@@ -1,0 +1,52 @@
+#sidebar
+  .well.side-widget
+    .side-widget-header
+    .side-widget-title Subscribe & Follow
+    .side-widget-content
+      ul.social-icons
+        / li
+        /   img src='/assets/social_icons/email.png' rel="tooltip" data-original-title="Email"
+        / li
+        /   img src='/assets/social_icons/rss.png' rel="tooltip" data-original-title="RSS"
+        li
+          img src='/assets/social_icons/facebook.png' rel="tooltip" data-original-title="Facebook"
+        li
+          img src='/assets/social_icons/twitter.png' rel="tooltip" data-original-title="Twitter"
+        li
+          img src='/assets/social_icons/googleplus.png' rel="tooltip" data-original-title="Google+"
+        / li
+        /   img src='/assets/social_icons/stumbleupon.png' rel="tooltip" data-original-title="Stumble Upon"
+
+    .side-widget-divider
+    .side-widget-content
+     iframe allowtransparency="true" frameborder="0" scrolling="no" src="http://platform.twitter.com/widgets/follow_button.1333526973.html#_=1333527593102&amp;id=twitter-widget-2&amp;lang=en&amp;screen_name=foreplot&amp;show_count=true&amp;show_screen_name=true&amp;size=m" class="twitter-follow-button" style="width: 236px; height: 20px; " title="Twitter Follow Button"
+
+    .side-widget-divider
+    .side-widget-content
+      div style="margin:19px 0 10px 0; text-align:center"
+        = link_to "Sign up, free", new_user_registration_path, class: "btn btn-primary btn-large"
+    .side-widget-divider
+    .side-widget-content
+      div style="margin:19px 0 10px 0; text-align:center"
+        = link_to "Upgrade to premium", plans_path, class: "btn btn-warning btn-large", "data-skip" => true
+
+
+    / .side-widget-title Trending
+    / .side-widget-content
+    /   .layout_time
+        
+    /   span ...
+div 
+  .well.side-widget
+    .side-widget-header
+    .side-widget-title Sponsored
+    .side-widget-content
+      .thumbnails
+        .thumbnail
+          h5 Advertise here!
+        / .thumbnail
+        /   h5 Advertise here!
+        / .thumbnail
+        /   = image_tag("pref-logo.png")
+        /   h5 Aliqua!
+        /   p Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.

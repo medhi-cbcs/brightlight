@@ -1,0 +1,35 @@
+doctype html
+html
+	head
+		title 
+			' Brightlight
+		/[if lt IE 9]
+			script src="http://html5shiv.googlecode.com/svn/trunk/html5.js" type="text/javascript"
+		= stylesheet_link_tag "application", media: "all", 'data-turbolinks-track' => true
+		= javascript_include_tag "application", 'data-turbolinks-track' => true
+		= yield :javascript
+		= csrf_meta_tags
+		= favicon_link_tag
+		link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,700italic,400,300,700' rel='stylesheet' type='text/css'
+		meta name="viewport" content="width=device-width, initial-scale=1.0"
+
+	body
+		// = render 'shared/layout/modal_divs'
+		.navbar.navbar-top
+			.container-fluid 
+				= render 'shared/layout/header'
+		
+		.container-fluid.documents
+			.row
+				.col-md-3
+					= render 'shared/side_menu_bar'
+				.col-md-9
+					div
+						= render 'shared/flash_messages'          
+						= yield :layout
+
+		= render 'shared/layout/footer'
+
+		-if Rails.env.development?
+			.container
+				= debug(params)
