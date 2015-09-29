@@ -2,14 +2,6 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 .products {
-	table {
-		border-collapse: collapse;
-	}
-
-	table tr td {
-		padding: 5px;
-		vertical-align: top;
-	}
 
 	.list_image {
 		width:  60px;
@@ -38,6 +30,11 @@
 		font-size:    x-small;
 		text-align:   right;
 		padding-left: 1em;
+
+		a {
+			margin: 3px;
+			width:  70px;
+		}
 	}
 
 	.list_line_even {
@@ -48,3 +45,4 @@
 		background:   #3BAFDA;
 	}
 }
+

@@ -1,0 +1,121 @@
+// Grays
+// -------------------------
+$black:                 #06101D;
+$grayDarker:            #171F2D;
+$grayDark:              #242C41;
+$gray:                  #474F64;
+$grayLight:             #757E88;
+$grayLighter:           #CED2CB;
+$offWhite:              #FAFAFA;
+$white:                 #FFF;
+
+
+
+#footer-spacer {
+    height: 185px;
+    clear: both;
+}
+
+#footer {
+    position: relative;
+    bottom: 0;
+    margin-top: 45px;
+    padding: 25px 0 26px;
+    border-top: 1px solid $grayLighter;
+
+    ul.footer-info {
+        margin: 0;
+        padding: 0;
+        list-style-type: none;
+        li {
+            //display: inline-block;
+            padding: 0.2em 0;
+        }
+    }
+
+    h5 {
+        color: $gray;
+    }
+    // a {
+    //     color: #999;
+    // }
+    // a:hover {
+    //     color: #FFF;
+    //     text-decoration: none;
+    // }
+}
+
+.footer-inner {
+    padding: 15px 0;
+    
+    font-size: 12px;
+    background: #111;
+    color: #999;
+}
+
+footer {
+    text-align: center;
+    margin-top: 10px;
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+
+    nav {
+        float: none;
+        background-color: white;
+        padding: 0 0.7em;
+        white-space: nowrap;
+
+        ul {
+        margin: 0;
+        padding: 0;
+
+            li {
+                list-style-type: none;
+                display: inline-block;
+                padding: 0.2em 0;
+
+                a {
+                padding: 0 5px;
+                font-weight: bold;
+
+                &:visited {
+                    color: #09c;
+                }
+
+                &:hover {
+                    text-decoration: underline;
+                }
+                }
+
+                .copyright {
+                    font-weight: normal;
+                }
+            }
+        }
+    }
+}
+
+.show-image {
+	width:  120px;
+	
+}
+
+
+// ============================================ Forms ===============================================
+
+
+.actions {
+	button, a {
+		margin-right: 10px;
+	}
+}
+
+
+// ============================================ Toolbar =============================================
+
+.toolbar {
+	margin: 20px 0px;
+	padding: 10px 0px;
+	border-top: 1px solid $grayLighter;
+}

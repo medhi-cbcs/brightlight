@@ -1,0 +1,14 @@
+.media
+	.media-left
+		a href="#"
+			= image_tag @product.image_url, class: 'media-object show-image'
+
+	.media-body
+		h3.media-heading = @product.title
+		p
+			= @product.description
+
+.toolbar.actions
+	= link_to 'Back', products_path, class: 'btn btn-default'
+	= link_to 'Edit', edit_product_path(@product), class: 'btn btn-primary'
+

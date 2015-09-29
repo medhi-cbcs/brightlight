@@ -9,15 +9,13 @@ html
 		= javascript_include_tag "application", 'data-turbolinks-track' => true
 		= yield :javascript
 		= csrf_meta_tags
-		= favicon_link_tag
-		link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,700italic,400,300,700' rel='stylesheet' type='text/css'
+		/= favicon_link_tag
+
 		meta name="viewport" content="width=device-width, initial-scale=1.0"
 
-	body
+	body class="#{ controller.controller_name}"
 		// = render 'shared/layout/modal_divs'
-		.navbar.navbar-top
-			.container-fluid 
-				= render 'shared/layout/header'
+		= render 'shared/layout/header'
 		
 		.container-fluid.documents
 			.row
