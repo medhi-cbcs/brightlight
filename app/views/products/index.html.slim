@@ -1,11 +1,13 @@
 h2 List of Products
 
-table.table.table-striped.table-hover
-  thead
-    tr
-      th = link_to 'New Product', new_product_path, class: "btn btn-default"
-      th Products
-      th ' 
+= link_to 'New Product', new_product_path, class: "btn btn-primary"
+
+table.responsive-table.striped
+  / thead
+  /   tr
+  /     th = link_to 'New Product', new_product_path, class: "btn btn-primary"
+  /     th Products
+  /     th ' 
   tbody
     - @products.each do |product|
       tr
@@ -18,10 +20,10 @@ table.table.table-striped.table-hover
             dd = truncate(strip_tags(product.description), length: 80)
             dd = product.price
 
-        td.list_actions
-          = link_to 'Edit', edit_product_path(product), class: "btn btn-default btn-xs"
+        td
+          = link_to 'Edit', edit_product_path(product), class: "btn waves-effect waves-teal btn-flat btn-small"
           br
-          = link_to 'Delete', product, method: :delete, data: "{ confirm: 'Are you sure?' }", class: "btn btn-danger btn-xs"
+          = link_to 'Delete', product, method: :delete, data: "{ confirm: 'Are you sure?' }", class: "btn waves-effect waves-teal red btn-small"
 
 br
 

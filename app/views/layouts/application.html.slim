@@ -6,8 +6,6 @@ html
 		/[if lt IE 9]
 			script src="http://html5shiv.googlecode.com/svn/trunk/html5.js" type="text/javascript"
 		= stylesheet_link_tag "application", media: "all", 'data-turbolinks-track' => true
-		= javascript_include_tag "application", 'data-turbolinks-track' => true
-		= yield :javascript
 		= csrf_meta_tags
 		/= favicon_link_tag
 
@@ -17,16 +15,19 @@ html
 		// = render 'shared/layout/modal_divs'
 		= render 'shared/layout/header'
 		
-		.container-fluid.documents
-			.row
-				.col-md-3
-					= render 'shared/side_menu_bar'
-				.col-md-9
-					div
-						= render 'shared/flash_messages'          
-						= yield :layout
+		.row
+			.col.s12.m2.l3
+				= render 'shared/side_menu_bar'
+			.col.s12.m9.l8
+				div
+					= render 'shared/flash_messages'          
+					= yield :layout
+			.col.s12.m1.l1
 
 		= render 'shared/layout/footer'
+
+		= javascript_include_tag "application", 'data-turbolinks-track' => true
+		= yield :javascript
 
 		-if Rails.env.development?
 			.container

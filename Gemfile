@@ -30,8 +30,7 @@ gem 'slim-rails'
 gem 'rabl'
 gem 'pjax_rails'
 
-# Bootstrap-sass
-gem 'bootstrap-sass', '~> 3.3.5'
+gem 'materialize-sass'
 
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'

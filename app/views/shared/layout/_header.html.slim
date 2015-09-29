@@ -1,44 +1,39 @@
-nav.navbar.navbar-default
-  .container-fluid
-    .navbar-header
-      button.navbar-toggle.collapsed type="button" data-toggle="collapse" data-target=""
-        span.sr-only Toggle navigation
-        span.icon-bar
-        span.icon-bar
-        span.icon-bar
-      a.navbar-brand href="#" Brightlight
 
-    .collapse.navbar-collapse#navbar-collapse-1
-      form.navbar-form.navbar-left role="search"
-        .input-group
-          input.form-control type="text" placeholder="Search"
-          span.input-group-btn
-            button.btn.btn-default type="submit" 
-              span.glyphicon.glyphicon-search aria-hidden="true"
+// Navbar
+nav
+  .nav-wrapper
+    a.brand-logo href="#" Brightlight
+    a.button-collapse href="#" data-activates="mobile-demo" 
+      i class="material-icons" menu
 
-      ul.nav.navbar-nav.navbar-right
-        li.active
-          a href="/products"
-            | Books 
-            span.sr-only (current)
-        li
-          a href="#" Help
-        li.dropdown
-          a.dropdown-toggle href="#" data-toggle="dropdown" role="button" aria-expanded="false"
-            | Users 
-            span.caret
-          ul.dropdown-menu role="menu"
-            li
-              a href="#" Action
-            li
-              a href="#" Another action
-            li
-              a href="#" Something else here
-            li.divider
-            li
-              a href="#" Separated link
-            li.divider
-            li
-              a href="#" One more separated link
-        li
-          a href="#" Login
+    / form
+    /   .input-field
+    /     input#search type="search" required 
+    /     label for="search"
+    /       i.material-icons search
+    /     i.material-icons close
+
+    ul.right.hide-on-med-and-down
+      li
+        a href="/products" Books 
+      li
+        a href="#" Help
+      li
+        a.dropdown-button href="#" data-activates="dropdown1" Users  
+      li
+        a href="#" Login
+
+// Dropdown menu
+ul#dropdown1.dropdown-content
+  li
+    a href="#" Action
+  li
+    a href="#" Another action
+  li
+    a href="#" Something else here
+  li.divider
+  li
+    a href="#" Separated link
+  li.divider
+  li
+    a href="#" One more separated link
