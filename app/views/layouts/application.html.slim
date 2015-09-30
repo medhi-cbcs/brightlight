@@ -8,11 +8,14 @@ html
 		= stylesheet_link_tag "application", media: "all", 'data-turbolinks-track' => true
 		= csrf_meta_tags
 		/= favicon_link_tag
+		link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"
+
+		= javascript_include_tag "application", 'data-turbolinks-track' => true
+		= yield :javascript
 
 		meta name="viewport" content="width=device-width, initial-scale=1.0"
 
 	body class="#{ controller.controller_name}"
-		// = render 'shared/layout/modal_divs'
 		= render 'shared/layout/header'
 		
 		.row
@@ -26,8 +29,6 @@ html
 
 		= render 'shared/layout/footer'
 
-		= javascript_include_tag "application", 'data-turbolinks-track' => true
-		= yield :javascript
 
 		-if Rails.env.development?
 			.container

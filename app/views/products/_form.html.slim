@@ -1,30 +1,25 @@
-= form_for @product, html: {class: 'form-horizontal'} do |f| 
-  - if @product.errors.any?
-    #error_explanation
-      h2 = "#{pluralize(@product.errors.count, "error")} prohibited this product from being saved"
+= form_for @product, html: {class: 'col s12'} do |f| 
+  .row
+    - if @product.errors.any?
+      #error_explanation
+        h2 = "#{pluralize(@product.errors.count, "error")} prohibited this product from being saved"
 
-      ul
-        - @product.errors.full_messages.each do |message|
-          li = message
+        ul
+          - @product.errors.full_messages.each do |message|
+            li = message
 
-  .fieldset
-    .form-group
-      = f.label :title, class: 'col-lg-2 control-label'
-      .col-lg-10
-        = f.text_field :title, class: 'form-control'
-    .form-group     
-      = f.label :description, class: 'col-lg-2 control-label'
-      .col-lg-10
-        = f.text_area :description, class: 'form-control'
-    .form-group
-      = f.label :image_url, class: 'col-lg-2 control-label'
-      .col-lg-10
-        = f.text_field :image_url, class: 'form-control'
-    .form-group
-      = f.label :price, class: 'col-lg-2 control-label'
-      .col-lg-10
-        = f.text_field :price, class: 'form-control'
-    .toolbar.actions
-      button.btn.btn-primary type="submit"
-        | Save
-      = link_to 'Cancel', products_path, class: "btn btn-default"
+    .input-field.col.s8
+      = f.label :title, class: 'active'
+      = f.text_field :title, required: true
+    .input-field.col.s8 
+      = f.label :description, class: 'active'
+      = f.text_area :description, class: 'materialize-textarea'
+    .input-field.col.s8
+      = f.label :image_url, class: 'active'
+      = f.text_field :image_url
+    .input-field.col.s8
+      = f.label :price, class: 'active'
+      = f.text_field :price
+    .actions.col.s12
+      button.btn.waves-effect.waves-light type="submit" Save
+      = link_to 'Cancel', products_path, class: "waves-effect waves-teal btn-flat"

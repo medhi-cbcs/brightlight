@@ -11,7 +11,29 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150927173738) do
+ActiveRecord::Schema.define(version: 20150930081206) do
+
+  create_table "books", force: :cascade do |t|
+    t.string   "google_book_id"
+    t.string   "isbndb_id"
+    t.string   "title"
+    t.string   "subtitle"
+    t.string   "authors"
+    t.string   "publisher"
+    t.date     "published_date"
+    t.string   "description"
+    t.integer  "isbn10"
+    t.integer  "isbn13"
+    t.integer  "page_count"
+    t.string   "small_thumbnail"
+    t.string   "thumbnail"
+    t.string   "language"
+    t.string   "edition_info"
+    t.string   "tags"
+    t.string   "subjects"
+    t.datetime "created_at",      null: false
+    t.datetime "updated_at",      null: false
+  end
 
   create_table "products", force: :cascade do |t|
     t.string   "title"
@@ -20,6 +42,14 @@ ActiveRecord::Schema.define(version: 20150927173738) do
     t.decimal  "price"
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
+  end
+
+  create_table "users", force: :cascade do |t|
+    t.string   "name"
+    t.string   "email"
+    t.string   "password"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
 end

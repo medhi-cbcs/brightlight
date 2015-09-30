@@ -1,34 +1,39 @@
-#footer-spacer
-#footer
+footer.page-footer
 
 	.row
 		.col.s3
 			.footer-logo
-				h3 Brightlight
+				a.brand-logo href="#" 
+					= image_tag 'lightbulb-icon.png', class: "logo-icon"
+					h4.white-text &nbsp; Brightlight
 		.col.s3
-			dl.footer-nav
-				dt.nav-title ABOUT
-				dd.nav-item About us
-				dd.nav-item Blog
-			dl.footer-nav
-				dt.nav-title LEGAL
-				dd.nav-item Terms
-				dd.nav-item Privacy
-				dd.nav-item Security
+			h5.white-text ABOUT
+			ul
+				li
+					a.grey-text.text-lighten-3 About us
+				li
+					a.grey-text.text-lighten-3 Blog
+				li
+					a.grey-text.text-lighten-3 Contact Form
 		.col.s3
-			dl.footer-nav
-				dt.nav-title DOCUMENTATIONS
-				dd.nav-item Brightlight Help
-				dd.nav-item Forum
+			h5.white-text LEGAL
+			ul
+				li
+					a.grey-text.text-lighten-3 Terms
+				li
+					a.grey-text.text-lighten-3 Privacy
+				li
+					a.grey-text.text-lighten-3 Security
 		.col.s3
-			dl.footer-nav
-				dt.nav-title CONTACT
-				dd.nav-item Info
-				dd.nav-item Map
-				dd.nav-item Contact Form
+			h5.white-text DOCUMENTATIONS
+			ul
+				li
+					a.grey-text.text-lighten-3 Brightlight Help
+				li
+					a.grey-text.text-lighten-3 Forum
+
 	.row
-		.col.s12
-			.footer-copyright.text-center
-				| Copyright © 2015 Brightlight. All rights reserved.
-				br
-				div 45832-19278
+		.footer-copyright
+			| Copyright © 2015 Brightlight. All rights reserved.
+			br
+			div 45832-19278

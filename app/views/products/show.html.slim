@@ -1,10 +1,14 @@
-.media
-	.media-left
-		a href="#"
-			= image_tag @product.image_url, class: 'media-object show-image'
+br
+.row
+	.col.s2
+		.card
+			.card-image
+				= image_tag @product.image_url, class: 'media-object show-image'
+			.card-content
+				p.small-text ISBN 92837291823
 
-	.media-body
-		h3.media-heading = @product.title
+	.col.s10
+		h5.media-heading = @product.title
 		p
 			= @product.description
 
