@@ -31,6 +31,13 @@ $white:                 #FFF;
 	}
 }
 
+// ============================================ Buttons =============================================
+
+.btn-small {
+	height: 24px;
+	line-height: 26px;
+	font-size: 12px;
+}
 
 // ============================================ Toolbar =============================================
 
@@ -38,4 +45,20 @@ $white:                 #FFF;
 	margin: 10px 0px;
 	padding: 5px 0px;
 	border-top: 1px solid $grayLighter;
+}
+
+// 
+
+body {
+	display: -webkit-flex;
+    display: flex;
+    min-height: 100vh;
+    flex-direction: column;
+    -webkit-flex-direction: column;
+}
+
+main {
+	-webkit-flex: 1 0 auto;
+	-ms-flex: 1 0 auto;
+    flex: 1 0 auto;
 }

@@ -1,0 +1,6 @@
+.row
+	= form_tag({controller: "books", action: "scan_isbn"}, method: "get", class: "col s6") do
+		.input-field.col.s6
+			= text_field_tag(:isbn, placeholder:'Scan ISBN')
+			button.btn.btn-floating.waves-effect.waves-light.red name='commit' type='submit'
+				i.material-icons add

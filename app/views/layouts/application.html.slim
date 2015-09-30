@@ -1,8 +1,7 @@
 doctype html
 html
 	head
-		title 
-			' Brightlight
+		title Brightlight
 		/[if lt IE 9]
 			script src="http://html5shiv.googlecode.com/svn/trunk/html5.js" type="text/javascript"
 		= stylesheet_link_tag "application", media: "all", 'data-turbolinks-track' => true
@@ -16,20 +15,22 @@ html
 		meta name="viewport" content="width=device-width, initial-scale=1.0"
 
 	body class="#{ controller.controller_name}"
-		= render 'shared/layout/header'
+		header
+			= render 'shared/layout/header'
 		
-		.row
-			.col.s12.m2.l3
-				= render 'shared/side_menu_bar'
-			.col.s12.m9.l8
-				div
-					= render 'shared/flash_messages'          
-					= yield :layout
-			.col.s12.m1.l1
+		main
+			.row
+				.col.s12.m2.l3
+					= render 'shared/side_menu_bar'
+				.col.s12.m9.l8
+					div
+						= render 'shared/flash_messages'          
+						= yield :layout
+				.col.s12.m1.l1
 
-		= render 'shared/layout/footer'
+		footer.page-footer
+			= render 'shared/layout/footer'
 
-
-		-if Rails.env.development?
-			.container
-				= debug(params)
+			-if Rails.env.development?
+				.container
+					= debug(params)

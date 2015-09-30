@@ -32,6 +32,8 @@ gem 'pjax_rails'
 
 gem 'materialize-sass'
 
+gem 'google_books', '~> 0.2.2'
+
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 

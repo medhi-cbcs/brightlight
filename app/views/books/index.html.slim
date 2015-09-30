@@ -1,53 +1,39 @@
-h1 Listing books
+h4 Listing books
 
-table
-  thead
-    tr
-      th Google book
-      th Isbndb
-      th Title
-      th Subtitle
-      th Authors
-      th Publisher
-      th Published date
-      th Description
-      th Isbn10
-      th Isbn13
-      th Page count
-      th Small thumbnail
-      th Thumbnail
-      th Language
-      th Edition info
-      th Tags
-      th Subjects
-      th
-      th
-      th
+.toolbar
+  = link_to 'Add New Book', new_book_path, class: "btn btn-primary"
+  form
+    .input-field
+      input type='text' 
+
+table.responsive-table.striped
 
   tbody
     - @books.each do |book|
       tr
-        td = book.google_book_id
-        td = book.isbndb_id
-        td = book.title
-        td = book.subtitle
-        td = book.authors
-        td = book.publisher
-        td = book.published_date
-        td = book.description
-        td = book.isbn10
-        td = book.isbn13
-        td = book.page_count
-        td = book.small_thumbnail
-        td = book.thumbnail
-        td = book.language
-        td = book.edition_info
-        td = book.tags
-        td = book.subjects
-        td = link_to 'Show', book
-        td = link_to 'Edit', edit_book_path(book)
-        td = link_to 'Destroy', book, data: {:confirm => 'Are you sure?'}, :method => :delete
+        td = image_tag(book.small_thumbnail, class: 'list_image')
+        td.list_description
+          dl
+            dt = link_to book.title, book
+            dd = book.subtitle
+            dd = truncate(strip_tags(book.description), length: 80)
+            dd = book.authors
+            dd = "ISBN #{book.isbn10} #{book.isbn13}"
+        / td = book.publisher
+        / td = book.published_date
+        / td = book.description
+        / td = book.isbn10
+        / td = book.isbn13
+        / td = book.page_count
+        / td = book.small_thumbnail
+        / td = book.thumbnail
+        / td = book.language
+        / td = book.edition_info
+        / td = book.tags
+        / td = book.subjects
+        td 
+          = link_to 'Edit', edit_book_path(book), class: "btn waves-effect waves-teal btn-flat btn-small"
+          br
+          = link_to 'Destroy', book, data: {:confirm => 'Are you sure?'}, :method => :delete, class: "btn waves-effect waves-teal red btn-small"
 
-br
 
-= link_to 'New Book', new_book_path
