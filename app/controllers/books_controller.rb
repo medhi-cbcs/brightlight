@@ -1,3 +1,5 @@
+require 'isbndb_client/api.rb'
+
 class BooksController < ApplicationController
   before_action :set_book, only: [:show, :edit, :update, :destroy]
 
@@ -23,29 +25,65 @@ class BooksController < ApplicationController
 
   # POST /search_isbn
   def search_isbn
-    isbn = params[:isbn]
-    books = GoogleBooks::API.search("isbn:#{isbn}")
-    book = books.first
-
     @book = Book.new
-    @book.title = book.title
-    @book.description = book.description
-    @book.authors = book.authors.join(', ')
-    @book.publisher = book.publisher
-    @book.isbn13 = book.isbn
-    @book.isbn10 = book.isbn_10
-    @book.page_count = book.page_count
-    @book.small_thumbnail = book.covers[:small]
-    @book.thumbnail = book.covers[:thumbnail]
-    @book.published_date = Date.parse book.published_date
-    
-    respond_to do |format|
-      if @book.save
-        format.html { redirect_to @book, notice: 'Book was successfully created.' }
-        format.json { render :show, status: :created, location: @book }
+
+    isbn = params[:isbn]
+
+    # First try to find the ISBN in Google Books
+    books = GoogleBooks::API.search("isbn:#{isbn}")
+    unless books.total_results == 0
+      book = books.first
+      @book.title = book.title
+      @book.description = book.description
+      @book.authors = book.authors.join(', ')
+      @book.publisher = book.publisher
+      @book.isbn13 = book.isbn
+      @book.isbn10 = book.isbn_10
+      @book.page_count = book.page_count
+      @book.small_thumbnail = book.covers[:small]
+      @book.thumbnail = book.covers[:thumbnail]
+      @book.published_date = book.published_date 
+
+      respond_to do |format|
+        if @book.save
+          format.html { redirect_to @book, notice: 'Book was successfully created.' }
+          format.json { render :show, status: :created, location: @book }
+        else
+          format.html { render :new }
+          format.json { render json: @book.errors, status: :unprocessable_entity }
+        end
+      end
+
+    else
+      # Not found in Google Books, try the ISBNdb.com
+      api_key = 'ULUP1074'
+      book = ISBNDBClient::API.find(isbn, {api_key: api_key})
+      unless book.error?
+        @book.title = book.title
+        @book.description = book.description
+        @book.authors = book.authors.join(', ')
+        @book.publisher = book.publisher
+        @book.isbn13 = book.isbn
+        @book.isbn10 = book.isbn10
+        @book.page_count = book.page_count
+        @book.published_date = book.published_date 
+
+        respond_to do |format|
+          if @book.save
+            format.html { redirect_to @book, notice: 'Book was successfully created.' }
+            format.json { render :show, status: :created, location: @book }
+          else
+            format.html { render :new }
+            format.json { render json: @book.errors, status: :unprocessable_entity }
+          end
+        end
+      
       else
-        format.html { render :new }
-        format.json { render json: @book.errors, status: :unprocessable_entity }
+        respond_to do |format|
+          format.html { redirect_to new_book_path, alert: "Could not find book with ISBN #{isbn}" }
+          format.json { render json: @book.errors, status: :unprocessable_entity }
+        end
+
       end
     end
   end

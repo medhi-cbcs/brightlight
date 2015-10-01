@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151001045917) do
+ActiveRecord::Schema.define(version: 20151001123948) do
 
   create_table "books", force: :cascade do |t|
     t.string   "google_book_id"
@@ -20,7 +20,7 @@ ActiveRecord::Schema.define(version: 20151001045917) do
     t.string   "subtitle"
     t.string   "authors"
     t.string   "publisher"
-    t.date     "published_date"
+    t.string   "published_date"
     t.string   "description"
     t.string   "isbn10"
     t.string   "isbn13"

@@ -1,35 +1,38 @@
 br
-.row
-  .col.s2
-    = image_tag(@book.small_thumbnail, class: 'list_image')
-  .col.s10
-    .list_description
-      dl.row
-        dt = link_to @book.title, @book
-        dd = @book.subtitle
-        dd.col.s6
-          .label Author
-          .item = @book.authors
-        dd.col.s6
-          .label ISBN 10
-          .item = @book.isbn10
-        dd.col.s6 
-          .label Publisher
-          .item = @book.publisher
-        dd.col.s6
-          .label ISBN
-          .item = @book.isbn13
-        dd.col.s6 
-          .label Published Date
-          .item = @book.published_date
-        dd.col.s6
-          .label Page count
-          .item = @book.page_count
-        p
-        .label Description
-        dd = strip_tags(@book.description)
+table
+  tr
+    td style="vertical-align:top"
+      = image_tag(@book.small_thumbnail, class: 'list_image')
+    td
+      .list_description
+        dl.row
+          dt = link_to @book.title, @book
+          dd = @book.subtitle
+          dd.col.s6
+            .label Author
+            .item = @book.authors
+          dd.col.s6
+            .label ISBN 10
+            .item = @book.isbn10
+          dd.col.s6 
+            .label Publisher
+            .item = @book.publisher
+          dd.col.s6
+            .label ISBN
+            .item = @book.isbn13
+          dd.col.s6 
+            .label Published Date
+            .item = @book.published_date
+          dd.col.s6
+            .label Page count
+            .item = @book.page_count
+          p
+          .label Description
+          dd = strip_tags(@book.description)
 
 .toolbar.actions
+  = link_to '< Back', books_path, class: 'btn btn-flat'
   = link_to 'Edit', edit_book_path(@book), class: 'btn btn-primary'
-  = link_to 'Back', books_path, class: 'btn btn-default'
+  = link_to 'Add new', new_book_path, class: 'btn btn-primary'
+
 

@@ -3,5 +3,6 @@
 /     button.close type="button" data-dismiss="alert" &times;
 /     = value
 - flash.each do |key, value|
+	- puts "FLASH #{key}:#{value}"
 	javascript:
-		Materialize.toast('#{value}', 4000, '#{key=='error'? "red" : "light-green"}');
+		Materialize.toast('#{value}', 4000, '#{key=='alert'? "red" : "light-green"}');
