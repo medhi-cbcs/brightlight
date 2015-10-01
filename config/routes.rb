@@ -8,7 +8,12 @@ Rails.application.routes.draw do
   # You can have the root of your site routed with "root"
   root 'welcome#index'
 
-  get 'books/search_isbn/:isbn' => 'books#search_isbn'
+  # get 'books/search_isbn' => 'books#search_isbn'
+  resources :books do
+    collection do
+      post 'search_isbn'
+    end
+  end
 
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'

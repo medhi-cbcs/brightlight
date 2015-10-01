@@ -21,10 +21,23 @@ class BooksController < ApplicationController
   def edit
   end
 
-  # GET /scan_isbn
-  def scan_isbn
+  # POST /search_isbn
+  def search_isbn
+    isbn = params[:isbn]
+    books = GoogleBooks::API.search("isbn:#{isbn}")
+    book = books.first
 
-    @book = book_params
+    @book = Book.new
+    @book.title = book.title
+    @book.description = book.description
+    @book.authors = book.authors.join(', ')
+    @book.publisher = book.publisher
+    @book.isbn13 = book.isbn
+    @book.isbn10 = book.isbn_10
+    @book.page_count = book.page_count
+    @book.small_thumbnail = book.covers[:small]
+    @book.thumbnail = book.covers[:thumbnail]
+    @book.published_date = Date.parse book.published_date
     
     respond_to do |format|
       if @book.save

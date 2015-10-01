@@ -1,48 +1,48 @@
 // Place all the styles related to the Products controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
-.products {
+// .products {
 
-	.list_image {
-		width:  60px;
-		height: 70px;
-	}
+// 	.list_image {
+// 		width:  60px;
+// 		height: 70px;
+// 	}
 
-	.list_description {
-		width: 60%;
+// 	.list_description {
+// 		width: 60%;
 
-		dl {
-			margin: 0;
-		}
+// 		dl {
+// 			margin: 0;
+// 		}
 
-		dt {
-			color:		 #244;
-			font-weight: bold;
-			font-size:   larger;
-		}
+// 		dt {
+// 			color:		 #244;
+// 			font-weight: bold;
+// 			font-size:   larger;
+// 		}
 
-		dd {
-			margin: 0;
-		}
-	}
+// 		dd {
+// 			margin: 0;
+// 		}
+// 	}
 
-	.list_actions {
-		font-size:    x-small;
-		text-align:   right;
-		padding-left: 1em;
+// 	.list_actions {
+// 		font-size:    x-small;
+// 		text-align:   right;
+// 		padding-left: 1em;
 
-		a {
-			margin: 3px;
-			width:  70px;
-		}
-	}
+// 		a {
+// 			margin: 3px;
+// 			width:  70px;
+// 		}
+// 	}
 
-	.list_line_even {
-		background:   #4FC1E9;
-	}
+// 	.list_line_even {
+// 		background:   #4FC1E9;
+// 	}
 
-	.list_line_odd {
-		background:   #3BAFDA;
-	}
-}
+// 	.list_line_odd {
+// 		background:   #3BAFDA;
+// 	}
+// }
 

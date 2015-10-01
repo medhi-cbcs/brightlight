@@ -62,3 +62,60 @@ main {
 	-ms-flex: 1 0 auto;
     flex: 1 0 auto;
 }
+
+.main-home {
+	background-color: $grayLighter
+}
+
+
+// ============================================ Book List ===========================================
+
+
+.list_image {
+	width:  128px;
+}
+
+.list_description {
+	dl {
+		margin: 0;
+	}
+
+	dt {
+		color:		 #244;
+		font-weight: bold;
+		font-size:   larger;
+	}
+
+	dd {
+		margin: 0;
+	}
+
+	.label {
+		font-size: 0.8rem;
+		color: #9e9e9e;
+	}
+
+	.item {
+		
+	}
+}
+
+.list_actions {
+	font-size:    x-small;
+	text-align:   right;
+	padding-left: 1em;
+
+	a {
+		margin: 3px;
+		width:  70px;
+	}
+}
+
+.list_line_even {
+	background:   #4FC1E9;
+}
+
+.list_line_odd {
+	background:   #3BAFDA;
+}
+

@@ -1,57 +1,35 @@
-p#notice = notice
+br
+.row
+  .col.s2
+    = image_tag(@book.small_thumbnail, class: 'list_image')
+  .col.s10
+    .list_description
+      dl.row
+        dt = link_to @book.title, @book
+        dd = @book.subtitle
+        dd.col.s6
+          .label Author
+          .item = @book.authors
+        dd.col.s6
+          .label ISBN 10
+          .item = @book.isbn10
+        dd.col.s6 
+          .label Publisher
+          .item = @book.publisher
+        dd.col.s6
+          .label ISBN
+          .item = @book.isbn13
+        dd.col.s6 
+          .label Published Date
+          .item = @book.published_date
+        dd.col.s6
+          .label Page count
+          .item = @book.page_count
+        p
+        .label Description
+        dd = strip_tags(@book.description)
 
-p
-  strong Google book:
-  = @book.google_book_id
-p
-  strong Isbndb:
-  = @book.isbndb_id
-p
-  strong Title:
-  = @book.title
-p
-  strong Subtitle:
-  = @book.subtitle
-p
-  strong Authors:
-  = @book.authors
-p
-  strong Publisher:
-  = @book.publisher
-p
-  strong Published date:
-  = @book.published_date
-p
-  strong Description:
-  = @book.description
-p
-  strong Isbn10:
-  = @book.isbn10
-p
-  strong Isbn13:
-  = @book.isbn13
-p
-  strong Page count:
-  = @book.page_count
-p
-  strong Small thumbnail:
-  = @book.small_thumbnail
-p
-  strong Thumbnail:
-  = @book.thumbnail
-p
-  strong Language:
-  = @book.language
-p
-  strong Edition info:
-  = @book.edition_info
-p
-  strong Tags:
-  = @book.tags
-p
-  strong Subjects:
-  = @book.subjects
+.toolbar.actions
+  = link_to 'Edit', edit_book_path(@book), class: 'btn btn-primary'
+  = link_to 'Back', books_path, class: 'btn btn-default'
 
-= link_to 'Edit', edit_book_path(@book)
-'|
-= link_to 'Back', books_path
