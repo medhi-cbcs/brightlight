@@ -33,9 +33,9 @@ table.striped
               dd.col.s6
                 .label Page count
                 .item = book.page_count
-              p
-              .label Description
-              dd = truncate(strip_tags(book.description), length: 140)
+              dd.col.s12
+                .label Description
+                .item = truncate(strip_tags(book.description), length: 140)
 
         / td = book.language
         / td = book.edition_info

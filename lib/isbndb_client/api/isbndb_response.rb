@@ -10,7 +10,7 @@ module ISBNDBClient
       # Iterator for looping through the results
       def each(&block)
         @results['data'].each do |item|
-          block.call(Book.new(item))
+          block.call(ISBNDBBook.new(item))
         end
       end
       

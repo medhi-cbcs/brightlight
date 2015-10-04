@@ -26,9 +26,9 @@ table
           dd.col.s6
             .label Page count
             .item = @book.page_count
-          p
-          .label Description
-          dd = strip_tags(@book.description)
+          dd.col.s12
+            .label Description
+            .item = strip_tags(@book.description)
 
 .toolbar.actions
   = link_to '< Back', books_path, class: 'btn btn-flat'

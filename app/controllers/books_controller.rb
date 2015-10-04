@@ -55,13 +55,26 @@ class BooksController < ApplicationController
       end
 
     else
-      # Not found in Google Books, try the ISBNdb.com
-      api_key = 'ULUP1074'
-      book = ISBNDBClient::API.find(isbn, {api_key: api_key})
-      unless book.error?
+      # # Not found in Google Books, try the ISBNdb.com
+      # results = ISBNdb::Query.find_book_by_isbn(isbn)
+      # unless results.count == 0
+      #   book = results.first
+      #   @book.title = book.title
+      #   @book.description = book.description
+      #   @book.authors = book.authors_text
+      #   @book.publisher = book.publisher_text['__content__']
+      #   @book.isbn13 = book.isbn
+      #   @book.isbn10 = book.isbn10
+      #   @book.page_count = book.page_count
+      #   @book.published_date = book.published_date 
+
+      result = ISBNDBClient::API.find(isbn)
+      puts result
+      unless result.nil?
+        book = result
         @book.title = book.title
         @book.description = book.description
-        @book.authors = book.authors.join(', ')
+        @book.authors = book.authors.map {|x| x['name']}.join(', ')
         @book.publisher = book.publisher
         @book.isbn13 = book.isbn
         @book.isbn10 = book.isbn10

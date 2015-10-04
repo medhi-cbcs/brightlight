@@ -30,9 +30,16 @@ gem 'slim-rails'
 gem 'rabl'
 gem 'pjax_rails'
 
+# The Materialize UI framework
 gem 'materialize-sass'
 
+# Wrapper for Google Books API
 gem 'google_books', '~> 0.2.2'
+
+gem 'hashie'
+
+# Wrapper for ISBNdb.com API
+# gem 'isbndb', '> 2.0.0'
 
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
