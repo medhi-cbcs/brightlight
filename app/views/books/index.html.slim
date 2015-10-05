@@ -9,7 +9,8 @@ table.striped
     - @books.each do |book|
       tr
         td style="vertical-align:top"
-          = image_tag(book.small_thumbnail || 'book-icon.png', class: 'list_image')
+          - thumbnail = (book.small_thumbnail.nil? or book.small_thumbnail.blank?) ? 'book-icon.png' : book.small_thumbnail
+          = image_tag(thumbnail, class: 'list_image')
         td
           .list_description
             dl.row
