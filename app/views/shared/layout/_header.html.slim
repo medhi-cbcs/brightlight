@@ -20,15 +20,18 @@ nav
       li
         a href="/products" Products
       li
-        a.dropdown-button href="#" data-activates="dropdown1" 
+        a.dropdown-button href="#" data-activates="dropdown2" 
           | Users
           i.material-icons.right arrow_drop_down
       li
-        a href="/auth/google"
-          i.material-icons perm_identity
+        a.dropdown-button href="/auth/google" data-activates="dropdown1"
+          - if current_user
+            = image_tag current_user.image_url, alt: current_user.name
+          - else
+            i.material-icons perm_identity
 
 // Dropdown menu
-ul#dropdown1.dropdown-content
+ul#dropdown2.dropdown-content
   li
     a href="/users" List users
   li
@@ -42,9 +45,9 @@ ul#dropdown1.dropdown-content
   li
     a href="#" One more separated link
 
-ul#dropdown2.dropdown-content
+ul#dropdown1.dropdown-content
   li
-    a href="#" Profile
+    a href="/auth/google" Login
   li.divider
   li
-    a href="#" Logout
+    = link_to 'Log Out', "#"
