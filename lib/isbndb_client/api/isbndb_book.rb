@@ -46,8 +46,8 @@ module ISBNDBClient
       # 7.3\"x8.8\"x1.8\"; 2.8 lb; 784 pages"
       def extract_page_count(info)
       	dimension, weight, pages = info.split(/; /)
-      	page_count, pp = pages.split(/ /)
-      	page_count
+        page_count =  /([\d]*) pages/.match(pages)[1] unless pages.nil?
+        page_count || nil
       end
 		end
 	end
