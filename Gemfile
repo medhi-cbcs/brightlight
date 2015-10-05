@@ -26,9 +26,14 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 # https://github.com/tzinfo/tzinfo/wiki/Resolving-TZInfo::DataSourceNotFound-Errors
 gem 'tzinfo-data', platforms: [:mingw, :mswin]
 
+# We use slim here instead or the default erb
 gem 'slim-rails'
-gem 'rabl'
+
+# Pjax
 gem 'pjax_rails'
+
+# Pagination
+gem 'will_paginate', '~> 3.0.6'
 
 # The Materialize UI framework
 gem 'materialize-sass'

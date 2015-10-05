@@ -119,3 +119,22 @@ main {
 	background:   #3BAFDA;
 }
 
+
+.pagination {
+	a {
+	    display: inline-block;
+	    font-size: 1rem;
+	    padding: 0 10px;
+	    line-height: 30px;
+	    border-radius: 2px;
+	    text-align: center;
+	}
+	.current {
+		background-color: #ee6e73;
+		display: inline-block;
+	    font-size: 1rem;
+	    padding: 0 10px;
+	    line-height: 30px;
+	    border-radius: 2px;
+	}
+}

@@ -6,3 +6,7 @@
 	- puts "FLASH #{key}:#{value}"
 	javascript:
 		Materialize.toast('#{value}', 4000, '#{key=='alert'? "red" : "light-green"}');
+
+/ Clear flash. They are somehow not cleared 
+- flash.each do |key, value|
+	- flash[key] = nil

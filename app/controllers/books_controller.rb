@@ -6,7 +6,7 @@ class BooksController < ApplicationController
   # GET /books
   # GET /books.json
   def index
-    @books = Book.all
+    @books = Book.paginate(page: params[:page], per_page: 10)
   end
 
   # GET /books/1
@@ -99,6 +99,13 @@ class BooksController < ApplicationController
 
       end
     end
+  end
+
+  rescue_from ISBNDBClient::API::Error, :with => :book_not_found
+
+  def book_not_found(exception)
+    flash[:alert] = exception
+    render :new
   end
 
   # POST /books

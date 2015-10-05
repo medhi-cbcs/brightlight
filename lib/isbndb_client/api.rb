@@ -36,8 +36,16 @@ module ISBNDBClient
       #
       # * `:api_key`, your ISBNdb.com API key.
       def find(id)
-        response = get("/#{access_key_set.current_key}/book/#{id}")
-        ISBNDBBook.new response
+        if /\A(\d{10}|\d{9}X|\d{13})\z/.match(id)
+          response = get("/#{access_key_set.current_key}/book/#{id}")
+          if JSON(response.body)['error'].present? 
+            raise Error, JSON(response.body)['error']
+          else
+            ISBNDBBook.new response
+          end
+        else
+          raise Error, 'Please enter valid ISBN number'
+        end
       end
 
       private
@@ -45,7 +53,7 @@ module ISBNDBClient
       def request(path, parameters)
         query = parameters ? URI.encode_www_form(parameters) : ""
         HTTParty.get(path, { query: query }).tap do |response|
-          raise Error, response['error']['message'] if response.has_key?('error')
+          raise Error, JSON(response.body)['error'] if JSON(response.body)['error'].present?
         end
       end
 
