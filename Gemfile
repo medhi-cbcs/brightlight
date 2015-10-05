@@ -43,8 +43,8 @@ gem 'google_books', '~> 0.2.2'
 
 gem 'hashie'
 
-# Wrapper for ISBNdb.com API
-# gem 'isbndb', '> 2.0.0'
+# Login with Google+ OAuth2
+gem "omniauth-google-oauth2"
 
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
