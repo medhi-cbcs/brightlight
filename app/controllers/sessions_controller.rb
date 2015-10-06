@@ -8,8 +8,8 @@ class SessionsController < ApplicationController
       # @user.name = request.env['omniauth.auth']['info']['name']
       # puts "USER done"
       # puts @user.to_yaml
-
-      @user = find_or_create_by(uid: auth_hash['uid'], provider: auth_hash['provider'])
+      auth_hash = request.env['omniauth.auth']
+      @user = User.find_or_create_by(uid: auth_hash['uid'], provider: auth_hash['provider'])
       @user.name = auth_hash['info']['name']
       @user.email = auth_hash['info']['email']
       @user.image = auth_hash['info']['image']
