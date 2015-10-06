@@ -2,50 +2,77 @@ h4 Listing books
 
 .toolbar
   = link_to 'Add New Book', new_book_path, class: "btn btn-primary"
+  .right
+    a href="#{books_path}"
+      i.material-icons view_list
+    a href="#{books_path}?v=list"
+      i.material-icons list
 
 table.striped
 
   tbody
     - @books.each do |book|
       tr
-        td style="vertical-align:top"
-          - thumbnail = (book.small_thumbnail.nil? or book.small_thumbnail.blank?) ? 'book-icon.png' : book.small_thumbnail
-          = image_tag(thumbnail, class: 'list_image')
-        td
-          .list_description
-            dl.row
-              dt = link_to book.title, book
-              dd = book.subtitle
-              dd.col.s6
-                .label Author
-                .item = book.authors
-              dd.col.s6
-                .label ISBN 10
-                .item = book.isbn10
-              dd.col.s6 
-                .label Publisher
-                .item = book.publisher
-              dd.col.s6
-                .label ISBN
-                .item = book.isbn13
-              dd.col.s6 
-                .label Published Date
-                .item = book.published_date
-              dd.col.s6
-                .label Page count
-                .item = book.page_count
-              dd.col.s12
-                .label Description
-                .item = truncate(strip_tags(book.description), length: 140)
+        - if @view_style == :list
+          td 
+            .list_description
+              div = link_to book.title, book
+              - if book.authors.present?
+                span.label Author:
+                span.item = book.authors
+              - if book.publisher.present?
+                span.label Publisher:
+                span.item = book.publisher
+              .isbn
+                - if book.isbn10.present?
+                  span.label ISBN 10:
+                  span.item = book.isbn10
+                - if book.isbn13.present?
+                  span.label ISBN 13:
+                  span.item = book.isbn13
 
-        / td = book.language
-        / td = book.edition_info
-        / td = book.tags
-        / td = book.subjects
+        - else    
+          td style="vertical-align:top"
+            - thumbnail = (book.small_thumbnail.nil? or book.small_thumbnail.blank?) ? 'book-icon.png' : book.small_thumbnail
+            = image_tag(thumbnail, class: 'list_image')
+          td
+            .list_description
+              dl.row
+                dt = link_to book.title, book
+                dd = book.subtitle
+                - if book.authors.present?
+                  dd.col.s6
+                    .label Author
+                    .item = book.authors
+                - if book.isbn10.present?
+                  dd.col.s6
+                    .label ISBN 10
+                    .item = book.isbn10
+                - if book.publisher.present?
+                  dd.col.s6 
+                    .label Publisher
+                    .item = book.publisher
+                - if book.isbn13.present?
+                  dd.col.s6
+                    .label ISBN
+                    .item = book.isbn13
+                - if book.published_date.present?
+                  dd.col.s6 
+                    .label Published Date
+                    .item = book.published_date
+                - if book.page_count.present?
+                  dd.col.s6
+                    .label Page count
+                    .item = book.page_count
+                - if book.description.present?
+                  dd.col.s12
+                    .label Description
+                    .item = truncate(strip_tags(book.description), length: 140)
+
         td 
           = link_to 'Edit', edit_book_path(book), class: "btn waves-effect waves-teal btn-flat btn-small"
           br
-          = link_to 'Destroy', book, data: {:confirm => 'Are you sure?'}, :method => :delete, class: "btn waves-effect waves-teal red btn-small"
+          = link_to 'Destroy', book, data: {:confirm => 'Are you sure?'}, :method => :delete, class: "btn waves-effect waves-teal red btn-small"                
 
 = will_paginate @books
 

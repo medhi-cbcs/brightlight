@@ -6,7 +6,14 @@ class BooksController < ApplicationController
   # GET /books
   # GET /books.json
   def index
-    @books = Book.paginate(page: params[:page], per_page: 10)
+    if params[:v] == 'list'
+      items_per_page = 20
+      @view_style = :list
+    else
+      items_per_page = 10
+      @view_style = :block
+    end
+    @books = Book.paginate(page: params[:page], per_page: items_per_page)
   end
 
   # GET /books/1
