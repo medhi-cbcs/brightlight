@@ -4,7 +4,8 @@ nav
   .nav-wrapper
     a.brand-logo href="/" 
       = image_tag 'lightbulb-icon.png', class: "logo-icon"
-      | &nbsp; Brightlight
+    a.brand-logo href="/" style="margin-left: 60px;"
+      | Brightlight
     a.button-collapse href="#" data-activates="mobile-demo" 
       i class="material-icons" menu
 
@@ -26,7 +27,7 @@ nav
       li
         a.dropdown-button href="/auth/google" data-activates="dropdown1"
           - if current_user
-            = image_tag current_user.image_url, alt: current_user.name
+            = image_tag current_user.image, alt: current_user.name, class: 'user-avatar'
           - else
             i.material-icons perm_identity
 
