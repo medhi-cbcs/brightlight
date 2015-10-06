@@ -46,6 +46,12 @@ $white:                 #FFF;
 	margin: 10px 0px;
 	padding: 5px 0px;
 	border-top: 1px solid $grayLighter;
+
+	i.material-icons {
+		color: $grayDarker;
+		margin-left: 6px;
+		font-size: 2.5rem;
+	}
 }
 
 // 
@@ -99,8 +105,17 @@ main {
 		color: #9e9e9e;
 	}
 
-	.item {
-		
+	span.label {
+		padding-right: 5px;
+	}
+	span.item {
+		margin-right: 10px;
+	}
+
+	.isbn {
+		span.item {
+			color: $grayLight;
+		}
 	}
 }
 
