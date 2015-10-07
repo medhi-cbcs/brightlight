@@ -1,6 +1,6 @@
 class CreateBookConditions < ActiveRecord::Migration
   def change
-    create_table :book_conditions do |t|
+    create_table :book_conditions, id: false do |t|
       t.string :code
       t.string :description
 
