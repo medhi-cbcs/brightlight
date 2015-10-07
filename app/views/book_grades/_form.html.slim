@@ -1,0 +1,27 @@
+= form_for @book_grade do |f|
+  - if @book_grade.errors.any?
+    #error_explanation
+      h2 = "#{pluralize(@book_grade.errors.count, "error")} prohibited this book_grade from being saved:"
+      ul
+        - @book_grade.errors.full_messages.each do |message|
+          li = message
+
+  .field
+    = f.label :book
+    = f.text_field :book
+  .field
+    = f.label :book_condition
+    = f.text_field :book_condition
+  .field
+    = f.label :academic_year
+    = f.text_field :academic_year
+  .field
+    = f.label :notes
+    = f.text_field :notes
+  .field
+    = f.label :graded_by
+    = f.number_field :graded_by
+  .field
+    = f.label :notes
+    = f.text_field :notes
+  .actions = f.submit

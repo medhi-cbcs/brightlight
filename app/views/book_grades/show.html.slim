@@ -1,0 +1,24 @@
+p#notice = notice
+
+p
+  strong Book:
+  = @book_grade.book
+p
+  strong Book condition:
+  = @book_grade.book_condition
+p
+  strong Academic year:
+  = @book_grade.academic_year
+p
+  strong Notes:
+  = @book_grade.notes
+p
+  strong Graded by:
+  = @book_grade.graded_by
+p
+  strong Notes:
+  = @book_grade.notes
+
+= link_to 'Edit', edit_book_grade_path(@book_grade)
+'|
+= link_to 'Back', book_grades_path

@@ -1,0 +1,17 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  book_id: 
+  book_condition_id: 
+  academic_year_id: 
+  notes: MyString
+  graded_by: 1
+  notes: MyString
+
+two:
+  book_id: 
+  book_condition_id: 
+  academic_year_id: 
+  notes: MyString
+  graded_by: 1
+  notes: MyString

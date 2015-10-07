@@ -1,0 +1,31 @@
+h1 Listing course_texts
+
+table
+  thead
+    tr
+      th Title
+      th Author
+      th Publisher
+      th Image url
+      th Notes
+      th Course
+      th
+      th
+      th
+
+  tbody
+    - @course_texts.each do |course_text|
+      tr
+        td = course_text.title
+        td = course_text.author
+        td = course_text.publisher
+        td = course_text.image_url
+        td = course_text.notes
+        td = course_text.course
+        td = link_to 'Show', course_text
+        td = link_to 'Edit', edit_course_text_path(course_text)
+        td = link_to 'Destroy', course_text, data: {:confirm => 'Are you sure?'}, :method => :delete
+
+br
+
+= link_to 'New Course text', new_course_text_path
