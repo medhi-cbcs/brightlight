@@ -1,0 +1,27 @@
+= form_for @course_text do |f|
+  - if @course_text.errors.any?
+    #error_explanation
+      h2 = "#{pluralize(@course_text.errors.count, "error")} prohibited this course_text from being saved:"
+      ul
+        - @course_text.errors.full_messages.each do |message|
+          li = message
+
+  .field
+    = f.label :title
+    = f.text_field :title
+  .field
+    = f.label :author
+    = f.text_field :author
+  .field
+    = f.label :publisher
+    = f.text_field :publisher
+  .field
+    = f.label :image_url
+    = f.text_field :image_url
+  .field
+    = f.label :notes
+    = f.text_field :notes
+  .field
+    = f.label :course
+    = f.text_field :course
+  .actions = f.submit

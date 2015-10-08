@@ -1,0 +1,90 @@
+= form_for @student do |f|
+  - if @student.errors.any?
+    #error_explanation
+      h2 = "#{pluralize(@student.errors.count, "error")} prohibited this student from being saved:"
+      ul
+        - @student.errors.full_messages.each do |message|
+          li = message
+
+  .field
+    = f.label :name
+    = f.text_field :name
+  .field
+    = f.label :first_name
+    = f.text_field :first_name
+  .field
+    = f.label :last_name
+    = f.text_field :last_name
+  .field
+    = f.label :date_of_birth
+    = f.date_select :date_of_birth
+  .field
+    = f.label :admission_no
+    = f.text_field :admission_no
+  .field
+    = f.label :family_id
+    = f.number_field :family_id
+  .field
+    = f.label :gender
+    = f.text_field :gender
+  .field
+    = f.label :blood_type
+    = f.text_field :blood_type
+  .field
+    = f.label :nationality
+    = f.text_field :nationality
+  .field
+    = f.label :religion
+    = f.text_field :religion
+  .field
+    = f.label :address_line1
+    = f.text_field :address_line1
+  .field
+    = f.label :address_line2
+    = f.text_field :address_line2
+  .field
+    = f.label :city
+    = f.text_field :city
+  .field
+    = f.label :state
+    = f.text_field :state
+  .field
+    = f.label :postal_code
+    = f.text_field :postal_code
+  .field
+    = f.label :country
+    = f.text_field :country
+  .field
+    = f.label :mobile_phone
+    = f.text_field :mobile_phone
+  .field
+    = f.label :home_phone
+    = f.text_field :home_phone
+  .field
+    = f.label :email
+    = f.text_field :email
+  .field
+    = f.label :photo_uri
+    = f.text_field :photo_uri
+  .field
+    = f.label :status
+    = f.text_field :status
+  .field
+    = f.label :status_description
+    = f.text_field :status_description
+  .field
+    = f.label :is_active
+    = f.check_box :is_active
+  .field
+    = f.label :is_deleted
+    = f.check_box :is_deleted
+  .field
+    = f.label :student_no
+    = f.number_field :student_no
+  .field
+    = f.label :passport_no
+    = f.text_field :passport_no
+  .field
+    = f.label :enrollment_date
+    = f.text_field :enrollment_date
+  .actions = f.submit

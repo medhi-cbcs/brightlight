@@ -1,0 +1,59 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  name: MyString
+  first_name: MyString
+  last_name: MyString
+  date_of_birth: 2015-10-07
+  admission_no: MyString
+  family_id: 1
+  gender: MyString
+  blood_type: MyString
+  nationality: MyString
+  religion: MyString
+  address_line1: MyString
+  address_line2: MyString
+  city: MyString
+  state: MyString
+  postal_code: MyString
+  country: MyString
+  mobile_phone: MyString
+  home_phone: MyString
+  email: MyString
+  photo_uri: MyString
+  status: MyString
+  status_description: MyString
+  is_active: false
+  is_deleted: false
+  student_no: 1
+  passport_no: MyString
+  enrollment_date: MyString
+
+two:
+  name: MyString
+  first_name: MyString
+  last_name: MyString
+  date_of_birth: 2015-10-07
+  admission_no: MyString
+  family_id: 1
+  gender: MyString
+  blood_type: MyString
+  nationality: MyString
+  religion: MyString
+  address_line1: MyString
+  address_line2: MyString
+  city: MyString
+  state: MyString
+  postal_code: MyString
+  country: MyString
+  mobile_phone: MyString
+  home_phone: MyString
+  email: MyString
+  photo_uri: MyString
+  status: MyString
+  status_description: MyString
+  is_active: false
+  is_deleted: false
+  student_no: 1
+  passport_no: MyString
+  enrollment_date: MyString

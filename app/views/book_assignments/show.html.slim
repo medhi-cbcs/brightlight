@@ -1,0 +1,33 @@
+p#notice = notice
+
+p
+  strong Book:
+  = @book_assignment.book
+p
+  strong Student:
+  = @book_assignment.student
+p
+  strong Academic year:
+  = @book_assignment.academic_year
+p
+  strong Course text:
+  = @book_assignment.course_text
+p
+  strong Issue date:
+  = @book_assignment.issue_date
+p
+  strong Return date:
+  = @book_assignment.return_date
+p
+  strong Initial condition:
+  = @book_assignment.initial_condition_id
+p
+  strong End condition:
+  = @book_assignment.end_condition_id
+p
+  strong Status:
+  = @book_assignment.status
+
+= link_to 'Edit', edit_book_assignment_path(@book_assignment)
+'|
+= link_to 'Back', book_assignments_path

@@ -1,0 +1,120 @@
+p#notice = notice
+
+p
+  strong Name:
+  = @employee.name
+p
+  strong First name:
+  = @employee.first_name
+p
+  strong Last name:
+  = @employee.last_name
+p
+  strong Gender:
+  = @employee.gender
+p
+  strong Date of birth:
+  = @employee.date_of_birth
+p
+  strong Place of birth:
+  = @employee.place_of_birth
+p
+  strong Joining date:
+  = @employee.joining_date
+p
+  strong Job title:
+  = @employee.job_title
+p
+  strong Employee number:
+  = @employee.employee_number
+p
+  strong Marital status:
+  = @employee.marital_status
+p
+  strong Experience year:
+  = @employee.experience_year
+p
+  strong Experience month:
+  = @employee.experience_month
+p
+  strong Employment status:
+  = @employee.employment_status
+p
+  strong Children count:
+  = @employee.children_count
+p
+  strong Home address line1:
+  = @employee.home_address_line1
+p
+  strong Home address line2:
+  = @employee.home_address_line2
+p
+  strong Home city:
+  = @employee.home_city
+p
+  strong Home state:
+  = @employee.home_state
+p
+  strong Home country:
+  = @employee.home_country
+p
+  strong Home postal code:
+  = @employee.home_postal_code
+p
+  strong Mobile phone:
+  = @employee.mobile_phone
+p
+  strong Home phone:
+  = @employee.home_phone
+p
+  strong Office phone:
+  = @employee.office_phone
+p
+  strong Other phone:
+  = @employee.other_phone
+p
+  strong Emergency contact number:
+  = @employee.emergency_contact_number
+p
+  strong Emergency contact name:
+  = @employee.emergency_contact_name
+p
+  strong Email:
+  = @employee.email
+p
+  strong Photo uri:
+  = @employee.photo_uri
+p
+  strong Education degree:
+  = @employee.education_degree
+p
+  strong Education graduation date:
+  = @employee.education_graduation_date
+p
+  strong Education school:
+  = @employee.education_school
+p
+  strong Education degree2:
+  = @employee.education_degree2
+p
+  strong Education graduation date2:
+  = @employee.education_graduation_date2
+p
+  strong Education school2:
+  = @employee.education_school2
+p
+  strong Reporting supervisor:
+  = @employee.reporting_supervisor_id
+p
+  strong Department:
+  = @employee.department_id
+p
+  strong Nationality:
+  = @employee.nationality
+p
+  strong Blood type:
+  = @employee.blood_type
+
+= link_to 'Edit', edit_employee_path(@employee)
+'|
+= link_to 'Back', employees_path

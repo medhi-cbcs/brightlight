@@ -1,0 +1,37 @@
+h1 Listing book_assignments
+
+table
+  thead
+    tr
+      th Book
+      th Student
+      th Academic year
+      th Course text
+      th Issue date
+      th Return date
+      th Initial condition
+      th End condition
+      th Status
+      th
+      th
+      th
+
+  tbody
+    - @book_assignments.each do |book_assignment|
+      tr
+        td = book_assignment.book
+        td = book_assignment.student
+        td = book_assignment.academic_year
+        td = book_assignment.course_text
+        td = book_assignment.issue_date
+        td = book_assignment.return_date
+        td = book_assignment.initial_condition_id
+        td = book_assignment.end_condition_id
+        td = book_assignment.status
+        td = link_to 'Show', book_assignment
+        td = link_to 'Edit', edit_book_assignment_path(book_assignment)
+        td = link_to 'Destroy', book_assignment, data: {:confirm => 'Are you sure?'}, :method => :delete
+
+br
+
+= link_to 'New Book assignment', new_book_assignment_path

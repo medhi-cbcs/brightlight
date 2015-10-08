@@ -1,0 +1,87 @@
+p#notice = notice
+
+p
+  strong Name:
+  = @student.name
+p
+  strong First name:
+  = @student.first_name
+p
+  strong Last name:
+  = @student.last_name
+p
+  strong Date of birth:
+  = @student.date_of_birth
+p
+  strong Admission no:
+  = @student.admission_no
+p
+  strong Family:
+  = @student.family_id
+p
+  strong Gender:
+  = @student.gender
+p
+  strong Blood type:
+  = @student.blood_type
+p
+  strong Nationality:
+  = @student.nationality
+p
+  strong Religion:
+  = @student.religion
+p
+  strong Address line1:
+  = @student.address_line1
+p
+  strong Address line2:
+  = @student.address_line2
+p
+  strong City:
+  = @student.city
+p
+  strong State:
+  = @student.state
+p
+  strong Postal code:
+  = @student.postal_code
+p
+  strong Country:
+  = @student.country
+p
+  strong Mobile phone:
+  = @student.mobile_phone
+p
+  strong Home phone:
+  = @student.home_phone
+p
+  strong Email:
+  = @student.email
+p
+  strong Photo uri:
+  = @student.photo_uri
+p
+  strong Status:
+  = @student.status
+p
+  strong Status description:
+  = @student.status_description
+p
+  strong Is active:
+  = @student.is_active
+p
+  strong Is deleted:
+  = @student.is_deleted
+p
+  strong Student no:
+  = @student.student_no
+p
+  strong Passport no:
+  = @student.passport_no
+p
+  strong Enrollment date:
+  = @student.enrollment_date
+
+= link_to 'Edit', edit_student_path(@student)
+'|
+= link_to 'Back', students_path

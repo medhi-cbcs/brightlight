@@ -1,0 +1,48 @@
+p#notice = notice
+
+p
+  strong Name:
+  = @guardian.name
+p
+  strong First name:
+  = @guardian.first_name
+p
+  strong Last name:
+  = @guardian.last_name
+p
+  strong Mobile phone:
+  = @guardian.mobile_phone
+p
+  strong Home phone:
+  = @guardian.home_phone
+p
+  strong Office phone:
+  = @guardian.office_phone
+p
+  strong Other phone:
+  = @guardian.other_phone
+p
+  strong Address line1:
+  = @guardian.address_line1
+p
+  strong Address line2:
+  = @guardian.address_line2
+p
+  strong City:
+  = @guardian.city
+p
+  strong State:
+  = @guardian.state
+p
+  strong Postal code:
+  = @guardian.postal_code
+p
+  strong Country:
+  = @guardian.country
+p
+  strong Family no:
+  = @guardian.family_no
+
+= link_to 'Edit', edit_guardian_path(@guardian)
+'|
+= link_to 'Back', guardians_path
