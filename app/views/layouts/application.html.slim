@@ -19,13 +19,13 @@ html
 			= render 'shared/layout/header'
 		
 		main
+			= render 'shared/flash_messages'
 			.row
 				.col.s12.m2.l3
-					= render 'shared/side_menu_bar'
+					= render "#{controller_name}/side_menu"
 				.col.s12.m9.l8
-					div
-						= render 'shared/flash_messages'          
-						= yield :layout
+					= yield :layout
+
 				.col.s12.m1.l1
 
 		footer.page-footer
