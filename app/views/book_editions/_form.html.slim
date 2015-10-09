@@ -1,10 +1,10 @@
 .row
-  = form_for @book, html: {class:'col s12'} do |f|
-    - if @book.errors.any?
+  = form_for @book_edition, html: {class:'col s12'} do |f|
+    - if @book_edition.errors.any?
       #error_explanation
-        h5 = "#{pluralize(@book.errors.count, "error")} prohibited this book from being saved:"
+        h5 = "#{pluralize(@book_edition.errors.count, "error")} prohibited this book from being saved:"
         ul
-          - @book.errors.full_messages.each do |message|
+          - @book_edition.errors.full_messages.each do |message|
             li = message
     .row
       .input-field.col.s6
@@ -55,4 +55,4 @@
 
       .actions.col.s12 
         button.btn.waves-effect.waves-light type="submit" Save
-        = link_to 'Cancel', books_path, class: "waves-effect waves-teal btn-flat"
+        = link_to 'Cancel', book_editions_path, class: "waves-effect waves-teal btn-flat"

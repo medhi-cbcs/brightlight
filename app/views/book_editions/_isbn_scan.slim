@@ -1,5 +1,5 @@
 .row
-	= form_tag({controller:'books', action:'search_isbn'}, {method: "post", class: "col s6"}) do
+	= form_tag({controller:'book_editions', action:'search_isbn'}, {method: "post", class: "col s6"}) do
 		.input-field
 			.col.s10
 				= text_field_tag(:isbn, '', {placeholder:'Scan ISBN'})

@@ -1,0 +1,77 @@
+h4 Listing book editions
+
+.toolbar
+  = link_to 'Add New Book', new_book_edition_path, class: "btn btn-primary"
+  .right
+    a href="#{book_editions_path}"
+      i.material-icons view_list
+    a href="#{book_editions_path}?v=list"
+      i.material-icons list
+
+table.striped
+
+  tbody
+    - @book_editions.each do |book_edition|
+      tr
+        - if @view_style == :list
+          td 
+            .list_description
+              div = link_to book_edition.title, book_edition
+              - if book_edition.authors.present?
+                span.label Author:
+                span.item = book_edition.authors
+              - if book_edition.publisher.present?
+                span.label Publisher:
+                span.item = book_edition.publisher
+              .isbn
+                - if book_edition.isbn10.present?
+                  span.label ISBN 10:
+                  span.item = book_edition.isbn10
+                - if book_edition.isbn13.present?
+                  span.label ISBN 13:
+                  span.item = book_edition.isbn13
+
+        - else    
+          td style="vertical-align:top"
+            - thumbnail = (book_edition.small_thumbnail.nil? or book_edition.small_thumbnail.blank?) ? 'book-icon.png' : book_edition.small_thumbnail
+            = image_tag(thumbnail, class: 'list_image')
+          td
+            .list_description
+              dl.row
+                dt = link_to book_edition.title, book_edition
+                dd = book_edition.subtitle
+                - if book_edition.authors.present?
+                  dd.col.s6
+                    .label Author
+                    .item = book_edition.authors
+                - if book_edition.isbn10.present?
+                  dd.col.s6
+                    .label ISBN 10
+                    .item = book_edition.isbn10
+                - if book_edition.publisher.present?
+                  dd.col.s6 
+                    .label Publisher
+                    .item = book_edition.publisher
+                - if book_edition.isbn13.present?
+                  dd.col.s6
+                    .label ISBN
+                    .item = book_edition.isbn13
+                - if book_edition.published_date.present?
+                  dd.col.s6 
+                    .label Published Date
+                    .item = book_edition.published_date
+                - if book_edition.page_count.present?
+                  dd.col.s6
+                    .label Page count
+                    .item = book_edition.page_count
+                - if book_edition.description.present?
+                  dd.col.s12
+                    .label Description
+                    .item = truncate(strip_tags(book_edition.description), length: 140)
+
+        td 
+          = link_to 'Edit', edit_book_edition_path(book_edition), class: "btn waves-effect waves-teal btn-flat btn-small"
+          br
+          = link_to 'Destroy', book_edition, data: {:confirm => 'Are you sure?'}, :method => :delete, class: "btn waves-effect waves-teal red btn-small"                
+
+= will_paginate @book_editions

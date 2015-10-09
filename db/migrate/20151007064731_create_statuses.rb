@@ -2,8 +2,7 @@ class CreateStatuses < ActiveRecord::Migration
   def change
     create_table :statuses do |t|
       t.string :name
-
-      t.timestamps null: false
+      t.integer :order_no
     end
   end
 end

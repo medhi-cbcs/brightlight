@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  grade_level_id: 
+  name: MyString
+  homeroom: MyString
+
+two:
+  grade_level_id: 
+  name: MyString
+  homeroom: MyString
