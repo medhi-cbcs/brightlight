@@ -10,7 +10,7 @@ html
 		link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"
 
 		= javascript_include_tag "application", 'data-turbolinks-track' => true
-		= yield :javascript
+		
 
 		meta name="viewport" content="width=device-width, initial-scale=1.0"
 
@@ -22,15 +22,23 @@ html
 			= render 'shared/flash_messages'
 			.row
 				.col.s12.m2.l3
-					= render "#{controller_name}/side_menu"
+					- if lookup_context.exists?("#{controller_name}/_side_menu")
+						= render "#{controller_name}/side_menu"
+					- else
+						= render 'shared/side_menu_bar'
 				.col.s12.m9.l8
 					= yield :layout
 
 				.col.s12.m1.l1
+			
+			
 
 		footer.page-footer
 			= render 'shared/layout/footer'
-
+			
+			= yield :javascript
+			= render 'shared/materialize_js_inits'
+			
 			-if Rails.env.development?
 				.container
 					= debug(params)
