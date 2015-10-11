@@ -1,0 +1,24 @@
+.row
+	= form_for [:admin, @academic_year], html: {class:'col s12'} do |f|
+	  - if @academic_year.errors.any?
+	    #error_explanation
+	      h5 = "#{pluralize(@academic_year.errors.count, "error")} prohibited this academic_year from being saved:"
+	      ul
+	        - @academic_year.errors.full_messages.each do |message|
+	          li = message
+	  .row
+	    .input-field.col.s6
+	      = f.label :name, class: 'active'
+	      = f.text_field :name
+	  .row
+	    .input-field.col.s6
+	      = f.label :start_date, class: 'active'
+	      = f.text_field :start_date
+	    .input-field.col.s6
+	      = f.label :end_date, class: 'active'
+	      = f.text_field :end_date
+
+	  .actions.col.s12 
+	    button.btn.waves-effect.waves-light type="submit" Save
+	    = link_to 'Cancel', admin_academic_years_path, class: "waves-effect waves-teal btn-flat"
+	    
