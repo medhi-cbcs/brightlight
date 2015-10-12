@@ -21,11 +21,13 @@ Rails.application.routes.draw do
     end
   end
 
-  # admin
   namespace :admin do
-    resources :academic_years
+    resources :academic_years, :academic_terms
+    
+    # resources :grade_levels, :grade_sections, :courses
+    # resources :course_sections, :students, :employees
   end
-
+ 
   # For authorization with OmniAuth2
   get '/auth/:provider/callback', to: 'sessions#create'
 

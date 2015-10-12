@@ -1,0 +1,30 @@
+.row
+	= form_for [:admin, @academic_term], html: {class:'col s12'} do |f|
+	  - if @academic_term.errors.any?
+	    #error_explanation
+	      h5 = "#{pluralize(@academic_term.errors.count, "error")} prohibited this academic_term from being saved:"
+	      ul
+	        - @academic_term.errors.full_messages.each do |message|
+	          li = message
+	  .row
+	    .input-field.col.s6
+	      = f.label :name, class: 'active'
+	      = f.text_field :name
+
+	    .input-field.col.s6
+	    	= f.label :academic_year_id
+	    	= f.text_field :academic_year_id
+	  .row
+	    .input-field.col.s6
+	      = f.label :start_date, class: 'active'
+	      = f.date_field :start_date, html={type:'date', 'data-value' => "#{@academic_term.start_date}", class:'datepicker'}
+	      /= f.date_field :start_date
+	    .input-field.col.s6
+	      = f.label :end_date, class: 'active'
+	      = f.date_field :end_date, html={type:'date', 'data-value' => "#{@academic_term.end_date}", class:'datepicker'}
+	      /= f.date_field :end_date
+
+	  .actions.col.s12 
+	    button.btn.waves-effect.waves-light type="submit" Save
+	    = link_to 'Cancel', admin_academic_terms_path, class: "waves-effect waves-teal btn-flat"
+

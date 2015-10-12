@@ -40,11 +40,8 @@ class Admin::AcademicYearsController < ApplicationController
   # PATCH/PUT /academic_years/1
   # PATCH/PUT /academic_years/1.json
   def update
-    puts academic_year_params
-
     respond_to do |format|
       if @academic_year.update(academic_year_params)
-        puts @academic_year.inspect
         format.html { redirect_to [:admin, @academic_year], notice: 'Academic year was successfully updated.' }
         format.json { render :show, status: :ok, location: [:admin, @academic_year] }
       else
