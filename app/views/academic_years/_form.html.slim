@@ -37,3 +37,10 @@
 		button.btn.waves-effect.waves-light type="submit" Save
 		= link_to 'Cancel', academic_years_path, class: "waves-effect waves-teal btn-flat"
 
+javascript:
+	$(".datepicker").pickadate({
+		format: 'yyyy-mm-dd',
+		formatSubmit: 'yyyy-mm-dd',
+			selectMonths: false, // Creates a dropdown to control month
+			selectYears: 15 // Creates a dropdown of 15 years to control year
+	});

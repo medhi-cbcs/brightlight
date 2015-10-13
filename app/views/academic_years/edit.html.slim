@@ -1,3 +1,6 @@
 h4 Edit Academic Year
 
 == render partial: 'form'
+
+.actions.col.s12
+	= link_to 'Delete', @academic_year, data: {:confirm => 'Are you sure?'}, :method => :delete, class: "right btn waves-effect waves-teal red btn-small" 
