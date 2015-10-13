@@ -41,6 +41,7 @@ class GradeLevelsController < ApplicationController
   # PATCH/PUT /grade_levels/1
   # PATCH/PUT /grade_levels/1.json
   def update
+
     respond_to do |format|
       if @grade_level.update(grade_level_params)
         format.html { redirect_to @grade_level, notice: 'Grade level was successfully updated.' }
@@ -71,6 +72,6 @@ class GradeLevelsController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def grade_level_params
       params.require(:grade_level).permit(:name, :order_no, 
-                                         {:grade_sections_attributes => [:name, :homeroom]})
+                                         {:grade_sections_attributes => [:name, :homeroom, :_destroy, :id]})
     end
 end

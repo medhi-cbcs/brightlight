@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+
   resources :guardians
   resources :book_assignments
   resources :book_grades
@@ -10,7 +11,7 @@ Rails.application.routes.draw do
   resources :products
   resources :academic_years
   resources :grade_levels
-  
+
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
@@ -22,14 +23,6 @@ Rails.application.routes.draw do
     collection do
       post 'search_isbn'
     end
-  end
-
-  namespace :admin do
-    resources :academic_years
-    
-    
-    # resources :grade_levels, :grade_sections, :courses
-    # resources :course_sections, :students, :employees
   end
  
   # For authorization with OmniAuth2

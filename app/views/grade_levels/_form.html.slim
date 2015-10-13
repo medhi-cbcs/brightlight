@@ -15,12 +15,15 @@
 		hr
 		= f.fields_for :grade_sections do |form|
 			.row
-				.input-field.col.s6
+				.input-field.col.s4
 					= form.label :name, class: 'active'
 					= form.text_field :name
-				.input-field.col.s6
+				.input-field.col.s5
 					= form.label 'Teacher', class: 'active'
 					= form.text_field :homeroom
+				.input-field.col.s3
+					= form.check_box :_destroy
+					= form.label '_destroy'
 
 	.actions.col.s12 
 		button.btn.waves-effect.waves-light type="submit" Save
