@@ -1,0 +1,28 @@
+br
+table
+  tr
+  	td
+      .list_description
+        dl.row
+          h5 Grade Level
+        dl.row
+          dd.col.s4
+            .label Name
+            .item = @grade_level.name
+
+        dl.row
+          h6 Sections
+        - @grade_level.grade_sections.each do |section|
+          dl.row
+            dd.col.s4
+              .label Name
+              .item = section.name
+            dd.col.s4
+              .label Teacher
+              .item = section.homeroom.present? ? section.homeroom : '--'
+
+
+.toolbar.actions
+  = link_to '< Back', grade_levels_path, class: 'btn btn-flat'
+  = link_to 'Edit', edit_grade_level_path(@grade_level), class: 'btn btn-primary'
+

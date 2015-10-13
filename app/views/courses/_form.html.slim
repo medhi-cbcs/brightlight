@@ -6,25 +6,4 @@
         - @course.errors.full_messages.each do |message|
           li = message
 
-  .field
-    = f.label :name
-    = f.text_field :name
-  .field
-    = f.label :number
-    = f.text_field :number
-  .field
-    = f.label :description
-    = f.text_field :description
-  .field
-    = f.label :grade_level
-    = f.text_field :grade_level
-  .field
-    = f.label :academic_year
-    = f.text_field :academic_year
-  .field
-    = f.label :academic_term
-    = f.text_field :academic_term
-  .field
-    = f.label :employee
-    = f.text_field :employee
   .actions = f.submit

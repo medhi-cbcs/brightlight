@@ -1,0 +1,28 @@
+h4 Grade Levels
+
+.toolbar
+  = link_to 'Add Grade Level', new_grade_level_path, class: "btn btn-primary"
+
+table.striped
+  thead
+    tr
+      th Name
+      th Sections
+      th Teacher
+      th Actions
+
+  tbody
+    - @grade_levels.each do |grade_level|
+      tr
+        td = grade_level.name
+        td 
+          - grade_level.grade_sections.each do |section|
+            div = section.name
+        td
+          - grade_level.grade_sections.each do |section|
+            div = section.homeroom.present? ? section.homeroom : '--'
+        td
+          = link_to 'Show', grade_level, class: "btn waves-effect waves-teal btn-flat btn-small"
+          br
+          = link_to 'Edit', edit_grade_level_path(grade_level), class: "btn waves-effect waves-teal btn-flat btn-small"
+        

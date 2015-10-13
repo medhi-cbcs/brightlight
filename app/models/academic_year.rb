@@ -5,5 +5,5 @@ class AcademicYear < ActiveRecord::Base
 	# validates :start_date, date: true
 	# validates :end_date, date: true
 	has_many :academic_terms, :dependent => :destroy
-    accepts_nested_attributes_for :academic_terms
+  accepts_nested_attributes_for :academic_terms
 end

@@ -3,13 +3,6 @@ h1 Listing courses
 table
   thead
     tr
-      th Name
-      th Number
-      th Description
-      th Grade level
-      th Academic year
-      th Academic term
-      th Employee
       th
       th
       th
@@ -17,13 +10,6 @@ table
   tbody
     - @courses.each do |course|
       tr
-        td = course.name
-        td = course.number
-        td = course.description
-        td = course.grade_level
-        td = course.academic_year
-        td = course.academic_term
-        td = course.employee
         td = link_to 'Show', course
         td = link_to 'Edit', edit_course_path(course)
         td = link_to 'Destroy', course, data: {:confirm => 'Are you sure?'}, :method => :delete
