@@ -1,0 +1,26 @@
+h4 Academic Years
+
+.toolbar
+  = link_to 'Add New Year', new_academic_year_path, class: "btn btn-primary"
+
+table.striped
+  thead
+    tr
+      th Name
+      th Start Date
+      th End Date
+      th Actions
+
+  tbody
+    - @academic_years.each do |academic_year|
+      tr
+        td = academic_year.name
+        td = academic_year.start_date
+        td = academic_year.end_date
+        td
+          = link_to 'Show', academic_year, class: "btn waves-effect waves-teal btn-flat btn-small"
+          br
+          = link_to 'Edit', edit_academic_year_path(academic_year), class: "btn waves-effect waves-teal btn-flat btn-small"
+          br
+          = link_to 'Destroy', academic_year, data: {:confirm => 'Are you sure?'}, :method => :delete, class: "btn waves-effect waves-teal red btn-small"    
+

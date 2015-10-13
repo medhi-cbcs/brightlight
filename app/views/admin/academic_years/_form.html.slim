@@ -8,7 +8,7 @@
 						li = message
 		.row
 			.input-field.col.s6
-				= f.label :name, class: 'active'
+				= f.label 'Academic Year', class: 'active'
 				= f.text_field :name
 		.row
 			.input-field.col.s6
@@ -17,6 +17,22 @@
 			.input-field.col.s6
 				= f.label :end_date, class: 'active'
 				= f.date_field :end_date, html={'data-value' => "#{@academic_year.end_date}", class:'datepicker'}
+
+		.row
+			h5 Academic Terms
+			hr
+			= f.fields_for :academic_terms do |form|
+				.row
+					.input-field.col.s6
+						= form.label 'Academic Term', class: 'active'
+						= form.text_field :name
+				.row
+					.input-field.col.s6
+						= f.label :start_date, class: 'active'
+						= f.date_field :start_date, html={class:'datepicker'}
+					.input-field.col.s6
+						= f.label :end_date, class: 'active'
+						= f.date_field :end_date, html={class:'datepicker'}
 
 		.actions.col.s12 
 			button.btn.waves-effect.waves-light type="submit" Save

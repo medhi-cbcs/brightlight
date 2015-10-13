@@ -8,6 +8,8 @@ Rails.application.routes.draw do
   resources :courses
   resources :book_editions
   resources :products
+  resources :academic_years
+  
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
@@ -22,7 +24,8 @@ Rails.application.routes.draw do
   end
 
   namespace :admin do
-    resources :academic_years, :academic_terms
+    resources :academic_years
+    
     
     # resources :grade_levels, :grade_sections, :courses
     # resources :course_sections, :students, :employees
