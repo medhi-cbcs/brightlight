@@ -22,16 +22,19 @@
 		hr
 		= f.fields_for :academic_terms do |form|
 			.row
-				.input-field.col.s6
+				.input-field.col.s4
 					= form.label 'Academic Term', class: 'active'
 					= form.text_field :name
-			.row
-				.input-field.col.s6
+				.input-field.col.s3
 					= form.label :start_date, class: 'active'
 					= form.date_field :start_date, html={class:'datepicker'}
-				.input-field.col.s6
+				.input-field.col.s3
 					= form.label :end_date, class: 'active'
 					= form.date_field :end_date, html={class:'datepicker'}
+				- if :action == :edit
+					.input-field.col.s2
+						= form.check_box :_destroy
+						= form.label '_destroy'
 
 	.actions.col.s12 
 		button.btn.waves-effect.waves-light type="submit" Save

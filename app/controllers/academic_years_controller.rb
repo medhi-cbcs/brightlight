@@ -20,16 +20,14 @@ class AcademicYearsController < ApplicationController
 
   # GET /academic_years/1/edit
   def edit
-    if @academic_year.academic_terms.blank?
-      2.times { @academic_year.academic_terms.build }
-    end
+    # if @academic_year.academic_terms.blank?
+    #   2.times { @academic_year.academic_terms.build }
+    # end
   end
 
   # POST /academic_years
   # POST /academic_years.json
   def create
-    puts "DEBUG CREATE"
-    puts params
     @academic_year = AcademicYear.new(academic_year_params)
 
     respond_to do |format|
@@ -46,8 +44,6 @@ class AcademicYearsController < ApplicationController
   # PATCH/PUT /academic_years/1
   # PATCH/PUT /academic_years/1.json
   def update
-    puts "DEBUG UPDATE"
-    puts params
     respond_to do |format|
       if @academic_year.update(academic_year_params)
         format.html { redirect_to @academic_year, notice: 'Academic year was successfully updated.' }
@@ -78,6 +74,6 @@ class AcademicYearsController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def academic_year_params
       params.require(:academic_year).permit(:name, :start_date, :end_date, 
-                                           {:academic_terms_attributes => [:academic_term_id, :name, :start_date, :end_date]})
+                                           {:academic_terms_attributes => [:name, :start_date, :end_date, :_destroy, :id]})
     end
 end
