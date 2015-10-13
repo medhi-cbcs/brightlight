@@ -17,12 +17,16 @@ nav
             input.icon-prefix type="text" placeholder="Search"
             .search-results
       li
-        a href="/book_editions" Books 
+        a.dropdown-button data-activates="dropdown4" href="#" 
+          | Books 
+          i.material-icons.right arrow_drop_down
       li
-        a href="/products" Products
+        a.dropdown-button data-activates="dropdown3" href="#" 
+          | School
+          i.material-icons.right arrow_drop_down
       li
-        a.dropdown-button href="#" data-activates="dropdown2" 
-          | Users
+        a.dropdown-button data-activates="dropdown2" href="#" 
+          | People
           i.material-icons.right arrow_drop_down
       li
         a.dropdown-button href="/auth/google" data-activates="dropdown1"
@@ -32,19 +36,41 @@ nav
             i.material-icons perm_identity
 
 // Dropdown menu
+ul#dropdown4.dropdown-content
+  li
+    a href="/book_assignments" Book Assignments
+  li
+    a href="/book_grades" Condition grading
+  li.divider
+  li
+    a href="/book_editions" Book Editions
+  li.divider
+  li
+    a href="/course_texts" Course Text
+
+ul#dropdown3.dropdown-content
+  li
+    a href="/courses" Courses
+  li.divider
+  li
+    a href="/academic_years" Academic Years
+  li
+    a href="/grade_levels" Grade Levels
+  li.divider
+  li
+    a href="#" . . .
+
 ul#dropdown2.dropdown-content
   li
-    a href="/users" List users
+    a href="/students" Students
   li
-    a href="#" Another action
-  li
-    a href="#" Something else here
+    a href="/guardians" Guardians
   li.divider
   li
-    a href="#" Separated link
-  li.divider
+    a href="/employees?q=teacher" Teachers
   li
-    a href="#" One more separated link
+    a href="/employees?q=staff" Staff
+
 
 ul#dropdown1.dropdown-content
   li

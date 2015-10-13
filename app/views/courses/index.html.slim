@@ -1,19 +1,32 @@
 h1 Listing courses
 
-table
+.toolbar
+  = link_to 'Add Course', new_course_path, class: "btn btn-primary"
+
+table.striped
   thead
     tr
-      th
-      th
-      th
+      th Number
+      th Name
+      th Description
+      th Grade
+      th Year
+      th Term
+      th Actions
 
   tbody
     - @courses.each do |course|
       tr
-        td = link_to 'Show', course
-        td = link_to 'Edit', edit_course_path(course)
-        td = link_to 'Destroy', course, data: {:confirm => 'Are you sure?'}, :method => :delete
+        td = course.number
+        td = course.name
+        td = course.description
+        td = course.grade_level.name
+        td = course.academic_year.name
+        td = course.academic_term.name
+        td
+          = link_to 'Show', course, class: "btn waves-effect waves-teal btn-flat btn-small"
+          br
+          = link_to 'Edit', edit_course_path(course), class: "btn waves-effect waves-teal btn-flat btn-small"
 
-br
 
-= link_to 'New Course', new_course_path
+

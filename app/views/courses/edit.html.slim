@@ -1,8 +1,6 @@
-h1 Editing course
+h4 Editing course
 
 == render 'form'
 
-= link_to 'Show', @course
-'|
-= link_to 'Back', courses_path
-
+.actions.col.s12
+	= link_to 'Delete', @course, data: {confirm: 'Are you sure?'}, method: :delete, class: "right btn waves-effect waves-teal red btn-small" 

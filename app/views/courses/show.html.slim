@@ -1,6 +1,35 @@
-p#notice = notice
+br
+table
+  tr
+  	td
+      .list_description
+        dl.row
+          h5 Course
+        dl.row
+          dd.col.s6
+            .label Name
+            .item = @course.name
+          dd.col.s6
+            .label Number
+            .item = @course.number
+        	dd.col.s12
+        		.label Description
+        		.item = @course.description
+        dl.row
+        	dd.col.s4
+        	  .label Grade
+        		.item = @course.grade_level.name
+        	dd.col.s4
+        	  .label Year
+        		.item = @course.academic_year.name
+        	dd.col.s4
+        	  .label Term
+        		.item = @course.academic_term.name
+        dl.row
+          h6 Sections
 
 
-= link_to 'Edit', edit_course_path(@course)
-'|
-= link_to 'Back', courses_path
+.toolbar.actions
+  = link_to '< Back', courses_path, class: 'btn btn-flat'
+  = link_to 'Edit', edit_course_path(@course), class: 'btn btn-primary'
+
