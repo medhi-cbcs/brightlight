@@ -1,123 +1,130 @@
 = form_for @employee do |f|
   - if @employee.errors.any?
     #error_explanation
-      h2 = "#{pluralize(@employee.errors.count, "error")} prohibited this employee from being saved:"
+      h6 = "#{pluralize(@employee.errors.count, "error")} prohibited this employee from being saved:"
       ul
         - @employee.errors.full_messages.each do |message|
           li = message
 
-  .field
-    = f.label :name
-    = f.text_field :name
-  .field
-    = f.label :first_name
-    = f.text_field :first_name
-  .field
-    = f.label :last_name
-    = f.text_field :last_name
-  .field
-    = f.label :gender
-    = f.text_field :gender
-  .field
-    = f.label :date_of_birth
-    = f.date_select :date_of_birth
-  .field
-    = f.label :place_of_birth
-    = f.text_field :place_of_birth
-  .field
-    = f.label :joining_date
-    = f.date_select :joining_date
-  .field
-    = f.label :job_title
-    = f.text_field :job_title
-  .field
-    = f.label :employee_number
-    = f.text_field :employee_number
-  .field
-    = f.label :marital_status
-    = f.text_field :marital_status
-  .field
-    = f.label :experience_year
-    = f.number_field :experience_year
-  .field
-    = f.label :experience_month
-    = f.number_field :experience_month
-  .field
-    = f.label :employment_status
-    = f.text_field :employment_status
-  .field
-    = f.label :children_count
-    = f.number_field :children_count
-  .field
-    = f.label :home_address_line1
-    = f.text_field :home_address_line1
-  .field
-    = f.label :home_address_line2
-    = f.text_field :home_address_line2
-  .field
-    = f.label :home_city
-    = f.text_field :home_city
-  .field
-    = f.label :home_state
-    = f.text_field :home_state
-  .field
-    = f.label :home_country
-    = f.text_field :home_country
-  .field
-    = f.label :home_postal_code
-    = f.text_field :home_postal_code
-  .field
-    = f.label :mobile_phone
-    = f.text_field :mobile_phone
-  .field
-    = f.label :home_phone
-    = f.text_field :home_phone
-  .field
-    = f.label :office_phone
-    = f.text_field :office_phone
-  .field
-    = f.label :other_phone
-    = f.text_field :other_phone
-  .field
-    = f.label :emergency_contact_number
-    = f.text_field :emergency_contact_number
-  .field
-    = f.label :emergency_contact_name
-    = f.text_field :emergency_contact_name
-  .field
-    = f.label :email
-    = f.text_field :email
-  .field
-    = f.label :photo_uri
-    = f.text_field :photo_uri
-  .field
-    = f.label :education_degree
-    = f.text_field :education_degree
-  .field
-    = f.label :education_graduation_date
-    = f.text_field :education_graduation_date
-  .field
-    = f.label :education_school
-    = f.text_field :education_school
-  .field
-    = f.label :education_degree2
-    = f.text_field :education_degree2
-  .field
-    = f.label :education_graduation_date2
-    = f.text_field :education_graduation_date2
-  .field
-    = f.label :education_school2
-    = f.text_field :education_school2
-  .field
-    = f.label :reporting_supervisor_id
-    = f.number_field :reporting_supervisor_id
-  .field
-    = f.label :department_id
-    = f.number_field :department_id
-  .field
-    = f.label :nationality
-    = f.text_field :nationality
-  .field
-    = f.label :blood_type
-    = f.text_field :blood_type
-  .actions = f.submit
+  .row
+    .input-field.col.s4
+      = f.label :name
+      = f.text_field :name
+    .input-field.col.s4
+      = f.label :first_name
+      = f.text_field :first_name
+    .input-field.col.s4
+      = f.label :last_name
+      = f.text_field :last_name
+  .row
+    h5 Personal Details
+    .input-field.col.s4
+      = f.label :gender
+      = f.text_field :gender
+    .input-field.col.s4
+      = f.label :date_of_birth
+      = f.date_select :date_of_birth
+    .input-field.col.s4
+      = f.label :place_of_birth
+      = f.text_field :place_of_birth
+    .input-field.col.s4
+      = f.label :marital_status
+      = f.text_field :marital_status
+    .input-field.col.s4
+      = f.label 'No of children'
+      = f.number_field :children_count
+    .input-field.col.s4
+      = f.label :nationality
+      = f.text_field :nationality
+    .input-field.col.s4
+      = f.label :blood_type
+      = f.text_field :blood_type
+  .row
+    h5 Employment
+    .input-field.col.s4
+      = f.label :department_id
+      = f.number_field :department_id
+    .input-field.col.s4
+      = f.label :joining_date
+      = f.date_select :joining_date
+    .input-field.col.s4
+      = f.label :job_title
+      = f.text_field :job_title
+    .input-field.col.s4
+      = f.label :employee_number
+      = f.text_field :employee_number
+    .input-field.col.s4
+      = f.label :experience_year
+      = f.number_field :experience_year
+    .input-field.col.s4
+      = f.label :experience_month
+      = f.number_field :experience_month
+    .input-field.col.s4
+      = f.label :employment_status
+      = f.text_field :employment_status
+  .row
+    h5 Contacts
+    .input-field.col.s4
+      = f.label :home_address_line1
+      = f.text_field :home_address_line1
+    .input-field.col.s4
+      = f.label :home_address_line2
+      = f.text_field :home_address_line2
+    .input-field.col.s4
+      = f.label :home_city
+      = f.text_field :home_city
+    .input-field.col.s4
+      = f.label :home_state
+      = f.text_field :home_state
+    .input-field.col.s4
+      = f.label :home_country
+      = f.text_field :home_country
+    .input-field.col.s4
+      = f.label :home_postal_code
+      = f.text_field :home_postal_code
+    .input-field.col.s4
+      = f.label :mobile_phone
+      = f.text_field :mobile_phone
+    .input-field.col.s4
+      = f.label :home_phone
+      = f.text_field :home_phone
+    .input-field.col.s4
+      = f.label :office_phone
+      = f.text_field :office_phone
+    .input-field.col.s4
+      = f.label :other_phone
+      = f.text_field :other_phone
+    .input-field.col.s4
+      = f.label :emergency_contact_number
+      = f.text_field :emergency_contact_number
+    .input-field.col.s4
+      = f.label :emergency_contact_name
+      = f.text_field :emergency_contact_name
+    .input-field.col.s4
+      = f.label :email
+      = f.text_field :email
+  .row
+    h5 Education
+    .input-field.col.s4
+      = f.label :education_degree
+      = f.text_field :education_degree
+    .input-field.col.s4
+      = f.label :education_graduation_date
+      = f.text_field :education_graduation_date
+    .input-field.col.s4
+      = f.label :education_school
+      = f.text_field :education_school
+    .input-field.col.s4
+      = f.label :education_degree2
+      = f.text_field :education_degree2
+    .input-field.col.s4
+      = f.label :education_graduation_date2
+      = f.text_field :education_graduation_date2
+    .input-field.col.s4
+      = f.label :education_school2
+      = f.text_field :education_school2
+    .input-field.col.s4
+      = f.label :reporting_supervisor_id
+      = f.number_field :reporting_supervisor_id
+
+    .actions = f.submit

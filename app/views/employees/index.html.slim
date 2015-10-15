@@ -1,95 +1,23 @@
-h1 Listing employees
+h4 Employees
+
+.toolbar
+  = link_to 'Add Employee', new_employee_path, class: "btn btn-primary"
 
 table
   thead
     tr
       th Name
-      th First name
-      th Last name
-      th Gender
-      th Date of birth
-      th Place of birth
-      th Joining date
       th Job title
-      th Employee number
-      th Marital status
-      th Experience year
-      th Experience month
-      th Employment status
-      th Children count
-      th Home address line1
-      th Home address line2
-      th Home city
-      th Home state
-      th Home country
-      th Home postal code
-      th Mobile phone
-      th Home phone
-      th Office phone
-      th Other phone
-      th Emergency contact number
-      th Emergency contact name
-      th Email
-      th Photo uri
-      th Education degree
-      th Education graduation date
-      th Education school
-      th Education degree2
-      th Education graduation date2
-      th Education school2
-      th Reporting supervisor
       th Department
-      th Nationality
-      th Blood type
-      th
-      th
-      th
+      th Actions
 
   tbody
     - @employees.each do |employee|
       tr
-        td = employee.name
-        td = employee.first_name
-        td = employee.last_name
-        td = employee.gender
-        td = employee.date_of_birth
-        td = employee.place_of_birth
-        td = employee.joining_date
+        td = link_to employee.name, employee
         td = employee.job_title
-        td = employee.employee_number
-        td = employee.marital_status
-        td = employee.experience_year
-        td = employee.experience_month
-        td = employee.employment_status
-        td = employee.children_count
-        td = employee.home_address_line1
-        td = employee.home_address_line2
-        td = employee.home_city
-        td = employee.home_state
-        td = employee.home_country
-        td = employee.home_postal_code
-        td = employee.mobile_phone
-        td = employee.home_phone
-        td = employee.office_phone
-        td = employee.other_phone
-        td = employee.emergency_contact_number
-        td = employee.emergency_contact_name
-        td = employee.email
-        td = employee.photo_uri
-        td = employee.education_degree
-        td = employee.education_graduation_date
-        td = employee.education_school
-        td = employee.education_degree2
-        td = employee.education_graduation_date2
-        td = employee.education_school2
-        td = employee.reporting_supervisor_id
         td = employee.department_id
-        td = employee.nationality
-        td = employee.blood_type
-        td = link_to 'Show', employee
-        td = link_to 'Edit', edit_employee_path(employee)
-        td = link_to 'Destroy', employee, data: {:confirm => 'Are you sure?'}, :method => :delete
 
-br
+        td = link_to 'Edit', edit_employee_path(employee), class: "btn waves-effect waves-teal btn-flat btn-small"
 
-= link_to 'New Employee', new_employee_path
+
