@@ -1,87 +1,125 @@
-p#notice = notice
+br
+.row.tabbed
+  h4 = @student.name
+  .col.s12
+    ul.tabs.z-depth-1
+      li.tab.col.s3
+        a href='#tab1' Name
+      li.tab.col.s3
+        a href='#tab2' Demographics
+      li.tab.col.s3
+        a href='#tab3' Contacts
+      li.tab.col.s3
+        a href='#tab4' Details
 
-p
-  strong Name:
-  = @student.name
-p
-  strong First name:
-  = @student.first_name
-p
-  strong Last name:
-  = @student.last_name
-p
-  strong Date of birth:
-  = @student.date_of_birth
-p
-  strong Admission no:
-  = @student.admission_no
-p
-  strong Family:
-  = @student.family_id
-p
-  strong Gender:
-  = @student.gender
-p
-  strong Blood type:
-  = @student.blood_type
-p
-  strong Nationality:
-  = @student.nationality
-p
-  strong Religion:
-  = @student.religion
-p
-  strong Address line1:
-  = @student.address_line1
-p
-  strong Address line2:
-  = @student.address_line2
-p
-  strong City:
-  = @student.city
-p
-  strong State:
-  = @student.state
-p
-  strong Postal code:
-  = @student.postal_code
-p
-  strong Country:
-  = @student.country
-p
-  strong Mobile phone:
-  = @student.mobile_phone
-p
-  strong Home phone:
-  = @student.home_phone
-p
-  strong Email:
-  = @student.email
-p
-  strong Photo uri:
-  = @student.photo_uri
-p
-  strong Status:
-  = @student.status
-p
-  strong Status description:
-  = @student.status_description
-p
-  strong Is active:
-  = @student.is_active
-p
-  strong Is deleted:
-  = @student.is_deleted
-p
-  strong Student no:
-  = @student.student_no
-p
-  strong Passport no:
-  = @student.passport_no
-p
-  strong Enrollment date:
-  = @student.enrollment_date
+  #tab1
+    .col.s2
+      .card
+        .card-image
+          = image_tag (@student.photo_uri.present? ? @student.photo_uri : 'avatar-placeholder.png'), class: 'media-object show-image'
+        .card-content
+          p.small-text = @student.name
+    .col.s10
+      .list_description
+        dl.row
+          dd.col.s5
+            .label First name: 
+            .item = @student.first_name
+          dd.col.s5
+            .label Last name: 
+            .item = @student.last_name
+          dd.col.s5
+            .label Date of birth:
+            .item = @student.date_of_birth
+          dd.col.s5
+            .label Admission no: 
+            .item = @student.admission_no
+          dd.col.s5
+            .label Family: 
+            .item = @student.family_id
+          dd.col.s5
+            .label Gender: 
+            .item = @student.gender
+          dd.col.s5
+            .label Student no: 
+            .item = @student.student_no
 
-= link_to 'Edit', edit_student_path(@student)
-'|
-= link_to 'Back', students_path
+  #tab2
+    .list_description.col.s12
+      dl.row
+        dd.col.s4
+          .label Nationality: 
+          .item = @student.nationality
+        dd.col.s4
+          .label Religion: 
+          .item = @student.religion
+        dd.col.s4
+          .label Blood type: 
+          .item = @student.blood_type
+        dd.col.s4
+          .label Passport no: 
+          .item = @student.passport_no
+        dd.col.s4
+          .label Enrollment date:
+          .item = @student.enrollment_date
+        dd.col.s4
+          .label Is active:
+          .item = @student.is_active
+        dd.col.s4
+          .label Is deleted:
+          .item = @student.is_deleted
+
+  #tab3
+    .list_description.col.s12
+      dl.row
+        dd.col.s4
+          .label Address line1:
+          .item = @student.address_line1
+        dd.col.s4
+          .label Address line2:
+          .item = @student.address_line2
+        dd.col.s4
+          .label City: 
+          .item = @student.city
+        dd.col.s4
+          .label Province: 
+          .item = @student.state
+        dd.col.s4
+          .label Postal code: 
+          .item = @student.postal_code
+        dd.col.s4
+          .label Country: 
+          .item = @student.country
+        dd.col.s4
+          .label Mobile phone:
+          .item = @student.mobile_phone
+        dd.col.s4
+          .label Email:
+          .item = @student.home_phone
+        dd.col.s4
+          .label Country: 
+          .item = @student.email
+  #tab4
+    .list_description.col.s12
+      dl.row
+        dd.col.s4
+          .label Blood type:: 
+          .item = @student.blood_type
+        dd.col.s4
+          .label Status: 
+          .item = @student.status
+          .label City: 
+          .item = @student.city
+        dd.col.s4
+          .label Status description:
+          .item = @student.status_description
+          .label City: 
+          .item = @student.city
+        dd.col.s4
+          .label Province: 
+          .item = @student.state
+
+.toolbar.actions
+  = link_to 'Back', students_path, class: 'btn btn-default'
+  = link_to 'Edit', edit_student_path(@student), class: 'btn btn-primary'
+

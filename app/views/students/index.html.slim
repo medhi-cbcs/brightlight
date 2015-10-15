@@ -1,73 +1,26 @@
-h1 Listing students
+h4 Students
+
+.toolbar
+  = link_to 'Add Student', new_student_path, class: "btn btn-primary"
 
 table
   thead
     tr
       th Name
-      th First name
-      th Last name
-      th Date of birth
       th Admission no
       th Family
-      th Gender
-      th Blood type
-      th Nationality
-      th Religion
-      th Address line1
-      th Address line2
-      th City
-      th State
-      th Postal code
-      th Country
       th Mobile phone
-      th Home phone
       th Email
-      th Photo uri
-      th Status
-      th Status description
-      th Is active
-      th Is deleted
-      th Student no
-      th Passport no
-      th Enrollment date
-      th
-      th
-      th
+      th Actions
 
   tbody
     - @students.each do |student|
       tr
-        td = student.name
-        td = student.first_name
-        td = student.last_name
-        td = student.date_of_birth
+        td = link_to student.name, student
         td = student.admission_no
         td = student.family_id
-        td = student.gender
-        td = student.blood_type
-        td = student.nationality
-        td = student.religion
-        td = student.address_line1
-        td = student.address_line2
-        td = student.city
-        td = student.state
-        td = student.postal_code
-        td = student.country
         td = student.mobile_phone
-        td = student.home_phone
         td = student.email
-        td = student.photo_uri
-        td = student.status
-        td = student.status_description
-        td = student.is_active
-        td = student.is_deleted
-        td = student.student_no
-        td = student.passport_no
-        td = student.enrollment_date
-        td = link_to 'Show', student
-        td = link_to 'Edit', edit_student_path(student)
-        td = link_to 'Destroy', student, data: {:confirm => 'Are you sure?'}, :method => :delete
 
-br
-
-= link_to 'New Student', new_student_path
+        td 
+          = link_to 'Edit', edit_student_path(student), class: "btn waves-effect waves-teal btn-flat btn-small"

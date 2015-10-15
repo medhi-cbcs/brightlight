@@ -20,6 +20,13 @@
     .input-field.col.s8
       = f.label :price, class: 'active'
       = f.text_field :price
+    .input-field.col.s6
+      = f.label :expiry_date, class: 'active'
+      = f.date_field :expiry_date
+    .input-field.col.s6
+      = f.label :received_date, class: 'active'
+      = f.date_field :received_date
+
     .actions.col.s12
       button.btn.waves-effect.waves-light type="submit" Save
       = link_to 'Cancel', products_path, class: "waves-effect waves-teal btn-flat"

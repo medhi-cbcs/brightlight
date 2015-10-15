@@ -12,10 +12,11 @@
 	.row
 		.input-field.col.s6
 			= f.label :start_date, class: 'active'
-			= f.date_field :start_date, html={'data-value' => "#{@academic_year.start_date}", class:'datepicker'}
+			= f.text_field :start_date
 		.input-field.col.s6
 			= f.label :end_date, class: 'active'
-			= f.date_field :end_date, html={'data-value' => "#{@academic_year.end_date}", class:'datepicker'}
+			= f.text_field :end_date
+			/, html={'data-value' => "#{@academic_year.end_date}", class:'datepicker'}
 
 	.row
 		h5 Academic Terms
@@ -27,10 +28,10 @@
 					= form.text_field :name
 				.input-field.col.s3
 					= form.label :start_date, class: 'active'
-					= form.date_field :start_date, html={class:'datepicker'}
+					= form.date_field :start_date
 				.input-field.col.s3
 					= form.label :end_date, class: 'active'
-					= form.date_field :end_date, html={class:'datepicker'}
+					= form.date_field :end_date
 				- if :action == :edit
 					.input-field.col.s2
 						= form.check_box :_destroy
@@ -39,11 +40,3 @@
 	.actions.col.s12 
 		button.btn.waves-effect.waves-light type="submit" Save
 		= link_to 'Cancel', academic_years_path, class: "waves-effect waves-teal btn-flat"
-
-javascript:
-	$(".datepicker").pickadate({
-		format: 'yyyy-mm-dd',
-		formatSubmit: 'yyyy-mm-dd',
-			selectMonths: false, // Creates a dropdown to control month
-			selectYears: 15 // Creates a dropdown of 15 years to control year
-	});

@@ -6,85 +6,95 @@
         - @student.errors.full_messages.each do |message|
           li = message
 
-  .field
-    = f.label :name
-    = f.text_field :name
-  .field
-    = f.label :first_name
-    = f.text_field :first_name
-  .field
-    = f.label :last_name
-    = f.text_field :last_name
-  .field
-    = f.label :date_of_birth
-    = f.date_select :date_of_birth
-  .field
-    = f.label :admission_no
-    = f.text_field :admission_no
-  .field
-    = f.label :family_id
-    = f.number_field :family_id
-  .field
-    = f.label :gender
-    = f.text_field :gender
-  .field
-    = f.label :blood_type
-    = f.text_field :blood_type
-  .field
-    = f.label :nationality
-    = f.text_field :nationality
-  .field
-    = f.label :religion
-    = f.text_field :religion
-  .field
-    = f.label :address_line1
-    = f.text_field :address_line1
-  .field
-    = f.label :address_line2
-    = f.text_field :address_line2
-  .field
-    = f.label :city
-    = f.text_field :city
-  .field
-    = f.label :state
-    = f.text_field :state
-  .field
-    = f.label :postal_code
-    = f.text_field :postal_code
-  .field
-    = f.label :country
-    = f.text_field :country
-  .field
-    = f.label :mobile_phone
-    = f.text_field :mobile_phone
-  .field
-    = f.label :home_phone
-    = f.text_field :home_phone
-  .field
-    = f.label :email
-    = f.text_field :email
-  .field
-    = f.label :photo_uri
-    = f.text_field :photo_uri
-  .field
-    = f.label :status
-    = f.text_field :status
-  .field
-    = f.label :status_description
-    = f.text_field :status_description
-  .field
-    = f.label :is_active
-    = f.check_box :is_active
-  .field
-    = f.label :is_deleted
-    = f.check_box :is_deleted
-  .field
-    = f.label :student_no
-    = f.number_field :student_no
-  .field
-    = f.label :passport_no
-    = f.text_field :passport_no
-  .field
-    = f.label :enrollment_date
-    = f.text_field :enrollment_date
-  .actions = f.submit
+  .row
+    .input-field.col.s4
+      = f.label :name, class: 'active'
+      = f.text_field :name
+    .input-field.col.s4
+      = f.label :first_name, class: 'active'
+      = f.text_field :first_name
+    .input-field.col.s4
+      = f.label :last_name, class: 'active'
+      = f.text_field :last_name
+  .row
+    h5 Personal details
+    .input-field.col.s4
+      = f.label :date_of_birth, class: 'active'
+      = f.date_field :date_of_birth
+    .input-field.col.s4
+      = f.label :family_id, class: 'active'
+      = f.number_field :family_id
+    .input-field.col.s4
+      = f.label :gender, class: 'active'
+      = f.select :gender, [['Male', 'm'], ['Female', 'f']]
+  .row
+    .input-field.col.s4
+      = f.label :blood_type, class: 'active'
+      = f.text_field :blood_type
+    .input-field.col.s4
+      = f.label :nationality, class: 'active'
+      = f.text_field :nationality
+    .input-field.col.s4
+      = f.label :religion, class: 'active'
+      = f.text_field :religion
+  .row
+    h5 Contacts
+    .input-field.col.s4
+      = f.label :address_line1, class: 'active'
+      = f.text_field :address_line1
+    .input-field.col.s4
+      = f.label :address_line2, class: 'active'
+      = f.text_field :address_line2
+    .input-field.col.s4
+      = f.label :city, class: 'active'
+      = f.text_field :city
+    .input-field.col.s4
+      = f.label :state, class: 'active'
+      = f.text_field :state
+    .input-field.col.s4
+      = f.label :postal_code, class: 'active'
+      = f.text_field :postal_code
+    .input-field.col.s4
+      = f.label :country, class: 'active'
+      = f.text_field :country
+    .input-field.col.s4
+      = f.label :mobile_phone, class: 'active'
+      = f.text_field :mobile_phone
+    .input-field.col.s4
+      = f.label :home_phone, class: 'active'
+      = f.text_field :home_phone
+    .input-field.col.s4
+      = f.label :email, class: 'active'
+      = f.text_field :email
+  .row
+    h5 Status
+    .input-field.col.s4
+      = f.label :admission_no, class: 'active'
+      = f.text_field :admission_no
+    .input-field.col.s4
+      = f.label :status, class: 'active'
+      = f.text_field :status
+    .input-field.col.s4
+      = f.label :status_description, class: 'active'
+      = f.text_field :status_description
+    .input-field.col.s4
+      = f.label :student_no, class: 'active'
+      = f.number_field :student_no
+    .input-field.col.s4
+      = f.label :passport_no, class: 'active'
+      = f.text_field :passport_no
+    .input-field.col.s4
+      = f.label :enrollment_date, class: 'active'
+      = f.date_field :enrollment_date
+
+  .actions.col.s12 
+    button.btn.waves-effect.waves-light type="submit" Save
+    = link_to 'Upload photo', "#", class: "waves-effect waves-teal btn btn-default"
+    = link_to 'Cancel', students_path, class: "waves-effect waves-teal btn-flat"
+
+/ .input-field.col.s4
+/   = f.label :is_active
+/   = f.check_box :is_active
+/ .input-field.col.s4
+/   = f.label :is_deleted
+/   = f.check_box :is_deleted

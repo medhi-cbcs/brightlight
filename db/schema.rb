@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151012062818) do
+ActiveRecord::Schema.define(version: 20151015005235) do
 
   create_table "academic_terms", force: :cascade do |t|
     t.integer  "academic_year_id"
@@ -252,8 +252,10 @@ ActiveRecord::Schema.define(version: 20151012062818) do
     t.text     "description"
     t.string   "image_url"
     t.decimal  "price"
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
+    t.string   "expiry_date"
+    t.date     "received_date"
   end
 
   create_table "statuses", force: :cascade do |t|
