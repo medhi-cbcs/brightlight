@@ -1,0 +1,25 @@
+h1 Listing school_years
+
+table
+  thead
+    tr
+      th Name
+      th Start date
+      th End date
+      th
+      th
+      th
+
+  tbody
+    - @school_years.each do |school_year|
+      tr
+        td = school_year.name
+        td = school_year.start_date
+        td = school_year.end_date
+        td = link_to 'Show', school_year
+        td = link_to 'Edit', edit_school_year_path(school_year)
+        td = link_to 'Destroy', school_year, data: {:confirm => 'Are you sure?'}, :method => :delete
+
+br
+
+= link_to 'New School year', new_school_year_path

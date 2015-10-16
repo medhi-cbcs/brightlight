@@ -65,8 +65,8 @@
       = f.label :employment_status, class: 'active'
       = f.select :employment_status, [['Probation','probation'],['Contract','contract'],['Permanent','permanent']]
     .input-field.col.s4
-      = f.label :reporting_supervisor_id, class: 'active'
-      = f.collection_select :reporting_supervisor_id, Employee.all, :id, :name
+      = f.label :supervisor_id, class: 'active'
+      = f.collection_select :supervisor_id, Employee.all, :id, :name
   .row
     h5 Contacts
     .input-field.col.s4
