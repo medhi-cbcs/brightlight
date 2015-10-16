@@ -73,31 +73,20 @@ br
     .list_description.col.s12
       dl.row
         dd.col.s4
-          .label Address line1:
+          .label Address
           .item = @student.address_line1
-        dd.col.s4
-          .label Address line2:
-          .item = @student.address_line2
-        dd.col.s4
-          .label City: 
-          .item = @student.city
-        dd.col.s4
-          .label Province: 
+          .item = @student.address_line2        
+          .item = @student.city + ' ' + @student.postal_code
           .item = @student.state
-        dd.col.s4
-          .label Postal code: 
-          .item = @student.postal_code
-        dd.col.s4
-          .label Country: 
           .item = @student.country
         dd.col.s4
           .label Mobile phone:
           .item = @student.mobile_phone
         dd.col.s4
-          .label Email:
+          .label Home phone:
           .item = @student.home_phone
         dd.col.s4
-          .label Country: 
+          .label Email: 
           .item = @student.email
   #tab4
     .list_description.col.s12
@@ -108,16 +97,10 @@ br
         dd.col.s4
           .label Status: 
           .item = @student.status
-          .label City: 
-          .item = @student.city
         dd.col.s4
           .label Status description:
           .item = @student.status_description
-          .label City: 
-          .item = @student.city
-        dd.col.s4
-          .label Province: 
-          .item = @student.state
+
 
 .toolbar.actions
   = link_to 'Back', students_path, class: 'btn btn-default'

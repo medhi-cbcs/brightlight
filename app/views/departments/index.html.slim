@@ -1,0 +1,25 @@
+h1 Listing departments
+
+table
+  thead
+    tr
+      th Name
+      th Code
+      th Manager
+      th
+      th
+      th
+
+  tbody
+    - @departments.each do |department|
+      tr
+        td = department.name
+        td = department.code
+        td = department.manager
+        td = link_to 'Show', department
+        td = link_to 'Edit', edit_department_path(department)
+        td = link_to 'Destroy', department, data: {:confirm => 'Are you sure?'}, :method => :delete
+
+br
+
+= link_to 'New Department', new_department_path

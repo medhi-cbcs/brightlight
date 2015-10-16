@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
 
+  resources :departments
   resources :guardians
   resources :book_assignments
   resources :book_grades

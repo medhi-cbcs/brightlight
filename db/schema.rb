@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151015005235) do
+ActiveRecord::Schema.define(version: 20151016041133) do
 
   create_table "academic_terms", force: :cascade do |t|
     t.integer  "academic_year_id"
@@ -158,6 +158,14 @@ ActiveRecord::Schema.define(version: 20151015005235) do
   add_index "courses_sections", ["employee_id"], name: "index_courses_sections_on_employee_id"
   add_index "courses_sections", ["grade_section_id"], name: "index_courses_sections_on_grade_section_id"
 
+  create_table "departments", force: :cascade do |t|
+    t.string   "name"
+    t.string   "code"
+    t.integer  "manager"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "employees", force: :cascade do |t|
     t.string   "name"
     t.string   "first_name"
@@ -188,10 +196,10 @@ ActiveRecord::Schema.define(version: 20151015005235) do
     t.string   "email"
     t.string   "photo_uri"
     t.string   "education_degree"
-    t.string   "education_graduation_date"
+    t.date     "education_graduation_date"
     t.string   "education_school"
     t.string   "education_degree2"
-    t.string   "education_graduation_date2"
+    t.date     "education_graduation_date2"
     t.string   "education_school2"
     t.integer  "reporting_supervisor_id"
     t.integer  "department_id"

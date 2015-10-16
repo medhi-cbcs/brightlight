@@ -1,0 +1,15 @@
+p#notice = notice
+
+p
+  strong Name:
+  = @department.name
+p
+  strong Code:
+  = @department.code
+p
+  strong Manager:
+  = @department.manager
+
+= link_to 'Edit', edit_department_path(@department)
+'|
+= link_to 'Back', departments_path
