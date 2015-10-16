@@ -15,10 +15,12 @@ class DepartmentsController < ApplicationController
   # GET /departments/new
   def new
     @department = Department.new
+    @employees = Employee.all
   end
 
   # GET /departments/1/edit
   def edit
+    @employees = Employee.all
   end
 
   # POST /departments

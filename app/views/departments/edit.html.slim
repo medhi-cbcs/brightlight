@@ -1,8 +1,8 @@
-h1 Editing department
+h4 Editing department
 
 == render 'form'
 
-= link_to 'Show', @department
-'|
-= link_to 'Back', departments_path
+.actions.col.s12
+	= link_to 'Delete', @department, data: {confirm: 'Are you sure?'}, method: :delete, class: "right btn waves-effect waves-teal red btn-small" 
+
 

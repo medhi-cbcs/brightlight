@@ -45,7 +45,7 @@
     h5 Employment
     .input-field.col.s4
       = f.label :department_id, class: 'active'
-      = f.number_field :department_id
+      = f.collection_select :department_id, Department.all, :id, :name
     .input-field.col.s4
       = f.label :joining_date, class: 'active'
       = f.date_field :joining_date
@@ -63,10 +63,10 @@
       = f.number_field :experience_month
     .input-field.col.s4
       = f.label :employment_status, class: 'active'
-      = f.text_field :employment_status
+      = f.select :employment_status, [['Probation','probation'],['Contract','contract'],['Permanent','permanent']]
     .input-field.col.s4
       = f.label :reporting_supervisor_id, class: 'active'
-      = f.number_field :reporting_supervisor_id
+      = f.collection_select :reporting_supervisor_id, Employee.all, :id, :name
   .row
     h5 Contacts
     .input-field.col.s4
@@ -100,14 +100,15 @@
       = f.label :other_phone, class: 'active'
       = f.text_field :other_phone
     .input-field.col.s4
+      = f.label :email, class: 'active'
+      = f.text_field :email
+    .input-field.col.s4
       = f.label :emergency_contact_number, class: 'active'
       = f.text_field :emergency_contact_number
     .input-field.col.s4
       = f.label :emergency_contact_name, class: 'active'
       = f.text_field :emergency_contact_name
-    .input-field.col.s4
-      = f.label :email, class: 'active'
-      = f.text_field :email
+
   .row
     h5 Education
     .input-field.col.s4

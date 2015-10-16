@@ -1,4 +1,7 @@
-h1 Listing departments
+h4 Listing departments
+
+.toolbar
+  = link_to 'Add Department', new_department_path, class: "btn btn-primary"
 
 table
   thead
@@ -6,20 +9,14 @@ table
       th Name
       th Code
       th Manager
-      th
-      th
-      th
+      th Actions
 
   tbody
     - @departments.each do |department|
       tr
-        td = department.name
+        td = link_to department.name, department
         td = department.code
         td = department.manager
-        td = link_to 'Show', department
-        td = link_to 'Edit', edit_department_path(department)
-        td = link_to 'Destroy', department, data: {:confirm => 'Are you sure?'}, :method => :delete
 
-br
+        td = link_to 'Edit', edit_department_path(department), class: "btn waves-effect waves-teal btn-flat btn-small"
 
-= link_to 'New Department', new_department_path

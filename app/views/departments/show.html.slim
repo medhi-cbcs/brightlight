@@ -1,15 +1,20 @@
-p#notice = notice
+br
 
-p
-  strong Name:
-  = @department.name
-p
-  strong Code:
-  = @department.code
-p
-  strong Manager:
-  = @department.manager
+.row
+	.col.s10
+    .list_description
+      dl
+				dd
+				  .label Name:
+				  .item = @department.name
+				dd
+				  .label Code:
+				  .item = @department.code
+				dd
+				  .label Manager:
+				  .item = @department.manager
 
-= link_to 'Edit', edit_department_path(@department)
-'|
-= link_to 'Back', departments_path
+.toolbar.actions
+  = link_to 'Back', departments_path, class: 'btn btn-default'
+  = link_to 'Edit', edit_department_path(@department), class: 'btn btn-primary'
+
