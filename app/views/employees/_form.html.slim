@@ -45,7 +45,11 @@
     h5 Employment
     .input-field.col.s4
       = f.label :department_id, class: 'active'
-      = f.collection_select :department_id, Department.all, :id, :name
+      = f.select :department_id do
+        - unless @employee.department.present?
+          option.disabled value="" Select department
+        = Department.all.each do |e| 
+          = content_tag(:option, e.name, value: e.id)
     .input-field.col.s4
       = f.label :joining_date, class: 'active'
       = f.date_field :joining_date
@@ -66,7 +70,11 @@
       = f.select :employment_status, [['Probation','probation'],['Contract','contract'],['Permanent','permanent']]
     .input-field.col.s4
       = f.label :supervisor_id, class: 'active'
-      = f.collection_select :supervisor_id, Employee.all, :id, :name
+      = f.select :supervisor_id do
+        - unless @employee.supervisor.present?
+          option.disabled value="" Select supervisor
+        = Employee.all.each do |e| 
+          = content_tag(:option, e.name, value: e.id)
   .row
     h5 Contacts
     .input-field.col.s4

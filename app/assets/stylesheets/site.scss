@@ -36,7 +36,7 @@ $white:                 #FFF;
 form {
 	input[type=text], input[type=password], input[type=email], input[type=url], input[type=time], 
 	input[type=date], input[type=datetime-local], input[type=tel], input[type=number], input[type=search], 
-	textarea.materialize-textarea {
+	textarea.materialize-textarea, .select-wrapper input[type=text] {
 		height: 2.3rem;
 		margin: 0 0 10px 0;
 	}

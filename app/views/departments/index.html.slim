@@ -16,7 +16,7 @@ table
       tr
         td = link_to department.name, department
         td = department.code
-        td = department.manager
+        td = department.manager || "--"
 
         td = link_to 'Edit', edit_department_path(department), class: "btn waves-effect waves-teal btn-flat btn-small"
 

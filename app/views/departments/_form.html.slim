@@ -14,9 +14,10 @@
       = f.label :code, class: 'active'
       = f.text_field :code
     .input-field.col.s4
-      = f.label :manager, class: 'active'
-      = f.select :manager do
-        option.disabled value="" Select manager
+      = f.label :manager_id, class: 'active'
+      = f.select :manager_id do
+        - unless @department.manager.present?
+          option.disabled value="" Select manager
         = @employees.each do |e| 
           = content_tag(:option, e.name, value: e.id)
 

@@ -111,10 +111,10 @@
           .item = @employee.employment_status
         dd.col.s4
           .label Reporting supervisor:
-          .item = @employee.supervisor.present? ? @employee.supervisor.name : "-"
+          .item = @employee.supervisor || "--"
         dd.col.s4
           .label Department:
-          .item = @employee.department.present? ? @employee.department.name : "-"
+          .item = @employee.department || "--"
 
   #tab5
     .list_description.col.s12

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151016084028) do
+ActiveRecord::Schema.define(version: 20151019144300) do
 
   create_table "academic_terms", force: :cascade do |t|
     t.integer  "academic_year_id"
@@ -163,10 +163,12 @@ ActiveRecord::Schema.define(version: 20151016084028) do
   create_table "departments", force: :cascade do |t|
     t.string   "name"
     t.string   "code"
-    t.integer  "manager"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer  "manager_id"
   end
+
+  add_index "departments", ["manager_id"], name: "index_departments_on_manager_id"
 
   create_table "employees", force: :cascade do |t|
     t.string   "name"

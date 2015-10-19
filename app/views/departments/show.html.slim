@@ -2,19 +2,19 @@ br
 
 .row
 	.col.s10
-    .list_description
-      dl
-				dd
-				  .label Name:
-				  .item = @department.name
-				dd
-				  .label Code:
-				  .item = @department.code
-				dd
-				  .label Manager:
-				  .item = @department.manager
+	.list_description
+		dl
+			dt
+				.label Name:
+			 	.item = @department.name
+			dd
+				.label Code:
+				.item = @department.code
+			dd
+				.label Manager:
+				.item = @department.manager || "--"
 
 .toolbar.actions
-  = link_to 'Back', departments_path, class: 'btn btn-default'
-  = link_to 'Edit', edit_department_path(@department), class: 'btn btn-primary'
+	= link_to '< Back', departments_path, class: 'btn btn-flat'
+	= link_to 'Edit', edit_department_path(@department), class: 'btn btn-primary'
 
