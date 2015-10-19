@@ -15,11 +15,7 @@
       = f.text_field :code
     .input-field.col.s4
       = f.label :manager_id, class: 'active'
-      = f.select :manager_id do
-        - unless @department.manager.present?
-          option.disabled value="" Select manager
-        = @employees.each do |e| 
-          = content_tag(:option, e.name, value: e.id)
+      = f.collection_select :manager_id, Employee.all, :id, :name, prompt: true
 
   .actions.col.s12 
     button.btn.waves-effect.waves-light type="submit" Save

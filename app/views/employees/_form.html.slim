@@ -20,7 +20,7 @@
     h5 Personal Details
     .input-field.col.s4
       = f.label :gender, class: 'active'
-      = f.select :gender, [['Male', 'M'], ['Female', 'F']]
+      = f.select :gender, [['Male', 'M'], ['Female', 'F']], prompt: true
     .input-field.col.s4
       = f.label :date_of_birth, class: 'active'
       = f.date_field :date_of_birth
@@ -45,11 +45,7 @@
     h5 Employment
     .input-field.col.s4
       = f.label :department_id, class: 'active'
-      = f.select :department_id do
-        - unless @employee.department.present?
-          option.disabled value="" Select department
-        = Department.all.each do |e| 
-          = content_tag(:option, e.name, value: e.id)
+      = f.collection_select :department_id, Department.all, :id, :name, prompt: true
     .input-field.col.s4
       = f.label :joining_date, class: 'active'
       = f.date_field :joining_date
@@ -70,11 +66,8 @@
       = f.select :employment_status, [['Probation','probation'],['Contract','contract'],['Permanent','permanent']]
     .input-field.col.s4
       = f.label :supervisor_id, class: 'active'
-      = f.select :supervisor_id do
-        - unless @employee.supervisor.present?
-          option.disabled value="" Select supervisor
-        = Employee.all.each do |e| 
-          = content_tag(:option, e.name, value: e.id)
+      = f.collection_select :supervisor_id, Employee.all, :id, :name, prompt: true
+
   .row
     h5 Contacts
     .input-field.col.s4
