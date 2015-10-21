@@ -46,6 +46,8 @@ gem 'hashie'
 # Login with Google+ OAuth2
 gem "omniauth-google-oauth2"
 
+gem 'devise'
+
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 
