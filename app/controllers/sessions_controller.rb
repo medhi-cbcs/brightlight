@@ -17,6 +17,6 @@ class SessionsController < ApplicationController
       flash[:warning] = "There was an error while trying to authenticate you..."
       puts request.env["omniauth.auth"].to_yaml
     end
-    redirect_to books_path
+    redirect_to dashboard_path
   end
 end
