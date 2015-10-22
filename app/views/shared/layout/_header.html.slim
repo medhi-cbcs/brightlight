@@ -33,7 +33,10 @@ nav
       li
         a.dropdown-button href="#" data-activates="dropdown1"
           - if current_user
-            = image_tag current_user.image, alt: current_user.name, class: 'user-avatar'
+            - if current_user.image
+              = image_tag current_user.image, alt: current_user.name, class: 'user-avatar'
+            - else
+              i.material-icons perm_identity
           - else
             i.material-icons perm_identity
 
@@ -77,8 +80,18 @@ ul#dropdown2.dropdown-content
 
 
 ul#dropdown1.dropdown-content
-  li
-    a href="/users/sign_in" Login
-  li.divider
-  li
-    = link_to 'Log Out', destroy_user_session_path, method:'delete'
+  - if user_signed_in?
+    li
+      = link_to 'Edit Profile', edit_user_registration_path
+    li 
+      = link_to 'Change password', edit_user_password_path
+    li.divider
+    li
+      = link_to 'Log Out', destroy_user_session_path, method:'delete'
+  - else
+    li
+      = link_to 'Sign up', new_user_registration_path
+    li
+      = link_to 'Login', new_user_session_path
+
+  

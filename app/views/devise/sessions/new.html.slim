@@ -18,6 +18,6 @@
 					= link_to 'Sign up', new_user_registration_path, class:'btn btn-flat'
 					button.btn.right type="submit" Login
 				.card-action
-					= link_to "Sign in with Google", user_omniauth_authorize_path(:google_oauth2)
+					= link_to "Sign in with Google", user_omniauth_authorize_path(:google_oauth2), class:'btn red'
 
 			= link_to 'Forgot your password?', new_user_password_path
