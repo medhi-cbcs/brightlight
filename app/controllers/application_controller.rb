@@ -3,8 +3,17 @@ class ApplicationController < ActionController::Base
   # For APIs, you may want to use :null_session instead.
   protect_from_forgery
   helper_method :current_user
+	layout :layout_by_controller
 
-  def current_user
-    @current_user ||= User.find_by(id: session[:user_id])
-  end
+	def layout_by_controller
+	  if params[:controller] == 'users' || params[:controller] == 'welcome' || params[:controller] =~ /devise\/.*/
+	    'home'
+	   else
+	    "application"
+	  end
+	end
+
+  # def current_user
+  #   @current_user ||= User.find_by(id: session[:user_id])
+  # end
 end

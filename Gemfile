@@ -43,10 +43,10 @@ gem 'google_books', '~> 0.2.2'
 
 gem 'hashie'
 
-# Login with Google+ OAuth2
-gem "omniauth-google-oauth2"
-
+# Login with Devise & OmniAuth Google+ OAuth2
 gem 'devise'
+gem 'omniauth'
+gem 'omniauth-google-oauth2'
 
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'

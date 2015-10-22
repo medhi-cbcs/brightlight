@@ -29,7 +29,9 @@ nav
           | People
           i.material-icons.right arrow_drop_down
       li
-        a.dropdown-button href="/auth/google" data-activates="dropdown1"
+        = current_user.name if current_user
+      li
+        a.dropdown-button href="#" data-activates="dropdown1"
           - if current_user
             = image_tag current_user.image, alt: current_user.name, class: 'user-avatar'
           - else
@@ -76,7 +78,7 @@ ul#dropdown2.dropdown-content
 
 ul#dropdown1.dropdown-content
   li
-    a href="/auth/google" Login
+    a href="/users/sign_in" Login
   li.divider
   li
-    = link_to 'Log Out', "#"
+    = link_to 'Log Out', destroy_user_session_path, method:'delete'
