@@ -6,7 +6,7 @@ class ApplicationController < ActionController::Base
 	layout :layout_by_controller
 
 	def layout_by_controller
-	  if params[:controller] == 'users' || params[:controller] == 'welcome' || params[:controller] =~ /devise\/.*/
+	  if params[:controller] =~ /users.*/ || params[:controller] == 'welcome' || params[:controller] =~ /devise\/.*/
 	    'home'
 	   else
 	    "application"
