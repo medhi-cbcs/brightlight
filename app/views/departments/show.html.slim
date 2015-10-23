@@ -12,7 +12,7 @@ br
 				.item = @department.code
 			dd
 				.label Manager:
-				.item = @department.manager || "--"
+				.item = @department.manager.presence ? link_to(@department.manager, Employee.find(@department.manager.id)) : "--"
 
 .toolbar.actions
 	= link_to '< Back', departments_path, class: 'btn btn-flat'

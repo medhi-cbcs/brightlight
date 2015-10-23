@@ -17,7 +17,8 @@
     .col.s2
       .card
         .card-image
-          = image_tag (@employee.photo_uri.present? ? @employee.photo_uri : 'avatar-placeholder.png'), class: 'media-object show-image'
+          - avatar = @employee.gender == 'F' ? 'female-avatar.jpg' : 'male-avatar.jpg'
+          = image_tag (@employee.photo_uri.present? ? @employee.photo_uri : avatar), class: 'media-object show-image'
         .card-content
           p.small-text = @employee.name
     .col.s10

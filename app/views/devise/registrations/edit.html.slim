@@ -1,7 +1,7 @@
-= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put }) do |f|
-	- puts "name:#{resource.name} email:#{resource.email} password:#{resource.password}"
-	.row
-		.col.s4.offset-s4
+.row
+	.col.s5.offset-s3
+		= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put }) do |f|
+			- puts "name:#{resource.name} email:#{resource.email} password:#{resource.password}"	
 			= devise_error_messages!
 			.card
 				.card-content.white
@@ -29,11 +29,15 @@
 							= f.password_field :current_password, autocomplete: "off"
 							i = "(we need your current password to confirm your changes)"
 				.card-action
-					| &nbsp;
+					button.btn.btn-flat
 					= f.submit 'Update', class: 'btn right'
 
-			/ h6 Cancel my account
-			/ p Unhappy?
-			/ = button_to "Cancel my account", registration_path(resource_name), data: { confirm: "Are you sure?" }, method: :delete
+	.col.s3
+		.card
+			.card-content.white
+				span.card-title.grey-text Cancel my account
+				p Unhappy?
+			.card-action
+				= button_to "Cancel my account", registration_path(resource_name), data: { confirm: "Are you sure?" }, method: :delete, class:'btn btn-flat'
 
 			
