@@ -4,7 +4,7 @@ class GuardiansController < ApplicationController
   # GET /guardians
   # GET /guardians.json
   def index
-    @guardians = Guardian.all
+    @guardians = Guardian.paginate(page: params[:page], per_page: 20)
   end
 
   # GET /guardians/1

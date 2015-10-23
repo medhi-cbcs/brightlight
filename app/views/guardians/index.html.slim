@@ -1,47 +1,28 @@
-h1 Listing guardians
+h4 Guardians
 
-table
+.toolbar
+  = link_to 'New Guardian', new_guardian_path, class: "btn btn-primary"
+
+table.striped
   thead
     tr
       th Name
-      th First name
-      th Last name
       th Mobile phone
       th Home phone
       th Office phone
-      th Other phone
-      th Address line1
-      th Address line2
-      th City
-      th State
-      th Postal code
-      th Country
       th Family no
-      th
-      th
       th
 
   tbody
     - @guardians.each do |guardian|
       tr
-        td = guardian.name
-        td = guardian.first_name
-        td = guardian.last_name
+        td = link_to guardian.name, guardian
         td = guardian.mobile_phone
         td = guardian.home_phone
         td = guardian.office_phone
-        td = guardian.other_phone
-        td = guardian.address_line1
-        td = guardian.address_line2
-        td = guardian.city
-        td = guardian.state
-        td = guardian.postal_code
-        td = guardian.country
         td = guardian.family_no
-        td = link_to 'Show', guardian
-        td = link_to 'Edit', edit_guardian_path(guardian)
-        td = link_to 'Destroy', guardian, data: {:confirm => 'Are you sure?'}, :method => :delete
+        td = link_to 'Edit', edit_guardian_path(guardian), class: "btn waves-effect waves-teal btn-flat btn-small"
 
 br
 
-= link_to 'New Guardian', new_guardian_path
+= will_paginate @guardians

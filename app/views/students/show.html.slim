@@ -1,4 +1,3 @@
-br
 .row.tabbed
   h4 = @student.name
   .col.s12
@@ -89,6 +88,30 @@ br
         dd.col.s4
           .label Email: 
           .item = @student.email
+      
+      - @student.students_guardians.each do |g|
+        dl.row
+          dt = g.relation
+          dd.col.s4
+            .label Name
+            .item = g.guardian.name
+            
+            .label Address
+            .item = g.guardian.address_line1
+            .item = g.guardian.address_line2        
+            .item = g.guardian.city + ' ' + g.guardian.postal_code
+            .item = g.guardian.state
+            .item = g.guardian.country
+          dd.col.s4
+            .label Mobile phone:
+            .item = g.guardian.mobile_phone
+          dd.col.s4
+            .label Home phone:
+            .item = g.guardian.home_phone
+          dd.col.s4
+            .label Office phone: 
+            .item = g.guardian.office_phone
+
   #tab4
     .list_description.col.s12
       dl.row
