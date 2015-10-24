@@ -1,18 +1,34 @@
-br
+.row.tabbed
+	h4 = @department.name + " (#{@department.code})"
+	.col.s12
+		ul.tabs.z-depth-1
+			li.tab.col.s3
+				a href='#tab1' Name
+			li.tab.col.s3
+				a href='#tab2' Members
 
-.row
-	.col.s10
-	.list_description
-		dl
-			dt
-				.label Name:
-			 	.item = @department.name
-			dd
-				.label Code:
-				.item = @department.code
-			dd
-				.label Manager:
-				.item = @department.manager.presence ? link_to(@department.manager, Employee.find(@department.manager.id)) : "--"
+	#tab1
+		.col.s10
+			.list_description
+				dl.row
+					dd.col.s4
+						.label Manager:
+						.item = @manager.present? ? link_to(@manager.name, @manager) : "--"
+					dd.col.s4
+						.label Office Phone:
+						.item = @manager.present? ? @manager.office_phone : "--"
+
+	#tab2
+		.col.s10
+			.list_description
+				- @members.each do |member|
+					dl.row
+						dd.col.s4
+							.label Name:
+						 	.item = link_to member.name, member
+						dd.col.s4
+							.label Phone:
+							.item = member.mobile_phone
 
 .toolbar.actions
 	= link_to '< Back', departments_path, class: 'btn btn-flat'

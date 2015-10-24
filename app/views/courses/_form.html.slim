@@ -17,7 +17,7 @@
 			= f.text_area :description, class: 'materialize-textarea'
 		.input-field.col.s4
 			= f.label :grade_level, class: 'active'
-			= f.collection_select(:grade_level, GradeLevel.all, :id, :name, {}, {:class => 'browser-default'})
+			= f.collection_select(:grade_level_id, GradeLevel.all, :id, :name, {}, {:class => 'browser-default'})
 		.input-field.col.s4
 			= f.label :academic_year_id, class: 'active'
 			= f.collection_select(:academic_year_id, AcademicYear.all, :id, :name, {}, {:class => 'browser-default'})
@@ -28,14 +28,15 @@
 	.row
 		h5 Course Sections
 		hr
-		/ = f.fields_for :course_sections do |form|
-		/ 	.row
-		/ 		.input-field.col.s6
-		/ 			= form.label :name, class: 'active'
-		/ 			= form.text_field :name
-		/ 		.input-field.col.s6
-		/ 			= form.label 'Teacher', class: 'active'
-		/ 			= form.text_field :homeroom
+		= f.fields_for :courses_sections do |form|
+			.row
+				.input-field.col.s4
+					= form.label :grade_section, class: 'active'
+					= form.collection_select :grade_section_id, GradeSection.all, :id, :name, prompt: true
+				.input-field.col.s4
+					= form.label :instructor, class: 'active'
+					= form.collection_select :instructor_id, @teachers, :id, :name, prompt: true
+
 
 	.actions.col.s12 
 		button.btn.waves-effect.waves-light type="submit" Save

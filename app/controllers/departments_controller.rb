@@ -10,6 +10,8 @@ class DepartmentsController < ApplicationController
   # GET /departments/1
   # GET /departments/1.json
   def show
+    @manager = @department.manager
+    @members = @department.employees
   end
 
   # GET /departments/new

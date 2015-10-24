@@ -16,10 +16,12 @@ class GradeLevelsController < ApplicationController
   def new
     @grade_level = GradeLevel.new
     3.times { @grade_level.grade_sections.build }
+    @teachers = Employee.where(job_title:'Teacher')
   end
 
   # GET /grade_levels/1/edit
   def edit
+    @teachers = Employee.where(job_title:'Teacher')
   end
 
   # POST /grade_levels
@@ -72,6 +74,6 @@ class GradeLevelsController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def grade_level_params
       params.require(:grade_level).permit(:name, :order_no, 
-                                         {:grade_sections_attributes => [:name, :homeroom, :_destroy, :id]})
+                                         {:grade_sections_attributes => [:name, :homeroom_id, :_destroy, :id]})
     end
 end

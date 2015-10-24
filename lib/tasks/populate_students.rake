@@ -2,8 +2,12 @@ namespace :db do
 	desc "Create students with random names"
 	task populate_students: :environment do
 		require 'forgery'
-		n = 0
+
+		Student.delete_all
+		Guardian.delete_all
+		StudentsGuardian.delete_all
 		
+		n = 0
 		287.times do
 			n += 1
 			moms_name = Forgery('name').female_first_name
@@ -14,9 +18,9 @@ namespace :db do
 			dad.first_name = dads_name
 			dad.last_name =  Forgery::NameIndonesian.name
 			dad.name = dads_name + ' ' + dad.last_name
-			dad.address_line1 = Forgery('address').street_address
-			dad.city = Forgery('address').city
-			dad.state = Forgery('address').state
+			dad.address_line1 = Forgery::StreetNameIndonesia.name + " #{rand(249)}"
+			dad.city = ['Bandung','Cimahi','Padalarang'][rand(0..2)]
+			dad.state = 'Jawa Barat'
 			dad.postal_code = Forgery('address').zip
 			dad.country = 'Indonesia'
 			dad.mobile_phone = '0899-'+Forgery('address').phone[7..14]
