@@ -1,0 +1,42 @@
+.app-side-menu
+  ul.collapsible data-collapsible='expandable'
+    li
+      .collapsible-header.active
+        i.material-icons class
+        | Student
+      .collapsible-body
+        .cell-row
+          a href="#" 
+            | Classes
+        .cell-row
+          a href="#" 
+            | Guardians
+    li
+      .collapsible-header.active
+        i.material-icons query_builder
+        | Actions
+      .collapsible-body
+        = link_to 'Add Student', new_student_path, class: "btn waves-effect waves-teal btn-default"
+        - if params[:id] and action_name != 'edit'
+          = link_to 'Edit', edit_student_path(@student), class: "btn waves-effect waves-teal btn-flat"
+    li
+      .collapsible-header
+        i.material-icons info_outline
+        | Related
+      .collapsible-body
+        .cell-row
+          a href="#" 
+            | Morbi leo risus
+        .cell-row
+          a href="#" 
+            | Porta ac consectetur ac
+    li
+      .collapsible-header
+        i.material-icons subject
+        | Reports
+      .collapsible-body
+        .cell-row
+          a href="#" 
+            | Print detail
+
+

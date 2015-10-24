@@ -1,32 +1,29 @@
-h1 Listing courses
-
-.toolbar
-  = link_to 'Add Course', new_course_path, class: "btn btn-primary"
+h4 Courses
 
 table.striped
-  thead
-    tr
-      th Number
-      th Name
-      th Description
-      th Grade
-      th Year
-      th Term
-      th Actions
+	thead
+		tr
+			th Number
+			th Name
+			th Description
+			th Grade
+			th Year
+			th Term
+			th Actions
 
-  tbody
-    - @courses.each do |course|
-      tr
-        td = course.number
-        td = course.name
-        td = course.description
-        td = course.grade_level.name
-        td = course.academic_year.name
-        td = course.academic_term.name
-        td
-          = link_to 'Show', course, class: "btn waves-effect waves-teal btn-flat btn-small"
-          br
-          = link_to 'Edit', edit_course_path(course), class: "btn waves-effect waves-teal btn-flat btn-small"
+	tbody
+		- @courses.each do |course|
+			tr
+				td = course.number
+				td = course.name
+				td = course.description
+				td = course.grade_level.name if course.grade_level
+				td = course.academic_year.name if course.academic_year
+				td = course.academic_term.name if course.academic_term
+				td
+					= link_to 'Show', course, class: "btn waves-effect waves-teal btn-flat btn-small"
+					br
+					= link_to 'Edit', edit_course_path(course), class: "btn waves-effect waves-teal btn-flat btn-small"
 
 
 

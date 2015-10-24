@@ -25,8 +25,20 @@ table
 					dd.col.s4
 						.label Term
 						.item = @course.academic_term.name
-				dl.row
-					h6 Sections
+				
+				
+				h5 Course Sections
+				- if @course.courses_sections.present?
+					- @course.courses_sections.each do |section|
+						dl.row
+							dd.col.s6
+								.label Section
+								.item = section.grade_section.name if section.grade_section
+							dd.col.s6
+								.label Number
+								.item = section.instructor.name if section.instructor
+				- else
+					p.red-text No sections				
 
 
 .toolbar.actions

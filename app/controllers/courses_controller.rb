@@ -21,7 +21,8 @@ class CoursesController < ApplicationController
 
   # GET /courses/1/edit
   def edit
-    @teachers = Employee.where(job_title:'Teacher')
+    @teachers = Employee.where(job_title:'Teacher')   
+    3.times { @course.courses_sections.build } if @course.courses_sections.empty?
   end
 
   # POST /courses
@@ -73,7 +74,7 @@ class CoursesController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def course_params
       params.require(:course).permit(:name, :number, :description, :grade_level_id, :academic_year_id, :academic_term_id, :employee_id,
-                                    {:course_sections_attributes => [:name, :course_id, :grade_section_id, :instructor_id, :_destroy, :id]},
+                                    {:courses_sections_attributes => [:name, :course_id, :grade_section_id, :instructor_id, :_destroy, :id]},
                                     {:course_texts_attributes => [:course_id, :book_title_id, :order_no]})
     end
 end
