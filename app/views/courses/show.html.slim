@@ -1,44 +1,37 @@
-br
-table
-	tr
-		td
-			.list_description
-				dl.row
-					h5 Course
-				dl.row
-					dd.col.s6
-						.label Name
-						.item = @course.name
-					dd.col.s6
-						.label Number
-						.item = @course.number
-					dd.col.s12
-						.label Description
-						.item = @course.description
-				dl.row
-					dd.col.s4
-						.label Grade
-						.item = @course.grade_level.name
-					dd.col.s4
-						.label Year
-						.item = @course.academic_year.name
-					dd.col.s4
-						.label Term
-						.item = @course.academic_term.name
-				
-				
-				h5 Course Sections
-				- if @course.courses_sections.present?
-					- @course.courses_sections.each do |section|
-						dl.row
-							dd.col.s6
-								.label Section
-								.item = section.grade_section.name if section.grade_section
-							dd.col.s6
-								.label Number
-								.item = section.instructor.name if section.instructor
-				- else
-					p.red-text No sections				
+.list_description
+	dl
+		h5 = @course.name 
+	dl.row
+		dd.col.s2
+			.label Course Number
+			.item = @course.number
+		dd.col.s10
+			.label Description
+			.item = @course.description
+	dl.row
+		dd.col.s2
+			.label Grade
+			.item = @course.grade_level.name
+		dd.col.s4
+			.label Year
+			.item = @course.academic_year.name
+		dd.col.s4
+			.label Term
+			.item = @course.academic_term.name
+	
+	
+	h5 Course Sections
+	- if @course.courses_sections.present?
+		- @course.courses_sections.each do |section|
+			dl.row
+				dd.col.s2
+					.label Section
+					.item = section.grade_section.name if section.grade_section
+				dd.col.s6
+					.label Instructor
+					.item = section.instructor.name if section.instructor
+	- else
+		p.red-text No sections
 
 
 .toolbar.actions

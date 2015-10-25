@@ -5,6 +5,7 @@
 			ul
 				- @course.errors.full_messages.each do |message|
 					li = message
+
 	.row
 		.input-field.col.s6
 			= f.label :name, class: 'active'

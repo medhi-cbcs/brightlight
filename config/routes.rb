@@ -4,10 +4,11 @@ Rails.application.routes.draw do
   resources :guardians
   resources :book_assignments
   resources :book_grades
-  resources :course_texts
   resources :students
   resources :employees
-  resources :courses
+  resources :courses do
+    resources :course_texts
+  end
   resources :book_editions
   resources :products
   resources :academic_years
