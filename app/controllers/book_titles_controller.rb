@@ -25,11 +25,12 @@ class BookTitlesController < ApplicationController
       @book_title.image_url = edition.small_thumbnail
     end
 
-    2.times { @book_title.book_editions.build }
+    6.times { @book_title.book_editions.build }
   end
 
   # GET /book_titles/1/edit
   def edit
+    6.times { @book_title.book_editions.build }
   end
 
   # POST /book_titles
@@ -80,6 +81,7 @@ class BookTitlesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def book_title_params
-      params.require(:book_title).permit(:title, :authors, :publisher, :image_url)
+      params.require(:book_title).permit(:title, :authors, :publisher, :image_url,
+                                          {:book_editions_attributes => [:id]})
     end
 end

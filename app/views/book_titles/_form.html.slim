@@ -16,13 +16,18 @@
       .input-field.col.s6
         = f.label :publisher, class: 'active'
         = f.text_field :publisher
+      .input-field.col.s6
         = f.label :image_url, class: 'active'
         = f.text_field :image_url
+    .row
+      h5 Book Editions
+      hr
+      = f.fields_for :book_editions do |form|
+        .input-field.col.s6
+          = form.label :book_title, class: 'active'
+          = form.collection_select :book_title_id, BookEdition.all, :id, :title, prompt: true
 
-    / .row
-    / 	h4 Book Editions
-    / 		= f.fields_for :book_editions do |form|
-    			
-      .toolbar.actions.col.s12 
-        button.btn.waves-effect.waves-light type="submit" Save
-        = link_to 'Cancel', book_titles_path, class: "waves-effect waves-teal btn-flat"
+      .col.s12
+        .toolbar.actions
+          button.btn.waves-effect.waves-light type="submit" Save
+          = link_to 'Cancel', book_titles_path, class: "waves-effect waves-teal btn-flat"
