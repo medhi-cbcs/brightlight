@@ -1,5 +1,5 @@
 class CourseTextsController < ApplicationController
-  before_action :set_course 
+  before_action :get_course 
   before_action :set_course_text, only: [:show, :edit, :update, :destroy]
 
   # GET /course_texts
@@ -68,7 +68,7 @@ class CourseTextsController < ApplicationController
       @course_text = @course.course_texts.find(params[:id])
     end
 
-    def set_course
+    def get_course
       @course = Course.find(params[:course_id])
     end
 

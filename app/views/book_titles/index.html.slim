@@ -1,0 +1,28 @@
+h4 Listing Book Titles
+
+.toolbar
+  = link_to 'Add Book Title', new_book_title_path, class: "btn btn-primary"
+
+table
+  thead
+    tr
+      th Title
+      th Action
+
+  tbody
+    - @book_titles.each do |book_title|
+      tr
+        td
+          .list_description
+            div = link_to book_title.title, book_title
+            - if book_title.authors.present?
+              span.label Author:
+              span.item = book_title.authors
+            - if book_title.publisher.present?
+              span.label Publisher:
+              span.item = book_title.publisher
+
+        td = link_to 'Edit', edit_book_title_path(book_title), class: "btn waves-effect waves-teal btn-flat btn-small"
+
+= will_paginate @book_titles
+

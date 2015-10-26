@@ -1,0 +1,2 @@
+module BookTitlesHelper
+end

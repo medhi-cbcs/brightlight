@@ -1,24 +1,6 @@
 p#notice = notice
 
-p
-  strong Title:
-  = @course_text.title
-p
-  strong Author:
-  = @course_text.author
-p
-  strong Publisher:
-  = @course_text.publisher
-p
-  strong Image url:
-  = @course_text.image_url
-p
-  strong Notes:
-  = @course_text.notes
-p
-  strong Course:
-  = @course_text.course
 
-= link_to 'Edit', edit_course_text_path(@course_text)
+= link_to 'Edit', edit_course_course_text_path(@course, course_text)
 '|
 = link_to 'Back', course_texts_path

@@ -1,4 +1,4 @@
-h1 Listing course_texts
+h4 = "Course texts for #{@course.name}"
 
 table
   thead
@@ -22,10 +22,10 @@ table
         td = course_text.image_url
         td = course_text.notes
         td = course_text.course
-        td = link_to 'Show', course_text
-        td = link_to 'Edit', edit_course_text_path(course_text)
-        td = link_to 'Destroy', course_text, data: {:confirm => 'Are you sure?'}, :method => :delete
+        td = link_to 'Show', [@course, course_text]
+        td = link_to 'Edit', edit_course_course_text_path(@course, course_text)
+        td = link_to 'Destroy', course_course_text(@course, course_text), data: {:confirm => 'Are you sure?'}, :method => :delete
 
 br
 
-= link_to 'New Course text', new_course_text_path
+= link_to 'New Course text', new_course_course_text_path

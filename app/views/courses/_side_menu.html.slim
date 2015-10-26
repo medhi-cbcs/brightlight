@@ -20,7 +20,7 @@
         - if params[:id] and action_name != 'edit'
           = link_to 'Edit', edit_course_path(@course), class: "btn waves-effect waves-teal btn-flat"
         - if params[:id]
-          = link_to 'Course Texts', course_text_path(@course.course_texts), class: "btn waves-effect waves-teal btn-flat"
+          = link_to 'Course Texts', course_course_texts_path(@course), class: "btn waves-effect waves-teal btn-flat"
     li
       .collapsible-header
         i.material-icons info_outline

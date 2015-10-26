@@ -10,6 +10,7 @@ Rails.application.routes.draw do
     resources :course_texts
   end
   resources :book_editions
+  resources :book_titles
   resources :products
   resources :academic_years
   resources :grade_levels
