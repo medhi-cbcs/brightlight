@@ -168,6 +168,8 @@ class BookEditionsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def book_edition_params
-      params.require(:book_edition).permit(:google_book_id, :isbndb_id, :title, :subtitle, :authors, :publisher, :published_date, :description, :isbn10, :isbn13, :page_count, :small_thumbnail, :thumbnail, :language, :edition_info, :tags, :subjects)
+      params.require(:book_edition).permit(:google_book_id, :isbndb_id, :title, :subtitle, :authors, 
+        :publisher, :published_date, :description, :isbn10, :isbn13, :page_count, :small_thumbnail, :thumbnail, 
+        :language, :edition_info, :tags, :subjects, :book_title_id)
     end
 end

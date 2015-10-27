@@ -30,6 +30,9 @@ table
           dd.col.s12
             .label Description
             .item = strip_tags(@book_edition.description)
+          dd.col.s6
+            .label Title group
+            .item = @book_edition.book_title ? @book_edition.book_title.title : "--" 
 
 .toolbar.actions
   = link_to '< Back', book_editions_path, class: 'btn btn-flat'

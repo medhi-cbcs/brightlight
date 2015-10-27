@@ -6,7 +6,7 @@ table
     td
       .list_description
         dl.row
-          dt = @book_title.title
+          h4 = @book_title.title
           dd.col.s6
             .label Author
             .item = @book_title.authors
@@ -18,17 +18,21 @@ h5 Editions
 table.striped
   thead
     th Title
+    th Author
     th Publisher
     th ISBN 10
+    th ISBN
 
   tbody
   - @book_title.book_editions.each do |edition|
     tr
       td = link_to edition.title, edition
+      td = edition.authors
       td = edition.publisher
       td = edition.isbn10
+      td = edition.isbn13
 
 .toolbar.actions
-  = link_to '< Back', book_titles_path, class: 'btn btn-flat'
+  = link_to '< Back', :back, class: 'btn btn-flat'
   = link_to 'Edit', edit_book_title_path(@book_title), class: 'btn btn-primary'
 
