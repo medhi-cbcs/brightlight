@@ -22,24 +22,24 @@
       .input-field.col.s6
         = f.label :published_date, class: 'active'
         = f.text_field :published_date
-      .input-field.col.s6
+      .input-field.col.s12
         = f.label :description, class: 'active'
         = f.text_field :description
       .input-field.col.s6
-        = f.label :isbn10, class: 'active'
+        = f.label 'ISBN 10', class: 'active'
         = f.text_field :isbn10
       .input-field.col.s6
-        = f.label :isbn13, class: 'active'
+        = f.label 'ISBN 13', class: 'active'
         = f.text_field :isbn13
       .input-field.col.s6
         = f.label :page_count, class: 'active'
         = f.number_field :page_count
-      .input-field.col.s6
-        = f.label :small_thumbnail, class: 'active'
-        = f.text_field :small_thumbnail
-      .input-field.col.s6
-        = f.label :thumbnail, class: 'active'
-        = f.text_field :thumbnail
+      / .input-field.col.s6
+      /   = f.label :small_thumbnail, class: 'active'
+      /   = f.text_field :small_thumbnail
+      / .input-field.col.s6
+      /   = f.label :thumbnail, class: 'active'
+      /   = f.text_field :thumbnail
       .input-field.col.s6
         = f.label :language, class: 'active'
         = f.text_field :language
@@ -52,6 +52,9 @@
       .input-field.col.s6
         = f.label :subjects, class: 'active'
         = f.text_field :subjects
+      .input-field.col.s6
+        = f.label 'Title group', class: 'active'
+        = f.collection_select :book_title_id, BookTitle.all, :id, :title, prompt: true
 
       .actions.col.s12 
         button.btn.waves-effect.waves-light type="submit" Save

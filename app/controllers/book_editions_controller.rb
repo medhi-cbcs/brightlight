@@ -150,7 +150,7 @@ class BookEditionsController < ApplicationController
   def destroy
     @book_edition.destroy
     respond_to do |format|
-      format.html { redirect_to books_url, notice: 'Book edition was successfully destroyed.' }
+      format.html { redirect_to book_editions_url, notice: 'Book edition was successfully destroyed.' }
       format.json { head :no_content }
     end
   end

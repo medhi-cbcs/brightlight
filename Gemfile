@@ -72,5 +72,9 @@ group :development do
 
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'spring'
+  
+  # irb messed up on Windows, use pry to replace irb as console
+  gem 'pry-rails'
+
 end
 

@@ -14,6 +14,20 @@ table
             .label Publisher
             .item = @book_title.publisher
 
+h5 Editions
+table.striped
+  thead
+    th Title
+    th Publisher
+    th ISBN 10
+
+  tbody
+  - @book_title.book_editions.each do |edition|
+    tr
+      td = link_to edition.title, edition
+      td = edition.publisher
+      td = edition.isbn10
+
 .toolbar.actions
   = link_to '< Back', book_titles_path, class: 'btn btn-flat'
   = link_to 'Edit', edit_book_title_path(@book_title), class: 'btn btn-primary'

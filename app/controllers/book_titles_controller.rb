@@ -23,23 +23,26 @@ class BookTitlesController < ApplicationController
       @book_title.authors = edition.authors
       @book_title.publisher = edition.publisher
       @book_title.image_url = edition.small_thumbnail
+      @edition = edition
     end
-
-    6.times { @book_title.book_editions.build }
   end
 
   # GET /book_titles/1/edit
   def edit
-    6.times { @book_title.book_editions.build }
   end
 
   # POST /book_titles
   # POST /book_titles.json
   def create
+    puts params
+
     @book_title = BookTitle.new(book_title_params)
+    @book_edition = BookEdition.find(params[:edition])
 
     respond_to do |format|
       if @book_title.save
+        @book_edition.book_title_id = @book_title.id
+        @book_edition.save
         format.html { redirect_to @book_title, notice: 'Book title was successfully created.' }
         format.json { render :show, status: :created, location: @book_title }
       else

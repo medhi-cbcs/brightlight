@@ -1,33 +1,36 @@
 .row
-  = form_for @book_title, html: {class:'col s12'} do |f|
-    - if @book_title.errors.any?
-      #error_explanation
-        h5 = "#{pluralize(@book_title.errors.count, "error")} prohibited this book from being saved:"
-        ul
-          - @book_title.errors.full_messages.each do |message|
-            li = message
-    .row
-      .input-field.col.s6
-        = f.label :title, class: 'active'
-        = f.text_field :title
-      .input-field.col.s6
-        = f.label :authors, class: 'active'
-        = f.text_field :authors
-      .input-field.col.s6
-        = f.label :publisher, class: 'active'
-        = f.text_field :publisher
-      .input-field.col.s6
-        = f.label :image_url, class: 'active'
-        = f.text_field :image_url
-    .row
-      h5 Book Editions
-      hr
-      = f.fields_for :book_editions do |form|
-        .input-field.col.s6
-          = form.label :book_title, class: 'active'
-          = form.collection_select :book_title_id, BookEdition.all, :id, :title, prompt: true
+  .col.s12
 
-      .col.s12
-        .toolbar.actions
-          button.btn.waves-effect.waves-light type="submit" Save
-          = link_to 'Cancel', book_titles_path, class: "waves-effect waves-teal btn-flat"
+    = form_for @book_title, html: {class:'col s12'} do |f|
+      - if @book_title.errors.any?
+        #error_explanation
+          h5 = "#{pluralize(@book_title.errors.count, "error")} prohibited this book from being saved:"
+          ul
+            - @book_title.errors.full_messages.each do |message|
+              li = message
+      .row
+        .input-field
+          = f.label :title, class: 'active'
+          = f.text_field :title
+        .input-field
+          = f.label :authors, class: 'active'
+          = f.text_field :authors
+        .input-field
+          = f.label :publisher, class: 'active'
+          = f.text_field :publisher
+        
+        / Hidden fields        
+        = f.text_field :image_url, hidden: true
+        input hidden="hidden" type="text" value="#{@edition.id}" name="edition" id="edition"
+        / .row
+        /   h5 Book Editions
+        /   hr
+        /     = f.fields_for :book_editions do |form|
+        /       .input-field.col.s6
+        /         = form.label :book_title, class: 'active'
+        /         = form.collection_select :book_title_id, BookEdition.all, :id, :title, prompt: true
+
+        .col.s12
+          .toolbar.actions
+            button.btn.waves-effect.waves-light type="submit" Save
+            = link_to 'Cancel', book_titles_path, class: "waves-effect waves-teal btn-flat"

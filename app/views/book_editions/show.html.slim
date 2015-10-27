@@ -2,7 +2,7 @@ br
 table
   tr
     td style="vertical-align:top"
-      - thumbnail = (@book_edition.small_thumbnail.nil? or @book_edition.small_thumbnail.blank?) ? 'book-icon.png' : @book_edition.small_thumbnail
+      - thumbnail = @book_edition.small_thumbnail.present? ? @book_edition.small_thumbnail : 'book-icon.png' 
       = image_tag(thumbnail, class: 'list_image')
     td
       .list_description
