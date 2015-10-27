@@ -17,13 +17,11 @@ class BookTitlesController < ApplicationController
     @book_title = BookTitle.new
 
     unless params[:edition].blank?
-      edition = BookEdition.find params[:edition]
-      @book_title.book_editions << edition
-      @book_title.title = edition.title
-      @book_title.authors = edition.authors
-      @book_title.publisher = edition.publisher
-      @book_title.image_url = edition.small_thumbnail
-      @edition = edition
+      @edition = BookEdition.find params[:edition]
+      @book_title.title = @edition.title
+      @book_title.authors = @edition.authors
+      @book_title.publisher = @edition.publisher
+      @book_title.image_url = @edition.small_thumbnail
     end
   end
 

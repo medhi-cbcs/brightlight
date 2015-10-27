@@ -21,7 +21,8 @@
         
         / Hidden fields        
         = f.text_field :image_url, hidden: true
-        input hidden="hidden" type="text" value="#{@edition.id}" name="edition" id="edition"
+        - if @edition
+          input hidden="hidden" type="text" value="#{@edition.id}" name="edition" id="edition"
         / .row
         /   h5 Book Editions
         /   hr
