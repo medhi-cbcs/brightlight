@@ -1,0 +1,4 @@
+li.nested-fields
+	= f.fields_for :book_title do |course_text_book_title|
+		= course_text_book_title.text_field :title
+		/= link_to_remove_association "Remove", f

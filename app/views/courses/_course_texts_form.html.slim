@@ -1,0 +1,40 @@
+= form_for @course do |f|
+	- if @course.errors.any?
+		#error_explanation
+			h2 = "#{pluralize(@course.errors.count, "error")} prohibited this Grade Level from being saved:"
+			ul
+				- @course.errors.full_messages.each do |message|
+					li = message
+
+	.row
+		.input-field.col.s6
+			= f.label :name, class: 'active'
+			= f.text_field :name
+		.input-field.col.s6
+			= f.label :number, class: 'active'
+			= f.text_field :number
+		.input-field.col.s12
+			= f.label :description, class: 'active'
+			= f.text_area :description, class: 'materialize-textarea'
+		.input-field.col.s4
+			= f.label :grade_level, class: 'active'
+			= f.collection_select(:grade_level_id, GradeLevel.all, :id, :name, {}, {:class => 'browser-default'})
+		.input-field.col.s4
+			= f.label :academic_year_id, class: 'active'
+			= f.collection_select(:academic_year_id, AcademicYear.all, :id, :name, {}, {:class => 'browser-default'})
+		.input-field.col.s4
+			= f.label :academic_term_id, class: 'active'
+			= f.collection_select(:academic_term_id, AcademicTerm.all, :id, :name, {}, {:class => 'browser-default'})
+
+	.row
+		h5 Course Texts
+		hr
+		= f.fields_for :course_texts do |course_text|
+			= render 'course_text_fields', f:course_text
+
+			= link_to_add_association 'Add Book Title', f, :course_texts, 'data-association-insertion-node' => "#course-book_title ol", 'data-association-insertion-method' => "append", wrap_object: Proc.new {|course_text| course_text.build_book_title; course_text }
+
+
+	.toolbar.actions.col.s12 
+		button.btn.waves-effect.waves-light type="submit" Save
+		= link_to 'Cancel', courses_path, class: "waves-effect waves-teal btn-flat"

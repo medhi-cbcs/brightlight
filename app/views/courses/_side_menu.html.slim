@@ -10,7 +10,8 @@
             | Course Section
         .cell-row
           a href="#" 
-            | Course Text
+            | Course Texts
+
     li
       .collapsible-header.active
         i.material-icons query_builder
@@ -20,7 +21,8 @@
         - if params[:id] and action_name != 'edit'
           = link_to 'Edit', edit_course_path(@course), class: "btn waves-effect waves-teal btn-flat"
         - if params[:id]
-          = link_to 'Course Texts', course_course_texts_path(@course), class: "btn waves-effect waves-teal btn-flat"
+          /= link_to 'Course Texts', course_course_texts_path(@course), class: "btn waves-effect waves-teal btn-flat"
+          = link_to 'Edit Course Texts', edit_course_path({id:@course.id, v:'texts'})
     li
       .collapsible-header
         i.material-icons info_outline
