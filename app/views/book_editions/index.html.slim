@@ -7,7 +7,7 @@
         input type="hidden" name="v" value=@view_style
         - if params[:search].present?
           i.material-icons.prefix onclick='reset_form()' style='cursor:pointer'
-            | not_interested
+            | highlight_off
         - else
           i.material-icons.prefix search
         input.icon-prefix type="text" name="search" placeholder="Search" value=params[:search]    
@@ -17,11 +17,14 @@
       }
 
 .toolbar
+  i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="Delete" delete
+  i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="Assign" assignment
+  i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="Add to group" library_add
   .right
     = link_to book_editions_path(search:params[:search])
-      i.material-icons view_list
+      i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="Expanded view"  view_list
     = link_to book_editions_path({v:'list',search:params[:search]})
-      i.material-icons list
+      i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="List view"  list
 
 table.striped
   tbody

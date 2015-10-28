@@ -4,7 +4,16 @@ class BookTitlesController < ApplicationController
   # GET /book_titles
   # GET /book_titles.json
   def index
-    @book_titles = BookTitle.paginate(page: params[:page], per_page: 20)
+    if params[:v] == 'list'
+      items_per_page = 20
+      @view_style = :list
+      session[:view_style] = 'list'
+    else
+      items_per_page = 10
+      @view_style = :block
+      session[:view_style] = ''
+    end
+    @book_titles = BookTitle.paginate(page: params[:page], per_page: items_per_page)
   end
 
   # GET /book_titles/1
