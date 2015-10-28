@@ -33,6 +33,6 @@ table.striped
       td = edition.isbn13
 
 .toolbar.actions
-  = link_to '< Back', :back, class: 'btn btn-flat'
+  = link_to '< Back', book_titles_path, class: 'btn btn-flat'
   = link_to 'Edit', edit_book_title_path(@book_title), class: 'btn btn-primary'
 

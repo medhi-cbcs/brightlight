@@ -2,7 +2,8 @@
   .col.s12
 
     = form_for @book_title, url: {action:'merge'}, html: {class:'col s12'} do |f|
-      input type="hidden" id=@book_title.id name="merge[#{@book_title.id}]"
+      - @book_titles.each do |book_title|
+        input type="hidden" id=book_title.id name="merge[#{book_title.id}]" value="on"
       - if @book_title.errors.any?
         #error_explanation
           h5 = "#{pluralize(@book_title.errors.count, "error")} prohibited this book from being saved:"
@@ -20,16 +21,22 @@
           = f.label :publisher, class: 'active'
           = f.collection_select :publisher, @book_titles, :publisher, :publisher
 
+      .row
+        h6.grey-text Select cover image:
+        - @book_titles.each do |book_title|
+          .cover-selection
+            .input-field.col.s2
+              input class='with-gap' type="radio" id="book-#{book_title.id}" name="book_title[image_url]" value=book_title.image_url
+              = label_tag "book-#{book_title.id}", 'Select'
+              - thumbnail = book_title.image_url.present? ? book_title.image_url : 'book-icon.png' 
+              = image_tag(thumbnail, class: 'list_image')
+
+
         .col.s12
           .toolbar.actions
             button.btn.waves-effect.waves-light type="submit" Save
             = link_to 'Cancel', book_titles_path, class: "waves-effect waves-teal btn-flat"
-      / .row
-      /   - @book_titles.each do |book|
-      /     .input-field.col.s2
-      /       - thumbnail = book_title.image_url.present? ? book_title.image_url : 'book-icon.png' 
-      /       = image_tag(thumbnail, class: 'list_image')
-      /       = f.check_box
+
       /     - else
       /       td style="vertical-align:top"
       /         - thumbnail = book_title.image_url.present? ? book_title.image_url : 'book-icon.png' 

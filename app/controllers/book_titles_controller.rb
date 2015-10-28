@@ -1,5 +1,5 @@
 class BookTitlesController < ApplicationController
-  before_action :set_book_title, only: [:show, :edit, :update, :destroy, :merge]
+  before_action :set_book_title, only: [:show, :edit, :update, :destroy]
 
   # GET /book_titles
   # GET /book_titles.json
@@ -114,6 +114,7 @@ class BookTitlesController < ApplicationController
 
   # POST /book_titles/merge
   def merge
+    @book_title = BookTitle.new(book_title_params) 
     @book_titles = params[:merge].map {|id,on| BookTitle.find(id)}
     @book_titles.each do |title|
       @book_title.book_editions << title.book_editions
