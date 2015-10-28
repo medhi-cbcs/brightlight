@@ -9,11 +9,13 @@ class BookEditionsController < ApplicationController
     if params[:v] == 'list'
       items_per_page = 20
       @view_style = :list
+      session[:view_style] = 'list'
     else
       items_per_page = 10
       @view_style = :block
+      session[:view_style] = ''
     end
-    puts "INDEX search #{params[:search]}"
+    
     if params[:search]
       @book_editions = BookEdition.where('title LIKE ?', "%#{params[:search]}%").paginate(page: params[:page], per_page: items_per_page)
     else

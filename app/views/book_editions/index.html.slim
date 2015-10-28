@@ -1,19 +1,29 @@
-h4 Book editions
+.row 
+  .col.s6
+    h4 Book Editions
+  .col.s5
+    = form_tag({controller:'book_editions', action:'index'}, {method:'get'}) do 
+      .input-field
+        input type="hidden" name="v" value=@view_style
+        - if params[:search].present?
+          i.material-icons.prefix onclick='reset_form()' style='cursor:pointer'
+            | not_interested
+        - else
+          i.material-icons.prefix search
+        input.icon-prefix type="text" name="search" placeholder="Search" value=params[:search]    
+    javascript:
+      function reset_form() {
+        window.location="#{book_editions_path(v:'list')}"
+      }
 
 .toolbar
-  = form_tag({controller:'book_editions', action:'index'}, {method:'get', class:'col s6'}) do 
-    .input-field
-      i.material-icons.prefix search
-      input.icon-prefix type="text" name="search" placeholder="Search"
-
   .right
-    a href="#{book_editions_path}"
+    = link_to book_editions_path(search:params[:search])
       i.material-icons view_list
-    a href="#{book_editions_path}?v=list"
+    = link_to book_editions_path({v:'list',search:params[:search]})
       i.material-icons list
 
 table.striped
-
   tbody
     - @book_editions.each do |book_edition|
       tr
