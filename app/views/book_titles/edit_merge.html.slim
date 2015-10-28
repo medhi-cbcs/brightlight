@@ -1,0 +1,38 @@
+.row
+  .col.s12
+
+    = form_for @book_title, url: {action:'merge'}, html: {class:'col s12'} do |f|
+      input type="hidden" id=@book_title.id name="merge[#{@book_title.id}]"
+      - if @book_title.errors.any?
+        #error_explanation
+          h5 = "#{pluralize(@book_title.errors.count, "error")} prohibited this book from being saved:"
+          ul
+            - @book_title.errors.full_messages.each do |message|
+              li = message
+      .row
+        .input-field
+          = f.label :title, class: 'active'
+          = f.collection_select :title, @book_titles, :title, :title
+        .input-field
+          = f.label :authors, class: 'active'
+          = f.collection_select :authors, @book_titles, :authors, :authors
+        .input-field
+          = f.label :publisher, class: 'active'
+          = f.collection_select :publisher, @book_titles, :publisher, :publisher
+
+        .col.s12
+          .toolbar.actions
+            button.btn.waves-effect.waves-light type="submit" Save
+            = link_to 'Cancel', book_titles_path, class: "waves-effect waves-teal btn-flat"
+      / .row
+      /   - @book_titles.each do |book|
+      /     .input-field.col.s2
+      /       - thumbnail = book_title.image_url.present? ? book_title.image_url : 'book-icon.png' 
+      /       = image_tag(thumbnail, class: 'list_image')
+      /       = f.check_box
+      /     - else
+      /       td style="vertical-align:top"
+      /         - thumbnail = book_title.image_url.present? ? book_title.image_url : 'book-icon.png' 
+      /         = image_tag(thumbnail, class: 'list_image')
+
+

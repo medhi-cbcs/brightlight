@@ -1,48 +1,70 @@
-h4 Book Titles
-  
-.toolbar
-  = link_to 'Add Book Title', new_book_title_path, class: "btn btn-primary"
-  .right
-    = link_to book_titles_path(search:params[:search])
-      i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="Expanded view"  view_list
-    = link_to book_titles_path({v:'list',search:params[:search]})
-      i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="List view"  list
-
-table.striped
-  tbody
-    - @book_titles.each do |book_title|
-      tr
-        - if @view_style == :list
-          td
-            .list_description
-              div = link_to book_title.title, book_title
-              - if book_title.authors.present?
-                span.label Author:
-                span.item = book_title.authors
-              - if book_title.publisher.present?
-                span.label Publisher:
-                span.item = book_title.publisher
-
-          td = link_to 'Edit', edit_book_title_path(book_title), class: "btn waves-effect waves-teal btn-flat btn-small"
-
+.row 
+  .col.s6
+    h4 Book Titles
+  .col.s5
+    = form_tag({controller:'book_titles', action:'index'}, {method:'get'}) do 
+      .input-field
+        input type="hidden" name="v" value=@view_style
+        - if params[:search].present?
+          i.material-icons.prefix onclick='reset_form()' style='cursor:pointer'
+            | highlight_off
         - else
-          td style="vertical-align:top"
-            - thumbnail = book_title.image_url.present? ? book_title.image_url : 'book-icon.png' 
-            = image_tag(thumbnail, class: 'list_image')
-          td
-            .list_description
-              dl.row
-                dt = link_to book_title.title, book_title
-                - if book_title.authors.present?
-                  dd
-                    .label Author:
-                    .item = book_title.authors
-                - if book_title.publisher.present?
-                  dd
-                    .label Publisher:
-                    .item = book_title.publisher
+          i.material-icons.prefix search
+        input.icon-prefix type="text" name="search" placeholder="Search" value=params[:search]    
+    javascript:
+      function reset_form() {
+        window.location="#{book_titles_path(v:'list')}"
+      }
 
-          td = link_to 'Edit', edit_book_title_path(book_title), class: "btn waves-effect waves-teal btn-flat btn-small"
+= form_tag do 
+  .toolbar
+    button.btn formaction="#{edit_merge_book_titles_path}" Merge
+    button.btn.btn-flat formaction="#{delete_book_titles_path}"
+      i.material-icons delete
+    .right
+      = link_to book_titles_path(search:params[:search])
+        i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="Expanded view"  view_list
+      = link_to book_titles_path({v:'list',search:params[:search]})
+        i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="List view"  list
+
+  table.striped
+    tbody
+      - @book_titles.each do |book_title|
+        tr
+          td
+            input type="checkbox" id=book_title.id name="merge[#{book_title.id}]"
+            = label_tag book_title.id, ""
+          - if @view_style == :list
+            td
+              .list_description
+                div = link_to book_title.title, book_title
+                - if book_title.authors.present?
+                  span.label Author:
+                  span.item = book_title.authors
+                - if book_title.publisher.present?
+                  span.label Publisher:
+                  span.item = book_title.publisher
+
+            td = link_to 'Edit', edit_book_title_path(book_title), class: "btn waves-effect waves-teal btn-flat btn-small"
+
+          - else
+            td style="vertical-align:top"
+              - thumbnail = book_title.image_url.present? ? book_title.image_url : 'book-icon.png' 
+              = image_tag(thumbnail, class: 'list_image')
+            td
+              .list_description
+                dl.row
+                  dt = link_to book_title.title, book_title
+                  - if book_title.authors.present?
+                    dd
+                      .label Author:
+                      .item = book_title.authors
+                  - if book_title.publisher.present?
+                    dd
+                      .label Publisher:
+                      .item = book_title.publisher
+
+            td = link_to 'Edit', edit_book_title_path(book_title), class: "btn waves-effect waves-teal btn-flat btn-small"
 
 = will_paginate @book_titles
 

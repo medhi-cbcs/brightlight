@@ -6,15 +6,26 @@ Rails.application.routes.draw do
   resources :book_grades
   resources :students
   resources :employees
-  resources :courses do
-    resources :course_texts
-  end
-  resources :book_editions
-  resources :book_titles
   resources :products
   resources :academic_years
   resources :grade_levels
-
+  resources :courses do
+    resources :course_texts
+  end
+  # get 'books/search_isbn' => 'books#search_isbn'
+  resources :book_editions do
+    collection do
+      post 'search_isbn'
+    end
+  end
+  resources :book_titles do
+    collection do
+      post 'edit_merge' # edit merges
+      post 'merge'      # merges several book titles together
+      post 'delete'     # deletes several book titles at the same time
+    end
+  end
+  
   devise_for :users, controllers: {
     omniauth_callbacks: "users/omniauth_callbacks",
     sessions: "users/sessions",
@@ -28,13 +39,9 @@ Rails.application.routes.draw do
   root 'welcome#index'
   get 'dashboard', to: 'welcome#dashboard'
   
-  # get 'books/search_isbn' => 'books#search_isbn'
-  resources :book_editions do
-    collection do
-      post 'search_isbn'
-    end
-  end
+
  
+  resources :book
   # For authorization with OmniAuth2
   get '/auth/:provider/callback', to: 'sessions#create'
 

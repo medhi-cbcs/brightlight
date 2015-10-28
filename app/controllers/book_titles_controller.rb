@@ -1,5 +1,5 @@
 class BookTitlesController < ApplicationController
-  before_action :set_book_title, only: [:show, :edit, :update, :destroy]
+  before_action :set_book_title, only: [:show, :edit, :update, :destroy, :merge]
 
   # GET /book_titles
   # GET /book_titles.json
@@ -13,7 +13,12 @@ class BookTitlesController < ApplicationController
       @view_style = :block
       session[:view_style] = ''
     end
-    @book_titles = BookTitle.paginate(page: params[:page], per_page: items_per_page)
+    
+    if params[:search]
+      @book_titles = BookTitle.where('title LIKE ?', "%#{params[:search]}%").paginate(page: params[:page], per_page: items_per_page)
+    else
+      @book_titles = BookTitle.paginate(page: params[:page], per_page: items_per_page)
+    end
   end
 
   # GET /book_titles/1
@@ -41,15 +46,15 @@ class BookTitlesController < ApplicationController
   # POST /book_titles
   # POST /book_titles.json
   def create
-    puts params
-
-    @book_title = BookTitle.new(book_title_params)
-    @book_edition = BookEdition.find(params[:edition])
+    @book_title = BookTitle.new(book_title_params)    
+    @book_edition = BookEdition.find(params[:edition]) if params[:edition]
 
     respond_to do |format|
       if @book_title.save
-        @book_edition.book_title_id = @book_title.id
-        @book_edition.save
+        if params[:edition]
+          @book_edition.book_title_id = @book_title.id
+          @book_edition.save
+        end
         format.html { redirect_to @book_title, notice: 'Book title was successfully created.' }
         format.json { render :show, status: :created, location: @book_title }
       else
@@ -78,8 +83,47 @@ class BookTitlesController < ApplicationController
   def destroy
     @book_title.destroy
     respond_to do |format|
-      format.html { redirect_to book_titles_url, notice: 'Book title was successfully destroyed.' }
+      format.html { redirect_to book_titles_url, notice: 'Book title was successfully deleted.' }
       format.json { head :no_content }
+    end
+  end
+
+  # POST /book_titles/delete
+  def delete
+    if params[:merge]
+      @book_titles = params[:merge].map {|id,on| BookTitle.find(id)}
+      @book_titles.each do |book_title|
+        book_title.destroy
+        # TODO: check dependencies on COURSE_TEXTS table
+      end
+      redirect_to book_titles_path, notice: 'Book titles were successfully deleted.'
+    else
+      redirect_to book_titles_path
+    end
+  end
+
+  # POST /book_titles/edit_merge
+  def edit_merge
+    if params[:merge]
+      @book_titles = params[:merge].map {|id,on| BookTitle.find(id)}
+      @book_title = BookTitle.new
+    else
+      redirect_to book_titles_path
+    end
+  end
+
+  # POST /book_titles/merge
+  def merge
+    @book_titles = params[:merge].map {|id,on| BookTitle.find(id)}
+    @book_titles.each do |title|
+      @book_title.book_editions << title.book_editions
+      title.destroy
+      # TODO: check dependencies on COURSE_TEXTS table
+    end
+    if @book_title.save
+      redirect_to @book_title, notice: 'Book titles were successfully merged.'
+    else
+      render :edit_merge
     end
   end
 

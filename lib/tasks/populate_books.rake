@@ -1,8 +1,10 @@
 namespace :db do
 	desc "Populate database with book titles and book editions"
 	task populate_books: :environment do
+		
+		BookEdition.delete_all
 
-		book_titles = ['inauthor:jane+austen','beowulf','saxon+math',
+		queries = ['inauthor:jane+austen','beowulf','saxon+math',
 			'inauthor:susan+wise+bauer','inauthor:kelly+kapic','inauthor:wayne+grudem','inauthor:david+noebel',
 			'inauthor:paul+foerster','inauthor:paul+hewitt','inauthor:Joseph+Gibaldi','inauthor:Chris+Krenzke',
 			'inauthor:tolkien','inauthor:Walter+Scott','inauthor:Douglas+Wilson','inauthor:Erin+Fouberg',
@@ -13,8 +15,8 @@ namespace :db do
 			'Focus+on+Grammar+3+An+Integrated+Skills+Approach','inauthor:c+s+lewis','inauthor:George+MacDonald',
 			'Biblical+Worldview+Rhetoric','inauthor:Stedman+Ray','inauthor:Spielvogel+Jackson']	
 
-		book_titles.each do |book_title|
-			books = GoogleBooks::API.search(book_title,{count:30})
+		queries.each do |query|
+			books = GoogleBooks::API.search(query,{count:30})
 			books.each do |book|
 				book_edition = BookEdition.new
 				book_edition.title = book.title
@@ -28,7 +30,8 @@ namespace :db do
 	      book_edition.thumbnail = book.covers[:thumbnail]
 	      book_edition.published_date = book.published_date 
 
-	      book_edition.save
+	      book_edition.create_book_title
+	      puts book_edition.title
 			end
 		end
 	end
