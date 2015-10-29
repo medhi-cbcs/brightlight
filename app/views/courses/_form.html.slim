@@ -26,18 +26,14 @@
 			= f.label :academic_term_id, class: 'active'
 			= f.collection_select(:academic_term_id, AcademicTerm.all, :id, :name, {}, {:class => 'browser-default'})
 
-	.row
+	#courses_section.row
 		h5 Course Sections
 		hr
-		= f.fields_for :courses_sections do |form|
-			.row
-				.input-field.col.s4
-					= form.label :grade_section, class: 'active'
-					= form.collection_select :grade_section_id, GradeSection.all, :id, :name, prompt: true
-				.input-field.col.s4
-					= form.label :instructor, class: 'active'
-					= form.collection_select :instructor_id, @teachers, :id, :name, prompt: true
-
+		= f.fields_for :courses_sections do |courses_section|
+			= render 'courses_section_fields', f: courses_section
+			
+		.actions.col.s1 
+			= link_to_add_association 'Add', f, :courses_sections, class: "waves-effect waves-teal btn btn-small"
 
 	.toolbar.actions.col.s12 
 		button.btn.waves-effect.waves-light type="submit" Save
