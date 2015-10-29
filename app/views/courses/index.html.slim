@@ -1,36 +1,37 @@
 h4 Courses
 
 .toolbar.z-depth-1
+  i.material-icons assignment
   .right
-    = link_to book_courses_path(search:params[:search])
-      i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="Expanded view"  view_list
-    = link_to book_courses_path({v:'list',search:params[:search]})
+    = link_to courses_path(search:params[:search])
+       i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="Expanded view"  view_list
+    = link_to courses_path({v:'list',search:params[:search]})
       i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="List view"  list
 
 table.striped
-	thead
-		tr
-			th Number
-			th Name
-			th Description
-			th Grade
-			th Year
-			th Term
-			th Actions
+  thead
+    tr
+      th Number
+      th Name
+      th Description
+      th Grade
+      th Year
+      th Term
+      th Actions
 
-	tbody
-		- @courses.each do |course|
-			tr
-				td = course.number
-				td = course.name
-				td = course.description
-				td = course.grade_level.name if course.grade_level
-				td = course.academic_year.name if course.academic_year
-				td = course.academic_term.name if course.academic_term
-				td
-					= link_to 'Show', course, class: "btn waves-effect waves-teal btn-small"
-					br
-					= link_to 'Edit', edit_course_path(course), class: "btn waves-effect waves-teal btn-small"
+  tbody
+    - @courses.each do |course|
+      tr
+        td = course.number
+        td = course.name
+        td = course.description
+        td = course.grade_level.name if course.grade_level
+        td = course.academic_year.name if course.academic_year
+        td = course.academic_term.name if course.academic_term
+        td
+          = link_to 'Show', course, class: "btn waves-effect waves-teal btn-small"
+          br
+          = link_to 'Edit', edit_course_path(course), class: "btn waves-effect waves-teal btn-small"
 
 
 
