@@ -23,6 +23,7 @@ class CoursesController < ApplicationController
   def edit
     @teachers = Employee.where(job_title:'Teacher')   
     3.times { @course.course_sections.build } if @course.course_sections.empty?
+    @book_titles = BookTitle.all
   end
 
   # POST /courses

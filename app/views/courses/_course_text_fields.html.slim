@@ -1,4 +1,7 @@
-li.nested-fields
-	= f.fields_for :book_title do |course_text_book_title|
-		= course_text_book_title.text_field :title
-		/= link_to_remove_association "Remove", f
+.nested-fields
+	.row
+		.input-field.col.s4
+			= f.label :course_text, class: 'active'
+			= f.collection_select(:course_text_id, @course_texts, :id, :name, {prompt: true}, {:class => 'browser-default'})
+		.input-field.col.s4
+			= link_to_remove_association "Remove", f, class: "waves-effect waves-teal btn btn-flat red-text btn-small"

@@ -26,14 +26,15 @@
 			= f.label :academic_term_id, class: 'active'
 			= f.collection_select(:academic_term_id, AcademicTerm.all, :id, :name, {}, {:class => 'browser-default'})
 
-	.row
-		h5 Course Texts
-		hr
+	h5 Course Texts
+	hr
+	#course_text.row
 		= f.fields_for :course_texts do |course_text|
 			= render 'course_text_fields', f:course_text
 
-			= link_to_add_association 'Add Book Title', f, :course_texts, 'data-association-insertion-node' => "#course-book_title ol", 'data-association-insertion-method' => "append", wrap_object: Proc.new {|course_text| course_text.build_book_title; course_text }
-
+		= link_to_add_association f, :course_texts, class: "waves-effect waves-teal btn btn-flat", 'data-association-insertion-method' => 'before', 'data-association-insertion-node' => 'this'
+			' add section
+			i.material-icons.left playlist_add
 
 	.toolbar.actions.col.s12 
 		button.btn.waves-effect.waves-light type="submit" Save
