@@ -1,5 +1,12 @@
 h4 Courses
 
+.toolbar.z-depth-1
+  .right
+    = link_to book_courses_path(search:params[:search])
+      i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="Expanded view"  view_list
+    = link_to book_courses_path({v:'list',search:params[:search]})
+      i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="List view"  list
+
 table.striped
 	thead
 		tr

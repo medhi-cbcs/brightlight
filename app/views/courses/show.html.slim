@@ -1,6 +1,6 @@
+h4 = @course.name 
+
 .list_description
-	dl
-		h4 = @course.name 
 	dl.row
 		dd.col.s2
 			.label Course Number
@@ -19,22 +19,23 @@
 			.label Term
 			.item = @course.academic_term.name
 	
-	
+.row
 	h5 Course Sections
 	- if @course.courses_sections.present?
-		- @course.courses_sections.each do |section|
-			dl.row
-				dd.col.s2
-					.label Section
-					.item = section.grade_section.name if section.grade_section
-				dd.col.s6
-					.label Instructor
-					.item = section.instructor.name if section.instructor
+		table.striped.col.s6
+			thead
+				th Section
+				th Instructor
+			tbody
+			- @course.courses_sections.each do |section|
+				tr
+					td = section.grade_section.name if section.grade_section
+					td = section.instructor.name if section.instructor
 	- else
 		p.red-text No sections
 
-
-.toolbar.actions
-	= link_to '< Back', :back, class: 'btn btn-flat'
-	= link_to 'Edit', edit_course_path(@course), class: 'btn btn-primary'
+.row
+	.toolbar.actions
+		= link_to '< Back', :back, class: 'btn btn-flat'
+		= link_to 'Edit', edit_course_path(@course), class: 'btn btn-primary'
 

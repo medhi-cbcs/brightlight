@@ -31,10 +31,11 @@
 		hr
 		= f.fields_for :courses_sections do |courses_section|
 			= render 'courses_section_fields', f: courses_section
-			
-		.actions.col.s1 
-			= link_to_add_association 'Add', f, :courses_sections, class: "waves-effect waves-teal btn btn-small"
+			 
+		= link_to_add_association f, :courses_sections, class: "waves-effect waves-teal btn btn-flat"
+			' add section
+			i.material-icons.left playlist_add
 
-	.toolbar.actions.col.s12 
+	.toolbar.actions
 		button.btn.waves-effect.waves-light type="submit" Save
 		= link_to 'Cancel', courses_path, class: "waves-effect waves-teal btn-flat"
