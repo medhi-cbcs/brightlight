@@ -21,13 +21,13 @@ h4 = @course.name
 	
 .row
 	h5 Course Sections
-	- if @course.courses_sections.present?
+	- if @course.course_sections.present?
 		table.striped.col.s6
 			thead
 				th Section
 				th Instructor
 			tbody
-			- @course.courses_sections.each do |section|
+			- @course.course_sections.each do |section|
 				tr
 					td = section.grade_section.name if section.grade_section
 					td = section.instructor.name if section.instructor
