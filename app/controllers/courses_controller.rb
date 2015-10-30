@@ -16,6 +16,7 @@ class CoursesController < ApplicationController
   def new
     @course = Course.new
     3.times { @course.course_sections.build }
+    3.times { @course.course_texts.build }
     @teachers = Employee.where(job_title:'Teacher')
   end
 
@@ -23,6 +24,7 @@ class CoursesController < ApplicationController
   def edit
     @teachers = Employee.where(job_title:'Teacher')   
     3.times { @course.course_sections.build } if @course.course_sections.empty?
+    3.times { @course.course_texts.build } if @course.course_texts.empty?
     @book_titles = BookTitle.all
   end
 

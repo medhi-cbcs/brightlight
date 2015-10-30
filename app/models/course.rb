@@ -9,5 +9,5 @@ class Course < ActiveRecord::Base
   
   has_many :course_texts
   has_many :book_titles, through: :course_texts
-  # accepts_nested_attributes_for :course_texts, allow_destroy: true
+  accepts_nested_attributes_for :course_texts, allow_destroy: true
 end
