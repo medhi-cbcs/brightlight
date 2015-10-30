@@ -5,7 +5,12 @@ class BookCopiesController < ApplicationController
   # GET /book_copies
   # GET /book_copies.json
   def index
-    @book_copies = BookCopy.all
+    if params[:book_edition_id]
+      @book_edition = BookEdition.find(params[:book_edition_id])
+      @book_copies = @book_edition.book_copies
+    else
+      @book_copies = BookCopy.all
+    end
   end
 
   # GET /book_copies/1
@@ -15,11 +20,19 @@ class BookCopiesController < ApplicationController
 
   # GET /book_copies/new
   def new
-    @book_copy = BookCopy.new
+    if params[:book_edition_id]
+      @book_edition = BookEdition.find(params[:book_edition_id])
+      @book_copy = @book_edition.book_copies.build
+    else
+      @book_copy = BookCopy.new
+    end
   end
 
   # GET /book_copies/1/edit
   def edit
+    if params[:book_edition_id]
+      @book_edition = BookEdition.find(params[:book_edition_id])
+    end
   end
 
   # POST /book_copies

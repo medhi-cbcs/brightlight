@@ -1,9 +1,5 @@
-h4 Listing Book Copies
-
-.toolbar
-  = link_to 'New Book copy', new_book_copy_path, class: "btn btn-primary"
-
 -if @book_edition
+  h4 = @book_edition.title
   table
     tr
       td style="vertical-align:top"
@@ -12,8 +8,6 @@ h4 Listing Book Copies
       td
         .list_description
           dl.row
-            dt = @book_edition.title
-            dd = @book_edition.subtitle
             dd.col.s6
               .label Author
               .item = @book_edition.authors
@@ -27,6 +21,7 @@ h4 Listing Book Copies
               .label ISBN
               .item = @book_edition.isbn13
 
+h5 Book Copies
 table.striped
   thead
     tr

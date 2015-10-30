@@ -1,24 +1,27 @@
-= form_for @book_copy do |f|
-  - if @book_copy.errors.any?
-    #error_explanation
-      h2 = "#{pluralize(@book_copy.errors.count, "error")} prohibited this book_copy from being saved:"
-      ul
-        - @book_copy.errors.full_messages.each do |message|
-          li = message
+.row
+  = form_for @book_copy do |f|
+    - if @book_copy.errors.any?
+      #error_explanation
+        h2 = "#{pluralize(@book_copy.errors.count, "error")} prohibited this book_copy from being saved:"
+        ul
+          - @book_copy.errors.full_messages.each do |message|
+            li = message
 
-  .field
-    = f.label :book_edition_id
-    = f.text_field :book_edition_id
-  .field
-    = f.label :book_condition_id
-    = f.text_field :book_condition_id
-  .field
-    = f.label :status_id
-    = f.text_field :status_id
-  .field
-    = f.label :barcode
-    = f.text_field :barcode
-  .field
-    = f.label :copy_no
-    = f.text_field :copy_no
-  .actions = f.submit
+    .input-field.col.s6
+      = f.label :book_condition_id
+      = f.text_field :book_condition_id
+    .input-field.col.s6
+      = f.label :status_id
+      = f.text_field :status_id
+    .input-field.col.s6
+      = f.label :barcode
+      = f.text_field :barcode
+    .input-field.col.s6
+      = f.label :copy_no
+      = f.text_field :copy_no
+
+    .actions.col.s12 
+      button.btn.waves-effect.waves-light type="submit" Save
+      = link_to 'Cancel', book_edition_book_copies_path(@book_copy.book_edition_id), class: "waves-effect waves-teal btn-flat"
+
+    .actions = f.submit
