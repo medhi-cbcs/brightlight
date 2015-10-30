@@ -15,12 +15,16 @@
       function reset_form() {
         window.location="#{book_titles_path(v:'list')}"
       }
+      function toggle_toolbar_menu() {
+        $('#context-buttons').toggle()
+      }
 
 = form_tag do 
   .toolbar
-    button.btn formaction="#{edit_merge_book_titles_path}" Merge
-    button.btn.btn-flat formaction="#{delete_book_titles_path}"
-      i.material-icons delete
+    #context-buttons
+      button.btn formaction="#{edit_merge_book_titles_path}" Merge
+      button.btn.btn-flat formaction="#{delete_book_titles_path}"
+        i.material-icons delete
     .right
       = link_to book_titles_path(search:params[:search])
         i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="Expanded view"  view_list
@@ -33,7 +37,7 @@
         tr
           td
             input type="checkbox" id=book_title.id name="merge[#{book_title.id}]"
-            = label_tag book_title.id, ""
+            = label_tag book_title.id, "", onclick:"toggle_toolbar_menu()"
           - if @view_style == :list
             td
               .list_description
