@@ -4,7 +4,9 @@ class BookEdition < ActiveRecord::Base
 	validates_uniqueness_of :isbn13, :allow_blank => true, :allow_nil => true
 
 	belongs_to :book_title
-
+	has_many :book_copies
+	accepts_nested_attributes_for :book_copies, allow_destroy: false
+	
 	def create_book_title
 		book_title = BookTitle.create(
 			title: self.title,

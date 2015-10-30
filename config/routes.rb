@@ -2,6 +2,7 @@ Rails.application.routes.draw do
 
   resources :departments
   resources :guardians
+  resources :book_copies
   resources :book_assignments
   resources :book_grades
   resources :students
@@ -17,7 +18,10 @@ Rails.application.routes.draw do
     collection do
       post 'search_isbn'
     end
+
+    resources :book_copies
   end
+  
   resources :book_titles do
     collection do
       post 'edit_merge' # edit merges
