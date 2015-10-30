@@ -1,25 +1,24 @@
--if @book_edition
-  h4 = @book_edition.title
-  table
-    tr
-      td style="vertical-align:top"
-        - thumbnail = @book_edition.small_thumbnail.present? ? @book_edition.small_thumbnail : 'book-icon.png' 
-        = image_tag(thumbnail, class: 'list_image')
-      td
-        .list_description
-          dl.row
-            dd.col.s6
-              .label Author
-              .item = @book_edition.authors
-            dd.col.s6
-              .label ISBN 10
-              .item = @book_edition.isbn10
-            dd.col.s6 
-              .label Publisher
-              .item = @book_edition.publisher
-            dd.col.s6
-              .label ISBN
-              .item = @book_edition.isbn13
+h4 = @book_edition.title
+table
+  tr
+    td style="vertical-align:top"
+      - thumbnail = @book_edition.small_thumbnail.present? ? @book_edition.small_thumbnail : 'book-icon.png' 
+      = image_tag(thumbnail, class: 'list_image')
+    td
+      .list_description
+        dl.row
+          dd.col.s6
+            .label Author
+            .item = @book_edition.authors
+          dd.col.s6
+            .label ISBN 10
+            .item = @book_edition.isbn10
+          dd.col.s6 
+            .label Publisher
+            .item = @book_edition.publisher
+          dd.col.s6
+            .label ISBN
+            .item = @book_edition.isbn13
 
 h5 Book Copies
 table.striped
@@ -38,10 +37,20 @@ table.striped
         td = book_copy.book_edition.title
         td = link_to book_copy.barcode, book_copy
         td = book_copy.copy_no
-        td = book_copy.book_condition
-        td = book_copy.status
+        td = book_copy.book_condition.code
+        td = book_copy.status.name
 
-        td 
-          = link_to 'Edit', edit_book_copy_path(book_copy), class: "btn waves-effect waves-teal btn-flat btn-small"
-          = link_to 'Delete', book_copy, data: {:confirm => 'Are you sure?'}, :method => :delete, class: "btn waves-effect waves-teal red btn-small"
+        td
+          = link_to book_copy
+            i.material-icons book
+          = link_to edit_book_copy_path(book_copy)
+            i.material-icons create
+          = link_to book_copy, data: {:confirm => 'Are you sure?'}, :method => :delete
+            i.material-icons delete
+
+          / = link_to 'Show', book_copy, class: "btn waves-effect waves-teal btn-flat btn-small"
+          / br
+          / = link_to 'Edit', edit_book_copy_path(book_copy), class: "btn waves-effect waves-teal btn-flat btn-small"
+          / br
+          / = link_to 'Delete', book_copy, data: {:confirm => 'Are you sure?'}, :method => :delete, class: "btn waves-effect waves-teal red btn-small"
 

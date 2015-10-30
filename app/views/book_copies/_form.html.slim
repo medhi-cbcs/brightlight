@@ -1,5 +1,8 @@
 .row
-  = form_for @book_copy do |f|
+  .label.grey-text Book Title
+  h5 = @book_copy.book_edition.title 
+
+  = form_for [@book_edition, @book_copy] do |f|
     - if @book_copy.errors.any?
       #error_explanation
         h2 = "#{pluralize(@book_copy.errors.count, "error")} prohibited this book_copy from being saved:"
@@ -7,21 +10,22 @@
           - @book_copy.errors.full_messages.each do |message|
             li = message
 
-    .input-field.col.s6
-      = f.label :book_condition_id
-      = f.text_field :book_condition_id
-    .input-field.col.s6
-      = f.label :status_id
-      = f.text_field :status_id
+    input type="hidden" name="book_copy[book_edition_id]" value=@book_copy.book_edition_id
     .input-field.col.s6
       = f.label :barcode
       = f.text_field :barcode
     .input-field.col.s6
-      = f.label :copy_no
+      = f.label 'Label'
       = f.text_field :copy_no
+    .input-field.col.s6
+      = f.label :book_condition, class: 'active'
+      = f.collection_select :book_condition_id, BookCondition.all, :id, :code, prompt: true
+    .input-field.col.s6
+      = f.label :status_id, class: 'active'
+      = f.collection_select :status_id, Status.all, :id, :name, prompt: true
 
-    .actions.col.s12 
+    .toolbar.actions.col.s12 
       button.btn.waves-effect.waves-light type="submit" Save
-      = link_to 'Cancel', book_edition_book_copies_path(@book_copy.book_edition_id), class: "waves-effect waves-teal btn-flat"
+      = link_to 'Cancel', book_edition_book_copies_path(@book_copy.book_edition), class: "waves-effect waves-teal btn-flat"
+      
 
-    .actions = f.submit

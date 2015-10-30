@@ -1,6 +1,5 @@
 class BookCopiesController < ApplicationController
   before_action :set_book_copy, only: [:show, :edit, :update, :destroy]
-  before_action :set_book_edition, only: [:show, :edit]
 
   # GET /book_copies
   # GET /book_copies.json
@@ -20,19 +19,12 @@ class BookCopiesController < ApplicationController
 
   # GET /book_copies/new
   def new
-    if params[:book_edition_id]
-      @book_edition = BookEdition.find(params[:book_edition_id])
-      @book_copy = @book_edition.book_copies.build
-    else
-      @book_copy = BookCopy.new
-    end
+    @book_edition = BookEdition.find(params[:book_edition_id])
+    @book_copy = @book_edition.book_copies.new
   end
 
   # GET /book_copies/1/edit
   def edit
-    if params[:book_edition_id]
-      @book_edition = BookEdition.find(params[:book_edition_id])
-    end
   end
 
   # POST /book_copies
@@ -68,9 +60,10 @@ class BookCopiesController < ApplicationController
   # DELETE /book_copies/1
   # DELETE /book_copies/1.json
   def destroy
+    book_edition = @book_copy.book_edition
     @book_copy.destroy
     respond_to do |format|
-      format.html { redirect_to book_copies_url, notice: 'Book copy was successfully destroyed.' }
+      format.html { redirect_to book_edition_book_copies_path(book_edition), notice: 'Book copy was successfully destroyed.' }
       format.json { head :no_content }
     end
   end
@@ -79,10 +72,6 @@ class BookCopiesController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_book_copy
       @book_copy = BookCopy.find(params[:id])
-    end
-
-    def set_book_edition
-      @book_edition = @book_copy.book_edition
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.
