@@ -1,7 +1,7 @@
 class Course < ActiveRecord::Base
   belongs_to :grade_level
   belongs_to :academic_year
-  belongs_to :academic_term
+  has_and_belongs_to_many :academic_terms
   belongs_to :employee
   
   has_many :course_sections, dependent: :destroy

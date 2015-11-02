@@ -1,41 +1,60 @@
 = form_for @course do |f|
-	- if @course.errors.any?
-		#error_explanation
-			h2 = "#{pluralize(@course.errors.count, "error")} prohibited this Grade Level from being saved:"
-			ul
-				- @course.errors.full_messages.each do |message|
-					li = message
+  - if @course.errors.any?
+    #error_explanation
+      h2 = "#{pluralize(@course.errors.count, "error")} prohibited this Grade Level from being saved:"
+      ul
+        - @course.errors.full_messages.each do |message|
+          li = message
 
-	.row
-		.input-field.col.s6
-			= f.label :name, class: 'active'
-			= f.text_field :name
-		.input-field.col.s6
-			= f.label :number, class: 'active'
-			= f.text_field :number
-		.input-field.col.s12
-			= f.label :description, class: 'active'
-			= f.text_area :description, class: 'materialize-textarea'
-		.input-field.col.s4
-			= f.label :grade_level, class: 'active'
-			= f.collection_select(:grade_level_id, GradeLevel.all, :id, :name, {}, {:class => 'browser-default'})
-		.input-field.col.s4
-			= f.label :academic_year_id, class: 'active'
-			= f.collection_select(:academic_year_id, AcademicYear.all, :id, :name, {}, {:class => 'browser-default'})
-		.input-field.col.s4
-			= f.label :academic_term_id, class: 'active'
-			= f.collection_select(:academic_term_id, AcademicTerm.all, :id, :name, {}, {:class => 'browser-default'})
+  .row
+    .input-field.col.s6
+      = f.label :name, class: 'active'
+      = f.text_field :name
+    .input-field.col.s6
+      = f.label :number, class: 'active'
+      = f.text_field :number
+    .input-field.col.s12
+      = f.label :description, class: 'active'
+      = f.text_area :description, class: 'materialize-textarea'
+    .input-field.col.s4
+      = f.label :grade_level, class: 'active'
+      = f.collection_select(:grade_level_id, GradeLevel.all, :id, :name, {}, {:class => 'browser-default'})
+    .input-field.col.s4
+      = f.label :academic_year_id, class: 'active'
+      = f.collection_select(:academic_year_id, AcademicYear.all, :id, :name, {}, {:class => 'browser-default', onchange:'setupTermSelectBoxes()'})
+    = hidden_field_tag("course[academic_term_ids][]", nil)
+    - AcademicTerm.all.each do |academic_term|
+      - id=academic_term.id
+      .input-field.col.s4
+        input type="radio" id="term-#{id}" name="course[academic_term_id]" value=academic_term.id
+          
 
-	h5 Course Sections
-	hr
-	#course_section.row
-		= f.fields_for :course_sections do |course_section|
-			= render 'course_section_fields', f: course_section
-			 
-		= link_to_add_association f, :course_sections, class: "waves-effect waves-teal btn btn-flat", 'data-association-insertion-method' => 'before', 'data-association-insertion-node' => 'this'
-			' add section
-			i.material-icons.left playlist_add
+    /- AcademicTerm.all.each do |academic_term|
+    /  .input-field.col.s4
+    /    = label_tag "term-#{academic_term.id}", academic_term.name
+    /    = check_box_tag("course[academic_term_ids][]", "term-#{academic_term.id}", id.in?(@course.academic_terms.collect(&:id)) 
+        
+  h5 Course Sections
+  hr
+  #course_section.row
+    = f.fields_for :course_sections do |course_section|
+      = render 'course_section_fields', f: course_section
+       
+    = link_to_add_association f, :course_sections, class: "waves-effect waves-teal btn btn-flat", 'data-association-insertion-method' => 'before', 'data-association-insertion-node' => 'this'
+      ' add section
+      i.material-icons.left playlist_add
 
-	.toolbar.actions
-		button.btn.waves-effect.waves-light type="submit" Save
-		= link_to 'Cancel', courses_path, class: "waves-effect waves-teal btn-flat"
+  .toolbar.actions
+    button.btn.waves-effect.waves-light type="submit" Save
+    = link_to 'Cancel', courses_path, class: "waves-effect waves-teal btn-flat"
+
+/ - AcademicYear.all.each do |year|
+/   div id=year
+/     .input-field.col.s4
+/       = f.label :academic_term_id, class: 'active'
+/       = f.collection_select(:academic_term_id, year.academic_terms, :id, :name, {}, {:class => 'browser-default'})
+
+javascript:
+  setupTermSelectBoxes(id) {
+    $('#term-select-box').html($('id').html());
+  }

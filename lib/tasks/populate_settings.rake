@@ -5,10 +5,10 @@ namespace :db do
 		BookCondition.delete_all
 		Status.delete_all
 
-		[{code:'new',  description:'New book', order_no: 1},
-		 {code:'good', description:'Slightly used', order_no: 2},
-		 {code:'fair', description:'Heavily used', order_no: 3},
-		 {code:'poor', description:'Very heavily used', order_no: 4}
+		[{code:'New',  description:'New book', order_no: 1},
+		 {code:'Good', description:'Slightly used', order_no: 2},
+		 {code:'Gair', description:'Heavily used', order_no: 3},
+		 {code:'Poor', description:'Very heavily used', order_no: 4}
 		].each do |condition|
 			BookCondition.create(code:condition[:code], description:condition[:description])
 		end
