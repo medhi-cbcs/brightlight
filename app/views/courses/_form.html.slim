@@ -24,15 +24,16 @@
       = f.collection_select(:academic_year_id, AcademicYear.all, :id, :name, {}, {:class => 'browser-default', onchange:'setupTermSelectBoxes()'})
     = hidden_field_tag("course[academic_term_ids][]", nil)
     - AcademicTerm.all.each do |academic_term|
-      - id=academic_term.id
-      .input-field.col.s4
-        input type="radio" id="term-#{id}" name="course[academic_term_id]" value=academic_term.id
+     .input-field.col.s4
+       input type="checkbox" name="course[academic_term_ids][]" value=academic_term.id id="term#{academic_term.id}" checked=@course.academic_terms.include?(academic_term)
+       = label_tag "term#{academic_term.id}", academic_term.name
+    / - AcademicTerm.all.each do |academic_term|
+    /   - id=academic_term.id
+    /   .input-field.col.s4
+    /     input type="radio" id="term-#{id}" name="course[academic_term_id]" value=academic_term.id
           
 
-    /- AcademicTerm.all.each do |academic_term|
-    /  .input-field.col.s4
-    /    = label_tag "term-#{academic_term.id}", academic_term.name
-    /    = check_box_tag("course[academic_term_ids][]", "term-#{academic_term.id}", id.in?(@course.academic_terms.collect(&:id)) 
+
         
   h5 Course Sections
   hr

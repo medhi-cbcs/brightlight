@@ -16,8 +16,8 @@ h4 = @course.name
       .label Year
       .item = @course.academic_year.name
     dd.col.s4
-      .label Term
-      .item = @course.academic_term.name
+      .label Terms
+      .item = @course.academic_terms.map { |term| term.name }.join(', ')
 
 .row.tabbed
   .col.s12
