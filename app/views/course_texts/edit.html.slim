@@ -2,7 +2,7 @@ h1 Editing course_text
 
 == render 'form'
 
-= link_to 'Show', @course_text
+= link_to 'Show', [@course_text.course, @course_text]
 '|
-= link_to 'Back', course_texts_path
+= link_to 'Back', course_course_texts_path(@course)
 

@@ -1,10 +1,11 @@
 class CourseTextsController < ApplicationController
+  before_action :set_course 
   before_action :set_course_text, only: [:show, :edit, :update, :destroy]
 
   # GET /course_texts
   # GET /course_texts.json
   def index
-    @course_texts = CourseText.all
+    @course_texts = @course.course_texts
   end
 
   # GET /course_texts/1
@@ -14,7 +15,7 @@ class CourseTextsController < ApplicationController
 
   # GET /course_texts/new
   def new
-    @course_text = CourseText.new
+    @course_text = @course.course_texts.build
   end
 
   # GET /course_texts/1/edit
@@ -24,7 +25,7 @@ class CourseTextsController < ApplicationController
   # POST /course_texts
   # POST /course_texts.json
   def create
-    @course_text = CourseText.new(course_text_params)
+    @course_text = @course.course_texts.new(course_text_params)
 
     respond_to do |format|
       if @course_text.save
@@ -64,7 +65,11 @@ class CourseTextsController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_course_text
-      @course_text = CourseText.find(params[:id])
+      @course_text = @course.course_texts.find(params[:id])
+    end
+
+    def set_course
+      @course = Course.find(params[:course_id])
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.

@@ -1,30 +1,49 @@
 Rails.application.routes.draw do
 
+  resources :departments
   resources :guardians
   resources :book_assignments
   resources :book_grades
-  resources :course_texts
   resources :students
   resources :employees
-  resources :courses
-  resources :book_editions
   resources :products
   resources :academic_years
   resources :grade_levels
+  resources :courses do
+    resources :course_texts
+  end
+  # get 'books/search_isbn' => 'books#search_isbn'
+  resources :book_editions do
+    collection do
+      post 'search_isbn'
+    end
+    resources :book_copies, shallow: true
+  end
+  
+  resources :book_titles do
+    collection do
+      post 'edit_merge' # edit merges
+      post 'merge'      # merges several book titles together
+      post 'delete'     # deletes several book titles at the same time
+    end
+  end
+  
+  devise_for :users, controllers: {
+    omniauth_callbacks: "users/omniauth_callbacks",
+    sessions: "users/sessions",
+    registrations: "users/registrations"
+  }
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
   # You can have the root of your site routed with "root"
   root 'welcome#index'
+  get 'dashboard', to: 'welcome#dashboard'
+  
 
-  # get 'books/search_isbn' => 'books#search_isbn'
-  resources :book_editions do
-    collection do
-      post 'search_isbn'
-    end
-  end
  
+  resources :book
   # For authorization with OmniAuth2
   get '/auth/:provider/callback', to: 'sessions#create'
 

@@ -1,0 +1,36 @@
+table
+  tr
+    td style="vertical-align:top"
+      - thumbnail = @book_copy.book_edition.present? ? @book_copy.book_edition.small_thumbnail : 'book-icon.png' 
+      = image_tag(thumbnail, class: 'list_image')
+    td
+      .list_description
+        dl.row
+          h4 = @book_copy.book_edition.title
+          dd = @book_copy.book_edition.subtitle
+        dl.row
+          dd.col.s4
+            .label Barcode
+            h5 = @book_copy.barcode
+          dd.col.s4
+            .label Label
+            h5 = @book_copy.copy_no
+        dl.row
+          dd.col.s4
+            .label ISBN 10
+            .item = @book_copy.book_edition.isbn10
+          dd.col.s4
+            .label ISBN
+            .item = @book_copy.book_edition.isbn13
+        dl
+          dd.col.s4
+            .label Condition
+            .item = @book_copy.book_condition.code
+          dd.col.s4
+            .label Status
+            .item = @book_copy.status.name
+
+.toolbar.actions
+  = link_to '< Back', book_edition_book_copies_path(@book_copy.book_edition), class: 'btn btn-flat'
+  = link_to 'Edit', edit_book_copy_path(@book_copy), class: 'btn btn-primary'
+

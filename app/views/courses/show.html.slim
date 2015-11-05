@@ -1,35 +1,81 @@
-br
-table
-  tr
-  	td
-      .list_description
-        dl.row
-          h5 Course
-        dl.row
-          dd.col.s6
-            .label Name
-            .item = @course.name
-          dd.col.s6
-            .label Number
-            .item = @course.number
-        	dd.col.s12
-        		.label Description
-        		.item = @course.description
-        dl.row
-        	dd.col.s4
-        	  .label Grade
-        		.item = @course.grade_level.name
-        	dd.col.s4
-        	  .label Year
-        		.item = @course.academic_year.name
-        	dd.col.s4
-        	  .label Term
-        		.item = @course.academic_term.name
-        dl.row
-          h6 Sections
+h4 = @course.name 
 
+.list_description
+  dl.row
+    dd.col.s2
+      .label Course Number
+      .item = @course.number
+    dd.col.s10
+      .label Description
+      .item = @course.description
+  dl.row
+    dd.col.s2
+      .label Grade
+      .item = @course.grade_level.name
+    dd.col.s4
+      .label Year
+      .item = @course.academic_year.name
+    dd.col.s4
+      .label Terms
+      - for term in @course.academic_terms
+        .item = term.name
 
-.toolbar.actions
-  = link_to '< Back', courses_path, class: 'btn btn-flat'
-  = link_to 'Edit', edit_course_path(@course), class: 'btn btn-primary'
+.row.tabbed
+  .col.s12
+    ul.tabs.z-depth-1
+      li.tab.col.s3
+        a href='#tab1' Sections
+      li.tab.col.s3
+        a href='#tab2' Textbooks
+
+#tab1
+  .row
+    h5 Course Sections
+    - if @course.course_sections.present?
+      table.striped.col.s6
+        thead
+          th Section
+          th Instructor
+        tbody
+        - @course.course_sections.each do |section|
+          tr
+            td = section.grade_section.name if section.grade_section
+            td = section.instructor.name if section.instructor
+    - else
+      p.red-text No sections
+
+#tab2
+  .row
+    h5 Textbooks
+    - if @course.course_texts.present?
+      / - @course.course_texts.each do |course_text|
+      /     - textbook = course_text.book_title
+      /     - if textbook
+      /       .col.s6
+      /         - thumbnail = textbook.image_url.present? ? textbook.image_url : 'book-icon.png'
+      /           = image_tag(thumbnail, class: 'list_image')
+      /         = textbook.title
+      /         = textbook.authors
+
+      table.striped.col.s6
+        thead
+          th
+          th Title
+          th Author
+        tbody
+        - @course.course_texts.each do |course_text|
+          - textbook = course_text.book_title
+          - if textbook
+            tr
+              td style="vertical-align:top"
+                - thumbnail = textbook.image_url.present? ? textbook.image_url : 'book-icon.png'
+                = image_tag(thumbnail, class: 'list_image')
+              td = textbook.title
+              td = textbook.authors
+    - else
+      p.red-text No textbooks
+.row
+  .toolbar.actions
+    = link_to '< Back', :back, class: 'btn btn-flat'
+    = link_to 'Edit', edit_course_path(@course), class: 'btn btn-primary'
 

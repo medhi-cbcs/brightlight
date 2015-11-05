@@ -1,0 +1,38 @@
+table
+  tr
+    td style="vertical-align:top"
+      - thumbnail = @book_title.image_url.present? ? @book_title.image_url : 'book-icon.png'
+      = image_tag(thumbnail, class: 'list_image')
+    td
+      .list_description
+        dl.row
+          h4 = @book_title.title
+          dd.col.s6
+            .label Author
+            .item = @book_title.authors
+          dd.col.s6 
+            .label Publisher
+            .item = @book_title.publisher
+
+h5 Editions
+table.striped
+  thead
+    th Title
+    th Author
+    th Publisher
+    th ISBN 10
+    th ISBN
+
+  tbody
+  - @book_title.book_editions.each do |edition|
+    tr
+      td = link_to edition.title, edition
+      td = edition.authors
+      td = edition.publisher
+      td = edition.isbn10
+      td = edition.isbn13
+
+.toolbar.actions
+  = link_to '< Back', book_titles_path, class: 'btn btn-flat'
+  = link_to 'Edit', edit_book_title_path(@book_title), class: 'btn btn-primary'
+

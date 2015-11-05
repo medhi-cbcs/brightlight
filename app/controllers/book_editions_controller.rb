@@ -9,11 +9,18 @@ class BookEditionsController < ApplicationController
     if params[:v] == 'list'
       items_per_page = 20
       @view_style = :list
+      session[:view_style] = 'list'
     else
       items_per_page = 10
       @view_style = :block
+      session[:view_style] = ''
     end
-    @book_editions = BookEdition.paginate(page: params[:page], per_page: items_per_page)
+    
+    if params[:search]
+      @book_editions = BookEdition.where('title LIKE ?', "%#{params[:search]}%").paginate(page: params[:page], per_page: items_per_page)
+    else
+      @book_editions = BookEdition.paginate(page: params[:page], per_page: items_per_page)
+    end
   end
 
   # GET /book_editions/1
@@ -150,7 +157,7 @@ class BookEditionsController < ApplicationController
   def destroy
     @book_edition.destroy
     respond_to do |format|
-      format.html { redirect_to books_url, notice: 'Book edition was successfully destroyed.' }
+      format.html { redirect_to book_editions_url, notice: 'Book edition was successfully destroyed.' }
       format.json { head :no_content }
     end
   end
@@ -163,6 +170,11 @@ class BookEditionsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def book_edition_params
-      params.require(:book_edition).permit(:google_book_id, :isbndb_id, :title, :subtitle, :authors, :publisher, :published_date, :description, :isbn10, :isbn13, :page_count, :small_thumbnail, :thumbnail, :language, :edition_info, :tags, :subjects)
+      params.require(:book_edition).permit(
+        :google_book_id, :isbndb_id, :title, :subtitle, :authors, :publisher, :published_date,
+        :description, :isbn10, :isbn13, :page_count, :small_thumbnail, :thumbnail, 
+        :language, :edition_info, :tags, :subjects, :book_title_id,
+        {:book_copies_attributes => [:id, :book_edition_id, :book_condition_id, :status_id, :barcode, :copy_no, :_destroy]}
+      )
     end
 end

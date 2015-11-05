@@ -1,15 +1,32 @@
-h4 Listing book editions
+.row 
+  .col.s6
+    h4 Book Editions
+  .col.s5
+    = form_tag({controller:'book_editions', action:'index'}, {method:'get'}) do 
+      .input-field
+        input type="hidden" name="v" value=@view_style
+        - if params[:search].present?
+          i.material-icons.prefix onclick='reset_form()' style='cursor:pointer'
+            | highlight_off
+        - else
+          i.material-icons.prefix search
+        input.icon-prefix type="text" name="search" placeholder="Search" value=params[:search]    
+    javascript:
+      function reset_form() {
+        window.location="#{book_editions_path(v:'list')}"
+      }
 
-.toolbar
-  = link_to 'Add New Book', new_book_edition_path, class: "btn btn-primary"
+.toolbar.z-depth-1
+  / i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="Delete" delete
+  i.material-icons book
+  / i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="Add to group" library_add
   .right
-    a href="#{book_editions_path}"
-      i.material-icons view_list
-    a href="#{book_editions_path}?v=list"
-      i.material-icons list
+    = link_to book_editions_path(search:params[:search])
+      i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="Expanded view"  view_list
+    = link_to book_editions_path({v:'list',search:params[:search]})
+      i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="List view"  list
 
 table.striped
-
   tbody
     - @book_editions.each do |book_edition|
       tr
@@ -33,7 +50,7 @@ table.striped
 
         - else    
           td style="vertical-align:top"
-            - thumbnail = (book_edition.small_thumbnail.nil? or book_edition.small_thumbnail.blank?) ? 'book-icon.png' : book_edition.small_thumbnail
+            - thumbnail = book_edition.small_thumbnail.present? ? book_edition.small_thumbnail : 'book-icon.png' 
             = image_tag(thumbnail, class: 'list_image')
           td
             .list_description

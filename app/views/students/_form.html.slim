@@ -1,7 +1,7 @@
 = form_for @student do |f|
   - if @student.errors.any?
     #error_explanation
-      h2 = "#{pluralize(@student.errors.count, "error")} prohibited this student from being saved:"
+      h6 = "#{pluralize(@student.errors.count, "error")} prohibited this student from being saved:"
       ul
         - @student.errors.full_messages.each do |message|
           li = message
@@ -26,7 +26,7 @@
       = f.number_field :family_id
     .input-field.col.s4
       = f.label :gender, class: 'active'
-      = f.select :gender, [['Male', 'm'], ['Female', 'f']]
+      = f.select :gender, [['Male', 'M'], ['Female', 'F']]
   .row
     .input-field.col.s4
       = f.label :blood_type, class: 'active'

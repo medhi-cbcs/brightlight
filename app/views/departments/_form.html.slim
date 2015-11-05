@@ -1,0 +1,22 @@
+= form_for @department do |f|
+  - if @department.errors.any?
+    #error_explanation
+      h6 = "#{pluralize(@department.errors.count, "error")} prohibited this department from being saved:"
+      ul
+        - @department.errors.full_messages.each do |message|
+          li = message
+
+  .row
+    .input-field.col.s4
+      = f.label :name, class: 'active'
+      = f.text_field :name
+    .input-field.col.s4
+      = f.label :code, class: 'active'
+      = f.text_field :code
+    .input-field.col.s4
+      = f.label :manager_id, class: 'active'
+      = f.collection_select :manager_id, Employee.all, :id, :name, prompt: true
+
+  .actions.col.s12 
+    button.btn.waves-effect.waves-light type="submit" Save
+    = link_to 'Cancel', departments_path, class: "waves-effect waves-teal btn-flat"

@@ -1,8 +1,8 @@
-h1 Editing employee
+h4 Editing employee
 
 == render 'form'
 
-= link_to 'Show', @employee
-'|
-= link_to 'Back', employees_path
+.actions.col.s12
+	= link_to 'Delete', @employee, data: {confirm: 'Are you sure?'}, method: :delete, class: "right btn waves-effect waves-teal red btn-small" 
+
 

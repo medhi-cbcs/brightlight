@@ -2,7 +2,7 @@
 // Navbar
 nav
   .nav-wrapper
-    a.brand-logo href="/" 
+    a.brand-logo href="#{dashboard_path}" 
       = image_tag 'lightbulb-icon.png', class: "logo-icon"
     a.brand-logo href="/" style="margin-left: 60px;"
       | Brightlight
@@ -29,9 +29,14 @@ nav
           | People
           i.material-icons.right arrow_drop_down
       li
-        a.dropdown-button href="/auth/google" data-activates="dropdown1"
+        = current_user.name if current_user
+      li
+        a.dropdown-button href="#" data-activates="dropdown1"
           - if current_user
-            = image_tag current_user.image, alt: current_user.name, class: 'user-avatar'
+            - if current_user.image
+              = image_tag current_user.image, alt: current_user.name, class: 'user-avatar'
+            - else
+              i.material-icons perm_identity
           - else
             i.material-icons perm_identity
 
@@ -44,6 +49,8 @@ ul#dropdown4.dropdown-content
   li.divider
   li
     a href="/book_editions" Book Editions
+  li
+    a href="/book_titles" Book Titles
   li.divider
   li
     a href="/course_texts" Course Text
@@ -57,6 +64,8 @@ ul#dropdown3.dropdown-content
   li
     a href="/grade_levels" Grade Levels
   li.divider
+  li
+    a href="/departments" Departments
   li
     a href="#" . . .
 
@@ -73,8 +82,18 @@ ul#dropdown2.dropdown-content
 
 
 ul#dropdown1.dropdown-content
-  li
-    a href="/auth/google" Login
-  li.divider
-  li
-    = link_to 'Log Out', "#"
+  - if user_signed_in?
+    / li
+    /   = link_to 'Edit Profile', "#"
+    li 
+      = link_to 'Change password', edit_user_registration_path
+    li.divider
+    li
+      = link_to 'Log Out', destroy_user_session_path, method:'delete'
+  - else
+    li
+      = link_to 'Sign up', new_user_registration_path
+    li
+      = link_to 'Login', new_user_session_path
+
+  

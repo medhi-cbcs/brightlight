@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151015005235) do
+ActiveRecord::Schema.define(version: 20151104065055) do
 
   create_table "academic_terms", force: :cascade do |t|
     t.integer  "academic_year_id"
@@ -23,6 +23,14 @@ ActiveRecord::Schema.define(version: 20151015005235) do
   end
 
   add_index "academic_terms", ["academic_year_id"], name: "index_academic_terms_on_academic_year_id"
+
+  create_table "academic_terms_courses", id: false, force: :cascade do |t|
+    t.integer "academic_term_id"
+    t.integer "course_id"
+  end
+
+  add_index "academic_terms_courses", ["academic_term_id"], name: "index_academic_terms_courses_on_academic_term_id"
+  add_index "academic_terms_courses", ["course_id"], name: "index_academic_terms_courses_on_course_id"
 
   create_table "academic_years", force: :cascade do |t|
     t.string   "name"
@@ -52,7 +60,7 @@ ActiveRecord::Schema.define(version: 20151015005235) do
   add_index "book_assignments", ["status_id"], name: "index_book_assignments_on_status_id"
   add_index "book_assignments", ["student_id"], name: "index_book_assignments_on_student_id"
 
-  create_table "book_conditions", id: false, force: :cascade do |t|
+  create_table "book_conditions", force: :cascade do |t|
     t.string   "code"
     t.string   "description"
     t.datetime "created_at",  null: false
@@ -93,7 +101,10 @@ ActiveRecord::Schema.define(version: 20151015005235) do
     t.string   "subjects"
     t.datetime "created_at",      null: false
     t.datetime "updated_at",      null: false
+    t.integer  "book_title_id"
   end
+
+  add_index "book_editions", ["book_title_id"], name: "index_book_editions_on_book_title_id"
 
   create_table "book_grades", id: false, force: :cascade do |t|
     t.integer  "book_id"
@@ -112,14 +123,27 @@ ActiveRecord::Schema.define(version: 20151015005235) do
 
   create_table "book_titles", force: :cascade do |t|
     t.string   "title"
-    t.string   "author"
+    t.string   "authors"
     t.string   "publisher"
     t.string   "image_url"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
-  create_table "course_texts", id: false, force: :cascade do |t|
+  create_table "course_sections", force: :cascade do |t|
+    t.string   "name"
+    t.integer  "course_id"
+    t.integer  "grade_section_id"
+    t.datetime "created_at",       null: false
+    t.datetime "updated_at",       null: false
+    t.integer  "instructor_id"
+  end
+
+  add_index "course_sections", ["course_id"], name: "index_course_sections_on_course_id"
+  add_index "course_sections", ["grade_section_id"], name: "index_course_sections_on_grade_section_id"
+  add_index "course_sections", ["instructor_id"], name: "index_course_sections_on_instructor_id"
+
+  create_table "course_texts", force: :cascade do |t|
     t.integer "course_id"
     t.integer "book_title_id"
   end
@@ -144,19 +168,15 @@ ActiveRecord::Schema.define(version: 20151015005235) do
   add_index "courses", ["employee_id"], name: "index_courses_on_employee_id"
   add_index "courses", ["grade_level_id"], name: "index_courses_on_grade_level_id"
 
-  create_table "courses_sections", id: false, force: :cascade do |t|
+  create_table "departments", force: :cascade do |t|
     t.string   "name"
-    t.integer  "course_id"
-    t.integer  "grade_section_id"
-    t.string   "instructor"
-    t.integer  "employee_id"
-    t.datetime "created_at",       null: false
-    t.datetime "updated_at",       null: false
+    t.string   "code"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer  "manager_id"
   end
 
-  add_index "courses_sections", ["course_id"], name: "index_courses_sections_on_course_id"
-  add_index "courses_sections", ["employee_id"], name: "index_courses_sections_on_employee_id"
-  add_index "courses_sections", ["grade_section_id"], name: "index_courses_sections_on_grade_section_id"
+  add_index "departments", ["manager_id"], name: "index_departments_on_manager_id"
 
   create_table "employees", force: :cascade do |t|
     t.string   "name"
@@ -188,18 +208,21 @@ ActiveRecord::Schema.define(version: 20151015005235) do
     t.string   "email"
     t.string   "photo_uri"
     t.string   "education_degree"
-    t.string   "education_graduation_date"
+    t.date     "education_graduation_date"
     t.string   "education_school"
     t.string   "education_degree2"
-    t.string   "education_graduation_date2"
+    t.date     "education_graduation_date2"
     t.string   "education_school2"
-    t.integer  "reporting_supervisor_id"
-    t.integer  "department_id"
     t.string   "nationality"
     t.string   "blood_type"
     t.datetime "created_at",                 null: false
     t.datetime "updated_at",                 null: false
+    t.integer  "supervisor_id"
+    t.integer  "department_id"
   end
+
+  add_index "employees", ["department_id"], name: "index_employees_on_department_id"
+  add_index "employees", ["supervisor_id"], name: "index_employees_on_supervisor_id"
 
   create_table "grade_levels", force: :cascade do |t|
     t.string   "name"
@@ -210,12 +233,13 @@ ActiveRecord::Schema.define(version: 20151015005235) do
   create_table "grade_sections", force: :cascade do |t|
     t.integer  "grade_level_id"
     t.string   "name"
-    t.string   "homeroom"
     t.datetime "created_at",     null: false
     t.datetime "updated_at",     null: false
+    t.integer  "homeroom_id"
   end
 
   add_index "grade_sections", ["grade_level_id"], name: "index_grade_sections_on_grade_level_id"
+  add_index "grade_sections", ["homeroom_id"], name: "index_grade_sections_on_homeroom_id"
 
   create_table "grade_sections_students", id: false, force: :cascade do |t|
     t.integer  "grade_section_id"
@@ -258,10 +282,28 @@ ActiveRecord::Schema.define(version: 20151015005235) do
     t.date     "received_date"
   end
 
-  create_table "statuses", force: :cascade do |t|
+  create_table "school_terms", force: :cascade do |t|
+    t.integer  "academic_year_id"
     t.string   "name"
+    t.date     "start_date"
+    t.date     "end_date"
+    t.datetime "created_at",       null: false
+    t.datetime "updated_at",       null: false
+  end
+
+  add_index "school_terms", ["academic_year_id"], name: "index_school_terms_on_academic_year_id"
+
+  create_table "school_years", force: :cascade do |t|
+    t.string   "name"
+    t.date     "start_date"
+    t.date     "end_date"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "statuses", force: :cascade do |t|
+    t.string  "name"
+    t.integer "order_no"
   end
 
   create_table "students", force: :cascade do |t|
@@ -308,18 +350,30 @@ ActiveRecord::Schema.define(version: 20151015005235) do
   add_index "students_guardians", ["student_id"], name: "index_students_guardians_on_student_id"
 
   create_table "users", force: :cascade do |t|
-    t.string   "provider",   null: false
-    t.string   "uid",        null: false
+    t.string   "provider"
+    t.string   "uid"
     t.string   "name"
     t.string   "location"
     t.string   "image_url"
     t.string   "url"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at",                          null: false
+    t.datetime "updated_at",                          null: false
     t.string   "email"
     t.string   "first_name"
     t.string   "last_name"
     t.string   "image"
+    t.string   "encrypted_password",     default: "", null: false
+    t.string   "reset_password_token"
+    t.datetime "reset_password_sent_at"
+    t.datetime "remember_created_at"
+    t.integer  "sign_in_count",          default: 0,  null: false
+    t.datetime "current_sign_in_at"
+    t.datetime "last_sign_in_at"
+    t.string   "current_sign_in_ip"
+    t.string   "last_sign_in_ip"
   end
+
+  add_index "users", ["email"], name: "index_users_on_email", unique: true
+  add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
 
 end

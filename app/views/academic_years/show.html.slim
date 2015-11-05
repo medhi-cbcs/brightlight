@@ -30,7 +30,7 @@ table
               .item = term.end_date
 
 .toolbar.actions
-  = link_to '< Back', academic_years_path, class: 'btn btn-flat'
+  = link_to '< Back', :back, class: 'btn btn-flat'
   = link_to 'Edit', edit_academic_year_path(@academic_year), class: 'btn btn-primary'
   = link_to 'Add new', new_academic_year_path, class: 'btn btn-primary'
 

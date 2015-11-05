@@ -1,0 +1,22 @@
+h4 Listing departments
+
+.toolbar
+  = link_to 'Add Department', new_department_path, class: "btn btn-primary"
+
+table
+  thead
+    tr
+      th Name
+      th Code
+      th Manager
+      th Actions
+
+  tbody
+    - @departments.each do |department|
+      tr
+        td = link_to department.name, department
+        td = department.code
+        td = department.manager || "--"
+
+        td = link_to 'Edit', edit_department_path(department), class: "btn waves-effect waves-teal btn-flat btn-small"
+

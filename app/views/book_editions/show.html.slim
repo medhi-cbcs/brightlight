@@ -1,8 +1,7 @@
-br
 table
   tr
     td style="vertical-align:top"
-      - thumbnail = (@book_edition.small_thumbnail.nil? or @book_edition.small_thumbnail.blank?) ? 'book-icon.png' : @book_edition.small_thumbnail
+      - thumbnail = @book_edition.small_thumbnail.present? ? @book_edition.small_thumbnail : 'book-icon.png' 
       = image_tag(thumbnail, class: 'list_image')
     td
       .list_description
@@ -30,11 +29,14 @@ table
           dd.col.s12
             .label Description
             .item = strip_tags(@book_edition.description)
+          dd.col.s6
+            .label Title group
+            .item = @book_edition.book_title ? link_to(@book_edition.book_title.title, @book_edition.book_title) : "--" 
 
 .toolbar.actions
   = link_to '< Back', book_editions_path, class: 'btn btn-flat'
   = link_to 'Edit', edit_book_edition_path(@book_edition), class: 'btn btn-primary'
-  = link_to 'Add new', new_book_edition_path, class: 'btn btn-primary'
+
 
 
 

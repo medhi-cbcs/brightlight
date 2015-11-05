@@ -1,7 +1,12 @@
-h1 Listing courses
+h4 Courses
 
-.toolbar
-  = link_to 'Add Course', new_course_path, class: "btn btn-primary"
+.toolbar.z-depth-1
+  i.material-icons assignment
+  .right
+    = link_to courses_path(search:params[:search])
+       i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="Expanded view"  view_list
+    = link_to courses_path({v:'list',search:params[:search]})
+      i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="List view"  list
 
 table.striped
   thead
@@ -20,13 +25,14 @@ table.striped
         td = course.number
         td = course.name
         td = course.description
-        td = course.grade_level.name
-        td = course.academic_year.name
-        td = course.academic_term.name
+        td = course.grade_level.name if course.grade_level
+        td = course.academic_year.name if course.academic_year
+        td 
+        /= course.academic_terms.name if course.academic_terms
         td
-          = link_to 'Show', course, class: "btn waves-effect waves-teal btn-flat btn-small"
+          = link_to 'Show', course, class: "btn waves-effect waves-teal btn-small"
           br
-          = link_to 'Edit', edit_course_path(course), class: "btn waves-effect waves-teal btn-flat btn-small"
+          = link_to 'Edit', edit_course_path(course), class: "btn waves-effect waves-teal btn-small"
 
 
 

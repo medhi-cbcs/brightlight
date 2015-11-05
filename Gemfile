@@ -18,6 +18,8 @@ gem 'coffee-rails', '~> 4.1.0'
 gem 'jquery-rails'
 # Turbolinks makes following links in your web application faster. Read more: https://github.com/rails/turbolinks
 gem 'turbolinks'
+gem 'jquery-turbolinks'
+
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem 'jbuilder', '~> 2.0'
 # bundle exec rake doc:rails generates the API under doc/api.
@@ -43,8 +45,13 @@ gem 'google_books', '~> 0.2.2'
 
 gem 'hashie'
 
-# Login with Google+ OAuth2
-gem "omniauth-google-oauth2"
+# Login with Devise & OmniAuth Google+ OAuth2
+gem 'devise'
+gem 'omniauth'
+gem 'omniauth-google-oauth2'
+
+# Nested form handling
+gem 'cocoon'
 
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
@@ -58,6 +65,8 @@ gem "omniauth-google-oauth2"
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug'
+  gem 'forgery'
+  gem 'populator'
 end
 
 group :development do
@@ -66,5 +75,9 @@ group :development do
 
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'spring'
+  
+  # irb messed up on Windows, use pry to replace irb as console
+  gem 'pry-rails'
+
 end
 

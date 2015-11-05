@@ -1,6 +1,9 @@
 h4 Editing course
 
-== render 'form'
+- if params[:v] == 'texts'
+	== render 'course_texts_form'
+- else
+	== render 'form'
 
 .actions.col.s12
 	= link_to 'Delete', @course, data: {confirm: 'Are you sure?'}, method: :delete, class: "right btn waves-effect waves-teal red btn-small" 

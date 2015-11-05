@@ -1,0 +1,15 @@
+p#notice = notice
+
+p
+  strong Name:
+  = @school_year.name
+p
+  strong Start date:
+  = @school_year.start_date
+p
+  strong End date:
+  = @school_year.end_date
+
+= link_to 'Edit', edit_school_year_path(@school_year)
+'|
+= link_to 'Back', school_years_path
