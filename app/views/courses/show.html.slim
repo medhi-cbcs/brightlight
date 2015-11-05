@@ -17,7 +17,8 @@ h4 = @course.name
       .item = @course.academic_year.name
     dd.col.s4
       .label Terms
-      .item = @course.academic_terms.map { |term| term.name }.join(', ')
+      - for term in @course.academic_terms
+        .item = term.name
 
 .row.tabbed
   .col.s12
@@ -47,6 +48,15 @@ h4 = @course.name
   .row
     h5 Textbooks
     - if @course.course_texts.present?
+      / - @course.course_texts.each do |course_text|
+      /     - textbook = course_text.book_title
+      /     - if textbook
+      /       .col.s6
+      /         - thumbnail = textbook.image_url.present? ? textbook.image_url : 'book-icon.png'
+      /           = image_tag(thumbnail, class: 'list_image')
+      /         = textbook.title
+      /         = textbook.authors
+
       table.striped.col.s6
         thead
           th

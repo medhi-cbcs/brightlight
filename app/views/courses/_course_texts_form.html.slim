@@ -30,7 +30,7 @@
 	hr
 	#course_text.row
 		= f.fields_for :course_texts do |course_text|
-			= render 'course_text_fields', f:course_text
+			= render 'course_text_fields', f: course_text
 
 		= link_to_add_association f, :course_texts, class: "waves-effect waves-teal btn btn-flat", 'data-association-insertion-method' => 'before', 'data-association-insertion-node' => 'this'
 			' add section
