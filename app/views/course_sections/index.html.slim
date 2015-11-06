@@ -1,0 +1,19 @@
+h1 Listing course_sections
+
+table
+  thead
+    tr
+      th
+      th
+      th
+
+  tbody
+    - @course_sections.each do |course_section|
+      tr
+        td = link_to 'Show', course_section
+        td = link_to 'Edit', edit_course_section_path(course_section)
+        td = link_to 'Destroy', course_section, data: {:confirm => 'Are you sure?'}, :method => :delete
+
+br
+
+= link_to 'New Course section', new_course_section_path

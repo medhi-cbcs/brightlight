@@ -1,0 +1,7 @@
+.nested-fields
+	.row
+		.input-field.col.s4
+			= f.label :student, class: 'active'
+			= f.collection_select(:student_id, Student.all, :id, :name, {prompt: true}, {:class => 'browser-default'})
+		.input-field.col.s4
+			= link_to_remove_association "Remove", f, class: "waves-effect waves-teal btn btn-flat red-text btn-small"

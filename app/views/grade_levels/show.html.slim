@@ -1,4 +1,3 @@
-br
 table
   tr
   	td
@@ -16,7 +15,7 @@ table
           dl.row
             dd.col.s4
               .label Section
-              .item = section.name
+              .item = link_to section.name, section
             dd.col.s4
               .label Teacher
               .item = section.homeroom.present? ? section.homeroom : '--'

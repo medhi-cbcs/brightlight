@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151104065055) do
+ActiveRecord::Schema.define(version: 20151106044620) do
 
   create_table "academic_terms", force: :cascade do |t|
     t.integer  "academic_year_id"
@@ -247,8 +247,10 @@ ActiveRecord::Schema.define(version: 20151104065055) do
     t.integer  "order_no"
     t.datetime "created_at",       null: false
     t.datetime "updated_at",       null: false
+    t.integer  "academic_year_id"
   end
 
+  add_index "grade_sections_students", ["academic_year_id"], name: "index_grade_sections_students_on_academic_year_id"
   add_index "grade_sections_students", ["grade_section_id"], name: "index_grade_sections_students_on_grade_section_id"
   add_index "grade_sections_students", ["student_id"], name: "index_grade_sections_students_on_student_id"
 
@@ -281,6 +283,19 @@ ActiveRecord::Schema.define(version: 20151104065055) do
     t.string   "expiry_date"
     t.date     "received_date"
   end
+
+  create_table "rosters", force: :cascade do |t|
+    t.integer  "course_section_id"
+    t.integer  "student_id"
+    t.integer  "academic_year_id"
+    t.integer  "order_no"
+    t.datetime "created_at",        null: false
+    t.datetime "updated_at",        null: false
+  end
+
+  add_index "rosters", ["academic_year_id"], name: "index_rosters_on_academic_year_id"
+  add_index "rosters", ["course_section_id"], name: "index_rosters_on_course_section_id"
+  add_index "rosters", ["student_id"], name: "index_rosters_on_student_id"
 
   create_table "school_terms", force: :cascade do |t|
     t.integer  "academic_year_id"

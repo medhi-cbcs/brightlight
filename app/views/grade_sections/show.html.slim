@@ -1,0 +1,19 @@
+h4 Grade #{@grade_section.grade_level.name} Section #{@grade_section.name}
+
+.list_description
+  dl.row
+    dd.col.s4
+      .label Section
+      .item = @grade_section.name
+    dd.col.s4
+      .label Homeroom teacher
+      .item = @grade_section.homeroom.present? ? link_to(@grade_section.homeroom, @grade_section.homeroom) : '--'
+
+h5 Students
+ul
+  - @grade_section.students.each do |student|
+    li = student.name
+
+.toolbar.actions
+  = link_to 'Back', grade_level_grade_sections_path(@grade_section.grade_level), class: "btn waves-effect waves-teal btn-flat"
+  = link_to 'Edit', edit_grade_section_path(@grade_section), class: "btn waves-effect waves-teal"

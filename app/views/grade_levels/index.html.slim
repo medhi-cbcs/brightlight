@@ -17,7 +17,7 @@ table.striped
         td = grade_level.name
         td 
           - grade_level.grade_sections.each do |section|
-            div = section.name
+            div = link_to section.name, section
         td
           - grade_level.grade_sections.each do |section|
             div = section.homeroom.present? ? section.homeroom : '--'
