@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151106044620) do
+ActiveRecord::Schema.define(version: 20151109042711) do
 
   create_table "academic_terms", force: :cascade do |t|
     t.integer  "academic_year_id"
@@ -241,7 +241,7 @@ ActiveRecord::Schema.define(version: 20151106044620) do
   add_index "grade_sections", ["grade_level_id"], name: "index_grade_sections_on_grade_level_id"
   add_index "grade_sections", ["homeroom_id"], name: "index_grade_sections_on_homeroom_id"
 
-  create_table "grade_sections_students", id: false, force: :cascade do |t|
+  create_table "grade_sections_students", force: :cascade do |t|
     t.integer  "grade_section_id"
     t.integer  "student_id"
     t.integer  "order_no"

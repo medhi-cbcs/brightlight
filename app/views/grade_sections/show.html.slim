@@ -11,8 +11,11 @@ h4 Grade #{@grade_section.grade_level.name} Section #{@grade_section.name}
 
 h5 Students
 ul
+  - i = 0
   - @grade_section.students.each do |student|
-    li = student.name
+    li 
+      = "#{i += 1}. "
+      = link_to student.name, student
 
 .toolbar.actions
   = link_to 'Back', grade_level_grade_sections_path(@grade_section.grade_level), class: "btn waves-effect waves-teal btn-flat"

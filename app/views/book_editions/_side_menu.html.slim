@@ -11,7 +11,8 @@
         .cell-row
           a href="#" 
             | Book assignment
-        - if @book_edition
+        // Only show the link if the book edition is present and saved (has id)
+        - if @book_edition.present? && @book_edition.id.present?
           .cell-row
             = link_to 'Copies of this edition', book_edition_book_copies_path(@book_edition)
 
