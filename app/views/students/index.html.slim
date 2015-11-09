@@ -1,7 +1,20 @@
-h4 Students
-
-.toolbar
-  = link_to 'Add Student', new_student_path, class: "btn btn-primary"
+.row 
+  .col.s6
+    h4 Students
+  .col.s5
+    = form_tag({controller:'students', action:'index'}, {method:'get'}) do 
+      .input-field
+        input type="hidden" name="v" value=@view_style
+        - if params[:search].present?
+          i.material-icons.prefix onclick='reset_form()' style='cursor:pointer'
+            | highlight_off
+        - else
+          i.material-icons.prefix search
+        input.icon-prefix type="text" name="search" placeholder="Search" value=params[:search]    
+    javascript:
+      function reset_form() {
+        window.location="#{students_path(v:'list')}"
+      }
 
 table.striped.compact
   thead

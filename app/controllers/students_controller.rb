@@ -6,7 +6,12 @@ class StudentsController < ApplicationController
   def index
     respond_to do |format|
       format.html {
-        @students = Student.paginate(page: params[:page], per_page: 20)
+        items_per_page = 20
+        if params[:search]
+          @students = Student.where('name LIKE ?', "%#{params[:search]}%").paginate(page: params[:page], per_page: items_per_page)
+        else
+           @students = Student.paginate(page: params[:page], per_page: items_per_page)
+        end
       }
       format.csv { 
         @students = Student.all
