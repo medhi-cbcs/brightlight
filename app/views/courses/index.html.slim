@@ -2,6 +2,15 @@ h4 Courses
 
 .toolbar.z-depth-1
   i.material-icons assignment
+  .left
+    = form_tag({controller:'courses', action:'index'}, {method:'get'}) do
+      .input-field.col.s3
+        = collection_select '', :grade_id, GradeLevel.all, :id, :name, {prompt: true}, {class: 'browser-default'}
+      button.btn type='submit' Submit
+      /= label_tag :grade_level, class:'active'
+    / .input-field
+    /   button.btn type='submit' Submit
+
   .right
     = link_to courses_path(search:params[:search])
        i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="Expanded view"  view_list
@@ -34,5 +43,5 @@ table.striped
           br
           = link_to 'Edit', edit_course_path(course), class: "btn waves-effect waves-teal btn-small"
 
-
+= will_paginate
 

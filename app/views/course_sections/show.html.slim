@@ -1,6 +1,26 @@
-p#notice = notice
+.row
+  h4 Course Section
+  .list_description
+    dl.row
+      dd.col.s4
+        .label Course Name
+        .item = @course_section.course.name
+      dd.col.s4
+        .label Section
+        .item = @course_section.name
+      dd.col.s4
+        .label Instructor
+        .item = @course_section.instructor.name
 
+  h5 Students
+  ul
+    - i = 0
+    - @course_section.students.each do |student|
+      li 
+        = "#{i += 1}. "
+        = link_to student.name, student
 
-= link_to 'Edit', edit_course_section_path(@course_section)
-'|
-= link_to 'Back', course_sections_path
+.toolbar         
+  = link_to 'Edit', edit_course_section_path(@course_section), class: "btn waves-effect waves-teal btn-flat"
+
+/ = link_to 'Back', course_course_sections_path(@course)

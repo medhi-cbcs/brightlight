@@ -39,7 +39,7 @@ h4 = @course.name
         tbody
         - @course.course_sections.each do |section|
           tr
-            td = link_to(section.grade_section.name, section.grade_section) if section.grade_section
+            td = link_to(section.name, section) if section.grade_section
             td = link_to(section.instructor.name, section.instructor) if section.instructor
     - else
       p.red-text No sections

@@ -4,7 +4,13 @@ class CourseSectionsController < ApplicationController
   # GET /course_sections
   # GET /course_sections.json
   def index
-    @course_sections = CourseSection.all
+    @course = Course.find(params[:course_id])
+    items_per_page = 20
+    if params[:grade_id]
+      @course_sections = CourseSection.with_grade_level_id(params[:grade_id]).paginate(page: params[:page], per_page: items_per_page)
+    else 
+      @course_sections = CourseSection.all
+    end
   end
 
   # GET /course_sections/1
@@ -14,6 +20,7 @@ class CourseSectionsController < ApplicationController
 
   # GET /course_sections/new
   def new
+    @course = Course.find(params[:course_id])
     @course_section = CourseSection.new
   end
 

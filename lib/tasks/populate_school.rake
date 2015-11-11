@@ -6,8 +6,6 @@ namespace :db do
 		
 		AcademicYear.delete_all
 		AcademicTerm.delete_all
-		GradeLevel.delete_all
-		GradeSection.delete_all
 		Department.delete_all
 		Employee.delete_all
 
@@ -125,20 +123,6 @@ namespace :db do
 			employee.education_degree2 = Forgery::Degree.sarjanaS2
 			employee.education_graduation_date2 = Forgery('date').date
 			employee.education_school2 = Forgery::Universitas.universitas_negeri
-		end
-
-		# Grade Levels
-		g = 0
-		GradeLevel.populate 12 do |grade|
-			g += 1
-			grade.name = "#{g}"
-
-			s = 0
-			GradeSection.populate 3 do |section|
-				section.name = grade.name + ["A","B","C"][s]
-				section.grade_level_id = grade.id
-				s += 1
-			end
 		end
 
 	end
