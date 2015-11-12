@@ -1,0 +1,10 @@
+.nested-fields
+	.row
+		.input-field.col.s4
+			= f.label 'Section', class: 'active'
+			= f.text_field :name
+		.input-field.col.s5
+			= f.label :homeroom_id, class: 'active'
+			= f.collection_select :homeroom_id, Employee.all_teachers, :id, :name, prompt: true
+		.input-field.col.s3
+			= link_to_remove_association "Remove", f, class: "waves-effect waves-teal btn btn-flat red-text btn-small"
