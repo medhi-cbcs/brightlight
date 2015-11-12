@@ -16,12 +16,10 @@ class GradeLevelsController < ApplicationController
   def new
     @grade_level = GradeLevel.new
     3.times { @grade_level.grade_sections.build }
-    @teachers = Employee.where(job_title:'Teacher')
   end
 
   # GET /grade_levels/1/edit
   def edit
-    @teachers = Employee.where(job_title:'Teacher')
   end
 
   # POST /grade_levels

@@ -8,20 +8,14 @@ class CourseSectionsController < ApplicationController
     items_per_page = 20
     if params[:grade_id]
       @course_sections = CourseSection.with_grade_level_id(params[:grade_id]).paginate(page: params[:page], per_page: items_per_page)
-    else 
-      @course_sections = CourseSection.all
+    elsif params[:course_id]
+      @course_sections = @course.course_sections
     end
   end
 
   # GET /course_sections/1
   # GET /course_sections/1.json
   def show
-  end
-
-  # GET /course_sections/new
-  def new
-    @course = Course.find(params[:course_id])
-    @course_section = CourseSection.new
   end
 
   # GET /course_sections/1/edit

@@ -1,13 +1,11 @@
 .row
-  h4 Course Section
+  h5 Course Section
+  h4 = @course_section.name
   .list_description
     dl.row
       dd.col.s4
         .label Course Name
         .item = @course_section.course.name
-      dd.col.s4
-        .label Section
-        .item = @course_section.name
       dd.col.s4
         .label Instructor
         .item = @course_section.instructor.name
@@ -22,5 +20,3 @@
 
 .toolbar         
   = link_to 'Edit', edit_course_section_path(@course_section), class: "btn waves-effect waves-teal btn-flat"
-
-/ = link_to 'Back', course_course_sections_path(@course)

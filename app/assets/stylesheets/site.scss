@@ -135,6 +135,19 @@ form {
 		display: none;
 		float: left;
 	}
+
+	select {
+		height: 2.5rem;
+	}
+
+	label.for-select {
+		top: 0.6rem;
+	}
+	.select-grade {
+		position: absolute;
+		left: 5rem;
+		width: 4rem;
+	}
 }
 
 // 

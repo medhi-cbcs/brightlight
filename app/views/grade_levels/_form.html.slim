@@ -20,7 +20,7 @@
 					= form.text_field :name
 				.input-field.col.s5
 					= form.label :homeroom, class: 'active'
-					= form.collection_select :homeroom_id, @teachers, :id, :name, prompt: true
+					= form.collection_select :homeroom_id, Employee.all_teachers, :id, :name, prompt: true
 				- if :action == :edit
 					.input-field.col.s3
 						= form.check_box :_destroy

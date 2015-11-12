@@ -1,15 +1,13 @@
 h4 Courses
 
 .toolbar.z-depth-1
-  i.material-icons assignment
+  /i.material-icons assignment
   .left
     = form_tag({controller:'courses', action:'index'}, {method:'get'}) do
-      .input-field.col.s3
-        = collection_select '', :grade_id, GradeLevel.all, :id, :name, {prompt: true}, {class: 'browser-default'}
-      button.btn type='submit' Submit
-      /= label_tag :grade_level, class:'active'
-    / .input-field
-    /   button.btn type='submit' Submit
+      .input-field
+        = label_tag :grade_id, "Grade: ", {class: 'for-select'}
+        - options = options_for_select(GradeLevel.all.map {|g| [g.name, g.id]}, params[:grade_id])
+        = select_tag :grade_id, options, {class: 'browser-default select-grade', onchange:"this.form.submit()"}
 
   .right
     = link_to courses_path(search:params[:search])

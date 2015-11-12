@@ -15,7 +15,7 @@ Rails.application.routes.draw do
   resources :rosters
   resources :courses do
     resources :course_texts
-    resources :course_sections, shallow: true
+    resources :course_sections, except: :new, shallow: true
   end
   # get 'books/search_isbn' => 'books#search_isbn'
   resources :book_editions do

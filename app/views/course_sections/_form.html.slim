@@ -1,4 +1,4 @@
-= form_for @course_section do |f|
+= form_for [@course, @course_section] do |f|
   - if @course_section.errors.any?
     #error_explanation
       h2 = "#{pluralize(@course_section.errors.count, "error")} prohibited this course_section from being saved:"
@@ -6,4 +6,14 @@
         - @course_section.errors.full_messages.each do |message|
           li = message
 
-  .actions = f.submit
+  .row
+    .input-field.col.s8
+      = f.label :name, class: 'active'
+      = f.text_field :name
+    .input-field.col.s8
+      = f.label :instructor, class: 'active'
+      = f.collection_select(:instructor_id, Employee.all_teachers, :id, :name, {prompt: true}, {:class => 'browser-default'})
+
+  .toolbar.actions
+    = link_to 'Back', course_course_sections_path(@course), class: "btn waves-effect waves-teal btn-flat" 
+    button.btn.waves-effect.waves-light type="submit" Save

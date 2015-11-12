@@ -17,12 +17,10 @@ class GradeSectionsController < ApplicationController
   def new
     @grade_level = GradeLevel.find(params[:grade_level_id])
     @grade_section = @grade_level.grade_sections.new
-    @teachers = Employee.where(job_title:'Teacher')
   end
 
   # GET /grade_sections/1/edit
   def edit
-    @teachers = Employee.where(job_title:'Teacher')
   end
 
   # POST /grade_sections
