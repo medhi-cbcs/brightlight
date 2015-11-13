@@ -1,4 +1,5 @@
 class CourseSection < ActiveRecord::Base
+  validates :name, presence: true, uniqueness: true
   belongs_to :course
   belongs_to :grade_section
   belongs_to :instructor, class_name: "Employee"

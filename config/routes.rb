@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
 
+  resources :book_labels
   resources :rosters
   resources :departments
   resources :guardians

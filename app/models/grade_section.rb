@@ -1,4 +1,5 @@
 class GradeSection < ActiveRecord::Base
+  validates :name, presence: true, uniqueness: true
   belongs_to :grade_level
   belongs_to :homeroom, class_name: "Employee"
   has_many :course_sections
@@ -9,4 +10,6 @@ class GradeSection < ActiveRecord::Base
 
   accepts_nested_attributes_for :students
   accepts_nested_attributes_for :grade_sections_students, allow_destroy: true, reject_if: :all_blank
+
+  scope :only_year_id, -> {|id| where(grade_sections_students: {academic_year_id: id})}
 end

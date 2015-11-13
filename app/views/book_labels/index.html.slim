@@ -1,0 +1,25 @@
+h4 Book Labels
+
+.toolbar
+  = link_to 'New Book label', new_book_label_path, class: "btn waves-effect waves-teal btn-default"
+table.striped
+  thead
+    tr
+      th Grade Sections
+      th Label
+      th
+
+  tbody
+    - @book_labels.each do |book_label|
+      tr
+        td = book_copy.grade_section.name
+        td = link_to book_label.name, book_label
+
+        td
+          = link_to book_label
+            i.material-icons book
+          = link_to edit_book_label_path(book_label)
+            i.material-icons create
+          = link_to book_label, data: {:confirm => 'Are you sure?'}, :method => :delete
+            i.material-icons delete
+

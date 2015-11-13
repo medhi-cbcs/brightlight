@@ -1,4 +1,5 @@
 class Course < ActiveRecord::Base
+  validates :name, presence: true, uniqueness: true
   belongs_to :grade_level
   belongs_to :academic_year
   has_and_belongs_to_many :academic_terms
