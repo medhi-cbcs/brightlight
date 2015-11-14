@@ -1,22 +1,27 @@
 .row
-  h5 Course Section
   h4 = @course_section.name
   .list_description
     dl.row
       dd.col.s4
         .label Course Name
-        .item = @course_section.course.name
+        .item = link_to @course_section.course.name, @course_section.course
       dd.col.s4
         .label Instructor
         .item = @course_section.instructor.name
 
-  h5 Students
-  ul
-    - i = 0
-    - @course_section.students.each do |student|
-      li 
-        = "#{i += 1}. "
-        = link_to student.name, student
+  h5 Students in #{@course_section.grade_section.name}
+  table.striped.compact
+    thead
+      th No
+      th Name
+    tbody
+      - i = 0
+      - @course_section.students.each do |student|
+        tr
+          td style="width:40px"
+            = "#{i += 1}. "
+          td
+            = link_to student.name, student
 
 .toolbar         
   = link_to 'Edit', edit_course_section_path(@course_section), class: "btn waves-effect waves-teal btn-flat"

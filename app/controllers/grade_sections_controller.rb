@@ -5,7 +5,8 @@ class GradeSectionsController < ApplicationController
   # GET /grade_sections.json
   def index
     @grade_level = GradeLevel.find(params[:grade_level_id])
-    @grade_sections = @grade_level.grade_sections
+    @year_id = params[:year] || AcademicYear.current.first.id
+    @grade_sections = @grade_level.grade_sections.with_academic_year_id(@year_id).includes([:academic_year, :homeroom])
   end
 
   # GET /grade_sections/1

@@ -1,5 +1,9 @@
 h4 Grade #{@grade_section.grade_level.name} Section #{@grade_section.name}
 
+- unless @grade_section.academic_year_id == current_academic_year_id
+  .toolbar
+    h5.right = AcademicYear.find(@grade_section.academic_year_id).name
+
 .list_description
   dl.row
     dd.col.s4
@@ -12,13 +16,43 @@ h4 Grade #{@grade_section.grade_level.name} Section #{@grade_section.name}
       .label Academic Year
       .item = @grade_section.academic_year.present? ? @grade_section.academic_year.name : "--"
 
-h5 Students
-ul
-  - i = 0
-  - @grade_section.students.each do |student|
-    li 
-      = "#{i += 1}. "
-      = link_to student.name, student
+.row.tabbed
+  .col.s12
+    ul.tabs.z-depth-1
+      li.tab.col.s3
+        a href='#tab1' Students
+      li.tab.col.s3
+        a href='#tab2' Courses
+
+#tab1
+  h5 Students
+  table.striped.compact
+    thead
+      th No
+      th Name
+    tbody
+      - i = 0
+      - @grade_section.students.each do |student|
+        tr
+          td style="width:40px"
+            = "#{i += 1}. "
+          td
+            = link_to student.name, student
+
+#tab2
+  h5 Course Sections
+  table.striped.compact
+    thead
+      th No
+      th Name
+    tbody
+      - i = 0
+      - @grade_section.course_sections.each do |course|
+        tr
+          td style="width:40px"
+            = "#{i += 1}. "
+          td
+            = link_to course.name, course
 
 .toolbar.actions
   = link_to 'Back', grade_level_grade_sections_path(@grade_section.grade_level), class: "btn waves-effect waves-teal btn-flat"

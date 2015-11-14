@@ -3,23 +3,23 @@
     li
       .collapsible-header.active
         i.material-icons class
-        | Grade Sections
+        | Course Section
       .collapsible-body
         .cell-row
           a href="#" 
-            | Courses
+            | Course Section
         .cell-row
           a href="#" 
-            | Students
+            | Course Texts
+
     li
       .collapsible-header.active
         i.material-icons query_builder
         | Actions
-      .collapsible-body
-        = link_to 'Add Section', new_grade_level_grade_section_path(@grade_level.id), class: "btn waves-effect waves-teal btn-default"
-        
+      .collapsible-body.center
+        = link_to 'Add Section', new_course_path, class: "btn waves-effect waves-teal btn-flat"
         - if params[:id] and action_name != 'edit'
-          = link_to 'Edit', edit_grade_section_path(@grade_section), class: "btn waves-effect waves-teal btn-flat"
+          = link_to 'Edit', edit_course_section_path(@course_section), class: "btn waves-effect waves-teal btn-flat"
     li
       .collapsible-header
         i.material-icons info_outline
@@ -39,3 +39,5 @@
         .cell-row
           a href="#" 
             | Print detail
+
+

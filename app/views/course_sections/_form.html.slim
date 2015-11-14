@@ -15,5 +15,5 @@
       = f.collection_select(:instructor_id, Employee.all_teachers, :id, :name, {prompt: true}, {:class => 'browser-default'})
 
   .toolbar.actions
-    = link_to 'Back', course_course_sections_path(@course), class: "btn waves-effect waves-teal btn-flat" 
+    = link_to 'Back', course_course_sections_path(course_id: @course_section.course), class: "btn waves-effect waves-teal btn-flat" 
     button.btn.waves-effect.waves-light type="submit" Save
