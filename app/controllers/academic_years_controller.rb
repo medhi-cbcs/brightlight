@@ -20,9 +20,6 @@ class AcademicYearsController < ApplicationController
 
   # GET /academic_years/1/edit
   def edit
-    # if @academic_year.academic_terms.blank?
-    #   2.times { @academic_year.academic_terms.build }
-    # end
   end
 
   # POST /academic_years

@@ -23,6 +23,16 @@ $white:                 #FFF;
 	margin: 6px 6px;
 }
 
+
+// ============================================ Table ===============================================
+
+table.compact {
+	td {
+		padding-top: 4px;
+		padding-bottom: 4px;
+	}
+}
+
 // ============================================ Forms ===============================================
 
 
@@ -50,6 +60,17 @@ form {
 		[type="radio"]:not(:checked) + label, [type="radio"]:checked + label {
 			height: 40px;
 		}
+		.input-field {
+			margin-top: 0px;
+		}
+	}
+
+	.header {
+		font-weight: bold;
+	}
+
+	.compact {
+		margin-bottom: 2px;
 		.input-field {
 			margin-top: 0px;
 		}
@@ -114,6 +135,19 @@ form {
 		display: none;
 		float: left;
 	}
+
+	select {
+		height: 2.5rem;
+	}
+
+	label.for-select {
+		top: 0.6rem;
+	}
+	.select-grade {
+		position: absolute;
+		left: 5rem;
+		width: 4rem;
+	}
 }
 
 // 
@@ -150,8 +184,16 @@ main {
 			color: $grayDark;
 		}
 		.collapsible-body {
-			padding: 10px 10px 10px 30px;
+			padding: 10px 20px 10px 20px;			
 		}
+
+		.center {
+			text-align: center;
+		}
+	}
+
+	.btn {
+		margin: 5px 5px;
 	}
 }
 

@@ -1,0 +1,21 @@
+h4 Grade #{@grade_level.name} Sections
+
+.toolbar
+  = link_to 'New Grade section', new_grade_level_grade_section_path(@grade_level.id), class:"btn"
+
+table.striped
+  thead
+    tr
+      th Section
+      th Teacher
+
+  tbody
+    - @grade_sections.each do |grade_section|
+      tr
+        td
+          = link_to grade_section.name, grade_section
+        td
+          = grade_section.homeroom.present? ? grade_section.homeroom : '--'
+
+br
+

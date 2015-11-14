@@ -39,8 +39,8 @@ h4 = @course.name
         tbody
         - @course.course_sections.each do |section|
           tr
-            td = section.grade_section.name if section.grade_section
-            td = section.instructor.name if section.instructor
+            td = link_to(section.name, section) if section.grade_section
+            td = link_to(section.instructor.name, section.instructor) if section.instructor
     - else
       p.red-text No sections
 
@@ -48,20 +48,7 @@ h4 = @course.name
   .row
     h5 Textbooks
     - if @course.course_texts.present?
-      / - @course.course_texts.each do |course_text|
-      /     - textbook = course_text.book_title
-      /     - if textbook
-      /       .col.s6
-      /         - thumbnail = textbook.image_url.present? ? textbook.image_url : 'book-icon.png'
-      /           = image_tag(thumbnail, class: 'list_image')
-      /         = textbook.title
-      /         = textbook.authors
-
       table.striped.col.s6
-        thead
-          th
-          th Title
-          th Author
         tbody
         - @course.course_texts.each do |course_text|
           - textbook = course_text.book_title
@@ -69,9 +56,11 @@ h4 = @course.name
             tr
               td style="vertical-align:top"
                 - thumbnail = textbook.image_url.present? ? textbook.image_url : 'book-icon.png'
-                = image_tag(thumbnail, class: 'list_image')
-              td = textbook.title
-              td = textbook.authors
+                = link_to textbook
+                  = image_tag(thumbnail, class: 'list_image')
+              td 
+                em = link_to(textbook.title, textbook)
+                p  = textbook.authors
     - else
       p.red-text No textbooks
 .row

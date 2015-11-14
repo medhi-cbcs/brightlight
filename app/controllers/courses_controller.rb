@@ -4,7 +4,12 @@ class CoursesController < ApplicationController
   # GET /courses
   # GET /courses.json
   def index
-    @courses = Course.all
+    items_per_page = 20
+    if params[:grade_id]
+      @courses = Course.with_grade_level_id(params[:grade_id]).paginate(page: params[:page], per_page: items_per_page)
+    else 
+      @courses = Course.paginate(page: params[:page], per_page: items_per_page)
+    end
   end
 
   # GET /courses/1
@@ -17,12 +22,10 @@ class CoursesController < ApplicationController
     @course = Course.new
     3.times { @course.course_sections.build }
     3.times { @course.course_texts.build }
-    @teachers = Employee.where(job_title:'Teacher')
   end
 
   # GET /courses/1/edit
   def edit
-    @teachers = Employee.where(job_title:'Teacher')   
     3.times { @course.course_sections.build } if @course.course_sections.empty?
     3.times { @course.course_texts.build } if @course.course_texts.empty?
     @book_titles = BookTitle.all

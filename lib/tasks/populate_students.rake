@@ -46,7 +46,7 @@ namespace :db do
 			mom.family_no = dad.family_no
 			mom.save!
 
-			rand(1...3).times do
+			rand(1..3).times do
 				student = Student.new
 				student.gender = Forgery('personal').abbreviated_gender
 				student.first_name = student.gender == 'F' ? Forgery('name').female_first_name : Forgery('name').male_first_name

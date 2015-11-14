@@ -1,0 +1,15 @@
+p#notice = notice
+
+p
+  strong Grade section:
+  = @book_label.grade_section
+p
+  strong Student:
+  = @book_label.student
+p
+  strong Name:
+  = @book_label.name
+
+= link_to 'Edit', edit_book_label_path(@book_label)
+'|
+= link_to 'Back', book_labels_path

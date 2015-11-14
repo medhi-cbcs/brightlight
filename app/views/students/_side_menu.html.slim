@@ -17,6 +17,8 @@
         | Actions
       .collapsible-body
         = link_to 'Add Student', new_student_path, class: "btn waves-effect waves-teal btn-default"
+        = link_to 'Export as CSV', students_path + '.csv', class: "btn waves-effect waves-teal btn-default"
+        
         - if params[:id] and action_name != 'edit'
           = link_to 'Edit', edit_student_path(@student), class: "btn waves-effect waves-teal btn-flat"
     li

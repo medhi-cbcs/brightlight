@@ -4,24 +4,31 @@ class GradeLevelsController < ApplicationController
   # GET /grade_levels
   # GET /grade_levels.json
   def index
-    @grade_levels = GradeLevel.all
+    @year_id = params[:year] || AcademicYear.current.first.id
+    @academic_year = AcademicYear.find(@year_id)
+    # This preloading cuts down the number of database calls to just 4 calls regardless the numbers of grade sections we have
+    @grade_levels = GradeLevel.includes(grade_sections: [:homeroom, :academic_year]).where(grade_sections: {academic_year:@year_id})
   end
 
   # GET /grade_levels/1
   # GET /grade_levels/1.json
   def show
+    @year_id = params[:year] || AcademicYear.current.first.id
+    @academic_year = AcademicYear.find(@year_id)
+    @grade_sections = @grade_level.grade_sections.with_academic_year_id(@year_id).includes([:academic_year, :homeroom])
   end
 
   # GET /grade_levels/new
   def new
     @grade_level = GradeLevel.new
     3.times { @grade_level.grade_sections.build }
-    @teachers = Employee.where(job_title:'Teacher')
   end
 
   # GET /grade_levels/1/edit
   def edit
-    @teachers = Employee.where(job_title:'Teacher')
+    @year_id = params[:year] || AcademicYear.current.first.id
+    @academic_year = AcademicYear.find(@year_id)
+    @grade_sections = @grade_level.grade_sections.with_academic_year_id(@year_id).includes([:academic_year, :homeroom])
   end
 
   # POST /grade_levels
@@ -74,6 +81,6 @@ class GradeLevelsController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def grade_level_params
       params.require(:grade_level).permit(:name, :order_no, 
-                                         {:grade_sections_attributes => [:name, :homeroom_id, :_destroy, :id]})
+                                         {:grade_sections_attributes => [:name, :homeroom_id, :academic_year_id, :_destroy, :id]})
     end
 end

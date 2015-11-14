@@ -1,5 +1,7 @@
 Rails.application.routes.draw do
 
+  resources :book_labels
+  resources :rosters
   resources :departments
   resources :guardians
   resources :book_assignments
@@ -8,9 +10,13 @@ Rails.application.routes.draw do
   resources :employees
   resources :products
   resources :academic_years
-  resources :grade_levels
+  resources :grade_levels do
+    resources :grade_sections, shallow: true
+  end
+  resources :rosters
   resources :courses do
     resources :course_texts
+    resources :course_sections, except: :new, shallow: true
   end
   # get 'books/search_isbn' => 'books#search_isbn'
   resources :book_editions do

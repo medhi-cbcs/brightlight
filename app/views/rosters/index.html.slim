@@ -1,0 +1,19 @@
+h1 Listing rosters
+
+table
+  thead
+    tr
+      th
+      th
+      th
+
+  tbody
+    - @rosters.each do |roster|
+      tr
+        td = link_to 'Show', roster
+        td = link_to 'Edit', edit_roster_path(roster)
+        td = link_to 'Destroy', roster, data: {:confirm => 'Are you sure?'}, :method => :delete
+
+br
+
+= link_to 'New Roster', new_roster_path

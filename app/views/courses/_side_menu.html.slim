@@ -16,7 +16,7 @@
       .collapsible-header.active
         i.material-icons query_builder
         | Actions
-      .collapsible-body
+      .collapsible-body.center
         = link_to 'Add New Course', new_course_path, class: "btn waves-effect waves-teal btn-flat"
         - if params[:id] and action_name != 'edit'
           = link_to 'Edit', edit_course_path(@course), class: "btn waves-effect waves-teal btn-flat"
