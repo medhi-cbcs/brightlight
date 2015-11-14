@@ -1,25 +1,21 @@
-table
-  tr
-  	td
-      .list_description
-        dl.row
-          h5 Grade Level
-        dl.row
-          dd.col.s4
-            .label Name
-            .item = @grade_level.name
+h4 Grade #{@grade_level.name} Sections
 
-        dl.row
-          h6 Sections
-        - @grade_level.grade_sections.each do |section|
-          dl.row
-            dd.col.s4
-              .label Section
-              .item = link_to section.name, section
-            dd.col.s4
-              .label Teacher
-              .item = section.homeroom.present? ? section.homeroom : '--'
+- unless @academic_year.id == current_academic_year_id
+  .toolbar
+    h5.right #{@academic_year.name}
 
+table.striped
+  thead
+    th Section
+    th Teacher
+
+  tbody
+    - @grade_sections.each do |section|
+      tr
+        td
+          .item = link_to section.name, section
+        td
+          .item = section.homeroom.present? ? link_to(section.homeroom) : '--'
 
 .toolbar.actions
   = link_to '< Back', :back, class: 'btn btn-flat'

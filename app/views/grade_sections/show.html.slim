@@ -8,6 +8,9 @@ h4 Grade #{@grade_section.grade_level.name} Section #{@grade_section.name}
     dd.col.s4
       .label Homeroom teacher
       .item = @grade_section.homeroom.present? ? link_to(@grade_section.homeroom, @grade_section.homeroom) : '--'
+    dd.col.s4
+      .label Academic Year
+      .item = @grade_section.academic_year.present? ? @grade_section.academic_year.name : "--"
 
 h5 Students
 ul

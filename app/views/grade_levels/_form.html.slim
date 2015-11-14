@@ -14,7 +14,7 @@
     h5 Grade Sections
     hr
     #grade_section.row
-    = f.fields_for :grade_sections do |grade_section|
+    = f.fields_for :grade_sections, @grade_sections do |grade_section|
       = render 'grade_section_fields', f: grade_section
 
     = link_to_add_association f, :grade_sections, class: "waves-effect waves-teal btn btn-flat", 'data-association-insertion-method' => 'before', 'data-association-insertion-node' => 'this'

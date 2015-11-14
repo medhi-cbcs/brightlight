@@ -7,6 +7,8 @@ class Student < ActiveRecord::Base
   has_many :rosters, dependent: :destroy
   
   validates :name, :gender, presence: true
+  
+  scope :with_academic_year_id, lambda {|id| where(grade_sections_students: {academic_year_id: id})}
 
   def self.to_csv
     CSV.generate do |csv|

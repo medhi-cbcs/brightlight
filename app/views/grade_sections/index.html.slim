@@ -5,9 +5,9 @@ h4 Grade Sections for Grade Level #{@grade_level.name}
 table
   thead
     tr
-      th
-      th
-      th
+      th Section
+      th Teacher
+      th Year
 
   tbody
     - @grade_sections.each do |grade_section|
@@ -16,6 +16,8 @@ table
           = link_to grade_section.name, grade_section
         td
           = grade_section.homeroom.present? ? grade_section.homeroom : '--'
+        td
+          = grade_section.academic_year.name
 
 br
 

@@ -1,5 +1,6 @@
 .nested-fields
   .row
+    = f.hidden_field :academic_year_id, value: @year_id
     .input-field.col.s4
       = f.label 'Section', class: 'active'
       = f.text_field :name

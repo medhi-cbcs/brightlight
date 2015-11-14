@@ -11,6 +11,7 @@ class GradeSectionsController < ApplicationController
   # GET /grade_sections/1
   # GET /grade_sections/1.json
   def show
+    @grade_level =  @grade_section.grade_level
   end
 
   # GET /grade_sections/new
@@ -21,6 +22,7 @@ class GradeSectionsController < ApplicationController
 
   # GET /grade_sections/1/edit
   def edit
+    @grade_level =  @grade_section.grade_level
   end
 
   # POST /grade_sections

@@ -28,6 +28,7 @@ namespace :db do
 				section.name = "#{grade.name}#{["A","B","C"][s]}"
 				section.grade_level_id = grade.id
 				section.homeroom_id = teachers[rand(teachers_count)].id
+				section.academic_year_id = year.id
 				s += 1				
 			end
 		end

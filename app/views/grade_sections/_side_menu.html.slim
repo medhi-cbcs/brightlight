@@ -3,32 +3,23 @@
     li
       .collapsible-header.active
         i.material-icons class
-        | Grade Levels
+        | Grade Sections
       .collapsible-body
         .cell-row
           a href="#" 
-            | Sections
+            | Courses
         .cell-row
           a href="#" 
-            | Courses
+            | Students
     li
       .collapsible-header.active
         i.material-icons query_builder
         | Actions
       .collapsible-body
-        = link_to 'Add Grade Level', new_grade_level_path, class: "btn waves-effect waves-teal btn-default"
+        = link_to 'Add Section', new_grade_level_grade_section_path(@grade_level.id), class: "btn waves-effect waves-teal btn-default"
         
         - if params[:id] and action_name != 'edit'
-          = link_to 'Edit', edit_grade_level_path(@grade_level), class: "btn waves-effect waves-teal btn-flat"
-    li
-      .collapsible-header
-        i.material-icons settings
-        | Settings
-      .collapsible-body
-        .cell-row
-          = label_tag :academic_year
-          - selected = params[:year] || AcademicYear.current
-          = collection_select nil, :year, AcademicYear.all, :id, :name, {selected:selected}, {onchange: 'set_academic_year($(this).val())'}
+          = link_to 'Edit', edit_grade_section_path(@grade_section), class: "btn waves-effect waves-teal btn-flat"
     li
       .collapsible-header
         i.material-icons info_outline
@@ -49,7 +40,3 @@
           a href="#" 
             | Print detail
 
-javascript:
-  function set_academic_year(value) {
-    window.location="#{grade_levels_path}"+"?year="+value;
-  }

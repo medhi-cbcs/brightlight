@@ -1,10 +1,12 @@
 class Course < ActiveRecord::Base
-  validates :name, presence: true, uniqueness: true
   belongs_to :grade_level
   belongs_to :academic_year
   has_and_belongs_to_many :academic_terms
   belongs_to :employee
   
+  validates :name, presence: true, uniqueness: true
+  validates :academic_year, presence: true
+
   has_many :course_sections, dependent: :destroy
   accepts_nested_attributes_for :course_sections, allow_destroy: true, reject_if: :all_blank
   
