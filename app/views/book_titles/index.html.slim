@@ -11,13 +11,6 @@
         - else
           i.material-icons.prefix search
         input.icon-prefix type="text" name="search" placeholder="Search" value=params[:search]    
-    javascript:
-      function reset_form() {
-        window.location="#{book_titles_path(v:'list')}"
-      }
-      function toggle_toolbar_menu() {
-        $('#context-buttons').toggle()
-      }
 
 = form_tag do 
   .toolbar.z-depth-1
@@ -36,8 +29,9 @@
       - @book_titles.each do |book_title|
         tr
           td
-            input type="checkbox" id=book_title.id name="merge[#{book_title.id}]"
-            = label_tag book_title.id, "", onclick:"toggle_toolbar_menu()"
+            input.checkbox type="checkbox" id="cb-#{book_title.id}" name="merge[#{book_title.id}]" onchange="toggle_toolbar_menu()"
+            / This label is required for Materialize CSS to work
+            = label_tag "cb-#{book_title.id}", ""
           - if @view_style == :list
             td
               .list_description
@@ -72,3 +66,13 @@
 
 = will_paginate @book_titles
 
+javascript:
+  function reset_form() {
+    window.location = "#{book_titles_path(v:'list')}"
+  }
+  function toggle_toolbar_menu() {
+    if ($('input.checkbox:checked').length > 0) 
+      $('#context-buttons').show(); 
+    else
+      $('#context-buttons').hide(); 
+  }

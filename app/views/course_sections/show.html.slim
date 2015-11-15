@@ -7,7 +7,7 @@
         .item = link_to @course_section.course.name, @course_section.course
       dd.col.s4
         .label Instructor
-        .item = @course_section.instructor.name
+        .item = @course_section.instructor.present? ? link_to(@course_section.instructor.name, @course_section.instructor) : "--"
 
   h5 Students in #{@course_section.grade_section.name}
   table.striped.compact
