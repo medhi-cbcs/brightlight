@@ -37,8 +37,8 @@ table.striped
         td = book_copy.book_edition.title
         td = link_to book_copy.barcode, book_copy
         td = book_copy.copy_no
-        td = book_copy.book_condition.code
-        td = book_copy.status.name
+        td = book_copy.book_condition.present? ? book_copy.book_condition.code : 'N/A'
+        td = book_copy.status.present? ? book_copy.status.name : 'N/A'
 
         td
           = link_to book_copy

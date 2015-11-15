@@ -25,10 +25,10 @@ table
         dl
           dd.col.s4
             .label Condition
-            .item = @book_copy.book_condition.code
+            .item = @book_copy.book_condition.present? ? @book_copy.book_condition.code : 'N/A'
           dd.col.s4
             .label Status
-            .item = @book_copy.status.name
+            .item = @book_copy.status.present? ? @book_copy.status.name : 'N/A'
 
 .toolbar.actions
   = link_to '< Back', book_edition_book_copies_path(@book_copy.book_edition), class: 'btn btn-flat'

@@ -15,17 +15,17 @@ Rails.application.routes.draw do
   end
   resources :rosters
   resources :courses do
-    resources :course_texts
+    resources :course_texts, shallow: true
     resources :course_sections, except: :new, shallow: true
   end
-  # get 'books/search_isbn' => 'books#search_isbn'
+
   resources :book_editions do
     collection do
       post 'search_isbn'
     end
     resources :book_copies, shallow: true
   end
-  
+
   resources :book_titles do
     collection do
       post 'edit_merge' # edit merges
@@ -45,11 +45,8 @@ Rails.application.routes.draw do
 
   # You can have the root of your site routed with "root"
   root 'welcome#index'
-  get 'dashboard', to: 'welcome#dashboard'
+  get :dashboard, to: 'welcome#dashboard'
   
-
- 
-  resources :book
   # For authorization with OmniAuth2
   get '/auth/:provider/callback', to: 'sessions#create'
 

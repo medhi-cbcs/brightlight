@@ -14,11 +14,25 @@ class BookTitlesController < ApplicationController
       session[:view_style] = ''
     end
     
-    if params[:search]
-      @book_titles = BookTitle.where('title LIKE ?', "%#{params[:search]}%").paginate(page: params[:page], per_page: items_per_page)
-    else
-      @book_titles = BookTitle.paginate(page: params[:page], per_page: items_per_page)
+    respond_to do |format|
+      format.html { 
+        if params[:search]
+          @book_titles = BookTitle.where('title LIKE ?', "%#{params[:search]}%").paginate(page: params[:page], per_page: items_per_page)
+        else
+          @book_titles = BookTitle.paginate(page: params[:page], per_page: items_per_page)
+        end      
+      }
+      format.json { 
+        search = params[:search] || ""
+        @book_titles = BookTitle.where('title LIKE ?', "%#{search}%").paginate(page: params[:page], per_page:40)
+        # if params[:callback]
+        #   render json: @book_titles, callback: params[:callback]
+        # else
+        #   render json: @book_titles
+        # end
+      }
     end
+
   end
 
   # GET /book_titles/1

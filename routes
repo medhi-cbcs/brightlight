@@ -1,4 +1,12 @@
                        Prefix Verb     URI Pattern                                                Controller#Action
+                  book_labels GET      /book_labels(.:format)                                     book_labels#index
+                              POST     /book_labels(.:format)                                     book_labels#create
+               new_book_label GET      /book_labels/new(.:format)                                 book_labels#new
+              edit_book_label GET      /book_labels/:id/edit(.:format)                            book_labels#edit
+                   book_label GET      /book_labels/:id(.:format)                                 book_labels#show
+                              PATCH    /book_labels/:id(.:format)                                 book_labels#update
+                              PUT      /book_labels/:id(.:format)                                 book_labels#update
+                              DELETE   /book_labels/:id(.:format)                                 book_labels#destroy
                       rosters GET      /rosters(.:format)                                         rosters#index
                               POST     /rosters(.:format)                                         rosters#create
                    new_roster GET      /rosters/new(.:format)                                     rosters#new
@@ -98,14 +106,13 @@ new_grade_level_grade_section GET      /grade_levels/:grade_level_id/grade_secti
           course_course_texts GET      /courses/:course_id/course_texts(.:format)                 course_texts#index
                               POST     /courses/:course_id/course_texts(.:format)                 course_texts#create
        new_course_course_text GET      /courses/:course_id/course_texts/new(.:format)             course_texts#new
-      edit_course_course_text GET      /courses/:course_id/course_texts/:id/edit(.:format)        course_texts#edit
-           course_course_text GET      /courses/:course_id/course_texts/:id(.:format)             course_texts#show
-                              PATCH    /courses/:course_id/course_texts/:id(.:format)             course_texts#update
-                              PUT      /courses/:course_id/course_texts/:id(.:format)             course_texts#update
-                              DELETE   /courses/:course_id/course_texts/:id(.:format)             course_texts#destroy
+             edit_course_text GET      /course_texts/:id/edit(.:format)                           course_texts#edit
+                  course_text GET      /course_texts/:id(.:format)                                course_texts#show
+                              PATCH    /course_texts/:id(.:format)                                course_texts#update
+                              PUT      /course_texts/:id(.:format)                                course_texts#update
+                              DELETE   /course_texts/:id(.:format)                                course_texts#destroy
        course_course_sections GET      /courses/:course_id/course_sections(.:format)              course_sections#index
                               POST     /courses/:course_id/course_sections(.:format)              course_sections#create
-    new_course_course_section GET      /courses/:course_id/course_sections/new(.:format)          course_sections#new
           edit_course_section GET      /course_sections/:id/edit(.:format)                        course_sections#edit
                course_section GET      /course_sections/:id(.:format)                             course_sections#show
                               PATCH    /course_sections/:id(.:format)                             course_sections#update
