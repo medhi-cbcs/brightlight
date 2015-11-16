@@ -20,7 +20,7 @@ class BookTitlesController < ApplicationController
           @book_titles = BookTitle.where('title LIKE ?', "%#{params[:search]}%").paginate(page: params[:page], per_page: items_per_page)
         else
           @book_titles = BookTitle.paginate(page: params[:page], per_page: items_per_page)
-        end      
+        end
       }
       format.json { 
         search = params[:search] || ""

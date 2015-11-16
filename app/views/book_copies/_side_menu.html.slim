@@ -23,11 +23,12 @@
         i.material-icons query_builder
         | Actions
       .collapsible-body
-        - if params[:book_edition_id]
-          = link_to 'Add New Copy', new_book_edition_book_copy_path(params[:book_edition_id]), class: "btn waves-effect waves-teal btn-default"
-        
-        - if params[:id] and action_name != 'edit'
-          = link_to 'Edit', edit_book_copy_path(@book_copy), class: "btn waves-effect waves-teal btn-flat"
+        .cell-row
+          - if params[:book_edition_id]
+            == render 'barcode_scan_form'
+
+          - if params[:id] and action_name != 'edit'
+            = link_to 'Edit', edit_book_copy_path(@book_copy), class: "btn waves-effect waves-teal btn-flat"
 
     li
       .collapsible-header

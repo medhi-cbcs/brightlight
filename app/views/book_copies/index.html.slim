@@ -19,6 +19,18 @@ table
           dd.col.s6
             .label ISBN
             .item = @book_edition.isbn13
+        dl
+          strong Number of copies
+        dl.row
+          - @by_condition.each do |c|
+            dd.col.s2
+              .label = c.first
+              .item = c.last
+        dl.row
+          = @by_status.each do |c|
+            dd.col.s2
+              .label = c.first
+              .item = c.last
 
 h5 Book Copies
 table.striped
@@ -27,12 +39,12 @@ table.striped
       th Title
       th Barcode
       th Label
-      th Book condition
+      th Condition
       th Status
       th
 
   tbody
-    - @book_copies.each do |book_copy|
+    - @book_copies.order(:copy_no).each do |book_copy|
       tr
         td = book_copy.book_edition.title
         td = link_to book_copy.barcode, book_copy

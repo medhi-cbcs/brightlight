@@ -16,6 +16,7 @@
             dd.col.s4
               .label ISBN
               .item = @book_copy.book_edition.isbn13
+        br
         - if @book_copy.errors.any?
           #error_explanation
             h2 = "#{pluralize(@book_copy.errors.count, "error")} prohibited this book_copy from being saved:"
@@ -23,24 +24,20 @@
               - @book_copy.errors.full_messages.each do |message|
                 li = message
         input type="hidden" name="book_copy[book_edition_id]" value=@book_copy.book_edition_id
-        dl.row
-          dd.col.s4
-            .input-field
-              = f.label :barcode
-              = f.text_field :barcode
-          dd.col.s4
-            .input-field
-              = f.label 'Label'
-              = f.text_field :copy_no
-        dl.row
-          dd.col.s4
-            .input-field
-              = f.label :book_condition, class: 'active'
-              = f.collection_select :book_condition_id, BookCondition.all, :id, :code, prompt: true
-          dd.col.s4
-            .input-field
-              = f.label :status_id, class: 'active'
-              = f.collection_select :status_id, Status.all, :id, :name, prompt: true
+        .row
+          .input-field.col.s4
+            = f.label :barcode
+            = f.text_field :barcode
+          .input-field.col.s4
+            = f.label 'Label'
+            = f.text_field :copy_no
+        .row
+          .input-field.col.s4
+            = f.label :book_condition, class: 'active'
+            = f.collection_select :book_condition_id, BookCondition.all, :id, :code, prompt: true
+          .input-field.col.s4
+            = f.label :status_id, class: 'active'
+            = f.collection_select :status_id, Status.all, :id, :name, prompt: true
 
   .toolbar.actions
     button.btn.waves-effect.waves-light type="submit" Save

@@ -7,7 +7,7 @@ namespace :db do
 
 		[{code:'New',  description:'New book', order_no: 1},
 		 {code:'Good', description:'Slightly used', order_no: 2},
-		 {code:'Gair', description:'Heavily used', order_no: 3},
+		 {code:'Fair', description:'Heavily used', order_no: 3},
 		 {code:'Poor', description:'Very heavily used', order_no: 4}
 		].each do |condition|
 			BookCondition.create(code:condition[:code], description:condition[:description])

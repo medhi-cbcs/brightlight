@@ -7,6 +7,9 @@ class BookCopiesController < ApplicationController
     if params[:book_edition_id]
       @book_edition = BookEdition.find(params[:book_edition_id])
       @book_copies = @book_edition.book_copies
+      @book_copy = @book_edition.book_copies.new
+      @by_condition = BookCondition.all.map {|bc| [bc.code, @book_edition.book_copies.select {|c| c.book_condition_id == bc.id}.count ]}
+      @by_status = Status.all.map {|bc| [bc.name, @book_edition.book_copies.select {|c| c.status_id == bc.id}.count ]}
     else
       @book_copies = BookCopy.all
     end
