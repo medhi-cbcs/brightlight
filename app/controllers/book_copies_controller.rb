@@ -6,10 +6,12 @@ class BookCopiesController < ApplicationController
   def index
     if params[:book_edition_id]
       @book_edition = BookEdition.find(params[:book_edition_id])
-      @book_copies = @book_edition.book_copies
+      @book_copies = @book_edition.book_copies.includes([:book_condition, :status])
       @book_copy = @book_edition.book_copies.new
-      @by_condition = BookCondition.all.map {|bc| [bc.code, @book_edition.book_copies.select {|c| c.book_condition_id == bc.id}.count ]}
-      @by_status = Status.all.map {|bc| [bc.name, @book_edition.book_copies.select {|c| c.status_id == bc.id}.count ]}
+      @by_condition = BookCondition.all.map {|bc| [bc, @book_edition.book_copies.select {|c| c.book_condition_id == bc.id}.count ]}
+      @by_status = Status.all.map {|bc| [bc, @book_edition.book_copies.select {|c| c.status_id == bc.id}.count ]}
+      # @by_condition = @book_edition.book_copies.group(:book_condition).count
+      # @by_status = @book_edition.book_copies.group(:status).count
     else
       @book_copies = BookCopy.all
     end

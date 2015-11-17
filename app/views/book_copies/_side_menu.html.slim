@@ -22,7 +22,7 @@
       .collapsible-header.active
         i.material-icons query_builder
         | Actions
-      .collapsible-body
+      .collapsible-body style="padding-left:5px; padding-right:30px"
         .cell-row
           - if params[:book_edition_id]
             == render 'barcode_scan_form'

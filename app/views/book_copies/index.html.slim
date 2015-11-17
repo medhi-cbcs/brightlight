@@ -19,34 +19,32 @@ table
           dd.col.s6
             .label ISBN
             .item = @book_edition.isbn13
-        dl
-          strong Number of copies
+        
+        h6 Number of copies:
         dl.row
           - @by_condition.each do |c|
             dd.col.s2
-              .label = c.first
+              .label = c.first.code
               .item = c.last
         dl.row
-          = @by_status.each do |c|
+          - @by_status.each do |c|
             dd.col.s2
-              .label = c.first
+              .label = c.first.name
               .item = c.last
 
 h5 Book Copies
 table.striped
   thead
     tr
-      th Title
       th Barcode
       th Label
       th Condition
       th Status
-      th
+      th Actions
 
   tbody
     - @book_copies.order(:copy_no).each do |book_copy|
       tr
-        td = book_copy.book_edition.title
         td = link_to book_copy.barcode, book_copy
         td = book_copy.copy_no
         td = book_copy.book_condition.present? ? book_copy.book_condition.code : 'N/A'
