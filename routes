@@ -105,7 +105,6 @@ new_grade_level_grade_section GET      /grade_levels/:grade_level_id/grade_secti
                               DELETE   /rosters/:id(.:format)                                     rosters#destroy
           course_course_texts GET      /courses/:course_id/course_texts(.:format)                 course_texts#index
                               POST     /courses/:course_id/course_texts(.:format)                 course_texts#create
-       new_course_course_text GET      /courses/:course_id/course_texts/new(.:format)             course_texts#new
              edit_course_text GET      /course_texts/:id/edit(.:format)                           course_texts#edit
                   course_text GET      /course_texts/:id(.:format)                                course_texts#show
                               PATCH    /course_texts/:id(.:format)                                course_texts#update
@@ -173,12 +172,4 @@ new_grade_level_grade_section GET      /grade_levels/:grade_level_id/grade_secti
                               DELETE   /users(.:format)                                           users/registrations#destroy
                          root GET      /                                                          welcome#index
                     dashboard GET      /dashboard(.:format)                                       welcome#dashboard
-                   book_index GET      /book(.:format)                                            book#index
-                              POST     /book(.:format)                                            book#create
-                     new_book GET      /book/new(.:format)                                        book#new
-                    edit_book GET      /book/:id/edit(.:format)                                   book#edit
-                         book GET      /book/:id(.:format)                                        book#show
-                              PATCH    /book/:id(.:format)                                        book#update
-                              PUT      /book/:id(.:format)                                        book#update
-                              DELETE   /book/:id(.:format)                                        book#destroy
                               GET      /auth/:provider/callback(.:format)                         sessions#create
