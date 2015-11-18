@@ -135,12 +135,16 @@ class BookTitlesController < ApplicationController
   def merge
     @book_title = BookTitle.new(book_title_params) 
     @book_titles = params[:merge].map {|id,on| BookTitle.find(id)}
-    @book_titles.each do |title|
-      @book_title.book_editions << title.book_editions
-      title.destroy
-      # TODO: check dependencies on COURSE_TEXTS table
-    end
+    
     if @book_title.save
+      @book_titles.each do |title|
+        title.book_editions.each do |edition|
+          edition.book_title_id = @book_title.id
+          edition.save
+        end
+        title.destroy
+        # TODO: check dependencies on COURSE_TEXTS table
+      end
       redirect_to @book_title, notice: 'Book titles were successfully merged.'
     else
       render :edit_merge
