@@ -58,6 +58,13 @@ class BookEditionsController < ApplicationController
       @book_edition.thumbnail = book.covers[:thumbnail]
       @book_edition.published_date = book.published_date 
 
+      # Create a BookTitle with this edition
+      @book_edition.book_title = BookTitle.new(
+        title: @book_edition.title,
+        authors: @book_edition.authors, 
+        publisher: @book_edition.publisher,
+        image_url: @book_edition.small_thumbnail)
+
       respond_to do |format|
         if @book_edition.save
           format.html { redirect_to @book_edition, notice: 'Book was successfully created.' }
@@ -94,6 +101,12 @@ class BookEditionsController < ApplicationController
         @book_edition.isbn10 = book.isbn10
         @book_edition.page_count = book.page_count
         @book_edition.published_date = book.published_date 
+
+        # Create a BookTitle with this edition
+        @book_edition.book_title = BookTitle.new(
+          title: @book_edition.title,
+          authors: @book_edition.authors, 
+          publisher: @book_edition.publisher)
 
         respond_to do |format|
           if @book_edition.save
