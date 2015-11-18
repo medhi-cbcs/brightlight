@@ -42,6 +42,9 @@ gem 'will_paginate', '~> 3.0.6'
 # The Materialize UI framework
 gem 'materialize-sass'
 
+# jQuery UI
+gem 'jquery-ui-rails'
+
 # Wrapper for Google Books API
 gem 'google_books', '~> 0.2.2'
 

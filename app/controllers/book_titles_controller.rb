@@ -23,7 +23,7 @@ class BookTitlesController < ApplicationController
         end
       }
       format.json { 
-        search = params[:search] || ""
+        search = params[:term] || ""
         @book_titles = BookTitle.where('title LIKE ?', "%#{search}%").paginate(page: params[:page], per_page:40)
         # if params[:callback]
         #   render json: @book_titles, callback: params[:callback]

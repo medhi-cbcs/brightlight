@@ -1,5 +1,5 @@
 class CourseTextsController < ApplicationController
-  before_action :set_course 
+  before_action :set_course, only: [:index, :create]
   before_action :set_course_text, only: [:show, :edit, :update, :destroy]
 
   # GET /course_texts
@@ -29,7 +29,7 @@ class CourseTextsController < ApplicationController
 
     respond_to do |format|
       if @course_text.save
-        format.html { redirect_to @course_text, notice: 'Course text was successfully created.' }
+        format.html { redirect_to course_course_texts_path(@course), notice: 'Course text was successfully created.' }
         format.json { render :show, status: :created, location: @course_text }
       else
         format.html { render :new }
@@ -43,7 +43,7 @@ class CourseTextsController < ApplicationController
   def update
     respond_to do |format|
       if @course_text.update(course_text_params)
-        format.html { redirect_to @course_text, notice: 'Course text was successfully updated.' }
+        format.html { redirect_to course_course_texts_path(@course), notice: 'Course text was successfully updated.' }
         format.json { render :show, status: :ok, location: @course_text }
       else
         format.html { render :edit }
@@ -57,7 +57,7 @@ class CourseTextsController < ApplicationController
   def destroy
     @course_text.destroy
     respond_to do |format|
-      format.html { redirect_to course_texts_url, notice: 'Course text was successfully destroyed.' }
+      format.html { redirect_to course_course_texts_path(@course), notice: 'Course text was successfully destroyed.' }
       format.json { head :no_content }
     end
   end
@@ -65,7 +65,8 @@ class CourseTextsController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_course_text
-      @course_text = @course.course_texts.find(params[:id])
+      @course_text = CourseText.find(params[:id])
+      @course = @course_text.course
     end
 
     def set_course
@@ -74,6 +75,6 @@ class CourseTextsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def course_text_params
-      params.require(:course_text).permit(:title, :author, :publisher, :image_url, :notes, :course_id)
+      params.require(:course_text).permit(:course_id, :book_title_id)
     end
 end
