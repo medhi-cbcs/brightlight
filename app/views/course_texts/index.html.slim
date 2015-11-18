@@ -26,56 +26,6 @@ table.striped
           td
           td
         td
-          = link_to course_text
-            i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="Show" book
           = link_to course_text, data: {:confirm => 'Are you sure?'}, :method => :delete
-            i.material-icons.red-text.tooltipped data-position="bottom" data-delay="50" data-tooltip="Delete" delete
-br
+            i.material-icons.red-text.tooltipped data-position="bottom" data-delay="50" data-tooltip="Remove" delete
 
-/= link_to 'New Course text', new_course_course_text_path(@course)
-h5 Add new text book title
-.row
-  = form_tag ({controller: "course_texts", action: "create"}) do
-    .input-field.col.s4
-      / = label_tag 'book_title', 'Enter book title', class:'active'
-      = text_field_tag :title_field, nil, placeholder:"Enter book title"
-      = hidden_field :course_text, :course_id, {value: @course.id}
-      = hidden_field :course_text, :book_title_id
-    .action style="padding-top: 14px;"
-      button.btn.waves-effect.waves-light type="submit" Add
-
-  #log
-
-javascript:
-  $(function() {
-      function log( message ) {
-        $( "<div>" ).text( message ).prependTo( "#log" );
-        $( "#log" ).scrollTop( 0 );
-      }
-      $( "#title_field" ).autocomplete({
-        source: "/book_titles.json",
-        minLength: 2,
-        select: function( event, ui ) {
-          event.preventDefault();
-          $("#course_text_book_title_id").val(ui.item.value);
-          log( ui.item? "Selected: " + ui.item.label : "Nothing selected");
-        }
-      });
-    });
-
-/ css:
-/   .ui-menu-item > a.ui-corner-all {
-/       display: block;
-/       padding: 3px 15px;
-/       clear: both;
-/       font-weight: normal;
-/       line-height: 18px;
-/       color: #555555;
-/       white-space: nowrap;
-/       text-decoration: none;
-/   }
-/ select: function( event, ui ) {
-/   log( ui.item ?
-/     "Selected: " + ui.item.value + " aka " + ui.item.id :
-/     "Nothing selected, input was " + this.value );
-/ }

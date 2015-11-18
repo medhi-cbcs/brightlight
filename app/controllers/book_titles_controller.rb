@@ -120,7 +120,12 @@ class BookTitlesController < ApplicationController
   def edit_merge
     if params[:merge]
       @book_titles = params[:merge].map {|id,on| BookTitle.find(id)}
-      @book_title = BookTitle.new
+      if @book_titles.count > 1
+        @book_title = BookTitle.new
+      else
+        flash[:warning] = 'Merge can only work with 2 or more selection.'
+        redirect_to :back
+      end
     else
       redirect_to book_titles_path
     end

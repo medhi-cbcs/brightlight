@@ -57,7 +57,7 @@ class CourseTextsController < ApplicationController
   def destroy
     @course_text.destroy
     respond_to do |format|
-      format.html { redirect_to course_course_texts_path(@course), notice: 'Course text was successfully destroyed.' }
+      format.html { redirect_to course_course_texts_path(@course), notice: 'Course text was successfully removed.' }
       format.json { head :no_content }
     end
   end
