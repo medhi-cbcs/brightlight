@@ -22,12 +22,12 @@ module ISBNDBClient
         @title = @book['title']
         @authors = @book['author_data'] || []
         @publisher = @book['publisher_name']
-        @published_date = extract_date @book['edition_info']
+        @published_date = extract_date @book['edition_info'] if @book['edition_info'].present?
         @description = @book['summary']
         @isbn = @book['isbn']
         @isbn10 = @book['isbn10']
         @dewey = @book['dewey_decimal']
-        @page_count = extract_page_count @book['physical_description_text']
+        @page_count = extract_page_count @book['physical_description_text'] if @book['physical_description_text'].present?
         @notes = @book['notes']
         @edition_info = @book['edition_info']
         @physical_description = @book['physical_description_text']
@@ -39,15 +39,22 @@ module ISBNDBClient
       #
       def extract_date(info)
       	edition, published_date = info.split(/; /)
-      	published_date
+        if Date.valid_date? *published_date.split('-').map(&:to_i)
+      	  published_date
+        else
+          nil
+        end
       end
 
       # Extract page count from physical description text
       # 7.3\"x8.8\"x1.8\"; 2.8 lb; 784 pages"
       def extract_page_count(info)
-      	dimension, weight, pages = info.split(/; /)
-        page_count =  /([\d]*) pages/.match(pages)[1] unless pages.nil?
-        page_count || nil
+        pages = info.split(/; /).select {|s| /.* pages/.match(s)}.first
+        unless pages.nil?
+          /([\d]*) pages/.match(pages)[1]
+        else
+          nil
+        end
       end
 		end
 	end

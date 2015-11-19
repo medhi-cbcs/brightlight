@@ -1,5 +1,5 @@
 class BookTitle < ActiveRecord::Base
-  validates :title, presence: true, uniqueness: true
+  validates :title, presence: true
   has_many :course_texts
   has_many :courses, through: :course_texts
   has_many :book_editions

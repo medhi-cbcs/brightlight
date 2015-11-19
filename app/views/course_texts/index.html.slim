@@ -1,27 +1,31 @@
-h4 = "Course texts for #{@course.name}"
+label Course name
+h4 = @course.name
 
-table
+h5 Course texts
+table.striped
   thead
     tr
+      th ID
       th Title
       th Author
       th Publisher
+      th Actions
 
-      th
-      th
-      th
 
   tbody
     - @course_texts.each do |course_text|
       tr
-        td = course_text.book_title.title
-        td = course_text.book_title.authors
-        td = course_text.book_title.publisher
+        - if course_text.book_title.present?
+          td = course_text.book_title_id
+          td = link_to course_text.book_title.title, course_text.book_title
+          td = course_text.book_title.authors
+          td = course_text.book_title.publisher
+        - else
+          td = course_text.book_title_id
+          td Missing data for Book Title id: #{course_text.book_title_id}
+          td
+          td
+        td
+          = link_to course_text, data: {:confirm => 'Are you sure?'}, :method => :delete
+            i.material-icons.red-text.tooltipped data-position="bottom" data-delay="50" data-tooltip="Remove" delete
 
-        td = link_to 'Show', course_text, class: "btn waves-effect waves-teal btn-small"
-        td = link_to 'Edit', edit_course_text_path(course_text), class: "btn waves-effect waves-teal btn-small"
-        td = link_to 'Destroy', course_text, data: {:confirm => 'Are you sure?'}, :method => :delete, class: "btn waves-effect waves-teal btn-small red"
-
-br
-
-= link_to 'New Course text', new_course_course_text_path(@course)

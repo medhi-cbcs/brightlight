@@ -23,7 +23,7 @@ class BookTitlesController < ApplicationController
         end
       }
       format.json { 
-        search = params[:search] || ""
+        search = params[:term] || ""
         @book_titles = BookTitle.where('title LIKE ?', "%#{search}%").paginate(page: params[:page], per_page:40)
         # if params[:callback]
         #   render json: @book_titles, callback: params[:callback]
@@ -120,7 +120,12 @@ class BookTitlesController < ApplicationController
   def edit_merge
     if params[:merge]
       @book_titles = params[:merge].map {|id,on| BookTitle.find(id)}
-      @book_title = BookTitle.new
+      if @book_titles.count > 1
+        @book_title = BookTitle.new
+      else
+        flash[:warning] = 'Merge can only work with 2 or more selection.'
+        redirect_to :back
+      end
     else
       redirect_to book_titles_path
     end
@@ -130,12 +135,16 @@ class BookTitlesController < ApplicationController
   def merge
     @book_title = BookTitle.new(book_title_params) 
     @book_titles = params[:merge].map {|id,on| BookTitle.find(id)}
-    @book_titles.each do |title|
-      @book_title.book_editions << title.book_editions
-      title.destroy
-      # TODO: check dependencies on COURSE_TEXTS table
-    end
+    
     if @book_title.save
+      @book_titles.each do |title|
+        title.book_editions.each do |edition|
+          edition.book_title_id = @book_title.id
+          edition.save
+        end
+        title.destroy
+        # TODO: check dependencies on COURSE_TEXTS table
+      end
       redirect_to @book_title, notice: 'Book titles were successfully merged.'
     else
       render :edit_merge
