@@ -76,19 +76,6 @@ class BookEditionsController < ApplicationController
       end
 
     else
-      # # Not found in Google Books, try the ISBNdb.com
-      # results = ISBNdb::Query.find_book_by_isbn(isbn)
-      # unless results.count == 0
-      #   book = results.first
-      #   @book_edition.title = book.title
-      #   @book_edition.description = book.description
-      #   @book_edition.authors = book.authors_text
-      #   @book_edition.publisher = book.publisher_text['__content__']
-      #   @book_edition.isbn13 = book.isbn
-      #   @book_edition.isbn10 = book.isbn10
-      #   @book_edition.page_count = book.page_count
-      #   @book_edition.published_date = book.published_date 
-
       result = ISBNDBClient::API.find(isbn)
       puts result
       unless result.nil?
