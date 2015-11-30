@@ -15,7 +15,7 @@ table.striped
         td
           .item = link_to section.name, section
         td
-          .item = section.homeroom.present? ? link_to(section.homeroom) : '--'
+          .item = section.homeroom.present? ? link_to(section.homeroom, section.homeroom) : '--'
 
 .toolbar.actions
   = link_to '< Back', :back, class: 'btn btn-flat'

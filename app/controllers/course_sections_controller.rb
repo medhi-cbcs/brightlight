@@ -70,6 +70,6 @@ class CourseSectionsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def course_section_params
-      params[:course_section]
+      params.require(:course_section).permit(:name, :instructor_id)
     end
 end

@@ -35,7 +35,10 @@ class CoursesController < ApplicationController
   # POST /courses.json
   def create
     @course = Course.new(course_params)
-
+    @course.course_sections.each do |course_section|
+      course_section.name = "#{@course.name} #{course_section.grade_section.name}"
+    end
+    
     respond_to do |format|
       if @course.save
         format.html { redirect_to @course, notice: 'Course was successfully created.' }
@@ -81,7 +84,7 @@ class CoursesController < ApplicationController
     def course_params
       params.require(:course).permit(:name, :number, :description, :grade_level_id, :academic_year_id, :academic_term_id, :employee_id,
                                     {:academic_term_ids => []},
-                                    {:course_sections_attributes => [:id, :name, :grade_section_id, :course_id, :instructor_id, :_destroy]},
-                                    {:course_texts_attributes => [:id, :course_id, :book_title_id, :order_no, :_destroy]})
+                                    {:course_sections_attributes => [:id, :name, :grade_section_id, :instructor_id, :_destroy]},
+                                    {:course_texts_attributes => [:id, :book_title_id, :order_no, :_destroy]})
     end
 end
