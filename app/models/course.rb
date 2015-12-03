@@ -10,7 +10,7 @@ class Course < ActiveRecord::Base
   has_many :course_sections, dependent: :destroy
   accepts_nested_attributes_for :course_sections, allow_destroy: true, reject_if: :all_blank
   
-  has_many :course_texts
+  has_many :course_texts, dependent: :destroy
   has_many :book_titles, through: :course_texts
   accepts_nested_attributes_for :course_texts, allow_destroy: true, reject_if: :all_blank
 

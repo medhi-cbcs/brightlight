@@ -21,3 +21,8 @@
 
 en:
   hello: "Hello world"
+  errors:
+    "404":
+      description: "The page which you are looking is not exist!"
+      heading: "Record is not found"
+      subheading: ""

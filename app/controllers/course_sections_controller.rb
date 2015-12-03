@@ -16,6 +16,7 @@ class CourseSectionsController < ApplicationController
   # GET /course_sections/1
   # GET /course_sections/1.json
   def show
+    @course = @course_section.course
   end
 
   # GET /course_sections/1/edit
