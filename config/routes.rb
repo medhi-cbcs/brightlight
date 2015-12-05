@@ -31,6 +31,7 @@ Rails.application.routes.draw do
       post 'edit_merge' # edit merges
       post 'merge'      # merges several book titles together
       post 'delete'     # deletes several book titles at the same time
+      post 'search_isbn'
     end
   end
   

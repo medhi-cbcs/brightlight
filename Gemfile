@@ -72,6 +72,7 @@ group :development, :test do
   gem 'byebug'
   gem 'forgery'
   gem 'populator'
+  gem 'letter_opener'
 end
 
 group :development do

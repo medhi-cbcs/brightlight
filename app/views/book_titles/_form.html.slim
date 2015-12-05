@@ -24,18 +24,24 @@
           h6.grey-text Select cover image:
           - @book_title.book_editions.each do |book|
             .cover-selection
-              .input-field.col.s2
+              .input-field.col.s3
                 input class='with-gap' type="radio" id="book-#{book.id}" name="book_title[image_url]" value=book.small_thumbnail
                 = label_tag "book-#{book.id}", 'Select'
                 - thumbnail = book.small_thumbnail.present? ? book.small_thumbnail : 'book-icon.png' 
                 = image_tag(thumbnail, class: 'list_image')
+
         - elsif @edition
           = f.hidden_field :image_url, @edition.small_thumbnail
-
+        
         - if @edition
           input hidden="hidden" type="text" value="#{@edition.id}" name="edition" id="edition"
+      
+      h5 Editions
+      #book_title.row
+        = f.fields_for :book_editions do |book_edition|
+          = render 'book_edition_fields', f: book_edition
 
-        .col.s12
-          .toolbar.actions
-            button.btn.waves-effect.waves-light type="submit" Save
-            = link_to 'Cancel', book_titles_path, class: "waves-effect waves-teal btn-flat"
+      .col.s12
+        .toolbar.actions
+          button.btn.waves-effect.waves-light type="submit" Save
+          = link_to 'Cancel', book_titles_path, class: "waves-effect waves-teal btn-flat"

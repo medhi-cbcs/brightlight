@@ -1,3 +1,5 @@
+require 'isbndb_client/api.rb'
+
 class BookTitlesController < ApplicationController
   before_action :set_book_title, only: [:show, :edit, :update, :destroy]
 
@@ -50,6 +52,8 @@ class BookTitlesController < ApplicationController
       @book_title.authors = @edition.authors
       @book_title.publisher = @edition.publisher
       @book_title.image_url = @edition.small_thumbnail
+    else
+      @edition = @book_title.book_editions.build
     end
   end
 
@@ -61,14 +65,14 @@ class BookTitlesController < ApplicationController
   # POST /book_titles.json
   def create
     @book_title = BookTitle.new(book_title_params)    
-    @book_edition = BookEdition.find(params[:edition]) if params[:edition]
 
     respond_to do |format|
       if @book_title.save
-        if params[:edition]
-          @book_edition.book_title_id = @book_title.id
-          @book_edition.save
-        end
+        # if params[:edition].present?
+        #   @book_edition = BookEdition.find(params[:edition])
+        #   @book_edition.book_title_id = @book_title.id
+        #   @book_edition.save
+        # end
         format.html { redirect_to @book_title, notice: 'Book title was successfully created.' }
         format.json { render :show, status: :created, location: @book_title }
       else
@@ -102,6 +106,66 @@ class BookTitlesController < ApplicationController
     end
   end
 
+  # POST /search_isbn
+  def search_isbn
+    @edition = BookEdition.new
+    isbn = params[:isbn]
+
+    # First try to find the ISBN in Google Books
+    books = GoogleBooks::API.search("isbn:#{isbn}")
+    unless books.total_results == 0
+      book = books.first
+      @edition.title = book.title
+      @edition.description = book.description
+      @edition.authors = book.authors.join(', ')
+      @edition.publisher = book.publisher
+      @edition.isbn13 = book.isbn
+      @edition.isbn10 = book.isbn_10
+      @edition.page_count = book.page_count
+      @edition.small_thumbnail = book.covers[:small]
+      @edition.thumbnail = book.covers[:thumbnail]
+      @edition.published_date = book.published_date 
+
+      # Create a BookTitle with this edition
+      @book_title = BookTitle.new(
+        title: @edition.title,
+        authors: @edition.authors, 
+        publisher: @edition.publisher,
+        image_url: @edition.small_thumbnail)
+
+    else
+      result = ISBNDBClient::API.find(isbn)
+      puts result
+      unless result.nil?
+        book = result
+        @edition.title = book.title
+        @edition.description = book.description
+        @edition.authors = book.authors.map {|x| x['name']}.join(', ')
+        @edition.publisher = book.publisher
+        @edition.isbn13 = book.isbn
+        @edition.isbn10 = book.isbn10
+        @edition.page_count = book.page_count
+        @edition.published_date = book.published_date 
+
+        # Create a BookTitle with this edition
+        @book_title = BookTitle.new(
+          title: @edition.title,
+          authors: @edition.authors, 
+          publisher: @edition.publisher)
+      end
+    end
+    @book_title.book_editions.build @edition.attributes
+
+    render new_book_title_path
+  end
+  
+  rescue_from ISBNDBClient::API::Error, :with => :book_not_found
+
+  def book_not_found(exception)
+    flash[:alert] = exception
+    render :new
+  end
+  
   # POST /book_titles/delete
   def delete
     if params[:merge]
@@ -160,6 +224,8 @@ class BookTitlesController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def book_title_params
       params.require(:book_title).permit(:title, :authors, :publisher, :image_url,
-                                          {:book_editions_attributes => [:id]})
+                                          {book_editions_attributes: [:id, :google_book_id, :isbndb_id, :title, :subtitle, :authors, :publisher, :published_date,
+                                                                      :description, :isbn10, :isbn13, :page_count, :small_thumbnail, :thumbnail, 
+                                                                      :language, :edition_info, :tags, :subjects, :book_title_id]})
     end
 end
