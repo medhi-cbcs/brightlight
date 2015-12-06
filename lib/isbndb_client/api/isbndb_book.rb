@@ -38,12 +38,16 @@ module ISBNDBClient
       # "Paperback; 2004-10-15"
       #
       def extract_date(info)
-      	edition, published_date = info.split(/; /)
-        if Date.valid_date? *published_date.split('-').map(&:to_i)
-      	  published_date
-        else
-          nil
+      	info.split(/; /).each do |str|
+          begin
+            Date.valid_date? *str.split('-').map(&:to_i)
+          rescue 
+            nil
+          else
+            return str
+          end
         end
+        nil
       end
 
       # Extract page count from physical description text
