@@ -1,7 +1,7 @@
 require 'isbndb_client/api.rb'
 
 class BookTitlesController < ApplicationController
-  before_action :set_book_title, only: [:show, :edit, :update, :destroy]
+  before_action :set_book_title, only: [:show, :edit, :update, :destroy, :editions, :add_existing_editions]
 
   # GET /book_titles
   # GET /book_titles.json
@@ -60,6 +60,39 @@ class BookTitlesController < ApplicationController
   # GET /book_titles/1/edit
   def edit
   end
+
+  def editions
+    @filterrific = initialize_filterrific(
+      BookEdition,
+      params[:filterrific],
+      select_options: {
+        sorted_by: BookEdition.options_for_sorted_by
+      }
+    ) or return
+
+    @editions = @filterrific.find.page(params[:page])
+
+    respond_to do |format|
+      format.html
+      format.js
+    end
+
+    # Recover from invalid param sets, e.g., when a filter refers to the
+    # database id of a record that doesn’t exist any more.
+    # In this case we reset filterrific and discard all filter params.
+  rescue ActiveRecord::RecordNotFound => e
+    # There is an issue with the persisted param_set. Reset it.
+    puts "Had to reset filterrific params: #{ e.message }"
+    redirect_to(reset_filterrific_url(format: :html)) and return
+
+  end
+
+def add_existing_editions
+  params[:add].map {|id,on| BookEdition.find(id)}.each do |edition|
+    @book_title.book_editions << edition
+  end
+  redirect_to @book_title, notice: 'Book editions successfully added'
+end
 
   # POST /book_titles
   # POST /book_titles.json

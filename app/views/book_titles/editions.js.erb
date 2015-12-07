@@ -1,0 +1,5 @@
+<%# app/views/book_titles/editions.js.erb %>
+<% js = escape_javascript(
+  render(partial: 'book_editions/list', locals: { editions: @editions })
+) %>
+$("#filterrific_results").html("<%= js %>");

@@ -33,6 +33,10 @@ Rails.application.routes.draw do
       post 'delete'     # deletes several book titles at the same time
       post 'search_isbn'
     end
+    member do
+      get 'editions'
+      post 'add_existing_editions'
+    end
   end
   
   devise_for :users, controllers: {

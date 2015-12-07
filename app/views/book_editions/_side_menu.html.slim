@@ -21,10 +21,9 @@
         i.material-icons query_builder
         | Actions
       .collapsible-body
-        = link_to 'Add New Book', new_book_edition_path, class: "btn waves-effect waves-teal btn-default"
         - if params[:id] and action_name != 'edit'
           = link_to 'Edit', edit_book_edition_path(@book_edition), class: "btn waves-effect waves-teal btn-flat"
-          = link_to 'Create Title', new_book_title_path(params:{edition:@book_edition.id}), class: "btn waves-effect waves-teal btn-flat"
+
     li
       .collapsible-header
         i.material-icons info_outline
