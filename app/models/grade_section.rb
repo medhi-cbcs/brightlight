@@ -1,6 +1,5 @@
 class GradeSection < ActiveRecord::Base
   validates :name, presence: true
-  validates :grade_level, presence: true
   validates :academic_year, presence: true
 
   belongs_to :grade_level

@@ -4,12 +4,16 @@
     dl.row
       dd.col.s4
         .label Course Name
-        .item = link_to @course_section.course.name, @course_section.course
+        .item
+          - if @course_section.course.present?
+            = link_to @course_section.course.name, @course_section.course
+          - else
+            .red-text Error! Course doesn't exist.
       dd.col.s4
         .label Instructor
         .item = @course_section.instructor.present? ? link_to(@course_section.instructor.name, @course_section.instructor) : "--"
 
-  h5 Students in #{@course_section.grade_section.name}
+  h5 Students
   table.striped.compact
     thead
       th No

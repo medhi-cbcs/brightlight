@@ -1,0 +1,71 @@
+.app-side-menu
+  ul.collapsible data-collapsible='expandable'
+    li
+      .collapsible-header.active
+        i.material-icons class
+        | Course Texts
+      .collapsible-body
+        .cell-row
+          = link_to 'Course', @course
+        .cell-row
+          = link_to "Grade #{@course.grade_level.name}", @course.grade_level
+
+    li
+      .collapsible-header.active
+        i.material-icons query_builder
+        | Actions
+      .collapsible-body.center
+        h6 Add new text book title
+        .row
+          = form_tag ({controller: "course_texts", action: "create"}) do
+            .input-field.col.s12
+              / = label_tag 'book_title', 'Enter book title', class:'active'
+              = text_field_tag :title_field, nil, placeholder:"Enter book title"
+              = hidden_field :course_text, :course_id, {value: @course.id}
+              = hidden_field :course_text, :book_title_id
+            .action style="padding-top: 14px;"
+              button.btn.waves-effect.waves-light type="submit" Add
+
+          #book-cover.col.s12
+          #selected.col.s12
+
+
+        javascript:
+          $(function() {
+              function log(image_url,title ) {
+                $("#book-cover").empty();
+                $("#selected").empty()
+                $("<div>").text(title).prependTo("#selected");
+                $("<img>").attr("src", image_url).prependTo("#book-cover");
+                $("#title_field").val("");
+                $("#book-cover").scrollTop(0);
+              }
+              $("#title_field").autocomplete({
+                source: "/book_titles.json",
+                minLength: 2,
+                select: function(event, ui) {
+                  event.preventDefault();
+                  $("#course_text_book_title_id").val(ui.item.value);
+                  log(ui.item.image_url, ui.item? ui.item.label : "Nothing selected");
+                }
+              });
+            });
+    li
+      .collapsible-header
+        i.material-icons info_outline
+        | Related
+      .collapsible-body
+        .cell-row
+          a href="#" 
+            | Morbi leo risus
+        .cell-row
+          a href="#" 
+            | Porta ac consectetur ac
+    li
+      .collapsible-header
+        i.material-icons subject
+        | Reports
+      .collapsible-body
+        .cell-row
+          a href="#" 
+            | Print detail

@@ -16,4 +16,22 @@ class ApplicationController < ActionController::Base
   # def current_user
   #   @current_user ||= User.find_by(id: session[:user_id])
   # end
+
+	# rescue_from (ActiveRecord::RecordNotFound) { |exception| handle_exception(exception, 404) }
+
+ #  protected
+
+ #    def handle_exception(ex, status)
+ #        render_error(ex, status)
+ #        logger.error ex   
+ #    end
+
+ #    def render_error(ex, status)
+ #        @status_code = status
+ #        respond_to do |format|
+ #          format.html { render :template => "shared/error", :status => status }
+ #          format.all { render :nothing => true, :status => status }
+ #       end
+ #    end
+
 end

@@ -1,0 +1,7 @@
+.page-header
+  h4
+    = t "errors.#{@status_code}.heading"
+    small = t "errors.#{@status_code}.subheading"
+p = t "errors.#{@status_code}.description"
+- if defined? root_path 
+  = link_to t(:return_to_home), root_path

@@ -1,7 +1,8 @@
 class BookEdition < ActiveRecord::Base
-	validates_length_of :title, minimum: 2
-	validates_uniqueness_of :isbn10, :allow_blank => true, :allow_nil => true
-	validates_uniqueness_of :isbn13, :allow_blank => true, :allow_nil => true
+	validates :title, length: { minimum: 2 }
+	validates :isbn10, uniqueness: true, allow_blank: true, allow_nil: true
+	validates :isbn13, uniqueness: true, allow_blank: true, allow_nil: true
+	validates :book_title, presence: true
 
 	belongs_to :book_title
 	has_many :book_copies

@@ -15,8 +15,8 @@
 = form_tag do 
   .toolbar.z-depth-1
     #context-buttons
-      button.btn formaction="#{edit_merge_book_titles_path}" Merge
-      button.btn.btn-flat formaction="#{delete_book_titles_path}"
+      button.btn#merge-button formaction="#{edit_merge_book_titles_path}" Merge
+      button.btn.btn-flat#delete-button formaction="#{delete_book_titles_path}"
         i.material-icons delete
     .right
       = link_to book_titles_path(search:params[:search])
@@ -71,8 +71,10 @@ javascript:
     window.location = "#{book_titles_path(v:'list')}"
   }
   function toggle_toolbar_menu() {
-    if ($('input.checkbox:checked').length > 0) 
-      $('#context-buttons').show(); 
-    else
+    if ($('input.checkbox:checked').length > 0) {
+      $('#context-buttons').show();
+      $('#merge-button').prop('disabled', $('input.checkbox:checked').length < 2);
+    } else {
       $('#context-buttons').hide(); 
+    }
   }

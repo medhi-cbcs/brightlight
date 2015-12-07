@@ -47,12 +47,12 @@ h4 Grade #{@grade_section.grade_level.name} Section #{@grade_section.name}
       th Name
     tbody
       - i = 0
-      - @grade_section.course_sections.each do |course|
+      - @grade_section.course_sections.each do |course_section|
         tr
           td style="width:40px"
             = "#{i += 1}. "
           td
-            = link_to course.name, course
+            = link_to course_section.name ? course_section.name : '-- Missing name --', course_section, class:"#{'red-text' if course_section.name.blank?}"
 
 .toolbar.actions
   = link_to 'Back', grade_level_grade_sections_path(@grade_section.grade_level), class: "btn waves-effect waves-teal btn-flat"
