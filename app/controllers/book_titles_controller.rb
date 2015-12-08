@@ -19,7 +19,7 @@ class BookTitlesController < ApplicationController
     respond_to do |format|
       format.html { 
         if params[:search]
-          @book_titles = BookTitle.where('title LIKE ?', "%#{params[:search]}%").paginate(page: params[:page], per_page: items_per_page)
+          @book_titles = BookTitle.search_query(params[:search]).paginate(page: params[:page], per_page: items_per_page)
         else
           @book_titles = BookTitle.paginate(page: params[:page], per_page: items_per_page)
         end
