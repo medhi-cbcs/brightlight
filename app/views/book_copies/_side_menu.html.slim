@@ -11,7 +11,7 @@
         .cell-row
           a href="#" 
               | Book Titles
-        - if params[:id] && @book_copy.book_edition.present?
+        - if @book_copy.book_edition.present?
           .cell-row
             = link_to @book_copy.book_edition
               | Book Edition

@@ -4,10 +4,16 @@
 			.col.s10
 				label Create new copy
 				= f.text_field :barcode, {placeholder:'Scan/enter Barcode'}
-				= f.hidden_field :book_edition_id, value: @book_edition.id
-				= f.hidden_field :book_condition_id, value: BookCondition.where(code:'New').first.id
-				= f.hidden_field :status_id, value: Status.where(name:'Available').first.id
 			.col.s2
-				button.btn.btn-floating.waves-effect.waves-light.red name='commit' type='submit'
+				button.btn.btn-floating.waves-effect.waves-light.teal name='commit' type='submit'
 					i.material-icons add
+			.col.s10
+				= f.text_field :copy_no, {placeholder:'Enter Label'}
+				= f.hidden_field :book_edition_id, value: @book_edition.id
+			.col.s5
+				= f.collection_select :book_condition_id, BookCondition.all, :id, :code, {selected: 0}
+			.col.s5
+				= f.collection_select :status_id, Status.all, :id, :name, {selected: 1}
+				/= f.hidden_field :status_id, value: Status.where(name:'Available').first.id
+
 
