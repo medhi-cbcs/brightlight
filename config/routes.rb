@@ -24,6 +24,9 @@ Rails.application.routes.draw do
       post 'search_isbn'
     end
     resources :book_copies, shallow: true
+    member do
+      get 'new_labels'
+    end
   end
 
   resources :book_titles do
