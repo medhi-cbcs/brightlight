@@ -175,15 +175,14 @@ main {
 
 // ============================================ Side Menu ===========================================
 .app-side-menu {
-	margin-top: 1.14rem;
-
 	ul li {
 		.collapsible-header {
 			background-color: #eeeeee;
 			color: $grayDark;
 		}
 		.collapsible-body {
-			padding: 10px 20px 10px 20px;			
+			padding: 10px 20px 10px 20px;
+			background-color: white;		
 		}
 
 		.center {
@@ -193,6 +192,10 @@ main {
 
 	.btn {
 		margin: 5px 5px;
+	}
+
+	ul {
+		margin:0px;
 	}
 }
 
@@ -281,4 +284,54 @@ main {
 	.col {
 		padding-top: 10px;
 	}
+}
+
+// ============================================ Layout ===========================================
+
+
+body {
+  background-color: #fcfcfc;
+}
+#main,
+footer {
+  padding-left: 240px;
+}
+
+#input-select .input-field label {
+  position: absolute;
+  top: -14px;
+  font-size: 0.8rem;
+}
+#sidenav-overlay {
+  background-color: transparent;
+}
+.container {
+  padding: 0 0.5rem;
+  margin: 0 auto;
+  max-width: 100% !important;
+  width: 98%;
+}
+
+// ============================================ Left Sidebar ===========================================
+
+#left-sidebar {
+  position: fixed;
+  width: 230px;
+  left: 0px;
+  z-index: 999;
+  height: auto;
+}
+
+#slide-out li a i {
+  line-height: inherit;
+  width: 2rem;
+  font-size: 1.6rem;
+  display: block;
+  float: left;
+  text-align: center;
+  margin-right: 1rem;
+}
+
+ul.side-nav.leftside-navigation {
+  top: 64px;
 }

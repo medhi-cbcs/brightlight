@@ -10,3 +10,12 @@ $('.dropdown-button').dropdown({
 $('.collapsible').collapsible({
 	accordion : false // A setting that changes the collapsible behavior to expandable instead of the default accordion style
 });
+
+// Materialize sideNav  
+
+//Main Left Sidebar Menu
+// $('.sidebar-collapse').sideNav({
+// 	edge: 'left', // Choose the horizontal origin    
+// });
+$(".button-collapse").sideNav();
+
