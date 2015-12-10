@@ -13,9 +13,9 @@ $('.collapsible').collapsible({
 
 // Materialize sideNav  
 
-//Main Left Sidebar Menu
-// $('.sidebar-collapse').sideNav({
-// 	edge: 'left', // Choose the horizontal origin    
-// });
-$(".button-collapse").sideNav();
+$(".sidebar-collapse").sideNav({
+	menuWidth:300px;
+	edge: 'left';
+	closeOnClick: true;
+});
 

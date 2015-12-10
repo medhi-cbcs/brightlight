@@ -297,6 +297,13 @@ footer {
   padding-left: 240px;
 }
 
+@media only screen and (max-width: 993px) {
+  #main,
+  footer {
+    padding-left: 0px;
+  }
+}
+
 #input-select .input-field label {
   position: absolute;
   top: -14px;
@@ -334,4 +341,14 @@ footer {
 
 ul.side-nav.leftside-navigation {
   top: 64px;
+}
+
+a.sidebar-collapse {
+  position: absolute;
+  left: 14px;
+  top: 14px;
+
+  i {
+  	line-height: 37px;
+  }
 }
