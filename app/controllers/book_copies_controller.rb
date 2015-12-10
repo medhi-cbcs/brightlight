@@ -8,8 +8,8 @@ class BookCopiesController < ApplicationController
       @book_edition = BookEdition.find(params[:book_edition_id])
       @book_copies = @book_edition.book_copies.includes([:book_condition, :status])
       @book_copy = @book_edition.book_copies.new
-      @by_condition = BookCondition.all.map {|bc| [bc, @book_edition.book_copies.select {|c| c.book_condition_id == bc.id}.count ]}
-      @by_status = Status.all.map {|bc| [bc, @book_edition.book_copies.select {|c| c.status_id == bc.id}.count ]}
+      @by_condition = BookCondition.all.map {|bc| [bc, @book_copies.select {|c| c.book_condition_id == bc.id}.count ]}
+      @by_status = Status.all.map {|bc| [bc, @book_copies.select {|c| c.status_id == bc.id}.count ]}
       # @by_condition = @book_edition.book_copies.group(:book_condition).count
       # @by_status = @book_edition.book_copies.group(:status).count
     else
@@ -39,7 +39,7 @@ class BookCopiesController < ApplicationController
 
     respond_to do |format|
       if @book_copy.save
-        format.html { redirect_to @book_copy, notice: 'Book copy was successfully created.' }
+        format.html { redirect_to book_edition_book_copies_path(@book_copy.book_edition), notice: 'Book copy was successfully created.' }
         format.json { render :show, status: :created, location: @book_copy }
       else
         format.html { render :new }

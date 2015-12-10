@@ -39,6 +39,9 @@ gem 'pjax_rails'
 # Pagination
 gem 'will_paginate', '~> 3.0.6'
 
+# Search in table
+gem 'filterrific'
+
 # The Materialize UI framework
 gem 'materialize-sass'
 

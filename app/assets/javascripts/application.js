@@ -19,3 +19,4 @@
 //= require materialize-sprockets
 //= require materialize/extras/nouislider
 //= require cocoon
+//= require filterrific/filterrific-jquery

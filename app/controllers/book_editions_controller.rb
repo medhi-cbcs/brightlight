@@ -17,7 +17,7 @@ class BookEditionsController < ApplicationController
     end
     
     if params[:search]
-      @book_editions = BookEdition.where('title LIKE ?', "%#{params[:search]}%").paginate(page: params[:page], per_page: items_per_page)
+      @book_editions = BookEdition.search_query(params[:search]).paginate(page: params[:page], per_page: items_per_page)
     else
       @book_editions = BookEdition.paginate(page: params[:page], per_page: items_per_page)
     end

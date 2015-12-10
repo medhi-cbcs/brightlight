@@ -1,10 +1,11 @@
+div Add new book by ISBN No.
 .row
 	= form_tag({controller:'book_titles', action:'search_isbn'}, {method: "post"}) do
 		.input-field
 			.col.s10
-				= text_field_tag(:isbn, '', {placeholder:'Search for ISBN'})
+				= text_field_tag(:isbn, '', {placeholder:'Enter ISBN No'})
 
 			.col.s2
-				button.btn.btn-floating.waves-effect.waves-light.red name='commit' type='submit'
+				button.btn.btn-floating.waves-effect.waves-light.teal name='commit' type='submit'
 					i.material-icons add
 

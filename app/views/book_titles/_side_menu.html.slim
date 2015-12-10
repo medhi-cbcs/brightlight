@@ -16,9 +16,9 @@
       .collapsible-header.active
         i.material-icons query_builder
         | Actions
-      .collapsible-body style="padding-left:5px;"
-        = link_to 'Add Book Title', new_book_title_path, class: "btn waves-effect waves-teal btn-default"
+      .collapsible-body
         == render 'isbn_search'
+        = link_to 'Manually Add New Book >', new_book_title_path
         - if params[:id] and action_name != 'edit'
           = link_to 'Edit', edit_book_title_path(@book_title), class: "btn waves-effect waves-teal btn-flat"
 
