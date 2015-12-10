@@ -204,6 +204,8 @@ main {
 
 .list_image {
 	width:  128px;
+	margin-right: 20px;
+	margin-left: 10px;
 }
 
 .list_description {
@@ -319,11 +321,15 @@ footer {
   width: 98%;
 }
 
+section {
+	padding-left: 30px;
+}
+
 // ============================================ Left Sidebar ===========================================
 
 #left-sidebar {
   position: fixed;
-  width: 230px;
+  width: 240px;
   left: 0px;
   z-index: 999;
   height: auto;
