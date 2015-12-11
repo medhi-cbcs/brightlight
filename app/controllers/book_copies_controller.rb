@@ -20,6 +20,7 @@ class BookCopiesController < ApplicationController
   # GET /book_copies/1
   # GET /book_copies/1.json
   def show
+    @related_courses = @book_copy.book_title.courses if @book_copy.book_title.present?
   end
 
   # GET /book_copies/new

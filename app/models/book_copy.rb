@@ -5,4 +5,9 @@ class BookCopy < ActiveRecord::Base
   validates :book_edition, presence: true
   validates :barcode, presence: true, uniqueness: true
   
+  def book_title
+  	book_edition.book_title
+  end
+
+  
 end

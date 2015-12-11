@@ -34,13 +34,15 @@
             = link_to 'Edit', edit_book_copy_path(@book_copy), class: "btn waves-effect waves-teal btn-flat"
         
     li
-      .collapsible-header
+      .collapsible-header.active
         i.material-icons info_outline
         | Related
       .collapsible-body
-        .cell-row
-          a href="#" 
-            | Morbi leo risus
+        - if @related_courses.present?
+          .grey-text Courses using this text:
+          - @related_courses.each do |course|
+            .cell-row
+              = link_to course.name, course
         .cell-row
           a href="#" 
             | Porta ac consectetur ac
