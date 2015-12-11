@@ -18,6 +18,9 @@
           .cell-row
             a href="#" 
               | Book assignment
+        - if params[:book_edition_id]
+          .cell-row
+            = link_to 'Label new copies', new_labels_book_edition_path(params[:book_edition_id])
     li
       .collapsible-header.active
         i.material-icons query_builder
@@ -29,7 +32,7 @@
 
           - if params[:id] and action_name != 'edit'
             = link_to 'Edit', edit_book_copy_path(@book_copy), class: "btn waves-effect waves-teal btn-flat"
-
+        
     li
       .collapsible-header
         i.material-icons info_outline

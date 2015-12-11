@@ -135,6 +135,7 @@
                                  PATCH    /book_copies/:id(.:format)                                 book_copies#update
                                  PUT      /book_copies/:id(.:format)                                 book_copies#update
                                  DELETE   /book_copies/:id(.:format)                                 book_copies#destroy
+         new_labels_book_edition GET      /book_editions/:id/new_labels(.:format)                    book_editions#new_labels
                    book_editions GET      /book_editions(.:format)                                   book_editions#index
                                  POST     /book_editions(.:format)                                   book_editions#create
                 new_book_edition GET      /book_editions/new(.:format)                               book_editions#new
