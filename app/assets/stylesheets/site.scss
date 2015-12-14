@@ -175,6 +175,12 @@ main {
 
 // ============================================ Side Menu ===========================================
 .app-side-menu {
+	position: fixed;
+	width: 240px;
+	left: 0px;
+	z-index: 999;
+	height: 100%;
+
 	ul li {
 		.collapsible-header {
 			background-color: #eeeeee;
@@ -195,7 +201,9 @@ main {
 	}
 
 	ul {
-		margin:0px;
+		margin: 0px;
+		height: 100%;
+		background-color: white;
 	}
 }
 
@@ -327,13 +335,6 @@ section {
 
 // ============================================ Left Sidebar ===========================================
 
-#left-sidebar {
-  position: fixed;
-  width: 240px;
-  left: 0px;
-  z-index: 999;
-  height: auto;
-}
 
 #slide-out li a i {
   line-height: inherit;

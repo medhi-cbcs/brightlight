@@ -10,25 +10,25 @@ table
           dd = @book_edition.subtitle
           dd.col.s6
             .label Author
-            .item = @book_edition.authors
+            .item = @book_edition.authors || 'N/A'
           dd.col.s6
             .label ISBN 10
-            .item = @book_edition.isbn10
+            .item = @book_edition.isbn10 || 'N/A'
           dd.col.s6 
             .label Publisher
-            .item = @book_edition.publisher
+            .item = @book_edition.publisher || 'N/A'
           dd.col.s6
             .label ISBN
-            .item = @book_edition.isbn13
+            .item = @book_edition.isbn13 || 'N/A'
           dd.col.s6 
             .label Published Date
-            .item = @book_edition.published_date
+            .item = @book_edition.published_date || 'N/A'
           dd.col.s6
             .label Page count
-            .item = @book_edition.page_count
+            .item = @book_edition.page_count || 'N/A'
           dd.col.s12
             .label Description
-            .item = strip_tags(@book_edition.description)
+            .item = strip_tags(@book_edition.description) || 'N/A'
           dd.col.s6
             .label Title group
             .item = @book_edition.book_title ? link_to(@book_edition.book_title.title, @book_edition.book_title) : "--" 

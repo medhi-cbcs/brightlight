@@ -16,8 +16,8 @@ html
 
 	body class="main-home #{controller.controller_name}"
 		header
-			= render 'shared/layout/header'
-		
+			= render 'shared/layout/header_home'
+
 		main
 			= render 'shared/flash_messages'
 			.row
@@ -32,3 +32,4 @@ html
 			-if Rails.env.development?
 				.container
 					= debug(params)
+

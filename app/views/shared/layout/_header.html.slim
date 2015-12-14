@@ -96,4 +96,15 @@
       li
         = link_to 'Login', new_user_session_path
 
-  
+
+.app-side-menu
+  ul.fixed.hide-on-med-and-down.collapsible data-collapsible='expandable'
+    - if lookup_context.exists?("#{controller_name}/_side_menu")
+      = render "#{controller_name}/side_menu"
+    - else
+      = render 'shared/side_menu_bar'
+  ul#nav-mobile.side-nav.collapsible data-collapsible='expandable'
+    - if lookup_context.exists?("#{controller_name}/_side_menu")
+      = render "#{controller_name}/side_menu"
+    - else
+      = render 'shared/side_menu_bar'
