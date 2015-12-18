@@ -9,5 +9,4 @@ class BookCopy < ActiveRecord::Base
   	book_edition.book_title
   end
 
-  
 end

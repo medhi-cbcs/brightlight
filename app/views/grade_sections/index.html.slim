@@ -1,7 +1,5 @@
-h4 Grade #{@grade_level.name} Sections
-
-.toolbar
-  = link_to 'New Grade section', new_grade_level_grade_section_path(@grade_level.id), class:"btn"
+h5 Grade 
+.giant-letter = @grade_level.name
 
 table.striped
   thead
@@ -15,7 +13,7 @@ table.striped
         td
           = link_to grade_section.name, grade_section
         td
-          = grade_section.homeroom.present? ? grade_section.homeroom : '--'
+          = grade_section.homeroom.present? ? link_to(grade_section.homeroom) : '--'
 
 br
 
