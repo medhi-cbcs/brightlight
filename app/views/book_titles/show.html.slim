@@ -32,7 +32,21 @@ table.striped
       td = edition.isbn10
       td = edition.isbn13
 
+.row
+
+.row
+  = form_tag({controller:'book_editions', action:'search_isbn'}, {method: "post", class: "col s6"}) do
+    .col.s7
+      button.btn.btn-flat name='commit' type='submit'
+        i.material-icons.left playlist_add
+        | Add new ISBN
+    .col.s5
+      = text_field_tag(:isbn, '', {placeholder:'ISBN No.'})
+
 .toolbar.actions
-  = link_to '< Back', book_titles_path, class: 'btn btn-flat'
-  = link_to 'Edit', edit_book_title_path(@book_title), class: 'btn btn-primary'
-  = link_to 'Add existing editions', editions_book_title_path(@book_title), class: 'btn btn-primary'
+  //= link_to '< Back', book_titles_path, class: 'btn btn-flat'
+  = link_to 'Edit', edit_book_title_path(@book_title), class: 'waves-effect waves-teal btn-flat'
+  = link_to editions_book_title_path(@book_title), class: 'waves-effect waves-teal btn-flat'
+    | Add existing editions
+  
+

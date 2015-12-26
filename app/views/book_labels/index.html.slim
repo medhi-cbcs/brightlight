@@ -1,25 +1,38 @@
 h4 Book Labels
 
-.toolbar
-  = link_to 'New Book label', new_book_label_path, class: "btn waves-effect waves-teal btn-default"
-table.striped
+.toolbar.z-depth-1
+  / = label_tag "Grade"
+  / = collection_select "Grade", :grade, GradeLevel.all, :id, :name, {}, {onchange: 'filter_grade_level($(this).val())'}
+  = label_tag :grade_id, "Grade: ", {class: 'for-select'}
+  - options = options_for_select(GradeLevel.all.map {|g| [g.name, g.id]}, params[:grade_id])
+  = select_tag :grade_id, options, {class: 'browser-default select-grade', onchange:"filter_grade_level($(this).val())"}
+
+h5 Grade #{@grade_level.name}
+
+table
   thead
     tr
-      th Grade Sections
-      th Label
-      th
+      - @grade_sections.each do |section|
+        th = section.name
 
   tbody
-    - @book_labels.each do |book_label|
-      tr
-        td = book_copy.grade_section.name
-        td = link_to book_label.name, book_label
-
+    tr
+      - @grade_sections.each do |section|
         td
-          = link_to book_label
-            i.material-icons book
-          = link_to edit_book_label_path(book_label)
-            i.material-icons create
-          = link_to book_label, data: {:confirm => 'Are you sure?'}, :method => :delete
-            i.material-icons delete
+          ul 
+          - section.book_labels do |book_label|
+            li = link_to book_label.name, book_label
 
+        / td
+        /   = link_to book_label
+        /     i.material-icons book
+        /   = link_to edit_book_label_path(book_label)
+        /     i.material-icons create
+        /   = link_to book_label, data: {:confirm => 'Are you sure?'}, :method => :delete
+        /     i.material-icons delete
+
+javascript:
+  function filter_grade_level(level) {
+    window.location = "#{book_labels_path}" + "?grade=" + level;
+    console.log(level);
+  }

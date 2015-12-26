@@ -1,36 +1,30 @@
 li
   .collapsible-header.active
     i.material-icons class
-    | Book
+    | Book Label
   .collapsible-body
     .cell-row
       a href="#" 
-        | Course Text
+        | Grade Level
     .cell-row
       a href="#" 
         | Book assignment
-
 li
   .collapsible-header.active
     i.material-icons query_builder
     | Actions
   .collapsible-body
-    == render 'isbn_search'
-    = link_to 'Manually Create New Title >', new_book_title_path
-    - if params[:id] and action_name != 'edit'
-      = link_to 'Edit', edit_book_title_path(@book_title), class: "btn waves-effect waves-teal btn-flat"
-
+    .cell-row
+      a href="#" 
+        | Create numbered labels
+    
 li
-  .collapsible-header
+  .collapsible-header.active
     i.material-icons info_outline
     | Related
   .collapsible-body
     .cell-row
-      a href="#" 
-        | Morbi leo risus
-    .cell-row
-      a href="#" 
-        | Porta ac consectetur ac
+      = link_to 'Grade Levels', grade_levels_path
 li
   .collapsible-header
     i.material-icons subject
@@ -39,5 +33,3 @@ li
     .cell-row
       a href="#" 
         | Print detail
-
-
