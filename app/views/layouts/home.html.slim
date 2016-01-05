@@ -5,6 +5,8 @@ html
 		/[if lt IE 9]
 			script src="http://html5shiv.googlecode.com/svn/trunk/html5.js" type="text/javascript"
 		= stylesheet_link_tag "application", media: "all", 'data-turbolinks-track' => true
+		= stylesheet_link_tag "page-center.css", media: "screen,projection"
+
 		= csrf_meta_tags
 		/= favicon_link_tag
 		link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"
@@ -14,22 +16,20 @@ html
 
 		meta name="viewport" content="width=device-width, initial-scale=1.0"
 
-	body class="main-home #{controller.controller_name}"
-		header
-			= render 'shared/layout/header_home'
+	body class="main-home #{controller.controller_name} blue"
+		/header
+		/	= render 'shared/layout/header_home'
 
 		main
 			= render 'shared/flash_messages'
-			.row
-				.col.s12
-					div        
-						= yield :layout
+      
+			= yield :layout
 			
 
-		footer.page-footer
-			= render 'shared/layout/footer'
+		/ footer.page-footer
+		/ 	= render 'shared/layout/footer'
 
-			-if Rails.env.development?
-				.container
-					= debug(params)
+		/ 	-if Rails.env.development?
+		/ 		.container
+		/ 			= debug(params)
 
