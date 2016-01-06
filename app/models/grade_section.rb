@@ -9,7 +9,8 @@ class GradeSection < ActiveRecord::Base
   has_many :course_sections
   has_many :grade_sections_students, dependent: :destroy
   has_many :students, through: :grade_sections_students
-
+  has_many :book_labels
+  
   scope :with_academic_year_id, lambda {|id| where(academic_year_id: id)}
 
   accepts_nested_attributes_for :students

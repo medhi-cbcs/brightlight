@@ -1,58 +1,54 @@
-.app-side-menu
-  ul.collapsible data-collapsible='expandable'
-    li
-      .collapsible-header.active
-        i.material-icons class
-        | Book Copy
-      .collapsible-body
-        .cell-row
-          a href="#" 
-            | Courses
-        .cell-row
-          a href="#" 
-              | Book Titles
-        - if @book_copy.book_edition.present?
-          .cell-row
-            = link_to @book_copy.book_edition
-              | Book Edition
-          .cell-row
-            a href="#" 
-              | Book assignment
-        - if params[:book_edition_id]
-          .cell-row
-            = link_to 'Label new copies', new_labels_book_edition_path(params[:book_edition_id])
-    li
-      .collapsible-header.active
-        i.material-icons query_builder
-        | Actions
-      .collapsible-body style="padding-left:5px; padding-right:30px"
-        .cell-row
-          - if params[:book_edition_id]
-            == render 'barcode_scan_form'
+li
+  .collapsible-header.active
+    i.material-icons class
+    | Book Copy
+  .collapsible-body
+    .cell-row
+      a href="#" 
+        | Courses
+    - if @book_copy.book_title.present?
+      .cell-row
+        = link_to 'Book Title', @book_copy.book_title
+    .cell-row
+      = link_to 'Book Edition', @book_copy.book_edition
+    .cell-row
+      a href="#" 
+        | Book assignment
+    - if params[:book_edition_id]
+      .cell-row
+        = link_to 'Label new copies', new_labels_book_edition_path(params[:book_edition_id])
+li
+  .collapsible-header.active
+    i.material-icons query_builder
+    | Actions
+  .collapsible-body style="padding-left:5px; padding-right:30px"
+    .cell-row
+      - if params[:book_edition_id]
+        == render 'barcode_scan_form'
 
-          - if params[:id] and action_name != 'edit'
-            = link_to 'Edit', edit_book_copy_path(@book_copy), class: "btn waves-effect waves-teal btn-flat"
-        
-    li
-      .collapsible-header.active
-        i.material-icons info_outline
-        | Related
-      .collapsible-body
-        - if @related_courses.present?
-          .grey-text Courses using this text:
-          - @related_courses.each do |course|
-            .cell-row
-              = link_to course.name, course
+      - if params[:id] and action_name != 'edit'
+        = link_to 'Edit', edit_book_copy_path(@book_copy), class: "btn waves-effect waves-teal btn-flat"
+    
+li
+  .collapsible-header.active
+    i.material-icons info_outline
+    | Related
+  .collapsible-body
+    - if @related_courses.present?
+      .grey-text Courses using this text:
+      - @related_courses.each do |course|
         .cell-row
-          a href="#" 
-            | Porta ac consectetur ac
-    li
-      .collapsible-header
-        i.material-icons subject
-        | Reports
-      .collapsible-body
-        .cell-row
-          a href="#" 
-            | Print detail
+          = link_to course.name, course
+    .cell-row
+      a href="#" 
+        | Porta ac consectetur ac
+li
+  .collapsible-header
+    i.material-icons subject
+    | Reports
+  .collapsible-body
+    .cell-row
+      a href="#" 
+        | Print detail
 
 

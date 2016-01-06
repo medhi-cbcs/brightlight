@@ -6,7 +6,7 @@ h4 Grade Levels
 table.striped
   thead
     tr
-      th Name
+      th Grade
       th Sections
       th Teacher
 
@@ -14,7 +14,8 @@ table.striped
     - @grade_levels.each do |grade_level|
       - grade_sections = grade_level.grade_sections.where(academic_year_id:@year_id)
       tr
-        td = grade_level.name
+        td 
+          .giant-letter = grade_level.name
         td
           - grade_sections.each do |section|
             div = link_to section.name, section

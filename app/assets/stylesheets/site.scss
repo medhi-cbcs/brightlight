@@ -50,10 +50,10 @@ form {
 		margin: 0 0 10px 0;
 	}
 
-	i, em {
-		font-size: 0.8rem;
-		color: #9e9e9e;
-	}
+	// i, em {
+	// 	font-size: 0.8rem;
+	// 	color: #9e9e9e;
+	// }
 
 	.cover-selection {
 		[type="radio"]:not(:checked) + label, [type="radio"]:checked + label {
@@ -97,7 +97,11 @@ form {
 	}
 }
 
+// ========================================= Typography =============================================
 
+.giant-letter {
+	font-size: 4rem;
+}
 
 // ============================================ Buttons =============================================
 
@@ -117,11 +121,11 @@ form {
 	height: 50px;
 	border-top: 1px solid $grayLighter;
 
-	i.material-icons {
-		color: $gray;
-		margin-left: 6px;
-		font-size: 2.2rem;
-	}
+	// i.material-icons {
+	// 	color: $gray;
+	// 	margin-left: 6px;
+	// 	font-size: 2.2rem;
+	// }
 
 	.btn {
 		margin-left: 6px;
