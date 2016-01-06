@@ -1,9 +1,10 @@
 #login-page.row
-	.card.z-depth-4.col.s12.margin
+	.card.z-depth-4.col.s12.zero-padding
 		= form_for(resource, as: resource_name, url: registration_path(resource_name), html: {class: 'login-form'}) do |f|
 			.card-content.white
-				span.card-title.grey-text Sign Up
-				.row
+				.center
+					span.card-title.grey-text Sign Up
+				.row.zero-margin
 					.input-field.col.s12
 						i.mdi-social-person-outline.prefix
 						= f.label :name
@@ -24,13 +25,15 @@
 						= f.label :password_confirmation
 						= f.password_field :password_confirmation, autocomplete: "off"
 					- if devise_mapping.rememberable?
-						.input-field.col.s12.login-text
+						.input-field.col.s12
 							= f.check_box :remember_me
 							= f.label :remember_me
 			.card-action
-				button.btn.waves-effect.waves-light.col.s12 type="submit" Sign Up
-			.row
-				.input-field.col.s12.m12.l12
+				.row.zero-margin
+					button.btn.waves-effect.waves-light.col.s12 type="submit" Sign Up
+
+			.row.with-side-padding
+				.input-field.col.s12.center
 					| Have an account? 
-					= link_to 'Log in', new_user_session_path
+					= link_to 'Login', new_user_session_path
 

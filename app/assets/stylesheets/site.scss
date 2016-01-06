@@ -333,10 +333,23 @@ section {
 	padding-left: 30px;
 }
 
-.margin {
+.zero-margin {
   margin: 0 !important;
 }
 
+.zero-padding {
+  padding: 0 !important;
+}
+
+.card-action {
+	.row {
+		margin-bottom: 0;
+	}
+}
+
+.with-side-padding {
+	padding: 0 20px;
+}
 // ============================================ Left Sidebar ===========================================
 
 
@@ -377,9 +390,4 @@ a.sidebar-collapse {
 .profile-image-login{
   width: 100px;
   height: 100px !important;
-}
-
-.login-text {
-  margin-top: -6px;
-  margin-left: -6px !important;
 }
