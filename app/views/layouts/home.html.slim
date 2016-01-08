@@ -11,22 +11,23 @@ html
     link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"
 
     = javascript_include_tag "application", 'data-turbolinks-track' => true
-    = yield :javascript
 
     meta name="viewport" content="width=device-width, initial-scale=1.0"
 
   body class="main-home #{controller.controller_name} blue darken-4"
     header
-      = render 'shared/layout/header_home'
+      = render 'shared/layout/header'
     
     main
-      = render 'shared/flash_messages'
-      
-      = yield :layout
-      
+      .container
+        = render 'shared/flash_messages'
+        section
+          = yield :layout
 
     footer.page-footer
       = render 'shared/layout/footer'
+      = yield :javascript
+      = render 'shared/materialize_js_inits'
 
       -if Rails.env.development?
         .container
