@@ -1,70 +1,75 @@
 h4 = @course.name 
 
-.list_description
-  dl.row
-    dd.col.s2
-      .label Course Number
-      .item = @course.number
-    dd.col.s10
-      .label Description
-      .item = @course.description
-  dl.row
-    dd.col.s2
-      .label Grade
-      .item = @course.grade_level.name
-    dd.col.s4
-      .label Year
-      .item = @course.academic_year.name
-    dd.col.s4
-      .label Terms
-      - for term in @course.academic_terms
-        .item = term.name
-
-.row.tabbed
-  .col.s12
-    ul.tabs.z-depth-1.orange
-      li.tab.col.s3
-        a href='#tab1' Sections
-      li.tab.col.s3
-        a href='#tab2' Textbooks
-
-#tab1
-  .row
-    h5 Course Sections
-    - if @course.course_sections.present?
-      table.striped.col.s6
-        thead
-          th Section
-          th Instructor
-        tbody
-        - @course.course_sections.each do |section|
-          tr
-            td = link_to(section.name, section)
-            td = link_to(section.instructor.name, section.instructor) if section.instructor
-    - else
-      p.red-text No sections
-
-#tab2
-  .row
-    h5 Textbooks
-    - if @course.course_texts.present?
-      table.striped.col.s6
-        tbody
-        - @course.course_texts.each do |course_text|
-          - textbook = course_text.book_title
-          - if textbook
-            tr
-              td style="vertical-align:top"
-                - thumbnail = textbook.image_url.present? ? textbook.image_url : 'book-icon.png'
-                = link_to textbook
-                  = image_tag(thumbnail, class: 'list_image')
-              td 
-                em = link_to(textbook.title, textbook)
-                p  = textbook.authors
-    - else
-      p.red-text No textbooks
 .row
-  .toolbar.actions
-    = link_to '< Back', :back, class: 'btn btn-flat'
-    = link_to 'Edit', edit_course_path(@course), class: 'btn btn-primary'
+  .col.s12
+    .card-panel
+      .list_description
+        dl.row
+          dd.col.s2
+            .label Course Number
+            .item = @course.number
+          dd.col.s10
+            .label Description
+            .item = @course.description
+        dl.row
+          dd.col.s2
+            .label Grade
+            .item = @course.grade_level.name
+          dd.col.s4
+            .label Year
+            .item = @course.academic_year.name
+          dd.col.s4
+            .label Terms
+            - for term in @course.academic_terms
+              .item = term.name
+
+.row
+  .col.s12
+    .card   
+      .tabbed
+        ul.tabs.z-depth-1
+          li.tab.col.s6
+            a href='#tab1' Sections
+          li.tab.col.s6
+            a href='#tab2' Textbooks
+
+        #tab1
+          .card-content
+            h5 Course Sections
+            - if @course.course_sections.present?
+              table.striped
+                thead
+                  th Section
+                  th Instructor
+                tbody
+                - @course.course_sections.each do |section|
+                  tr
+                    td = link_to(section.name, section)
+                    td = link_to(section.instructor.name, section.instructor) if section.instructor
+            - else
+              p.red-text No sections
+
+        #tab2
+          .card-content
+            h5 Textbooks
+            - if @course.course_texts.present?
+              table.striped
+                tbody
+                - @course.course_texts.each do |course_text|
+                  - textbook = course_text.book_title
+                  - if textbook
+                    tr
+                      td style="vertical-align:top"
+                        - thumbnail = textbook.image_url.present? ? textbook.image_url : 'book-icon.png'
+                        = link_to textbook
+                          = image_tag(thumbnail, class: 'list_image')
+                      td 
+                        em = link_to(textbook.title, textbook)
+                        p  = textbook.authors
+            - else
+              p.red-text No textbooks
+    
+      .card-action
+        = link_to '< Back', :back, class: 'btn btn-flat'
+        = link_to 'Edit', edit_course_path(@course), class: 'btn btn-primary'
 
