@@ -1,17 +1,16 @@
 li
-  .collapsible-header.active
+  .collapsible-header
     i.material-icons class
     | Book
   .collapsible-body
-    .cell-row
-      a href="#" 
-        | Course Text
-    .cell-row
-      a href="#" 
-        | Book assignment
+    ul
+      li.active
+        a href="/courses" Course Text
+      li.active
+        a href="/courses" Book assignment
 
 li
-  .collapsible-header.active
+  .collapsible-header
     i.material-icons query_builder
     | Actions
   .collapsible-body
@@ -19,25 +18,5 @@ li
     = link_to 'Manually Create New Title >', new_book_title_path
     - if params[:id] and action_name != 'edit'
       = link_to 'Edit', edit_book_title_path(@book_title), class: "btn waves-effect waves-teal btn-flat"
-
-li
-  .collapsible-header
-    i.material-icons info_outline
-    | Related
-  .collapsible-body
-    .cell-row
-      a href="#" 
-        | Morbi leo risus
-    .cell-row
-      a href="#" 
-        | Porta ac consectetur ac
-li
-  .collapsible-header
-    i.material-icons subject
-    | Reports
-  .collapsible-body
-    .cell-row
-      a href="#" 
-        | Print detail
 
 

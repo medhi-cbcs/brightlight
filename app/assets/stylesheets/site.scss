@@ -187,6 +187,43 @@ main {
 }
 
 // ============================================ Side Menu ===========================================
+
+ul.side-nav.fixed li.logo {
+    text-align: center;
+    margin-top: 32px;
+    margin-bottom: 80px
+}
+
+ul.side-nav.fixed li.logo:hover {
+    background-color: transparent
+}
+
+ul.side-nav.fixed {
+    overflow: hidden
+}
+
+ul.side-nav.fixed li {
+    line-height: 44px
+}
+
+ul.side-nav.fixed li:hover, ul.side-nav.fixed li.active {
+    background-color: rgba(0, 0, 0, 0.05)
+}
+
+ul.side-nav.fixed li a {
+    font-size: 13px;
+    line-height: 44px;
+    height: 44px
+}
+
+ul.side-nav.fixed ul.collapsible-accordion {
+    background-color: #FFF
+}
+
+ul.side-nav.fixed:hover {
+    overflow-y: auto
+}
+
 .app-side-menu {
 	position: fixed;
 	width: 240px;

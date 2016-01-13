@@ -18,6 +18,21 @@ html
 			= render 'shared/layout/header'
 
 		main#main
+			/ .navbar-fixed
+			/ 	nav
+			/ 		.nav-wrapper
+			/ 			ul.right.hide-on-med-and-down
+			/ 				li
+			/ 					= current_user.name if current_user
+			/ 				li
+			/ 					a.dropdown-button href="#" data-activates="dropdown1"
+			/ 						- if current_user
+			/ 							- if current_user.image
+			/ 								= image_tag current_user.image, alt: current_user.name, class: 'user-avatar'
+			/ 							- else
+			/ 								i.material-icons perm_identity
+			/ 						- else
+			/ 							i.material-icons perm_identity
 			.container
 				= render 'shared/flash_messages'
 				section

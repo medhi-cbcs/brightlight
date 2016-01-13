@@ -1,15 +1,55 @@
-.collection
-	a.collection-item.active href="#" 
-		| Cras justo odio
-	a.collection-item href="#" 
-		| Dapibus ac facilisis in
-	a.collection-item href="#" 
-		| Morbi leo risus
-	a.collection-item href="#" 
-		| Porta ac consectetur ac
-	a.collection-item href="#" 
-		| Vestibulum at eros
-	a.collection-item href="#" 
-		| Morbi leo risus
-		span.badge.new 38
-
+li
+	.collapsible-header.waves-effect.waves-cyan
+		i.material-icons info_outline
+		i.mdi-navigation-chevron-right.right
+		| Books
+	.collapsible-body
+		ul
+			li
+				a href="/book_titles" Titles
+			li
+				a href="/book_editions" Editions
+			li
+				a href="/book_assignments" Assignments
+			li
+				a href="/book_labels" Labels
+li
+	.collapsible-header.waves-effect.waves-cyan
+		i.material-icons subject
+		i.mdi-navigation-chevron-right.right
+		| School
+	.collapsible-body
+		ul
+			li
+				a href="/courses" Courses
+			li
+				a href="/grade_levels" Grade Levels
+			li
+				a href="/departments" Departments
+li
+	.collapsible-header.waves-effect.waves-cyan
+		i.material-icons subject
+		i.mdi-navigation-chevron-right.right
+		| People
+	.collapsible-body
+		ul
+			li
+				a href="/students" Students
+			li
+				a href="/guardians" Guardians
+			li
+				a href="/employees?q=teacher" Teachers
+			li
+				a href="/employees?q=staff" Staff
+li
+	.collapsible-header.waves-effect.waves-cyan
+		i.material-icons subject
+		i.mdi-navigation-chevron-right.right
+		| Admin
+	.collapsible-body
+		ul
+			li
+				a href="/academic_years" Academic Years
+			li
+				a href="/users" 
+					| Users

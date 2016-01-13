@@ -1,148 +1,153 @@
 // Navbar
-.navbar-fixed
-  nav
-    .nav-wrapper
-      / a.brand-logo href="#{dashboard_path}" 
-      /   = image_tag 'lightbulb-icon.png', class: "logo-icon"
-      / a.brand-logo href="/" style="margin-left: 100px;"
-      /   | Brightlight
-      / a.right-sidebar-collapse.hide-on-large-only.right href="#" data-activates="nav-menu-mobile" style="margin-right:20px"
-      /   i.mdi-navigation-more-vert
+/ .navbar-fixed
+/   nav
+/     .nav-wrapper
+/       a.brand-logo href="#{dashboard_path}" 
+/         = image_tag 'lightbulb-icon.png', class: "logo-icon"
+/       a.brand-logo href="/" style="margin-left: 100px;"
+/         | Brightlight
+/       a.right-sidebar-collapse.hide-on-large-only.right href="#" data-activates="nav-menu-mobile" style="margin-right:20px"
+/         i.mdi-navigation-more-vert
 
-      / ul.right.hide-on-med-and-down
-      /   li
-      /     a.dropdown-button data-activates="dropdown4" href="#" 
-      /       | Books 
-      /       i.material-icons.right arrow_drop_down
-      /   li
-      /     a.dropdown-button data-activates="dropdown3" href="#" 
-      /       | School
-      /       i.material-icons.right arrow_drop_down
-      /   li
-      /     a.dropdown-button data-activates="dropdown2" href="#" 
-      /       | People
-      /       i.material-icons.right arrow_drop_down
-      /   li
-      /     = current_user.name if current_user
-      /   li
-      /     a.dropdown-button href="#" data-activates="dropdown1"
-      /       - if current_user
-      /         - if current_user.image
-      /           = image_tag current_user.image, alt: current_user.name, class: 'user-avatar'
-      /         - else
-      /           i.material-icons perm_identity
-      /       - else
-      /         i.material-icons perm_identity
-    
-    .app-side-menu.z-depth-2
-      ul#nav-menu-mobile.side-nav.collapsible data-collapsible='expandable'
-        li
-          .collapsible-header.active
-            i.material-icons book
-            | Book
-          .collapsible-body
-            ul
-              li
-                a href="/book_titles" Titles
-              li
-                a href="/book_editions" Editions
-              li.divider
-              li
-                a href="/book_assignments" Assignments
-              li
-                a href="/book_labels" Labels
-        li
-          .collapsible-header.active
-            i.material-icons school
-            | School
-          .collapsible-body
-            .cell-row
-        li
-          .collapsible-header.active
-            i.material-icons people
-            | People
-          .collapsible-body
-            .cell-row
-        li
-          .collapsible-header.active
-            - if current_user
-              - if current_user.image
-                = image_tag current_user.image, alt: current_user.name, class: 'user-avatar'
-              - else
-                i.material-icons perm_identity
-            - else
-              i.material-icons perm_identity
-              = current_user ? current_user.name : 'User'
-            .collapsible-body
-              .cell-row
-          a.dropdown-button href="#" data-activates="dropdown1"
-            = current_user.name if current_user
-
-
-    // Dropdown menu
-    ul#dropdown4.dropdown-content
-      li
-        a href="/book_titles" Book Titles
-      li
-        a href="/book_editions" Book Editions
-      li.divider
-      li
-        a href="/book_assignments" Book Assignments
-      li
-        a href="/book_labels" Book Labels
-      li.divider
-      / li
-      /   a href="/book_copies" Book Copies
-
-    ul#dropdown3.dropdown-content
-      li
-        a href="/courses" Courses
-      li.divider
-      li
-        a href="/academic_years" Academic Years
-      li
-        a href="/grade_levels" Grade Levels
-      li.divider
-      li
-        a href="/departments" Departments
-      li
-        a href="#" . . .
-
-    ul#dropdown2.dropdown-content
-      li
-        a href="/students" Students
-      li
-        a href="/guardians" Guardians
-      li.divider
-      li
-        a href="/employees?q=teacher" Teachers
-      li
-        a href="/employees?q=staff" Staff
-
-    ul#dropdown1.dropdown-content
-      - if user_signed_in?
-        / li
-        /   = link_to 'Edit Profile', "#"
-        li 
-          = link_to 'Change password', edit_user_registration_path
-        li.divider
-        li
-          = link_to 'Log Out', destroy_user_session_path, method:'delete'
-      - else
-        li
-          = link_to 'Sign up', new_user_registration_path
-        li
-          = link_to 'Login', new_user_session_path
+/       ul.right.hide-on-med-and-down
+/         li
+/           a.dropdown-button data-activates="dropdown4" href="#" 
+/             | Books 
+/             i.material-icons.right arrow_drop_down
+/         li
+/           a.dropdown-button data-activates="dropdown3" href="#" 
+/             | School
+/             i.material-icons.right arrow_drop_down
+/         li
+/           a.dropdown-button data-activates="dropdown2" href="#" 
+/             | People
+/             i.material-icons.right arrow_drop_down
+/         li
+/           = current_user.name if current_user
+/         li
+/           a.dropdown-button href="#" data-activates="dropdown1"
+/             - if current_user
+/               - if current_user.image
+/                 = image_tag current_user.image, alt: current_user.name, class: 'user-avatar'
+/               - else
+/                 i.material-icons perm_identity
+/             - else
+/               i.material-icons perm_identity
+   
+/     .app-side-menu.z-depth-2
+/       ul#nav-menu-mobile.side-nav.collapsible data-collapsible='expandable'
+/         li
+/           .collapsible-header.active
+/             i.material-icons book
+/             | Book
+/           .collapsible-body
+/             ul
+/               li
+/                 a href="/book_titles" Titles
+/               li
+/                 a href="/book_editions" Editions
+/               li.divider
+/               li
+/                 a href="/book_assignments" Assignments
+/               li
+/                 a href="/book_labels" Labels
+/         li
+/           .collapsible-header.active
+/             i.material-icons school
+/             | School
+/           .collapsible-body
+/             .cell-row
+/         li
+/           .collapsible-header.active
+/             i.material-icons people
+/             | People
+/           .collapsible-body
+/             .cell-row
+/         li
+/           .collapsible-header.active
+/             - if current_user
+/               - if current_user.image
+/                 = image_tag current_user.image, alt: current_user.name, class: 'user-avatar'
+/               - else
+/                 i.material-icons perm_identity
+/             - else
+/               i.material-icons perm_identity
+/               = current_user ? current_user.name : 'User'
+/             .collapsible-body
+/               .cell-row
+/           a.dropdown-button href="#" data-activates="dropdown1"
+/             = current_user.name if current_user
 
 
-.app-side-menu
-  ul.fixed.hide-on-med-and-down.collapsible data-collapsible='expandable'
-    - if lookup_context.exists?("#{controller_name}/_side_menu")
-      = render "#{controller_name}/side_menu"
-    - else
+/     // Dropdown menu
+/     ul#dropdown4.dropdown-content
+/       li
+/         a href="/book_titles" Book Titles
+/       li
+/         a href="/book_editions" Book Editions
+/       li.divider
+/       li
+/         a href="/book_assignments" Book Assignments
+/       li
+/         a href="/book_labels" Book Labels
+/       li.divider
+/       / li
+/       /   a href="/book_copies" Book Copies
+
+/     ul#dropdown3.dropdown-content
+/       li
+/         a href="/courses" Courses
+/       li.divider
+/       li
+/         a href="/academic_years" Academic Years
+/       li
+/         a href="/grade_levels" Grade Levels
+/       li.divider
+/       li
+/         a href="/departments" Departments
+/       li
+/         a href="#" . . .
+
+/     ul#dropdown2.dropdown-content
+/       li
+/         a href="/students" Students
+/       li
+/         a href="/guardians" Guardians
+/       li.divider
+/       li
+/         a href="/employees?q=teacher" Teachers
+/       li
+/         a href="/employees?q=staff" Staff
+
+/     ul#dropdown1.dropdown-content
+/       - if user_signed_in?
+/         / li
+/         /   = link_to 'Edit Profile', "#"
+/         li 
+/           = link_to 'Change password', edit_user_registration_path
+/         li.divider
+/         li
+/           = link_to 'Log Out', destroy_user_session_path, method:'delete'
+/       - else
+/         li
+/           = link_to 'Sign up', new_user_registration_path
+/         li
+/           = link_to 'Login', new_user_session_path
+
+.container
+  a.hide-on-large-only.sidebar-collapse.top-nav.waves-effect.waves-light.circle href="#" data-activates="nav-mobile"
+    i.mdi-navigation-menu
+ul#nav-mobile.side-nav.fixed
+  li.logo
+    a#logo-container.brand-logo href="#{dashboard_path}" 
+      = image_tag 'lightbulb-icon.png', class: "logo-icon"
+      /a.brand-logo href="/" style="margin-left: 10px;"
+      | Brightlight
+  - if lookup_context.exists?("#{controller_name}/_side_menu")
+    li.no-padding
+      ul.collapsible data-collapsible='accordion'
+        = render "#{controller_name}/side_menu"
+  li.no-padding
+    ul.collapsible data-collapsible='accordion'
       = render 'shared/side_menu_bar'
-  ul#nav-mobile.side-nav.collapsible data-collapsible='expandable'
-    - if lookup_context.exists?("#{controller_name}/_side_menu")
-      = render "#{controller_name}/side_menu"
-    - else
-      = render 'shared/side_menu_bar'
+
