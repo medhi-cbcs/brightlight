@@ -1,59 +1,64 @@
 h4 = @book_edition.title
-table
-  tr
-    td style="vertical-align:top"
-      - thumbnail = @book_edition.small_thumbnail.present? ? @book_edition.small_thumbnail : 'book-icon.png' 
-      = image_tag(thumbnail, class: 'list_image')
-    td
-      .list_description
-        dl.row
-          dd.col.s6
-            .label Author
-            .item = @book_edition.authors
-          dd.col.s6
-            .label ISBN 10
-            .item = @book_edition.isbn10
-          dd.col.s6 
-            .label Publisher
-            .item = @book_edition.publisher
-          dd.col.s6
-            .label ISBN
-            .item = @book_edition.isbn13
-        
-        h6 Number of copies:
-        dl.row
-          - @by_condition.each do |c|
-            dd.col.s2
-              .label = c.first.code
-              .item = c.last
-        dl.row
-          - @by_status.each do |c|
-            dd.col.s2
-              .label = c.first.name
-              .item = c.last
 
-h5 Book Copies
-table.striped
-  thead
+.card-panel
+  table
     tr
-      th Barcode
-      th Label
-      th Condition
-      th Status
-      th Actions
+      td style="vertical-align:top"
+        - thumbnail = @book_edition.small_thumbnail.present? ? @book_edition.small_thumbnail : 'book-icon.png' 
+        = image_tag(thumbnail, class: 'list_image')
+      td
+        .list_description
+          dl.row
+            dd.col.s6
+              .label Author
+              .item = @book_edition.authors
+            dd.col.s6
+              .label ISBN 10
+              .item = @book_edition.isbn10
+            dd.col.s6 
+              .label Publisher
+              .item = @book_edition.publisher
+            dd.col.s6
+              .label ISBN
+              .item = @book_edition.isbn13
+          
+          h6 Number of copies:
+          dl.row
+            - @by_condition.each do |c|
+              dd.col.s2
+                .label = c.first.code
+                .item = c.last
+          dl.row
+            - @by_status.each do |c|
+              dd.col.s2
+                .label = c.first.name
+                .item = c.last
 
-  tbody
-    - @book_copies.order(:copy_no).each do |book_copy|
+.toolbar.z-depth-1
+  h5 Book Copies
+
+.card-panel
+  table.striped
+    thead
       tr
-        td = link_to book_copy.barcode, book_copy
-        td = book_copy.copy_no
-        td = book_copy.book_condition.present? ? book_copy.book_condition.code : 'N/A'
-        td = book_copy.status.present? ? book_copy.status.name : 'N/A'
+        th Barcode
+        th Label
+        th Condition
+        th Status
+        th Actions
 
-        td
-          = link_to book_copy
-            i.material-icons book
-          = link_to edit_book_copy_path(book_copy)
-            i.material-icons create
-          = link_to book_copy, data: {:confirm => 'Are you sure?'}, :method => :delete
-            i.material-icons delete
+    tbody
+      - @book_copies.order(:copy_no).each do |book_copy|
+        tr
+          td = link_to book_copy.barcode, book_copy
+          td = book_copy.copy_no
+          td = book_copy.book_condition.present? ? book_copy.book_condition.code : 'N/A'
+          td = book_copy.status.present? ? book_copy.status.name : 'N/A'
+
+          td
+            = link_to book_copy
+              i.material-icons book
+            = link_to edit_book_copy_path(book_copy)
+              i.material-icons create
+            = link_to book_copy, data: {:confirm => 'Are you sure?'}, :method => :delete
+              i.material-icons delete

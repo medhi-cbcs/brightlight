@@ -24,45 +24,46 @@
       = link_to book_titles_path({v:'list',search:params[:search]})
         i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="List view"  list
 
-  table.striped
-    tbody
-      - @book_titles.each do |book_title|
-        tr
-          td
-            input.checkbox type="checkbox" id="cb-#{book_title.id}" name="merge[#{book_title.id}]" onchange="toggle_toolbar_menu()"
-            / This label is required for Materialize CSS to work
-            = label_tag "cb-#{book_title.id}", ""
-          - if @view_style == :list
+  .card-panel
+    table.striped
+      tbody
+        - @book_titles.each do |book_title|
+          tr
             td
-              .list_description
-                div = link_to book_title.title, book_title
-                - if book_title.authors.present?
-                  span.label Author:
-                  span.item = book_title.authors
-                - if book_title.publisher.present?
-                  span.label Publisher:
-                  span.item = book_title.publisher
-
-            td = link_to 'Edit', edit_book_title_path(book_title), class: "btn waves-effect waves-teal btn-flat btn-small"
-
-          - else
-            td style="vertical-align:top"
-              - thumbnail = book_title.image_url.present? ? book_title.image_url : 'book-icon.png' 
-              = image_tag(thumbnail, class: 'list_image')
-            td
-              .list_description
-                dl.row
-                  dt = link_to book_title.title, book_title
+              input.checkbox type="checkbox" id="cb-#{book_title.id}" name="merge[#{book_title.id}]" onchange="toggle_toolbar_menu()"
+              / This label is required for Materialize CSS to work
+              = label_tag "cb-#{book_title.id}", ""
+            - if @view_style == :list
+              td
+                .list_description
+                  div = link_to book_title.title, book_title
                   - if book_title.authors.present?
-                    dd
-                      .label Author:
-                      .item = book_title.authors
+                    span.label Author:
+                    span.item = book_title.authors
                   - if book_title.publisher.present?
-                    dd
-                      .label Publisher:
-                      .item = book_title.publisher
+                    span.label Publisher:
+                    span.item = book_title.publisher
 
-            td = link_to 'Edit', edit_book_title_path(book_title), class: "btn waves-effect waves-teal btn-flat btn-small"
+              td = link_to 'Edit', edit_book_title_path(book_title), class: "btn waves-effect waves-teal btn-flat btn-small"
+
+            - else
+              td style="vertical-align:top"
+                - thumbnail = book_title.image_url.present? ? book_title.image_url : 'book-icon.png' 
+                = image_tag(thumbnail, class: 'list_image')
+              td
+                .list_description
+                  dl.row
+                    dt = link_to book_title.title, book_title
+                    - if book_title.authors.present?
+                      dd
+                        .label Author:
+                        .item = book_title.authors
+                    - if book_title.publisher.present?
+                      dd
+                        .label Publisher:
+                        .item = book_title.publisher
+
+              td = link_to 'Edit', edit_book_title_path(book_title), class: "btn waves-effect waves-teal btn-flat btn-small"
 
 = will_paginate @book_titles
 

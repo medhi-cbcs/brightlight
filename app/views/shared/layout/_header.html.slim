@@ -2,37 +2,37 @@
 .navbar-fixed
   nav
     .nav-wrapper
-      a.brand-logo href="#{dashboard_path}" 
-        = image_tag 'lightbulb-icon.png', class: "logo-icon"
-      a.brand-logo href="/" style="margin-left: 100px;"
-        | Brightlight
-      a.right-sidebar-collapse.hide-on-large-only.right href="#" data-activates="nav-menu-mobile" style="margin-right:20px"
-        i.mdi-navigation-more-vert
+      / a.brand-logo href="#{dashboard_path}" 
+      /   = image_tag 'lightbulb-icon.png', class: "logo-icon"
+      / a.brand-logo href="/" style="margin-left: 100px;"
+      /   | Brightlight
+      / a.right-sidebar-collapse.hide-on-large-only.right href="#" data-activates="nav-menu-mobile" style="margin-right:20px"
+      /   i.mdi-navigation-more-vert
 
-      ul.right.hide-on-med-and-down
-        li
-          a.dropdown-button data-activates="dropdown4" href="#" 
-            | Books 
-            i.material-icons.right arrow_drop_down
-        li
-          a.dropdown-button data-activates="dropdown3" href="#" 
-            | School
-            i.material-icons.right arrow_drop_down
-        li
-          a.dropdown-button data-activates="dropdown2" href="#" 
-            | People
-            i.material-icons.right arrow_drop_down
-        li
-          = current_user.name if current_user
-        li
-          a.dropdown-button href="#" data-activates="dropdown1"
-            - if current_user
-              - if current_user.image
-                = image_tag current_user.image, alt: current_user.name, class: 'user-avatar'
-              - else
-                i.material-icons perm_identity
-            - else
-              i.material-icons perm_identity
+      / ul.right.hide-on-med-and-down
+      /   li
+      /     a.dropdown-button data-activates="dropdown4" href="#" 
+      /       | Books 
+      /       i.material-icons.right arrow_drop_down
+      /   li
+      /     a.dropdown-button data-activates="dropdown3" href="#" 
+      /       | School
+      /       i.material-icons.right arrow_drop_down
+      /   li
+      /     a.dropdown-button data-activates="dropdown2" href="#" 
+      /       | People
+      /       i.material-icons.right arrow_drop_down
+      /   li
+      /     = current_user.name if current_user
+      /   li
+      /     a.dropdown-button href="#" data-activates="dropdown1"
+      /       - if current_user
+      /         - if current_user.image
+      /           = image_tag current_user.image, alt: current_user.name, class: 'user-avatar'
+      /         - else
+      /           i.material-icons perm_identity
+      /       - else
+      /         i.material-icons perm_identity
     
     .app-side-menu.z-depth-2
       ul#nav-menu-mobile.side-nav.collapsible data-collapsible='expandable'

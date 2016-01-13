@@ -1,44 +1,47 @@
 .row
   .col.s12
 
-    = form_for @book_title, html: {class:'col s12'} do |f|
-      - if @book_title.errors.any?
-        #error_explanation
-          h5 = "#{pluralize(@book_title.errors.count, "error")} prohibited this book from being saved:"
-          ul
-            - @book_title.errors.full_messages.each do |message|
-              li = message
-      .row
-        .input-field.col.s8
-          = f.label :title, class: 'active'
-          = f.text_field :title
-        .input-field.col.s8
-          = f.label :authors, class: 'active'
-          = f.text_field :authors
-        .input-field.col.s8
-          = f.label :publisher, class: 'active'
-          = f.text_field :publisher
-        
-      .row
-        - if @book_title.book_editions.present?
-          h6.grey-text Select cover image:
-          - @book_title.book_editions.each do |book|
-            .cover-selection
-              .input-field.col.s3
-                - if book.small_thumbnail.present?
-                  input class='with-gap' type="radio" id="book-#{book.id}" name="book_title[image_url]" value=book.small_thumbnail
-                  = label_tag "book-#{book.id}", 'Select'
-                - thumbnail = book.small_thumbnail.present? ? book.small_thumbnail : 'book-icon.png' 
-                = image_tag(thumbnail, class: 'list_image')
+    = form_for @book_title, html: {class:'col s12 no-padding'} do |f|
+      .card-panel
+        - if @book_title.errors.any?
+          #error_explanation
+            h5 = "#{pluralize(@book_title.errors.count, "error")} prohibited this book from being saved:"
+            ul
+              - @book_title.errors.full_messages.each do |message|
+                li = message
+        .row
+          .input-field.col.s8
+            = f.label :title, class: 'active'
+            = f.text_field :title
+          .input-field.col.s8
+            = f.label :authors, class: 'active'
+            = f.text_field :authors
+          .input-field.col.s8
+            = f.label :publisher, class: 'active'
+            = f.text_field :publisher
+          
+        .row
+          - if @book_title.book_editions.present?
+            h6.grey-text Select cover image:
+            - @book_title.book_editions.each do |book|
+              .cover-selection
+                .input-field.col.s3
+                  - if book.small_thumbnail.present?
+                    input class='with-gap' type="radio" id="book-#{book.id}" name="book_title[image_url]" value=book.small_thumbnail
+                    = label_tag "book-#{book.id}", 'Select'
+                  - thumbnail = book.small_thumbnail.present? ? book.small_thumbnail : 'book-icon.png' 
+                  = image_tag(thumbnail, class: 'list_image')
 
-        - elsif @edition
-          = f.hidden_field :image_url, @edition.small_thumbnail
-        
-        - if @edition
-          input hidden="hidden" type="text" value="#{@edition.id}" name="edition" id="edition"
+          - elsif @edition
+            = f.hidden_field :image_url, @edition.small_thumbnail
+          
+          - if @edition
+            input hidden="hidden" type="text" value="#{@edition.id}" name="edition" id="edition"
       
-      h5 Editions
-      #book_title.row
+      .toolbar.z-depth-1
+        h5.no-margin Editions
+
+      #book_title
         = f.fields_for :book_editions do |book_edition|
           = render 'book_edition_fields', f: book_edition
         = link_to_add_association f, :book_editions, class: "waves-effect waves-teal btn btn-flat", 'data-association-insertion-method' => 'before', 'data-association-insertion-node' => 'this'

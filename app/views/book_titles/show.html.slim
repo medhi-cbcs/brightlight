@@ -1,52 +1,73 @@
-table
-  tr
-    td style="vertical-align:top"
-      - thumbnail = @book_title.image_url.present? ? @book_title.image_url : 'book-icon.png'
-      = image_tag(thumbnail, class: 'list_image')
-    td
-      .list_description
-        dl.row
-          h4 = @book_title.title
-          dd.col.s6
-            .label Author
-            .item = @book_title.authors
-          dd.col.s6 
-            .label Publisher
-            .item = @book_title.publisher
+.row
+  .col.s12
+    .card-panel
+      table
+        tr
+          td style="vertical-align:top"
+            - thumbnail = @book_title.image_url.present? ? @book_title.image_url : 'book-icon.png'
+            = image_tag(thumbnail, class: 'list_image')
+          td
+            .list_description
+              dl.row
+                h4 = @book_title.title
+                dd.col.s6
+                  .label Author
+                  .item = @book_title.authors
+                dd.col.s6 
+                  .label Publisher
+                  .item = @book_title.publisher
 
-h5 Editions
-table.striped
-  thead
-    th Title
-    th Author
-    th Publisher
-    th ISBN 10
-    th ISBN
+/.toolbar.z-depth-1
+/  h5 Editions
+/  = link_to 'Edit', edit_book_title_path(@book_title), class: 'waves-effect waves-teal btn-flat'
 
-  tbody
-  - @book_title.book_editions.each do |edition|
-    tr
-      td = link_to edition.title, edition
-      td = edition.authors
-      td = edition.publisher
-      td = edition.isbn10
-      td = edition.isbn13
+nav.grey.darken-2
+  .nav-wrapper
+    .brand-logo style="margin-left: 20px; font-size:1.2em"
+      | Editions
+    ul.right.hide-on-med-and-down
+      li 
+        = link_to edit_book_title_path(@book_title), class: 'waves-effect waves-light'
+          i.material-icons.left edit
+          | Edit
+      li
+        = link_to editions_book_title_path(@book_title), class: 'waves-effect waves-light'
+          i.material-icons.left add 
+          | Add existing
 
 .row
+  .col.s12
+    .card-panel
+      table.striped
+        thead
+          th Title
+          th Author
+          th Publisher
+          th ISBN 10
+          th ISBN
 
-.row
-  = form_tag({controller:'book_editions', action:'search_isbn'}, {method: "post", class: "col s6"}) do
-    .col.s7
-      button.btn.btn-flat name='commit' type='submit'
-        i.material-icons.left playlist_add
-        | Add new ISBN
-    .col.s5
-      = text_field_tag(:isbn, '', {placeholder:'ISBN No.'})
+        tbody
+        - @book_title.book_editions.each do |edition|
+          tr
+            td = link_to edition.title, edition
+            td = edition.authors
+            td = edition.publisher
+            td = edition.isbn10
+            td = edition.isbn13
 
-.toolbar.actions
-  //= link_to '< Back', book_titles_path, class: 'btn btn-flat'
-  = link_to 'Edit', edit_book_title_path(@book_title), class: 'waves-effect waves-teal btn-flat'
-  = link_to editions_book_title_path(@book_title), class: 'waves-effect waves-teal btn-flat'
-    | Add existing editions
+      .row
+        = form_tag({controller:'book_editions', action:'search_isbn'}, {method: "post", class: "col s6"}) do
+          .col.s7
+            button.btn.btn-flat name='commit' type='submit'
+              i.material-icons.left playlist_add
+              | Add new ISBN
+          .col.s5
+            = text_field_tag(:isbn, '', {placeholder:'ISBN No.'})
+
+      .toolbar.actions
+        //= link_to '< Back', book_titles_path, class: 'btn btn-flat'
+        = link_to 'Edit', edit_book_title_path(@book_title), class: 'waves-effect waves-teal btn-flat'
+        = link_to editions_book_title_path(@book_title), class: 'waves-effect waves-teal btn-flat'
+          | Add existing editions
   
 

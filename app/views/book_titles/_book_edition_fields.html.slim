@@ -1,42 +1,44 @@
-.nested-fields
-  .input-field.col.s6
-    = f.label :title, class: 'active'
-    = f.text_field :title
-  .input-field.col.s6
-    = f.label :subtitle, class: 'active'
-    = f.text_field :subtitle
-  .input-field.col.s6
-    = f.label :authors, class: 'active'
-    = f.text_field :authors
-  .input-field.col.s6
-    = f.label :publisher, class: 'active'
-    = f.text_field :publisher
-  .input-field.col.s12
-    = f.text_area :description, class: 'materialize-textarea'
-    = f.label :description, class: 'active'
-  .input-field.col.s3
-    = f.label 'ISBN 10', class: 'active'
-    = f.text_field :isbn10
-  .input-field.col.s3
-    = f.label 'ISBN 13', class: 'active'
-    = f.text_field :isbn13
-  .input-field.col.s3
-    = f.label :published_date, class: 'active'
-    = f.text_field :published_date
-  .input-field.col.s3
-    = f.label :page_count, class: 'active'
-    = f.number_field :page_count
-  .input-field.col.s3
-    = f.label :language, class: 'active'
-    = f.text_field :language
-  .input-field.col.s3
-    = f.label :edition_info, class: 'active'
-    = f.text_field :edition_info
-  .input-field.col.s3
-    = f.label :tags, class: 'active'
-    = f.text_field :tags
-  .input-field.col.s3
-    = f.label :subjects, class: 'active'
-    = f.text_field :subjects
-  = f.hidden_field :small_thumbnail
-  hr
+.card-panel
+  .nested-fields
+    .input-field.col.s6
+      = f.label :title, class: 'active'
+      = f.text_field :title
+    .input-field.col.s6
+      = f.label :subtitle, class: 'active'
+      = f.text_field :subtitle
+    .input-field.col.s6
+      = f.label :authors, class: 'active'
+      = f.text_field :authors
+    .input-field.col.s6
+      = f.label :publisher, class: 'active'
+      = f.text_field :publisher
+    .input-field.col.s12
+      = f.text_area :description, class: 'materialize-textarea'
+      = f.label :description, class: 'active'
+    .input-field.col.s3
+      = f.label 'ISBN 10', class: 'active'
+      = f.text_field :isbn10
+    .input-field.col.s3
+      = f.label 'ISBN 13', class: 'active'
+      = f.text_field :isbn13
+    .input-field.col.s3
+      = f.label :published_date, class: 'active'
+      = f.text_field :published_date
+    .input-field.col.s3
+      = f.label :page_count, class: 'active'
+      = f.number_field :page_count
+    .input-field.col.s3
+      = f.label :language, class: 'active'
+      = f.text_field :language
+    .input-field.col.s3
+      = f.label :edition_info, class: 'active'
+      = f.text_field :edition_info
+    .input-field.col.s3
+      = f.label :tags, class: 'active'
+      = f.text_field :tags
+    .input-field.col.s3
+      = f.label :subjects, class: 'active'
+      = f.text_field :subjects
+    = f.hidden_field :small_thumbnail
+  / This hr element is required!
+  hr style="color:white;border-style: solid;"

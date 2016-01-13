@@ -132,6 +132,10 @@ form {
 	// 	font-size: 2.2rem;
 	// }
 
+	h5 {
+		margin: 0.3em 0 0 0;
+	}
+	
 	.btn {
 		margin-left: 6px;
 	}
@@ -396,9 +400,9 @@ section {
   margin-right: 1rem;
 }
 
-ul.side-nav.leftside-navigation {
-  top: 64px;
-}
+// ul.side-nav.leftside-navigation {
+//   top: 64px;
+// }
 
 a.sidebar-collapse {
   position: absolute;
