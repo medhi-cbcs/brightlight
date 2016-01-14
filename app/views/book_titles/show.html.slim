@@ -23,17 +23,23 @@
 
 nav.grey.darken-2
   .nav-wrapper
-    .brand-logo style="margin-left: 20px; font-size:1.2em"
+    .brand-logo style="margin-left: 20px; font-size:1.5em"
       | Editions
     ul.right.hide-on-med-and-down
-      li 
-        = link_to edit_book_title_path(@book_title), class: 'waves-effect waves-light'
-          i.material-icons.left edit
-          | Edit
+      li
+        = form_tag({controller:'book_titles', action:'add_isbn'}, {method: "post", class: "col s6"}) do
+          .input-field
+            = text_field_tag(:isbn, '', {placeholder:' Add ISBN'})
+            label for="isbn"
+              i.material-icons.left playlist_add
       li
         = link_to editions_book_title_path(@book_title), class: 'waves-effect waves-light'
           i.material-icons.left add 
           | Add existing
+      li 
+        = link_to edit_book_title_path(@book_title), class: 'waves-effect waves-light'
+          i.material-icons.left edit
+          | Edit
 
 .row
   .col.s12
@@ -55,19 +61,5 @@ nav.grey.darken-2
             td = edition.isbn10
             td = edition.isbn13
 
-      .row
-        = form_tag({controller:'book_editions', action:'search_isbn'}, {method: "post", class: "col s6"}) do
-          .col.s7
-            button.btn.btn-flat name='commit' type='submit'
-              i.material-icons.left playlist_add
-              | Add new ISBN
-          .col.s5
-            = text_field_tag(:isbn, '', {placeholder:'ISBN No.'})
-
-      .toolbar.actions
-        //= link_to '< Back', book_titles_path, class: 'btn btn-flat'
-        = link_to 'Edit', edit_book_title_path(@book_title), class: 'waves-effect waves-teal btn-flat'
-        = link_to editions_book_title_path(@book_title), class: 'waves-effect waves-teal btn-flat'
-          | Add existing editions
   
 

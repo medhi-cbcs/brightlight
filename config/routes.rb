@@ -39,6 +39,7 @@ Rails.application.routes.draw do
     member do
       get 'editions'
       post 'add_existing_editions'
+      post 'add_isbn'
     end
   end
   
