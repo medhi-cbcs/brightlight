@@ -20,3 +20,4 @@
 //= require materialize/extras/nouislider
 //= require cocoon
 //= require filterrific/filterrific-jquery
+//= require material-init.js

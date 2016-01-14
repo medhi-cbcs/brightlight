@@ -188,10 +188,14 @@ main {
 
 // ============================================ Side Menu ===========================================
 
+ul.side-nav.fixed {
+	background-color: #292c33
+}
+
 ul.side-nav.fixed li.logo {
     text-align: center;
-    margin-top: 32px;
-    margin-bottom: 80px
+    padding-top: 32px;
+    padding-bottom: 32px
 }
 
 ul.side-nav.fixed li.logo:hover {
@@ -217,7 +221,38 @@ ul.side-nav.fixed li a {
 }
 
 ul.side-nav.fixed ul.collapsible-accordion {
-    background-color: #FFF
+    background-color:  $darker-grey;
+}
+
+ul.side-nav.fixed li.logo {
+	background-color: $darker-grey;
+}
+
+ul.side-nav.fixed .collapsible-header {
+	background-color: $darker-grey;
+	color: $lighter-grey;
+	border: none;
+	padding-right: 0;
+	margin: 0;
+}
+
+ul.side-nav.fixed .collapsible-body {
+	display: block;
+	padding: 0px;
+	background-color: $dark-grey;
+	border: none;
+	line-height: 38px;
+	a {
+		color: $light-grey;
+		margin: 0 1rem 0 2rem; 
+	}
+
+	ul {
+		li.active {
+			background-color: $dark-grey;
+			border-left: 4px solid $muted-red;
+		}
+	}
 }
 
 ul.side-nav.fixed:hover {
