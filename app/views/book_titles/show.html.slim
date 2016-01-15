@@ -25,7 +25,7 @@ nav.grey.darken-2
   .nav-wrapper
     .brand-logo style="margin-left: 20px; font-size:1.5em"
       | Editions
-    ul.right.hide-on-med-and-down
+    ul.right
       li
         = form_tag({controller:'book_titles', action:'add_isbn'}, {method: "post", class: "col s6"}) do
           .input-field

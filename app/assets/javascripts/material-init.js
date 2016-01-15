@@ -35,3 +35,12 @@ $(document).on('ready page:load', function () {
 	// 		selectYears: 15 			// Creates a dropdown of 15 years to control year
 	// });
 });
+
+(function($) {
+    $.fn.scrollTo = function() {
+        $('html, body').animate({
+            scrollTop: $(this).offset().top + 'px'
+        }, 'fast');
+        return this; // for chaining...
+    }
+})(jQuery);

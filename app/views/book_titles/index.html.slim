@@ -12,17 +12,33 @@
           i.material-icons.prefix search
         input.icon-prefix type="text" name="search" placeholder="Search" value=params[:search]    
 
-= form_tag do 
-  .toolbar.z-depth-1
-    #context-buttons
-      button.btn#merge-button formaction="#{edit_merge_book_titles_path}" Merge
-      button.btn.btn-flat#delete-button formaction="#{delete_book_titles_path}"
-        i.material-icons delete
-    .right
-      = link_to book_titles_path(search:params[:search])
-        i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="Expanded view"  view_list
-      = link_to book_titles_path({v:'list',search:params[:search]})
-        i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="List view"  list
+= form_tag do
+  nav.grey.darken-2
+    .nav-wrapper
+      ul
+        #context-buttons style="display:none;"
+          li
+            button.btn#merge-button formaction="#{edit_merge_book_titles_path}" Merge
+          li
+            = link_to delete_book_titles_path, id:"delete-button"
+              i.material-icons delete
+        li
+          = link_to new_book_title_path
+            | New
+            i.material-icons.tooltipped.left data-position="bottom" data-delay="50" data-tooltip="Create new"  add
+        = form_tag({controller:'book_titles', action:'search_isbn'}, {method: "post"}) do
+          li
+            .input-field
+              = text_field_tag(:isbn, '', {placeholder:'ISBN No'})
+          li
+            = link_to type='submit'
+              i.material-icons add
+        li.right
+          = link_to book_titles_path(search:params[:search])
+            i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="Expanded view"  view_list
+        li.right
+          = link_to book_titles_path({v:'list',search:params[:search]})
+            i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="List view"  list
 
   .card-panel
     table.striped
@@ -44,7 +60,7 @@
                     span.label Publisher:
                     span.item = book_title.publisher
 
-              td = link_to 'Edit', edit_book_title_path(book_title), class: "btn waves-effect waves-teal btn-flat btn-small"
+              td = link_to 'Edit', edit_book_title_path(book_title), class: "btn waves-effect waves-yellow btn-flat btn-small"
 
             - else
               td style="vertical-align:top"
@@ -65,7 +81,8 @@
 
               td = link_to 'Edit', edit_book_title_path(book_title), class: "btn waves-effect waves-teal btn-flat btn-small"
 
-= will_paginate @book_titles
+.toolbar.z-depth-1
+  = will_paginate @book_titles
 
 javascript:
   function reset_form() {

@@ -21,7 +21,7 @@
             = f.text_field :publisher
           
         .row
-          - if @book_title.book_editions.present?
+          - if @book_title.has_cover?
             h6.grey-text Select cover image:
             - @book_title.book_editions.each do |book|
               .cover-selection
@@ -32,23 +32,39 @@
                   - thumbnail = book.small_thumbnail.present? ? book.small_thumbnail : 'book-icon.png' 
                   = image_tag(thumbnail, class: 'list_image')
 
-          - elsif @edition
+          - elsif @edition.has_cover?
             = f.hidden_field :image_url, @edition.small_thumbnail
           
           - if @edition
             input hidden="hidden" type="text" value="#{@edition.id}" name="edition" id="edition"
       
-      .toolbar.z-depth-1
-        h5.no-margin Editions
+      nav.grey.darken-2
+        .nav-wrapper
+          .brand-logo style="margin-left: 20px; font-size:1.5em"
+            | Editions
+          ul.right
+            li
+              = link_to_add_association f, :book_editions, class: "waves-effect waves-teal", 'data-association-insertion-method' => 'append', 'data-association-insertion-node' => '#book_title'
+                ' Add Edition
+                i.material-icons.left playlist_add
 
       #book_title
         = f.fields_for :book_editions do |book_edition|
           = render 'book_edition_fields', f: book_edition
-        = link_to_add_association f, :book_editions, class: "waves-effect waves-teal btn btn-flat", 'data-association-insertion-method' => 'before', 'data-association-insertion-node' => 'this'
-          ' add edition
-          i.material-icons.left playlist_add
+        /= link_to_add_association f, :book_editions, class: "waves-effect waves-teal btn btn-flat", 'data-association-insertion-method' => 'before', 'data-association-insertion-node' => 'this'
+        /  ' add edition
+        /  i.material-icons.left playlist_add
 
-      .col.s12
-        .toolbar.actions
-          button.btn.waves-effect.waves-light type="submit" Save
-          = link_to 'Cancel', book_titles_path, class: "waves-effect waves-teal btn-flat"
+      #placemark
+      .card-panel
+        button.btn.waves-effect.waves-light type="submit" Save
+        /= link_to 'Cancel', book_titles_path, class: "waves-effect waves-teal btn-flat"
+        - if params[:action] =~ /edit/
+          = link_to 'Delete', @book_title, data: {confirm: 'Are you sure?'}, method: :delete, class: "right btn waves-effect waves-teal red"
+
+
+javascript:
+  $('#book_title')
+    .on('cocoon:after-insert', function(e, added_task) {
+      $("#placemark").scrollTo();
+    })

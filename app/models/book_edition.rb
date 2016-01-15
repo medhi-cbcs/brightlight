@@ -86,4 +86,8 @@ class BookEdition < ActiveRecord::Base
     end
   end
 
+  def has_cover?
+    self.small_thumbnail.present?
+  end
+
 end
