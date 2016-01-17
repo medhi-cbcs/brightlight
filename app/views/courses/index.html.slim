@@ -1,19 +1,31 @@
 h4 Courses
 
-.toolbar.z-depth-1
-  /i.material-icons assignment
-  .left
-    = form_tag({controller:'courses', action:'index'}, {method:'get'}) do
-      .input-field
-        = label_tag :grade_id, "Grade: ", {class: 'for-select'}
-        - options = options_for_select(GradeLevel.all.map {|g| [g.name, g.id]}, params[:grade_id])
-        = select_tag :grade_id, options, {class: 'browser-default select-grade', onchange:"this.form.submit()"}
+nav.grey.darken-2
+  .nav-wrapper
+    ul
+      li
+        = "Grade #{@grade.name}"
+      li
+        a.dropdown-button href="#!" data-activates="grades-list"
+          | Choose grade
+          i.material-icons.right arrow_drop_down
+        / = form_tag({controller:'courses', action:'index'}, {method:'get'}) do
+        /   .input-field
+        /     - options = options_for_select(GradeLevel.all.map {|g| [g.name, g.id]}, params[:grade_id])
+        /     = select_tag :grade_id, options, {class: 'select-grade', onchange:"this.form.submit()"}
 
-  .right
-    = link_to courses_path(search:params[:search])
-       i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="Expanded view"  view_list
-    = link_to courses_path({v:'list',search:params[:search]})
-      i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="List view"  list
+      li.right
+        = link_to courses_path(search:params[:search])
+           i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="Expanded view"  view_list
+      li.right
+        = link_to courses_path({v:'list',search:params[:search]})
+          i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="List view"  list
+
+    ul#grades-list.dropdown-content
+      - GradeLevel.all.each do |grade|
+        li
+          = link_to courses_path(grade_id:grade.id)
+            = grade.name
 
 .card-panel
   table.striped
@@ -38,10 +50,10 @@ h4 Courses
           td 
           /= course.academic_terms.name if course.academic_terms
           td
-            = link_to course, class: "btn waves-effect waves-light"
+            = link_to course
               i.material-icons visibility
             
-            = link_to edit_course_path(course), class: "btn waves-effect waves-teal"
+            = link_to edit_course_path(course)
               i.material-icons edit
 
 .toolbar.z-depth-1

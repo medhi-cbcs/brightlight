@@ -41,8 +41,9 @@
                 = f.label :status_id, class: 'active'
                 = f.collection_select :status_id, Status.all, :id, :name, prompt: true
 
+  br
   .card-action
-    button.btn.btn-flat.waves-effect.waves-light type="submit" Save
+    button.btn.waves-effect.waves-light type="submit" Save
     = link_to 'Cancel', book_edition_book_copies_path(@book_copy.book_edition), class: "waves-effect waves-teal btn-flat"
 
 

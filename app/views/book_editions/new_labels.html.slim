@@ -1,46 +1,52 @@
-table
-  tr
-    td style="vertical-align:top"
-      - thumbnail = @book_edition.small_thumbnail.present? ? @book_edition.small_thumbnail : 'book-icon.png' 
-      = image_tag(thumbnail, class: 'list_image')
-    td
-      .list_description
-        dl.row
-          dt = @book_edition.title
-          dd = @book_edition.subtitle
-          dd.col.s6
-            .label Author
-            .item = @book_edition.authors
-          dd.col.s6
-            .label ISBN 10
-            .item = @book_edition.isbn10
-          dd.col.s6 
-            .label Publisher
-            .item = @book_edition.publisher
-          dd.col.s6
-            .label ISBN
-            .item = @book_edition.isbn13
-          dd.col.s6 
-            .label Published Date
-            .item = @book_edition.published_date
-          dd.col.s6
-            .label Page count
-            .item = @book_edition.page_count
+.card-panel
+  table
+    tr
+      td style="vertical-align:top"
+        - thumbnail = @book_edition.small_thumbnail.present? ? @book_edition.small_thumbnail : 'book-icon.png' 
+        = image_tag(thumbnail, class: 'list_image')
+      td
+        .list_description
+          dl.row
+            dt = @book_edition.title
+            dd = @book_edition.subtitle
+            dd.col.s6
+              .label Author
+              .item = @book_edition.authors
+            dd.col.s6
+              .label ISBN 10
+              .item = @book_edition.isbn10
+            dd.col.s6 
+              .label Publisher
+              .item = @book_edition.publisher
+            dd.col.s6
+              .label ISBN
+              .item = @book_edition.isbn13
+            dd.col.s6 
+              .label Published Date
+              .item = @book_edition.published_date
+            dd.col.s6
+              .label Page count
+              .item = @book_edition.page_count
 
-h4 New book copies
-.row
+nav.grey.darken-2
+  .nav-wrapper
+    .brand-logo style="margin-left: 20px; font-size:1.5em"
+      | New book copies
+
+.card
   = form_for @book_edition do |f|
-    table.compact
-      thead
-        th Barcode
-        th Label
-        th Condition
-        th Status
-      tbody#book_copy
-        = f.fields_for :book_copies do |book_copy|
-          = render 'book_copy_fields', f: book_copy
-       
-    .toolbar.actions
+    .card-content
+      .row
+        table.compact
+          thead
+            th Barcode
+            th Label
+            th Condition
+            th Status
+          tbody#book_copy
+            = f.fields_for :book_copies do |book_copy|
+              = render 'book_copy_fields', f: book_copy
+    .card-action
       / Note: 'Append' new row at the end of the 'tbody#book_copy' node
       = link_to_add_association f, :book_copies, class: "waves-effect waves-teal btn btn-flat", 'data-association-insertion-method' => 'append', 'data-association-insertion-node' => 'tbody#book_copy'
         ' add row

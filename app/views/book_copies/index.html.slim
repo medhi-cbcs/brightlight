@@ -34,8 +34,16 @@ h4 = @book_edition.title
                 .label = c.first.name
                 .item = c.last
 
-.toolbar.z-depth-1
-  h5 Book Copies
+nav.grey.darken-2
+  .nav-wrapper
+    .brand-logo style="margin-left: 20px; font-size:1.5em"
+      | Book Copies
+    ul.right
+      li
+        = link_to new_labels_book_edition_path(@book_edition)
+          | Add copies
+          i.material-icons.left add
+
 
 .card-panel
   table.striped
@@ -60,5 +68,5 @@ h4 = @book_edition.title
               i.material-icons book
             = link_to edit_book_copy_path(book_copy)
               i.material-icons create
-            = link_to book_copy, data: {:confirm => 'Are you sure?'}, :method => :delete
+            = link_to book_copy, data: {:confirm => 'Are you sure?'}, :method => :delete, class:'red-text'
               i.material-icons delete

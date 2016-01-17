@@ -150,6 +150,7 @@
          search_isbn_book_titles POST     /book_titles/search_isbn(.:format)                         book_titles#search_isbn
              editions_book_title GET      /book_titles/:id/editions(.:format)                        book_titles#editions
 add_existing_editions_book_title POST     /book_titles/:id/add_existing_editions(.:format)           book_titles#add_existing_editions
+             add_isbn_book_title POST     /book_titles/:id/add_isbn(.:format)                        book_titles#add_isbn
                      book_titles GET      /book_titles(.:format)                                     book_titles#index
                                  POST     /book_titles(.:format)                                     book_titles#create
                   new_book_title GET      /book_titles/new(.:format)                                 book_titles#new

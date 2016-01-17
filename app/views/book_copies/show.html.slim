@@ -1,5 +1,15 @@
 h4 Book Copy
 
+nav.grey.darken-2
+  .nav-wrapper
+    ul
+      li
+        = link_to book_edition_book_copies_path(@book_copy.book_edition)
+          i.material-icons chevron_left
+      li.right
+        = link_to edit_book_copy_path(@book_copy)
+          i.material-icons.left edit
+          | Edit
 .card
   .card-content
     table
@@ -26,7 +36,7 @@ h4 Book Copy
               dd.col.s4
                 .label ISBN
                 .item = @book_copy.book_edition.isbn13
-            dl
+            dl.row
               dd.col.s4
                 .label Condition
                 .item = @book_copy.book_condition.present? ? @book_copy.book_condition.code : 'N/A'
@@ -34,7 +44,5 @@ h4 Book Copy
                 .label Status
                 .item = @book_copy.status.present? ? @book_copy.status.name : 'N/A'
 
-  .card-action
-    /= link_to '< Back', book_edition_book_copies_path(@book_copy.book_edition), class: 'btn btn-flat'
-    = link_to 'Edit', edit_book_copy_path(@book_copy), class: 'btn btn-flat'
+
 
