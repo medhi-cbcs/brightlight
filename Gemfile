@@ -43,7 +43,7 @@ gem 'will_paginate', '~> 3.0.6'
 gem 'filterrific'
 
 # The Materialize UI framework
-gem 'materialize-sass'
+gem 'materialize-sass', '0.97.1'
 
 # jQuery UI
 gem 'jquery-ui-rails'

@@ -25,14 +25,7 @@
         li
           = link_to new_book_title_path
             | New
-            i.material-icons.tooltipped.left data-position="bottom" data-delay="50" data-tooltip="Create new"  add
-        = form_tag({controller:'book_titles', action:'search_isbn'}, {method: "post"}) do
-          li
-            .input-field
-              = text_field_tag(:isbn, '', {placeholder:'ISBN No'})
-          li
-            = link_to type='submit'
-              i.material-icons add
+            i.material-icons.tooltipped.left data-position="bottom" data-delay="50" data-tooltip="Create new"  add       
         li.right
           = link_to book_titles_path(search:params[:search])
             i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="Expanded view"  view_list
