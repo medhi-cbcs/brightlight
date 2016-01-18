@@ -34,7 +34,6 @@ class BookTitlesController < ApplicationController
         # end
       }
     end
-
   end
 
   # GET /book_titles/1
