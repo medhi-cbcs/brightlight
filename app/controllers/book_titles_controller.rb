@@ -330,6 +330,8 @@ class BookTitlesController < ApplicationController
       params.require(:book_title).permit(:title, :authors, :publisher, :image_url,
                                           {book_editions_attributes: [:id, :google_book_id, :isbndb_id, :title, :subtitle, :authors, :publisher, :published_date,
                                                                       :description, :isbn10, :isbn13, :page_count, :small_thumbnail, :thumbnail, 
-                                                                      :language, :edition_info, :tags, :subjects, :book_title_id]})
+                                                                      :language, :edition_info, :tags, :subjects, :book_title_id, :_destroy]
+                                          }
+                                        )
     end
 end

@@ -51,9 +51,6 @@
       #book_title
         = f.fields_for :book_editions do |book_edition|
           = render 'book_edition_fields', f: book_edition
-        /= link_to_add_association f, :book_editions, class: "waves-effect waves-teal btn btn-flat", 'data-association-insertion-method' => 'before', 'data-association-insertion-node' => 'this'
-        /  ' add edition
-        /  i.material-icons.left playlist_add
 
       #placemark
       .card-panel

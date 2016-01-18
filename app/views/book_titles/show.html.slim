@@ -17,10 +17,6 @@
                   .label Publisher
                   .item = @book_title.publisher
 
-/.toolbar.z-depth-1
-/  h5 Editions
-/  = link_to 'Edit', edit_book_title_path(@book_title), class: 'waves-effect waves-teal btn-flat'
-
 nav.grey.darken-2
   .nav-wrapper
     .brand-logo style="margin-left: 20px; font-size:1.5em"
@@ -36,30 +32,27 @@ nav.grey.darken-2
         = link_to editions_book_title_path(@book_title), class: 'waves-effect waves-light'
           i.material-icons.left add 
           | Add existing
-      li 
+      li
         = link_to edit_book_title_path(@book_title), class: 'waves-effect waves-light'
           i.material-icons.left edit
           | Edit
 
-.row
-  .col.s12
-    .card-panel
-      table.striped
-        thead
-          th Title
-          th Author
-          th Publisher
-          th ISBN 10
-          th ISBN
+.card-panel
+  table.striped
+    thead
+      th Title
+      th Author
+      th Publisher
+      th ISBN 10
+      th ISBN
 
-        tbody
-        - @book_title.book_editions.each do |edition|
-          tr
-            td = link_to edition.title, edition
-            td = edition.authors
-            td = edition.publisher
-            td = edition.isbn10
-            td = edition.isbn13
+    tbody
+    - @book_title.book_editions.each do |edition|
+      tr
+        td = link_to edition.title, edition
+        td = edition.authors
+        td = edition.publisher
+        td = edition.isbn10
+        td = edition.isbn13
 
-  
 
