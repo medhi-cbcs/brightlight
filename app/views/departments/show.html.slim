@@ -1,36 +1,40 @@
-.row.tabbed
-	h4 = @department.name + " (#{@department.code})"
-	.col.s12
-		ul.tabs.z-depth-1
-			li.tab.col.s3
-				a href='#tab1' Name
-			li.tab.col.s3
-				a href='#tab2' Members
+h4 = @department.name + " (#{@department.code})"
+  
+nav.grey.darken-2
+  .nav-wrapper
+    ul
+      li
+        = link_to :back
+          i.material-icons chevron_left
+      li.right
+        = link_to edit_department_path(@department)
+          | Edit
+          i.material-icons.left edit
 
-	#tab1
-		.col.s10
-			.list_description
-				dl.row
-					dd.col.s4
-						.label Manager:
-						.item = @manager.present? ? link_to(@manager.name, @manager) : "--"
-					dd.col.s4
-						.label Office Phone:
-						.item = @manager.present? ? @manager.office_phone : "--"
+.card-panel
+  .row
+    .col.s10
+      .list_description
+        dl.row
+          dd.col.s4
+            .label Manager:
+            .item = @manager.present? ? link_to(@manager.name, @manager) : "--"
+          dd.col.s4
+            .label Office Phone:
+            .item = @manager.present? ? @manager.office_phone : "--"
 
-	#tab2
-		.col.s10
-			.list_description
-				- @members.each do |member|
-					dl.row
-						dd.col.s4
-							.label Name:
-						 	.item = link_to member.name, member
-						dd.col.s4
-							.label Phone:
-							.item = member.mobile_phone
+.card-panel
+  .row
+    .col.s10
+      .list_description
+        - @members.each do |member|
+          dl.row
+            dd.col.s4
+              .label Name:
+              .item = link_to member.name, member
+            dd.col.s4
+              .label Phone:
+              .item = member.mobile_phone
 
-.toolbar.actions
-	= link_to '< Back', :back, class: 'btn btn-flat'
-	= link_to 'Edit', edit_department_path(@department), class: 'btn btn-primary'
+  
 
