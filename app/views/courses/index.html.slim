@@ -4,21 +4,14 @@ nav.grey.darken-2
   .nav-wrapper
     ul
       li
-        = "Grade #{@grade.name}"
-      li
         a.dropdown-button href="#!" data-activates="grades-list"
-          | Choose grade
+          = params[:grade_id] ? "Grade #{GradeLevel.where(id:params[:grade_id]).first.name}" : "Choose grade"
           i.material-icons.right arrow_drop_down
-        / = form_tag({controller:'courses', action:'index'}, {method:'get'}) do
-        /   .input-field
-        /     - options = options_for_select(GradeLevel.all.map {|g| [g.name, g.id]}, params[:grade_id])
-        /     = select_tag :grade_id, options, {class: 'select-grade', onchange:"this.form.submit()"}
-
       li.right
-        = link_to courses_path(search:params[:search])
+        = link_to courses_path(grade_id:params[:grade_id])
            i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="Expanded view"  view_list
       li.right
-        = link_to courses_path({v:'list',search:params[:search]})
+        = link_to courses_path({v:'list',grade_id:params[:grade_id]})
           i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="List view"  list
 
     ul#grades-list.dropdown-content
