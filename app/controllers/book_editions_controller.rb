@@ -155,7 +155,8 @@ class BookEditionsController < ApplicationController
   # GET /new_labels
   def new_labels
     @book_edition = BookEdition.find(params[:id])
-    10.times { @book_edition.book_copies.new }
+    3.times { @book_edition.book_copies.new }
+    @book_copies = @book_edition.book_copies
   end
 
   # DELETE /book_editions/1

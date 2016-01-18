@@ -44,7 +44,7 @@ nav.grey.darken-2
             th Condition
             th Status
           tbody#book_copy
-            = f.fields_for :book_copies do |book_copy|
+            = f.fields_for :book_copies, @book_copies do |book_copy|
               = render 'book_copy_fields', f: book_copy
     .card-action
       / Note: 'Append' new row at the end of the 'tbody#book_copy' node
