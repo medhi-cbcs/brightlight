@@ -1,29 +1,32 @@
 h4 Grade Levels
 
-.toolbar
-  h5.right #{@academic_year.name}
+nav.grey.darken-2
+  .nav-wrapper
+    .brand-logo.right style="margin: 0 20px; font-size:1.5em"
+      | #{@academic_year.name}
 
-table.striped
-  thead
-    tr
-      th Grade
-      th Sections
-      th Teacher
-
-  tbody
-    - @grade_levels.each do |grade_level|
-      - grade_sections = grade_level.grade_sections.where(academic_year_id:@year_id)
+.card-panel
+  table.striped
+    thead
       tr
-        td 
-          .giant-letter = grade_level.name
-        td
-          - grade_sections.each do |section|
-            div = link_to section.name, section
-        td
-          - grade_sections.each do |section|
-            div = section.homeroom.present? ? section.homeroom : '--'
-        td
-          = link_to 'Show', grade_level_path(id:grade_level.id,year:@year_id), class: "btn waves-effect waves-teal btn-small"
-          br
-          = link_to 'Edit', edit_grade_level_path(grade_level), class: "btn waves-effect waves-teal btn-small"
+        th Grade
+        th Sections
+        th Teacher
+
+    tbody
+      - @grade_levels.each do |grade_level|
+        - grade_sections = grade_level.grade_sections.where(academic_year_id:@year_id)
+        tr
+          td 
+            .giant-letter = grade_level.name
+          td
+            - grade_sections.each do |section|
+              div = link_to section.name, section
+          td
+            - grade_sections.each do |section|
+              div = section.homeroom.present? ? section.homeroom : '--'
+          td
+            = link_to 'Show', grade_level_path(id:grade_level.id,year:@year_id), class: "btn waves-effect waves-teal btn-small"
+            br
+            = link_to 'Edit', edit_grade_level_path(grade_level), class: "btn waves-effect waves-teal btn-small"
         
