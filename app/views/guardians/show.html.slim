@@ -1,56 +1,65 @@
-.row.tabbed
-	h4 = @guardian.name
-	.col.s12
-		ul.tabs.z-depth-1
-			li.tab.col.s3
-				a href='#tab1' Name
-			li.tab.col.s3
-				a href='#tab2' Family
+h4 = @guardian.name
 
+nav.grey.darken-2
+  .nav-wrapper
+    ul
+      li
+        = link_to :back
+          i.material-icons chevron_left
+      li.right
+        = link_to edit_guardian_path(@guardian)
+          | Edit
+          i.material-icons.left edit
 
-	#tab1
-		.col.s10
-			.list_description
-				dl.row
-					dd.col.s4
-						.label First name: 
-						.item = @guardian.first_name
-					dd.col.s4
-						.label Last name: 
-						.item = @guardian.last_name
-					dd.col.s4
-						.label Mobile phone:
-						.item = @guardian.mobile_phone
-					dd.col.s4
-						.label Home phone:
-						.item = @guardian.home_phone
-					dd.col.s4
-						.label Office phone:
-						.item = @guardian.office_phone
-					dd.col.s4
-						.label Other phone:
-						.item = @guardian.other_phone
-				dl.row
-					dd.col.s4
-						.label Address
-						.item = @guardian.address_line1
-						.item = @guardian.address_line2        
-						.item = @guardian.city + ' ' + @guardian.postal_code
-						.item = @guardian.state
-						.item = @guardian.country
-					dd.col.s4
-						.label Family no:
-						.item = @guardian.family_no
-	#tab2
-		.col.s10
-			.list_description
-				- @guardian.students_guardians.each do |g|
-					dl.row
-						dd
-							.label Name: 
-							.item = link_to g.student.name, g.student
+.card
+	.row
+		.col.s12 style="margin-bottom: 15px; padding: 0px;"
+			ul.tabs.z-depth-1
+				li.tab.col.s3
+					a href='#tab1' Name
+				li.tab.col.s3
+					a href='#tab2' Family
 
-.actions
-	= link_to 'Back', guardians_path, class: 'btn btn-flat'
-	= link_to 'Edit', edit_guardian_path(@guardian), class: 'btn btn-default'
+		#tab1.tab-content
+			.col.s10
+				.list_description
+					dl
+						dd.col.s4
+							.label First name: 
+							.item = @guardian.first_name
+						dd.col.s4
+							.label Last name: 
+							.item = @guardian.last_name
+						dd.col.s4
+							.label Mobile phone:
+							.item = @guardian.mobile_phone
+						dd.col.s4
+							.label Home phone:
+							.item = @guardian.home_phone
+						dd.col.s4
+							.label Office phone:
+							.item = @guardian.office_phone
+						dd.col.s4
+							.label Other phone:
+							.item = @guardian.other_phone
+					dl
+						dd.col.s4
+							.label Address
+							.item = @guardian.address_line1
+							.item = @guardian.address_line2        
+							.item = @guardian.city + ' ' + @guardian.postal_code
+							.item = @guardian.state
+							.item = @guardian.country
+						dd.col.s4
+							.label Family no:
+							.item = @guardian.family_no
+		#tab2.tab-content
+			.col.s10
+				.list_description
+					- @guardian.students_guardians.each do |g|
+						dl
+							dd
+								.label Name: 
+								.item = link_to g.student.name, g.student
+
 

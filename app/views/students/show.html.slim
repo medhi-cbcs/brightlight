@@ -1,132 +1,144 @@
-.row.tabbed
-  h4 = @student.name
-  .col.s12
-    ul.tabs.z-depth-1
-      li.tab.col.s3
-        a href='#tab1' Name
-      li.tab.col.s3
-        a href='#tab2' Demographics
-      li.tab.col.s3
-        a href='#tab3' Contacts
-      li.tab.col.s3
-        a href='#tab4' Details
+h4 = @student.name
 
-  #tab1
-    .col.s2
-      .card
-        .card-image
-          - avatar = @student.gender == 'F' ? 'female-child-avatar.png' : 'male-child-avatar.png'
-          = image_tag (@student.photo_uri.present? ? @student.photo_uri : avatar), class: 'media-object show-image'
-        .card-content
-          p.small-text = @student.name
-    .col.s10
-      .list_description
-        dl.row
-          dd.col.s5
-            .label First name: 
-            .item = @student.first_name
-          dd.col.s5
-            .label Last name: 
-            .item = @student.last_name
-          dd.col.s5
-            .label Date of birth:
-            .item = @student.date_of_birth
-          dd.col.s5
-            .label Admission no: 
-            .item = @student.admission_no
-          dd.col.s5
-            .label Family: 
-            .item = @student.family_id
-          dd.col.s5
-            .label Gender: 
-            .item = @student.gender
-          dd.col.s5
-            .label Student no: 
-            .item = @student.student_no
+nav.grey.darken-2
+  .nav-wrapper
+    ul
+      li
+        = link_to :back
+          i.material-icons chevron_left
+      li.right
+        = link_to edit_student_path(@student)
+          | Edit
+          i.material-icons.left edit
 
-  #tab2
-    .list_description.col.s12
-      dl.row
-        dd.col.s4
-          .label Nationality: 
-          .item = @student.nationality
-        dd.col.s4
-          .label Religion: 
-          .item = @student.religion
-        dd.col.s4
-          .label Blood type: 
-          .item = @student.blood_type
-        dd.col.s4
-          .label Passport no: 
-          .item = @student.passport_no
-        dd.col.s4
-          .label Enrollment date:
-          .item = @student.enrollment_date
-        dd.col.s4
-          .label Is active:
-          .item = @student.is_active
-        dd.col.s4
-          .label Is deleted:
-          .item = @student.is_deleted
+.card
+  .row
+    .col.s12 style="margin-bottom: 15px; padding: 0px;"
+      ul.tabs.z-depth-1
+        li.tab.col.s3
+          a href='#tab1' Name
+        li.tab.col.s3
+          a href='#tab2' Demographics
+        li.tab.col.s3
+          a href='#tab3' Contacts
+        li.tab.col.s3
+          a href='#tab4' Details
 
-  #tab3
-    .list_description.col.s12
-      dl.row
-        dd.col.s4
-          .label Address
-          .item = @student.address_line1
-          .item = @student.address_line2        
-          .item = @student.city + ' ' + @student.postal_code
-          .item = @student.state
-          .item = @student.country
-        dd.col.s4
-          .label Mobile phone:
-          .item = @student.mobile_phone
-        dd.col.s4
-          .label Home phone:
-          .item = @student.home_phone
-        dd.col.s4
-          .label Email: 
-          .item = @student.email
-      
+    #tab1.tab-content
+      .col.s2
+        .card
+          .card-image
+            - avatar = @student.gender == 'F' ? 'female-child-avatar.png' : 'male-child-avatar.png'
+            = image_tag (@student.photo_uri.present? ? @student.photo_uri : avatar), class: 'media-object show-image'
+          .card-content
+            p.small-text = @student.name
+      .col.s10
+        .list_description
+          dl
+            dd.col.s5
+              .label First name: 
+              .item = @student.first_name
+            dd.col.s5
+              .label Last name: 
+              .item = @student.last_name
+            dd.col.s5
+              .label Date of birth:
+              .item = @student.date_of_birth
+            dd.col.s5
+              .label Admission no: 
+              .item = @student.admission_no
+            dd.col.s5
+              .label Family: 
+              .item = @student.family_id
+            dd.col.s5
+              .label Gender: 
+              .item = @student.gender
+            dd.col.s5
+              .label Student no: 
+              .item = @student.student_no
+
+    #tab2.tab-content
+      .list_description.col.s12
+        dl
+          dd.col.s4
+            .label Nationality: 
+            .item = @student.nationality
+          dd.col.s4
+            .label Religion: 
+            .item = @student.religion
+          dd.col.s4
+            .label Blood type: 
+            .item = @student.blood_type
+          dd.col.s4
+            .label Passport no: 
+            .item = @student.passport_no
+          dd.col.s4
+            .label Enrollment date:
+            .item = @student.enrollment_date
+          dd.col.s4
+            .label Is active:
+            .item = @student.is_active
+          dd.col.s4
+            .label Is deleted:
+            .item = @student.is_deleted
+
+    #tab3.tab-content
+      .col.s4
+        .list_description
+          dl
+            dd
+              .label Address
+              .item = @student.address_line1
+              .item = @student.address_line2        
+              .item = @student.city + ' ' + @student.postal_code
+              .item = @student.state
+              .item = @student.country
+            dd
+              .label Mobile phone:
+              .item = @student.mobile_phone
+            dd
+              .label Home phone:
+              .item = @student.home_phone
+            dd
+              .label Email: 
+              .item = @student.email
+        
       - @student.students_guardians.each do |g|
-        dl.row
-          dt = g.relation
-          dd.col.s4
-            .label Name
-            .item = g.guardian.name
-            
-            .label Address
-            .item = g.guardian.address_line1
-            .item = g.guardian.address_line2        
-            .item = g.guardian.city + ' ' + g.guardian.postal_code
-            .item = g.guardian.state
-            .item = g.guardian.country
-          dd.col.s4
-            .label Mobile phone:
-            .item = g.guardian.mobile_phone
-          dd.col.s4
-            .label Home phone:
-            .item = g.guardian.home_phone
-          dd.col.s4
-            .label Office phone: 
-            .item = g.guardian.office_phone
+        .col.s4
+          .list_description
+            dl
+              dt = g.relation
+              dd
+                .label Name
+                .item = g.guardian.name
+                
+                .label Address
+                .item = g.guardian.address_line1
+                .item = g.guardian.address_line2        
+                .item = g.guardian.city + ' ' + g.guardian.postal_code
+                .item = g.guardian.state
+                .item = g.guardian.country
+              dd
+                .label Mobile phone:
+                .item = g.guardian.mobile_phone
+              dd
+                .label Home phone:
+                .item = g.guardian.home_phone
+              dd
+                .label Office phone: 
+                .item = g.guardian.office_phone
 
-  #tab4
-    .list_description.col.s12
-      dl.row
-        dd.col.s4
-          .label Blood type:: 
-          .item = @student.blood_type
-        dd.col.s4
-          .label Status: 
-          .item = @student.status
-        dd.col.s4
-          .label Status description:
-          .item = @student.status_description
+    #tab4.tab-content
+      .list_description.col.s12
+        dl
+          dd.col.s4
+            .label Blood type:: 
+            .item = @student.blood_type
+          dd.col.s4
+            .label Status: 
+            .item = @student.status
+          dd.col.s4
+            .label Status description:
+            .item = @student.status_description
 
-
-.toolbar.actions
-  = link_to 'Back', students_path, class: 'btn btn-default'
-  = link_to 'Edit', edit_student_path(@student), class: 'btn btn-primary'
 
