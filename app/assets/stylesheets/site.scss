@@ -141,7 +141,8 @@ form {
 	height: 50px;
 	border-top: 1px solid $lighter-grey;
 	background-color: white;
-
+	box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
+	
 	// i.material-icons {
 	// 	color: $gray;
 	// 	margin-left: 6px;

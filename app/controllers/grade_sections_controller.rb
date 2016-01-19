@@ -1,5 +1,5 @@
 class GradeSectionsController < ApplicationController
-  before_action :set_grade_section, only: [:show, :edit, :update, :destroy]
+  before_action :set_grade_section, only: [:show, :edit, :update, :destroy, :students, :add_students]
   before_action :set_year, only: [:index, :show, :new, :edit]
 
   # GET /grade_sections
@@ -25,6 +25,39 @@ class GradeSectionsController < ApplicationController
   # GET /grade_sections/1/edit
   def edit
     @grade_level =  @grade_section.grade_level
+  end
+
+  def students
+    @grade_level = @grade_section.grade_level
+    @filterrific = initialize_filterrific(
+      Student,
+      params[:filterrific],
+      select_options: {
+        sorted_by: Student.options_for_sorted_by
+      }
+    ) or return
+
+    @students = @filterrific.find.page(params[:page])
+
+    respond_to do |format|
+      format.html
+      format.js
+    end
+
+    # Recover from invalid param sets, e.g., when a filter refers to the
+    # database id of a record that doesn’t exist any more.
+    # In this case we reset filterrific and discard all filter params.
+  rescue ActiveRecord::RecordNotFound => e
+    # There is an issue with the persisted param_set. Reset it.
+    puts "Had to reset filterrific params: #{ e.message }"
+    redirect_to(reset_filterrific_url(format: :html)) and return
+  end
+
+  def add_students
+    params[:add].map {|id,on| Student.find(id)}.each do |student|
+      @grade_section.students << student
+    end
+    redirect_to @grade_section, notice: 'Students successfully added'
   end
 
   # POST /grade_sections

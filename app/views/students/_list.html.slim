@@ -1,0 +1,30 @@
+= form_tag({controller: "grade_sections", action: "add_students"}) do 
+  .card#filterrific_results
+    .card-content
+      div
+        = page_entries_info students 
+        = render_filterrific_spinner 
+
+      table.striped
+        tr
+          th 
+          th Name
+          th Admission No 
+          th Family number
+          th Mobile phone
+
+        - students.each do |student|
+          tr
+            td
+              /input.checkbox type="checkbox" id="cb-#{student.id}"
+              = check_box_tag "add[#{student.id}]"
+              = label_tag "add[#{student.id}]", ""
+            td = student.name
+            td = student.admission_no
+            td = student.family_id
+            td = student.mobile_phone
+
+      = will_paginate students 
+
+    .card-action
+      button.btn Add

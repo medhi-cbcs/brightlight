@@ -10,9 +10,6 @@ Rails.application.routes.draw do
   resources :employees
   resources :products
   resources :academic_years
-  resources :grade_levels do
-    resources :grade_sections, shallow: true
-  end
   resources :rosters
   resources :courses do
     resources :course_texts, shallow: true
@@ -42,7 +39,16 @@ Rails.application.routes.draw do
       post 'add_isbn'
     end
   end
-  
+
+  resources :grade_levels do
+    resources :grade_sections, shallow: true do
+      member do
+        get 'students'
+        post 'add_students'
+      end
+    end
+  end
+
   devise_for :users, controllers: {
     omniauth_callbacks: "users/omniauth_callbacks",
     sessions: "users/sessions",

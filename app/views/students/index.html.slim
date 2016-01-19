@@ -16,6 +16,16 @@
         window.location="#{students_path(v:'list')}"
       }
 
+nav.grey.darken-2
+  .nav-wrapper
+    ul.right
+      li
+        = link_to new_student_path
+          | Add New Student
+          i.material-icons.left add
+      li
+        = link_to 'Export as CSV', students_path + '.csv'
+
 .card-panel
   table.striped.compact
     thead
