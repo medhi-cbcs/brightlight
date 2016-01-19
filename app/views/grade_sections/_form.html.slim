@@ -1,35 +1,36 @@
 = form_for @grade_section do |f|
-  - if @grade_section.errors.any?
-    #error_explanation
-      h2 = "#{pluralize(@grade_section.errors.count, "error")} prohibited this grade_section from being saved:"
-      ul
-        - @grade_section.errors.full_messages.each do |message|
-          li = message
-  .row
-    .col.s4
-      = f.label :name
-      = f.text_field :name
-    .col.s4
-      = f.label :homeroom
-      = f.collection_select :homeroom_id, Employee.all_teachers, :id, :name, prompt: true
-  
-  h5 Student List
-  hr
-  .row.header.compact
-    .col.s6 Name
-    .col.s2 Order No
-    .col.s4 Action
-  #students.row.compact
-    = f.fields_for :grade_sections_students do |grade_section_student|
-      .nested-fields
-        = render 'grade_sections_student_fields', f: grade_section_student
+  .card-panel
+    - if @grade_section.errors.any?
+      #error_explanation
+        h2 = "#{pluralize(@grade_section.errors.count, "error")} prohibited this grade_section from being saved:"
+        ul
+          - @grade_section.errors.full_messages.each do |message|
+            li = message
+    .row
+      .col.s4
+        = f.label :name
+        = f.text_field :name
+      .col.s4
+        = f.label :homeroom
+        = f.collection_select :homeroom_id, Employee.all_teachers, :id, :name, prompt: true
+    
+    .section-header Student List
 
-  .col.s12
-    = link_to_add_association f, :grade_sections_students, class: "waves-effect waves-teal btn btn-flat", 'data-association-insertion-method' => 'before', 'data-association-insertion-node' => 'this'
-      ' Add student
-      i.material-icons.left playlist_add
+    .row.header.compact
+      .col.s6 Name
+      .col.s2 Order No
+      .col.s4 Action
+    #students.row.compact
+      = f.fields_for :grade_sections_students do |grade_section_student|
+        .nested-fields
+          = render 'grade_sections_student_fields', f: grade_section_student
 
-  .toolbar.actions.col.s12
+    .col.s12
+      = link_to_add_association f, :grade_sections_students, class: "waves-effect waves-teal btn btn-flat", 'data-association-insertion-method' => 'before', 'data-association-insertion-node' => 'this'
+        ' Add student
+        i.material-icons.left playlist_add
+
+  .toolbar.z-depth-1
     button.btn.waves-effect.waves-light type="submit" Save
     = link_to 'Cancel', courses_path, class: "waves-effect waves-teal btn-flat"
 

@@ -1,5 +1,6 @@
 class GradeSectionsController < ApplicationController
   before_action :set_grade_section, only: [:show, :edit, :update, :destroy]
+  before_action :set_year, only: [:index, :show, :new, :edit]
 
   # GET /grade_sections
   # GET /grade_sections.json
@@ -72,6 +73,11 @@ class GradeSectionsController < ApplicationController
       @grade_section = GradeSection.find(params[:id])
     end
 
+    def set_year
+      @year_id = params[:year] || AcademicYear.current.first.id
+      @academic_year = AcademicYear.find(@year_id)
+    end
+    
     # Never trust parameters from the scary internet, only allow the white list through.
     def grade_section_params
       params.require(:grade_section).permit(:name, :homeroom_id, 

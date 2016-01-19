@@ -1,59 +1,68 @@
 h5 Section
 .giant-letter = @grade_section.name
 
-- unless @grade_section.academic_year_id == current_academic_year_id
-  .toolbar
-    h5.right = AcademicYear.find(@grade_section.academic_year_id).name
+nav.grey.darken-2
+  .nav-wrapper
+    - unless @grade_section.academic_year_id == current_academic_year_id
+      .brand-logo.right style="margin: 0 20px; font-size:1.5em"
+        = AcademicYear.find(@grade_section.academic_year_id).name
+    ul
+      li.right
+        = link_to edit_grade_section_path(@grade_section)
+          | Edit
+          i.material-icons.left edit
 
-.list_description
-  dl.row
-    dd.col.s4
-      .label Grade
-      .item = link_to @grade_section.grade_level.name, @grade_section.grade_level
-    dd.col.s4
-      .label Homeroom teacher
-      .item = @grade_section.homeroom.present? ? link_to(@grade_section.homeroom, @grade_section.homeroom) : '--'
-    dd.col.s4
-      .label Academic Year
-      .item = @grade_section.academic_year.present? ? @grade_section.academic_year.name : "--"
+.card-panel
+  .list_description
+    dl.row
+      dd.col.s4
+        .label Grade
+        .item = link_to @grade_section.grade_level.name, @grade_section.grade_level
+      dd.col.s4
+        .label Homeroom teacher
+        .item = @grade_section.homeroom.present? ? link_to(@grade_section.homeroom, @grade_section.homeroom) : '--'
+      dd.col.s4
+        .label Academic Year
+        .item = @grade_section.academic_year.present? ? @grade_section.academic_year.name : "--"
 
-.row.tabbed
-  .col.s12
-    ul.tabs.z-depth-1
-      li.tab.col.s3
-        a href='#tab1' Students
-      li.tab.col.s3
-        a href='#tab2' Courses
+.card
+  .row
+    .col.s12 style="margin-bottom: 15px; padding: 0px;"
+      ul.tabs.z-depth-1
+        li.tab.col.s3
+          a href='#tab1' Students
+        li.tab.col.s3
+          a href='#tab2' Courses
 
-#tab1
-  h5 Students
-  table.striped.compact
-    thead
-      th No
-      th Name
-    tbody
-      - i = 0
-      - @grade_section.students.each do |student|
-        tr
-          td style="width:40px"
-            = "#{i += 1}. "
-          td
-            = link_to student.name, student
+    #tab1.tab-content
+      h5 Students
+      table.striped.compact
+        thead
+          th No
+          th Name
+        tbody
+          - i = 0
+          - @grade_section.students.each do |student|
+            tr
+              td style="width:40px"
+                = "#{i += 1}. "
+              td
+                = link_to student.name, student
 
-#tab2
-  h5 Course Sections
-  table.striped.compact
-    thead
-      th No
-      th Name
-    tbody
-      - i = 0
-      - @grade_section.course_sections.each do |course_section|
-        tr
-          td style="width:40px"
-            = "#{i += 1}. "
-          td
-            = link_to course_section.name ? course_section.name : '-- Missing name --', course_section, class:"#{'red-text' if course_section.name.blank?}"
+    #tab2.tab-content
+      h5 Course Sections
+      table.striped.compact
+        thead
+          th No
+          th Name
+        tbody
+          - i = 0
+          - @grade_section.course_sections.each do |course_section|
+            tr
+              td style="width:40px"
+                = "#{i += 1}. "
+              td
+                = link_to course_section.name ? course_section.name : '-- Missing name --', course_section, class:"#{'red-text' if course_section.name.blank?}"
 
 .toolbar.actions
   = link_to 'Back', grade_level_grade_sections_path(@grade_section.grade_level), class: "btn waves-effect waves-teal btn-flat"
