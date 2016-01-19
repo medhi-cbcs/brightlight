@@ -1,23 +1,46 @@
-h4 Employees
+.row 
+  .col.s6
+    h4 Employees
+  .col.s5
+    = form_tag({controller:'employees', action:'index'}, {method:'get'}) do 
+      .input-field
+        input type="hidden" name="v" value=@view_style
+        - if params[:search].present?
+          i.material-icons.prefix onclick='reset_form()' style='cursor:pointer'
+            | highlight_off
+        - else
+          i.material-icons.prefix search
+        input.icon-prefix type="text" name="search" placeholder="Search" value=params[:search]    
+    javascript:
+      function reset_form() {
+        window.location="#{employees_path(v:'list')}"
+      }
 
-.toolbar
-  = link_to 'Add Employee', new_employee_path, class: "btn btn-primary"
+nav.grey.darken-2
+  .nav-wrapper
+    ul.right
+      li
+        = link_to new_employee_path
+          | New Employee
+          i.material-icons.left add
 
-table
-  thead
-    tr
-      th Name
-      th Job title
-      th Department
-      th Actions
-
-  tbody
-    - @employees.each do |employee|
+.card-panel
+  table
+    thead
       tr
-        td = link_to employee.name, employee
-        td = employee.job_title
-        td = employee.department || "--"
+        th Name
+        th Job title
+        th Department
+        th Actions
 
-        td = link_to 'Edit', edit_employee_path(employee), class: "btn waves-effect waves-teal btn-flat btn-small"
+    tbody
+      - @employees.each do |employee|
+        tr
+          td = link_to employee.name, employee
+          td = employee.job_title
+          td = employee.department || "--"
 
-= will_paginate @employees
+          td = link_to 'Edit', edit_employee_path(employee), class: "btn waves-effect waves-teal btn-flat btn-small"
+
+.toolbar.z-depth-1
+  = will_paginate @employees
