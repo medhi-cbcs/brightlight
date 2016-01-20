@@ -37,6 +37,8 @@ nav.grey.darken-2
         a href='#tab1' Students
       li.tab
         a href='#tab2' Courses
+      li.tab
+        a href='#tab3' Textbooks
 
     #tab1.tab-content
       h5 Students
@@ -67,3 +69,24 @@ nav.grey.darken-2
                 = "#{i += 1}. "
               td
                 = link_to course_section.name ? course_section.name : '-- Missing name --', course_section, class:"#{'red-text' if course_section.name.blank?}"
+
+
+    #tab3.tab-content
+      h5 Textbooks
+      table.striped.compact
+        thead
+          th No
+          th Title
+          th Author
+        tbody
+          - i = 0
+          - @grade_section.course_sections.map {|cs| cs.course.book_titles}.flatten.each do |book|
+            tr
+              td style="width:40px"
+                = "#{i += 1}. "
+              td
+                = link_to book.title, book
+              td
+                = book.authors
+
+
