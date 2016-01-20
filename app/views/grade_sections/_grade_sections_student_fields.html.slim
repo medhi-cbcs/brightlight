@@ -1,9 +1,9 @@
 .row.compact
-	.input-field.col.s6
-		/= f.label :student, class: 'active'
-		= f.collection_select(:student_id, Student.all, :id, :name, {prompt: true}, {:class => 'browser-default'})
+	.col.s4
+		span style="padding-left:10px; line-height:45px"
+			= Student.where(id:f.object.student_id).first.name if f.object.student_id
 	.input-field.col.s2
 		/= f.label :order_no, class: 'active'
 		= f.number_field :order_no
-	.input-field.col.s4
+	.input-field.col.s4 style="padding-top:8px"
 		= link_to_remove_association "Remove", f, class: "waves-effect waves-teal btn btn-flat red-text btn-small"

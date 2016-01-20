@@ -9,10 +9,6 @@ nav.grey.darken-2
       = AcademicYear.find(@grade_section.academic_year_id).name
     ul
       li.right
-        = link_to students_grade_section_path(@grade_section), class: 'waves-effect waves-light'
-          i.material-icons.left add 
-          | Add students
-      li.right
         = link_to edit_grade_section_path(@grade_section)
           | Edit
           i.material-icons.left edit

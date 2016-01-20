@@ -1,9 +1,15 @@
 /label Course name
 h4 = @course.name
 
-.toolbar.z-depth-1
-  span Course texts
-  a.waves-effect.waves-light.btn.right.modal-trigger href="#add-new-title-modal" Add text book
+nav.grey.darken-2
+  .nav-wrapper
+    .brand-logo style="margin-left: 20px; font-size:1.5em"
+      | Course texts
+    ul.right
+      li 
+        a.waves-effect.waves-light.modal-trigger href="#add-new-title-modal" 
+          | Add text book
+          i.material-icons.left add
 
 #add-new-title-modal.modal.modal-fixed-footer.ui-front
   = form_tag ({controller: "course_texts", action: "create"}) do

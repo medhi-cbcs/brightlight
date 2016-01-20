@@ -1,5 +1,18 @@
 h4 Editing Grade Section #{@grade_section.name}
 
+nav.grey.darken-2
+  .nav-wrapper
+    .brand-logo style="margin: 0 20px; font-size:2.5em"
+      = @grade_section.name
+      /- unless @grade_section.academic_year_id == current_academic_year_id
+    .brand-logo style="margin: 0 20px; font-size:1.5em; padding-left:5em"
+      = AcademicYear.find(@grade_section.academic_year_id).name
+    ul
+      li.right
+        = link_to students_grade_section_path(@grade_section), class: 'waves-effect waves-light'
+          i.material-icons.left add 
+          | Add students
+          
 == render 'form'
 
 

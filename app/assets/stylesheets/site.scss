@@ -472,15 +472,28 @@ section {
   padding: 0 !important;
 }
 
-.card-action {
-	.row {
-		margin-bottom: 0;
-	}
-}
-
 .with-side-padding {
 	padding: 0 20px;
 }
+
+// ============================================ Card ===========================================
+
+.card {
+	.card-action {
+		.row {
+			margin-bottom: 0;
+		}
+
+		a {
+			margin: 0 1em;
+		}
+
+		button {
+			margin: 0 1em;
+		}
+	}
+}
+
 // ============================================ Left Sidebar ===========================================
 
 

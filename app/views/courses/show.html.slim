@@ -23,6 +23,23 @@ h4 = @course.name
             - for term in @course.academic_terms
               .item = term.name
 
+nav.grey.darken-2
+  .nav-wrapper
+    .brand-logo style="margin-left: 20px; font-size:1.5em"
+      | Course
+    ul.right
+      li
+        = link_to new_course_path
+          | New Course
+          i.material-icons.left playlist_add
+      li 
+        = link_to edit_course_path(@course)
+          | Edit
+          i.material-icons.left edit
+      li
+        = link_to course_course_texts_path(@course) 
+          | Edit Course Texts
+          i.material-icons.left book
 .row
   .col.s12
     .card   
@@ -68,8 +85,5 @@ h4 = @course.name
                         p  = textbook.authors
             - else
               p.red-text No textbooks
-    
-      .card-action
-        = link_to '< Back', :back, class: 'btn btn-flat'
-        = link_to 'Edit', edit_course_path(@course), class: 'btn btn-primary'
+
 
