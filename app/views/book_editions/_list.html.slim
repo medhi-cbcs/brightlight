@@ -16,8 +16,7 @@
         - editions.each do |edition|
           tr
             td
-              /input.checkbox type="checkbox" id="cb-#{edition.id}"
-              = check_box_tag "add[#{edition.id}]"
+              input.checkbox type="checkbox" id="add_#{edition.id}" name="add[#{edition.id}]" onchange="toggle_add_button()"
               = label_tag "add[#{edition.id}]", ""
             td = edition.title
             td = edition.authors
@@ -27,6 +26,9 @@
       = will_paginate editions 
 
     .card-action
-      button.btn Add
+      button.btn#add-button disabled=true Add
 
- 
+javascript:
+  function toggle_add_button() {
+    $('#add-button').prop('disabled', $('input.checkbox:checked').length < 1);
+  }
