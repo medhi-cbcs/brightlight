@@ -76,13 +76,14 @@ nav.grey.darken-2
           th Author
         tbody
           - i = 0
-          - @grade_section.course_sections.map {|cs| cs.course.book_titles}.flatten.each do |book|
-            tr
-              td style="width:40px"
-                = "#{i += 1}. "
-              td
-                = link_to book.title, book
-              td
-                = book.authors
+          - if @textbooks.flatten.length > 0
+            - @textbooks.flatten.each do |book|
+              tr
+                td style="width:40px"
+                  = "#{i += 1}. "
+                td
+                  = link_to book.title, book unless book.blank?
+                td
+                  = book.authors unless book.blank?
 
 
