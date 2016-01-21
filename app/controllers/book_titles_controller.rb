@@ -228,8 +228,8 @@ class BookTitlesController < ApplicationController
       @edition.description = book.description
       @edition.authors = book.authors.join(', ')
       @edition.publisher = book.publisher
-      @edition.isbn13 = book.isbn
-      @edition.isbn10 = book.isbn_10
+      @edition.isbn13 = book.isbn || (isbn if isbn.length == 13)
+      @edition.isbn10 = book.isbn_10 || (isbn if isbn.length == 10)
       @edition.page_count = book.page_count
       @edition.small_thumbnail = book.covers[:small]
       @edition.thumbnail = book.covers[:thumbnail]

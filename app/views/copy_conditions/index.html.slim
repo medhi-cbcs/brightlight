@@ -1,0 +1,35 @@
+h1 Listing copy_conditions
+
+table
+  thead
+    tr
+      th Book copy
+      th Book condition
+      th Academic year
+      th Barcode
+      th Notes
+      th User
+      th Start date
+      th End date
+      th
+      th
+      th
+
+  tbody
+    - @copy_conditions.each do |copy_condition|
+      tr
+        td = copy_condition.book_copy
+        td = copy_condition.book_condition
+        td = copy_condition.academic_year
+        td = copy_condition.barcode
+        td = copy_condition.notes
+        td = copy_condition.user
+        td = copy_condition.start_date
+        td = copy_condition.end_date
+        td = link_to 'Show', copy_condition
+        td = link_to 'Edit', edit_copy_condition_path(copy_condition)
+        td = link_to 'Destroy', copy_condition, data: {:confirm => 'Are you sure?'}, :method => :delete
+
+br
+
+= link_to 'New Copy condition', new_copy_condition_path

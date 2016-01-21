@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
 
+  resources :copy_conditions
   resources :book_labels
   resources :rosters
   resources :departments

@@ -1,0 +1,33 @@
+= form_for @copy_condition do |f|
+  - if @copy_condition.errors.any?
+    #error_explanation
+      h2 = "#{pluralize(@copy_condition.errors.count, "error")} prohibited this copy_condition from being saved:"
+      ul
+        - @copy_condition.errors.full_messages.each do |message|
+          li = message
+
+  .field
+    = f.label :book_copy
+    = f.text_field :book_copy
+  .field
+    = f.label :book_condition
+    = f.text_field :book_condition
+  .field
+    = f.label :academic_year
+    = f.text_field :academic_year
+  .field
+    = f.label :barcode
+    = f.text_field :barcode
+  .field
+    = f.label :notes
+    = f.text_field :notes
+  .field
+    = f.label :user
+    = f.text_field :user
+  .field
+    = f.label :start_date
+    = f.date_select :start_date
+  .field
+    = f.label :end_date
+    = f.date_select :end_date
+  .actions = f.submit
