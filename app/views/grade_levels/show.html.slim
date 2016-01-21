@@ -1,12 +1,12 @@
 h4 Grade #{@grade_level.name} Sections
 
 - unless @academic_year.id == current_academic_year_id
-  nav.grey.darken-2
+  nav
     .nav-wrapper
       .brand-logo.right style="margin: 0 20px; font-size:1.5em"
         | #{@academic_year.name}
 
-nav.grey.darken-2
+nav
   .nav-wrapper
     ul
       li

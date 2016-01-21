@@ -123,12 +123,35 @@ form {
 }
 
 // ============================================= Navbar =============================================
-.nav-wrapper {
+
+nav {
+	background-color: $dark-grey;
 	ul {
 		li {
-			button {
-				margin: 0 15px;
+			a {
+				&:hover {
+					background-color: rgba(0,0,0,.3);
+				}
 			}
+		}
+	}
+	.nav-wrapper {
+		ul {
+			li {
+				button {
+					margin: 0 15px;
+				}
+			}
+		}
+	}
+	.input-field {
+		input {
+			border-bottom: 2px dotted gray;
+			width: 85%;
+			&:focus, &[type=text]:valid, &[type=password]:valid,
+      &[type=email]:valid, &[type=url]:valid, &[type=date]:valid {
+        border-bottom: 2px dotted gray;
+      }
 		}
 	}
 }

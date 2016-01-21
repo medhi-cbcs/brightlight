@@ -30,7 +30,7 @@
           input type="checkbox" name="course[academic_term_ids][]" value=academic_term.id id="term#{academic_term.id}" checked=@course.academic_terms.include?(academic_term)
           = label_tag "term#{academic_term.id}", academic_term.name
   
-  nav.grey.darken-2
+  nav
     .nav-wrapper
       .brand-logo style="margin-left: 20px; font-size:1.5em"
         | Course Sections

@@ -102,4 +102,8 @@ class BookEdition < ActiveRecord::Base
     self.small_thumbnail.present?
   end
 
+  def number_of_copies
+    book_copies.length
+  end
+  
 end
