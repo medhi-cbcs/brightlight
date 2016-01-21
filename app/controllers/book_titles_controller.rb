@@ -87,10 +87,15 @@ class BookTitlesController < ApplicationController
   end
 
   def add_existing_editions
-    params[:add].map {|id,on| BookEdition.find(id)}.each do |edition|
-      @book_title.book_editions << edition
+    if params[:add]
+      params[:add].map {|id,on| BookEdition.find(id)}.each do |edition|
+        @book_title.book_editions << edition
+      end
+      redirect_to @book_title, notice: 'Book editions successfully added'
+    else
+      flash[:warning] = 'You must select at least one.'
+      redirect_to :back
     end
-    redirect_to @book_title, notice: 'Book editions successfully added'
   end
 
   def add_isbn
