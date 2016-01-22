@@ -1,33 +1,101 @@
-= form_for @copy_condition do |f|
-  - if @copy_condition.errors.any?
-    #error_explanation
-      h2 = "#{pluralize(@copy_condition.errors.count, "error")} prohibited this copy_condition from being saved:"
-      ul
-        - @copy_condition.errors.full_messages.each do |message|
-          li = message
+ul#sort-options.dropdown-content
+  li = link_to "None", new_copy_condition_path
+  li = link_to "Student", new_copy_condition_path(sort:"student")
+  li = link_to "Title", new_copy_condition_path(sort:"title")
+ul#grade-options.dropdown-content
+  - GradeLevel.all.each do |grade|
+    li 
+      = link_to grade.name, "#!", onclick:"filterSectionOptions(#{grade.id});"
+ul#section-options.dropdown-content
+  - @grade_sections.each do |section|
+    li
+      span class="grade#{section.grade_level_id}" = section.name
 
-  .field
-    = f.label :book_copy
-    = f.text_field :book_copy
-  .field
-    = f.label :book_condition
-    = f.text_field :book_condition
-  .field
-    = f.label :academic_year
-    = f.text_field :academic_year
-  .field
-    = f.label :barcode
-    = f.text_field :barcode
-  .field
-    = f.label :notes
-    = f.text_field :notes
-  .field
-    = f.label :user
-    = f.text_field :user
-  .field
-    = f.label :start_date
-    = f.date_select :start_date
-  .field
-    = f.label :end_date
-    = f.date_select :end_date
-  .actions = f.submit
+- if params[:sort].blank?
+  nav
+    .nav-wrapper
+      ul
+        li
+          = link_to :back
+            i.material-icons chevron_left
+        li.right
+          a.dropdown-button href="#!" data-activates="sort-options"
+            = params[:sort].present? ? params[:sort] : "Sort options"
+            i.material-icons.right arrow_drop_down
+
+  = form_for @copy_condition do |f|
+    .card-panel
+      .row
+        - if @copy_condition.errors.any?
+          #error_explanation
+            h2 = "#{pluralize(@copy_condition.errors.count, "error")} prohibited this copy_condition from being saved:"
+            ul
+              - @copy_condition.errors.full_messages.each do |message|
+                li = message
+        .input-field.col.s4
+          = f.label :barcode
+          = f.text_field :barcode
+        .input-field.col.s2
+          = f.label :book_condition, class:'active'
+          = f.collection_select :book_condition_id, BookCondition.all, :id, :code, {selected: 0}
+        .col.s2
+          button.btn.waves-effect.waves-light type="submit" Save        
+        .input-field.col.s12
+          = f.label :notes
+          = f.text_field :notes
+
+- elsif params[:sort] =~ /student/
+  nav
+    .nav-wrapper
+      ul
+        li
+          = link_to :back
+            i.material-icons chevron_left
+        li.right
+          a.dropdown-button href="#!" data-activates="sort-options"
+            = params[:sort].present? ? params[:sort] : "Sort options"
+            i.material-icons.right arrow_drop_down
+        li.right
+          a.dropdown-button href="#!" data-activates="section-options"
+            = params[:s].present? ? params[:s] : "Choose section"
+            i.material-icons.right arrow_drop_down
+        li.right
+          a.dropdown-button href="#!" data-activates="grade-options"
+            = params[:g].present? ? params[:g] : "Choose grade"
+            i.material-icons.right arrow_drop_down
+  javascript:
+    //$(filterSectionOptions(grade_ids,$('#course_academic_year_id').val()));
+    function filterSectionOptions(id) {
+      var grade_ids = #{raw @grade_level_ids};
+      grade_ids.forEach(function(g){ 
+        if(id!=g) { 
+          $(".grade"+g).hide();
+        } else {
+          $(".grade"+id).show();
+        }
+      }) 
+    }
+  = form_tag do
+
+  = form_for @copy_condition do |f|
+    .card-panel
+      .row
+        - if @copy_condition.errors.any?
+          #error_explanation
+            h2 = "#{pluralize(@copy_condition.errors.count, "error")} prohibited this copy_condition from being saved:"
+            ul
+              - @copy_condition.errors.full_messages.each do |message|
+                li = message
+        .input-field.col.s4
+          = f.label :barcode
+          = f.text_field :barcode
+        .input-field.col.s2
+          = f.label :book_condition, class:'active'
+          = f.collection_select :book_condition_id, BookCondition.all, :id, :code, {selected: 0}
+        .col.s2
+          button.btn.waves-effect.waves-light type="submit" Save        
+        .input-field.col.s12
+          = f.label :notes
+          = f.text_field :notes
+- elsif params[:sort] =~ /title/
+

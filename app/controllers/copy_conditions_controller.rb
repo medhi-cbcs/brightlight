@@ -15,6 +15,9 @@ class CopyConditionsController < ApplicationController
   # GET /copy_conditions/new
   def new
     @copy_condition = CopyCondition.new
+    @grade_level_ids = GradeLevel.all.collect(&:id)
+    @grade_sections = GradeSection.all
+    @grade_sections_ids = GradeSection.all.collect(&:id)
   end
 
   # GET /copy_conditions/1/edit

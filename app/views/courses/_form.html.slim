@@ -23,7 +23,7 @@
       .input-field.col.s4
         = f.label :academic_year_id, class: 'active'
         = f.collection_select(:academic_year_id, AcademicYear.all, :id, :name, {}, {:class => 'browser-default', onchange:"toggleDisplayTermCheckBoxes(#{AcademicYear.all.collect(&:id)},$('#course_academic_year_id').val())"})
-      = content_tag "div", id:'years', data: {ids: AcademicYear.all.collect(&:id)} do
+      /= content_tag "div", id:'years', data: {ids: AcademicYear.all.collect(&:id)} do
       = hidden_field_tag("course[academic_term_ids][]", nil)
       - AcademicTerm.all.each do |academic_term|
         .input-field.col.s4 class="year#{academic_term.academic_year_id}"
