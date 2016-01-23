@@ -16,8 +16,8 @@ class CopyConditionsController < ApplicationController
   def new
     @copy_condition = CopyCondition.new
     @grade_level_ids = GradeLevel.all.collect(&:id)
-    @grade_sections = GradeSection.all
-    @grade_sections_ids = GradeSection.all.collect(&:id)
+    @grade_sections = GradeSection.with_academic_year_id(AcademicYear.current_id)
+    @grade_sections_ids = @grade_sections.collect(&:id)
   end
 
   # GET /copy_conditions/1/edit
