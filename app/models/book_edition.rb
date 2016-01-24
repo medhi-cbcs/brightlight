@@ -75,6 +75,54 @@ class BookEdition < ActiveRecord::Base
     ]
   end
 
+  def self.searchGoogleAPI(isbn)
+    results = GoogleBooks::API.search("isbn:#{isbn}")
+    unless results.total_results == 0
+      book_edition = BookEdition.new
+      book = results.first
+      book_edition.title = book.title
+      book_edition.authors = book.authors.join(', ')
+      book_edition.publisher = book.publisher
+      book_edition.isbn13 = book.isbn || (isbn if isbn.length == 13)
+      book_edition.isbn10 = book.isbn_10 || (isbn if isbn.length == 10)
+      book_edition.page_count = book.page_count
+      book_edition.small_thumbnail = book.covers[:small]
+      book_edition.thumbnail = book.covers[:thumbnail]
+      book_edition.published_date = book.published_date 
+      book_edition.language = book.language
+      book_edition.google_book_id = book.id
+      return book_edition
+    else 
+      return nil
+    end
+  end
+
+  def self.googleAPI(query)
+    results = GoogleBooks::API.search(query)
+  end
+
+  def self.searchISBNDB(isbn)
+    result = ISBNDBClient::API.find(isbn)
+    unless result.nil?
+      book_edition = BookEdition.new
+      book = result
+      book_edition.title = book.title
+      book_edition.description = book.description
+      book_edition.authors = book.authors.map {|data| data['name']}.join(', ')
+      book_edition.publisher = book.publisher
+      book_edition.isbn13 = book.isbn
+      book_edition.isbn10 = book.isbn10
+      book_edition.page_count = book.page_count
+      book_edition.published_date = book.published_date 
+      book_edition.edition_info = book.edition_info
+      book_edition.language = book.language
+      book_edition.isbndb_id = book.book_id
+      return book_edition
+    else
+      return nil
+    end
+  end
+
   def create_book_title
     book_title = BookTitle.create(
       title: self.title,

@@ -1,6 +1,6 @@
 h4 New Book Title
 
-- if @book_title.title.blank?
+- if @book_title.blank? || @book_title.title.blank?
 	.card-panel
 		.card-content
 			p.grey-text Fill out the form below or enter ISBN No and let the program seach the information for you

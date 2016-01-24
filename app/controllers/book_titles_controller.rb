@@ -86,89 +86,6 @@ class BookTitlesController < ApplicationController
 
   end
 
-  def add_existing_editions
-    if params[:add]
-      params[:add].map {|id,on| BookEdition.find(id)}.each do |edition|
-        @book_title.book_editions << edition
-      end
-      redirect_to @book_title, notice: 'Book editions successfully added'
-    else
-      flash[:warning] = 'You must select at least one.'
-      redirect_to :back
-    end
-  end
-
-  def add_isbn
-    book_edition = BookEdition.new
-
-    isbn = params[:isbn]
-
-    # First try to find the ISBN in Google Books
-    books = GoogleBooks::API.search("isbn:#{isbn}")
-    unless books.total_results == 0
-      book = books.first
-      book_edition.title = book.title
-      book_edition.authors = book.authors.join(', ')
-      book_edition.publisher = book.publisher
-      book_edition.isbn13 = book.isbn || (isbn if isbn.length == 13)
-      book_edition.isbn10 = book.isbn_10 || (isbn if isbn.length == 10)
-      book_edition.page_count = book.page_count
-      book_edition.small_thumbnail = book.covers[:small]
-      book_edition.thumbnail = book.covers[:thumbnail]
-      book_edition.published_date = book.published_date 
-
-      respond_to do |format|
-        if book_edition.save
-          @book_title.book_editions << book_edition
-          format.html { redirect_to @book_title, notice: 'Book was successfully created.' }
-          format.json { render :show, status: :created, location: @book_edition }
-        else
-          format.html { redirect_to @book_title, alert: "Cannot add edition with that ISBN" }
-          format.json { render json: @book_title.errors, status: :unprocessable_entity }
-        end
-      end
-
-    else
-      result = ISBNDBClient::API.find(isbn)
-      puts result
-      unless result.nil?
-        book = result
-        book_edition.title = book.title
-        book_edition.description = book.description
-        book_edition.authors = book.authors.map {|x| x['name']}.join(', ')
-        book_edition.publisher = book.publisher
-        book_edition.isbn13 = book.isbn
-        book_edition.isbn10 = book.isbn10
-        book_edition.page_count = book.page_count
-        book_edition.published_date = book.published_date 
-
-        respond_to do |format|
-          if book_edition.save
-            @book_title.book_editions << book_edition
-            format.html { redirect_to @book_title, notice: 'Book was successfully created.' }
-            format.json { render :show, status: :created, location: @book_edition }
-          else
-            format.html { redirect_to @book_title, alert: "Cannot add edition with ISBN #{isbn}" }
-            format.json { render json: @book_title.errors, status: :unprocessable_entity }
-          end
-        end
-      
-      else
-        respond_to do |format|
-          format.html { redirect_to @book_title, alert: "Could not find book with ISBN #{isbn}" }
-          format.json { render json: @book_title.errors, status: :unprocessable_entity }
-        end
-      end
-    end
-  end
-
-
-  rescue_from ISBNDBClient::API::Error, :with => :book_not_found
-
-  def book_not_found(exception)
-    flash[:alert] = exception
-  end
-
   # POST /book_titles
   # POST /book_titles.json
   def create
@@ -216,63 +133,187 @@ class BookTitlesController < ApplicationController
   end
 
   # POST /search_isbn
-  def search_isbn
-    @edition = BookEdition.new
-    isbn = params[:isbn]
+  # def search_book
+  #   @edition = BookEdition.new
+  #   isbn = params[:isbn]
 
-    # First try to find the ISBN in Google Books
-    books = GoogleBooks::API.search("isbn:#{isbn}")
-    unless books.total_results == 0
-      book = books.first
-      @edition.title = book.title
-      @edition.description = book.description
-      @edition.authors = book.authors.join(', ')
-      @edition.publisher = book.publisher
-      @edition.isbn13 = book.isbn || (isbn if isbn.length == 13)
-      @edition.isbn10 = book.isbn_10 || (isbn if isbn.length == 10)
-      @edition.page_count = book.page_count
-      @edition.small_thumbnail = book.covers[:small]
-      @edition.thumbnail = book.covers[:thumbnail]
-      @edition.published_date = book.published_date 
+  #   # First try to find the ISBN in Google Books
+  #   books = GoogleBooks::API.search("isbn:#{isbn}")
+  #   unless books.total_results == 0
+  #     book = books.first
+  #     @edition.title = book.title
+  #     @edition.description = book.description
+  #     @edition.authors = book.authors.join(', ')
+  #     @edition.publisher = book.publisher
+  #     @edition.isbn13 = book.isbn || (isbn if isbn.length == 13)
+  #     @edition.isbn10 = book.isbn_10 || (isbn if isbn.length == 10)
+  #     @edition.page_count = book.page_count
+  #     @edition.small_thumbnail = book.covers[:small]
+  #     @edition.thumbnail = book.covers[:thumbnail]
+  #     @edition.published_date = book.published_date 
 
-      # Create a BookTitle with this edition
-      @book_title = BookTitle.new(
-        title: @edition.title,
-        authors: @edition.authors, 
-        publisher: @edition.publisher,
-        image_url: @edition.small_thumbnail)
+  #     # Create a BookTitle with this edition
+  #     @book_title = BookTitle.new(
+  #       title: @edition.title,
+  #       authors: @edition.authors, 
+  #       publisher: @edition.publisher,
+  #       image_url: @edition.small_thumbnail)
 
+  #   else
+  #     result = ISBNDBClient::API.find(isbn)
+  #     puts result
+  #     unless result.nil?
+  #       book = result
+  #       @edition.title = book.title
+  #       @edition.description = book.description
+  #       @edition.authors = book.authors.map {|x| x['name']}.join(', ')
+  #       @edition.publisher = book.publisher
+  #       @edition.isbn13 = book.isbn
+  #       @edition.isbn10 = book.isbn10
+  #       @edition.page_count = book.page_count
+  #       @edition.published_date = book.published_date 
+
+  #       # Create a BookTitle with this edition
+  #       @book_title = BookTitle.new(
+  #         title: @edition.title,
+  #         authors: @edition.authors, 
+  #         publisher: @edition.publisher)
+  #     end
+  #   end
+  #   @book_title.book_editions.build @edition.attributes
+
+  #   render new_book_title_path
+  # end
+
+  def add_existing_editions
+    if params[:add]
+      params[:add].map {|id,on| BookEdition.find(id)}.each do |edition|
+        @book_title.book_editions << edition
+      end
+      redirect_to @book_title, notice: 'Book editions successfully added'
     else
-      result = ISBNDBClient::API.find(isbn)
-      puts result
-      unless result.nil?
-        book = result
-        @edition.title = book.title
-        @edition.description = book.description
-        @edition.authors = book.authors.map {|x| x['name']}.join(', ')
-        @edition.publisher = book.publisher
-        @edition.isbn13 = book.isbn
-        @edition.isbn10 = book.isbn10
-        @edition.page_count = book.page_count
-        @edition.published_date = book.published_date 
+      flash[:warning] = 'You must select at least one.'
+      redirect_to :back
+    end
+  end
 
-        # Create a BookTitle with this edition
-        @book_title = BookTitle.new(
-          title: @edition.title,
-          authors: @edition.authors, 
-          publisher: @edition.publisher)
+  # def add_book
+  #   book_edition = BookEdition.new
+
+  #   isbn = params[:isbn]
+
+  #   # First try to find the ISBN in Google Books
+  #   books = GoogleBooks::API.search("isbn:#{isbn}")
+  #   unless books.total_results == 0
+  #     book = books.first
+  #     book_edition.title = book.title
+  #     book_edition.authors = book.authors.join(', ')
+  #     book_edition.publisher = book.publisher
+  #     book_edition.isbn13 = book.isbn || (isbn if isbn.length == 13)
+  #     book_edition.isbn10 = book.isbn_10 || (isbn if isbn.length == 10)
+  #     book_edition.page_count = book.page_count
+  #     book_edition.small_thumbnail = book.covers[:small]
+  #     book_edition.thumbnail = book.covers[:thumbnail]
+  #     book_edition.published_date = book.published_date 
+
+  #     respond_to do |format|
+  #       if book_edition.save
+  #         @book_title.book_editions << book_edition
+  #         format.html { redirect_to @book_title, notice: 'Book was successfully created.' }
+  #         format.json { render :show, status: :created, location: @book_edition }
+  #       else
+  #         format.html { redirect_to @book_title, alert: "Cannot add edition with that ISBN" }
+  #         format.json { render json: @book_title.errors, status: :unprocessable_entity }
+  #       end
+  #     end
+
+  #   else
+  #     result = ISBNDBClient::API.find(isbn)
+  #     puts result
+  #     unless result.nil?
+  #       book = result
+  #       book_edition.title = book.title
+  #       book_edition.description = book.description
+  #       book_edition.authors = book.authors.map {|x| x['name']}.join(', ')
+  #       book_edition.publisher = book.publisher
+  #       book_edition.isbn13 = book.isbn
+  #       book_edition.isbn10 = book.isbn10
+  #       book_edition.page_count = book.page_count
+  #       book_edition.published_date = book.published_date 
+
+  #       respond_to do |format|
+  #         if book_edition.save
+  #           @book_title.book_editions << book_edition
+  #           format.html { redirect_to @book_title, notice: 'Book was successfully created.' }
+  #           format.json { render :show, status: :created, location: @book_edition }
+  #         else
+  #           format.html { redirect_to @book_title, alert: "Cannot add edition with ISBN #{isbn}" }
+  #           format.json { render json: @book_title.errors, status: :unprocessable_entity }
+  #         end
+  #       end
+      
+  #     else
+  #       respond_to do |format|
+  #         format.html { redirect_to @book_title, alert: "Could not find book with ISBN #{isbn}" }
+  #         format.json { render json: @book_title.errors, status: :unprocessable_entity }
+  #       end
+  #     end
+  #   end
+  # end
+
+  def add_isbn
+    isbn = params[:isbn]
+    
+    begin
+      book_edition = BookEdition.searchGoogleAPI(isbn)
+      book_edition = BookEdition.searchISBNDB(isbn) if book_edition.blank?
+
+      respond_to do |format|
+        if book_edition.save
+          @book_title.book_editions << book_edition
+          format.html { redirect_to @book_title, notice: 'Book edition was successfully added.' }
+          format.json { render :show, status: :created, location: @book_edition }
+        else
+          format.html { redirect_to @book_title, alert: "Couldn't add edition with ISBN #{isbn}" }
+          format.json { render json: @book_title.errors, status: :unprocessable_entity }
+        end
+      end
+
+    rescue ISBNDBClient::API::Error
+      respond_to do |format|
+        format.html { redirect_to @book_title, alert: "Couldn't find edition with ISBN #{isbn}" }
+        format.json { render json: @book_title.errors, status: :unprocessable_entity }
       end
     end
-    @book_title.book_editions.build @edition.attributes
-
-    render new_book_title_path
   end
-  
-  rescue_from ISBNDBClient::API::Error, :with => :book_not_found
 
-  def book_not_found(exception)
-    flash[:alert] = exception
-    render :new
+  def search_isbn
+    isbn = params[:isbn]
+  
+    begin  
+      @edition = BookEdition.searchGoogleAPI(isbn)
+      @edition = BookEdition.searchISBNDB(isbn) if @edition.blank?
+    
+      @book_title = BookTitle.new(
+          title: @edition.title,
+          authors: @edition.authors, 
+          publisher: @edition.publisher,
+          image_url: @edition.small_thumbnail)
+      @book_title.book_editions.build @edition.attributes
+
+      render new_book_title_path
+
+    rescue ISBNDBClient::API::Error
+      respond_to do |format|
+        format.html { 
+          flash[:alert] = "Couldn't find edition with ISBN #{isbn}"
+          @book_title = BookTitle.new
+          @edition = @book_title.book_editions.build
+          render :new
+        }
+        format.json { render json: @edition.errors, status: :unprocessable_entity }
+      end
+    end
   end
   
   # POST /book_titles/delete
