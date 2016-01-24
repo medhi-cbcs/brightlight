@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
 
-  resources :copy_conditions
+  resources :copy_conditions, except: [:index]
   resources :book_labels
   resources :rosters
   resources :departments
@@ -26,6 +26,8 @@ Rails.application.routes.draw do
       get 'new_labels'
     end
   end
+
+  get 'book_copies/:id/conditions' => 'copy_conditions#index', as: :book_copy_conditions
 
   resources :book_titles do
     collection do

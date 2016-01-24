@@ -1,35 +1,42 @@
-h1 Listing copy_conditions
+h4 Book Condition History
 
-table
-  thead
-    tr
-      th Book copy
-      th Book condition
-      th Academic year
-      th Barcode
-      th Notes
-      th User
-      th Start date
-      th End date
-      th
-      th
-      th
+.card-panel
+  .row
+    .col.s12
+      .label Book Title
+      h6 = @book_edition.title
+    .col.s3
+      .label barcode
+      div = @book_copy.barcode
+    .col.s3
+      .label Book No.
+      div = @book_copy.copy_no
+nav
+  .nav-wrapper
+    ul.right
+      li
+        = link_to new_copy_condition_path
+          | Update condition
+          i.material-icons.left add
 
-  tbody
-    - @copy_conditions.each do |copy_condition|
+.card-panel
+  table.striped
+    thead
       tr
-        td = copy_condition.book_copy
-        td = copy_condition.book_condition
-        td = copy_condition.academic_year
-        td = copy_condition.barcode
-        td = copy_condition.notes
-        td = copy_condition.user
-        td = copy_condition.start_date
-        td = copy_condition.end_date
-        td = link_to 'Show', copy_condition
-        td = link_to 'Edit', edit_copy_condition_path(copy_condition)
-        td = link_to 'Destroy', copy_condition, data: {:confirm => 'Are you sure?'}, :method => :delete
+        th Date
+        th Book condition
+        th Academic year
+        th Notes
 
-br
+    tbody
+      - @copy_conditions.each do |copy_condition|
+        - colors = ['blue', 'green', 'yellow', 'red']
+        tr
+          td = copy_condition.start_date
+          td 
+            span class="#{colors[copy_condition.book_condition.code.to_i]}-text" = copy_condition.book_condition.code 
+          td = copy_condition.academic_year.name
+          td = copy_condition.notes
 
-= link_to 'New Copy condition', new_copy_condition_path
+
+

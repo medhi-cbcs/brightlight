@@ -15,10 +15,6 @@ class ApplicationController < ActionController::Base
     end
   end
 
-  # def current_user
-  #   @current_user ||= User.find_by(id: session[:user_id])
-  # end
-
   # rescue_from (ActiveRecord::RecordNotFound) { |exception| handle_exception(exception, 404) }
 
  #  protected

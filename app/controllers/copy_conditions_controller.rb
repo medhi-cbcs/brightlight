@@ -1,10 +1,13 @@
 class CopyConditionsController < ApplicationController
   before_action :set_copy_condition, only: [:show, :edit, :update, :destroy]
+  include ApplicationHelper
 
   # GET /copy_conditions
   # GET /copy_conditions.json
   def index
-    @copy_conditions = CopyCondition.all
+    @copy_conditions = CopyCondition.where(book_copy_id:params[:id])
+    @book_copy = @copy_conditions.first.book_copy
+    @book_edition = @book_copy.book_edition
   end
 
   # GET /copy_conditions/1
@@ -27,11 +30,21 @@ class CopyConditionsController < ApplicationController
   # POST /copy_conditions
   # POST /copy_conditions.json
   def create
-    @copy_condition = CopyCondition.new(copy_condition_params)
+    @book_copy = BookCopy.copy_with_barcode(copy_condition_params[:barcode])
+
+    @copy_condition = CopyCondition.new(
+      book_copy_id: @book_copy.id,
+      book_condition_id: copy_condition_params[:book_condition_id],
+      academic_year_id: current_academic_year_id,
+      barcode: copy_condition_params[:barcode],
+      notes: copy_condition_params[:notes],
+      start_date: Date.today,
+      user_id: current_user.id
+      )
 
     respond_to do |format|
       if @copy_condition.save
-        format.html { redirect_to @copy_condition, notice: 'Copy condition was successfully created.' }
+        format.html { redirect_to book_copy_conditions_url(@book_copy.id), notice: 'Copy condition was successfully created.' }
         format.json { render :show, status: :created, location: @copy_condition }
       else
         format.html { render :new }
@@ -45,7 +58,7 @@ class CopyConditionsController < ApplicationController
   def update
     respond_to do |format|
       if @copy_condition.update(copy_condition_params)
-        format.html { redirect_to @copy_condition, notice: 'Copy condition was successfully updated.' }
+        format.html { redirect_to book_copy_conditions_url(@book_copy.id), notice: 'Copy condition was successfully updated.' }
         format.json { render :show, status: :ok, location: @copy_condition }
       else
         format.html { render :edit }
@@ -57,9 +70,10 @@ class CopyConditionsController < ApplicationController
   # DELETE /copy_conditions/1
   # DELETE /copy_conditions/1.json
   def destroy
+    @book_copy = @copy_condition.book_copy
     @copy_condition.destroy
     respond_to do |format|
-      format.html { redirect_to copy_conditions_url, notice: 'Copy condition was successfully destroyed.' }
+      format.html { redirect_to book_copy_conditions_url(@book_copy.id), notice: 'Copy condition was successfully destroyed.' }
       format.json { head :no_content }
     end
   end

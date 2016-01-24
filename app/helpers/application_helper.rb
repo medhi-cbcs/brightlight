@@ -4,6 +4,6 @@ module ApplicationHelper
   end
 
   def current_academic_year_id
-  	session[:year_id] ||= AcademicYear.current.first.id
+  	session[:year_id] ||= AcademicYear.current_id
   end
 end

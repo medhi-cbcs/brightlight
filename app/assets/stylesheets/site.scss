@@ -27,6 +27,14 @@ $muted-red:				#f5494d;
 	margin: 6px 6px;
 }
 
+
+.label {
+	color: $light-grey;
+	text-transform: uppercase;
+	font-size: 0.8em;
+	font-weight: bold;
+}
+
 // ============================================ Table ===============================================
 
 table.compact {
