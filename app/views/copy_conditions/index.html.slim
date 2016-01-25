@@ -13,8 +13,12 @@ h4 Book Condition History
       div = @book_copy.copy_no
 nav
   .nav-wrapper
-    ul.right
+    ul
       li
+        = link_to @book_copy
+          i.material-icons.left chevron_left
+          | Book Copy
+      li.right
         = link_to new_copy_condition_path
           | Update condition
           i.material-icons.left add
@@ -30,11 +34,11 @@ nav
 
     tbody
       - @copy_conditions.each do |copy_condition|
-        - colors = ['blue', 'green', 'yellow', 'red']
+        - colors = {"new"=>"blue", "good"=>"green", "fair"=>"orange", "poor"=>"red"}
         tr
           td = copy_condition.start_date
           td 
-            span class="#{colors[copy_condition.book_condition.code.to_i]}-text" = copy_condition.book_condition.code 
+            span class="#{colors[copy_condition.book_condition.code]}-text" = copy_condition.book_condition.code 
           td = copy_condition.academic_year.name
           td = copy_condition.notes
 

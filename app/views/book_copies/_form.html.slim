@@ -33,13 +33,6 @@
               .input-field.col.s4
                 = f.label 'Label', class: 'active'
                 = f.text_field :copy_no
-            .row
-              .input-field.col.s4
-                = f.label :book_condition, class: 'active'
-                = f.collection_select :book_condition_id, BookCondition.all, :id, :code, prompt: true
-              .input-field.col.s4
-                = f.label :status_id, class: 'active'
-                = f.collection_select :status_id, Status.all, :id, :name, prompt: true
 
   br
   .card-action

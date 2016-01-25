@@ -44,6 +44,7 @@ class CopyConditionsController < ApplicationController
 
     respond_to do |format|
       if @copy_condition.save
+        @book_copy.update(book_condition_id:@copy_condition.book_condition_id)
         format.html { redirect_to book_copy_conditions_url(@book_copy.id), notice: 'Copy condition was successfully created.' }
         format.json { render :show, status: :created, location: @copy_condition }
       else

@@ -45,6 +45,7 @@ nav
       th Publisher
       th ISBN 10
       th ISBN
+      th Copies
 
     tbody
     - @book_title.book_editions.each do |edition|
@@ -54,5 +55,6 @@ nav
         td = edition.publisher
         td = edition.isbn10
         td = edition.isbn13
+        td = edition.number_of_copies
 
 

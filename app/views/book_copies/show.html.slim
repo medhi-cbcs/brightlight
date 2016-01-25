@@ -10,6 +10,9 @@ nav
         = link_to edit_book_copy_path(@book_copy)
           i.material-icons.left edit
           | Edit
+      li.right
+        = link_to book_copy_conditions_path(@book_copy)
+          | Conditions
 .card
   .card-content
     table
@@ -32,10 +35,10 @@ nav
             dl.row
               dd.col.s4
                 .label ISBN 10
-                .item = @book_copy.book_edition.isbn10
+                .item = @book_copy.book_edition.isbn10.blank? ? '--' : @book_copy.book_edition.isbn10
               dd.col.s4
                 .label ISBN
-                .item = @book_copy.book_edition.isbn13
+                .item = @book_copy.book_edition.isbn13.blank? ? '--' : @book_copy.book_edition.isbn13
             dl.row
               dd.col.s4
                 .label Condition
