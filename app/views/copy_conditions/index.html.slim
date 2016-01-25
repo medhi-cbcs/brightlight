@@ -38,7 +38,7 @@ nav
         tr
           td = copy_condition.start_date
           td 
-            span class="#{colors[copy_condition.book_condition.code]}-text" = copy_condition.book_condition.code 
+            span class="#{colors[copy_condition.book_condition.code.downcase]}-text" = copy_condition.book_condition.code 
           td = copy_condition.academic_year.name
           td = copy_condition.notes
 
