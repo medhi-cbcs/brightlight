@@ -3,22 +3,21 @@ h4 Courses
 nav
   .nav-wrapper
     ul
-      li
+      li.tooltipped data-position="bottom" data-delay="50" data-tooltip="Show only selected grade"
         a.dropdown-button href="#!" data-activates="grades-list"
-          = params[:grade_id] ? "Grade #{GradeLevel.where(id:params[:grade_id]).first.name}" : "Choose grade"
+          = params[:grade_id] ? "Grade #{GradeLevel.where(id:params[:grade_id]).first.name}" : "Filter grade"
           i.material-icons.right arrow_drop_down
-      li.right
-        = link_to courses_path(grade_id:params[:grade_id])
-           i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="Expanded view"  view_list
-      li.right
-        = link_to courses_path({v:'list',grade_id:params[:grade_id]})
-          i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="List view"  list
+          i.material-icons.left filter_list
+      li.right.tooltipped data-position="bottom" data-delay="50" data-tooltip="Create new course"
+        = link_to new_course_path
+          | New Course
+          i.material-icons.left playlist_add
 
     ul#grades-list.dropdown-content
       - GradeLevel.all.each do |grade|
         li
           = link_to courses_path(grade_id:grade.id)
-            = grade.name
+            = "Grade #{grade.name}"
 
 .card-panel
   table.striped

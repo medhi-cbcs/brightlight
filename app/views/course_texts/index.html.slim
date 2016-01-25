@@ -3,10 +3,11 @@ h4 = @course.name
 
 nav
   .nav-wrapper
-    .brand-logo style="margin-left: 20px; font-size:1.5em"
-      | Course texts
-    ul.right
-      li 
+    ul
+      li
+        = link_to @course
+          i.material-icons chevron_left
+      li.right
         a.waves-effect.waves-light.modal-trigger href="#add-new-title-modal" 
           | Add text book
           i.material-icons.left add
@@ -17,40 +18,41 @@ nav
       h5 Adding new text book
       .row      
         .input-field.col.s12
-          / = label_tag 'book_title', 'Enter book title', class:'active'
-          = text_field_tag :title_field, nil, placeholder:"Enter book title"
+          = label_tag :title_field, 'Enter book title', class:'active'
+          = text_field_tag :title_field
           = hidden_field :course_text, :course_id, {value: @course.id}
           = hidden_field :course_text, :book_title_id
       #book-cover
       #selected
     .modal-footer
-      / .action style="padding-top: 14px;"
-      button.waves-effect.waves-light.modal-action.btn-flat type="submit" Add
+      button#add-button.waves-effect.waves-light.modal-action.btn.btn-default disabled=true type="submit" Add
       a.waves-effect.waves-light.modal-action.modal-close.btn-flat href="#!" Cancel
 
   javascript:
     $(function() {
-        function log(image_url,title ) {
-          $("#book-cover").empty();
-          $("#selected").empty()
-          $("<div>").text(title).prependTo("#selected");
-          $("<img>").attr("src", image_url).prependTo("#book-cover");
-          $("#title_field").val("");
-          $("#book-cover").scrollTop(0);
+      function log(image_url,title ) {
+        $("#book-cover").empty();
+        $("#selected").empty()
+        $("<div>").text(title).prependTo("#selected");
+        $("<img>").attr("src", image_url).prependTo("#book-cover");
+        $("#title_field").val("");
+        $("#book-cover").scrollTop(0);
+      }
+      $("#title_field").autocomplete({
+        source: "/book_titles.json",
+        minLength: 2,
+        select: function(event, ui) {
+          event.preventDefault();
+          $("#course_text_book_title_id").val(ui.item.value);
+          $('#add-button').prop('disabled', false);
+          log(ui.item.image_url, ui.item? ui.item.label : "Nothing selected");
         }
-        $("#title_field").autocomplete({
-          source: "/book_titles.json",
-          minLength: 2,
-          select: function(event, ui) {
-            event.preventDefault();
-            $("#course_text_book_title_id").val(ui.item.value);
-            log(ui.item.image_url, ui.item? ui.item.label : "Nothing selected");
-          }
-        });
       });
+    });
 
 
 .card-panel
+  .label Course texts
   table.striped
     thead
       tr
