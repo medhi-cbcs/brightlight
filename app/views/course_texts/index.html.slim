@@ -8,6 +8,12 @@ nav
         = link_to @course
           i.material-icons chevron_left
       li.right
+        = link_to course_course_texts_path(@course)
+          i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="Expanded view"  view_module
+      li.right
+        = link_to course_course_texts_path(@course, {v:'list'})
+          i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="List view"  list
+      li.right
         a.waves-effect.waves-light.modal-trigger href="#add-new-title-modal" 
           | Add text book
           i.material-icons.left add
@@ -51,32 +57,58 @@ nav
     });
 
 
-.card-panel
-  .label Course texts
-  table.striped
-    thead
-      tr
-        th ID
-        th Title
-        th Author
-        th Publisher
-        th Actions
-
-
-    tbody
-      - @course_texts.each do |course_text|
+- if @view_style == :list
+  .card-panel
+    .label Course texts
+    table.striped
+      thead
         tr
-          - if course_text.book_title.present?
-            td = course_text.book_title_id
-            td = link_to course_text.book_title.title, course_text.book_title
-            td = course_text.book_title.authors
-            td = course_text.book_title.publisher
-          - else
-            td = course_text.book_title_id
-            td Missing data for Book Title id: #{course_text.book_title_id}
+          th Title
+          th Author
+          th Publisher
+          th Actions
+
+      tbody
+        - @course_texts.each do |course_text|
+          tr
+            - if course_text.book_title.present?
+              td = link_to course_text.book_title.title, course_text.book_title
+              td = course_text.book_title.authors
+              td = course_text.book_title.publisher
+            - else
+              td Missing data for Book Title id: #{course_text.book_title_id}
+              td
+              td
             td
-            td
-          td
+              = link_to course_text, data: {:confirm => 'Are you sure?'}, :method => :delete
+                i.material-icons.red-text.tooltipped data-position="bottom" data-delay="50" data-tooltip="Remove" delete
+- else
+  .row
+    - @course_texts.each do |course_text|
+      .col.s3
+        .card.medium
+          .card-image
+            - thumbnail = course_text.book_title.image_url.present? ? course_text.book_title.image_url : 'book-icon.png' 
+            = image_tag(thumbnail, class: 'list_image activator')           
+          .card-content
+            span.card-title.truncate.grey-text.text-darken-3.activator 
+              = course_text.book_title.title
+              i.material-icons.right more_vert
+          .card-action
+            = link_to course_text.book_title
+              i.material-icons.left.tooltipped data-position="bottom" data-delay="50" data-tooltip="Show" visibility
             = link_to course_text, data: {:confirm => 'Are you sure?'}, :method => :delete
-              i.material-icons.red-text.tooltipped data-position="bottom" data-delay="50" data-tooltip="Remove" delete
+              i.material-icons.left.red-text.tooltipped data-position="bottom" data-delay="50" data-tooltip="Remove" delete
+          .card-reveal
+            .card-title.grey-text
+              i.material-icons.right close
+            p  = course_text.book_title.title             
+            .label Author
+            p = course_text.book_title.authors
+            .label Publisher
+            p = course_text.book_title.publisher
+
+
+
+
 
