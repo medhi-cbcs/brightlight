@@ -11,14 +11,10 @@ nav
       tr
         th Section 
         th Instructor
-        th Actions
 
     tbody
       - @course_sections.each do |course_section|
         tr
           td = link_to course_section.name, course_section
           td = course_section.instructor.present? ? course_section.instructor.name : "--"
-          td 
-            = link_to 'Edit', edit_course_section_path(course_section), class: "btn btn-small"
-            = link_to 'Delete', course_section, data: {:confirm => 'Are you sure?'}, :method => :delete, class: 'btn btn-small red'
 

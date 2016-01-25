@@ -16,5 +16,7 @@
         = f.collection_select(:instructor_id, Employee.all_teachers, :id, :name, {prompt: true}, {:class => 'browser-default'})
 
   .toolbar.z-depth-1
-    = link_to 'Back', course_course_sections_path(course_id: @course_section.course), class: "btn waves-effect waves-teal btn-flat" 
+    = link_to 'Back', @course_section, class: "btn waves-effect waves-light btn-flat" 
     button.btn.waves-effect.waves-light type="submit" Save
+    - if params[:action] =~ /edit/
+      = link_to 'Delete', @course_section, data: {confirm: 'Are you sure?'}, method: :delete, class: "right btn waves-effect waves-light red"
