@@ -21,7 +21,8 @@ h4 Editing Book Condition
     .row
     	.input-field.col.s12
     		= f.label 'Last update:', class: 'active'
-    		p.grey-text = "#{@user.name} (#{@user.email}), #{@copy_condition.updated_at}"
+        - unless @user.nil?
+      		p.grey-text = "#{@user.name} (#{@user.email}), #{@copy_condition.updated_at}"
 
   .toolbar.z-depth-1
   	button.btn.waves-effect.waves-light type="submit" Save

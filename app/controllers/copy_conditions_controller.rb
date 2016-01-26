@@ -25,7 +25,7 @@ class CopyConditionsController < ApplicationController
 
   # GET /copy_conditions/1/edit
   def edit
-    @user = User.find(@copy_condition.user_id)
+    @user = User.where(id:@copy_condition.user_id).first
   end
 
   # POST /copy_conditions
