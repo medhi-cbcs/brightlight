@@ -4,9 +4,10 @@ class BookCopiesController < ApplicationController
   # GET /book_copies
   # GET /book_copies.json
   def index
+    items_per_page = 20
     if params[:book_edition_id]
       @book_edition = BookEdition.find(params[:book_edition_id])
-      @book_copies = @book_edition.book_copies.includes([:book_condition, :status])
+      @book_copies = @book_edition.book_copies.includes([:book_condition, :status]).paginate(page: params[:page], per_page: items_per_page)
       @book_copy = @book_edition.book_copies.new
       @by_condition = BookCondition.all.map {|bc| [bc, @book_copies.select {|c| c.book_condition_id == bc.id}.count ]}
       @by_status = Status.all.map {|bc| [bc, @book_copies.select {|c| c.status_id == bc.id}.count ]}

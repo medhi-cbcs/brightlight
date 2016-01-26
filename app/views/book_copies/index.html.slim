@@ -73,3 +73,6 @@ nav
               i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="Edit" edit
             = link_to book_copy, data: {:confirm => 'Are you sure?'}, :method => :delete, class:'red-text'
               i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="Delete" delete
+
+.toolbar.z-depth-1
+  = will_paginate @book_copies
