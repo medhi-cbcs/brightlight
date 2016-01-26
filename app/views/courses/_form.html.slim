@@ -36,7 +36,7 @@
         | Course Sections
       ul.right
         li
-          = link_to_add_association f, :course_sections, class: "waves-effect waves-teal", 'data-association-insertion-method' => 'append', 'data-association-insertion-node' => '#course_section'
+          = link_to_add_association f, :course_sections, class: "waves-effect waves-light", 'data-association-insertion-method' => 'append', 'data-association-insertion-node' => '#course_section'
             ' Add Section
             i.material-icons.left playlist_add
 
@@ -47,9 +47,9 @@
 
   .toolbar.z-depth-1
     button.btn.waves-effect.waves-light type="submit" Save
-    = link_to 'Cancel', courses_path, class: "waves-effect waves-teal btn-flat"
+    = link_to 'Cancel', @course, class: "waves-effect waves-light btn-flat"
     - if params[:action] =~ /edit/
-      = link_to 'Delete', @course, data: {confirm: 'Are you sure?'}, method: :delete, class: "right btn waves-effect waves-teal red"
+      = link_to 'Delete', @course, data: {confirm: 'Are you sure?'}, method: :delete, class: "right btn waves-effect waves-light red"
 
 javascript:
   var year_ids = #{raw AcademicYear.all.collect(&:id)};
