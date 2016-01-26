@@ -50,11 +50,12 @@ nav
     tbody
     - @book_title.book_editions.each do |edition|
       tr
-        td = link_to edition.title, edition
+        td.tooltipped data-position="bottom" data-delay="50" data-tooltip="View details of this edition"
+          = link_to edition.title, edition
         td = edition.authors
         td = edition.publisher
         td = edition.isbn10
         td = edition.isbn13
-        td = edition.number_of_copies
-
+        td.tooltipped data-position="bottom" data-delay="50" data-tooltip="View copies of this edition"
+          = link_to edition.number_of_copies, book_edition_book_copies_path(edition)
 
