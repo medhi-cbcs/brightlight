@@ -14,11 +14,11 @@ nav
         = link_to course_course_texts_path(@course, {v:'list'})
           i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="List view"  list
       li.right
-        a.waves-effect.waves-light.modal-trigger href="#add-new-title-modal" 
+        a.waves-effect.waves-light.modal-trigger href="#add-new-title" 
           | Add text book
           i.material-icons.left add
 
-#add-new-title-modal.modal.modal-fixed-footer.ui-front
+#add-new-title.modal.modal-fixed-footer.ui-front
   = form_tag ({controller: "course_texts", action: "create"}) do
     .modal-content
       h5 Adding new text book

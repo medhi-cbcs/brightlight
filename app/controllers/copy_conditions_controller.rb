@@ -6,7 +6,7 @@ class CopyConditionsController < ApplicationController
   # GET /copy_conditions.json
   def index
     @copy_conditions = CopyCondition.where(book_copy_id:params[:id])
-    @book_copy = @copy_conditions.first.book_copy
+    @book_copy = BookCopy.find(params[:id])
     @book_edition = @book_copy.book_edition
   end
 
@@ -25,6 +25,7 @@ class CopyConditionsController < ApplicationController
 
   # GET /copy_conditions/1/edit
   def edit
+    @user = User.find(@copy_condition.user_id)
   end
 
   # POST /copy_conditions
@@ -57,6 +58,7 @@ class CopyConditionsController < ApplicationController
   # PATCH/PUT /copy_conditions/1
   # PATCH/PUT /copy_conditions/1.json
   def update
+    @book_copy = @copy_condition.book_copy
     respond_to do |format|
       if @copy_condition.update(copy_condition_params)
         format.html { redirect_to book_copy_conditions_url(@book_copy.id), notice: 'Copy condition was successfully updated.' }

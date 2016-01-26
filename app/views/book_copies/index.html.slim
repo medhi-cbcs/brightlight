@@ -60,13 +60,16 @@ nav
         tr
           td = link_to book_copy.barcode, book_copy
           td = book_copy.copy_no
-          td = book_copy.book_condition.present? ? book_copy.book_condition.code : 'N/A'
+          - color = BookCondition::COLORS[book_copy.book_condition.code.downcase]
+          td 
+            span class="#{color}-text"
+             = book_copy.book_condition.present? ? book_copy.book_condition.code.capitalize : 'N/A'
           td = book_copy.status.present? ? book_copy.status.name : 'N/A'
 
-          td
+          td.actions
             = link_to book_copy
-              i.material-icons book
+              i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="View" visibility
             = link_to edit_book_copy_path(book_copy)
-              i.material-icons create
+              i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="Edit" edit
             = link_to book_copy, data: {:confirm => 'Are you sure?'}, :method => :delete, class:'red-text'
-              i.material-icons delete
+              i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="Delete" delete

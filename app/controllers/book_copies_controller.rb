@@ -10,8 +10,6 @@ class BookCopiesController < ApplicationController
       @book_copy = @book_edition.book_copies.new
       @by_condition = BookCondition.all.map {|bc| [bc, @book_copies.select {|c| c.book_condition_id == bc.id}.count ]}
       @by_status = Status.all.map {|bc| [bc, @book_copies.select {|c| c.status_id == bc.id}.count ]}
-      # @by_condition = @book_edition.book_copies.group(:book_condition).count
-      # @by_status = @book_edition.book_copies.group(:status).count
     else
       @book_copies = BookCopy.all
     end

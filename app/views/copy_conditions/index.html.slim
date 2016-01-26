@@ -31,16 +31,21 @@ nav
         th Book condition
         th Academic year
         th Notes
+        th Action
 
     tbody
       - @copy_conditions.each do |copy_condition|
-        - colors = {"new"=>"blue", "good"=>"green", "fair"=>"orange", "poor"=>"red"}
+        - color = BookCondition::COLORS[copy_condition.book_condition.code.downcase]
+        - user = User.find(copy_condition.user_id)
         tr
           td = copy_condition.start_date
-          td 
-            span class="#{colors[copy_condition.book_condition.code.downcase]}-text" = copy_condition.book_condition.code 
+          td.tooltipped data-position="bottom" data-delay="50" data-tooltip="Last update by: #{user.name} at #{copy_condition.updated_at}"
+            span class="#{color}-text" = copy_condition.book_condition.code 
           td = copy_condition.academic_year.name
           td = copy_condition.notes
+          td.actions
+            = link_to edit_copy_condition_path(copy_condition)
+              i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="Edit" edit
 
 
 
