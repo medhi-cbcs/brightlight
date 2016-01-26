@@ -40,9 +40,13 @@ nav
       | Book Copies
     ul.right
       li
-        = link_to new_labels_book_edition_path(@book_edition)
-          | Edit
+        = link_to edit_labels_book_edition_book_copies_path(@book_edition)
+          | Edit labels
           i.material-icons.left edit
+      li
+        = link_to new_book_edition_book_copy_path(@book_edition)
+          | Create new
+          i.material-icons.left add
 
 
 .card-panel

@@ -18,12 +18,10 @@ Rails.application.routes.draw do
   end
 
   resources :book_editions do
-    collection do
-      post 'search_isbn'
-    end
-    resources :book_copies, shallow: true
-    member do
-      get 'new_labels'
+    resources :book_copies, shallow: true do
+      collection do
+        get 'edit_labels'
+      end
     end
   end
 

@@ -28,30 +28,32 @@
               .label Page count
               .item = @book_edition.page_count
 
-nav
-  .nav-wrapper
-    .brand-logo style="margin-left: 20px; font-size:1.5em"
-      | New book copies
+= form_for @book_edition do |f|
+  nav
+    .nav-wrapper
+      .brand-logo style="margin-left: 20px; font-size:1.5em"
+        | Edit labels
 
-.card
-  = form_for @book_edition do |f|
-    .card-content
-      .row
-        table.compact
-          thead
-            th Barcode
-            th Label
-            th Condition
-            th Status
-          tbody#book_copy
-            = f.fields_for :book_copies, @book_copies do |book_copy|
-              = render 'book_copy_fields', f: book_copy
-    .card-action
-      / Note: 'Append' new row at the end of the 'tbody#book_copy' node
-      = link_to_add_association f, :book_copies, class: "waves-effect waves-teal btn btn-flat", 'data-association-insertion-method' => 'append', 'data-association-insertion-node' => 'tbody#book_copy'
-        ' add row
-        i.material-icons.left playlist_add
-      button.btn.waves-effect.waves-light type="submit" Save
+  .card-panel
+    .row
+      table.compact
+        thead
+          th Barcode
+          th Label
+
+        tbody
+          = f.fields_for :book_copies, @book_copies do |c|
+            tr.nested-fields
+              td
+                .input-field
+                  = c.text_field :barcode
+              td
+                .input-field
+                  = c.text_field :copy_no
+
+  .toolbar.z-depth-1
+    button.btn.waves-effect.waves-light type="submit" Save
+    = link_to 'Cancel', book_edition_book_copies_path(@book_edition), class: "waves-effect waves-light btn btn-flat"
 
 / The following javascript callback function will turn select elements in the dynamically created row 
 / into MaterializeCSS style selects.

@@ -1,5 +1,5 @@
-.card-panel
-  = form_for @book_edition, html: {class:'col s12'} do |f|
+= form_for @book_edition, html: {class:'col s12'} do |f|
+  .card-panel
     .card-content
       - if @book_edition.errors.any?
         #error_explanation
@@ -35,12 +35,6 @@
         .input-field.col.s6
           = f.label :page_count, class: 'active'
           = f.number_field :page_count
-        / .input-field.col.s6
-        /   = f.label :small_thumbnail, class: 'active'
-        /   = f.text_field :small_thumbnail
-        / .input-field.col.s6
-        /   = f.label :thumbnail, class: 'active'
-        /   = f.text_field :thumbnail
         .input-field.col.s6
           = f.label :language, class: 'active'
           = f.text_field :language
@@ -53,13 +47,10 @@
         .input-field.col.s6
           = f.label :subjects, class: 'active'
           = f.text_field :subjects
-        .input-field.col.s6
-          = f.label 'Title group', class: 'active'
-          = f.collection_select :book_title_id, BookTitle.all, :id, :title, prompt: true
 
-    .card-action
-      .actions.col.s12 
-        button.btn.waves-effect.waves-light type="submit" Save
-        = link_to 'Cancel', @book_edition, class: "waves-effect waves-teal btn-flat"
-        - if params[:action] =~ /edit/
-          = link_to 'Delete', @book_edition, data: {confirm: 'Are you sure?'}, method: :delete, class: "right btn waves-effect waves-teal red"
+  .toolbar.z-depth-1
+    .actions.col.s12 
+      button.btn.waves-effect.waves-light type="submit" Save
+      = link_to 'Cancel', @book_edition, class: "waves-effect waves-teal btn-flat"
+      - if params[:action] =~ /edit/
+        = link_to 'Delete', @book_edition, data: {confirm: 'Are you sure?'}, method: :delete, class: "right btn waves-effect waves-teal red"

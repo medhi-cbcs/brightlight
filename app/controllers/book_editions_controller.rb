@@ -1,5 +1,3 @@
-require 'isbndb_client/api.rb'
-
 class BookEditionsController < ApplicationController
   before_action :set_book_edition, only: [:show, :edit, :update, :destroy]
 
@@ -37,91 +35,6 @@ class BookEditionsController < ApplicationController
   def edit
   end
 
-  # POST /search_isbn
-  def search_isbn
-    @book_edition = BookEdition.new
-
-    isbn = params[:isbn]
-
-    # First try to find the ISBN in Google Books
-    books = GoogleBooks::API.search("isbn:#{isbn}")
-    unless books.total_results == 0
-      book = books.first
-      @book_edition.title = book.title
-      @book_edition.description = book.description
-      @book_edition.authors = book.authors.join(', ')
-      @book_edition.publisher = book.publisher
-      @book_edition.isbn13 = book.isbn || (isbn if isbn.length == 13)
-      @book_edition.isbn10 = book.isbn_10 || (isbn if isbn.length == 10)
-      @book_edition.page_count = book.page_count
-      @book_edition.small_thumbnail = book.covers[:small]
-      @book_edition.thumbnail = book.covers[:thumbnail]
-      @book_edition.published_date = book.published_date 
-
-      # Create a BookTitle with this edition
-      @book_edition.book_title = BookTitle.new(
-        title: @book_edition.title,
-        authors: @book_edition.authors, 
-        publisher: @book_edition.publisher,
-        image_url: @book_edition.small_thumbnail)
-
-      respond_to do |format|
-        if @book_edition.save
-          format.html { redirect_to @book_edition, notice: 'Book was successfully created.' }
-          format.json { render :show, status: :created, location: @book_edition }
-        else
-          format.html { render :new }
-          format.json { render json: @book_edition.errors, status: :unprocessable_entity }
-        end
-      end
-
-    else
-      result = ISBNDBClient::API.find(isbn)
-      puts result
-      unless result.nil?
-        book = result
-        @book_edition.title = book.title
-        @book_edition.description = book.description
-        @book_edition.authors = book.authors.map {|x| x['name']}.join(', ')
-        @book_edition.publisher = book.publisher
-        @book_edition.isbn13 = book.isbn
-        @book_edition.isbn10 = book.isbn10
-        @book_edition.page_count = book.page_count
-        @book_edition.published_date = book.published_date 
-
-        # Create a BookTitle with this edition
-        @book_edition.book_title = BookTitle.new(
-          title: @book_edition.title,
-          authors: @book_edition.authors, 
-          publisher: @book_edition.publisher)
-
-        respond_to do |format|
-          if @book_edition.save
-            format.html { redirect_to @book_edition, notice: 'Book was successfully created.' }
-            format.json { render :show, status: :created, location: @book_edition }
-          else
-            format.html { render :new }
-            format.json { render json: @book_edition.errors, status: :unprocessable_entity }
-          end
-        end
-      
-      else
-        respond_to do |format|
-          format.html { redirect_to new_book_path, alert: "Could not find book with ISBN #{isbn}" }
-          format.json { render json: @book_edition.errors, status: :unprocessable_entity }
-        end
-
-      end
-    end
-  end
-
-  rescue_from ISBNDBClient::API::Error, :with => :book_not_found
-
-  def book_not_found(exception)
-    flash[:alert] = exception
-    render :new
-  end
-
   # POST /book_editions
   # POST /book_editions.json
   def create
@@ -129,7 +42,8 @@ class BookEditionsController < ApplicationController
 
     respond_to do |format|
       if @book_edition.save
-        format.html { redirect_to @book_edition, notice: 'Book edition was successfully created.' }
+        nested_form = book_edition_params[:book_copies_attributes].present?
+        format.html { redirect_to nested_form ? book_edition_book_copies_path(@book_edition) : @book_edition, notice: 'Book edition was successfully created.' }
         format.json { render :show, status: :created, location: @book_edition }
       else
         format.html { render :new }
@@ -143,20 +57,14 @@ class BookEditionsController < ApplicationController
   def update
     respond_to do |format|
       if @book_edition.update(book_edition_params)
-        format.html { redirect_to @book_edition, notice: 'Book edition was successfully updated.' }
+        nested_form = book_edition_params[:book_copies_attributes].present?
+        format.html { redirect_to nested_form ? book_edition_book_copies_path(@book_edition) : @book_edition, notice: 'Book edition was successfully updated.' }
         format.json { render :show, status: :ok, location: @book_edition }
       else
         format.html { render :edit }
         format.json { render json: @book_edition.errors, status: :unprocessable_entity }
       end
     end
-  end
-
-  # GET /new_labels
-  def new_labels
-    @book_edition = BookEdition.find(params[:id])
-    3.times { @book_edition.book_copies.new }
-    @book_copies = @book_edition.book_copies
   end
 
   # DELETE /book_editions/1

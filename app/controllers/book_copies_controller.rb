@@ -1,5 +1,5 @@
 class BookCopiesController < ApplicationController
-  before_action :set_book_copy, only: [:show, :edit, :update, :destroy]
+  before_action :set_book_copy, only: [:show, :edit, :destroy]
 
   # GET /book_copies
   # GET /book_copies.json
@@ -32,18 +32,24 @@ class BookCopiesController < ApplicationController
   def edit
   end
 
+  # GET /book_copies/1/edit
+  def edit_labels
+    @book_edition = BookEdition.find(params[:book_edition_id])
+  end
+
   # POST /book_copies
   # POST /book_copies.json
   def create
-    @book_copy = BookCopy.new(book_copy_params)
+    # @book_copy = BookCopy.new(book_copy_params)
+    @book_edition = BookEdition.new(book_edition_params)
 
     respond_to do |format|
-      if @book_copy.save
-        format.html { redirect_to book_edition_book_copies_path(@book_copy.book_edition), notice: 'Book copy was successfully created.' }
-        format.json { render :show, status: :created, location: @book_copy }
+      if @book_edition.save
+        format.html { redirect_to book_edition_book_copies_path(@book_edition), notice: 'Book copy was successfully created.' }
+        format.json { render :show, status: :created, location: @book_edition }
       else
         format.html { render :new }
-        format.json { render json: @book_copy.errors, status: :unprocessable_entity }
+        format.json { render json: @book_edition.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -51,13 +57,14 @@ class BookCopiesController < ApplicationController
   # PATCH/PUT /book_copies/1
   # PATCH/PUT /book_copies/1.json
   def update
+    @book_edition = BookEdition.find(params[:book_edition_id])
     respond_to do |format|
-      if @book_copy.update(book_copy_params)
-        format.html { redirect_to @book_copy, notice: 'Book copy was successfully updated.' }
-        format.json { render :show, status: :ok, location: @book_copy }
+      if @book_edition.update(book_edition_params)
+        format.html { redirect_to book_edition_book_copies_path(@book_edition), notice: 'Book copy was successfully updated.' }
+        format.json { render :show, status: :ok, location: @book_edition }
       else
         format.html { render :edit }
-        format.json { render json: @book_copy.errors, status: :unprocessable_entity }
+        format.json { render json: @book_edition.errors, status: :unprocessable_entity }
       end
     end
   end
