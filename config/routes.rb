@@ -50,6 +50,13 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :student_books do
+    collection do
+      get 'assign'
+      post 'label'
+    end
+  end
+
   devise_for :users, controllers: {
     omniauth_callbacks: "users/omniauth_callbacks",
     sessions: "users/sessions",
@@ -62,7 +69,7 @@ Rails.application.routes.draw do
   # You can have the root of your site routed with "root"
   root 'welcome#index'
   get :dashboard, to: 'welcome#dashboard'
-  
+
   # For authorization with OmniAuth2
   get '/auth/:provider/callback', to: 'sessions#create'
 

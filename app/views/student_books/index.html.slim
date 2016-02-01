@@ -1,0 +1,79 @@
+h4 Listing Student's Books
+
+ul#grade-options.dropdown-content
+  - GradeLevel.all.each do |grade|
+    li 
+      = link_to grade.name, "#!", onclick:"filterSectionOptions(#{grade.id}, #{grade.name});"
+ul#section-options.dropdown-content
+  - @grade_sections.each do |section|
+    li
+      = link_to section.name, student_books_path(s:"#{section.id}"), class:"grade-#{section.grade_level_id}"
+ui#student-options.dropdown-content
+  - if @grade_section.present?
+    - @grade_section.students.each do |student|
+      li 
+        = link_to student.name, student_books_path(s:"#{@grade_section.id}",sid:"#{student.id}"), class:"student-#{@grade_section.grade_level_id}"
+
+javascript:
+  function filterSectionOptions(id, name) {
+    var grade_ids = #{raw @grade_level_ids};
+    $("#grade").html("Grade "+name);
+    grade_ids.forEach(function(g){ 
+      if(id!=g) { 
+        $(".grade-"+g).hide();
+      } else {
+        $(".grade-"+id).show();
+      }
+    }) 
+  }
+
+nav
+  .nav-wrapper
+    ul
+      li.right
+        a.dropdown-button href="#!" data-activates="student-options"
+          span#grade = params[:sid].present? ? "#{@student.name}" : "Choose student" 
+          i.material-icons.right arrow_drop_down
+      li.right
+        a.dropdown-button href="#!" data-activates="section-options"
+          = params[:s].present? ? "Section #{@grade_section.name}" : "Choose section"
+          i.material-icons.right arrow_drop_down
+      li.right
+        a.dropdown-button href="#!" data-activates="grade-options"
+          span#grade = params[:s].present? ? "Grade #{@grade_section.grade_level.name}" : "Choose grade" 
+          i.material-icons.right arrow_drop_down
+
+.card-panel
+  - if params[:sid].present?
+    .section-header = @student.name
+  table
+    thead
+      tr
+        th Barcode
+        th Label
+        th Issue date
+        th Return date
+        th Initial condition
+        th End condition
+        th
+
+    tbody
+      - @student_books.each do |student_book|
+        tr
+          td = student_book.barcode
+          td = student_book.copy_no
+          td = student_book.issue_date
+          td = student_book.return_date
+          td = student_book.initial_copy_condition_id
+          td = student_book.end_copy_condition_id
+          td 
+            = link_to student_book
+              | Show
+              i.material-icons.left visibility
+            = link_to edit_student_book_path(student_book)
+              | Edit
+              i.material-icons.left edit
+
+br
+
+= link_to 'New Student book', new_student_book_path

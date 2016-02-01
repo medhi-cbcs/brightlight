@@ -11,15 +11,15 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160121191834) do
+ActiveRecord::Schema.define(version: 20160201175336) do
 
   create_table "academic_terms", force: :cascade do |t|
     t.integer  "academic_year_id"
+    t.string   "name"
     t.date     "start_date"
     t.date     "end_date"
     t.datetime "created_at",       null: false
     t.datetime "updated_at",       null: false
-    t.string   "name"
   end
 
   add_index "academic_terms", ["academic_year_id"], name: "index_academic_terms_on_academic_year_id"
@@ -41,7 +41,7 @@ ActiveRecord::Schema.define(version: 20160121191834) do
   end
 
   create_table "book_assignments", id: false, force: :cascade do |t|
-    t.integer  "book_id"
+    t.integer  "book_copy_id"
     t.integer  "student_id"
     t.integer  "academic_year_id"
     t.integer  "course_text_id"
@@ -52,17 +52,20 @@ ActiveRecord::Schema.define(version: 20160121191834) do
     t.integer  "status_id"
     t.datetime "created_at",           null: false
     t.datetime "updated_at",           null: false
+    t.integer  "grade_section_id"
   end
 
   add_index "book_assignments", ["academic_year_id"], name: "index_book_assignments_on_academic_year_id"
-  add_index "book_assignments", ["book_id"], name: "index_book_assignments_on_book_id"
+  add_index "book_assignments", ["book_copy_id"], name: "index_book_assignments_on_book_copy_id"
   add_index "book_assignments", ["course_text_id"], name: "index_book_assignments_on_course_text_id"
+  add_index "book_assignments", ["grade_section_id"], name: "index_book_assignments_on_grade_section_id"
   add_index "book_assignments", ["status_id"], name: "index_book_assignments_on_status_id"
   add_index "book_assignments", ["student_id"], name: "index_book_assignments_on_student_id"
 
   create_table "book_conditions", force: :cascade do |t|
     t.string   "code"
     t.string   "description"
+    t.integer  "order_no"
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
   end
@@ -107,7 +110,7 @@ ActiveRecord::Schema.define(version: 20160121191834) do
   add_index "book_editions", ["book_title_id"], name: "index_book_editions_on_book_title_id"
 
   create_table "book_grades", id: false, force: :cascade do |t|
-    t.integer  "book_id"
+    t.integer  "book_copy_id"
     t.integer  "book_condition_id"
     t.integer  "academic_year_id"
     t.string   "notes"
@@ -119,7 +122,7 @@ ActiveRecord::Schema.define(version: 20160121191834) do
 
   add_index "book_grades", ["academic_year_id"], name: "index_book_grades_on_academic_year_id"
   add_index "book_grades", ["book_condition_id"], name: "index_book_grades_on_book_condition_id"
-  add_index "book_grades", ["book_id"], name: "index_book_grades_on_book_id"
+  add_index "book_grades", ["book_copy_id"], name: "index_book_grades_on_book_copy_id"
 
   create_table "book_labels", force: :cascade do |t|
     t.integer  "grade_section_id"
@@ -175,6 +178,7 @@ ActiveRecord::Schema.define(version: 20160121191834) do
   create_table "course_texts", force: :cascade do |t|
     t.integer "course_id"
     t.integer "book_title_id"
+    t.integer "order_no"
   end
 
   add_index "course_texts", ["book_title_id"], name: "index_course_texts_on_book_title_id"
@@ -255,6 +259,7 @@ ActiveRecord::Schema.define(version: 20160121191834) do
 
   create_table "grade_levels", force: :cascade do |t|
     t.string   "name"
+    t.integer  "order_no"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -315,6 +320,20 @@ ActiveRecord::Schema.define(version: 20160121191834) do
     t.date     "received_date"
   end
 
+  create_table "roles", force: :cascade do |t|
+    t.string   "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "roles_users", force: :cascade do |t|
+    t.integer "user_id"
+    t.integer "role_id"
+  end
+
+  add_index "roles_users", ["role_id"], name: "index_roles_users_on_role_id"
+  add_index "roles_users", ["user_id"], name: "index_roles_users_on_user_id"
+
   create_table "rosters", force: :cascade do |t|
     t.integer  "course_section_id"
     t.integer  "student_id"
@@ -351,6 +370,31 @@ ActiveRecord::Schema.define(version: 20160121191834) do
     t.string  "name"
     t.integer "order_no"
   end
+
+  create_table "student_books", force: :cascade do |t|
+    t.integer  "student_id"
+    t.integer  "book_copy_id"
+    t.integer  "academic_year_id"
+    t.integer  "course_text_id"
+    t.string   "copy_no"
+    t.integer  "grade_section_id"
+    t.integer  "grade_level_id"
+    t.integer  "course_id"
+    t.date     "issue_date"
+    t.date     "return_date"
+    t.integer  "initial_copy_condition_id"
+    t.integer  "end_copy_condition_id"
+    t.datetime "created_at",                null: false
+    t.datetime "updated_at",                null: false
+  end
+
+  add_index "student_books", ["academic_year_id"], name: "index_student_books_on_academic_year_id"
+  add_index "student_books", ["book_copy_id"], name: "index_student_books_on_book_copy_id"
+  add_index "student_books", ["course_id"], name: "index_student_books_on_course_id"
+  add_index "student_books", ["course_text_id"], name: "index_student_books_on_course_text_id"
+  add_index "student_books", ["grade_level_id"], name: "index_student_books_on_grade_level_id"
+  add_index "student_books", ["grade_section_id"], name: "index_student_books_on_grade_section_id"
+  add_index "student_books", ["student_id"], name: "index_student_books_on_student_id"
 
   create_table "students", force: :cascade do |t|
     t.string   "name"
@@ -420,6 +464,5 @@ ActiveRecord::Schema.define(version: 20160121191834) do
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true
-  add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
 
 end
