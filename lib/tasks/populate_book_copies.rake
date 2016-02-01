@@ -1,12 +1,12 @@
 namespace :db do
 	desc "Populate database with book copies"
 	task populate_book_copies: :environment do
-		
+
 		BookCopy.delete_all
 		CopyCondition.delete_all
 
 		condition_ids = BookCondition.all.map {|bc| bc.id}
-    new_condition_id = BookCondition.where(code:'new').first.id
+    new_condition_id = BookCondition.where(code:'New').first.id
     status = Status.where(name:'On loan').first
 
 		academic_year_id = AcademicYear.current_id
@@ -14,7 +14,7 @@ namespace :db do
 
 		n = 0
 		CourseText.find_each do |textbook|
-			
+
 			next if textbook.course.blank?
 			next if textbook.book_title.blank?
 

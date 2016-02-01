@@ -11,7 +11,7 @@ ul#grade-options.dropdown-content
 ul#section-options.dropdown-content
   - @grade_sections.each do |section|
     li
-      = link_to section.name, new_copy_condition_path(sort:"Student",s:"Section #{section.name}"), class:"grade#{section.grade_level_id}"
+      = link_to section.name, new_copy_condition_path(sort:"Student",s:"#{section.id}"), class:"grade#{section.grade_level_id}"
 
 - if params[:sort].blank?
   nav
@@ -20,10 +20,11 @@ ul#section-options.dropdown-content
         li
           = link_to :back
             i.material-icons chevron_left
-        li.right
+        li
           a.dropdown-button href="#!" data-activates="sort-options"
             = params[:sort].present? ? params[:sort] : "Sort options"
             i.material-icons.right arrow_drop_down
+            i.material-icons.left filter_list
 
   = form_for @copy_condition do |f|
     .card-panel
@@ -53,17 +54,18 @@ ul#section-options.dropdown-content
         li
           = link_to :back
             i.material-icons chevron_left
-        li.right
+        li
           a.dropdown-button href="#!" data-activates="sort-options"
             = params[:sort].present? ? params[:sort] : "Sort options"
             i.material-icons.right arrow_drop_down
+            i.material-icons.left filter_list
         li.right
           a.dropdown-button href="#!" data-activates="section-options"
-            = params[:s].present? ? params[:s] : "Choose section"
+            = params[:s].present? ? "Section #{@grade_section.name}" : "Choose section"
             i.material-icons.right arrow_drop_down
         li.right
           a.dropdown-button href="#!" data-activates="grade-options"
-            span#grade Choose grade
+            span#grade = params[:s].present? ? "Grade #{@grade_section.grade_level.name}" : "Choose grade" 
             i.material-icons.right arrow_drop_down
   javascript:
     //$(filterSectionOptions(grade_ids,$('#course_academic_year_id').val()));
@@ -103,5 +105,3 @@ ul#section-options.dropdown-content
           = f.text_field :notes
 
 - elsif params[:sort] =~ /Title/
-
-
