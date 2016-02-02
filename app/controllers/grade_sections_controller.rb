@@ -118,6 +118,7 @@ class GradeSectionsController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def grade_section_params
       params.require(:grade_section).permit(:name, :homeroom_id,
-                                           {:grade_sections_students_attributes => [:id, :student_id, :order_no, :_destroy]})
+                                           {:grade_sections_students_attributes => [:id, :student_id, :order_no, :_destroy]},
+                                           {:book_labels_attributes => [:id, :name, :_destroy]})
     end
 end
