@@ -10,15 +10,6 @@ li
       a href="#" 
         | Students
 li
-  .collapsible-header.active
-    i.material-icons query_builder
-    | Actions
-  .collapsible-body
-    = link_to 'Add Section', new_grade_level_grade_section_path(@grade_level), class: "btn waves-effect waves-teal btn-default"
-    
-    - if params[:id] and action_name != 'edit'
-      = link_to 'Edit', edit_grade_section_path(@grade_section), class: "btn waves-effect waves-teal btn-flat"
-li
   .collapsible-header
     i.material-icons info_outline
     | Related

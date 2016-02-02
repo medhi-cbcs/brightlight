@@ -46,6 +46,7 @@ Rails.application.routes.draw do
       member do
         get 'students'
         post 'add_students'
+        get 'edit_labels'
       end
     end
   end

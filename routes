@@ -117,7 +117,6 @@
                                      PATCH    /courses/:id(.:format)                                            courses#update
                                      PUT      /courses/:id(.:format)                                            courses#update
                                      DELETE   /courses/:id(.:format)                                            courses#destroy
-           search_isbn_book_editions POST     /book_editions/search_isbn(.:format)                              book_editions#search_isbn
 edit_labels_book_edition_book_copies GET      /book_editions/:book_edition_id/book_copies/edit_labels(.:format) book_copies#edit_labels
             book_edition_book_copies GET      /book_editions/:book_edition_id/book_copies(.:format)             book_copies#index
                                      POST     /book_editions/:book_edition_id/book_copies(.:format)             book_copies#create
@@ -153,6 +152,7 @@ edit_labels_book_edition_book_copies GET      /book_editions/:book_edition_id/bo
                                      DELETE   /book_titles/:id(.:format)                                        book_titles#destroy
               students_grade_section GET      /grade_sections/:id/students(.:format)                            grade_sections#students
           add_students_grade_section POST     /grade_sections/:id/add_students(.:format)                        grade_sections#add_students
+           edit_labels_grade_section GET      /grade_sections/:id/edit_labels(.:format)                         grade_sections#edit_labels
           grade_level_grade_sections GET      /grade_levels/:grade_level_id/grade_sections(.:format)            grade_sections#index
                                      POST     /grade_levels/:grade_level_id/grade_sections(.:format)            grade_sections#create
        new_grade_level_grade_section GET      /grade_levels/:grade_level_id/grade_sections/new(.:format)        grade_sections#new
@@ -169,6 +169,16 @@ edit_labels_book_edition_book_copies GET      /book_editions/:book_edition_id/bo
                                      PATCH    /grade_levels/:id(.:format)                                       grade_levels#update
                                      PUT      /grade_levels/:id(.:format)                                       grade_levels#update
                                      DELETE   /grade_levels/:id(.:format)                                       grade_levels#destroy
+                assign_student_books GET      /student_books/assign(.:format)                                   student_books#assign
+                 label_student_books POST     /student_books/label(.:format)                                    student_books#label
+                       student_books GET      /student_books(.:format)                                          student_books#index
+                                     POST     /student_books(.:format)                                          student_books#create
+                    new_student_book GET      /student_books/new(.:format)                                      student_books#new
+                   edit_student_book GET      /student_books/:id/edit(.:format)                                 student_books#edit
+                        student_book GET      /student_books/:id(.:format)                                      student_books#show
+                                     PATCH    /student_books/:id(.:format)                                      student_books#update
+                                     PUT      /student_books/:id(.:format)                                      student_books#update
+                                     DELETE   /student_books/:id(.:format)                                      student_books#destroy
                     new_user_session GET      /users/sign_in(.:format)                                          users/sessions#new
                         user_session POST     /users/sign_in(.:format)                                          users/sessions#create
                 destroy_user_session DELETE   /users/sign_out(.:format)                                         users/sessions#destroy

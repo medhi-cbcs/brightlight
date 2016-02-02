@@ -4,8 +4,8 @@ class BookLabelsController < ApplicationController
   # GET /book_labels
   # GET /book_labels.json
   def index
-    @grade_level = params[:grade] ? GradeLevel.find(params[:grade]) : GradeLevel.first
-    @grade_sections = @grade_level.grade_sections.with_academic_year_id AcademicYear.current
+    @book_labels = BookLabel.all
+    @grade_sections = GradeSection.with_academic_year_id(AcademicYear.current_id)
   end
 
   # GET /book_labels/1

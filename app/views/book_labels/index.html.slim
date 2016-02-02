@@ -1,38 +1,22 @@
 h4 Book Labels
 
-.toolbar.z-depth-1
-  / = label_tag "Grade"
-  / = collection_select "Grade", :grade, GradeLevel.all, :id, :name, {}, {onchange: 'filter_grade_level($(this).val())'}
-  = label_tag :grade_id, "Grade: ", {class: 'for-select'}
-  - options = options_for_select(GradeLevel.all.map {|g| [g.name, g.id]}, params[:grade_id])
-  = select_tag :grade_id, options, {class: 'browser-default select-grade', onchange:"filter_grade_level($(this).val())"}
+nav
+  .nav-wrapper
+    .brand-logo style="margin-left: 20px; font-size:1.5em"
+      | Book Labels       
 
-h5 Grade #{@grade_level.name}
-
-table
-  thead
-    tr
+.row
+  .col.s6
+    ul.collapsible
       - @grade_sections.each do |section|
-        th = section.name
-
-  tbody
-    tr
-      - @grade_sections.each do |section|
-        td
-          ul 
-          - section.book_labels do |book_label|
-            li = link_to book_label.name, book_label
-
-        / td
-        /   = link_to book_label
-        /     i.material-icons book
-        /   = link_to edit_book_label_path(book_label)
-        /     i.material-icons create
-        /   = link_to book_label, data: {:confirm => 'Are you sure?'}, :method => :delete
-        /     i.material-icons delete
-
-javascript:
-  function filter_grade_level(level) {
-    window.location = "#{book_labels_path}" + "?grade=" + level;
-    console.log(level);
-  }
+        li
+          .collapsible-header.active
+            i.material-icons class
+            = section.name
+            = link_to edit_labels_grade_section_path(section.id), class:"secondary-content"
+              i.material-icons edit
+          .collapsible-body
+            ul.row
+              - section.book_labels.each do |label|
+                .col.s4 style="text-align:center"
+                  li = link_to label.name, label

@@ -35,6 +35,12 @@ class BookCopiesController < ApplicationController
   # GET /book_copies/1/edit
   def edit_labels
     @book_edition = BookEdition.find(params[:book_edition_id])
+    @grade_level_ids = GradeLevel.all.collect(&:id)
+    @grade_sections = GradeSection.with_academic_year_id(AcademicYear.current_id)
+    #@grade_sections_ids = @grade_sections.collect(&:id)
+    if params[:s].present?
+      @grade_section = @grade_sections.where(id:params[:s]).first
+    end
   end
 
   # POST /book_copies
