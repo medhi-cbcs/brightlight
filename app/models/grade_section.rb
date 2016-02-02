@@ -22,4 +22,8 @@ class GradeSection < ActiveRecord::Base
     course_sections.map { |cs| cs.textbooks } unless course_sections.blank?
   end
 
+  def self.default_scope
+    where(academic_year_id: AcademicYear.current_id)
+  end
+
 end

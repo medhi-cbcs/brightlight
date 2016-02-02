@@ -85,7 +85,14 @@ class GradeSectionsController < ApplicationController
   def update
     respond_to do |format|
       if @grade_section.update(grade_section_params)
-        format.html { redirect_to @grade_section, notice: 'Grade section was successfully updated.' }
+        editing_labels = grade_section_params[:book_labels_attributes].present?
+        format.html {
+          if editing_labels
+            redirect_to book_labels_path, notice: 'Labels were successfully updated.'
+          else
+            redirect_to @grade_section, notice: 'Grade section was successfully updated.'
+          end
+        }
         format.json { render :show, status: :ok, location: @grade_section }
       else
         format.html { render :edit }

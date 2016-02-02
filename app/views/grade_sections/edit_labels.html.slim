@@ -5,7 +5,7 @@
         | Edit Book Labels
       ul.right
         li
-          = link_to_add_association f, :book_labels, class: "waves-effect waves-teal", 'data-association-insertion-method' => 'append', 'data-association-insertion-node' => '#book_title'
+          = link_to_add_association f, :book_labels, class: "waves-effect waves-teal", 'data-association-insertion-method' => 'append', 'data-association-insertion-node' => '#book_label'
             ' Add Label
             i.material-icons.left playlist_add
             
@@ -22,7 +22,14 @@
       = f.fields_for :book_labels do |book_label|
         .nested-fields
           = render 'book_label_fields', f: book_label
-
+  
+  #placemark
   .toolbar.z-depth-1
     button.btn.waves-effect.waves-light type="submit" Save
     = link_to 'Cancel', book_labels_path, class: "waves-effect waves-light btn-flat"
+
+javascript:
+  $('#book_label')
+    .on('cocoon:after-insert', function(e, added_task) {
+      $("#placemark").scrollTo();
+  })
