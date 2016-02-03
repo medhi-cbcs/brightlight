@@ -42,11 +42,13 @@ Rails.application.routes.draw do
   end
 
   resources :grade_levels do
+    member do
+      get 'edit_labels'
+    end
     resources :grade_sections, shallow: true do
       member do
         get 'students'
         post 'add_students'
-        get 'edit_labels'
       end
     end
   end

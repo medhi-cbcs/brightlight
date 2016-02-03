@@ -5,7 +5,7 @@ class BookLabelsController < ApplicationController
   # GET /book_labels.json
   def index
     @book_labels = BookLabel.all
-    @grade_sections = GradeSection.with_academic_year_id(AcademicYear.current_id)
+    @acad_year = AcademicYear.current.first
   end
 
   # GET /book_labels/1

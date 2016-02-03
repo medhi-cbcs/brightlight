@@ -7,7 +7,7 @@ class AcademicYear < ActiveRecord::Base
   scope :for_date, lambda { |date| where("? between start_date and end_date", date) }
 
   def self.current_id
-  	self.current.first.id 
+  	self.current.first.id
   end
 
 end

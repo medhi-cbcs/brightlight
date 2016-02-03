@@ -150,9 +150,9 @@ edit_labels_book_edition_book_copies GET      /book_editions/:book_edition_id/bo
                                      PATCH    /book_titles/:id(.:format)                                        book_titles#update
                                      PUT      /book_titles/:id(.:format)                                        book_titles#update
                                      DELETE   /book_titles/:id(.:format)                                        book_titles#destroy
+             edit_labels_grade_level GET      /grade_levels/:id/edit_labels(.:format)                           grade_levels#edit_labels
               students_grade_section GET      /grade_sections/:id/students(.:format)                            grade_sections#students
           add_students_grade_section POST     /grade_sections/:id/add_students(.:format)                        grade_sections#add_students
-           edit_labels_grade_section GET      /grade_sections/:id/edit_labels(.:format)                         grade_sections#edit_labels
           grade_level_grade_sections GET      /grade_levels/:grade_level_id/grade_sections(.:format)            grade_sections#index
                                      POST     /grade_levels/:grade_level_id/grade_sections(.:format)            grade_sections#create
        new_grade_level_grade_section GET      /grade_levels/:grade_level_id/grade_sections/new(.:format)        grade_sections#new

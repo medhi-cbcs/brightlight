@@ -3,28 +3,18 @@ h4 Book Labels
 nav
   .nav-wrapper
     .brand-logo style="margin-left: 20px; font-size:1.5em"
-      | Book Labels       
+      | Book Labels 
+    .brand-logo.right
+      = @acad_year.name
 
 .row
   .col.s12
     ul.collection
       - GradeLevel.all.each do |grade|
         li.collection-item
-          - grade.grade_sections.each do |section|
-            .chip
-              = link_to edit_labels_grade_section_path(section.id)
-                i.material-icons class
-                = section.name
-    / ul.collapsible
-    /   - @grade_sections.each do |section|
-    /     li
-    /       .collapsible-header.active
-    /         i.material-icons class
-    /         = section.name
-    /         = link_to edit_labels_grade_section_path(section.id), class:"secondary-content"
-    /           i.material-icons edit
-    /       .collapsible-body
-    /         ul.row
-    /           - section.book_labels.each do |label|
-    /             .col.s4 style="text-align:center"
-    /               li = link_to label.name, label
+          = "Grade #{grade.name}: "
+          - grade.grade_sections.each do |section|                        
+              = link_to edit_labels_grade_level_path(id:grade.id,section:section.name)
+                .chip
+                  i.material-icons class
+                  = section.name
