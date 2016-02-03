@@ -4,7 +4,7 @@ namespace :db do
 
     BookCopy.all.each do |copy|
       label = BookLabel.where(name:copy.copy_no).first
-      copy.update_attribute(:book_label_id,label.id)
+      copy.update_attribute(:book_label_id,label.id) if label.present?
     end
   end
 end

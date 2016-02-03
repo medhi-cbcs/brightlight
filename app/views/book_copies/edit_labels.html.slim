@@ -82,18 +82,19 @@ javascript:
 
         tbody
           = f.fields_for :book_copies, @book_copies do |c|
-            tr.nested-fields
+            tr
               td
                 .input-field
                   = c.text_field :barcode
               td
                 .input-field
-                  - section = c.object.book_label.name.match(/(\d+[A-Z])#/)[1]
-                  /= select_tag :grade_section_name, options_from_collection_for_select(GradeSection.all, :name, :name, section)
-                  = select_tag :grade_section_name, option_for_select_with_class(GradeSection.all, :name, :name, section), class:"browser-default select-input"
+                  - section = c.object.book_label.name.match(/(\d+[A-Z])#/)[1] if c.object.book_label.present?
+                  = select_tag :grade_section_name, options_from_collection_for_select(GradeSection.all, :name, :name, section)
+                  /= select_tag :grade_section_name, option_for_select_with_class(GradeSection.all, :name, :name, section)
+                  /, class:"browser-default select-input"
               td 
                 .input-field
-                  - number = c.object.book_label.name.match(/#(\d+)/)[1]
+                  - number = c.object.book_label.name.match(/#(\d+)/)[1] if c.object.book_label.present?
                   = number_field_tag :no, number
                   /= c.collection_select :book_label_id, BookLabel.all, :id, :name
 
