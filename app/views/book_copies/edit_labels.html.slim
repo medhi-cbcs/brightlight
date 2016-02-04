@@ -71,7 +71,7 @@ javascript:
     $("#section").html("Section "+name);
   };
   
-= form_for @book_edition do |f|
+= form_tag update_labels_book_edition_book_copies_path,method: :put do
   input hidden="hidden" type="text" value="" name="section-name" id="section-name"
   .card-panel
     .row
@@ -81,30 +81,24 @@ javascript:
           th Label
 
         tbody
-          = f.fields_for :book_copies, @book_copies do |c|
-            tr
-              td
-                .input-field
-                  = c.text_field :barcode
-              td
-                .input-field
-                  - section = c.object.book_label.name.match(/(\d+[A-Z])#/)[1] if c.object.book_label.present?
-                  = select_tag :grade_section_name, options_from_collection_for_select(GradeSection.all, :name, :name, section)
-                  /= select_tag :grade_section_name, option_for_select_with_class(GradeSection.all, :name, :name, section)
-                  /, class:"browser-default select-input"
-              td 
-                .input-field
-                  - number = c.object.book_label.name.match(/#(\d+)/)[1] if c.object.book_label.present?
-                  = number_field_tag :no, number
-                  /= c.collection_select :book_label_id, BookLabel.all, :id, :name
+          - @book_copies.each do |book_copy|
+            = fields_for "book_copies[]", book_copy do |f|
+              tr
+                td
+                  .input-field
+                    = f.text_field :barcode
+                td
+                  .input-field
+                    - section = book_copy.book_label.name.match(/(\d+[A-Z])#/)[1] if book_copy.book_label.present?
+                    = select_tag "book_copies[#{book_copy.id}][grade_section_name]", options_from_collection_for_select(GradeSection.all, :name, :name, section)
+                    /= select_tag :grade_section_name, option_for_select_with_class(GradeSection.all, :name, :name, section)
+                    /, class:"browser-default select-input"
+                td 
+                  .input-field
+                    - number = book_copy.book_label.name.match(/#(\d+)/)[1] if book_copy.book_label.present?
+                    = number_field_tag "book_copies[#{book_copy.id}][no]", number
+                    /= c.collection_select :book_label_id, BookLabel.all, :id, :name
 
   .toolbar.z-depth-1
     button.btn.waves-effect.waves-light type="submit" Save
     = link_to 'Cancel', book_edition_book_copies_path(@book_edition), class: "waves-effect waves-light btn btn-flat"
-
-/ The following javascript callback function will turn select elements in the dynamically created row 
-/ into MaterializeCSS style selects.
-javascript:
-  $('#book_copy').on('cocoon:after-insert', function() {
-    $('select').material_select();
-  });

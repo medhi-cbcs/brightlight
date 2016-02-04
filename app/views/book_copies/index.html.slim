@@ -63,7 +63,7 @@ nav
       - @book_copies.order(:copy_no).each do |book_copy|
         tr
           td = link_to book_copy.barcode, book_copy
-          td = book_copy.copy_no
+          td = book_copy.book_label.name
           - color = BookCondition::COLORS[book_copy.book_condition.code.downcase]
           td 
             span class="#{color}-text"

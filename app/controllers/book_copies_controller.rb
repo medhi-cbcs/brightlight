@@ -35,18 +35,34 @@ class BookCopiesController < ApplicationController
   # GET /book_copies/1/edit
   def edit_labels
     @book_edition = BookEdition.find(params[:book_edition_id])
+    @book_copies = @book_edition.book_copies
     @grade_level_ids = GradeLevel.all.collect(&:id)
     @grade_sections = GradeSection.with_academic_year_id(AcademicYear.current_id)
-    #@grade_sections_ids = @grade_sections.collect(&:id)
+
     if params[:s].present?
       @grade_section = @grade_sections.where(id:params[:s]).first
+    end
+  end
+
+  # PUT /book_copies/update_labels
+  def update_labels
+    #@book_copies = BookCopy.update(params[:book_copies].keys, params[:book_copies].values).reject { |p| p.errors.empty? }
+    book_labels = params[:book_copies].values.map {|v|{book_label_id: BookLabel.where(name:v[:grade_section_name]+"#"+v[:no]).first.id} }
+    @book_copies = BookCopy.update(params[:book_copies].keys, book_labels).reject { |p| p.errors.empty? }
+    puts book_labels
+    
+    if @book_copies.empty?
+      flash[:notice] = "Book labels updated."
+      book_edition_id = params[:book_edition_id]
+      redirect_to book_edition_book_copies_path(book_edition_id)
+    else
+      render action: :edit_labels
     end
   end
 
   # POST /book_copies
   # POST /book_copies.json
   def create
-    # @book_copy = BookCopy.new(book_copy_params)
     @book_edition = BookEdition.new(book_edition_params)
 
     respond_to do |format|
@@ -94,6 +110,7 @@ class BookCopiesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def book_copy_params
-      params.require(:book_copy).permit(:book_edition_id, :book_condition_id, :status_id, :barcode, :copy_no)
+      params.require(:book_copy).permit(:book_edition_id, :book_condition_id, :status_id, :barcode, :copy_no,
+                                        {:book_copies => [:barcode, :grade_section_id, :no]})
     end
 end
