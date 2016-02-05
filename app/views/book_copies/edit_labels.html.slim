@@ -96,7 +96,7 @@ javascript:
                 td 
                   .input-field
                     - number = book_copy.book_label.name.match(/#(\d+)/)[1] if book_copy.book_label.present?
-                    = number_field_tag "book_copies[#{book_copy.id}][no]", number
+                    = number_field_tag "book_copies[#{book_copy.id}][no]", number, min:1, max: 25
                     /= c.collection_select :book_label_id, BookLabel.all, :id, :name
 
   .toolbar.z-depth-1
