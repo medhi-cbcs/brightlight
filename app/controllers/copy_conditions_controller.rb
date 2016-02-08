@@ -24,7 +24,10 @@ class CopyConditionsController < ApplicationController
     if params[:s].present?
       @grade_section = @grade_sections.where(id:params[:s]).first
       @grade_level = @grade_section.grade_level
-      
+    end
+    if params[:l].present?
+      @label = BookLabel.find(params[:l])
+      @copy_conditions = CopyCondition.current_year.for_label_id(params[:l])
     end
   end
 

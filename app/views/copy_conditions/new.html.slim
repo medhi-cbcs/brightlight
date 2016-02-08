@@ -1,9 +1,9 @@
-h4 Book Condition Checking
+h4 Book Condition Checking (#{params[:l].present? ? @label.name : ''})
 
 ul#sort-options.dropdown-content
   li = link_to "None", new_copy_condition_path
   li = link_to "Label", new_copy_condition_path(sort:"Label")
-  li = link_to "Title", new_copy_condition_path(sort:"Title")
+
 ul#grade-options.dropdown-content
   - GradeLevel.all.each do |grade|
     li 
@@ -102,23 +102,16 @@ ul#label-options.dropdown-content
     
   = form_for @copy_condition do |f|
     .card-panel
-      .row
-        - if @copy_condition.errors.any?
-          #error_explanation
-            h2 = "#{pluralize(@copy_condition.errors.count, "error")} prohibited this copy_condition from being saved:"
-            ul
-              - @copy_condition.errors.full_messages.each do |message|
-                li = message
-        .input-field.col.s4
-          = f.label :barcode
-          = f.text_field :barcode
-        .input-field.col.s2
-          = f.label :book_condition, class:'active'
-          = f.collection_select :book_condition_id, BookCondition.all, :id, :code, {selected: 0}
-        .col.s2
-          button.btn.waves-effect.waves-light type="submit" Save        
-        .input-field.col.s12
-          = f.label :notes
-          = f.text_field :notes
-
-- elsif params[:sort] =~ /Title/
+      .row.ellipsis-container
+        .tabular-header.col.s2.ellipsize Barcode
+        .tabular-header.col.s4.ellipsize Title
+        .tabular-header.col.s2.ellipsize Condition
+        .tabular-header.col.s2.ellipsize Notes
+        .tabular-header.col.s2.ellipsize Acad Year
+      - @copy_conditions.each_with_index do |cc, index|
+        .row.ellipsis-container class="#{'grey lighten-3' if index.even?}"
+          .col.s2.ellipsize = cc.barcode
+          .col.s4.ellipsize = cc.book_copy.book_edition.title
+          .col.s2.ellipsize = cc.book_condition.code
+          .col.s2.ellipsize = cc.notes
+          .col.s2.ellipsize = cc.academic_year.name

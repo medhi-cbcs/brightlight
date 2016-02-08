@@ -40,5 +40,5 @@ class BookTitle < ActiveRecord::Base
   def has_cover?
     self.book_editions.reduce(true) { |a, edition| a && edition.has_cover? }
   end
-  
+
 end

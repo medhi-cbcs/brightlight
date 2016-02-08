@@ -38,9 +38,49 @@ $muted-red:				#f5494d;
 // ============================================ Table ===============================================
 
 table.compact {
+	width: 100%;
+	// white-space: nowrap;
+	// table-layout: fixed;
+
+	td.ellipsize {
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
 	td {
 		padding-top: 4px;
 		padding-bottom: 4px;
+
+		.compact-cell {
+			position: relative;
+		}
+		.compact-cell:before {
+			content: attr(data-spacer);
+	    position: absolute;
+	    max-width: 100%;
+	    white-space: nowrap;
+	    overflow: hidden;
+	    text-overflow: ellipsis;
+		}
+		.compact-cell:after {
+		    content: attr(data-spacer);
+		    display: inline-block;
+		    height: 0;
+		    overflow: hidden;
+		}
+		.dont-truncate {
+		    white-space: nowrap;
+		}
+		.content {
+			position: absolute;
+	    max-width: 100%;
+	    white-space: nowrap;
+	    overflow: hidden;
+	    text-overflow: ellipsis;
+		}
+		.spacer {
+	    height: 0;
+	    overflow: hidden;
+		}
 	}
 }
 
@@ -49,6 +89,7 @@ td.actions {
 		padding-right: 0 15px;
 	}
 }
+
 
 // ============================================ Forms ===============================================
 
@@ -118,7 +159,14 @@ form {
 .section-header {
 	font-size: 1.1rem;
 	font-weight: bold;
-    text-transform: uppercase;
+  text-transform: uppercase;
+}
+
+.tabular-header {
+	font-size: 0.9rem;
+	font-weight: bold;
+  text-transform: uppercase;
+	color: $light-grey;
 }
 
 .select-input {
@@ -533,6 +581,15 @@ section {
 	padding: 0 20px;
 }
 
+.ellipsis-container {
+	margin: 0;
+	padding: 5px 0;
+	white-space: nowrap;
+	.ellipsize {
+		overflow:hidden;
+		text-overflow: ellipsis;
+	}
+}
 // ============================================ Card ===========================================
 
 .card {
