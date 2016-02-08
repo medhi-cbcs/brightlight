@@ -1,5 +1,5 @@
 class CopyConditionsController < ApplicationController
-  before_action :set_copy_condition, only: [:show, :edit, :update, :destroy]
+  before_action :set_copy_condition, only: [:show, :edit, :check, :update, :destroy]
   include ApplicationHelper
 
   # GET /copy_conditions
@@ -26,17 +26,6 @@ class CopyConditionsController < ApplicationController
   # GET /copy_conditions/new
   def new
     @copy_condition = CopyCondition.new
-    @grade_level_ids = GradeLevel.all.collect(&:id)
-    @grade_sections = GradeSection.with_academic_year_id(AcademicYear.current_id)
-    @grade_sections_ids = @grade_sections.collect(&:id)
-    if params[:s].present?
-      @grade_section = @grade_sections.where(id:params[:s]).first
-      @grade_level = @grade_section.grade_level
-    end
-    if params[:l].present?
-      @label = BookLabel.find(params[:l])
-      @copy_conditions = CopyCondition.current_year.for_label_id(params[:l])
-    end
   end
 
   # GET /copy_conditions/1/edit
@@ -44,11 +33,16 @@ class CopyConditionsController < ApplicationController
     @user = User.where(id:@copy_condition.user_id).first
   end
 
+  # GET /copy_conditions/1/check
+  def check
+    @user = User.where(id:@copy_condition.user_id).first
+  end
+
   # POST /copy_conditions
   # POST /copy_conditions.json
   def create
     @book_copy = BookCopy.copy_with_barcode(copy_condition_params[:barcode])
-
+    @old_condition = CopyCondition.find(params[:id]) if params[:id].present?
     @copy_condition = CopyCondition.new(
       book_copy_id: @book_copy.id,
       book_condition_id: copy_condition_params[:book_condition_id],
@@ -61,8 +55,37 @@ class CopyConditionsController < ApplicationController
 
     respond_to do |format|
       if @copy_condition.save
+        @old_condition.update(end_date:Date.today) if @old_condition.present?
         @book_copy.update(book_condition_id:@copy_condition.book_condition_id)
-        format.html { redirect_to book_copy_conditions_url(@book_copy.id), notice: 'Copy condition was successfully created.' }
+        format.html { redirect_to book_copy_conditions_url(@book_copy.id), notice: 'Copy condition was successfully updated.' }
+        format.json { render :show, status: :created, location: @copy_condition }
+      else
+        format.html { render :new }
+        format.json { render json: @copy_condition.errors, status: :unprocessable_entity }
+      end
+    end
+  end
+
+  # POST /copy_conditions/1/check_update
+  # POST /copy_conditions/1/check_update.json
+  def check_update
+    @book_copy = BookCopy.copy_with_barcode(copy_condition_params[:barcode])
+    @old_condition = CopyCondition.find(params[:id]) if params[:id].present?
+    @copy_condition = CopyCondition.new(
+      book_copy_id: @book_copy.id,
+      book_condition_id: copy_condition_params[:book_condition_id],
+      academic_year_id: current_academic_year_id,
+      barcode: copy_condition_params[:barcode],
+      notes: copy_condition_params[:notes],
+      start_date: Date.today,
+      user_id: current_user.id
+      )
+
+    respond_to do |format|
+      if @copy_condition.save
+        @old_condition.update(end_date:Date.today) if @old_condition.present?
+        @book_copy.update(book_condition_id:@copy_condition.book_condition_id)
+        format.html { redirect_to book_copy_conditions_url(@book_copy.id), notice: 'Copy condition was successfully updated.' }
         format.json { render :show, status: :created, location: @copy_condition }
       else
         format.html { render :new }

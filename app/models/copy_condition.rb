@@ -4,7 +4,7 @@ class CopyCondition < ActiveRecord::Base
   belongs_to :academic_year
   belongs_to :user   # user that did the checking
 
-  default_scope { order('created_at DESC') }
+  validates :academic_year, :start_date, :book_copy_id, :book_condition, presence: true
 
   scope :current_year, lambda { where(academic_year:AcademicYear.current) }
   

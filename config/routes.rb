@@ -1,6 +1,5 @@
 Rails.application.routes.draw do
 
-  resources :copy_conditions
   resources :book_labels
   resources :rosters
   resources :departments
@@ -23,6 +22,13 @@ Rails.application.routes.draw do
         get 'edit_labels'
         put 'update_labels'
       end
+    end
+  end
+
+  resources :copy_conditions do
+    member do
+      get 'check'
+      post 'check_update'
     end
   end
 

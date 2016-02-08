@@ -1,11 +1,4 @@
                                 Prefix Verb     URI Pattern                                                         Controller#Action
-                       copy_conditions POST     /copy_conditions(.:format)                                          copy_conditions#create
-                    new_copy_condition GET      /copy_conditions/new(.:format)                                      copy_conditions#new
-                   edit_copy_condition GET      /copy_conditions/:id/edit(.:format)                                 copy_conditions#edit
-                        copy_condition GET      /copy_conditions/:id(.:format)                                      copy_conditions#show
-                                       PATCH    /copy_conditions/:id(.:format)                                      copy_conditions#update
-                                       PUT      /copy_conditions/:id(.:format)                                      copy_conditions#update
-                                       DELETE   /copy_conditions/:id(.:format)                                      copy_conditions#destroy
                            book_labels GET      /book_labels(.:format)                                              book_labels#index
                                        POST     /book_labels(.:format)                                              book_labels#create
                         new_book_label GET      /book_labels/new(.:format)                                          book_labels#new
@@ -135,7 +128,16 @@ update_labels_book_edition_book_copies PUT      /book_editions/:book_edition_id/
                                        PATCH    /book_editions/:id(.:format)                                        book_editions#update
                                        PUT      /book_editions/:id(.:format)                                        book_editions#update
                                        DELETE   /book_editions/:id(.:format)                                        book_editions#destroy
-                  book_copy_conditions GET      /book_copies/:id/conditions(.:format)                               copy_conditions#index
+                  check_copy_condition GET      /copy_conditions/:id/check(.:format)                                copy_conditions#check
+                       copy_conditions GET      /copy_conditions(.:format)                                          copy_conditions#index
+                                       POST     /copy_conditions(.:format)                                          copy_conditions#create
+                    new_copy_condition GET      /copy_conditions/new(.:format)                                      copy_conditions#new
+                   edit_copy_condition GET      /copy_conditions/:id/edit(.:format)                                 copy_conditions#edit
+                        copy_condition GET      /copy_conditions/:id(.:format)                                      copy_conditions#show
+                                       PATCH    /copy_conditions/:id(.:format)                                      copy_conditions#update
+                                       PUT      /copy_conditions/:id(.:format)                                      copy_conditions#update
+                                       DELETE   /copy_conditions/:id(.:format)                                      copy_conditions#destroy
+                  book_copy_conditions GET      /book_copies/:id/conditions(.:format)                               book_copies#conditions
                 edit_merge_book_titles POST     /book_titles/edit_merge(.:format)                                   book_titles#edit_merge
                      merge_book_titles POST     /book_titles/merge(.:format)                                        book_titles#merge
                     delete_book_titles POST     /book_titles/delete(.:format)                                       book_titles#delete

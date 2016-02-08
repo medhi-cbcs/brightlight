@@ -7,5 +7,5 @@ nav
         = link_to :back
           i.material-icons chevron_left
 
-= form_for @copy_condition do |f|
+= form_for @copy_condition, url: {action: :check_update}, method: :post do |f|
   == render partial: 'fields', locals: {f: f}

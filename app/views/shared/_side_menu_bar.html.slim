@@ -12,7 +12,7 @@ li
 			li
 				a href="/student_books" Assignments
 			li
-				a href="/copy_conditions/new" Condition
+				a href="/copy_conditions/new" Update Condition
 li
 	.collapsible-header.waves-effect.waves-cyan
 		i.material-icons subject
@@ -55,3 +55,21 @@ li
 			li
 				a href="/users" 
 					| Users
+li 
+	.collapsible-header.waves-effect.waves-cyan
+		i.material-icons perm_identity
+		i.mdi-navigation-chevron-right.right
+		| Profile
+	.collapsible-body
+		ul
+			li 			
+				- if current_user
+					- if current_user.image
+						= image_tag current_user.image, alt: current_user.name, class: 'user-avatar'
+					- else
+						i.material-icons perm_identity
+					= current_user.name
+				- else
+					= link_to new_user_session_path
+						| Login
+						i.material-icons.left perm_identity
