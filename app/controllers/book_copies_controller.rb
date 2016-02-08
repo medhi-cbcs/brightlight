@@ -104,6 +104,13 @@ class BookCopiesController < ApplicationController
     end
   end
 
+  # GET /book_copies/1/conditions
+  def conditions
+    @copy_conditions = CopyCondition.where(book_copy_id:params[:id])
+    @book_copy = BookCopy.find(params[:id])
+    @book_edition = @book_copy.book_edition
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_book_copy

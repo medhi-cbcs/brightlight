@@ -1,117 +1,29 @@
-h4 Book Condition Checking (#{params[:l].present? ? @label.name : ''})
+h4 Book Condition Checking
 
-ul#sort-options.dropdown-content
-  li = link_to "None", new_copy_condition_path
-  li = link_to "Label", new_copy_condition_path(sort:"Label")
+nav
+  .nav-wrapper
+    ul
+      li
+        = link_to :back
+          i.material-icons chevron_left
 
-ul#grade-options.dropdown-content
-  - GradeLevel.all.each do |grade|
-    li 
-      = link_to grade.name, "#!", onclick:"filterSectionOptions(#{grade.id}, #{grade.name});"
-ul#section-options.dropdown-content
-  - @grade_sections.each do |section|
-    li
-      = link_to section.name, "#!", class:"grade#{section.grade_level_id}", onclick:"filterLabelOptions('#{section.name}');"
-ul#label-options.dropdown-content
-  - BookLabel.all.each do |label|
-    li
-      = link_to label.name, new_copy_condition_path(sort:"Label",g:"#{label.grade_level.name}", s:"#{label.section_name}",l:"#{label.id}"), class:"label#{label.section_name}"
-            
-- if params[:sort].blank?
-  nav
-    .nav-wrapper
-      ul
-        li
-          = link_to :back
-            i.material-icons chevron_left
-        li
-          a.dropdown-button href="#!" data-activates="sort-options"
-            = params[:sort].present? ? params[:sort] : "Sort options"
-            i.material-icons.right arrow_drop_down
-            i.material-icons.left filter_list
-
-  = form_for @copy_condition do |f|
-    .card-panel
-      .row
-        - if @copy_condition.errors.any?
-          #error_explanation
-            h2 = "#{pluralize(@copy_condition.errors.count, "error")} prohibited this copy_condition from being saved:"
-            ul
-              - @copy_condition.errors.full_messages.each do |message|
-                li = message
-        .input-field.col.s4
-          = f.label :barcode
-          = f.text_field :barcode
-        .input-field.col.s2
-          = f.label :book_condition, class:'active'
-          = f.collection_select :book_condition_id, BookCondition.all, :id, :code, {selected: 0}
-        .col.s2
-          button.btn.waves-effect.waves-light type="submit" Save        
-        .input-field.col.s12
-          = f.label :notes
-          = f.text_field :notes
-
-- elsif params[:sort] =~ /Label/
-  nav
-    .nav-wrapper
-      ul
-        li
-          = link_to :back
-            i.material-icons chevron_left
-        li
-          a.dropdown-button href="#!" data-activates="sort-options"
-            = params[:sort].present? ? params[:sort] : "Sort options"
-            i.material-icons.right arrow_drop_down
-            i.material-icons.left filter_list
-        li.right
-          a.dropdown-button href="#!" data-activates="label-options"
-            span#label = params[:l].present? ? "Label #{BookLabel.where(id:params[:l]).first.name}" :  "Choose label"
-            i.material-icons.right arrow_drop_down
-        li.right
-          a.dropdown-button href="#!" data-activates="section-options"
-            span#section = params[:s].present? ? "Section #{params[:s]}" : "Choose section"
-            i.material-icons.right arrow_drop_down
-        li.right
-          a.dropdown-button href="#!" data-activates="grade-options"
-            span#grade = params[:g].present? ? "Grade #{params[:g]}" : "Choose grade" 
-            i.material-icons.right arrow_drop_down
-  javascript:
-    //$(filterSectionOptions(grade_ids,$('#course_academic_year_id').val()));
-    function filterSectionOptions(id, name) {
-      var grade_ids = #{raw @grade_level_ids};
-      $("#grade").html("Grade "+name);
-      grade_ids.forEach(function(g){ 
-        if(id!=g) { 
-          $(".grade"+g).hide();
-        } else {
-          $(".grade"+id).show();
-        }
-      }) 
-    }
-    function filterLabelOptions(section_name) {
-      var section_names = #{raw GradeSection.all.map &:name};
-      $("#section").html(section_name);
-      section_names.forEach(function(s){ 
-        if(section_name != s) { 
-          $(".label"+s).hide();
-        } else {
-          $(".label"+section_name).show();
-        }
-      }) 
-    }
-    
-  = form_for @copy_condition do |f|
-    .card-panel
-      .row.ellipsis-container
-        .tabular-header.col.s2.ellipsize Barcode
-        .tabular-header.col.s4.ellipsize Title
-        .tabular-header.col.s2.ellipsize Condition
-        .tabular-header.col.s2.ellipsize Notes
-        .tabular-header.col.s2.ellipsize Acad Year
-      - @copy_conditions.each_with_index do |cc, index|
-        .row.ellipsis-container class="#{'grey lighten-3' if index.even?}"
-          .col.s2.ellipsize = cc.barcode
-          .col.s4.ellipsize = cc.book_copy.book_edition.title
-          .col.s2.ellipsize = cc.book_condition.code
-          .col.s2.ellipsize = cc.notes
-          .col.s2.ellipsize = cc.academic_year.name
+= form_for @copy_condition do |f|
+  .card-panel
+    .row
+      - if @copy_condition.errors.any?
+        #error_explanation
+          h2 = "#{pluralize(@copy_condition.errors.count, "error")} prohibited this copy_condition from being saved:"
+          ul
+            - @copy_condition.errors.full_messages.each do |message|
+              li = message
+      .input-field.col.s4
+        = f.label :barcode
+        = f.text_field :barcode
+      .input-field.col.s2
+        = f.label :book_condition, class:'active'
+        = f.collection_select :book_condition_id, BookCondition.all, :id, :code, {selected: 0}
+      .col.s2
+        button.btn.waves-effect.waves-light type="submit" Save        
+      .input-field.col.s12
+        = f.label :notes
+        = f.text_field :notes

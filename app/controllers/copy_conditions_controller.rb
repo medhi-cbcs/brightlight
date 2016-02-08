@@ -5,9 +5,17 @@ class CopyConditionsController < ApplicationController
   # GET /copy_conditions
   # GET /copy_conditions.json
   def index
-    @copy_conditions = CopyCondition.where(book_copy_id:params[:id])
-    @book_copy = BookCopy.find(params[:id])
-    @book_edition = @book_copy.book_edition
+    @grade_level_ids = GradeLevel.all.collect(&:id)
+    @grade_sections = GradeSection.with_academic_year_id(AcademicYear.current_id)
+    @grade_sections_ids = @grade_sections.collect(&:id)
+    if params[:s].present?
+      @grade_section = @grade_sections.where(id:params[:s]).first
+      @grade_level = @grade_section.grade_level
+    end
+    if params[:l].present?
+      @label = BookLabel.find(params[:l])
+      @copy_conditions = CopyCondition.current_year.for_label_id(params[:l])
+    end
   end
 
   # GET /copy_conditions/1
