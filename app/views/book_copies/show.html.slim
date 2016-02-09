@@ -31,7 +31,7 @@ nav
                 h5 = @book_copy.barcode
               dd.col.s4
                 .label Label
-                h5 = @book_copy.copy_no
+                h5 = @book_copy.book_label.present? ? @book_copy.book_label.name : "--"
             dl.row
               dd.col.s4
                 .label ISBN 10
@@ -48,6 +48,3 @@ nav
               dd.col.s4
                 .label Status
                 .item = @book_copy.status.present? ? @book_copy.status.name : 'N/A'
-
-
-

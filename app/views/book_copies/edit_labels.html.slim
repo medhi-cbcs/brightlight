@@ -36,15 +36,26 @@ nav
           i.material-icons chevron_left
       li
         | Edit labels
+      / li.right
+      /   a.dropdown-button href="#!" data-activates="section-options"
+      /     span#section = "Choose section"
+      /     i.material-icons.right arrow_drop_down
+      / li.right
+      /   a.dropdown-button href="#!" data-activates="grade-options"
+      /     span#grade = "Choose grade" 
+      /     i.material-icons.right arrow_drop_down
       li.right
-        a.dropdown-button href="#!" data-activates="section-options"
-          span#section = "Choose section"
-          i.material-icons.right arrow_drop_down
+        = collection_select :grade_section, :grade_section_name, [], :id, :name, {:include_blank => true}, {class:"browser-default"}
       li.right
-        a.dropdown-button href="#!" data-activates="grade-options"
-          span#grade = "Choose grade" 
-          i.material-icons.right arrow_drop_down
-          
+        = collection_select :grade_level, :grade_level_id, GradeLevel.all, :id, :name, \
+          {include_blank: true, class:"browser-default"}, \
+          { data: { \
+              dynamic_selectable_url: dynamic_select_grade_sections_path(:grade_level_id), \
+              dynamic_selectable_target: '#grade_section_grade_section_name' \
+            }, class:"browser-default" \
+          }
+
+      
 ul#grade-options.dropdown-content
   - GradeLevel.all.each do |grade|
     li 
@@ -71,7 +82,7 @@ javascript:
     $("#section").html("Section "+name);
   };
   
-= form_tag update_labels_book_edition_book_copies_path,method: :put do
+= form_tag update_labels_book_edition_book_copies_path, method: :put do
   input hidden="hidden" type="text" value="" name="section-name" id="section-name"
   .card-panel
     .row
@@ -90,9 +101,8 @@ javascript:
                 td
                   .input-field
                     - section = book_copy.book_label.name.match(/(\d+[A-Z])#/)[1] if book_copy.book_label.present?
-                    = select_tag "book_copies[#{book_copy.id}][grade_section_name]", options_from_collection_for_select(GradeSection.all, :name, :name, section)
-                    /= select_tag :grade_section_name, option_for_select_with_class(GradeSection.all, :name, :name, section)
-                    /, class:"browser-default select-input"
+                    = text_field_tag "book_copies[#{book_copy.id}][grade_section_name]", section
+                    /= select_tag "book_copies[#{book_copy.id}][grade_section_name]", options_from_collection_for_select(GradeSection.all, :name, :name, section)
                 td 
                   .input-field
                     - number = book_copy.book_label.name.match(/#(\d+)/)[1] if book_copy.book_label.present?

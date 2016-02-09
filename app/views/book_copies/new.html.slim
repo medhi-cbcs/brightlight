@@ -45,7 +45,8 @@
       table.compact
         thead
           th Barcode
-          th Label
+          th Grade
+          th No
           th Condition
           th Status
         tbody#book_copy
@@ -62,4 +63,3 @@ javascript:
   $('#book_copy').on('cocoon:after-insert', function() {
     $('select').material_select();
   });
-

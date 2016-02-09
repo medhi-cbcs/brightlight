@@ -73,6 +73,11 @@ Rails.application.routes.draw do
     registrations: "users/registrations"
   }
 
+  namespace :dynamic_select do
+    get ':grade_level_id/grade_sections', to: 'options#grade_sections', as: 'grade_sections'
+    get ':section/book_labels', to: 'options#book_labels', as: 'book_labels'
+  end
+
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
