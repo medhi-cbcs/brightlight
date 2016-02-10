@@ -60,20 +60,6 @@ class BookEditionsController < ApplicationController
         nested_form = book_edition_params[:book_copies_attributes].present?
         format.html {
           if nested_form
-            # # This comes from GET /book_copies/new
-            # begin
-            #   book_labels = params[:book_copies].values.map {|v|{book_label_id: BookLabel.for_section_and_number(v[:grade_section_name],v[:no]).id} }
-            #   @book_edition.book_copies << BookCopy.new(params[:book_copies].keys, book_labels)
-            # rescue
-            #   flash[:alert] = "Invalid input."
-            # end
-            # if @book_copies.present?
-            #   flash[:notice] = "Book copies were successfully created."
-            #   book_edition_id = params[:book_edition_id]
-            #   redirect_to book_edition_book_copies_path(@book_edition)
-            # else
-            #   redirect_to new_book_copies_path(@book_edition.id)
-            # end
             redirect_to book_edition_book_copies_path(@book_edition)
           else
             # This part handles the regular request from GET /book_editions/1/edit
