@@ -4,8 +4,17 @@ class BookLabelsController < ApplicationController
   # GET /book_labels
   # GET /book_labels.json
   def index
-    @book_labels = BookLabel.all
-    @acad_year = AcademicYear.current.first
+    respond_to do |format|
+      format.html {
+        @book_labels = BookLabel.all
+        @acad_year = AcademicYear.current.first
+      }
+      format.json {
+        search = params[:term] || ""
+        @book_labels = BookLabel.where('name LIKE ?', "#{search}%")
+      }
+    end
+
   end
 
   # GET /book_labels/1
