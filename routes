@@ -129,6 +129,7 @@ update_labels_book_edition_book_copies PUT      /book_editions/:book_edition_id/
                                        PUT      /book_editions/:id(.:format)                                        book_editions#update
                                        DELETE   /book_editions/:id(.:format)                                        book_editions#destroy
                   check_copy_condition GET      /copy_conditions/:id/check(.:format)                                copy_conditions#check
+           check_update_copy_condition POST     /copy_conditions/:id/check_update(.:format)                         copy_conditions#check_update
                        copy_conditions GET      /copy_conditions(.:format)                                          copy_conditions#index
                                        POST     /copy_conditions(.:format)                                          copy_conditions#create
                     new_copy_condition GET      /copy_conditions/new(.:format)                                      copy_conditions#new
@@ -199,6 +200,8 @@ update_labels_book_edition_book_copies PUT      /book_editions/:book_edition_id/
                                        PATCH    /users(.:format)                                                    users/registrations#update
                                        PUT      /users(.:format)                                                    users/registrations#update
                                        DELETE   /users(.:format)                                                    users/registrations#destroy
+         dynamic_select_grade_sections GET      /dynamic_select/:grade_level_id/grade_sections(.:format)            dynamic_select/options#grade_sections
+            dynamic_select_book_labels GET      /dynamic_select/:section/book_labels(.:format)                      dynamic_select/options#book_labels
                                   root GET      /                                                                   welcome#index
                              dashboard GET      /dashboard(.:format)                                                welcome#dashboard
                                        GET      /auth/:provider/callback(.:format)                                  sessions#create
