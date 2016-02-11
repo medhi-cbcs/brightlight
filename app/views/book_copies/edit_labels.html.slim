@@ -34,55 +34,8 @@ nav
       li
         = link_to :back
           i.material-icons chevron_left
-      li
-        | Edit labels
-      / li.right
-      /   a.dropdown-button href="#!" data-activates="section-options"
-      /     span#section = "Choose section"
-      /     i.material-icons.right arrow_drop_down
-      / li.right
-      /   a.dropdown-button href="#!" data-activates="grade-options"
-      /     span#grade = "Choose grade" 
-      /     i.material-icons.right arrow_drop_down
-      li.right
-        = collection_select :grade_section, :grade_section_name, [], :id, :name, {:include_blank => true}, {class:"browser-default"}
-      li.right
-        = collection_select :grade_level, :grade_level_id, GradeLevel.all, :id, :name, \
-          {include_blank: true, class:"browser-default"}, \
-          { data: { \
-              dynamic_selectable_url: dynamic_select_grade_sections_path(:grade_level_id), \
-              dynamic_selectable_target: '#grade_section_grade_section_name' \
-            }, class:"browser-default" \
-          }
 
-      
-ul#grade-options.dropdown-content
-  - GradeLevel.all.each do |grade|
-    li 
-      = link_to grade.name, "#!", onclick:"filterSectionOptions(#{grade.id}, '#{grade.name}');"
-ul#section-options.dropdown-content
-  - @grade_sections.each do |section|
-    li
-      = link_to section.name, "#!", class:"grade#{section.grade_level_id}", onclick:"setGradeSectionLabel('#{section.name}');"
-      
-javascript:
-  function filterSectionOptions(id, name) {
-    var grade_ids = #{raw @grade_level_ids};
-    $("#grade").html("Grade "+name);
-    grade_ids.forEach(function(g){ 
-      if(id!=g) { 
-        $(".grade"+g).hide();
-      } else {
-        $(".grade"+id).show();
-      }
-    }) 
-  };
-  function setGradeSectionLabel(name) {
-    $("input[name='section-name']").val(name);
-    $("#section").html("Section "+name);
-  };
-  
-= form_tag update_labels_book_edition_book_copies_path, method: :put do
+= form_for @book_edition do |f|
   input hidden="hidden" type="text" value="" name="section-name" id="section-name"
   .card-panel
     .row
@@ -92,23 +45,32 @@ javascript:
           th Label
 
         tbody
-          - @book_copies.each do |book_copy|
-            = fields_for "book_copies[]", book_copy do |f|
-              tr
-                td
-                  .input-field
-                    = f.text_field :barcode
-                td
-                  .input-field
-                    - section = book_copy.book_label.name.match(/(\d+[A-Z])#/)[1] if book_copy.book_label.present?
-                    = text_field_tag "book_copies[#{book_copy.id}][grade_section_name]", section
-                    /= select_tag "book_copies[#{book_copy.id}][grade_section_name]", options_from_collection_for_select(GradeSection.all, :name, :name, section)
-                td 
-                  .input-field
-                    - number = book_copy.book_label.name.match(/#(\d+)/)[1] if book_copy.book_label.present?
-                    = number_field_tag "book_copies[#{book_copy.id}][no]", number, min:1, max: 25
-                    /= c.collection_select :book_label_id, BookLabel.all, :id, :name
-
+          = f.fields_for :book_copies do |ff|
+            tr
+              td
+                .input-field
+                  = ff.text_field :barcode
+              td
+                .input-field
+                  = ff.text_field :copy_no, class:"book-label-fields"
+                  = ff.hidden_field :book_label_id
+                    
   .toolbar.z-depth-1
     button.btn.waves-effect.waves-light type="submit" Save
     = link_to 'Cancel', book_edition_book_copies_path(@book_edition), class: "waves-effect waves-light btn btn-flat"
+
+javascript:
+  $(function() {
+    $(".book-label-fields").autocomplete({
+      source: "/book_labels.json",
+      minLength: 2,
+      select: function(event, ui) {
+        event.preventDefault();
+        $(this).val(ui.item.label);
+        console.log(this);
+        element_id = $(this).attr('id').replace('copy_no','book_label_id');
+        $("#"+element_id).val(ui.item.value);
+      }
+    });
+  });
+  

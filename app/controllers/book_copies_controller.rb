@@ -44,24 +44,6 @@ class BookCopiesController < ApplicationController
     end
   end
 
-  # PUT /book_copies/update_labels
-  def update_labels
-    begin
-      book_labels = params[:book_copies].values.map {|v|{book_label_id: BookLabel.for_section_and_number(v[:grade_section_name],v[:no]).id} }
-      @book_copies = BookCopy.update(params[:book_copies].keys, book_labels)
-    rescue
-      flash[:alert] = "Invalid input."
-    end
-
-    if @book_copies.present?
-      flash[:notice] = "Book labels updated."
-      book_edition_id = params[:book_edition_id]
-      redirect_to book_edition_book_copies_path(book_edition_id)
-    else
-      redirect_to edit_labels_book_edition_book_copies_path(params[:book_edition_id])
-    end
-  end
-
   # POST /book_copies
   # POST /book_copies.json
   def create

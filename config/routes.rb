@@ -20,7 +20,6 @@ Rails.application.routes.draw do
     resources :book_copies, shallow: true do
       collection do
         get 'edit_labels'
-        put 'update_labels'
       end
     end
   end
