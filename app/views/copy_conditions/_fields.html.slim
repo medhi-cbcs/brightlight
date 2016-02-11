@@ -25,3 +25,4 @@
     .input-field.col.s12
       = f.label :notes
       = f.text_field :notes, value: ""
+      = f.hidden_field :user_id, value: current_user.try(:id)

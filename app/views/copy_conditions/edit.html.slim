@@ -18,6 +18,7 @@ h4 Editing Book Condition
       .input-field.col.s12
         = f.label :notes
         = f.text_field :notes
+        = f.hidden_field :user_id, value: current_user.try(:id)
     .row
     	.input-field.col.s12
     		= f.label 'Last update:', class: 'active'

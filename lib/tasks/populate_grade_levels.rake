@@ -5,7 +5,6 @@ namespace :db do
 
 		GradeLevel.delete_all
 		GradeSection.delete_all
-		GradeSectionsStudent.delete_all
 
 		# Academic Years and Terms
 		n = 0
@@ -29,17 +28,8 @@ namespace :db do
 				section.grade_level_id = grade.id
 				section.homeroom_id = teachers[rand(teachers_count)].id
 				section.academic_year_id = year.id
-				s += 1				
+				s += 1
 			end
-		end
-
-		no_of_sections = GradeSection.all.count
-		
-		# Randomly assign each student to a grade section
-		puts "Assigning students to grade sections"
-		Student.find_each do |student|
-			gs = GradeSection.all[rand(no_of_sections)]
-			GradeSectionsStudent.create student_id:student.id, grade_section_id:gs.id, academic_year_id:year.id
 		end
 	end
 end
