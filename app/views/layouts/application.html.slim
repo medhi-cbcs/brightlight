@@ -6,31 +6,33 @@ html
 			script src="http://html5shiv.googlecode.com/svn/trunk/html5.js" type="text/javascript"
 		= stylesheet_link_tag "application", media: "all", 'data-turbolinks-track' => true
 		= csrf_meta_tags
-		/= favicon_link_tag
-		link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"
+		link href='/assets/favicon.png' rel='icon' type='image/png'
+		/ link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"
 
 		= javascript_include_tag "application", 'data-turbolinks-track' => true
-		= yield :javascript
 
 		meta name="viewport" content="width=device-width, initial-scale=1.0"
 
-	body class="#{ controller.controller_name}"
+	body class="#{ controller.controller_name} blue-grey lighten-5"
 		header
 			= render 'shared/layout/header'
-		
-		main
-			.row
-				.col.s12.m2.l3
-					= render 'shared/side_menu_bar'
-				.col.s12.m9.l8
-					div
-						= render 'shared/flash_messages'          
-						= yield :layout
-				.col.s12.m1.l1
 
-		footer.page-footer
-			= render 'shared/layout/footer'
+		main#main
+			.container
+				= render 'shared/flash_messages'
+				section
+					= yield :layout
 
+		footer.page-footer style="padding-top:0"
+			//= render 'shared/layout/footer'
+			
+			= yield :javascript
+			
 			-if Rails.env.development?
 				.container
-					= debug(params)
+					ul.collapsible data-collapsible="expandable" style="padding-bottom:0px; box-shadow:none; border:none"
+						li style="color: white;"
+							.collapsible-header style="background-color:#389bfe; border:none"
+								| Copyright © 2015 Brightlight. All rights reserved.
+							.collapsible-body
+								= debug(params)

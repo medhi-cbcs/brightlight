@@ -1,0 +1,20 @@
+.row
+	.col.s5.offset-s3
+		= form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :post }) do |f|	
+			= devise_error_messages!
+			.card
+				.card-content.white
+					span.card-title.grey-text Forgot your password?
+					.row
+						input-field.col.s10.offset-s1
+							= f.label :email
+							= f.text_field :email, autofocus: true
+
+				.card-action
+					button.btn type="submit" Send me reset password instructions
+
+	.col.s3
+		.card
+			.card-content.white
+				= render "devise/shared/links"
+

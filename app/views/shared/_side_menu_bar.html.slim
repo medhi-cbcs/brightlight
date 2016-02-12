@@ -1,36 +1,75 @@
-.collection
-	a.collection-item.active href="#" 
-		| Cras justo odio
-	a.collection-item href="#" 
-		| Dapibus ac facilisis in
-	a.collection-item href="#" 
-		| Morbi leo risus
-	a.collection-item href="#" 
-		| Porta ac consectetur ac
-	a.collection-item href="#" 
-		| Vestibulum at eros
-	a.collection-item href="#" 
-		| Morbi leo risus
-		span.badge.new 38
-
-/ ul.nav.nav-pills.nav-stacked style="max-width: 300px;"
-/     li
-/     	a href="javascript:void(0)" Home
-/     li
-/     	a href="javascript:void(0)" Profile 
-/     li.disabled
-/     	a href="javascript:void(0)" Disabled 
-/     li.dropdown
-/         a.dropdown-toggle data-toggle="dropdown" href="#" data-target="#"
-/             | Dropdown 
-/             span.caret
-/         ul.dropdown-menu
-/             li
-/             	a href="javascript:void(0)" Action
-/             li
-/             	a href="javascript:void(0)" Another action 
-/             li
-/             	a href="javascript:void(0)" Something else here
-/             li.divider
-/             li
-/             	a href="javascript:void(0)" Separated link
+li
+	.collapsible-header.waves-effect.waves-cyan
+		i.material-icons info_outline
+		i.mdi-navigation-chevron-right.right
+		| Books
+	.collapsible-body
+		ul
+			li
+				a href="/book_titles" Titles
+			li
+				a href="/book_editions" Editions
+			li
+				a href="/student_books" Assignments
+			li
+				a href="/copy_conditions/new" Update Condition
+li
+	.collapsible-header.waves-effect.waves-cyan
+		i.material-icons subject
+		i.mdi-navigation-chevron-right.right
+		| School
+	.collapsible-body
+		ul
+			li
+				a href="/courses" Courses
+			li
+				a href="/grade_levels" Grade Levels
+			li
+				a href="/departments" Departments
+li
+	.collapsible-header.waves-effect.waves-cyan
+		i.material-icons subject
+		i.mdi-navigation-chevron-right.right
+		| People
+	.collapsible-body
+		ul
+			li
+				a href="/students" Students
+			li
+				a href="/guardians" Guardians
+			li
+				a href="/employees?q=teacher" Teachers
+			li
+				a href="/employees?q=staff" Staff
+li
+	.collapsible-header.waves-effect.waves-cyan
+		i.material-icons subject
+		i.mdi-navigation-chevron-right.right
+		| Admin
+	.collapsible-body
+		ul
+			li
+				a href="/academic_years" Academic Years
+			li
+				a href="/book_labels" Book Labels
+			li
+				a href="/users" 
+					| Users
+li 
+	.collapsible-header.waves-effect.waves-cyan
+		i.material-icons perm_identity
+		i.mdi-navigation-chevron-right.right
+		| Profile
+	.collapsible-body
+		ul
+			li 			
+				- if current_user
+					- if current_user.image
+						= image_tag current_user.image, alt: current_user.name, class: 'user-avatar'
+					- else
+						i.material-icons perm_identity
+					= current_user.name
+				- else
+					= link_to new_user_session_path
+						| Login
+						i.material-icons.left perm_identity

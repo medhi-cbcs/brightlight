@@ -1,0 +1,25 @@
+= form_for @book_label do |f|
+  .card-panel
+    - if @book_label.errors.any?
+      #error_explanation
+        h2 = "#{pluralize(@book_label.errors.count, "error")} prohibited this book_label from being saved:"
+        ul
+          - @book_label.errors.full_messages.each do |message|
+            li = message
+    .row
+      .input-field.col.s3
+        = f.label "Label"
+        = f.text_field :name
+    .row
+      .input-field.col.s3
+        = f.label :grade_section, class: 'active'
+        = f.collection_select :grade_section, GradeSection.all, :id, :name, {prompt: true}, { class: 'browser-default'}
+    .row
+      .input-field.col.s3
+        = f.label :student, class: 'active'
+        = f.collection_select :student, Student.all, :id, :name, {prompt: true}, { class: 'browser-default'}
+
+
+.toolbar.actions.col.s12 
+  button.btn.waves-effect.waves-light type="submit" Save
+  = link_to 'Cancel', book_labels_path, class: "waves-effect waves-teal btn-flat"

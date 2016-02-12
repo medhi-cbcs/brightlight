@@ -1,0 +1,89 @@
+h5 Section
+
+nav
+  .nav-wrapper
+    .brand-logo style="margin: 0 20px; font-size:2.5em"
+      = @grade_section.name
+      /- unless @grade_section.academic_year_id == current_academic_year_id
+    .brand-logo style="margin: 0 20px; font-size:1.5em; padding-left:5em"
+      = AcademicYear.find(@grade_section.academic_year_id).name
+    ul
+      li.right
+        = link_to edit_grade_section_path(@grade_section)
+          | Edit
+          i.material-icons.left edit
+
+.card-panel
+  .list_description
+    dl.row
+      dd.col.s4
+        .label Grade
+        .item = link_to @grade_section.grade_level.name, @grade_section.grade_level
+      dd.col.s4
+        .label Homeroom teacher
+        .item = @grade_section.homeroom.present? ? link_to(@grade_section.homeroom, @grade_section.homeroom) : '--'
+      dd.col.s4
+        .label Academic Year
+        .item = @grade_section.academic_year.present? ? @grade_section.academic_year.name : "--"
+
+.card
+  .col.s12 style="margin-bottom: 15px; padding: 0px;"
+    ul.tabs.z-depth-1
+      li.tab
+        a href='#tab1' Students
+      li.tab
+        a href='#tab2' Courses
+      li.tab
+        a href='#tab3' Textbooks
+
+    #tab1.tab-content
+      .label Students
+      table.striped.compact
+        thead
+          th No
+          th Name
+        tbody
+          - i = 0
+          - @grade_section.students.each do |student|
+            tr
+              td style="width:40px"
+                = "#{i += 1}. "
+              td
+                = link_to student.name, student
+
+    #tab2.tab-content
+      .label Course Sections
+      table.striped.compact
+        thead
+          th No
+          th Name
+        tbody
+          - i = 0
+          - @grade_section.course_sections.each do |course_section|
+            tr
+              td style="width:40px"
+                = "#{i += 1}. "
+              td
+                = link_to course_section.name ? course_section.name : '-- Missing name --', course_section, class:"#{'red-text' if course_section.name.blank?}"
+
+
+    #tab3.tab-content
+      .label Textbooks
+      table.striped.compact
+        thead
+          th No
+          th Title
+          th Author
+        tbody
+          - i = 0
+          - if @textbooks.flatten.length > 0
+            - @textbooks.flatten.each do |book|
+              tr
+                td style="width:40px"
+                  = "#{i += 1}. "
+                td
+                  = link_to book.title, book unless book.blank?
+                td
+                  = book.authors unless book.blank?
+
+

@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  book_id: 
+  book_condition_id: 
+  status_id: 
+  barcode: MyString
+  copy_no: MyString
+
+two:
+  book_id: 
+  book_condition_id: 
+  status_id: 
+  barcode: MyString
+  copy_no: MyString

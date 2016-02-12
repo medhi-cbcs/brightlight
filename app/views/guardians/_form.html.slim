@@ -1,0 +1,64 @@
+= form_for @guardian do |f|
+  .card-panel
+    - if @guardian.errors.any?
+      #error_explanation
+        h2 = "#{pluralize(@guardian.errors.count, "error")} prohibited this guardian from being saved:"
+        ul
+          - @guardian.errors.full_messages.each do |message|
+            li = message
+
+    .row
+      .input-field.col.s4
+        = f.label :name
+        = f.text_field :name
+      .input-field.col.s4
+        = f.label :first_name
+        = f.text_field :first_name
+      .input-field.col.s4
+        = f.label :last_name
+        = f.text_field :last_name
+    .row
+      .section-header.col.s12 Contact
+      .input-field.col.s4
+        = f.label :mobile_phone
+        = f.text_field :mobile_phone
+      .input-field.col.s4
+        = f.label :home_phone
+        = f.text_field :home_phone
+      .input-field.col.s4
+        = f.label :office_phone
+        = f.text_field :office_phone
+      .input-field.col.s4
+        = f.label :other_phone
+        = f.text_field :other_phone
+    .row
+      .section-header.col.s12 Address
+      .input-field.col.s4
+        = f.label :address_line1
+        = f.text_field :address_line1
+      .input-field.col.s4
+        = f.label :address_line2
+        = f.text_field :address_line2
+      .input-field.col.s4
+        = f.label :city
+        = f.text_field :city
+      .input-field.col.s4
+        = f.label :state
+        = f.text_field :state
+      .input-field.col.s4
+        = f.label :postal_code
+        = f.text_field :postal_code
+      .input-field.col.s4
+        = f.label :country
+        = f.text_field :country
+    .row
+      .section-header.col.s12 Info
+      .input-field.col.s4
+        = f.label :family_no
+        = f.number_field:family_no
+      
+  .toolbar.z-depth-1 
+    = link_to 'Cancel', guardians_path, class: "waves-effect waves-teal btn-flat"
+    button.btn.waves-effect.waves-light type="submit" Save
+    - if params[:action] =~ /edit/
+      = link_to 'Delete', @guardian, data: {confirm: 'Are you sure?'}, method: :delete, class: "right btn waves-effect waves-teal red"

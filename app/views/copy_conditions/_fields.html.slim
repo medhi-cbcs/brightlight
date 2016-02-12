@@ -1,0 +1,28 @@
+.card-panel
+  .row
+    - if @copy_condition.errors.any?
+      #error_explanation
+        h2 = "#{pluralize(@copy_condition.errors.count, "error")} prohibited this copy_condition from being saved:"
+        ul
+          - @copy_condition.errors.full_messages.each do |message|
+            li = message
+    .input-field.col.s4
+      = f.label :barcode
+      - if params[:action] =~ /check/
+        = f.text_field :barcode, disabled:true
+        = f.hidden_field :barcode
+      - else
+        = f.text_field :barcode
+    -if params[:action] =~ /check/
+      .input-field.col.s2
+        = label :present_condition, :present_condition
+        = text_field_tag :present_condition, BookCondition.find(@copy_condition.book_copy.book_condition_id).code, disabled:true
+    .input-field.col.s2
+      = f.label 'New condition', class:'active'
+      = f.collection_select :book_condition_id, BookCondition.all, :id, :code, {selected: @copy_condition.book_condition_id}
+    .col.s2
+      button.btn.waves-effect.waves-light type="submit" Save        
+    .input-field.col.s12
+      = f.label :notes
+      = f.text_field :notes, value: ""
+      = f.hidden_field :user_id, value: current_user.try(:id)

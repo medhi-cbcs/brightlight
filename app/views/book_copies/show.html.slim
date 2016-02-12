@@ -1,0 +1,50 @@
+h4 Book Copy
+
+nav
+  .nav-wrapper
+    ul
+      li
+        = link_to book_edition_book_copies_path(@book_copy.book_edition)
+          i.material-icons chevron_left
+      li.right
+        = link_to edit_book_copy_path(@book_copy)
+          i.material-icons.left edit
+          | Edit
+      li.right
+        = link_to book_copy_conditions_path(@book_copy)
+          | Conditions
+.card
+  .card-content
+    table
+      tr
+        td style="vertical-align:top"
+          - thumbnail = @book_copy.book_edition.present? ? @book_copy.book_edition.small_thumbnail : 'book-icon.png' 
+          = image_tag(thumbnail, class: 'list_image')
+        td
+          .list_description
+            dl.row
+              h4 = @book_copy.book_edition.title
+              dd = @book_copy.book_edition.subtitle
+            dl.row
+              dd.col.s4
+                .label Barcode
+                h5 = @book_copy.barcode
+              dd.col.s4
+                .label Label
+                h5 = @book_copy.book_label.present? ? @book_copy.book_label.name : "--"
+            dl.row
+              dd.col.s4
+                .label ISBN 10
+                .item = @book_copy.book_edition.isbn10.blank? ? '--' : @book_copy.book_edition.isbn10
+              dd.col.s4
+                .label ISBN
+                .item = @book_copy.book_edition.isbn13.blank? ? '--' : @book_copy.book_edition.isbn13
+            dl.row
+              dd.col.s4
+                .label Condition
+                - color = BookCondition::COLORS[@book_copy.book_condition.code.downcase]
+                .item class="#{color}-text"
+                  = @book_copy.book_condition.present? ? @book_copy.book_condition.code.capitalize : 'N/A'
+              dd.col.s4
+                .label Status
+                .item = @book_copy.status.present? ? @book_copy.status.name : 'N/A'

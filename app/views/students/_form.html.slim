@@ -1,0 +1,96 @@
+= form_for @student do |f|
+  .card-panel
+    - if @student.errors.any?
+      #error_explanation
+        h6 = "#{pluralize(@student.errors.count, "error")} prohibited this student from being saved:"
+        ul
+          - @student.errors.full_messages.each do |message|
+            li = message
+
+    .row
+      .input-field.col.s4
+        = f.label :name, class: 'active'
+        = f.text_field :name
+      .input-field.col.s4
+        = f.label :first_name, class: 'active'
+        = f.text_field :first_name
+      .input-field.col.s4
+        = f.label :last_name, class: 'active'
+        = f.text_field :last_name
+    .row
+      .section-header.col.s12 Personal details 
+      .input-field.col.s4
+        = f.label :date_of_birth, class: 'active'
+        = f.date_field :date_of_birth
+      .input-field.col.s4
+        = f.label :family_id, class: 'active'
+        = f.number_field :family_id
+      .input-field.col.s4
+        = f.label :gender, class: 'active'
+        = f.select :gender, [['Male', 'M'], ['Female', 'F']]
+    .row
+      .input-field.col.s4
+        = f.label :blood_type, class: 'active'
+        = f.text_field :blood_type
+      .input-field.col.s4
+        = f.label :nationality, class: 'active'
+        = f.text_field :nationality
+      .input-field.col.s4
+        = f.label :religion, class: 'active'
+        = f.text_field :religion
+    .row
+      .section-header.col.s12 Contacts
+      .input-field.col.s4
+        = f.label :address_line1, class: 'active'
+        = f.text_field :address_line1
+      .input-field.col.s4
+        = f.label :address_line2, class: 'active'
+        = f.text_field :address_line2
+      .input-field.col.s4
+        = f.label :city, class: 'active'
+        = f.text_field :city
+      .input-field.col.s4
+        = f.label :state, class: 'active'
+        = f.text_field :state
+      .input-field.col.s4
+        = f.label :postal_code, class: 'active'
+        = f.text_field :postal_code
+      .input-field.col.s4
+        = f.label :country, class: 'active'
+        = f.text_field :country
+      .input-field.col.s4
+        = f.label :mobile_phone, class: 'active'
+        = f.text_field :mobile_phone
+      .input-field.col.s4
+        = f.label :home_phone, class: 'active'
+        = f.text_field :home_phone
+      .input-field.col.s4
+        = f.label :email, class: 'active'
+        = f.text_field :email
+    .row
+      .section-header.col.s12 Status
+      .input-field.col.s4
+        = f.label :admission_no, class: 'active'
+        = f.text_field :admission_no
+      .input-field.col.s4
+        = f.label :status, class: 'active'
+        = f.text_field :status
+      .input-field.col.s4
+        = f.label :status_description, class: 'active'
+        = f.text_field :status_description
+      .input-field.col.s4
+        = f.label :student_no, class: 'active'
+        = f.number_field :student_no
+      .input-field.col.s4
+        = f.label :passport_no, class: 'active'
+        = f.text_field :passport_no
+      .input-field.col.s4
+        = f.label :enrollment_date, class: 'active'
+        = f.date_field :enrollment_date
+
+  .toolbar.z-depth-1
+    button.btn.waves-effect.waves-light type="submit" Save
+    = link_to 'Upload photo', "#", class: "waves-effect waves-teal btn btn-default"
+    = link_to 'Cancel', students_path, class: "waves-effect waves-teal btn-flat"
+    - if params[:action] =~ /edit/
+      = link_to 'Delete', @student, data: {confirm: 'Are you sure?'}, method: :delete, class: "right btn waves-effect waves-teal red"

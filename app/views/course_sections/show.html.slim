@@ -1,0 +1,43 @@
+h4 = @course_section.name
+
+.card-panel
+  .list_description
+    dl.row
+      dd.col.s4
+        .label Course Name
+        .item
+          - if @course_section.course.present?
+            = link_to @course_section.course.name, @course_section.course
+          - else
+            .red-text Error! Course doesn't exist.
+      dd.col.s4
+        .label Instructor
+        .item = @course_section.instructor.present? ? link_to(@course_section.instructor.name, @course_section.instructor) : "--"
+
+nav
+  .nav-wrapper
+    ul
+      li
+        = link_to @course_section.course
+          i.material-icons.left chevron_left
+          = @course_section.course.name
+      li.right
+        = link_to edit_course_section_path(@course_section)
+          | Edit
+          i.material-icons.left edit
+
+.card-panel
+  .label Students
+  table.striped.compact
+    thead
+      th No
+      th Name
+    tbody
+      - i = 0
+      - @course_section.students.each do |student|
+        tr
+          td style="width:40px"
+            = "#{i += 1}. "
+          td
+            = link_to student.name, student
+

@@ -1,0 +1,31 @@
+h4 Academic Years
+
+nav
+  .nav-wrapper
+    ul.right
+      li
+        = link_to new_academic_year_path
+          | Add New Year
+          i.material-icons.left add
+
+.card-panel
+  table.striped
+    thead
+      tr
+        th Name
+        th Start Date
+        th End Date
+        th Actions
+
+    tbody
+      - @academic_years.each do |academic_year|
+        tr
+          td = academic_year.name
+          td = academic_year.start_date
+          td = academic_year.end_date
+          td
+            = link_to 'Show', academic_year, class: "btn waves-effect waves-teal btn-flat btn-small"
+            br
+            = link_to 'Edit', edit_academic_year_path(academic_year), class: "btn waves-effect waves-teal btn-flat btn-small"
+        
+

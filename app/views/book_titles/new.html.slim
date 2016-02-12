@@ -1,0 +1,19 @@
+h4 New Book Title
+
+- if @book_title.blank? || @book_title.title.blank?
+	.card-panel
+		.card-content
+			p.grey-text Fill out the form below or enter ISBN No and let the program seach the information for you
+
+		.card-action
+			= form_tag({controller:'book_titles', action:'search_isbn'}, {method: "post"}) do
+				.row
+					.input-field.col.s5
+						i.material-icons.prefix search
+						= text_field_tag(:isbn, '')
+						label for='isbn' ISBN No
+					.input-field.col.s1
+						button.btn.waves-effect.waves-light name='commit' type='submit'
+							| Search ISBN
+
+== render 'form'

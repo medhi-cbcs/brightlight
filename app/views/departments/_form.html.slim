@@ -1,0 +1,30 @@
+= form_for @department do |f|
+  .card
+    .card-content
+      - if @department.errors.any?
+        #error_explanation
+          h6 = "#{pluralize(@department.errors.count, "error")} prohibited this department from being saved:"
+          ul
+            - @department.errors.full_messages.each do |message|
+              li = message
+
+      .row
+        .input-field.col.s4
+          = f.label 'Department Name', class: 'active'
+          = f.text_field :name
+
+        .col.s2
+
+        .input-field.col.s4
+          = f.label :manager_id, class: 'active'
+          = f.collection_select :manager_id, Employee.all, :id, :name, prompt: true
+      .row
+        .input-field.col.s4
+          = f.label 'Department Code', class: 'active'
+          = f.text_field :code
+
+    .card-action
+      button.btn.waves-effect.waves-light type="submit" Save
+      = link_to 'Cancel', departments_path, class: "waves-effect waves-teal btn-flat"
+      - if params[:action] =~ /edit/
+        = link_to 'Delete', @department, data: {confirm: 'Are you sure?'}, method: :delete, class: "right btn waves-effect waves-teal red"

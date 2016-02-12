@@ -1,0 +1,20 @@
+h4 = @course.name
+
+nav
+  .nav-wrapper
+    .brand-logo style="margin-left: 20px; font-size:1.5em"
+      | Sections
+
+.card-panel
+  table.striped
+    thead
+      tr
+        th Section 
+        th Instructor
+
+    tbody
+      - @course_sections.each do |course_section|
+        tr
+          td = link_to course_section.name, course_section
+          td = course_section.instructor.present? ? course_section.instructor.name : "--"
+

@@ -18,6 +18,10 @@ gem 'coffee-rails', '~> 4.1.0'
 gem 'jquery-rails'
 # Turbolinks makes following links in your web application faster. Read more: https://github.com/rails/turbolinks
 gem 'turbolinks'
+gem 'jquery-turbolinks'
+
+gem 'rails-jquery-autocomplete'
+
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem 'jbuilder', '~> 2.0'
 # bundle exec rake doc:rails generates the API under doc/api.
@@ -26,20 +30,36 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 # https://github.com/tzinfo/tzinfo/wiki/Resolving-TZInfo::DataSourceNotFound-Errors
 gem 'tzinfo-data', platforms: [:mingw, :mswin]
 
+# We use slim here instead or the default erb
 gem 'slim-rails'
-gem 'rabl'
+
+# Pjax
 gem 'pjax_rails'
 
+# Pagination
+gem 'will_paginate', '~> 3.0.6'
+
+# Search in table
+gem 'filterrific'
+
 # The Materialize UI framework
-gem 'materialize-sass'
+gem 'materialize-sass', '0.97.1'
+
+# jQuery UI
+gem 'jquery-ui-rails'
 
 # Wrapper for Google Books API
-gem 'google_books', '~> 0.2.2'
+gem 'google_books', git: 'https://github.com/medhiwidjaja/google_books.git', branch: '~> 0.2.2'
 
 gem 'hashie'
 
-# Wrapper for ISBNdb.com API
-# gem 'isbndb', '> 2.0.0'
+# Login with Devise & OmniAuth Google+ OAuth2
+gem 'devise'
+gem 'omniauth'
+gem 'omniauth-google-oauth2'
+
+# Nested form handling
+gem 'cocoon'
 
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
@@ -53,6 +73,9 @@ gem 'hashie'
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug'
+  gem 'forgery'
+  gem 'populator'
+  gem 'letter_opener'
 end
 
 group :development do
@@ -61,5 +84,9 @@ group :development do
 
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'spring'
+  
+  # irb messed up on Windows, use pry to replace irb as console
+  gem 'pry-rails'
+
 end
 

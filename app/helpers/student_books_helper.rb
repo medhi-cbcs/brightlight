@@ -1,0 +1,2 @@
+module StudentBooksHelper
+end

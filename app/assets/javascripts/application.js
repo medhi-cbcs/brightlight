@@ -10,9 +10,16 @@
 // Read Sprockets README (https://github.com/rails/sprockets#sprockets-directives) for details
 // about supported directives.
 //
-//= require jquery
+//= require jquery2
+//= require jquery.turbolinks
 //= require jquery_ujs
+//= require jquery-ui
 //= require turbolinks
+//= require autocomplete-rails
 //= require materialize-sprockets
 //= require materialize/extras/nouislider
-//= require_tree .
+//= require cocoon
+//= require filterrific/filterrific-jquery
+//= require dynamic_selectable
+//= require material-init.js
+//= require init.js

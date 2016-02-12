@@ -1,57 +1,16 @@
-
-// Navbar
-nav
-  .nav-wrapper
-    a.brand-logo href="/" 
+// Sidebar menu
+.container
+  a.sidebar-collapse.top-nav.hide-on-large-only.waves-effect.waves-light.btn-floating.btn-medium href="#" data-activates="nav-mobile"
+    i.mdi-navigation-menu
+ul#nav-mobile.side-nav.fixed
+  li.logo
+    a#logo-container.brand-logo href="#{dashboard_path}"  style="font-size:2em; color:white"
       = image_tag 'lightbulb-icon.png', class: "logo-icon"
-      | &nbsp; Brightlight
-    a.button-collapse href="#" data-activates="mobile-demo" 
-      i class="material-icons" menu
+  - if lookup_context.exists?("#{controller_name}/_side_menu")
+    li.no-padding
+      ul.collapsible data-collapsible='accordion'
+        = render "#{controller_name}/side_menu"
+  li.no-padding
+    ul.collapsible data-collapsible='accordion'
+      = render 'shared/side_menu_bar'
 
-    / form
-    /   .input-field
-    /     input#search type="search" required 
-    /     label for="search"
-    /       i.material-icons search
-    /     i.material-icons close
-
-    ul.right.hide-on-med-and-down
-      li
-        form
-          .input-field
-            i.material-icons.prefix search
-            input.icon-prefix type="text" placeholder="Search"
-            .search-results
-      li
-        a href="/books" Books 
-      li
-        a href="/products" Products
-      li
-        a.dropdown-button href="#" data-activates="dropdown1" 
-          | Users
-          i.material-icons.right arrow_drop_down
-      li
-        a.dropdown-button data-activates="dropdown2" href="#"
-          i.material-icons perm_identity
-
-// Dropdown menu
-ul#dropdown1.dropdown-content
-  li
-    a href="/users" List users
-  li
-    a href="#" Another action
-  li
-    a href="#" Something else here
-  li.divider
-  li
-    a href="#" Separated link
-  li.divider
-  li
-    a href="#" One more separated link
-
-ul#dropdown2.dropdown-content
-  li
-    a href="#" Profile
-  li.divider
-  li
-    a href="#" Logout

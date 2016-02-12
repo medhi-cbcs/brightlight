@@ -1,19 +1,91 @@
 Rails.application.routes.draw do
-  resources :books
-  resources :users
+
+  resources :book_labels
+  resources :rosters
+  resources :departments
+  resources :guardians
+  resources :book_assignments
+  resources :book_grades
+  resources :students
+  resources :employees
   resources :products
+  resources :academic_years
+  resources :rosters
+  resources :courses do
+    resources :course_texts, shallow: true
+    resources :course_sections, except: :new, shallow: true
+  end
+
+  resources :book_editions do
+    resources :book_copies, shallow: true do
+      collection do
+        get 'edit_labels'
+      end
+    end
+  end
+
+  resources :copy_conditions do
+    member do
+      get 'check'
+      post 'check_update'
+    end
+  end
+
+  get 'book_copies/:id/conditions' => 'book_copies#conditions', as: :book_copy_conditions
+
+  resources :book_titles do
+    collection do
+      post 'edit_merge' # edit merges
+      post 'merge'      # merges several book titles together
+      post 'delete'     # deletes several book titles at the same time
+      post 'search_isbn'
+    end
+    member do
+      get 'editions'
+      post 'add_existing_editions'
+      post 'add_isbn'
+    end
+  end
+
+  resources :grade_levels do
+    member do
+      get 'edit_labels'
+    end
+    resources :grade_sections, shallow: true do
+      member do
+        get 'students'
+        post 'add_students'
+      end
+    end
+  end
+
+  resources :student_books do
+    collection do
+      get 'assign'
+      post 'label'
+    end
+  end
+
+  devise_for :users, controllers: {
+    omniauth_callbacks: "users/omniauth_callbacks",
+    sessions: "users/sessions",
+    registrations: "users/registrations"
+  }
+
+  namespace :dynamic_select do
+    get ':grade_level_id/grade_sections', to: 'options#grade_sections', as: 'grade_sections'
+    get ':section/book_labels', to: 'options#book_labels', as: 'book_labels'
+  end
+
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
   # You can have the root of your site routed with "root"
   root 'welcome#index'
+  get :dashboard, to: 'welcome#dashboard'
 
-  # get 'books/search_isbn' => 'books#search_isbn'
-  resources :books do
-    collection do
-      post 'search_isbn'
-    end
-  end
+  # For authorization with OmniAuth2
+  get '/auth/:provider/callback', to: 'sessions#create'
 
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'

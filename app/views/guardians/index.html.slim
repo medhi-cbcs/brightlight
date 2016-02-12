@@ -1,0 +1,49 @@
+.row 
+  .col.s6
+    h4 Guardians
+  .col.s5
+    = form_tag({controller:'guardians', action:'index'}, {method:'get'}) do 
+      .input-field
+        input type="hidden" name="v" value=@view_style
+        - if params[:search].present?
+          i.material-icons.prefix onclick='reset_form()' style='cursor:pointer'
+            | highlight_off
+        - else
+          i.material-icons.prefix search
+        input.icon-prefix type="text" name="search" placeholder="Search" value=params[:search]    
+    javascript:
+      function reset_form() {
+        window.location="#{guardians_path(v:'list')}"
+      }
+
+nav
+  .nav-wrapper
+    ul.right
+      li
+        = link_to new_guardian_path
+          | New Guardian
+          i.material-icons.left add
+
+.card-panel
+  table.striped
+    thead
+      tr
+        th Name
+        th Mobile phone
+        th Home phone
+        th Office phone
+        th Family no
+        th
+
+    tbody
+      - @guardians.each do |guardian|
+        tr
+          td = link_to guardian.name, guardian
+          td = guardian.mobile_phone
+          td = guardian.home_phone
+          td = guardian.office_phone
+          td = guardian.family_no
+          td = link_to 'Edit', edit_guardian_path(guardian), class: "btn waves-effect waves-teal btn-flat btn-small"
+
+.toolbar.z-index-1
+  = will_paginate @guardians

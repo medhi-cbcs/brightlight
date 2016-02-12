@@ -1,0 +1,32 @@
+= form_for @grade_section do |f|
+  .card-panel
+    - if @grade_section.errors.any?
+      #error_explanation
+        h2 = "#{pluralize(@grade_section.errors.count, "error")} prohibited this grade_section from being saved:"
+        ul
+          - @grade_section.errors.full_messages.each do |message|
+            li = message
+    .row
+      .col.s4
+        = f.label :name
+        = f.text_field :name
+      .col.s4
+        = f.label :homeroom
+        = f.collection_select :homeroom_id, Employee.all_teachers, :id, :name, prompt: true
+    
+  .card-panel
+    .label Student List
+
+    .row.header.compact
+      .col.s4 Name
+      .col.s2 Order No
+      .col.s4 Action
+    #students.row.compact
+      = f.fields_for :grade_sections_students do |grade_section_student|
+        .nested-fields
+          = render 'grade_sections_student_fields', f: grade_section_student
+
+  .toolbar.z-depth-1
+    button.btn.waves-effect.waves-light type="submit" Save
+    = link_to 'Cancel', @grade_section, class: "waves-effect waves-light btn-flat"
+

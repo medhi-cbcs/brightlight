@@ -1,0 +1,53 @@
+h4 Courses
+
+nav
+  .nav-wrapper
+    ul
+      li.tooltipped data-position="bottom" data-delay="50" data-tooltip="Show only selected grade"
+        a.dropdown-button href="#!" data-activates="grades-list"
+          = params[:grade_id] ? "Grade #{GradeLevel.where(id:params[:grade_id]).first.name}" : "Filter grade"
+          i.material-icons.right arrow_drop_down
+          i.material-icons.left filter_list
+      li.right.tooltipped data-position="bottom" data-delay="50" data-tooltip="Create new course"
+        = link_to new_course_path
+          | New Course
+          i.material-icons.left playlist_add
+
+    ul#grades-list.dropdown-content
+      - GradeLevel.all.each do |grade|
+        li
+          = link_to courses_path(grade_id:grade.id)
+            = "Grade #{grade.name}"
+
+.card-panel
+  table.striped
+    thead
+      tr
+        th Number
+        th Name
+        th Description
+        th Grade
+        th Year
+        th Term
+        th Actions
+
+    tbody
+      - @courses.each do |course|
+        tr
+          td = course.number
+          td = course.name
+          td = course.description
+          td = course.grade_level.name if course.grade_level
+          td = course.academic_year.name if course.academic_year
+          td 
+          /= course.academic_terms.name if course.academic_terms
+          td
+            = link_to course
+              i.material-icons visibility
+            
+            = link_to edit_course_path(course)
+              i.material-icons edit
+
+.toolbar.z-depth-1
+  = will_paginate
+

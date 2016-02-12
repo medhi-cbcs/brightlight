@@ -1,0 +1,66 @@
+= form_for @course do |f|
+  .card-panel
+    - if @course.errors.any?
+      #error_explanation
+        h2 = "#{pluralize(@course.errors.count, "error")} prohibited this Grade Level from being saved:"
+        ul
+          - @course.errors.full_messages.each do |message|
+            li = message
+
+    .row
+      .input-field.col.s6
+        = f.label :name, class: 'active'
+        = f.text_field :name
+      .input-field.col.s6
+        = f.label :number, class: 'active'
+        = f.text_field :number
+      .input-field.col.s12
+        = f.label :description, class: 'active'
+        = f.text_area :description, class: 'materialize-textarea'
+      .input-field.col.s4
+        = f.label :grade_level, class: 'active'
+        = f.collection_select(:grade_level_id, GradeLevel.all, :id, :name, {}, {:class => 'browser-default'})
+      .input-field.col.s4
+        = f.label :academic_year_id, class: 'active'
+        = f.collection_select(:academic_year_id, AcademicYear.all, :id, :name, {}, {:class => 'browser-default', onchange:"toggleDisplayTermCheckBoxes(#{AcademicYear.all.collect(&:id)},$('#course_academic_year_id').val())"})
+      /= content_tag "div", id:'years', data: {ids: AcademicYear.all.collect(&:id)} do
+      = hidden_field_tag("course[academic_term_ids][]", nil)
+      - AcademicTerm.all.each do |academic_term|
+        .input-field.col.s4 class="year#{academic_term.academic_year_id}"
+          input type="checkbox" name="course[academic_term_ids][]" value=academic_term.id id="term#{academic_term.id}" checked=@course.academic_terms.include?(academic_term)
+          = label_tag "term#{academic_term.id}", academic_term.name
+  
+  nav
+    .nav-wrapper
+      .brand-logo style="margin-left: 20px; font-size:1.5em"
+        | Course Sections
+      ul.right
+        li
+          = link_to_add_association f, :course_sections, class: "waves-effect waves-light", 'data-association-insertion-method' => 'append', 'data-association-insertion-node' => '#course_section'
+            ' Add Section
+            i.material-icons.left playlist_add
+
+  .card-panel
+    #course_section.row
+      = f.fields_for :course_sections do |course_section|
+        = render 'course_section_fields', f: course_section
+
+  .toolbar.z-depth-1
+    button.btn.waves-effect.waves-light type="submit" Save
+    = link_to 'Cancel', @course, class: "waves-effect waves-light btn-flat"
+    - if params[:action] =~ /edit/
+      = link_to 'Delete', @course, data: {confirm: 'Are you sure?'}, method: :delete, class: "right btn waves-effect waves-light red"
+
+javascript:
+  var year_ids = #{raw AcademicYear.all.collect(&:id)};
+  $(toggleDisplayTermCheckBoxes(year_ids,$('#course_academic_year_id').val()));
+  function toggleDisplayTermCheckBoxes(year_ids,id) {
+    year_ids.forEach(function(y){ 
+      if(id!=y) { 
+        $(".year"+y).hide();
+        $(".year"+y).find("input").prop('checked', false);
+      } else {
+        $(".year"+id).show();
+      }
+    }) 
+  }

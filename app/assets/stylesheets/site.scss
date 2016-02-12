@@ -1,14 +1,18 @@
 // Grays
 // -------------------------
 $black:                 #06101D;
-$grayDarker:            #171F2D;
-$grayDark:              #242C41;
-$gray:                  #474F64;
-$grayLight:             #757E88;
-$grayLighter:           #CED2CB;
+$grayDarker:            #212121;
+$grayDark:              #424242;
+$gray:                  #747474;
+$light-grey:            #9e9e9e;
+$lighter-grey:          #e0e0e0;
 $offWhite:              #FAFAFA;
 $white:                 #FFF;
 
+$darker-grey:			#292c33;
+$dark-grey:				#2d3039;
+$brightBlue:			#389bfe;
+$muted-red:				#f5494d;
 
 .show-image {
 	width:  120px;
@@ -20,7 +24,72 @@ $white:                 #FFF;
 
 .logo-icon {
 	height: 50px;
+	margin: 6px 6px;
 }
+
+
+.label {
+	color: $light-grey;
+	text-transform: uppercase;
+	font-size: 0.8em;
+	font-weight: bold;
+}
+
+// ============================================ Table ===============================================
+
+table.compact {
+	width: 100%;
+	// white-space: nowrap;
+	// table-layout: fixed;
+
+	td.ellipsize {
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
+	td {
+		padding-top: 4px;
+		padding-bottom: 4px;
+
+		.compact-cell {
+			position: relative;
+		}
+		.compact-cell:before {
+			content: attr(data-spacer);
+	    position: absolute;
+	    max-width: 100%;
+	    white-space: nowrap;
+	    overflow: hidden;
+	    text-overflow: ellipsis;
+		}
+		.compact-cell:after {
+		    content: attr(data-spacer);
+		    display: inline-block;
+		    height: 0;
+		    overflow: hidden;
+		}
+		.dont-truncate {
+		    white-space: nowrap;
+		}
+		.content {
+			position: absolute;
+	    max-width: 100%;
+	    white-space: nowrap;
+	    overflow: hidden;
+	    text-overflow: ellipsis;
+		}
+		.spacer {
+	    height: 0;
+	    overflow: hidden;
+		}
+	}
+}
+
+td.actions {
+	a {
+		padding-right: 0 15px;
+	}
+}
+
 
 // ============================================ Forms ===============================================
 
@@ -31,23 +100,191 @@ $white:                 #FFF;
 	}
 }
 
+// Override Materializecss default form formatting
+form {
+	input[type=text], input[type=password], input[type=email], input[type=url], input[type=time],
+	input[type=date], input[type=datetime-local], input[type=tel], input[type=number], input[type=search],
+	textarea.materialize-textarea, .select-wrapper input[type=text] {
+		height: 2.3rem;
+		margin: 0 0 10px 0;
+	}
+
+	// i, em {
+	// 	font-size: 0.8rem;
+	// 	color: #9e9e9e;
+	// }
+
+	.cover-selection {
+		[type="radio"]:not(:checked) + label, [type="radio"]:checked + label {
+			height: 40px;
+		}
+		.input-field {
+			margin-top: 0px;
+		}
+	}
+
+	.header {
+		font-weight: bold;
+	}
+
+	.compact {
+		margin-bottom: 2px;
+		.input-field {
+			margin-top: 0px;
+		}
+	}
+
+}
+
+#error_explanation {
+	margin: 0.5rem 0 1rem 0;
+    background-color: #ef9a9a;
+    transition: box-shadow .25s;
+    border-radius: 2px;
+    padding: 12px;
+    border-radius: 0 0 2px 2px;
+    box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
+    h2 {
+    	font-size: 20px;
+    	margin: 6px 0 6px;
+    }
+    ul {
+    	padding: 0px 10px 0px 20px;
+    	li {
+    		list-style-type: disc;
+    	}
+	}
+}
+
+.section-header {
+	font-size: 1.1rem;
+	font-weight: bold;
+  text-transform: uppercase;
+}
+
+.tabular-header {
+	font-size: 0.9rem;
+	font-weight: bold;
+  text-transform: uppercase;
+	color: $light-grey;
+}
+
+.select-input {
+	position: relative;
+	cursor: pointer;
+	background-color: transparent;
+	border: none;
+	border-bottom: 1px solid #9e9e9e;
+	outline: none;
+	height: 3rem;
+	line-height: 3rem;
+	width: 100%;
+	font-size: 1rem;
+	margin: 0 0 15px 0;
+	padding: 0;
+	display: block;
+}
+// ========================================= Typography =============================================
+
+.giant-letter {
+	font-size: 4rem;
+}
+
 // ============================================ Buttons =============================================
 
 .btn-small {
 	height: 24px;
 	line-height: 26px;
 	font-size: 12px;
+	width: 113px;
+	margin: 2px;
+}
+
+// ============================================= Navbar =============================================
+
+nav {
+	background-color: $dark-grey;
+	ul {
+		li {
+			a {
+				&:hover {
+					background-color: rgba(0,0,0,.3);
+				}
+			}
+		}
+	}
+	.nav-wrapper {
+		ul {
+			li {
+				button {
+					margin: 0 15px;
+				}
+			}
+		}
+	}
+	.input-field {
+		input {
+			border-bottom: 2px dotted gray;
+			width: 85%;
+			&:focus, &[type=text]:valid, &[type=password]:valid,
+      &[type=email]:valid, &[type=url]:valid, &[type=date]:valid {
+        border-bottom: 2px dotted gray;
+      }
+		}
+	}
 }
 
 // ============================================ Toolbar =============================================
 
 .toolbar {
 	margin: 10px 0px;
-	padding: 5px 0px;
-	border-top: 1px solid $grayLighter;
+	padding: 6px 20px;
+	height: 50px;
+	border-top: 1px solid $lighter-grey;
+	background-color: white;
+	box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
+
+	// i.material-icons {
+	// 	color: $gray;
+	// 	margin-left: 6px;
+	// 	font-size: 2.2rem;
+	// }
+
+	h5 {
+		margin: 0.3em 0 0 0;
+	}
+
+	.btn {
+		margin-left: 6px;
+	}
+
+	.input-field {
+		margin-top: 0;
+	}
+	#context-buttons {
+		display: none;
+		float: left;
+	}
+
+	select {
+		height: 2.5rem;
+	}
+
+	label.for-select {
+		top: 0.6rem;
+	}
+	.select-grade {
+		position: absolute;
+		left: 5rem;
+		width: 4rem;
+	}
+
+	.pagination {
+		margin-top: 4px;
+	}
 }
 
-// 
+//
 
 body {
 	display: -webkit-flex;
@@ -64,15 +301,150 @@ main {
 }
 
 .main-home {
-	background-color: $grayLighter
+	background-color: $lighter-grey
 }
 
+.user-avatar {
+	margin-top: 6px;
+}
+
+// ============================================ Side Menu ===========================================
+
+ul.side-nav.fixed {
+	background-color: #292c33
+}
+
+ul.side-nav.fixed li.logo {
+    text-align: center;
+    padding-top: 32px;
+    padding-bottom: 32px
+}
+
+ul.side-nav.fixed li.logo:hover {
+    background-color: transparent
+}
+
+ul.side-nav.fixed {
+    overflow: hidden
+}
+
+ul.side-nav.fixed li {
+    line-height: 44px
+}
+
+ul.side-nav.fixed li:hover, ul.side-nav.fixed li.active {
+    background-color: rgba(0, 0, 0, 0.05)
+}
+
+ul.side-nav.fixed li a {
+    font-size: 13px;
+    line-height: 44px;
+    height: 44px
+}
+
+ul.side-nav.fixed ul.collapsible-accordion {
+    background-color:  $darker-grey;
+}
+
+ul.side-nav.fixed li.logo {
+	background-color: $darker-grey;
+}
+
+ul.side-nav.fixed .collapsible-header {
+	background-color: $darker-grey;
+	color: $lighter-grey;
+	border: none;
+	padding-right: 0;
+	margin: 0;
+}
+
+ul.side-nav.fixed .collapsible-body {
+	display: block;
+	padding: 0px;
+	background-color: $dark-grey;
+	border: none;
+	line-height: 38px;
+	a {
+		color: $light-grey;
+		margin: 0 1rem 0 2rem;
+	}
+
+	ul {
+		li.active {
+			background-color: $dark-grey;
+			border-left: 4px solid $muted-red;
+		}
+	}
+}
+
+ul.side-nav.fixed:hover {
+    overflow-y: auto
+}
+
+.app-side-menu {
+	position: fixed;
+	width: 240px;
+	left: 0px;
+	z-index: 999;
+	height: 100%;
+	background-color: $darker-grey;
+	color: $light-grey;
+
+	.collapsible {
+		border: none;
+	}
+
+	ul li {
+		.collapsible-header {
+			background-color: $darker-grey;
+			color: $lighter-grey;
+			font-weight: bold;
+			border: none;
+			padding-right: 0;
+		}
+		.collapsible-body {
+			display: block;
+			padding: 0px;
+			background-color: $darker-grey;
+			border: none;
+			line-height: 38px;
+			a {
+				color: $light-grey;
+				margin: 0 1rem 0 2rem;
+			}
+
+			ul {
+				li.active {
+					background-color: $dark-grey;
+					border-left: 4px solid $muted-red;
+				}
+			}
+		}
+
+		.center {
+			text-align: center;
+		}
+
+	}
+
+	.btn {
+		margin: 5px 5px;
+	}
+
+	ul {
+		margin: 0px;
+		height: 100%;
+		background-color: $darker-grey;
+	}
+}
 
 // ============================================ Book List ===========================================
 
 
 .list_image {
 	width:  128px;
+	margin-right: 20px;
+	margin-left: 10px;
 }
 
 .list_description {
@@ -95,8 +467,17 @@ main {
 		color: #9e9e9e;
 	}
 
-	.item {
-		
+	span.label {
+		padding-right: 5px;
+	}
+	span.item {
+		margin-right: 10px;
+	}
+
+	.isbn {
+		span.item {
+			color: $light-grey;
+		}
 	}
 }
 
@@ -119,3 +500,176 @@ main {
 	background:   #3BAFDA;
 }
 
+
+.pagination {
+	a {
+	    display: inline-block;
+	    font-size: 1rem;
+	    padding: 0 10px;
+	    line-height: 30px;
+	    border-radius: 2px;
+	    text-align: center;
+	}
+	.current {
+		background-color: #ee6e73;
+		display: inline-block;
+	    font-size: 1rem;
+	    padding: 0 10px;
+	    line-height: 30px;
+	    border-radius: 2px;
+	}
+}
+
+// ============================================ Tabs ===========================================
+
+.tabbed {
+	.col {
+		padding-top: 10px;
+	}
+}
+
+.tab-content {
+	padding: 15px;
+}
+
+// ============================================ Layout ===========================================
+
+
+body {
+  background-color: #fcfcfc;
+}
+#main,
+footer {
+  padding-left: 240px;
+}
+
+@media only screen and (max-width: 993px) {
+  #main,
+  footer {
+    padding-left: 0px;
+  }
+}
+
+#input-select .input-field label {
+  position: absolute;
+  top: -14px;
+  font-size: 0.8rem;
+}
+#sidenav-overlay {
+  background-color: transparent;
+}
+.container {
+  padding: 0 0.5rem;
+  margin: 0 auto;
+  max-width: 100% !important;
+  width: 98%;
+}
+
+section {
+	padding: 0.75rem;
+}
+
+.zero-margin {
+  margin: 0 !important;
+}
+
+.zero-padding {
+  padding: 0 !important;
+}
+
+.with-side-padding {
+	padding: 0 20px;
+}
+
+.ellipsis-container {
+	margin: 0;
+	padding: 5px 0;
+	white-space: nowrap;
+	.ellipsize {
+		overflow:hidden;
+		text-overflow: ellipsis;
+	}
+}
+// ============================================ Card ===========================================
+
+.card {
+	.card-action {
+		.row {
+			margin-bottom: 0;
+		}
+
+		a {
+			margin: 0 1em;
+		}
+
+		button {
+			margin: 0 1em;
+		}
+	}
+}
+
+// ============================================ Left Sidebar ===========================================
+
+
+#slide-out li a i {
+  line-height: inherit;
+  width: 2rem;
+  font-size: 1.6rem;
+  display: block;
+  float: left;
+  text-align: center;
+  margin-right: 1rem;
+}
+
+// ul.side-nav.leftside-navigation {
+//   top: 64px;
+// }
+
+a.sidebar-collapse {
+  position: absolute;
+  left: 14px;
+  top: 14px;
+
+  i {
+  	line-height: 37px;
+  }
+}
+
+// ============================================ Login Page ===========================================
+
+.login-form {
+  width: 310px;
+}
+.login-form-text{
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  font-size: 0.8rem;
+}
+.profile-image-login{
+  width: 100px;
+  height: 100px !important;
+}
+
+// ============================================ jQuery UI ===========================================
+.ui-widget {
+	font-family: Roboto, Arial, sans-serif;
+	font-size: 1em;
+}
+
+.ui-autocomplete {
+	width:  480px;
+	font-family: Roboto, Arial, sans-serif;
+	font-size: 1em;
+    max-height: 350px;
+    overflow-y: auto;
+    /* prevent horizontal scrollbar */
+    overflow-x: hidden;
+    /* add padding to account for vertical scrollbar */
+    padding-right: 20px;
+}
+
+.ui-front {
+	height: 480px;
+}
+
+//

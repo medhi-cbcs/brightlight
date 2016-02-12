@@ -1,0 +1,53 @@
+.row 
+  .col.s6
+    h4 Students
+  .col.s5
+    = form_tag({controller:'students', action:'index'}, {method:'get'}) do 
+      .input-field
+        input type="hidden" name="v" value=@view_style
+        - if params[:search].present?
+          i.material-icons.prefix onclick='reset_form()' style='cursor:pointer'
+            | highlight_off
+        - else
+          i.material-icons.prefix search
+        input.icon-prefix type="text" name="search" placeholder="Search" value=params[:search]    
+    javascript:
+      function reset_form() {
+        window.location="#{students_path(v:'list')}"
+      }
+
+nav
+  .nav-wrapper
+    ul.right
+      li
+        = link_to new_student_path
+          | Add New Student
+          i.material-icons.left add
+      li
+        = link_to 'Export as CSV', students_path + '.csv'
+
+.card-panel
+  table.striped.compact
+    thead
+      tr
+        th Name
+        th Admission no
+        th Family
+        th Mobile phone
+        th Email
+        th Actions
+
+    tbody
+      - @students.each do |student|
+        tr
+          td = link_to student.name, student
+          td = student.admission_no
+          td = student.family_id
+          td = student.mobile_phone
+          td = student.email
+
+          td 
+            = link_to 'Edit', edit_student_path(student), class: "btn waves-effect waves-teal btn-flat btn-small"
+
+.toolbar.z-index-1
+  = will_paginate @students

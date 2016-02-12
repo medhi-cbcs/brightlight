@@ -1,0 +1,36 @@
+br
+table
+  tr
+  	td
+      .list_description
+        dl.row
+          h5 Academic Year
+        dl.row
+          dd.col.s4
+            .label Name
+            .item = @academic_year.name
+          dd.col.s4
+            .label Start Date
+            .item = @academic_year.start_date
+          dd.col.s4 
+            .label End Date
+            .item = @academic_year.end_date
+        dl.row
+          h6 Terms
+        - @academic_year.academic_terms.each do |term|
+          dl.row
+            dd.col.s4
+              .label Name
+              .item = term.name
+            dd.col.s4
+              .label Start Date
+              .item = term.start_date
+            dd.col.s4 
+              .label End Date
+              .item = term.end_date
+
+.toolbar.actions
+  = link_to '< Back', :back, class: 'btn btn-flat'
+  = link_to 'Edit', edit_academic_year_path(@academic_year), class: 'btn btn-primary'
+  = link_to 'Add new', new_academic_year_path, class: 'btn btn-primary'
+

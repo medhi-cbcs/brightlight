@@ -1,0 +1,76 @@
+.card-panel
+  table
+    tr
+      td style="vertical-align:top"
+        - thumbnail = @book_edition.small_thumbnail.present? ? @book_edition.small_thumbnail : 'book-icon.png' 
+        = image_tag(thumbnail, class: 'list_image')
+      td
+        .list_description
+          dl.row
+            dt = @book_edition.title
+            dd = @book_edition.subtitle
+            dd.col.s6
+              .label Author
+              .item = @book_edition.authors
+            dd.col.s6
+              .label ISBN 10
+              .item = @book_edition.isbn10
+            dd.col.s6 
+              .label Publisher
+              .item = @book_edition.publisher
+            dd.col.s6
+              .label ISBN
+              .item = @book_edition.isbn13
+            dd.col.s6 
+              .label Published Date
+              .item = @book_edition.published_date
+            dd.col.s6
+              .label Page count
+              .item = @book_edition.page_count
+
+nav
+  .nav-wrapper
+    ul
+      li
+        = link_to :back
+          i.material-icons chevron_left
+
+= form_for @book_edition do |f|
+  input hidden="hidden" type="text" value="" name="section-name" id="section-name"
+  .card-panel
+    .row
+      table.compact
+        thead
+          th Barcode
+          th Label
+
+        tbody
+          = f.fields_for :book_copies do |ff|
+            tr
+              td
+                .input-field
+                  = ff.text_field :barcode
+              td
+                .input-field
+                  = ff.text_field :copy_no, class:"book-label-fields"
+                  = ff.hidden_field :book_label_id
+                    
+  .toolbar.z-depth-1
+    button.btn.waves-effect.waves-light type="submit" Save
+    = link_to 'Cancel', book_edition_book_copies_path(@book_edition), class: "waves-effect waves-light btn btn-flat"
+
+javascript:
+  $(function() {
+    $(".book-label-fields").autocomplete({
+      source: "/book_labels.json",
+      minLength: 2,
+      select: function(event, ui) {
+        event.preventDefault();
+        $(this).val(ui.item.label);
+        console.log(this);
+        element_id = $(this).attr('id').replace('copy_no','book_label_id');
+        $("#"+element_id).val(ui.item.value);
+      }
+    });
+  });
+  

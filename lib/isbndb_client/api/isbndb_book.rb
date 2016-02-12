@@ -3,7 +3,7 @@ module ISBNDBClient
 		class ISBNDBBook
 			attr_reader :title, :authors, :publisher, :published_date, :description,
                   :isbn, :isbn10, :dewey, :summary, :notes, :book_id, :page_count,
-                  :edition_info, :physical_description, :subject_ids                 
+                  :edition_info, :physical_description, :subject_ids , :language             
 
       def initialize(item)
         return if item.nil?
@@ -22,32 +22,44 @@ module ISBNDBClient
         @title = @book['title']
         @authors = @book['author_data'] || []
         @publisher = @book['publisher_name']
-        @published_date = extract_date @book['edition_info']
+        @published_date = extract_date @book['edition_info'] if @book['edition_info'].present?
         @description = @book['summary']
-        @isbn = @book['isbn']
+        @isbn = @book['isbn13']
         @isbn10 = @book['isbn10']
         @dewey = @book['dewey_decimal']
-        @page_count = extract_page_count @book['physical_description_text']
+        @page_count = extract_page_count @book['physical_description_text'] if @book['physical_description_text'].present?
         @notes = @book['notes']
         @edition_info = @book['edition_info']
         @physical_description = @book['physical_description_text']
         @subject_ids = @book['subject_ids'] || []
+        @language = @book['language']
       end
 
       # Extract date from the edition_info data
       # "Paperback; 2004-10-15"
       #
       def extract_date(info)
-      	edition, published_date = info.split(/; /)
-      	published_date
+      	info.split(/; /).each do |str|
+          begin
+            Date.valid_date? *str.split('-').map(&:to_i)
+          rescue 
+            nil
+          else
+            return str
+          end
+        end
+        nil
       end
 
       # Extract page count from physical description text
       # 7.3\"x8.8\"x1.8\"; 2.8 lb; 784 pages"
       def extract_page_count(info)
-      	dimension, weight, pages = info.split(/; /)
-      	page_count, pp = pages.split(/ /)
-      	page_count
+        pages = info.split(/; /).select {|s| /.* pages/.match(s)}.first
+        unless pages.nil?
+          /([\d]*) pages/.match(pages)[1]
+        else
+          nil
+        end
       end
 		end
 	end

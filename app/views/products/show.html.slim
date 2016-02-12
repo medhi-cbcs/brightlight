@@ -11,6 +11,12 @@ br
 		h5.media-heading = @product.title
 		p
 			= @product.description
+	.col.s1 Expiry
+	.col.s2	
+		= @product.expiry_date
+	.col.s1 Received
+	.col.s2	
+		= @product.received_date
 
 .toolbar.actions
 	= link_to 'Back', products_path, class: 'btn btn-default'

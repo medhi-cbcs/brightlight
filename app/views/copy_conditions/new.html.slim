@@ -1,0 +1,11 @@
+h4 Book Condition Checking
+
+nav
+  .nav-wrapper
+    ul
+      li
+        = link_to :back
+          i.material-icons chevron_left
+
+= form_for @copy_condition do |f|
+  == render partial: 'fields', locals: {f: f}

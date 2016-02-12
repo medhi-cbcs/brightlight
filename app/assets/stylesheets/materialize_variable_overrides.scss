@@ -1,1 +1,10 @@
 // Materialize variable overrides
+
+/*** Cards ***/
+$card-link-color: color("blue", "accent-2") !default;
+$card-link-color-light: lighten($card-link-color, 20%) !default;
+
+/*** Tabs ***/
+$tabs-underline-color: $muted-red !default;
+$tabs-text-color: $muted-red !default;
+$tabs-bg-color: #fff !default;

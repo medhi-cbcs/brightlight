@@ -1,0 +1,43 @@
+h4 = @course.name 
+
+.list_description
+  dl.row
+    dd.col.s2
+      .label Grade
+      .item = @course.grade_level.name
+    dd.col.s4
+      .label Year
+      .item = @course.academic_year.name
+    dd.col.s4
+      .label Terms
+      - for term in @course.academic_terms
+        .item = term.name
+
+= form_for @course do |f|
+  - if @course.errors.any?
+    #error_explanation
+      h2 = "#{pluralize(@course.errors.count, "error")} prohibited this Grade Level from being saved:"
+      ul
+        - @course.errors.full_messages.each do |message|
+          li = message
+
+  h5 Edit Course Texts
+  
+  table.striped
+    tbody
+      = f.fields_for :course_texts do |course_text|
+        tr
+          td = course_text.text_field :title
+          td 
+
+  .toolbar.actions
+    button.btn.waves-effect.waves-light type="submit" Save
+    = link_to 'Cancel', courses_path, class: "waves-effect waves-teal btn-flat"
+
+  / #course_text.row
+  /   = f.fields_for :course_texts do |course_text|
+  /     = render 'course_text_fields', f: course_text
+
+  /   = link_to_add_association f, :course_texts, class: "waves-effect waves-teal btn btn-flat", 'data-association-insertion-method' => 'before', 'data-association-insertion-node' => 'this'
+  /     ' add textbook
+  /     i.material-icons.left playlist_add
