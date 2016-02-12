@@ -1,28 +1,35 @@
-#filterrific_results
-  = form_tag({controller: "book_titles", action: "add_existing_editions"}) do
-    div
-      = page_entries_info editions 
-      = render_filterrific_spinner 
+.card#filterrific_results
+  .section-header.grey-text.text-darken-1 Choose book editions to add to the Book Title
+  = form_tag({controller: "book_titles", action: "add_existing_editions"}) do 
+    .card-content
+      div
+        = page_entries_info editions 
+        = render_filterrific_spinner 
 
-    table.striped
-      tr
-        th 
-        th Title
-        th Authors
-        th Publisher
-        th Published Date
-
-      - editions.each do |edition|
+      table.striped
         tr
-          td
-            /input.checkbox type="checkbox" id="cb-#{edition.id}"
-            = check_box_tag "add[#{edition.id}]"
-            = label_tag "add[#{edition.id}]", ""
-          td = edition.title
-          td = edition.authors
-          td = edition.publisher 
-          td = edition.published_date 
+          th 
+          th Title
+          th Authors
+          th Publisher
+          th Published Date
 
-    = will_paginate editions
+        - editions.each do |edition|
+          tr
+            td
+              input.checkbox type="checkbox" id="add_#{edition.id}" name="add[#{edition.id}]" onchange="toggle_add_button()"
+              = label_tag "add[#{edition.id}]", ""
+            td = edition.title
+            td = edition.authors
+            td = edition.publisher 
+            td = edition.published_date 
 
-    button.btn Add
+      = will_paginate editions 
+
+    .card-action
+      button.btn#add-button disabled=true Add
+
+javascript:
+  function toggle_add_button() {
+    $('#add-button').prop('disabled', $('input.checkbox:checked').length < 1);
+  }

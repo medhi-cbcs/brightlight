@@ -6,6 +6,13 @@ class CourseTextsController < ApplicationController
   # GET /course_texts.json
   def index
     @course_texts = @course.course_texts
+    if params[:v] == 'list'
+      @view_style = :list
+      session[:view_style] = 'list'
+    else
+      @view_style = :block
+      session[:view_style] = ''
+    end
   end
 
   # GET /course_texts/1

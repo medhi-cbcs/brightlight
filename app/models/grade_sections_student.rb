@@ -6,9 +6,9 @@ class GradeSectionsStudent < ActiveRecord::Base
   validates :grade_section, presence: true
   validates :student, presence: true
   # validates :academic_year, presence: true
-  
+
   default_scope { order(:order_no) }
 
-  # scope :current, lambda { where(academic_year: AcademicYear.current) }
-  # scope :with_academic_year_id, lambda { |id| where(academic_year_id: id) }
+  scope :current, lambda { where(academic_year_id: AcademicYear.current_id) }
+  scope :with_academic_year_id, lambda { |id| where(academic_year_id: id) }
 end

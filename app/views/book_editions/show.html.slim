@@ -1,41 +1,58 @@
-table
-  tr
-    td style="vertical-align:top"
-      - thumbnail = @book_edition.small_thumbnail.present? ? @book_edition.small_thumbnail : 'book-icon.png' 
-      = image_tag(thumbnail, class: 'list_image')
-    td
-      .list_description
-        dl.row
-          dt = @book_edition.title
-          dd = @book_edition.subtitle
-          dd.col.s6
-            .label Author
-            .item = @book_edition.authors
-          dd.col.s6
-            .label ISBN 10
-            .item = @book_edition.isbn10
-          dd.col.s6 
-            .label Publisher
-            .item = @book_edition.publisher
-          dd.col.s6
-            .label ISBN
-            .item = @book_edition.isbn13
-          dd.col.s6 
-            .label Published Date
-            .item = @book_edition.published_date
-          dd.col.s6
-            .label Page count
-            .item = @book_edition.page_count
-          dd.col.s12
-            .label Description
-            .item = strip_tags(@book_edition.description)
-          dd.col.s6
-            .label Title group
-            .item = @book_edition.book_title ? link_to(@book_edition.book_title.title, @book_edition.book_title) : "--" 
+h4 Book Edition
 
-.toolbar.actions
-  = link_to '< Back', book_editions_path, class: 'btn btn-flat'
-  = link_to 'Edit', edit_book_edition_path(@book_edition), class: 'btn btn-primary'
+nav
+  .nav-wrapper
+    ul
+      li
+        = link_to book_editions_path
+          i.material-icons chevron_left
+      li.right
+        = link_to book_edition_book_copies_path(@book_edition)
+          i.material-icons.left book
+          | Copies
+          span.badge.blue.grey-text.text-lighten-5 = @book_edition.number_of_copies
+      li.right
+        = link_to edit_book_edition_path(@book_edition)
+          i.material-icons.left edit
+          | Edit
+
+.card-panel
+  table
+    tr
+      td style="vertical-align:top"
+        - thumbnail = @book_edition.small_thumbnail.present? ? @book_edition.small_thumbnail : 'book-icon.png' 
+        = image_tag(thumbnail, class: 'list_image')
+      td
+        .list_description
+          dl.row
+            dt = @book_edition.title
+            dd = @book_edition.subtitle
+            dd.col.s6
+              .label Author
+              .item = @book_edition.authors || 'N/A'
+            dd.col.s6
+              .label ISBN 10
+              .item = @book_edition.isbn10 || 'N/A'
+            dd.col.s6 
+              .label Publisher
+              .item = @book_edition.publisher || 'N/A'
+            dd.col.s6
+              .label ISBN
+              .item = @book_edition.isbn13 || 'N/A'
+            dd.col.s6 
+              .label Published Date
+              .item = @book_edition.published_date || 'N/A'
+            dd.col.s6
+              .label Page count
+              .item = @book_edition.page_count || 'N/A'
+            dd.col.s12
+              .label Description
+              .item = strip_tags(@book_edition.description) || 'N/A'
+            dd.col.s6
+              .label Title group
+              .item = @book_edition.book_title ? link_to(@book_edition.book_title.title, @book_edition.book_title) : "--" 
+
+    
 
 
 

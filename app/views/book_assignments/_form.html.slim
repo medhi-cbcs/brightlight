@@ -1,36 +1,39 @@
 = form_for @book_assignment do |f|
-  - if @book_assignment.errors.any?
-    #error_explanation
-      h2 = "#{pluralize(@book_assignment.errors.count, "error")} prohibited this book_assignment from being saved:"
-      ul
-        - @book_assignment.errors.full_messages.each do |message|
-          li = message
+  .card-panel
+    - if @book_assignment.errors.any?
+      #error_explanation
+        h2 = "#{pluralize(@book_assignment.errors.count, "error")} prohibited this book_assignment from being saved:"
+        ul
+          - @book_assignment.errors.full_messages.each do |message|
+            li = message
 
-  .field
-    = f.label :book
-    = f.text_field :book
-  .field
-    = f.label :student
-    = f.text_field :student
-  .field
-    = f.label :academic_year
-    = f.text_field :academic_year
-  .field
-    = f.label :course_text
-    = f.text_field :course_text
-  .field
-    = f.label :issue_date
-    = f.date_select :issue_date
-  .field
-    = f.label :return_date
-    = f.text_field :return_date
-  .field
-    = f.label :initial_condition_id
-    = f.number_field :initial_condition_id
-  .field
-    = f.label :end_condition_id
-    = f.number_field :end_condition_id
-  .field
-    = f.label :status
-    = f.text_field :status
-  .actions = f.submit
+    .field
+      = f.label :book
+      = f.text_field :book
+    .field
+      = f.label :student
+      = f.text_field :student
+    .field
+      = f.label :academic_year
+      = f.text_field :academic_year
+    .field
+      = f.label :course_text
+      = f.text_field :course_text
+    .field
+      = f.label :issue_date
+      = f.date_select :issue_date
+    .field
+      = f.label :return_date
+      = f.text_field :return_date
+    .field
+      = f.label :initial_condition_id
+      = f.number_field :initial_condition_id
+    .field
+      = f.label :end_condition_id
+      = f.number_field :end_condition_id
+    .field
+      = f.label :status
+      = f.text_field :status
+  
+  .toolbar.z-depth-1
+    .actions = f.submit

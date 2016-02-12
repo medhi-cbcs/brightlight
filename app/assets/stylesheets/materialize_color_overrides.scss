@@ -1,3 +1,18 @@
 // Materialize color overrides
 
-$primary-color: color("indigo", "darken-4") !default;
+//$primary-color: color("indigo", "darken-4") !default;
+
+$primary-color: #389bfe !default;
+$secondary-color: #389bfe !default;
+
+// Brightlight's own colors
+$light-grey:            #9e9e9e;
+$lighter-grey:          #e0e0e0;
+$offWhite:              #FAFAFA;
+$white:                 #FFF;
+
+$darker-grey:			#292c33;
+$dark-grey:				#2d3039;
+$brightBlue:			#389bfe;
+$muted-red:				#f5494d;
+

@@ -1,0 +1,48 @@
+= form_for @student_book do |f|
+  - if @student_book.errors.any?
+    #error_explanation
+      h2 = "#{pluralize(@student_book.errors.count, "error")} prohibited this student_book from being saved:"
+      ul
+        - @student_book.errors.full_messages.each do |message|
+          li = message
+
+  .field
+    = f.label :student
+    = f.text_field :student
+  .field
+    = f.label :book_copy
+    = f.text_field :book_copy
+  .field
+    = f.label :academic_year
+    = f.text_field :academic_year
+  .field
+    = f.label :course_text
+    = f.text_field :course_text
+  .field
+    = f.label :copy_no
+    = f.text_field :copy_no
+  .field
+    = f.label :grade_section
+    = f.text_field :grade_section
+  .field
+    = f.label :grade_level
+    = f.text_field :grade_level
+  .field
+    = f.label :course_text
+    = f.text_field :course_text
+  .field
+    = f.label :course
+    = f.text_field :course
+  .field
+    = f.label :issue_date
+    = f.date_select :issue_date
+  .field
+    = f.label :return_date
+    = f.date_select :return_date
+  .field
+    = f.label :initial_copy_condition_id
+    = f.number_field :initial_copy_condition_id
+  .field
+    = f.label :end_copy_condition_id
+    = f.number_field :end_copy_condition_id
+  .actions = f.submit

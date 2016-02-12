@@ -1,34 +1,41 @@
 = form_for @academic_year do |f|
-  - if @academic_year.errors.any?
-    #error_explanation
-      h2 = "#{pluralize(@academic_year.errors.count, "error")} prohibited this Academic Year from being saved:"
-      ul
-        - @academic_year.errors.full_messages.each do |message|
-          li = message
-  .row
-    .input-field.col.s6
-      = f.label 'Academic Year', class: 'active'
-      = f.text_field :name
-  .row
-    .input-field.col.s6
-      = f.label :start_date, class: 'active'
-      = f.text_field :start_date
-    .input-field.col.s6
-      = f.label :end_date, class: 'active'
-      = f.text_field :end_date
-      /, html={'data-value' => "#{@academic_year.end_date}", class:'datepicker'}
+  .card-panel
+    - if @academic_year.errors.any?
+      #error_explanation
+        h2 = "#{pluralize(@academic_year.errors.count, "error")} prohibited this Academic Year from being saved:"
+        ul
+          - @academic_year.errors.full_messages.each do |message|
+            li = message
+    .row
+      .input-field.col.s6
+        = f.label 'Academic Year', class: 'active'
+        = f.text_field :name
+    .row
+      .input-field.col.s6
+        = f.label :start_date, class: 'active'
+        = f.text_field :start_date
+      .input-field.col.s6
+        = f.label :end_date, class: 'active'
+        = f.text_field :end_date
+        /, html={'data-value' => "#{@academic_year.end_date}", class:'datepicker'}
 
-  .row
-    h5 Academic Terms
-    hr
-    #academic_term.row
+  nav
+    .nav-wrapper
+      .brand-logo style="margin-left: 20px; font-size:1.5em"
+        | Academic Term
+      ul.right
+        li
+          = link_to_add_association f, :academic_terms, class: "waves-effect waves-teal", 'data-association-insertion-method' => 'append', 'data-association-insertion-node' => '#academic_term'
+            ' Add Term
+            i.material-icons.left playlist_add
+
+  .card-panel
+    #academic_term
       = f.fields_for :academic_terms do |academic_term|
         = render 'academic_term_fields', f: academic_term
 
-      = link_to_add_association f, :academic_terms, class: "waves-effect waves-teal btn btn-flat", 'data-association-insertion-method' => 'before', 'data-association-insertion-node' => 'this'
-        ' add term
-        i.material-icons.left playlist_add
-
-  .actions.col.s12 
+  .toolbar.z-depth-1
     button.btn.waves-effect.waves-light type="submit" Save
     = link_to 'Cancel', academic_years_path, class: "waves-effect waves-teal btn-flat"
+    - if params[:action] =~ /edit/
+      = link_to 'Delete', @academic_year, data: {:confirm => 'Are you sure?'}, :method => :delete, class: "right btn waves-effect waves-teal red"

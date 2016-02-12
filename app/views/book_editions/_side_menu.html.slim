@@ -1,47 +1,45 @@
-.app-side-menu
-  ul.collapsible data-collapsible='expandable'
-    li
-      .collapsible-header.active
-        i.material-icons class
-        | Book
-      .collapsible-body
-        .cell-row
-          a href="#" 
-            | Course Text
-        .cell-row
-          a href="#" 
-            | Book assignment
-        // Only show the link if the book edition is present and saved (has id)
-        - if @book_edition.present? && @book_edition.id.present?
-          .cell-row
-            = link_to 'Copies of this edition', book_edition_book_copies_path(@book_edition)
+li
+  .collapsible-header.active
+    i.material-icons class
+    strong Book Edition
+  .collapsible-body
+    .cell-row
+      a href="#" 
+        | Course Text
+    .cell-row
+      a href="#" 
+        | Book assignment
+    // Only show the link if the book edition is present and saved (has id)
+    - if @book_edition.present? && @book_edition.id.present?
+      .cell-row
+        = link_to 'Copies of this edition', book_edition_book_copies_path(@book_edition)
 
-    li
-      .collapsible-header.active
-        i.material-icons query_builder
-        | Actions
-      .collapsible-body
-        - if params[:id] and action_name != 'edit'
-          = link_to 'Edit', edit_book_edition_path(@book_edition), class: "btn waves-effect waves-teal btn-flat"
+li
+  .collapsible-header.active
+    i.material-icons query_builder
+    | Actions
+  .collapsible-body
+    - if params[:id] and action_name != 'edit'
+      = link_to 'Edit', edit_book_edition_path(@book_edition), class: "btn waves-effect waves-teal btn-flat"
 
-    li
-      .collapsible-header
-        i.material-icons info_outline
-        | Related
-      .collapsible-body
-        .cell-row
-          a href="#" 
-            | Morbi leo risus
-        .cell-row
-          a href="#" 
-            | Porta ac consectetur ac
-    li
-      .collapsible-header
-        i.material-icons subject
-        | Reports
-      .collapsible-body
-        .cell-row
-          a href="#" 
-            | Print detail
+li
+  .collapsible-header
+    i.material-icons info_outline
+    | Related
+  .collapsible-body
+    .cell-row
+      a href="#" 
+        | Morbi leo risus
+    .cell-row
+      a href="#" 
+        | Porta ac consectetur ac
+li
+  .collapsible-header
+    i.material-icons subject
+    | Reports
+  .collapsible-body
+    .cell-row
+      a href="#" 
+        | Print detail
 
 

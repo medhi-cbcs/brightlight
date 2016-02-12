@@ -3,21 +3,19 @@ class ApplicationController < ActionController::Base
   # For APIs, you may want to use :null_session instead.
   protect_from_forgery
   helper_method :current_user
-	layout :layout_by_controller
+  layout :layout_by_controller
 
-	def layout_by_controller
-	  if params[:controller] =~ /users.*/ || params[:controller] == 'welcome' || params[:controller] =~ /devise\/.*/
-	    'home'
-	   else
-	    "application"
-	  end
-	end
+  def layout_by_controller
+    if params[:controller] =~ /users.*/ || params[:controller] =~ /devise\/.*/
+      'user'
+    elsif params[:controller] == 'welcome'
+      'home'
+    else
+      "application"
+    end
+  end
 
-  # def current_user
-  #   @current_user ||= User.find_by(id: session[:user_id])
-  # end
-
-	# rescue_from (ActiveRecord::RecordNotFound) { |exception| handle_exception(exception, 404) }
+  # rescue_from (ActiveRecord::RecordNotFound) { |exception| handle_exception(exception, 404) }
 
  #  protected
 

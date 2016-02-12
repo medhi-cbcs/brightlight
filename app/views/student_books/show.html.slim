@@ -1,0 +1,45 @@
+p#notice = notice
+
+p
+  strong Student:
+  = @student_book.student
+p
+  strong Book copy:
+  = @student_book.book_copy
+p
+  strong Academic year:
+  = @student_book.academic_year
+p
+  strong Course text:
+  = @student_book.course_text
+p
+  strong Copy no:
+  = @student_book.copy_no
+p
+  strong Grade section:
+  = @student_book.grade_section
+p
+  strong Grade level:
+  = @student_book.grade_level
+p
+  strong Course text:
+  = @student_book.course_text
+p
+  strong Course:
+  = @student_book.course
+p
+  strong Issue date:
+  = @student_book.issue_date
+p
+  strong Return date:
+  = @student_book.return_date
+p
+  strong Initial copy condition:
+  = @student_book.initial_copy_condition_id
+p
+  strong End copy condition:
+  = @student_book.end_copy_condition_id
+
+= link_to 'Edit', edit_student_book_path(@student_book)
+'|
+= link_to 'Back', student_books_path

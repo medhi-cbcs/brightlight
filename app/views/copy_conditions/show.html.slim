@@ -1,0 +1,30 @@
+p#notice = notice
+
+p
+  strong Book copy:
+  = @copy_condition.book_copy
+p
+  strong Book condition:
+  = @copy_condition.book_condition
+p
+  strong Academic year:
+  = @copy_condition.academic_year
+p
+  strong Barcode:
+  = @copy_condition.barcode
+p
+  strong Notes:
+  = @copy_condition.notes
+p
+  strong User:
+  = @copy_condition.user
+p
+  strong Start date:
+  = @copy_condition.start_date
+p
+  strong End date:
+  = @copy_condition.end_date
+
+= link_to 'Edit', edit_copy_condition_path(@copy_condition)
+'|
+= link_to 'Back', copy_conditions_path

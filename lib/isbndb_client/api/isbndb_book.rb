@@ -3,7 +3,7 @@ module ISBNDBClient
 		class ISBNDBBook
 			attr_reader :title, :authors, :publisher, :published_date, :description,
                   :isbn, :isbn10, :dewey, :summary, :notes, :book_id, :page_count,
-                  :edition_info, :physical_description, :subject_ids                 
+                  :edition_info, :physical_description, :subject_ids , :language             
 
       def initialize(item)
         return if item.nil?
@@ -24,7 +24,7 @@ module ISBNDBClient
         @publisher = @book['publisher_name']
         @published_date = extract_date @book['edition_info'] if @book['edition_info'].present?
         @description = @book['summary']
-        @isbn = @book['isbn']
+        @isbn = @book['isbn13']
         @isbn10 = @book['isbn10']
         @dewey = @book['dewey_decimal']
         @page_count = extract_page_count @book['physical_description_text'] if @book['physical_description_text'].present?
@@ -32,6 +32,7 @@ module ISBNDBClient
         @edition_info = @book['edition_info']
         @physical_description = @book['physical_description_text']
         @subject_ids = @book['subject_ids'] || []
+        @language = @book['language']
       end
 
       # Extract date from the edition_info data

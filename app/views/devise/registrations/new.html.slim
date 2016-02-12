@@ -1,30 +1,39 @@
-= form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f|
-	.row
-		.col.s4.offset-s4
-			.card
-				.card-content.white
+#login-page.row
+	.card.z-depth-4.col.s12.zero-padding
+		= form_for(resource, as: resource_name, url: registration_path(resource_name), html: {class: 'login-form'}) do |f|
+			.card-content.white
+				.center
 					span.card-title.grey-text Sign Up
-					.row
-						input-field.col.s10.offset-s1
-							= f.label :name
-							= f.text_field :name, autofocus: true
-						.input-field.col.s10.offset-s1
-							= f.label :email
-							= f.email_field :email, autofocus: true
-						.input-field.col.s10.offset-s1
-							= f.label :password
-								| Password
-								- if @minimum_password_length
-									em = " (#{@minimum_password_length} characters minimum)"
-							= f.password_field :password, autocomplete: "off"
-						.input-field.col.s10.offset-s1
-							= f.label :password_confirmation
-							= f.password_field :password_confirmation, autocomplete: "off"
-						- if devise_mapping.rememberable?
-							.input-field.col.s6
-								= f.check_box :remember_me
-								= f.label :remember_me
-				.card-action
-					= link_to 'Log in', new_user_session_path, class:'btn btn-flat'
-					button.btn.right type="submit" Sign Up
+				.row.zero-margin
+					.input-field.col.s12
+						i.mdi-social-person-outline.prefix
+						= f.label :name
+						= f.text_field :name, autofocus: true
+					.input-field.col.s12
+						i.mdi-communication-email.prefix
+						= f.label :email
+						= f.email_field :email, autofocus: true
+					.input-field.col.s12
+						i.mdi-action-lock-outline.prefix
+						= f.label :password
+							| Password
+							- if @minimum_password_length
+								em = " (#{@minimum_password_length} characters minimum)"
+						= f.password_field :password, autocomplete: "off"
+					.input-field.col.s12
+						i.mdi-action-lock-outline.prefix
+						= f.label :password_confirmation
+						= f.password_field :password_confirmation, autocomplete: "off"
+					- if devise_mapping.rememberable?
+						.input-field.col.s12
+							= f.check_box :remember_me
+							= f.label :remember_me
+			.card-action
+				.row.zero-margin
+					button.btn.waves-effect.waves-light.col.s12 type="submit" Sign Up
+
+			.row.with-side-padding
+				.input-field.col.s12.center
+					| Have an account? 
+					= link_to 'Login', new_user_session_path
 

@@ -20,3 +20,6 @@
 //= require materialize/extras/nouislider
 //= require cocoon
 //= require filterrific/filterrific-jquery
+//= require dynamic_selectable
+//= require material-init.js
+//= require init.js

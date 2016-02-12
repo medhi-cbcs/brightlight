@@ -7,6 +7,7 @@ class CoursesController < ApplicationController
     items_per_page = 20
     if params[:grade_id]
       @courses = Course.with_grade_level_id(params[:grade_id]).paginate(page: params[:page], per_page: items_per_page)
+      @grade = GradeLevel.where(id: params[:grade_id])
     else 
       @courses = Course.paginate(page: params[:page], per_page: items_per_page)
     end

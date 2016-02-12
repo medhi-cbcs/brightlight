@@ -1,21 +1,24 @@
-h4 Grade #{@grade_level.name} Sections
+h5 Grade 
+.giant-letter = @grade_level.name
 
-.toolbar
-  = link_to 'New Grade section', new_grade_level_grade_section_path(@grade_level.id), class:"btn"
+nav
+  .nav-wrapper
+    .brand-logo.right style="margin: 0 20px; font-size:1.5em"
+      | #{@academic_year.name}
 
-table.striped
-  thead
-    tr
-      th Section
-      th Teacher
-
-  tbody
-    - @grade_sections.each do |grade_section|
+.card-panel      
+  table.striped
+    thead
       tr
-        td
-          = link_to grade_section.name, grade_section
-        td
-          = grade_section.homeroom.present? ? grade_section.homeroom : '--'
+        th Section
+        th Teacher
 
-br
+    tbody
+      - @grade_sections.each do |grade_section|
+        tr
+          td
+            = link_to grade_section.name, grade_section
+          td
+            = grade_section.homeroom.present? ? link_to(grade_section.homeroom) : '--'
+
 

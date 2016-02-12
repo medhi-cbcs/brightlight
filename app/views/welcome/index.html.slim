@@ -1,8 +1,35 @@
+       
+/   nav class="light-blue lighten-1" role="navigation"
+/     .nav-wrapper.container
+/       a#logo-container href="#" class="brand-logo" Logo
+/       ul.side-nav.fixed.hide-on-med-and-down style="top:64px"
+/         li
+/           a href="#" Navbar Link -a
+/         li
+/           a href="#" Navbar Link 1a
+/         li
+/           a href="#" Navbar Link 2a
+/         li
+/           a href="#" Navbar Link 3a
+
+/       ul#nav-mobile.side-nav
+/         - if lookup_context.exists?("#{controller_name}/_side_menu")
+/           = render "#{controller_name}/side_menu"
+/         - else
+/           = render 'shared/side_menu_bar'
+
+/       a href="#" data-activates="nav-mobile" class="button-collapse"
+/         i class="material-icons" menu
+
+/ javascript:
+/   $('.button-collapse').sideNav();
+
+
 .row
-	br
-	.col.s2.offset-s5
-		.card
-			.card-image
-				= image_tag 'book-icon.png'
-			.card-content
-				p Book
+  br
+  .col.s2.offset-s5
+    .card
+      .card-image
+        = image_tag 'book-icon.png'
+      .card-content
+        p Book

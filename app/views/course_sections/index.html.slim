@@ -1,20 +1,20 @@
-h4 
-  ' Course Sections for 
-  = @course.name
+h4 = @course.name
 
-table
-  thead
-    tr
-      th Section 
-      th Instructor
-      th Actions
+nav
+  .nav-wrapper
+    .brand-logo style="margin-left: 20px; font-size:1.5em"
+      | Sections
 
-  tbody
-    - @course_sections.each do |course_section|
+.card-panel
+  table.striped
+    thead
       tr
-        td = link_to course_section.name, course_section
-        td = course_section.instructor.present? ? course_section.instructor.name : "--"
-        td 
-          = link_to 'Edit', edit_course_section_path(course_section), class: "btn btn-small"
-          = link_to 'Destroy', course_section, data: {:confirm => 'Are you sure?'}, :method => :delete, class: 'btn btn-small red'
+        th Section 
+        th Instructor
+
+    tbody
+      - @course_sections.each do |course_section|
+        tr
+          td = link_to course_section.name, course_section
+          td = course_section.instructor.present? ? course_section.instructor.name : "--"
 

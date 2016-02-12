@@ -1,0 +1,49 @@
+h4 Book Condition History
+
+.card-panel
+  .row
+    .col.s12
+      .label Book Title
+      h6 = @book_edition.title
+    .col.s3
+      .label barcode
+      div = @book_copy.barcode
+    .col.s3
+      .label Book No.
+      div = @book_copy.copy_no
+nav
+  .nav-wrapper
+    ul
+      li
+        = link_to @book_copy
+          i.material-icons.left chevron_left
+          | Book Copy
+      li.right
+        = link_to @last_condition.present? ? check_copy_condition_path(@last_condition) : new_copy_condition_path
+          | Update condition
+          i.material-icons.left add
+
+.card-panel
+  table.striped
+    thead
+      tr
+        th Date
+        th Book condition
+        th Academic year
+        th Notes
+        th Action
+
+    tbody
+      - @copy_conditions.each do |copy_condition|
+        - color = BookCondition::COLORS[copy_condition.book_condition.code.downcase]
+        - user = User.where(id:copy_condition.user_id).first
+        - user_name = user.name rescue 'N/A'
+        tr
+          td = copy_condition.start_date
+          td.tooltipped data-position="bottom" data-delay="50" data-tooltip="Last update by: #{user_name} at #{copy_condition.updated_at}"
+            span class="#{color}-text" = copy_condition.book_condition.code 
+          td = copy_condition.academic_year.name
+          td = copy_condition.notes
+          td.actions
+            = link_to edit_copy_condition_path(copy_condition)
+              i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="Edit" edit

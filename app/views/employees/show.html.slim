@@ -1,145 +1,154 @@
-.row.tabbed
-  h4 = @employee.name
-  .col.s12
-    ul.tabs.z-depth-1
-      li.tab.col.s2
-        a href='#tab1' Name
-      li.tab.col.s2
-        a href='#tab2' Personal Details
-      li.tab.col.s2
-        a href='#tab3' Contacts
-      li.tab.col.s2
-        a href='#tab4' Employment
-      li.tab.col.s2
-        a href='#tab5' Education
+h4 = @employee.name
 
-  #tab1
-    .col.s2
-      .card
-        .card-image
-          - avatar = @employee.gender == 'F' ? 'female-avatar.jpg' : 'male-avatar.jpg'
-          = image_tag (@employee.photo_uri.present? ? @employee.photo_uri : avatar), class: 'media-object show-image'
-        .card-content
-          p.small-text = @employee.name
-    .col.s10
-      .list_description
-        dl.row
+nav
+  .nav-wrapper
+    ul
+      li
+        = link_to :back
+          i.material-icons chevron_left
+      li.right
+        = link_to edit_employee_path(@employee)
+          | Edit
+          i.material-icons.left edit
+
+.card
+  .row
+    .col.s12 style="margin-bottom: 15px; padding: 0px;"
+      ul.tabs.z-depth-1
+        li.tab.col.s2
+          a href='#tab1' Name
+        li.tab.col.s2
+          a href='#tab2' Personal Details
+        li.tab.col.s2
+          a href='#tab3' Contacts
+        li.tab.col.s2
+          a href='#tab4' Employment
+        li.tab.col.s2
+          a href='#tab5' Education
+
+    #tab1.tab-content
+      .col.s2
+        .card
+          .card-image
+            - avatar = @employee.gender == 'F' ? 'female-avatar.jpg' : 'male-avatar.jpg'
+            = image_tag (@employee.photo_uri.present? ? @employee.photo_uri : avatar), class: 'media-object show-image'
+          .card-content
+            p.small-text = @employee.name
+      .col.s10
+        .list_description
+          dl
+            dd.col.s5
+              .label First name: 
+              .item = @employee.first_name
+            dd.col.s5
+              .label Last name: 
+              .item = @employee.last_name
+              
+    #tab2.tab-content
+      .list_description.col.s12
+        dl
           dd.col.s5
-            .label First name: 
-            .item = @employee.first_name
+            .label Date of birth:
+            .item = @employee.date_of_birth
           dd.col.s5
-            .label Last name: 
-            .item = @employee.last_name
-            
-  #tab2
-    .list_description.col.s12
-      dl.row
-        dd.col.s5
-          .label Date of birth:
-          .item = @employee.date_of_birth
-        dd.col.s5
-          .label Place of birth:
-          .item = @employee.place_of_birth
-        dd.col.s5
-          .label Gender:
-          .item = @employee.gender
-        dd.col.s5
-          .label Marital status:
-          .item = @employee.marital_status
-        dd.col.s5
-          .label Number of Children:
-          .item = @employee.children_count
-        dd.col.s4
-          .label Nationality: 
-          .item = @employee.nationality
-        dd.col.s4
-          .label Blood type:
-          .item = @employee.blood_type
+            .label Place of birth:
+            .item = @employee.place_of_birth
+          dd.col.s5
+            .label Gender:
+            .item = @employee.gender
+          dd.col.s5
+            .label Marital status:
+            .item = @employee.marital_status
+          dd.col.s5
+            .label Number of Children:
+            .item = @employee.children_count
+          dd.col.s4
+            .label Nationality: 
+            .item = @employee.nationality
+          dd.col.s4
+            .label Blood type:
+            .item = @employee.blood_type
 
-  #tab3
-    .list_description.col.s12
-      dl.row
-        dd.col.s4
-          .label Address
-          .item = @employee.home_address_line1
-          .item = @employee.home_address_line2        
-          .item = @employee.home_city + ' ' + @employee.home_postal_code
-          .item = @employee.home_state
-          .item = @employee.home_country
-        dd.col.s4
-          .label Mobile phone:
-          .item = @employee.mobile_phone
-        dd.col.s4
-          .label Home phone:
-          .item = @employee.home_phone
-        dd.col.s4
-          .label Office phone:
-          .item = @employee.office_phone
-        dd.col.s4
-          .label Other phone:
-          .item = @employee.other_phone
-        dd.col.s4
-          .label Email:
-          .item = @employee.email
-        dd.col.s4
-          .label Emergency contact number:
-          .item = @employee.emergency_contact_number
-        dd.col.s4
-          .label Emergency contact name:
-          .item = @employee.emergency_contact_name
+    #tab3.tab-content
+      .list_description.col.s12
+        dl
+          dd.col.s4
+            .label Address
+            .item = @employee.home_address_line1
+            .item = @employee.home_address_line2        
+            .item = @employee.home_city + ' ' + @employee.home_postal_code
+            .item = @employee.home_state
+            .item = @employee.home_country
+          dd.col.s4
+            .label Mobile phone:
+            .item = @employee.mobile_phone
+          dd.col.s4
+            .label Home phone:
+            .item = @employee.home_phone
+          dd.col.s4
+            .label Office phone:
+            .item = @employee.office_phone
+          dd.col.s4
+            .label Other phone:
+            .item = @employee.other_phone
+          dd.col.s4
+            .label Email:
+            .item = @employee.email
+          dd.col.s4
+            .label Emergency contact number:
+            .item = @employee.emergency_contact_number
+          dd.col.s4
+            .label Emergency contact name:
+            .item = @employee.emergency_contact_name
 
-  #tab4
-    .list_description.col.s12
-      dl.row
-        dd.col.s4
-          .label Joining date:
-          .item = @employee.joining_date
-        dd.col.s4
-          .label Job title:
-          .item = @employee.job_title
-        dd.col.s4
-          .label Employee number:
-          .item = @employee.employee_number
+    #tab4.tab-content
+      .list_description.col.s12
+        dl
+          dd.col.s4
+            .label Joining date:
+            .item = @employee.joining_date
+          dd.col.s4
+            .label Job title:
+            .item = @employee.job_title
+          dd.col.s4
+            .label Employee number:
+            .item = @employee.employee_number
+          dd.col.s4
+            .label Experience year:
+            .item = @employee.experience_year
+          dd.col.s4
+            .label Experience month:
+            .item = @employee.experience_month
+          dd.col.s4
+            .label Employment status:
+            .item = @employee.employment_status
+          dd.col.s4
+            .label Reporting supervisor:
+            .item = @employee.supervisor || "--"
+          dd.col.s4
+            .label Department:
+            .item = @employee.department || "--"
 
-        dd.col.s4
-          .label Experience year:
-          .item = @employee.experience_year
-        dd.col.s4
-          .label Experience month:
-          .item = @employee.experience_month
-        dd.col.s4
-          .label Employment status:
-          .item = @employee.employment_status
-        dd.col.s4
-          .label Reporting supervisor:
-          .item = @employee.supervisor || "--"
-        dd.col.s4
-          .label Department:
-          .item = @employee.department || "--"
+    #tab5.tab-content
+      .list_description.col.s12
+        dl
+          dd.col.s4
+            .label 1st Education degree:
+            .item = @employee.education_degree
+          dd.col.s4
+            .label 1st Education graduation date:
+            .item = @employee.education_graduation_date
+          dd.col.s4
+            .label 1st Education school:
+            .item = @employee.education_school
+          dd.col.s4
+            .label 2nd Education degree:
+            .item = @employee.education_degree2
+          dd.col.s4
+            .label 2nd Education graduation date2:
+            .item = @employee.education_graduation_date2
+          dd.col.s4
+            .label 2nd Education school:
+            .item = @employee.education_school2
 
-  #tab5
-    .list_description.col.s12
-      dl.row
-        dd.col.s4
-          .label 1st Education degree:
-          .item = @employee.education_degree
-        dd.col.s4
-          .label 1st Education graduation date:
-          .item = @employee.education_graduation_date
-        dd.col.s4
-          .label 1st Education school:
-          .item = @employee.education_school
-        dd.col.s4
-          .label 2nd Education degree:
-          .item = @employee.education_degree2
-        dd.col.s4
-          .label 2nd Education graduation date2:
-          .item = @employee.education_graduation_date2
-        dd.col.s4
-          .label 2nd Education school:
-          .item = @employee.education_school2
-
-.toolbar.actions
-  = link_to 'Back', :back, class: 'btn btn-default'
-  = link_to 'Edit', edit_employee_path(@employee), class: 'btn btn-primary'
 

@@ -1,34 +1,39 @@
 doctype html
 html
-	head
-		title Brightlight
-		/[if lt IE 9]
-			script src="http://html5shiv.googlecode.com/svn/trunk/html5.js" type="text/javascript"
-		= stylesheet_link_tag "application", media: "all", 'data-turbolinks-track' => true
-		= csrf_meta_tags
-		/= favicon_link_tag
-		link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"
+  head
+    title Brightlight
+    /[if lt IE 9]
+      script src="http://html5shiv.googlecode.com/svn/trunk/html5.js" type="text/javascript"
+    = stylesheet_link_tag "application", media: "all", 'data-turbolinks-track' => true
 
-		= javascript_include_tag "application", 'data-turbolinks-track' => true
-		= yield :javascript
+    = csrf_meta_tags
+    /= favicon_link_tag
+    link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"
 
-		meta name="viewport" content="width=device-width, initial-scale=1.0"
+    = javascript_include_tag "application", 'data-turbolinks-track' => true
 
-	body class="main-home #{controller.controller_name}"
-		header
-			= render 'shared/layout/header'
-		
-		main
-			= render 'shared/flash_messages'
-			.row
-				.col.s12
-					div        
-						= yield :layout
-			
+    meta name="viewport" content="width=device-width, initial-scale=1.0"
 
-		footer.page-footer
-			= render 'shared/layout/footer'
+  body class="main-home #{controller.controller_name} blue darken-4"
+    header
+      = render 'shared/layout/header'
+    
+    main
+      .container
+        = render 'shared/flash_messages'
+        section
+          = yield :layout
 
-			-if Rails.env.development?
-				.container
-					= debug(params)
+    footer.page-footer style="padding-top:0"
+      //= render 'shared/layout/footer'
+      
+      = yield :javascript
+      
+      -if Rails.env.development?
+        .container
+          ul.collapsible data-collapsible="expandable" style="padding-bottom:0px; box-shadow:none; border:none"
+            li style="color: white;"
+              .collapsible-header style="background-color:#389bfe; border:none"
+                | Copyright © 2015 Brightlight. All rights reserved.
+              .collapsible-body
+                = debug(params)

@@ -10,9 +10,6 @@ Rails.application.routes.draw do
   resources :employees
   resources :products
   resources :academic_years
-  resources :grade_levels do
-    resources :grade_sections, shallow: true
-  end
   resources :rosters
   resources :courses do
     resources :course_texts, shallow: true
@@ -20,11 +17,21 @@ Rails.application.routes.draw do
   end
 
   resources :book_editions do
-    collection do
-      post 'search_isbn'
+    resources :book_copies, shallow: true do
+      collection do
+        get 'edit_labels'
+      end
     end
-    resources :book_copies, shallow: true
   end
+
+  resources :copy_conditions do
+    member do
+      get 'check'
+      post 'check_update'
+    end
+  end
+
+  get 'book_copies/:id/conditions' => 'book_copies#conditions', as: :book_copy_conditions
 
   resources :book_titles do
     collection do
@@ -36,14 +43,39 @@ Rails.application.routes.draw do
     member do
       get 'editions'
       post 'add_existing_editions'
+      post 'add_isbn'
     end
   end
-  
+
+  resources :grade_levels do
+    member do
+      get 'edit_labels'
+    end
+    resources :grade_sections, shallow: true do
+      member do
+        get 'students'
+        post 'add_students'
+      end
+    end
+  end
+
+  resources :student_books do
+    collection do
+      get 'assign'
+      post 'label'
+    end
+  end
+
   devise_for :users, controllers: {
     omniauth_callbacks: "users/omniauth_callbacks",
     sessions: "users/sessions",
     registrations: "users/registrations"
   }
+
+  namespace :dynamic_select do
+    get ':grade_level_id/grade_sections', to: 'options#grade_sections', as: 'grade_sections'
+    get ':section/book_labels', to: 'options#book_labels', as: 'book_labels'
+  end
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
@@ -51,7 +83,7 @@ Rails.application.routes.draw do
   # You can have the root of your site routed with "root"
   root 'welcome#index'
   get :dashboard, to: 'welcome#dashboard'
-  
+
   # For authorization with OmniAuth2
   get '/auth/:provider/callback', to: 'sessions#create'
 

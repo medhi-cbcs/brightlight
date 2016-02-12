@@ -1,23 +1,34 @@
 h4 Grade #{@grade_level.name} Sections
 
 - unless @academic_year.id == current_academic_year_id
-  .toolbar
-    h5.right #{@academic_year.name}
+  nav
+    .nav-wrapper
+      .brand-logo.right style="margin: 0 20px; font-size:1.5em"
+        | #{@academic_year.name}
 
-table.striped
-  thead
-    th Section
-    th Teacher
+nav
+  .nav-wrapper
+    ul
+      li
+        = link_to :back
+          i.material-icons chevron_left
+      li.right
+        = link_to edit_grade_level_path(@grade_level)
+          i.material-icons.left edit
+          | Edit
 
-  tbody
-    - @grade_sections.each do |section|
-      tr
-        td
-          .item = link_to section.name, section
-        td
-          .item = section.homeroom.present? ? link_to(section.homeroom, section.homeroom) : '--'
+.card-panel
+  table.striped
+    thead
+      th Section
+      th Teacher
 
-.toolbar.actions
-  = link_to '< Back', :back, class: 'btn btn-flat'
-  = link_to 'Edit', edit_grade_level_path(@grade_level), class: 'btn btn-primary'
+    tbody
+      - @grade_sections.each do |section|
+        tr
+          td
+            .item = link_to section.name, section
+          td
+            .item = section.homeroom.present? ? link_to(section.homeroom, section.homeroom) : '--'
+
 

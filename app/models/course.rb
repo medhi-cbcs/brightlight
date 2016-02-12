@@ -15,4 +15,9 @@ class Course < ActiveRecord::Base
   accepts_nested_attributes_for :course_texts, allow_destroy: true, reject_if: :all_blank
 
   scope :with_grade_level_id, lambda {|id| joins(:grade_level).where(grade_levels: {id: id}) }
+
+  def has_course_texts?
+    course_texts.present?
+  end
+  
 end

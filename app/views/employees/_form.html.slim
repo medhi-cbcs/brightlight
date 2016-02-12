@@ -1,139 +1,142 @@
 = form_for @employee do |f|
-  - if @employee.errors.any?
-    #error_explanation
-      h6 = "#{pluralize(@employee.errors.count, "error")} prohibited this employee from being saved:"
-      ul
-        - @employee.errors.full_messages.each do |message|
-          li = message
+  .card-panel
+    - if @employee.errors.any?
+      #error_explanation
+        h6 = "#{pluralize(@employee.errors.count, "error")} prohibited this employee from being saved:"
+        ul
+          - @employee.errors.full_messages.each do |message|
+            li = message
 
-  .row
-    .input-field.col.s4
-      = f.label :name, class: 'active'
-      = f.text_field :name
-    .input-field.col.s4
-      = f.label :first_name, class: 'active'
-      = f.text_field :first_name
-    .input-field.col.s4
-      = f.label :last_name, class: 'active'
-      = f.text_field :last_name
-  .row
-    h5 Personal Details
-    .input-field.col.s4
-      = f.label :gender, class: 'active'
-      = f.select :gender, [['Male', 'M'], ['Female', 'F']], prompt: true
-    .input-field.col.s4
-      = f.label :date_of_birth, class: 'active'
-      = f.date_field :date_of_birth
-    .input-field.col.s4
-      = f.label :place_of_birth, class: 'active'
-      = f.text_field :place_of_birth
-  .row
-    .input-field.col.s4
-      = f.label :marital_status, class: 'active'
-      = f.text_field :marital_status
-    .input-field.col.s4
-      = f.label 'No of children', class: 'active'
-      = f.number_field :children_count
-    .input-field.col.s4
-      = f.label :nationality, class: 'active'
-      = f.text_field :nationality
-  .row
-    .input-field.col.s4
-      = f.label :blood_type, class: 'active'
-      = f.text_field :blood_type
-  .row
-    h5 Employment
-    .input-field.col.s4
-      = f.label :department_id, class: 'active'
-      = f.collection_select :department_id, Department.all, :id, :name, prompt: true
-    .input-field.col.s4
-      = f.label :joining_date, class: 'active'
-      = f.date_field :joining_date
-    .input-field.col.s4
-      = f.label :job_title, class: 'active'
-      = f.text_field :job_title
-    .input-field.col.s4
-      = f.label :employee_number, class: 'active'
-      = f.text_field :employee_number
-    .input-field.col.s4
-      = f.label :experience_year, class: 'active'
-      = f.number_field :experience_year
-    .input-field.col.s4
-      = f.label :experience_month, class: 'active'
-      = f.number_field :experience_month
-    .input-field.col.s4
-      = f.label :employment_status, class: 'active'
-      = f.select :employment_status, [['Probation','probation'],['Contract','contract'],['Permanent','permanent']]
-    .input-field.col.s4
-      = f.label :supervisor_id, class: 'active'
-      = f.collection_select :supervisor_id, Employee.all, :id, :name, prompt: true
+    .row
+      .section-header.col.s12 Name
+      .input-field.col.s4
+        = f.label :name, class: 'active'
+        = f.text_field :name
+      .input-field.col.s4
+        = f.label :first_name, class: 'active'
+        = f.text_field :first_name
+      .input-field.col.s4
+        = f.label :last_name, class: 'active'
+        = f.text_field :last_name
+    .row
+      .section-header.col.s12 Personal Details
+      .input-field.col.s4
+        = f.label :gender, class: 'active'
+        = f.select :gender, [['Male', 'M'], ['Female', 'F']], prompt: true
+      .input-field.col.s4
+        = f.label :date_of_birth, class: 'active'
+        = f.date_field :date_of_birth
+      .input-field.col.s4
+        = f.label :place_of_birth, class: 'active'
+        = f.text_field :place_of_birth
+    .row
+      .input-field.col.s4
+        = f.label :marital_status, class: 'active'
+        = f.text_field :marital_status
+      .input-field.col.s4
+        = f.label 'No of children', class: 'active'
+        = f.number_field :children_count
+      .input-field.col.s4
+        = f.label :nationality, class: 'active'
+        = f.text_field :nationality
+    .row
+      .input-field.col.s4
+        = f.label :blood_type, class: 'active'
+        = f.text_field :blood_type
+    .row
+      .section-header.col.s12 Employment
+      .input-field.col.s4
+        = f.label :department_id, class: 'active'
+        = f.collection_select :department_id, Department.all, :id, :name, prompt: true
+      .input-field.col.s4
+        = f.label :joining_date, class: 'active'
+        = f.date_field :joining_date
+      .input-field.col.s4
+        = f.label :job_title, class: 'active'
+        = f.text_field :job_title
+      .input-field.col.s4
+        = f.label :employee_number, class: 'active'
+        = f.text_field :employee_number
+      .input-field.col.s4
+        = f.label :experience_year, class: 'active'
+        = f.number_field :experience_year
+      .input-field.col.s4
+        = f.label :experience_month, class: 'active'
+        = f.number_field :experience_month
+      .input-field.col.s4
+        = f.label :employment_status, class: 'active'
+        = f.select :employment_status, [['Probation','probation'],['Contract','contract'],['Permanent','permanent']]
+      .input-field.col.s4
+        = f.label :supervisor_id, class: 'active'
+        = f.collection_select :supervisor_id, Employee.all, :id, :name, prompt: true
 
-  .row
-    h5 Contacts
-    .input-field.col.s4
-      = f.label :home_address_line1, class: 'active'
-      = f.text_field :home_address_line1
-    .input-field.col.s4
-      = f.label :home_address_line2, class: 'active'
-      = f.text_field :home_address_line2
-    .input-field.col.s4
-      = f.label :home_city, class: 'active'
-      = f.text_field :home_city
-    .input-field.col.s4
-      = f.label :home_state, class: 'active'
-      = f.text_field :home_state
-    .input-field.col.s4
-      = f.label :home_country, class: 'active'
-      = f.text_field :home_country
-    .input-field.col.s4
-      = f.label :home_postal_code, class: 'active'
-      = f.text_field :home_postal_code
-    .input-field.col.s4
-      = f.label :mobile_phone, class: 'active'
-      = f.text_field :mobile_phone
-    .input-field.col.s4
-      = f.label :home_phone, class: 'active'
-      = f.text_field :home_phone
-    .input-field.col.s4
-      = f.label :office_phone, class: 'active'
-      = f.text_field :office_phone
-    .input-field.col.s4
-      = f.label :other_phone, class: 'active'
-      = f.text_field :other_phone
-    .input-field.col.s4
-      = f.label :email, class: 'active'
-      = f.text_field :email
-    .input-field.col.s4
-      = f.label :emergency_contact_number, class: 'active'
-      = f.text_field :emergency_contact_number
-    .input-field.col.s4
-      = f.label :emergency_contact_name, class: 'active'
-      = f.text_field :emergency_contact_name
+    .row
+      .section-header.col.s12 Contacts
+      .input-field.col.s4
+        = f.label :home_address_line1, class: 'active'
+        = f.text_field :home_address_line1
+      .input-field.col.s4
+        = f.label :home_address_line2, class: 'active'
+        = f.text_field :home_address_line2
+      .input-field.col.s4
+        = f.label :home_city, class: 'active'
+        = f.text_field :home_city
+      .input-field.col.s4
+        = f.label :home_state, class: 'active'
+        = f.text_field :home_state
+      .input-field.col.s4
+        = f.label :home_country, class: 'active'
+        = f.text_field :home_country
+      .input-field.col.s4
+        = f.label :home_postal_code, class: 'active'
+        = f.text_field :home_postal_code
+      .input-field.col.s4
+        = f.label :mobile_phone, class: 'active'
+        = f.text_field :mobile_phone
+      .input-field.col.s4
+        = f.label :home_phone, class: 'active'
+        = f.text_field :home_phone
+      .input-field.col.s4
+        = f.label :office_phone, class: 'active'
+        = f.text_field :office_phone
+      .input-field.col.s4
+        = f.label :other_phone, class: 'active'
+        = f.text_field :other_phone
+      .input-field.col.s4
+        = f.label :email, class: 'active'
+        = f.text_field :email
+      .input-field.col.s4
+        = f.label :emergency_contact_number, class: 'active'
+        = f.text_field :emergency_contact_number
+      .input-field.col.s4
+        = f.label :emergency_contact_name, class: 'active'
+        = f.text_field :emergency_contact_name
 
-  .row
-    h5 Education
-    .input-field.col.s4
-      = f.label '1st Education Degree', class: 'active'
-      = f.text_field :education_degree
-    .input-field.col.s4
-      = f.label '1st Education Graduation Date', class: 'active'
-      = f.date_field :education_graduation_date
-    .input-field.col.s4
-      = f.label '1st School/University', class: 'active'
-      = f.text_field :education_school
-    .input-field.col.s4
-      = f.label '2nd Education Degree', class: 'active'
-      = f.text_field :education_degree2
-    .input-field.col.s4
-      = f.label '2nd Education Graduation Date', class: 'active'
-      = f.date_field :education_graduation_date2
-    .input-field.col.s4
-      = f.label '2nd School/University', class: 'active'
-      = f.text_field :education_school2
+    .row
+      .section-header.col.s12 Education
+      .input-field.col.s4
+        = f.label '1st Education Degree', class: 'active'
+        = f.text_field :education_degree
+      .input-field.col.s4
+        = f.label '1st Education Graduation Date', class: 'active'
+        = f.date_field :education_graduation_date
+      .input-field.col.s4
+        = f.label '1st School/University', class: 'active'
+        = f.text_field :education_school
+      .input-field.col.s4
+        = f.label '2nd Education Degree', class: 'active'
+        = f.text_field :education_degree2
+      .input-field.col.s4
+        = f.label '2nd Education Graduation Date', class: 'active'
+        = f.date_field :education_graduation_date2
+      .input-field.col.s4
+        = f.label '2nd School/University', class: 'active'
+        = f.text_field :education_school2
 
 
-  .actions.col.s12 
+  .toolbar.z-depth-1
     button.btn.waves-effect.waves-light type="submit" Save
     = link_to 'Upload photo', "#", class: "waves-effect waves-teal btn btn-default"
     = link_to 'Cancel', employees_path, class: "waves-effect waves-teal btn-flat"
-
+    - if params[:action] =~ /edit/
+      = link_to 'Delete', @employee, data: {confirm: 'Are you sure?'}, method: :delete, class: "right btn waves-effect waves-teal red" 

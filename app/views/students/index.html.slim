@@ -16,26 +16,38 @@
         window.location="#{students_path(v:'list')}"
       }
 
-table.striped.compact
-  thead
-    tr
-      th Name
-      th Admission no
-      th Family
-      th Mobile phone
-      th Email
-      th Actions
+nav
+  .nav-wrapper
+    ul.right
+      li
+        = link_to new_student_path
+          | Add New Student
+          i.material-icons.left add
+      li
+        = link_to 'Export as CSV', students_path + '.csv'
 
-  tbody
-    - @students.each do |student|
+.card-panel
+  table.striped.compact
+    thead
       tr
-        td = link_to student.name, student
-        td = student.admission_no
-        td = student.family_id
-        td = student.mobile_phone
-        td = student.email
+        th Name
+        th Admission no
+        th Family
+        th Mobile phone
+        th Email
+        th Actions
 
-        td 
-          = link_to 'Edit', edit_student_path(student), class: "btn waves-effect waves-teal btn-flat btn-small"
+    tbody
+      - @students.each do |student|
+        tr
+          td = link_to student.name, student
+          td = student.admission_no
+          td = student.family_id
+          td = student.mobile_phone
+          td = student.email
 
-= will_paginate @students
+          td 
+            = link_to 'Edit', edit_student_path(student), class: "btn waves-effect waves-teal btn-flat btn-small"
+
+.toolbar.z-index-1
+  = will_paginate @students

@@ -1,5 +1,5 @@
 class GradeLevelsController < ApplicationController
-  before_action :set_grade_level, only: [:show, :edit, :update, :destroy]
+  before_action :set_grade_level, only: [:show, :edit, :update, :destroy, :edit_labels]
   before_action :set_year, only: [:index, :show, :new, :edit]
 
   # GET /grade_levels
@@ -42,13 +42,25 @@ class GradeLevelsController < ApplicationController
     end
   end
 
+  def edit_labels
+    section_name = params[:section]
+    @book_labels = @grade_level.book_labels.where('name LIKE ?', "#{section_name}%")
+  end
+
   # PATCH/PUT /grade_levels/1
   # PATCH/PUT /grade_levels/1.json
   def update
 
     respond_to do |format|
       if @grade_level.update(grade_level_params)
-        format.html { redirect_to @grade_level, notice: 'Grade level was successfully updated.' }
+        editing_labels = grade_level_params[:book_labels_attributes].present?
+        format.html {
+          if editing_labels
+            redirect_to book_labels_path, notice: 'Labels were successfully updated.'
+          else
+            redirect_to @grade_level, notice: 'Grade level was successfully updated.'
+          end
+        }
         format.json { render :show, status: :ok, location: @grade_level }
       else
         format.html { render :edit }
@@ -74,13 +86,14 @@ class GradeLevelsController < ApplicationController
     end
 
     def set_year
-      @year_id = params[:year] || AcademicYear.current.first.id
+      @year_id = params[:year] || AcademicYear.current_id
       @academic_year = AcademicYear.find(@year_id)
     end
-    
+
     # Never trust parameters from the scary internet, only allow the white list through.
     def grade_level_params
-      params.require(:grade_level).permit(:name, :order_no, 
-                                         {:grade_sections_attributes => [:name, :homeroom_id, :academic_year_id, :_destroy, :id]})
+      params.require(:grade_level).permit(:name, :order_no,
+                                         {:grade_sections_attributes => [:name, :homeroom_id, :academic_year_id, :_destroy, :id]},
+                                         {:book_labels_attributes => [:id, :name, :_destroy]})
     end
 end
