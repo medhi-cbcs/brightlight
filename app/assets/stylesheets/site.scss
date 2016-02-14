@@ -592,16 +592,41 @@ section {
 }
 // ============================================ Card ===========================================
 
-.card {
+
+.card.book-info {
+	height: 370px;
+	position: relative;
+
+	.card-image {
+		height: 250px;
+		overflow: hidden;
+	}
+	.book-title {
+		margin: 0 5px;
+		font-size: large;
+		font-weight: 300;
+		color: #424242 !important;
+		display: block;
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
+
+	i.material-icons {
+		margin-right: 10px;
+	}
+
 	.card-action {
 		.row {
 			margin-bottom: 0;
 		}
 
 		a {
-			margin: 0 1em;
+			margin: 0 5px;
 		}
-
+		i.material-icons {
+			margin-right: 10px;
+		}
 		button {
 			margin: 0 1em;
 		}

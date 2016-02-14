@@ -64,22 +64,42 @@ nav
 
         #tab2
           .card-content
-            h5 Textbooks
             - if @course.course_texts.present?
-              table.striped
-                tbody
+              .row
                 - @course.course_texts.each do |course_text|
-                  - textbook = course_text.book_title
-                  - if textbook
-                    tr
-                      td style="vertical-align:top"
-                        - thumbnail = textbook.image_url.present? ? textbook.image_url : 'book-icon.png'
-                        = link_to textbook
-                          = image_tag(thumbnail, class: 'list_image')
-                      td 
-                        em = link_to(textbook.title, textbook)
-                        p  = textbook.authors
+                  .col.s3
+                    .card.book-info
+                      .card-image
+                        - thumbnail = course_text.book_title.image_url.present? ? course_text.book_title.image_url : 'book-icon.png' 
+                        = image_tag(thumbnail, class: 'activator')           
+                      .book-title.activator
+                        = course_text.book_title.title
+                        i.material-icons.right more_vert
+                      .card-action
+                        = link_to course_text.book_title
+                          i.material-icons.left.tooltipped data-position="bottom" data-delay="50" data-tooltip="Show" visibility
+                        = link_to course_text, data: {:confirm => 'Are you sure?'}, :method => :delete
+                          i.material-icons.left.red-text.tooltipped data-position="bottom" data-delay="50" data-tooltip="Remove" delete
+                      .card-reveal
+                        .card-title.grey-text
+                          i.material-icons.right close
+                        p  = course_text.book_title.title             
+                        .label Author
+                        p = course_text.book_title.authors
+                        .label Publisher
+                        p = course_text.book_title.publisher
+              / table.striped
+              /   tbody
+              /   - @course.course_texts.each do |course_text|
+              /     - textbook = course_text.book_title
+              /     - if textbook
+              /       tr
+              /         td style="vertical-align:top"
+              /           - thumbnail = textbook.image_url.present? ? textbook.image_url : 'book-icon.png'
+              /           = link_to textbook
+              /             = image_tag(thumbnail, class: 'list_image')
+              /         td 
+              /           em = link_to(textbook.title, textbook)
+              /           p  = textbook.authors
             - else
               p.red-text No textbooks
-
-
