@@ -85,7 +85,7 @@ nav
 - else
   .row
     - @course_texts.each do |course_text|
-      .col.s3
+      .col.s12.m3.l3
         .card.book-info
           .card-image
             - thumbnail = course_text.book_title.image_url.present? ? course_text.book_title.image_url : 'book-icon.png' 
