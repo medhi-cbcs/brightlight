@@ -1,0 +1,32 @@
+doctype html
+// TODO: Fix me! Had to specify Arial font. wicked_pdf can't load Roboto fonts as local asset ("Not allowed to load local....")
+html style="font-family:'Arial'"
+  head
+    title Brightlight
+    script src="http://html5shiv.googlecode.com/svn/trunk/html5.js" type="text/javascript"
+    //= wicked_pdf_stylesheet_link_tag "application", media: "all", 'data-turbolinks-track' => true
+    / = wicked_pdf_stylesheet_link_tag "material-icons", media: "all", 'data-turbolinks-track' => true
+    / = wicked_pdf_stylesheet_link_tag "jquery-ui", media: "all", 'data-turbolinks-track' => true
+    / = wicked_pdf_stylesheet_link_tag "normalize", media: "all", 'data-turbolinks-track' => true
+    / = wicked_pdf_stylesheet_link_tag "materialize_components", media: "all", 'data-turbolinks-track' => true
+    / = wicked_pdf_stylesheet_link_tag "materialize/extras/nouislider", media: "all", 'data-turbolinks-track' => true
+    / = wicked_pdf_stylesheet_link_tag "site", media: "all", 'data-turbolinks-track' => true
+
+    = stylesheet_link_tag(ApplicationHelper.asset_data_base64("material-icons"), media: "all", 'data-turbolinks-track' => true)
+    = stylesheet_link_tag(ApplicationHelper.asset_data_base64("jquery-ui"), media: "all", 'data-turbolinks-track' => true)
+    = stylesheet_link_tag ApplicationHelper.asset_data_base64("normalize"), media: "all", 'data-turbolinks-track' => true
+    = stylesheet_link_tag ApplicationHelper.asset_data_base64("materialize_components"), media: "all", 'data-turbolinks-track' => true
+    = stylesheet_link_tag ApplicationHelper.asset_data_base64("materialize/extras/nouislider"), media: "all", 'data-turbolinks-track' => true
+    = stylesheet_link_tag ApplicationHelper.asset_data_base64("site"), media: "all", 'data-turbolinks-track' => true
+    
+    link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"
+
+    = javascript_include_tag ApplicationHelper.asset_data_base64("application"), 'data-turbolinks-track' => true
+
+    meta name="viewport" content="width=device-width, initial-scale=1.0"
+
+  body
+    main
+      .container
+        section
+          = yield :layout

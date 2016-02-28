@@ -6,9 +6,9 @@ namespace :db do
 		Student.delete_all
 		Guardian.delete_all
 		StudentsGuardian.delete_all
-		
+
 		n = 0
-		287.times do
+		117.times do
 			n += 1
 			moms_name = Forgery('name').female_first_name
 			dads_name = Forgery('name').male_first_name
@@ -27,7 +27,7 @@ namespace :db do
 			dad.other_phone = '0899-'+Forgery('address').phone[7..14]
 			dad.home_phone = Forgery('address').phone[2..14]
 			dad.office_phone = Forgery('address').phone[2..14]
-			dad.family_no = 134 + n 
+			dad.family_no = 134 + n
 			dad.save!
 
 			mom = Guardian.new
@@ -73,6 +73,6 @@ namespace :db do
 				StudentsGuardian.create(student_id: student.id, guardian_id: dad.id, relation: 'Father')
 			end
 		end
-		
+
 	end
 end

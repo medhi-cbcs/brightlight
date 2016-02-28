@@ -1,0 +1,23 @@
+.card-panel
+  - if params[:sid].present?
+    .section-header = @student.name
+  table.compact
+    thead
+      tr
+        th No
+        th Barcode
+        th Title
+        th Conditions
+        th Notes
+
+    tbody
+      - if book_label.present?
+        - book_copies = BookCopy.where(book_label:book_label).includes([:book_edition, :book_condition])
+        - book_copies.each_with_index do |book, i|
+          tr
+            td.wd5 = i+1
+            td.wd15 = book.barcode
+            td.wd50.ellipsis
+              span = book.book_edition.title
+            td.wd10 = book.book_condition.code
+            td.wd20

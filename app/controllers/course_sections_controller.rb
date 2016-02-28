@@ -7,7 +7,7 @@ class CourseSectionsController < ApplicationController
     @course = Course.find(params[:course_id])
     items_per_page = 20
     if params[:grade_id]
-      @course_sections = CourseSection.with_grade_level_id(params[:grade_id]).paginate(page: params[:page], per_page: items_per_page)
+      @course_sections = CourseSection.with_grade_level(params[:grade_id]).paginate(page: params[:page], per_page: items_per_page)
     elsif params[:course_id]
       @course_sections = @course.course_sections
     end

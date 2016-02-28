@@ -1,17 +1,16 @@
-h4 Grade #{@grade_level.name} Sections
-
-- unless @academic_year.id == current_academic_year_id
-  nav
-    .nav-wrapper
-      .brand-logo.right style="margin: 0 20px; font-size:1.5em"
-        | #{@academic_year.name}
+h4 Grade #{@grade_level.name} Sections #{@academic_year.name unless @academic_year.id == current_academic_year_id}
 
 nav
   .nav-wrapper
     ul
       li
         = link_to :back
-          i.material-icons chevron_left
+          | Back
+          i.material-icons.left chevron_left
+      li
+        = link_to courses_path(grade:@grade_level.id)
+          | Courses
+          i.material-icons.left school           
       li.right
         = link_to edit_grade_level_path(@grade_level)
           i.material-icons.left edit
@@ -30,5 +29,3 @@ nav
             .item = link_to section.name, section
           td
             .item = section.homeroom.present? ? link_to(section.homeroom, section.homeroom) : '--'
-
-

@@ -5,10 +5,10 @@ class CoursesController < ApplicationController
   # GET /courses.json
   def index
     items_per_page = 20
-    if params[:grade_id]
-      @courses = Course.with_grade_level_id(params[:grade_id]).paginate(page: params[:page], per_page: items_per_page)
-      @grade = GradeLevel.where(id: params[:grade_id])
-    else 
+    if params[:grade]
+      @courses = Course.with_grade_level(params[:grade]).paginate(page: params[:page], per_page: items_per_page)
+      @grade = GradeLevel.where(id: params[:grade])
+    else
       @courses = Course.paginate(page: params[:page], per_page: items_per_page)
     end
   end
@@ -39,7 +39,7 @@ class CoursesController < ApplicationController
     @course.course_sections.each do |course_section|
       course_section.name = "#{@course.name} #{course_section.grade_section.name}"
     end
-    
+
     respond_to do |format|
       if @course.save
         format.html { redirect_to @course, notice: 'Course was successfully created.' }

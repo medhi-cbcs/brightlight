@@ -5,6 +5,13 @@ class ApplicationController < ActionController::Base
   helper_method :current_user
   layout :layout_by_controller
 
+  # Authorization using CanCanCan gem
+  include CanCan::ControllerAdditions
+  load_and_authorize_resource
+  rescue_from CanCan::AccessDenied do |exception|
+    redirect_to root_url, :alert => exception.message
+  end
+
   def layout_by_controller
     if params[:controller] =~ /users.*/ || params[:controller] =~ /devise\/.*/
       'user'
@@ -21,7 +28,7 @@ class ApplicationController < ActionController::Base
 
  #    def handle_exception(ex, status)
  #        render_error(ex, status)
- #        logger.error ex   
+ #        logger.error ex
  #    end
 
  #    def render_error(ex, status)

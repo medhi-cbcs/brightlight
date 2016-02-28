@@ -1,5 +1,11 @@
 Rails.application.routes.draw do
 
+  resources :people
+  resources :book_loans
+  resources :attachment_types
+  resources :book_categories
+  resources :subjects
+  resources :fine_scales
   resources :book_labels
   resources :rosters
   resources :departments
@@ -55,6 +61,7 @@ Rails.application.routes.draw do
       member do
         get 'students'
         post 'add_students'
+        get 'assign'
       end
     end
   end
@@ -63,6 +70,13 @@ Rails.application.routes.draw do
     collection do
       get 'assign'
       post 'label'
+      get 'receipt_form'
+    end
+  end
+
+  resources :book_fines do
+    collection do
+      get 'calculate'
     end
   end
 

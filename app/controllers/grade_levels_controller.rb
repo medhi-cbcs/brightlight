@@ -12,7 +12,7 @@ class GradeLevelsController < ApplicationController
   # GET /grade_levels/1
   # GET /grade_levels/1.json
   def show
-    @grade_sections = @grade_level.grade_sections.with_academic_year_id(@year_id).includes([:academic_year, :homeroom])
+    @grade_sections = @grade_level.grade_sections.with_academic_year(@year_id).includes([:academic_year, :homeroom])
   end
 
   # GET /grade_levels/new
@@ -23,7 +23,7 @@ class GradeLevelsController < ApplicationController
 
   # GET /grade_levels/1/edit
   def edit
-    @grade_sections = @grade_level.grade_sections.with_academic_year_id(@year_id).includes([:academic_year, :homeroom])
+    @grade_sections = @grade_level.grade_sections.with_academic_year(@year_id).includes([:academic_year, :homeroom])
   end
 
   # POST /grade_levels
@@ -45,6 +45,8 @@ class GradeLevelsController < ApplicationController
   def edit_labels
     section_name = params[:section]
     @book_labels = @grade_level.book_labels.where('name LIKE ?', "#{section_name}%")
+    @grade_section = @grade_level.grade_sections.where(name:section_name).first
+    @students = @grade_section.students
   end
 
   # PATCH/PUT /grade_levels/1
@@ -94,6 +96,6 @@ class GradeLevelsController < ApplicationController
     def grade_level_params
       params.require(:grade_level).permit(:name, :order_no,
                                          {:grade_sections_attributes => [:name, :homeroom_id, :academic_year_id, :_destroy, :id]},
-                                         {:book_labels_attributes => [:id, :name, :_destroy]})
+                                         {:book_labels_attributes => [:id, :name, :student_id, :_destroy]})
     end
 end

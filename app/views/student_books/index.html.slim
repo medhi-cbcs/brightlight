@@ -7,12 +7,12 @@ ul#grade-options.dropdown-content
 ul#section-options.dropdown-content
   - @grade_sections.each do |section|
     li
-      = link_to section.name, student_books_path(s:"#{section.id}"), class:"grade-#{section.grade_level_id}"
-ui#student-options.dropdown-content
-  - if @grade_section.present?
-    - @grade_section.students.each do |student|
-      li 
-        = link_to student.name, student_books_path(s:"#{@grade_section.id}",sid:"#{student.id}"), class:"student-#{@grade_section.grade_level_id}"
+      = link_to section.name, "#!", class:"grade-#{section.grade_level_id}", onclick:"filterStudentOptions(#{section.id}, '#{section.name}');"
+ul#student-options.dropdown-content
+  / - if @grade_section.present?
+  /   - @grade_section.students.each do |student|
+  /     li 
+  /       = link_to student.name, student_books_path(s:"#{@grade_section.id}",sid:"#{student.id}"), class:"student-#{@grade_section.grade_level_id}"
 
 javascript:
   function filterSectionOptions(id, name) {
@@ -26,17 +26,28 @@ javascript:
       }
     }) 
   }
+  function filterStudentOptions(id, name) {
+    $("#section").html("Section "+name);
+    $.getJSON("/students.json?section="+id, null, function (data) {
+      console.log("Parsing /students.json?section="+id);
+      var list = "";
+      $.each(data, function(i,item){
+          list += "<li><a href='/student_books?st="+item.id+"'>"+item.name+"</a></li>";
+      });
+      $("#student-options").html(list);
+    });
+  }
 
 nav
   .nav-wrapper
     ul
       li.right
-        a.dropdown-button href="#!" data-activates="student-options"
-          span#grade = params[:sid].present? ? "#{@student.name}" : "Choose student" 
+        a#student-menu.dropdown-button href="#!" data-activates="student-options"
+          span#student = params[:sid].present? ? "#{@student.name}" : "Choose student" 
           i.material-icons.right arrow_drop_down
       li.right
         a.dropdown-button href="#!" data-activates="section-options"
-          = params[:s].present? ? "Section #{@grade_section.name}" : "Choose section"
+          span#section = params[:s].present? ? "Section #{@grade_section.name}" : "Choose section"
           i.material-icons.right arrow_drop_down
       li.right
         a.dropdown-button href="#!" data-activates="grade-options"

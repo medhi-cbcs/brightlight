@@ -37,7 +37,7 @@ class BookCopiesController < ApplicationController
     @book_edition = BookEdition.find(params[:book_edition_id])
     @book_copies = @book_edition.book_copies
     @grade_level_ids = GradeLevel.all.collect(&:id)
-    @grade_sections = GradeSection.with_academic_year_id(AcademicYear.current_id)
+    @grade_sections = GradeSection.with_academic_year(AcademicYear.current_id)
 
     if params[:s].present?
       @grade_section = @grade_sections.where(id:params[:s]).first

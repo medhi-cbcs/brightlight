@@ -1,0 +1,12 @@
+p#notice = notice
+
+p
+  strong Code:
+  = @attachment_type.code
+p
+  strong Name:
+  = @attachment_type.name
+
+= link_to 'Edit', edit_attachment_type_path(@attachment_type)
+'|
+= link_to 'Back', attachment_types_path

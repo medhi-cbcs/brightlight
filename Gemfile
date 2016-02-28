@@ -61,6 +61,13 @@ gem 'omniauth-google-oauth2'
 # Nested form handling
 gem 'cocoon'
 
+# For converting HTML to PDF
+gem 'wicked_pdf'
+gem 'wkhtmltopdf-binary', '~> 0.9.9.3'
+
+# Authorization
+gem 'cancancan', '~> 1.10'
+
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 
@@ -84,9 +91,8 @@ group :development do
 
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'spring'
-  
+
   # irb messed up on Windows, use pry to replace irb as console
   gem 'pry-rails'
 
 end
-

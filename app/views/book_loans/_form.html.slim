@@ -1,0 +1,36 @@
+= form_for @book_loan do |f|
+  - if @book_loan.errors.any?
+    #error_explanation
+      h2 = "#{pluralize(@book_loan.errors.count, "error")} prohibited this book_loan from being saved:"
+      ul
+        - @book_loan.errors.full_messages.each do |message|
+          li = message
+
+  .field
+    = f.label :book_copy
+    = f.text_field :book_copy
+  .field
+    = f.label :book_edition
+    = f.text_field :book_edition
+  .field
+    = f.label :book_title
+    = f.text_field :book_title
+  .field
+    = f.label :user
+    = f.text_field :user
+  .field
+    = f.label :book_category
+    = f.text_field :book_category
+  .field
+    = f.label :loan_type
+    = f.text_field :loan_type
+  .field
+    = f.label :out_date
+    = f.date_select :out_date
+  .field
+    = f.label :due_date
+    = f.date_select :due_date
+  .field
+    = f.label :academic_year
+    = f.text_field :academic_year
+  .actions = f.submit

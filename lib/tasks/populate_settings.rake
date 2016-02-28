@@ -1,14 +1,15 @@
 namespace :db do
 	desc "Populate database with settings"
 	task populate_settings: :environment do
-		
+
 		BookCondition.delete_all
 		Status.delete_all
 
-		[{code:'New',  description:'New book', order_no: 1},
-		 {code:'Good', description:'Slightly used', order_no: 2},
-		 {code:'Fair', description:'Heavily used', order_no: 3},
-		 {code:'Poor', description:'Very heavily used', order_no: 4}
+		[{code:'New',  description:'New book', color: 'blue'},
+		 {code:'Good', description:'Slightly used', color: 'green'},
+		 {code:'Fair', description:'Heavily used', color: 'orange'},
+		 {code:'Poor', description:'Very heavily used', color: 'red'},
+		 {code: 'Missing', description: 'Lost / Missing', color: 'maroon' }
 		].each do |condition|
 			BookCondition.create(code:condition[:code], description:condition[:description])
 		end

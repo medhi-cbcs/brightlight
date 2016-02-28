@@ -42,9 +42,8 @@ nav
             dl.row
               dd.col.s4
                 .label Condition
-                - color = BookCondition::COLORS[@book_copy.book_condition.code.downcase]
-                .item class="#{color}-text"
-                  = @book_copy.book_condition.present? ? @book_copy.book_condition.code.capitalize : 'N/A'
+                .item class="#{@book_copy.latest_condition.try(:color)}-text"
+                  = @book_copy.latest_condition.present? ? @book_copy.latest_condition.code.capitalize : 'N/A'
               dd.col.s4
                 .label Status
                 .item = @book_copy.status.present? ? @book_copy.status.name : 'N/A'

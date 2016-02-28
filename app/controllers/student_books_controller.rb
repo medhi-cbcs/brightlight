@@ -6,7 +6,7 @@ class StudentBooksController < ApplicationController
   def index
     @student_books = StudentBook.all
     @grade_level_ids = GradeLevel.all.collect(&:id)
-    @grade_sections = GradeSection.with_academic_year_id(AcademicYear.current_id)
+    @grade_sections = GradeSection.with_academic_year(AcademicYear.current_id)
     @grade_sections_ids = @grade_sections.collect(&:id)
     if params[:s].present?
       @grade_section = @grade_sections.where(id:params[:s]).first
@@ -60,12 +60,13 @@ class StudentBooksController < ApplicationController
       end
     end
   end
-  # 
-  # # GET /grade_section/1/student_books/assign
-  # def assign
-  #   @grade_section = GradeSection.find(params[:grade_section_id])
-  # end
-  #
+
+  # # GET /student_books/assign
+  def assign
+    @grade_section = GradeSection.find(params[:section])
+    @students = @grade_section.students
+  end
+
   # # POST /grade_section/1/student_books/label
   # # POST /grade_section/1/student_books/label.json
   # def label
@@ -89,6 +90,33 @@ class StudentBooksController < ApplicationController
     respond_to do |format|
       format.html { redirect_to student_books_url, notice: 'Student book was successfully destroyed.' }
       format.json { head :no_content }
+    end
+  end
+
+  # GET /student_books/receipt_form
+  def receipt_form
+    if params[:gs].present?
+      @book_labels = BookLabel.where('name LIKE ?', params[:gs]+"%")
+    elsif params[:l].present?
+      @book_labels = BookLabel.where(id:params[:l])
+      @grade_level_name = GradeLevel.find(@book_labels.first.grade_level_id).name
+      @grade_section_name = @book_labels.first.section_name
+      @labels = BookLabel.where('name LIKE ?', @grade_section_name+"%")
+    end
+
+    respond_to do |format|
+      format.html do
+        @grade_level_ids = GradeLevel.all.collect(&:id)
+        @grade_sections = GradeSection.with_academic_year(AcademicYear.current_id)
+        @grade_sections_ids = @grade_sections.collect(&:id)
+      end
+      format.pdf do
+        render pdf:         'form.pdf',
+               disposition: 'inline',
+               template:    'student_books/receipt_form.pdf.slim',
+               layout:      'pdf.html',
+               show_as_html: params.key?('debug')
+      end
     end
   end
 

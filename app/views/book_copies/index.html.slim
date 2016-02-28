@@ -66,11 +66,11 @@ nav
       - @book_copies.order(:copy_no).each do |book_copy|
         tr
           td = link_to book_copy.barcode, book_copy
-          td = book_copy.book_label.present? ? book_copy.book_label.name : "No label"
-          - color = BookCondition::COLORS[book_copy.book_condition.code.downcase]
+          td = book_copy.book_label.try(:name)
           td 
-            span class="#{color}-text"
-             = book_copy.book_condition.present? ? book_copy.book_condition.code.capitalize : 'N/A'
+            - text_color = book_copy.latest_condition.try(:color)
+            span class="#{text_color}-text"
+             = book_copy.latest_condition.present? ? book_copy.latest_condition.code.capitalize : 'N/A'
           td = book_copy.status.present? ? book_copy.status.name : 'N/A'
 
           td.actions

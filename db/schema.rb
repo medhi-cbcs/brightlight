@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160203043159) do
+ActiveRecord::Schema.define(version: 20160226175658) do
 
   create_table "academic_terms", force: :cascade do |t|
     t.integer  "academic_year_id"
@@ -40,6 +40,13 @@ ActiveRecord::Schema.define(version: 20160203043159) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "attachment_types", force: :cascade do |t|
+    t.string   "code"
+    t.string   "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "book_assignments", id: false, force: :cascade do |t|
     t.integer  "book_copy_id"
     t.integer  "student_id"
@@ -62,12 +69,20 @@ ActiveRecord::Schema.define(version: 20160203043159) do
   add_index "book_assignments", ["status_id"], name: "index_book_assignments_on_status_id"
   add_index "book_assignments", ["student_id"], name: "index_book_assignments_on_student_id"
 
+  create_table "book_categories", force: :cascade do |t|
+    t.string   "code"
+    t.string   "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "book_conditions", force: :cascade do |t|
     t.string   "code"
     t.string   "description"
     t.integer  "order_no"
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
+    t.string   "color"
   end
 
   create_table "book_copies", force: :cascade do |t|
@@ -104,12 +119,34 @@ ActiveRecord::Schema.define(version: 20160203043159) do
     t.string   "edition_info"
     t.string   "tags"
     t.string   "subjects"
-    t.datetime "created_at",      null: false
-    t.datetime "updated_at",      null: false
+    t.datetime "created_at",       null: false
+    t.datetime "updated_at",       null: false
     t.integer  "book_title_id"
+    t.decimal  "price"
+    t.string   "currency"
+    t.integer  "attachment_index"
+    t.string   "attachment_name"
+    t.integer  "attachment_qty"
+    t.string   "refno"
   end
 
   add_index "book_editions", ["book_title_id"], name: "index_book_editions_on_book_title_id"
+
+  create_table "book_fines", force: :cascade do |t|
+    t.integer  "book_copy_id"
+    t.integer  "old_condition_id"
+    t.integer  "new_condition_id"
+    t.decimal  "fine"
+    t.integer  "academic_year_id"
+    t.integer  "student_id"
+    t.string   "status"
+    t.datetime "created_at",       null: false
+    t.datetime "updated_at",       null: false
+  end
+
+  add_index "book_fines", ["academic_year_id"], name: "index_book_fines_on_academic_year_id"
+  add_index "book_fines", ["book_copy_id"], name: "index_book_fines_on_book_copy_id"
+  add_index "book_fines", ["student_id"], name: "index_book_fines_on_student_id"
 
   create_table "book_grades", id: false, force: :cascade do |t|
     t.integer  "book_copy_id"
@@ -130,12 +167,67 @@ ActiveRecord::Schema.define(version: 20160203043159) do
     t.integer  "grade_level_id"
     t.integer  "student_id"
     t.string   "name"
-    t.datetime "created_at",     null: false
-    t.datetime "updated_at",     null: false
+    t.datetime "created_at",       null: false
+    t.datetime "updated_at",       null: false
+    t.integer  "grade_section_id"
   end
 
   add_index "book_labels", ["grade_level_id"], name: "index_book_labels_on_grade_level_id"
+  add_index "book_labels", ["grade_section_id"], name: "index_book_labels_on_grade_section_id"
   add_index "book_labels", ["student_id"], name: "index_book_labels_on_student_id"
+
+  create_table "book_loan_histories", force: :cascade do |t|
+    t.integer  "book_title_id"
+    t.integer  "book_edition_id"
+    t.integer  "book_copy_id"
+    t.integer  "user_id"
+    t.date     "out_date"
+    t.date     "due_date"
+    t.date     "in_date"
+    t.integer  "condition_out_id"
+    t.integer  "condition_in_id"
+    t.float    "fine_assessed"
+    t.float    "fine_paid"
+    t.float    "fine_waived"
+    t.string   "remarks"
+    t.integer  "academic_year_id"
+    t.integer  "update_by_id"
+    t.datetime "created_at",       null: false
+    t.datetime "updated_at",       null: false
+  end
+
+  add_index "book_loan_histories", ["academic_year_id"], name: "index_book_loan_histories_on_academic_year_id"
+  add_index "book_loan_histories", ["book_copy_id"], name: "index_book_loan_histories_on_book_copy_id"
+  add_index "book_loan_histories", ["book_edition_id"], name: "index_book_loan_histories_on_book_edition_id"
+  add_index "book_loan_histories", ["book_title_id"], name: "index_book_loan_histories_on_book_title_id"
+  add_index "book_loan_histories", ["condition_in_id"], name: "index_book_loan_histories_on_condition_in_id"
+  add_index "book_loan_histories", ["condition_out_id"], name: "index_book_loan_histories_on_condition_out_id"
+  add_index "book_loan_histories", ["update_by_id"], name: "index_book_loan_histories_on_update_by_id"
+  add_index "book_loan_histories", ["user_id"], name: "index_book_loan_histories_on_user_id"
+
+  create_table "book_loans", force: :cascade do |t|
+    t.integer  "book_copy_id"
+    t.integer  "book_edition_id"
+    t.integer  "book_title_id"
+    t.integer  "person_id"
+    t.integer  "book_category_id"
+    t.integer  "loan_type_id"
+    t.date     "out_date"
+    t.date     "due_date"
+    t.integer  "academic_year_id"
+    t.integer  "user_id"
+    t.datetime "created_at",       null: false
+    t.datetime "updated_at",       null: false
+  end
+
+  add_index "book_loans", ["academic_year_id"], name: "index_book_loans_on_academic_year_id"
+  add_index "book_loans", ["book_category_id"], name: "index_book_loans_on_book_category_id"
+  add_index "book_loans", ["book_copy_id"], name: "index_book_loans_on_book_copy_id"
+  add_index "book_loans", ["book_edition_id"], name: "index_book_loans_on_book_edition_id"
+  add_index "book_loans", ["book_title_id"], name: "index_book_loans_on_book_title_id"
+  add_index "book_loans", ["loan_type_id"], name: "index_book_loans_on_loan_type_id"
+  add_index "book_loans", ["person_id"], name: "index_book_loans_on_person_id"
+  add_index "book_loans", ["user_id"], name: "index_book_loans_on_user_id"
 
   create_table "book_titles", force: :cascade do |t|
     t.string   "title"
@@ -144,7 +236,11 @@ ActiveRecord::Schema.define(version: 20160203043159) do
     t.string   "image_url"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer  "bkudid"
+    t.integer  "subject_id"
   end
+
+  add_index "book_titles", ["subject_id"], name: "index_book_titles_on_subject_id"
 
   create_table "copy_conditions", force: :cascade do |t|
     t.integer  "book_copy_id"
@@ -163,6 +259,23 @@ ActiveRecord::Schema.define(version: 20160203043159) do
   add_index "copy_conditions", ["book_condition_id"], name: "index_copy_conditions_on_book_condition_id"
   add_index "copy_conditions", ["book_copy_id"], name: "index_copy_conditions_on_book_copy_id"
   add_index "copy_conditions", ["user_id"], name: "index_copy_conditions_on_user_id"
+
+  create_table "course_section_histories", force: :cascade do |t|
+    t.string   "name"
+    t.integer  "course_id"
+    t.integer  "grade_section_id"
+    t.integer  "instructor_id"
+    t.integer  "academic_year_id"
+    t.integer  "academic_term_id"
+    t.datetime "created_at",       null: false
+    t.datetime "updated_at",       null: false
+  end
+
+  add_index "course_section_histories", ["academic_term_id"], name: "index_course_section_histories_on_academic_term_id"
+  add_index "course_section_histories", ["academic_year_id"], name: "index_course_section_histories_on_academic_year_id"
+  add_index "course_section_histories", ["course_id"], name: "index_course_section_histories_on_course_id"
+  add_index "course_section_histories", ["grade_section_id"], name: "index_course_section_histories_on_grade_section_id"
+  add_index "course_section_histories", ["instructor_id"], name: "index_course_section_histories_on_instructor_id"
 
   create_table "course_sections", force: :cascade do |t|
     t.string   "name"
@@ -254,10 +367,23 @@ ActiveRecord::Schema.define(version: 20160203043159) do
     t.datetime "updated_at",                 null: false
     t.integer  "supervisor_id"
     t.integer  "department_id"
+    t.integer  "person_id"
   end
 
   add_index "employees", ["department_id"], name: "index_employees_on_department_id"
+  add_index "employees", ["person_id"], name: "index_employees_on_person_id"
   add_index "employees", ["supervisor_id"], name: "index_employees_on_supervisor_id"
+
+  create_table "fine_scales", force: :cascade do |t|
+    t.integer  "old_condition_id"
+    t.integer  "new_condition_id"
+    t.float    "percentage"
+    t.datetime "created_at",       null: false
+    t.datetime "updated_at",       null: false
+  end
+
+  add_index "fine_scales", ["new_condition_id"], name: "index_fine_scales_on_new_condition_id"
+  add_index "fine_scales", ["old_condition_id"], name: "index_fine_scales_on_old_condition_id"
 
   create_table "grade_levels", force: :cascade do |t|
     t.string   "name"
@@ -265,6 +391,21 @@ ActiveRecord::Schema.define(version: 20160203043159) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
+
+  create_table "grade_section_histories", force: :cascade do |t|
+    t.integer  "grade_level_id"
+    t.integer  "grade_section_id"
+    t.integer  "academic_year_id"
+    t.integer  "homeroom_id"
+    t.string   "name"
+    t.datetime "created_at",       null: false
+    t.datetime "updated_at",       null: false
+  end
+
+  add_index "grade_section_histories", ["academic_year_id"], name: "index_grade_section_histories_on_academic_year_id"
+  add_index "grade_section_histories", ["grade_level_id"], name: "index_grade_section_histories_on_grade_level_id"
+  add_index "grade_section_histories", ["grade_section_id"], name: "index_grade_section_histories_on_grade_section_id"
+  add_index "grade_section_histories", ["homeroom_id"], name: "index_grade_section_histories_on_homeroom_id"
 
   create_table "grade_sections", force: :cascade do |t|
     t.integer  "grade_level_id"
@@ -309,6 +450,55 @@ ActiveRecord::Schema.define(version: 20160203043159) do
     t.integer  "family_no"
     t.datetime "created_at",    null: false
     t.datetime "updated_at",    null: false
+    t.integer  "person_id"
+  end
+
+  add_index "guardians", ["person_id"], name: "index_guardians_on_person_id"
+
+  create_table "loan_types", force: :cascade do |t|
+    t.string   "code"
+    t.string   "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "people", force: :cascade do |t|
+    t.string   "full_name"
+    t.string   "first_name"
+    t.string   "last_name"
+    t.string   "nick_name"
+    t.date     "date_of_birth"
+    t.string   "place_of_birth"
+    t.string   "gender"
+    t.string   "passport_no"
+    t.string   "blood_type"
+    t.string   "mobile_phone"
+    t.string   "home_phone"
+    t.string   "other_phone"
+    t.string   "email"
+    t.string   "other_email"
+    t.string   "bbm_pin"
+    t.string   "sm_twitter"
+    t.string   "sm_facebook"
+    t.string   "sm_line"
+    t.string   "sm_path"
+    t.string   "sm_instagram"
+    t.string   "sm_google_plus"
+    t.string   "sm_linked_in"
+    t.string   "gravatar"
+    t.string   "photo_uri"
+    t.string   "nationality"
+    t.string   "religion"
+    t.string   "address_line1"
+    t.string   "address_line2"
+    t.string   "kecamatan"
+    t.string   "kabupaten"
+    t.string   "city"
+    t.string   "postal_code"
+    t.string   "state"
+    t.string   "country"
+    t.datetime "created_at",     null: false
+    t.datetime "updated_at",     null: false
   end
 
   create_table "products", force: :cascade do |t|
@@ -428,7 +618,10 @@ ActiveRecord::Schema.define(version: 20160203043159) do
     t.string   "enrollment_date"
     t.datetime "created_at",         null: false
     t.datetime "updated_at",         null: false
+    t.integer  "person_id"
   end
+
+  add_index "students", ["person_id"], name: "index_students_on_person_id"
 
   create_table "students_guardians", id: false, force: :cascade do |t|
     t.integer  "student_id"
@@ -440,6 +633,14 @@ ActiveRecord::Schema.define(version: 20160203043159) do
 
   add_index "students_guardians", ["guardian_id"], name: "index_students_guardians_on_guardian_id"
   add_index "students_guardians", ["student_id"], name: "index_students_guardians_on_student_id"
+
+  create_table "subjects", force: :cascade do |t|
+    t.string   "code"
+    t.string   "name"
+    t.string   "description"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+  end
 
   create_table "users", force: :cascade do |t|
     t.string   "provider"
@@ -463,6 +664,7 @@ ActiveRecord::Schema.define(version: 20160203043159) do
     t.datetime "last_sign_in_at"
     t.string   "current_sign_in_ip"
     t.string   "last_sign_in_ip"
+    t.integer  "roles_mask"
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true

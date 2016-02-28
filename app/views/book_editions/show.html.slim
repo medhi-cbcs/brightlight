@@ -45,6 +45,9 @@ nav
             dd.col.s6
               .label Page count
               .item = @book_edition.page_count || 'N/A'
+            dd.col.s6
+              .label Price
+              .item = @book_edition.price.present? ? "#{@book_edition.currency} #{@book_edition.price.to_digits}" : 'N/A'
             dd.col.s12
               .label Description
               .item = strip_tags(@book_edition.description) || 'N/A'
@@ -53,8 +56,3 @@ nav
               .item = @book_edition.book_title ? link_to(@book_edition.book_title.title, @book_edition.book_title) : "--" 
 
     
-
-
-
-
-

@@ -1,17 +1,21 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
-one:
-  provider: MyString
-  uid: MyString
-  name: MyString
+bingley:
+  provider: Google
+  uid: 1
+  name: Bingley
+  email: bingley@pemberley.com
+  encrypted_password: PR3JuD1c3
   location: MyString
   image_url: MyString
   url: MyString
 
-two:
-  provider: MyString
-  uid: MyString
-  name: MyString
+darcy:
+  provider: Google
+  uid: 2
+  name: Mr Darcy
+  email: darcy@pemberley.com
+  encrypted_password: PR3JuD1c3
   location: MyString
   image_url: MyString
   url: MyString

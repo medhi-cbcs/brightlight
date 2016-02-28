@@ -83,6 +83,10 @@ nav
                     dd.col.s6
                       .label Page count
                       .item = book_edition.page_count
+                  - if book_edition.price.present?
+                    dd.col.s6
+                      .label Price
+                      .item = "#{book_edition.currency} #{book_edition.price.to_digits}"
                   - if book_edition.description.present?
                     dd.col.s12
                       .label Description

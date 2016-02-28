@@ -36,7 +36,27 @@ $muted-red:				#f5494d;
 }
 
 // ============================================ Table ===============================================
-
+table {
+		td.wd5  { width:  5%; }
+		td.wd10 { width: 10%; }
+		td.wd15 { width: 15%;	}
+		td.wd20 {	width: 20%;	}
+		td.wd25 {	width: 25%;	}
+		td.wd30 {	width: 30%;	}
+		td.wd35 {	width: 35%;	}
+		td.wd40 {	width: 40%;	}
+		td.wd45 {	width: 45%;	}
+		td.wd50 {	width: 50%;	}
+		td.wd55 {	width: 55%;	}
+		td.wd60 {	width: 60%;	}
+		td.wd65 {	width: 65%;	}
+		td.wd70 {	width: 70%;	}
+		td.wd75 {	width: 75%;	}
+		td.wd80 {	width: 80%;	}
+		td.wd85 {	width: 85%;	}
+		td.wd90 {	width: 90%;	}
+		td.wd95 {	width: 95%;	}
+}
 table.compact {
 	width: 100%;
 	// white-space: nowrap;
@@ -45,43 +65,62 @@ table.compact {
 	td.ellipsize {
 		overflow: hidden;
 		text-overflow: ellipsis;
+		display: block;
+		white-space: nowrap;
 	}
 	td {
 		padding-top: 4px;
 		padding-bottom: 4px;
-
-		.compact-cell {
-			position: relative;
-		}
-		.compact-cell:before {
-			content: attr(data-spacer);
-	    position: absolute;
-	    max-width: 100%;
-	    white-space: nowrap;
-	    overflow: hidden;
-	    text-overflow: ellipsis;
-		}
-		.compact-cell:after {
-		    content: attr(data-spacer);
-		    display: inline-block;
-		    height: 0;
-		    overflow: hidden;
-		}
-		.dont-truncate {
-		    white-space: nowrap;
-		}
-		.content {
-			position: absolute;
-	    max-width: 100%;
-	    white-space: nowrap;
-	    overflow: hidden;
-	    text-overflow: ellipsis;
-		}
-		.spacer {
-	    height: 0;
-	    overflow: hidden;
-		}
 	}
+	.ellipsis {
+	    position: relative;
+	}
+	.ellipsis:before {
+	    content: '&nbsp;';
+	    visibility: hidden;
+	}
+	.ellipsis span {
+	    position: absolute;
+	    left: 0;
+	    right: 0;
+	    white-space: nowrap;
+	    overflow: hidden;
+	    text-overflow: ellipsis;
+	}
+
+	// td {
+	// 	.compact-cell {
+	// 		position: relative;
+	// 	}
+	// 	.compact-cell:before {
+	// 		content: attr(data-spacer);
+	//     position: absolute;
+	//     max-width: 100%;
+	//     white-space: nowrap;
+	//     overflow: hidden;
+	//     text-overflow: ellipsis;
+	// 	}
+	// 	.compact-cell:after {
+	// 	    content: attr(data-spacer);
+	// 	    display: inline-block;
+	// 	    height: 0;
+	// 	    overflow: hidden;
+	// 	}
+	// 	.dont-truncate {
+	// 	    white-space: nowrap;
+	// 	}
+	// 	.content {
+	// 		position: absolute;
+	//     max-width: 100%;
+	//     white-space: nowrap;
+	//     overflow: hidden;
+	//     text-overflow: ellipsis;
+	// 	}
+	// 	.spacer {
+	//     height: 0;
+	//     overflow: hidden;
+	// 	}
+	// }
 }
 
 td.actions {
@@ -221,6 +260,10 @@ nav {
 				}
 			}
 		}
+		i {
+	    height: 56px;
+	    line-height: 52px;
+		}
 	}
 	.input-field {
 		input {
@@ -231,6 +274,13 @@ nav {
         border-bottom: 2px dotted gray;
       }
 		}
+	}
+}
+
+@media only screen and (min-width: 601px) {
+	nav, nav .nav-wrapper i, nav a.button-collapse, nav a.button-collapse i {
+    height: 64px;
+    line-height: 64px;
 	}
 }
 
@@ -590,6 +640,10 @@ section {
 		text-overflow: ellipsis;
 	}
 }
+
+// For PDF forms
+.page-break { display:block; clear:both; page-break-after:always; }
+
 // ============================================ Card ===========================================
 
 

@@ -35,13 +35,12 @@ nav
 
     tbody
       - @copy_conditions.each do |copy_condition|
-        - color = BookCondition::COLORS[copy_condition.book_condition.code.downcase]
         - user = User.where(id:copy_condition.user_id).first
         - user_name = user.name rescue 'N/A'
         tr
           td = copy_condition.start_date
           td.tooltipped data-position="bottom" data-delay="50" data-tooltip="Last update by: #{user_name} at #{copy_condition.updated_at}"
-            span class="#{color}-text" = copy_condition.book_condition.code 
+            span class="#{copy_condition.book_condition.color}-text" = copy_condition.book_condition.code 
           td = copy_condition.academic_year.name
           td = copy_condition.notes
           td.actions

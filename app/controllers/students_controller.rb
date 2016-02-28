@@ -10,12 +10,17 @@ class StudentsController < ApplicationController
         if params[:search]
           @students = Student.where('name LIKE ?', "%#{params[:search]}%").paginate(page: params[:page], per_page: items_per_page)
         else
-           @students = Student.paginate(page: params[:page], per_page: items_per_page)
+          @students = Student.paginate(page: params[:page], per_page: items_per_page)
         end
       }
-      format.csv { 
+      format.json {
+        if params[:section]
+          @students = Student.for_section(params[:section])
+        end
+      }
+      format.csv {
         @students = Student.all
-        render text: @students.to_csv 
+        render text: @students.to_csv
       }
     end
   end

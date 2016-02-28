@@ -1,19 +1,19 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
-  name: MyString
-  number: MyString
-  description: MyString
-  grade_level_id: 
-  academic_year_id: 
-  academic_term_id: 
-  employee_id: 
+  name: English 101
+  number: ENG-101
+  description: English 101
+  grade_level_id: 1
+  academic_year_id: 6
+  academic_term_id: 1
+  employee_id: 1
 
 two:
-  name: MyString
-  number: MyString
-  description: MyString
-  grade_level_id: 
-  academic_year_id: 
-  academic_term_id: 
-  employee_id: 
+  name: Math 101
+  number: MATH-101
+  description: Math 101
+  grade_level_id: 1
+  academic_year_id: 6
+  academic_term_id: 1
+  employee_id: 2

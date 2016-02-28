@@ -1,0 +1,35 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  book_title_id: 
+  book_edition_id: 
+  book_copy_id: 
+  user_id: 
+  out_date: 2016-02-24
+  due_date: 2016-02-24
+  in_date: 2016-02-24
+  condition_out_id: 
+  condition_in_id: 
+  fine_assessed: 1.5
+  fine_paid: 1.5
+  fine_waived: 1.5
+  remarks: MyString
+  academic_year_id: 
+  update_by_id: 
+
+two:
+  book_title_id: 
+  book_edition_id: 
+  book_copy_id: 
+  user_id: 
+  out_date: 2016-02-24
+  due_date: 2016-02-24
+  in_date: 2016-02-24
+  condition_out_id: 
+  condition_in_id: 
+  fine_assessed: 1.5
+  fine_paid: 1.5
+  fine_waived: 1.5
+  remarks: MyString
+  academic_year_id: 
+  update_by_id: 

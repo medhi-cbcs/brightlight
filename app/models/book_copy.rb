@@ -17,6 +17,10 @@ class BookCopy < ActiveRecord::Base
   	BookCopy.where(barcode:barcode).first
   end
 
+  def latest_condition
+    copy_conditions.order('created_at DESC').first.try(:book_condition)
+  end
+
   protected
     def create_initial_condition
       self.copy_conditions << CopyCondition.new(

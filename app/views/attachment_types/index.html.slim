@@ -1,0 +1,23 @@
+h1 Listing attachment_types
+
+table
+  thead
+    tr
+      th Code
+      th Name
+      th
+      th
+      th
+
+  tbody
+    - @attachment_types.each do |attachment_type|
+      tr
+        td = attachment_type.code
+        td = attachment_type.name
+        td = link_to 'Show', attachment_type
+        td = link_to 'Edit', edit_attachment_type_path(attachment_type)
+        td = link_to 'Destroy', attachment_type, data: {:confirm => 'Are you sure?'}, :method => :delete
+
+br
+
+= link_to 'New Attachment type', new_attachment_type_path

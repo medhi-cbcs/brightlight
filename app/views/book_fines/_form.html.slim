@@ -1,0 +1,30 @@
+= form_for @book_fine do |f|
+  - if @book_fine.errors.any?
+    #error_explanation
+      h2 = "#{pluralize(@book_fine.errors.count, "error")} prohibited this book_fine from being saved:"
+      ul
+        - @book_fine.errors.full_messages.each do |message|
+          li = message
+
+  .field
+    = f.label :book_copy
+    = f.text_field :book_copy
+  .field
+    = f.label :old_condition_id
+    = f.number_field :old_condition_id
+  .field
+    = f.label :new_condition_id
+    = f.number_field :new_condition_id
+  .field
+    = f.label :fine
+    = f.text_field :fine
+  .field
+    = f.label :academic_year
+    = f.text_field :academic_year
+  .field
+    = f.label :student
+    = f.text_field :student
+  .field
+    = f.label :status
+    = f.text_field :status
+  .actions = f.submit
