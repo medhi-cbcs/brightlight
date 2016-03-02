@@ -1,17 +1,12 @@
 class User < ActiveRecord::Base
   has_one :person
-  
+
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable, :omniauthable
 
-  # For user authorization
-  attr_accessible :roles
-
   def from_omniauth(auth_hash)
-  	puts "USER MODEL begin"
-
     user = find_or_create_by(uid: auth_hash['uid'], provider: auth_hash['provider'])
     user.name = auth_hash['info']['name']
     user.email = auth_hash['info']['email']

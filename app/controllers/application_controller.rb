@@ -7,10 +7,11 @@ class ApplicationController < ActionController::Base
 
   # Authorization using CanCanCan gem
   include CanCan::ControllerAdditions
-  load_and_authorize_resource
+  # load_and_authorize_resource
   rescue_from CanCan::AccessDenied do |exception|
     redirect_to root_url, :alert => exception.message
   end
+  before_action :configure_permitted_parameters, if: :devise_controller?
 
   def layout_by_controller
     if params[:controller] =~ /users.*/ || params[:controller] =~ /devise\/.*/
@@ -24,19 +25,10 @@ class ApplicationController < ActionController::Base
 
   # rescue_from (ActiveRecord::RecordNotFound) { |exception| handle_exception(exception, 404) }
 
- #  protected
+  protected
 
- #    def handle_exception(ex, status)
- #        render_error(ex, status)
- #        logger.error ex
- #    end
-
- #    def render_error(ex, status)
- #        @status_code = status
- #        respond_to do |format|
- #          format.html { render :template => "shared/error", :status => status }
- #          format.all { render :nothing => true, :status => status }
- #       end
- #    end
+    def configure_permitted_parameters
+      devise_parameter_sanitizer.for(:sign_up)  { |u| u.permit(  :email, :password, :password_confirmation, roles: [] ) }
+    end
 
 end
