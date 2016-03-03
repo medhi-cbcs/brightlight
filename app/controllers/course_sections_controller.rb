@@ -1,6 +1,7 @@
 class CourseSectionsController < ApplicationController
   before_action :set_course_section, only: [:show, :edit, :update, :destroy]
-
+  load_and_authorize_resource
+  
   # GET /course_sections
   # GET /course_sections.json
   def index

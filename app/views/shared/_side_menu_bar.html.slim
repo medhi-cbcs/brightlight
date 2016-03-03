@@ -41,35 +41,37 @@ li
 				a href="/employees?q=teacher" Teachers
 			li
 				a href="/employees?q=staff" Staff
-li
-	.collapsible-header.waves-effect.waves-cyan
-		i.material-icons subject
-		i.mdi-navigation-chevron-right.right
-		| Admin
-	.collapsible-body
-		ul
-			li
-				a href="/academic_years" Academic Years
-			li
-				a href="/book_labels" Book Labels
-			li
-				a href="/users" 
-					| Users
-li 
-	.collapsible-header.waves-effect.waves-cyan
-		i.material-icons perm_identity
-		i.mdi-navigation-chevron-right.right
-		| Profile
-	.collapsible-body
-		ul
-			li 			
-				- if current_user
-					- if current_user.image
-						= image_tag current_user.image, alt: current_user.name, class: 'user-avatar'
+- if signed_in? and current_user.admin?
+	li
+		.collapsible-header.waves-effect.waves-cyan
+			i.material-icons subject
+			i.mdi-navigation-chevron-right.right
+			| Admin
+		.collapsible-body
+			ul
+				li
+					a href="/academic_years" Academic Years
+				li
+					a href="/book_labels" Book Labels
+				li
+					a href="/users" 
+						| Users
+- if signed_in?
+	li 
+		.collapsible-header.waves-effect.waves-cyan
+			i.material-icons perm_identity
+			i.mdi-navigation-chevron-right.right
+			| Profile
+		.collapsible-body
+			ul
+				li 			
+					- if current_user
+						- if current_user.image
+							= image_tag current_user.image, alt: current_user.name, class: 'user-avatar'
+						- else
+							i.material-icons perm_identity
+						= current_user.name
 					- else
-						i.material-icons perm_identity
-					= current_user.name
-				- else
-					= link_to new_user_session_path
-						| Login
-						i.material-icons.left perm_identity
+						= link_to new_user_session_path
+							| Login
+							i.material-icons.left perm_identity

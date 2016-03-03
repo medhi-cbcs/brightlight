@@ -28,8 +28,9 @@ class Ability
 
   # Teacher
   def teacher
-    can :manage, CourseSection, instructor: @user.person.try(teacher)
-    can :manage, GradeSection, homeroom: @user.person.try(teacher)
+    can :read, CourseSection
+    can :manage, CourseSection, instructor: @user.person.try(:teacher)
+    can :manage, GradeSection, homeroom: @user.person.try(:teacher)
     can :read, :all
   end
 

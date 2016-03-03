@@ -58,4 +58,8 @@ class User < ActiveRecord::Base
     roles.include?(role)
   end
 
+  def admin?
+    self.has_role? :admin
+  end
+
 end
