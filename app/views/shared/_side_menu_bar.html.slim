@@ -70,7 +70,7 @@ li
 							= image_tag current_user.image, alt: current_user.name, class: 'user-avatar'
 						- else
 							i.material-icons perm_identity
-						= current_user.name
+						span.white-text.darken-text-1 = current_user.name
 					- else
 						= link_to new_user_session_path
 							| Login

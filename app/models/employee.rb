@@ -8,6 +8,9 @@ class Employee < ActiveRecord::Base
 	belongs_to :supervisor, class_name: "Employee"
 	has_many :subordinates, class_name: "Employee", foreign_key: "supervisor_id"
 
+  has_many :grade_sections, foreign_key: "homeroom_id"
+  has_many :course_sections, foreign_key: "instructor_id"
+  
 	scope :all_teachers, lambda { where(job_title:'Teacher') }
 
 	def to_s

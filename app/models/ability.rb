@@ -28,10 +28,16 @@ class Ability
 
   # Teacher
   def teacher
-    can :read, CourseSection
-    can :manage, CourseSection, instructor: @user.person.try(:teacher)
-    can :manage, GradeSection, homeroom: @user.person.try(:teacher)
+    can :manage, CourseSection, instructor: @user.person.try(:employee)
+    can :manage, GradeSection, homeroom: @user.person.try(:employee)
     can :read, :all
+  end
+
+  def student
+    can :read, CourseSection
+    can :read, GradeLevel
+    can :read, GradeSection
+    can :read, Course
   end
 
 	# Guest, a non-signed in user, can only view public articles
