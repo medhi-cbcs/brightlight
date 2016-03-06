@@ -65,6 +65,12 @@ gem 'cocoon'
 gem 'wicked_pdf'
 gem 'wkhtmltopdf-binary', '~> 0.9.9.3'
 
+# For creating and importing database
+gem 'activerecord-import'
+
+# For importing data from Excel
+gem 'roo', '~> 2.3.2'
+
 # Authorization
 gem 'cancancan', '~> 1.10'
 
