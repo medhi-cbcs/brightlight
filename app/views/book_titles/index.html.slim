@@ -20,8 +20,10 @@
           li
             button.btn#merge-button formaction="#{edit_merge_book_titles_path}" Merge
           li
-            = link_to delete_book_titles_path, id:"delete-button"
+            button.btn.red formaction="#{delete_book_titles_path}"
               i.material-icons delete
+            / = link_to delete_book_titles_path, id:"delete-button", method: :post
+            /   i.material-icons delete
         li
           = link_to new_book_title_path
             | New
