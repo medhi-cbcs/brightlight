@@ -9,7 +9,7 @@ namespace :data do
 
     # Read Book title from INVBOOKMASTER
     xl = Roo::Spreadsheet.open('lib/tasks/Database_1.xlsx')
-    sheet = xl.sheet('CBCS_INVBOOKMASTER')
+    book_master_sheet = xl.sheet('CBCS_INVBOOKMASTER')
 
     header = {bkudid:"BKUDID", isbn:"BKISBN", title:"BKTITLEMAIN", subject:"BKSUBJECT", year:"BKYEARPUBLISH", page_count:"BKNUMBERPAGE",
               notes:"BKNOTE", author:"BKAUTHOR", ed:"BKEDITION", publisher:"BKPUBLISHER", publisher_city:"BKTOWNPUBLISHER", location:"BKLOCATION",
@@ -21,9 +21,9 @@ namespace :data do
     ISBN13_REGEX = /^(?:\d[\ |-]?){13}$/i
 
     books = []
-    sheet.each_with_index(header) do |book,i|
-      next if i < 25
-      break if i > 30
+    book_master_sheet.each_with_index(header) do |book,i|
+      next if i < 116
+      break if i > 121
       isbn = book[:isbn]
       puts isbn
       begin
@@ -74,13 +74,15 @@ namespace :data do
       end
     end
 
-    BookTitle.import books, recursive: true
+    # BookTitle.import books, recursive: true
+    # Ooops, recursive only works on PostgreSQL
+
+    books.each { |book| book.save }
 
     # BookCategory.delete_all
     # columns = [:code, :name]
     # values = [['TB', 'Textbook'],['TM',"Teacher's Manual"],['SB','Story Book'],['PC','Packet'],['S','Sample']]
     # BookCategory.import columns, values
-
 
   end
 end
