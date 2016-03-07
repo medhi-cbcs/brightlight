@@ -6,7 +6,7 @@ class BookEdition < ActiveRecord::Base
   belongs_to :book_title
   has_many :book_copies
   accepts_nested_attributes_for :book_copies, allow_destroy: true, reject_if: :all_blank
-  
+
   filterrific(
     default_filter_params: { sorted_by: 'created_at_desc' },
     available_filters: [
@@ -24,7 +24,7 @@ class BookEdition < ActiveRecord::Base
     # check if search query looks like an isbn number
     if /^(?:\d[\ |-]?){9}[\d|X]$/i =~ query.to_s
       where(isbn10:query.delete('- '))
-      
+
     elsif /^(?:\d[\ |-]?){13}$/i =~ query.to_s
       where(isbn13:query.delete('- '))
 
@@ -49,7 +49,7 @@ class BookEdition < ActiveRecord::Base
       )
     end
   }
-  
+
   scope :sorted_by, lambda { |sort_option|
     # extract the sort direction from the param value.
     direction = (sort_option =~ /desc$/) ? 'desc' : 'asc'
@@ -88,11 +88,11 @@ class BookEdition < ActiveRecord::Base
       book_edition.page_count = book.page_count
       book_edition.small_thumbnail = book.covers[:small]
       book_edition.thumbnail = book.covers[:thumbnail]
-      book_edition.published_date = book.published_date 
+      book_edition.published_date = book.published_date
       book_edition.language = book.language
       book_edition.google_book_id = book.id
       return book_edition
-    else 
+    else
       return nil
     end
   end
@@ -113,13 +113,13 @@ class BookEdition < ActiveRecord::Base
       book_edition.isbn13 = book.isbn
       book_edition.isbn10 = book.isbn10
       book_edition.page_count = book.page_count
-      book_edition.published_date = book.published_date 
+      book_edition.published_date = book.published_date
       book_edition.edition_info = book.edition_info
       book_edition.language = book.language
       book_edition.isbndb_id = book.book_id
       return book_edition
     else
-      return nil
+      raise ISBNDBClient::API::Error
     end
   end
 
@@ -153,5 +153,5 @@ class BookEdition < ActiveRecord::Base
   def number_of_copies
     book_copies.length
   end
-  
+
 end

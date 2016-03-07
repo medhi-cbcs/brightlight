@@ -22,17 +22,19 @@ namespace :data do
 
     books = []
     sheet.each_with_index(header) do |book,i|
-      next if i < 20
-      break if i > 40
+      next if i < 25
+      break if i > 30
       isbn = book[:isbn]
       puts isbn
       begin
-        raise InvalidISBN if !isbn.match(ISBN13_REGEX) || !isbn.match(ISBN10_REGEX)
+        if !(isbn.match(ISBN13_REGEX) || isbn.match(ISBN10_REGEX))
+					puts "Error: Invalid ISBN: #{isbn}"
+					raise InvalidISBN
+				end
         edition = BookEdition.searchGoogleAPI(isbn)
-        count = 0
-        if edition.blank? and count > 499
+        if edition.blank?
+					puts "Couldn't find #{isbn} in Google Books, trying ISBNDB.org"
           edition = BookEdition.searchISBNDB(isbn)
-          count += 1
         end
 
         book_title = BookTitle.new(
@@ -40,7 +42,7 @@ namespace :data do
           authors: edition.authors,
           publisher: edition.publisher,
           image_url: edition.small_thumbnail,
-          bkuid: book[:bkuid],
+          bkudid: book[:bkudid],
           subject: book[:subject]
           )
         book_title.book_editions.build edition.attributes
@@ -51,7 +53,7 @@ namespace :data do
           title: book[:title],
           authors: book[:author],
           publisher: book[:publisher],
-          bkuid: book[:bkuid],
+          bkudid: book[:bkudid],
           subject: book[:subject]
         )
         book_title.book_editions.build(
