@@ -74,6 +74,9 @@ gem 'roo', '~> 2.3.2'
 # Authorization
 gem 'cancancan', '~> 1.10'
 
+# For connecting to SQL server
+gem 'tiny_tds'
+
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 

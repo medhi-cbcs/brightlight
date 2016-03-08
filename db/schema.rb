@@ -11,15 +11,15 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160306174536) do
+ActiveRecord::Schema.define(version: 20160308052555) do
 
   create_table "academic_terms", force: :cascade do |t|
     t.integer  "academic_year_id"
+    t.string   "name"
     t.date     "start_date"
     t.date     "end_date"
     t.datetime "created_at",       null: false
     t.datetime "updated_at",       null: false
-    t.string   "name"
   end
 
   add_index "academic_terms", ["academic_year_id"], name: "index_academic_terms_on_academic_year_id"
@@ -48,7 +48,7 @@ ActiveRecord::Schema.define(version: 20160306174536) do
   end
 
   create_table "book_assignments", id: false, force: :cascade do |t|
-    t.integer  "book_id"
+    t.integer  "book_copy_id"
     t.integer  "student_id"
     t.integer  "academic_year_id"
     t.integer  "course_text_id"
@@ -63,7 +63,7 @@ ActiveRecord::Schema.define(version: 20160306174536) do
   end
 
   add_index "book_assignments", ["academic_year_id"], name: "index_book_assignments_on_academic_year_id"
-  add_index "book_assignments", ["book_id"], name: "index_book_assignments_on_book_id"
+  add_index "book_assignments", ["book_copy_id"], name: "index_book_assignments_on_book_copy_id"
   add_index "book_assignments", ["course_text_id"], name: "index_book_assignments_on_course_text_id"
   add_index "book_assignments", ["grade_section_id"], name: "index_book_assignments_on_grade_section_id"
   add_index "book_assignments", ["status_id"], name: "index_book_assignments_on_status_id"
@@ -79,6 +79,7 @@ ActiveRecord::Schema.define(version: 20160306174536) do
   create_table "book_conditions", force: :cascade do |t|
     t.string   "code"
     t.string   "description"
+    t.integer  "order_no"
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
     t.string   "color"
@@ -146,21 +147,6 @@ ActiveRecord::Schema.define(version: 20160306174536) do
   add_index "book_fines", ["academic_year_id"], name: "index_book_fines_on_academic_year_id"
   add_index "book_fines", ["book_copy_id"], name: "index_book_fines_on_book_copy_id"
   add_index "book_fines", ["student_id"], name: "index_book_fines_on_student_id"
-
-  create_table "book_grades", id: false, force: :cascade do |t|
-    t.integer  "book_id"
-    t.integer  "book_condition_id"
-    t.integer  "academic_year_id"
-    t.string   "notes"
-    t.integer  "graded_by"
-    t.date     "checked_date"
-    t.datetime "created_at",        null: false
-    t.datetime "updated_at",        null: false
-  end
-
-  add_index "book_grades", ["academic_year_id"], name: "index_book_grades_on_academic_year_id"
-  add_index "book_grades", ["book_condition_id"], name: "index_book_grades_on_book_condition_id"
-  add_index "book_grades", ["book_id"], name: "index_book_grades_on_book_id"
 
   create_table "book_labels", force: :cascade do |t|
     t.integer  "grade_level_id"
@@ -293,6 +279,7 @@ ActiveRecord::Schema.define(version: 20160306174536) do
   create_table "course_texts", force: :cascade do |t|
     t.integer "course_id"
     t.integer "book_title_id"
+    t.integer "order_no"
   end
 
   add_index "course_texts", ["book_title_id"], name: "index_course_texts_on_book_title_id"
@@ -386,9 +373,14 @@ ActiveRecord::Schema.define(version: 20160306174536) do
 
   create_table "grade_levels", force: :cascade do |t|
     t.string   "name"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.integer  "order_no"
+    t.datetime "created_at",      null: false
+    t.datetime "updated_at",      null: false
+    t.integer  "school_level_id"
+    t.string   "code"
   end
+
+  add_index "grade_levels", ["school_level_id"], name: "index_grade_levels_on_school_level_id"
 
   create_table "grade_section_histories", force: :cascade do |t|
     t.integer  "grade_level_id"
@@ -526,6 +518,13 @@ ActiveRecord::Schema.define(version: 20160306174536) do
   add_index "rosters", ["course_section_id"], name: "index_rosters_on_course_section_id"
   add_index "rosters", ["student_id"], name: "index_rosters_on_student_id"
 
+  create_table "school_levels", force: :cascade do |t|
+    t.string   "name"
+    t.string   "code"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "school_terms", force: :cascade do |t|
     t.integer  "academic_year_id"
     t.string   "name"
@@ -549,6 +548,30 @@ ActiveRecord::Schema.define(version: 20160306174536) do
     t.string  "name"
     t.integer "order_no"
   end
+
+  create_table "student_admission_infos", force: :cascade do |t|
+    t.integer  "student_id"
+    t.integer  "academic_year_id"
+    t.string   "skhun"
+    t.string   "skhun_date"
+    t.string   "diploma"
+    t.string   "diploma_date"
+    t.string   "acceptance_date_1"
+    t.string   "acceptance_date_2"
+    t.string   "nisn"
+    t.string   "duration"
+    t.string   "reason"
+    t.string   "status"
+    t.string   "notes"
+    t.string   "prev_sch_name"
+    t.string   "prev_sch_grade"
+    t.string   "prev_sch_address"
+    t.datetime "created_at",        null: false
+    t.datetime "updated_at",        null: false
+  end
+
+  add_index "student_admission_infos", ["academic_year_id"], name: "index_student_admission_infos_on_academic_year_id"
+  add_index "student_admission_infos", ["student_id"], name: "index_student_admission_infos_on_student_id"
 
   create_table "student_books", force: :cascade do |t|
     t.integer  "student_id"
@@ -606,6 +629,22 @@ ActiveRecord::Schema.define(version: 20160306174536) do
     t.datetime "created_at",         null: false
     t.datetime "updated_at",         null: false
     t.integer  "person_id"
+    t.string   "nick_name"
+    t.string   "family_no"
+    t.float    "home_to_school_1"
+    t.float    "home_to_school_2"
+    t.integer  "siblings"
+    t.integer  "adopted_siblings"
+    t.integer  "step_siblings"
+    t.integer  "birth_order"
+    t.string   "transport"
+    t.string   "parental_status"
+    t.string   "parents_status"
+    t.string   "address_rt"
+    t.string   "address_rw"
+    t.string   "address_kelurahan"
+    t.string   "address_kecamatan"
+    t.string   "living_with"
   end
 
   add_index "students", ["person_id"], name: "index_students_on_person_id"
