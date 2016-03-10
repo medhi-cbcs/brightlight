@@ -7,6 +7,15 @@ GIT
       hashie (>= 1.1.0)
       httparty (>= 0.8.1)
 
+GIT
+  remote: https://github.com/subimage/slug.git
+  revision: b87459597136858e3c5069e97664f3367a7bf3e2
+  specs:
+    slug (4.0.0)
+      activerecord (> 3.0.0)
+      activesupport (> 3.0.0)
+      rake
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -281,6 +290,7 @@ DEPENDENCIES
   sdoc (~> 0.4.0)
   seed-fu (~> 2.3)
   slim-rails
+  slug!
   spring
   sqlite3
   tiny_tds

@@ -6,7 +6,7 @@ class BookCopiesController < ApplicationController
   def index
     items_per_page = 20
     if params[:book_edition_id]
-      @book_edition = BookEdition.find(params[:book_edition_id])
+      @book_edition = BookEdition.find_by_slug(params[:book_edition_id])
       @book_copies = @book_edition.book_copies.includes([:book_condition, :status]).paginate(page: params[:page], per_page: items_per_page)
       @book_copy = @book_edition.book_copies.new
       @by_condition = BookCondition.all.map {|bc| [bc, @book_edition.book_copies.select {|c| c.book_condition_id == bc.id}.count ]}
@@ -24,7 +24,7 @@ class BookCopiesController < ApplicationController
 
   # GET /book_copies/new
   def new
-    @book_edition = BookEdition.find(params[:book_edition_id])
+    @book_edition = BookEdition.find_by_slug(params[:book_edition_id])
     @book_copy = @book_edition.book_copies.new
   end
 
@@ -34,7 +34,7 @@ class BookCopiesController < ApplicationController
 
   # GET /book_copies/1/edit
   def edit_labels
-    @book_edition = BookEdition.find(params[:book_edition_id])
+    @book_edition = BookEdition.find_by_slug(params[:book_edition_id])
     @book_copies = @book_edition.book_copies
     @grade_level_ids = GradeLevel.all.collect(&:id)
     @grade_sections = GradeSection.with_academic_year(AcademicYear.current_id)
@@ -63,7 +63,7 @@ class BookCopiesController < ApplicationController
   # PATCH/PUT /book_copies/1
   # PATCH/PUT /book_copies/1.json
   def update
-    @book_edition = BookEdition.find(params[:book_edition_id])
+    @book_edition = BookEdition.find_by_slug(params[:book_edition_id])
     respond_to do |format|
       if @book_edition.update(book_edition_params)
         format.html { redirect_to book_edition_book_copies_path(@book_edition), notice: 'Book copy was successfully updated.' }
