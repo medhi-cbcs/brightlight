@@ -148,6 +148,21 @@ ActiveRecord::Schema.define(version: 20160308052555) do
   add_index "book_fines", ["book_copy_id"], name: "index_book_fines_on_book_copy_id"
   add_index "book_fines", ["student_id"], name: "index_book_fines_on_student_id"
 
+  create_table "book_grades", id: false, force: :cascade do |t|
+    t.integer  "book_copy_id"
+    t.integer  "book_condition_id"
+    t.integer  "academic_year_id"
+    t.string   "notes"
+    t.integer  "graded_by"
+    t.date     "checked_date"
+    t.datetime "created_at",        null: false
+    t.datetime "updated_at",        null: false
+  end
+
+  add_index "book_grades", ["academic_year_id"], name: "index_book_grades_on_academic_year_id"
+  add_index "book_grades", ["book_condition_id"], name: "index_book_grades_on_book_condition_id"
+  add_index "book_grades", ["book_copy_id"], name: "index_book_grades_on_book_copy_id"
+
   create_table "book_labels", force: :cascade do |t|
     t.integer  "grade_level_id"
     t.integer  "student_id"
@@ -505,6 +520,20 @@ ActiveRecord::Schema.define(version: 20160308052555) do
     t.date     "received_date"
   end
 
+  create_table "roles", force: :cascade do |t|
+    t.string   "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "roles_users", force: :cascade do |t|
+    t.integer "user_id"
+    t.integer "role_id"
+  end
+
+  add_index "roles_users", ["role_id"], name: "index_roles_users_on_role_id"
+  add_index "roles_users", ["user_id"], name: "index_roles_users_on_user_id"
+
   create_table "rosters", force: :cascade do |t|
     t.integer  "course_section_id"
     t.integer  "student_id"
@@ -694,6 +723,5 @@ ActiveRecord::Schema.define(version: 20160308052555) do
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true
-  add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
 
 end
