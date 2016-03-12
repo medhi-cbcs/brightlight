@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160310152306) do
+ActiveRecord::Schema.define(version: 20160312050455) do
 
   create_table "academic_terms", force: :cascade do |t|
     t.integer  "academic_year_id"
@@ -677,7 +677,7 @@ ActiveRecord::Schema.define(version: 20160310152306) do
     t.string   "status_description"
     t.boolean  "is_active"
     t.boolean  "is_deleted"
-    t.integer  "student_no"
+    t.string   "student_no"
     t.string   "passport_no"
     t.string   "enrollment_date"
     t.datetime "created_at",         null: false
@@ -700,6 +700,8 @@ ActiveRecord::Schema.define(version: 20160310152306) do
     t.string   "address_kecamatan"
     t.string   "living_with"
     t.string   "slug"
+    t.string   "place_of_birth"
+    t.string   "language"
   end
 
   add_index "students", ["person_id"], name: "index_students_on_person_id"

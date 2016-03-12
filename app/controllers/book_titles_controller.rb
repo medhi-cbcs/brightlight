@@ -1,7 +1,7 @@
 require 'isbndb_client/api.rb'
 
 class BookTitlesController < ApplicationController
-  before_action :set_book_title, only: [:show, :edit, :update, :destroy, :editions, :add_existing_editions, :add_isbn]
+  before_action :set_book_title, only: [:show, :edit, :update, :destroy, :editions, :add_existing_editions, :add_isbn, :update_metadata]
 
   # GET /book_titles
   # GET /book_titles.json
@@ -245,6 +245,14 @@ class BookTitlesController < ApplicationController
       redirect_to @book_title, notice: 'Book titles were successfully merged.'
     else
       render :edit_merge
+    end
+  end
+
+  # POST /book_title/1/update_metadata
+  def update_metadata
+    respond_to do |format|
+      @book_title.book_editions.each { |edition| edition.update_metadata }
+      format.js
     end
   end
 

@@ -31,21 +31,18 @@ nav
     thead
       tr
         th Name
-        th Admission no
-        th Family
-        th Mobile phone
-        th Email
+        th Student no
+        th Family no
+        th Home phone
         th Actions
 
     tbody
       - @students.each do |student|
         tr
           td = link_to student.name, student
-          td = student.admission_no
-          td = student.family_id
-          td = student.mobile_phone
-          td = student.email
-
+          td = student.student_no
+          td = student.family_no
+          td = student.home_phone
           td 
             = link_to 'Edit', edit_student_path(student), class: "btn waves-effect waves-teal btn-flat btn-small"
 

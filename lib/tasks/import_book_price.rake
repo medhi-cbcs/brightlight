@@ -11,10 +11,12 @@ namespace :data do
 
     sheet.each_with_index(header) do |book,i|
       next if i < 1
-      edition = BookEdition.where(isbn:book[:isbn]).first
+
+      edition = BookEdition.joins(:book_title).where(book_titles:{bkudid:book[:bkudid]}).first
       edition.price = book[:price]
       edition.currency = book[:currency]
       edition.save
+			puts "#{edition.title} - #{edition.currency} #{edition.price}"
     end
   end
 end

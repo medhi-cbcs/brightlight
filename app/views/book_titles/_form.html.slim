@@ -32,7 +32,7 @@
                   - thumbnail = book.small_thumbnail.present? ? book.small_thumbnail : 'book-icon.png' 
                   = image_tag(thumbnail, class: 'list_image')
 
-          - elsif @edition.has_cover?
+          - elsif @edition && @edition.has_cover?
             = f.hidden_field :image_url, @edition.small_thumbnail
           
           - if @edition
