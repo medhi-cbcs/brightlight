@@ -41,8 +41,8 @@ class BookTitle < ActiveRecord::Base
     self.book_editions.reduce(true) { |a, edition| a && edition.has_cover? }
   end
 
-  def fetch_info
-    
+  def number_of_copies
+    self.book_editions.reduce(0) {|t, edition| t + edition.number_of_copies }
   end
 
 end

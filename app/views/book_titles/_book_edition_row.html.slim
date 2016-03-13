@@ -26,11 +26,14 @@ td
       dl.row
         dt = link_to book_title.title, book_title
         - if book_title.authors.present?
-          dd
+          dd.col.s8
             .label Author:
             .item = book_title.authors
+        dd.col.s4
+          .label Total copies:
+          .item = book_title.number_of_copies
         - if book_title.publisher.present?
-          dd
+          dd.col.s12
             .label Publisher:
             .item = book_title.publisher
 
