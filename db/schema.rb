@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160313131345) do
+ActiveRecord::Schema.define(version: 20160313133416) do
 
   create_table "academic_terms", force: :cascade do |t|
     t.integer  "academic_year_id"
@@ -103,6 +103,7 @@ ActiveRecord::Schema.define(version: 20160313131345) do
     t.string   "slug"
   end
 
+  add_index "book_copies", ["barcode"], name: "index_book_copies_on_barcode", unique: true
   add_index "book_copies", ["book_condition_id"], name: "index_book_copies_on_book_condition_id"
   add_index "book_copies", ["book_edition_id"], name: "index_book_copies_on_book_edition_id"
   add_index "book_copies", ["book_label_id"], name: "index_book_copies_on_book_label_id"

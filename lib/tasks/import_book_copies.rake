@@ -18,7 +18,7 @@ namespace :data do
 			# break if i > 21
 			barcode = copy[:barcode]
 
-			title = BookTitle.where(bkudid: copy[:bkudid]).first
+			title = BookTitle.find_by_bkudid(copy[:bkudid])
 			if title.present?
 				edition = title.book_editions.first
 				book_copy = BookCopy.new(barcode: barcode, book_edition_id: edition.try(:id))
