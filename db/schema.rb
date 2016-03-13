@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160313133416) do
+ActiveRecord::Schema.define(version: 20160313175712) do
 
   create_table "academic_terms", force: :cascade do |t|
     t.integer  "academic_year_id"
@@ -391,6 +391,9 @@ ActiveRecord::Schema.define(version: 20160313133416) do
     t.integer  "department_id"
     t.integer  "person_id"
     t.string   "slug"
+    t.string   "nick_name"
+    t.boolean  "is_active"
+    t.integer  "family_no"
   end
 
   add_index "employees", ["department_id"], name: "index_employees_on_department_id"
