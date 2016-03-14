@@ -15,7 +15,7 @@ nav
 
     tbody
       - @grade_levels.each do |grade_level|
-        - grade_sections = grade_level.grade_sections.where(academic_year_id:@year_id)
+        - grade_sections = grade_level.grade_sections
         tr
           td 
             .giant-letter = grade_level.name

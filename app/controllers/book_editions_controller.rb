@@ -84,6 +84,25 @@ class BookEditionsController < ApplicationController
     end
   end
 
+  # POST /book_editions/1/update_metadata
+  def update_metadata
+    @book_edition = BookEdition.find(params[:id])
+    begin
+      @book_edition.update_metadata
+    rescue
+      @error = "ISBN No #{@book_edition.isbn} did not match any book results"
+    end
+    respond_to do |format|
+      format.html do
+        if @error.present?
+          redirect_to @book_edition, alert: @error
+        else
+          redirect_to @book_edition, notice: "Metadata updated"
+        end
+      end
+    end
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_book_edition
@@ -95,7 +114,7 @@ class BookEditionsController < ApplicationController
       params.require(:book_edition).permit(
         :google_book_id, :isbndb_id, :title, :subtitle, :authors, :publisher, :published_date,
         :description, :isbn10, :isbn13, :page_count, :small_thumbnail, :thumbnail,
-        :language, :edition_info, :tags, :subjects, :book_title_id,
+        :language, :edition_info, :tags, :subjects, :book_title_id, :refno, :price, :currency,
         {:book_copies_attributes => [:id, :book_edition_id, :book_condition_id, :status_id, :barcode, :copy_no, :book_label_id, :_destroy]}
       )
     end

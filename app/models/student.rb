@@ -4,10 +4,10 @@ class Student < ActiveRecord::Base
   has_many :grade_sections_students, dependent: :destroy
 	has_many :grade_sections, through: :grade_sections_students
 	has_many :course_sections, through: :rosters
-  has_many :rosters, dependent: :destroy  
+  has_many :rosters, dependent: :destroy
+	has_one  :student_admission_info, autosave: true
  	belongs_to :person
   validates :name, :gender, presence: true
-  validates :person, presence: true
 
 	scope :current, lambda { joins(:grade_sections_students).where(grade_sections_students: {academic_year: AcademicYear.current_id}) }
   scope :with_academic_year, lambda {|academic_year| joins(:grade_sections_students).where(grade_sections_students: {academic_year: academic_year}) }

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160310152306) do
+ActiveRecord::Schema.define(version: 20160313175712) do
 
   create_table "academic_terms", force: :cascade do |t|
     t.integer  "academic_year_id"
@@ -86,7 +86,10 @@ ActiveRecord::Schema.define(version: 20160310152306) do
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
     t.string   "color"
+    t.string   "slug"
   end
+
+  add_index "book_conditions", ["slug"], name: "index_book_conditions_on_slug", unique: true
 
   create_table "book_copies", force: :cascade do |t|
     t.integer  "book_edition_id"
@@ -100,6 +103,7 @@ ActiveRecord::Schema.define(version: 20160310152306) do
     t.string   "slug"
   end
 
+  add_index "book_copies", ["barcode"], name: "index_book_copies_on_barcode", unique: true
   add_index "book_copies", ["book_condition_id"], name: "index_book_copies_on_book_condition_id"
   add_index "book_copies", ["book_edition_id"], name: "index_book_copies_on_book_edition_id"
   add_index "book_copies", ["book_label_id"], name: "index_book_copies_on_book_label_id"
@@ -372,6 +376,9 @@ ActiveRecord::Schema.define(version: 20160310152306) do
     t.integer  "department_id"
     t.integer  "person_id"
     t.string   "slug"
+    t.string   "nick_name"
+    t.boolean  "is_active"
+    t.integer  "family_no"
   end
 
   add_index "employees", ["department_id"], name: "index_employees_on_department_id"
@@ -648,7 +655,7 @@ ActiveRecord::Schema.define(version: 20160310152306) do
     t.string   "status_description"
     t.boolean  "is_active"
     t.boolean  "is_deleted"
-    t.integer  "student_no"
+    t.string   "student_no"
     t.string   "passport_no"
     t.string   "enrollment_date"
     t.datetime "created_at",         null: false
@@ -671,6 +678,8 @@ ActiveRecord::Schema.define(version: 20160310152306) do
     t.string   "address_kecamatan"
     t.string   "living_with"
     t.string   "slug"
+    t.string   "place_of_birth"
+    t.string   "language"
   end
 
   add_index "students", ["person_id"], name: "index_students_on_person_id"

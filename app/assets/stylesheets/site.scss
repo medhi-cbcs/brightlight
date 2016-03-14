@@ -242,9 +242,16 @@ button.delete-button :hover {
 // ========================================= Typography =============================================
 
 .giant-letter {
-	font-size: 4rem;
+	font-size: 3rem;
 }
 
+span.box {
+  background-color: #039be5;
+  border-radius: 4px;
+  color: whitesmoke;
+  min-width: 3rem;
+  padding: 3px 15px;
+}
 // ============================================ Buttons =============================================
 
 .btn-small {
@@ -525,7 +532,7 @@ ul.side-nav.fixed:hover {
 	}
 
 	dd {
-		margin: 0;
+		margin: 8px 0;
 	}
 
 	.label {

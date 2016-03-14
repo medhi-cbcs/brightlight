@@ -6,13 +6,13 @@ class GradeLevelsController < ApplicationController
   # GET /grade_levels.json
   def index
     # This preloading cuts down the number of database calls to just 4 calls regardless the numbers of grade sections we have
-    @grade_levels = GradeLevel.includes(grade_sections: [:homeroom, :academic_year])
+    @grade_levels = GradeLevel.includes(grade_sections: [:homeroom])
   end
 
   # GET /grade_levels/1
   # GET /grade_levels/1.json
   def show
-    @grade_sections = @grade_level.grade_sections.with_academic_year(@year_id).includes([:academic_year, :homeroom])
+    @grade_sections = @grade_level.grade_sections.includes([:homeroom])
   end
 
   # GET /grade_levels/new
@@ -23,7 +23,7 @@ class GradeLevelsController < ApplicationController
 
   # GET /grade_levels/1/edit
   def edit
-    @grade_sections = @grade_level.grade_sections.with_academic_year(@year_id).includes([:academic_year, :homeroom])
+    @grade_sections = @grade_level.grade_sections.includes([:homeroom])
   end
 
   # POST /grade_levels
@@ -84,7 +84,7 @@ class GradeLevelsController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_grade_level
-      @grade_level = GradeLevel.find(params[:id])
+      @grade_level = GradeLevel.find_by_slug(params[:id])
     end
 
     def set_year

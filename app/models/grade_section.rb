@@ -1,7 +1,7 @@
 class GradeSection < ActiveRecord::Base
   validates :name, presence: true
-  validates :academic_year, presence: true
-
+  # validates :academic_year, presence: true
+  slug :name
   belongs_to :grade_level
   belongs_to :homeroom, class_name: "Employee"
   belongs_to :academic_year
@@ -11,7 +11,7 @@ class GradeSection < ActiveRecord::Base
   has_many :students, through: :grade_sections_students
   has_many :student_books
   has_many :book_labels
-  
+
   scope :with_academic_year, lambda {|academic_year| where(academic_year: academic_year)}
 
   accepts_nested_attributes_for :students

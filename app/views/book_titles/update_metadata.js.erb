@@ -1,0 +1,16 @@
+// content = "<%= escape_javascript(render(partial:"book_edition_row", locals:{book_title:@book_title, view_style:@view_style})) %>";
+// $("#title-<%= @book_title.id%>").html(content);
+(function($) {
+  var image_holder = "#cover-<%= @book_title.id%>";
+  var url = "<%= @book_title.image_url%>";
+  cover = new Image();
+  cover.src = url;
+  image.onload = function () {
+    $(image_holder).empty().append(cover);
+  };
+  image.onerror = function () {
+    $(image_holder).empty().html('Image unavailable.');
+  }
+  $(image_holder).empty().html('Loading...');
+  console.log("Cover: "+cover.src)
+})(jQuery);
