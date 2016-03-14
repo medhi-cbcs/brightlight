@@ -36,13 +36,13 @@ namespace :data do
 		GradeSection.delete_all
 		columns = [:name, :grade_level_id]
 		grades = GradeLevel.all.map(&:id)
-		values = [["PS-A", grades[13]], ["PS-B", grades[13]], ["PS-C", grades[13]], ["K-1A", grades[14]], ["K-1B", grades[14]], ["K-1C", grades[14]], ["K-2A", grades[15]], ["K-2B", grades[15]],
- 							["K-2C", grades[15]], ["Grade 1A", grades[1]], ["Grade 1B", grades[1]], ["Grade 1C", grades[1]], ["Grade 2A", grades[2]], ["Grade 2B", grades[2]], ["Grade 2C", grades[2]],
- 							["Grade 3A", grades[3]], ["Grade 3B", grades[3]], ["Grade 3C", grades[3]], ["Grade 4A", grades[4]], ["Grade 4B", grades[4]], ["Grade 4C", grades[4]],
-							["Grade 5A", grades[5]], ["Grade 5B", grades[5]], ["Grade 5C", grades[5]], ["Grade 6A", grades[6]], ["Grade 6B", grades[6]], ["Grade 6C", grades[6]],
-							["Grade 7A", grades[7]], ["Grade 7B", grades[7]], ["Grade 7C", grades[7]], ["Grade 8A", grades[8]], ["Grade 8B", grades[8]], ["Grade 8C", grades[8]],
-							["Grade 9A", grades[9]], ["Grade 9B", grades[9]], ["Grade 9C", grades[9]], ["Grade 10A", grades[10]], ["Grade 10B", grades[10]], ["Grade 10C", grades[10]],
-							["Grade 11A", grades[11]], ["Grade 11B", grades[11]], ["Grade 11C", grades[11]], ["Grade 12A", grades[12]], ["Grade 12B", grades[12]],["Grade 12C", grades[12]]]
+		values = [["PS-A", grades[12]], ["PS-B", grades[12]], ["PS-C", grades[12]], ["K-1A", grades[13]], ["K-1B", grades[13]], ["K-1C", grades[13]], ["K-2A", grades[14]], ["K-2B", grades[14]],
+ 							["K-2C", grades[14]], ["Grade 1A", grades[0]], ["Grade 1B", grades[0]], ["Grade 1C", grades[0]], ["Grade 2A", grades[1]], ["Grade 2B", grades[1]], ["Grade 2C", grades[1]],
+ 							["Grade 3A", grades[2]], ["Grade 3B", grades[2]], ["Grade 3C", grades[2]], ["Grade 4A", grades[3]], ["Grade 4B", grades[3]], ["Grade 4C", grades[3]],
+							["Grade 5A", grades[4]], ["Grade 5B", grades[4]], ["Grade 5C", grades[4]], ["Grade 6A", grades[5]], ["Grade 6B", grades[5]], ["Grade 6C", grades[5]],
+							["Grade 7A", grades[6]], ["Grade 7B", grades[6]], ["Grade 7C", grades[6]], ["Grade 8A", grades[7]], ["Grade 8B", grades[7]], ["Grade 8C", grades[7]],
+							["Grade 9A", grades[8]], ["Grade 9B", grades[8]], ["Grade 9C", grades[8]], ["Grade 10A", grades[9]], ["Grade 10B", grades[9]], ["Grade 10C", grades[9]],
+							["Grade 11A", grades[10]], ["Grade 11B", grades[10]], ["Grade 11C", grades[10]], ["Grade 12A", grades[11]], ["Grade 12B", grades[11]],["Grade 12C", grades[11]]]
 		GradeSection.import columns, values
 
 		AcademicYear.delete_all

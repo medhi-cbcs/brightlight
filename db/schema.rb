@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160313175712) do
+ActiveRecord::Schema.define(version: 20160314083824) do
 
   create_table "academic_terms", force: :cascade do |t|
     t.integer  "academic_year_id"
@@ -418,9 +418,14 @@ ActiveRecord::Schema.define(version: 20160313175712) do
     t.string   "name"
     t.datetime "created_at",       null: false
     t.datetime "updated_at",       null: false
+    t.integer  "assistant_id"
+    t.string   "subject_code"
+    t.string   "parallel_code"
+    t.string   "notes"
   end
 
   add_index "grade_section_histories", ["academic_year_id"], name: "index_grade_section_histories_on_academic_year_id"
+  add_index "grade_section_histories", ["assistant_id"], name: "index_grade_section_histories_on_assistant_id"
   add_index "grade_section_histories", ["grade_level_id"], name: "index_grade_section_histories_on_grade_level_id"
   add_index "grade_section_histories", ["grade_section_id"], name: "index_grade_section_histories_on_grade_section_id"
   add_index "grade_section_histories", ["homeroom_id"], name: "index_grade_section_histories_on_homeroom_id"
@@ -433,9 +438,14 @@ ActiveRecord::Schema.define(version: 20160313175712) do
     t.integer  "homeroom_id"
     t.integer  "academic_year_id"
     t.string   "slug"
+    t.integer  "assistant_id"
+    t.string   "subject_code"
+    t.string   "parallel_code"
+    t.string   "notes"
   end
 
   add_index "grade_sections", ["academic_year_id"], name: "index_grade_sections_on_academic_year_id"
+  add_index "grade_sections", ["assistant_id"], name: "index_grade_sections_on_assistant_id"
   add_index "grade_sections", ["grade_level_id"], name: "index_grade_sections_on_grade_level_id"
   add_index "grade_sections", ["homeroom_id"], name: "index_grade_sections_on_homeroom_id"
   add_index "grade_sections", ["slug"], name: "index_grade_sections_on_slug", unique: true

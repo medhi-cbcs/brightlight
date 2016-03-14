@@ -10,12 +10,10 @@ namespace :data do
               user_id:"WRBKIDUSER", date_input:"WRDATEINPUT", time_input:"WRTIMEINPUT", wr_index:"WRINDEX",refno:"WRBKREFERENCE",notes:"WRNOTE",
               note_opr:"WRNOTEOPR", bkudid:"BKUDID"}
 
-		ISBN10_REGEX = /^(?:\d[\ |-]?){9}[\d|X]$/i
-		ISBN13_REGEX = /^(?:\d[\ |-]?){13}$/i
-
 		sheet.each_with_index(header) do |copy,i|
 			next if i < 1
 			# break if i > 21
+
 			barcode = copy[:barcode]
 
 			title = BookTitle.find_by_bkudid(copy[:bkudid])
@@ -26,7 +24,7 @@ namespace :data do
 				book_copy = BookCopy.new(barcode: barcode)
 			end
 			book_copy.save
-			puts "#{i}. #{barcode} #{book_copy.book_edition.try(:title)}"
+		  puts "#{i}. #{barcode} #{book_copy.book_edition.try(:title)}" if i % 100 == 0
 		end
   end
 end

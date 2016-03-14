@@ -1,9 +1,10 @@
 class GradeSection < ActiveRecord::Base
   validates :name, presence: true
-  # validates :academic_year, presence: true
+
   slug :name
   belongs_to :grade_level
   belongs_to :homeroom, class_name: "Employee"
+  belongs_to :assistant, class_name: 'Employee'
   belongs_to :academic_year
 
   has_many :course_sections
