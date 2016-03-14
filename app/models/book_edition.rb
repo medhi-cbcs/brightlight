@@ -78,7 +78,7 @@ class BookEdition < ActiveRecord::Base
   end
 
   def self.searchGoogleAPI(isbn)
-    results = GoogleBooks::API.search("isbn:#{isbn}")
+    results = GoogleBooks::API.search("isbn:#{isbn}",{api_key:ENV["GOOGLE_API_KEY"]})
     unless results.total_results == 0
       book_edition = BookEdition.new
       book = results.first

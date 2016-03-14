@@ -20,10 +20,10 @@ namespace :data do
     ISBN10_REGEX = /^(?:\d[\ |-]?){9}[\d|X]$/i
     ISBN13_REGEX = /^(?:\d[\ |-]?){13}$/i
 
-    books = []
+  	#   books = []
     book_master_sheet.each_with_index(header) do |book,i|
-      next if i < 116
-      break if i > 121
+      next if i < 965
+    	# break if i > 20
       isbn = book[:isbn]
       puts isbn
       begin
@@ -46,8 +46,13 @@ namespace :data do
           subject: book[:subject]
           )
         book_title.book_editions.build edition.attributes
-        books << book_title
+				book_title.save
+				# books << book_title
+			rescue GoogleBooks::API::Error => e
+				puts "Breaking at no #{i}, ISBN: #{isbn}"
+				puts e.message
 
+				break
       rescue ISBNDBClient::API::Error, InvalidISBN
         book_title = BookTitle.new(
           title: book[:title],
@@ -70,14 +75,15 @@ namespace :data do
           attachment_name: book[:attachment_name],
           attachment_qty: book[:attachment_qty]
         )
-        books << book_title
+				book_title.save
+				# books << book_title
       end
     end
 
     # BookTitle.import books, recursive: true
     # Ooops, recursive only works on PostgreSQL
 
-    books.each { |book| book.save }
+    # books.each { |book| book.save }
 
     # BookCategory.delete_all
     # columns = [:code, :name]
