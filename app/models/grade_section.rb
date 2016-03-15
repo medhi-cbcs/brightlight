@@ -20,7 +20,7 @@ class GradeSection < ActiveRecord::Base
   accepts_nested_attributes_for :grade_sections_students, allow_destroy: true, reject_if: :all_blank
 
   def current_students
-    grade_sections_students.where(academic_year:academic_year).map &:student
+    grade_sections_students.where(academic_year:academic_year).order(:order_no).map &:student
   end
   
   def textbooks

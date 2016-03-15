@@ -18,9 +18,10 @@ namespace :data do
 
     sheet.each_with_index(header) do |row,i|
 			next if i < 1
-			# break if i > 50
+			# break if i > 50 
+      gender = ['MALE','FEMALE'].include? row[:gender] ? row[:gender].titleize : '0 '
       student = Student.new(
-        student_no:row[:student_no], family_no:row[:family_no], name:row[:name].titleize, nick_name:row[:nick_name].titleize, gender:row[:gender].titleize,
+        student_no:row[:student_no], family_no:row[:family_no], name:row[:name].titleize, nick_name:row[:nick_name].titleize, gender:gender,
 				place_of_birth:row[:place_of_birth].titleize, date_of_birth:row[:date_of_birth],
         religion:row[:religion].titleize, nationality:row[:nationality].titleize, email:row[:email],
 				address_line1:row[:address_line1].split.map {|s| !s.match(/\A[^AUIEO]+\z/) ? s.capitalize : s}.join(' '),
