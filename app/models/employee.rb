@@ -10,7 +10,8 @@ class Employee < ActiveRecord::Base
   has_many :course_sections, foreign_key: "instructor_id"
 
 	scope :all_teachers, lambda { where(job_title:'Teacher') }
-
+  scope :active, lambda { where(is_active:true) }
+  
 	def to_s
 		name
 	end

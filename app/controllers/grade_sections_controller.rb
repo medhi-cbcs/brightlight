@@ -15,6 +15,7 @@ class GradeSectionsController < ApplicationController
   def show
     @grade_level =  @grade_section.grade_level
     @textbooks = @grade_section.textbooks
+    @students = @grade_section.current_students
   end
 
   # GET /grade_sections/new

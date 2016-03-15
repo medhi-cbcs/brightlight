@@ -15,6 +15,12 @@ class BookTitle < ActiveRecord::Base
     elsif /^(?:\d[\ |-]?){13}$/i =~ query
       joins(:book_editions).where(book_editions:{isbn13:query.delete(' -')})
 
+    elsif /^(?:\d[A-Z\ |-]?){13}$/i =~ query
+      joins(:book_editions).where(book_editions:{refno:query.delete(' -')})
+
+    elsif /^(?:[A-Z\ |-]+\d+)$/i =~ query
+      joins(book_editions: :book_copies).where(book_copies: {barcode: query})
+
     else
       # condition query, parse into individual keywords
       terms = query.downcase.split(/\s+/)

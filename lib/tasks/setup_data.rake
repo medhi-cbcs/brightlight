@@ -42,7 +42,7 @@ namespace :data do
 							["Grade 5A", grades[4]], ["Grade 5B", grades[4]], ["Grade 5C", grades[4]], ["Grade 6A", grades[5]], ["Grade 6B", grades[5]], ["Grade 6C", grades[5]],
 							["Grade 7A", grades[6]], ["Grade 7B", grades[6]], ["Grade 7C", grades[6]], ["Grade 8A", grades[7]], ["Grade 8B", grades[7]], ["Grade 8C", grades[7]],
 							["Grade 9A", grades[8]], ["Grade 9B", grades[8]], ["Grade 9C", grades[8]], ["Grade 10A", grades[9]], ["Grade 10B", grades[9]], ["Grade 10C", grades[9]],
-							["Grade 11A", grades[10]], ["Grade 11B", grades[10]], ["Grade 11C", grades[10]], ["Grade 12A", grades[11]], ["Grade 12B", grades[11]],["Grade 12C", grades[11]]]
+							["Grade 11NS", grades[10]], ["Grade 11SS", grades[10]], ["Grade 12NS", grades[11]], ["Grade 12SS", grades[11]]]
 		GradeSection.import columns, values
 
 		AcademicYear.delete_all

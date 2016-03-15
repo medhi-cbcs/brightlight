@@ -19,6 +19,10 @@ class GradeSection < ActiveRecord::Base
   accepts_nested_attributes_for :students
   accepts_nested_attributes_for :grade_sections_students, allow_destroy: true, reject_if: :all_blank
 
+  def current_students
+    grade_sections_students.where(academic_year:academic_year).map &:student
+  end
+  
   def textbooks
     course_sections.map { |cs| cs.textbooks } unless course_sections.blank?
   end
