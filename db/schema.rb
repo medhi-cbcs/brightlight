@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160314083824) do
+ActiveRecord::Schema.define(version: 20160315075830) do
 
   create_table "academic_terms", force: :cascade do |t|
     t.integer  "academic_year_id"
@@ -454,12 +454,15 @@ ActiveRecord::Schema.define(version: 20160314083824) do
     t.integer  "grade_section_id"
     t.integer  "student_id"
     t.integer  "order_no"
-    t.datetime "created_at",       null: false
-    t.datetime "updated_at",       null: false
+    t.datetime "created_at",               null: false
+    t.datetime "updated_at",               null: false
     t.integer  "academic_year_id"
+    t.integer  "grade_section_history_id"
+    t.string   "notes"
   end
 
   add_index "grade_sections_students", ["academic_year_id"], name: "index_grade_sections_students_on_academic_year_id"
+  add_index "grade_sections_students", ["grade_section_history_id"], name: "index_grade_sections_students_on_grade_section_history_id"
   add_index "grade_sections_students", ["grade_section_id"], name: "index_grade_sections_students_on_grade_section_id"
   add_index "grade_sections_students", ["student_id"], name: "index_grade_sections_students_on_student_id"
 
