@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160315075830) do
+ActiveRecord::Schema.define(version: 20160316063932) do
 
   create_table "academic_terms", force: :cascade do |t|
     t.integer  "academic_year_id"
@@ -159,21 +159,6 @@ ActiveRecord::Schema.define(version: 20160315075830) do
   add_index "book_fines", ["book_copy_id"], name: "index_book_fines_on_book_copy_id"
   add_index "book_fines", ["student_id"], name: "index_book_fines_on_student_id"
 
-  create_table "book_grades", id: false, force: :cascade do |t|
-    t.integer  "book_copy_id"
-    t.integer  "book_condition_id"
-    t.integer  "academic_year_id"
-    t.string   "notes"
-    t.integer  "graded_by"
-    t.date     "checked_date"
-    t.datetime "created_at",        null: false
-    t.datetime "updated_at",        null: false
-  end
-
-  add_index "book_grades", ["academic_year_id"], name: "index_book_grades_on_academic_year_id"
-  add_index "book_grades", ["book_condition_id"], name: "index_book_grades_on_book_condition_id"
-  add_index "book_grades", ["book_copy_id"], name: "index_book_grades_on_book_copy_id"
-
   create_table "book_labels", force: :cascade do |t|
     t.integer  "grade_level_id"
     t.integer  "student_id"
@@ -229,8 +214,23 @@ ActiveRecord::Schema.define(version: 20160315075830) do
     t.date     "due_date"
     t.integer  "academic_year_id"
     t.integer  "user_id"
-    t.datetime "created_at",       null: false
-    t.datetime "updated_at",       null: false
+    t.datetime "created_at",           null: false
+    t.datetime "updated_at",           null: false
+    t.string   "student_no"
+    t.string   "roster_no"
+    t.string   "barcode"
+    t.string   "refno"
+    t.string   "grade_section_code"
+    t.string   "grade_subject_code"
+    t.string   "notes"
+    t.integer  "new_academic_year_id"
+    t.string   "loan_status"
+    t.string   "return_status"
+    t.string   "bkudid"
+    t.date     "return_date"
+    t.integer  "employee_id"
+    t.string   "employee_no"
+    t.integer  "student_id"
   end
 
   add_index "book_loans", ["academic_year_id"], name: "index_book_loans_on_academic_year_id"
@@ -238,8 +238,11 @@ ActiveRecord::Schema.define(version: 20160315075830) do
   add_index "book_loans", ["book_copy_id"], name: "index_book_loans_on_book_copy_id"
   add_index "book_loans", ["book_edition_id"], name: "index_book_loans_on_book_edition_id"
   add_index "book_loans", ["book_title_id"], name: "index_book_loans_on_book_title_id"
+  add_index "book_loans", ["employee_id"], name: "index_book_loans_on_employee_id"
   add_index "book_loans", ["loan_type_id"], name: "index_book_loans_on_loan_type_id"
+  add_index "book_loans", ["new_academic_year_id"], name: "index_book_loans_on_new_academic_year_id"
   add_index "book_loans", ["person_id"], name: "index_book_loans_on_person_id"
+  add_index "book_loans", ["student_id"], name: "index_book_loans_on_student_id"
   add_index "book_loans", ["user_id"], name: "index_book_loans_on_user_id"
 
   create_table "book_titles", force: :cascade do |t|
@@ -565,20 +568,6 @@ ActiveRecord::Schema.define(version: 20160315075830) do
     t.date     "received_date"
   end
 
-  create_table "roles", force: :cascade do |t|
-    t.string   "name"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
-  create_table "roles_users", force: :cascade do |t|
-    t.integer "user_id"
-    t.integer "role_id"
-  end
-
-  add_index "roles_users", ["role_id"], name: "index_roles_users_on_role_id"
-  add_index "roles_users", ["user_id"], name: "index_roles_users_on_user_id"
-
   create_table "rosters", force: :cascade do |t|
     t.integer  "course_section_id"
     t.integer  "student_id"
@@ -662,6 +651,13 @@ ActiveRecord::Schema.define(version: 20160315075830) do
     t.integer  "end_copy_condition_id"
     t.datetime "created_at",                null: false
     t.datetime "updated_at",                null: false
+    t.string   "barcode"
+    t.string   "student_no"
+    t.string   "roster_no"
+    t.string   "grade_section_code"
+    t.string   "grade_subject_code"
+    t.string   "notes"
+    t.integer  "new_academic_year_id"
   end
 
   add_index "student_books", ["academic_year_id"], name: "index_student_books_on_academic_year_id"
@@ -670,6 +666,7 @@ ActiveRecord::Schema.define(version: 20160315075830) do
   add_index "student_books", ["course_text_id"], name: "index_student_books_on_course_text_id"
   add_index "student_books", ["grade_level_id"], name: "index_student_books_on_grade_level_id"
   add_index "student_books", ["grade_section_id"], name: "index_student_books_on_grade_section_id"
+  add_index "student_books", ["new_academic_year_id"], name: "index_student_books_on_new_academic_year_id"
   add_index "student_books", ["student_id"], name: "index_student_books_on_student_id"
 
   create_table "students", force: :cascade do |t|
@@ -772,5 +769,6 @@ ActiveRecord::Schema.define(version: 20160315075830) do
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true
+  add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
 
 end

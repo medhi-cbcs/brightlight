@@ -18,7 +18,8 @@ namespace :data do
 
     sheet.each_with_index(header) do |row,i|
 			next if i < 1
-			# break if i > 50 
+			# break if i > 50
+			
       gender = ['MALE','FEMALE'].include? row[:gender] ? row[:gender].titleize : '0 '
       student = Student.new(
         student_no:row[:student_no], family_no:row[:family_no], name:row[:name].titleize, nick_name:row[:nick_name].titleize, gender:gender,
