@@ -1,0 +1,37 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  student_id: 
+  academic_year_id: 
+  skhun: MyString
+  skhun_date: MyString
+  diploma: MyString
+  diploma_date: MyString
+  acceptance_date_1: MyString
+  acceptance_date_2: MyString
+  nisn: MyString
+  duration: MyString
+  reason: MyString
+  status: MyString
+  note: MyString
+  prev_sch_name: MyString
+  prev_sch_grade: MyString
+  prev_sch_address: MyString
+
+two:
+  student_id: 
+  academic_year_id: 
+  skhun: MyString
+  skhun_date: MyString
+  diploma: MyString
+  diploma_date: MyString
+  acceptance_date_1: MyString
+  acceptance_date_2: MyString
+  nisn: MyString
+  duration: MyString
+  reason: MyString
+  status: MyString
+  note: MyString
+  prev_sch_name: MyString
+  prev_sch_grade: MyString
+  prev_sch_address: MyString

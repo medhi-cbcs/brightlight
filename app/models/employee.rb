@@ -1,7 +1,5 @@
 class Employee < ActiveRecord::Base
  	validates :name, presence: true
- 	validates :department, presence: true
-  validates :person, presence: true
 
  	belongs_to :person
 	belongs_to :department
@@ -10,8 +8,14 @@ class Employee < ActiveRecord::Base
 
   has_many :grade_sections, foreign_key: "homeroom_id"
   has_many :course_sections, foreign_key: "instructor_id"
-  
+
 	scope :all_teachers, lambda { where(job_title:'Teacher') }
+  scope :active, lambda { where(is_active:true).order(:name) }
+  
+  def name
+  	original = self[:name]
+  	original.titleize
+  end
 
 	def to_s
 		name

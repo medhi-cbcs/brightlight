@@ -15,7 +15,7 @@ nav
 
     tbody
       - @grade_levels.each do |grade_level|
-        - grade_sections = grade_level.grade_sections.where(academic_year_id:@year_id)
+        - grade_sections = grade_level.grade_sections
         tr
           td 
             .giant-letter = grade_level.name
@@ -26,7 +26,7 @@ nav
             - grade_sections.each do |section|
               div = section.homeroom.present? ? section.homeroom : '--'
           td
-            = link_to 'Show', grade_level_path(id:grade_level.id,year:@year_id), class: "btn waves-effect waves-teal btn-small"
+            = link_to 'Show', grade_level_path(grade_level), class: "btn waves-effect waves-teal btn-small"
             br
             = link_to 'Edit', edit_grade_level_path(grade_level), class: "btn waves-effect waves-teal btn-small"
         

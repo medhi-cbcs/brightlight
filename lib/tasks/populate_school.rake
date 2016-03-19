@@ -3,7 +3,7 @@ namespace :db do
 	task populate_school: :environment do
 		require 'populator'
 		require 'forgery'
-		
+
 		AcademicYear.delete_all
 		AcademicTerm.delete_all
 		Department.delete_all
@@ -11,25 +11,25 @@ namespace :db do
 
 		# Academic Years and Terms
 		n = 0
-		year = 2009
-		AcademicYear.populate 6 do |acad_year|
+		year = 2001
+		AcademicYear.populate 20 do |acad_year|
 			n += 1
 			year += 1
 			acad_year.name = "#{year}-#{year+1}"
-			acad_year.start_date = Date.new(year, 8, 10)
-			acad_year.end_date = Date.new(year+1, 7, 17)
+			acad_year.start_date = Date.new(year, 6, 1)
+			acad_year.end_date = Date.new(year+1, 5, 31)
 
 			t = 1
 			AcademicTerm.populate 1 do |term|
 				term.name = "Semester #{t} #{acad_year.name}"
 				term.start_date = acad_year.start_date
-				term.end_date = Date.new(year, 12, 15)
+				term.end_date = Date.new(year, 12, 31)
 				term.academic_year_id = acad_year.id
 			end
 			t += 1
 			AcademicTerm.populate 1 do |term|
 				term.name = "Semester #{t} #{acad_year.name}"
-				term.start_date = Date.new(year+1, 1, 5)
+				term.start_date = Date.new(year+1, 1, 1)
 				term.end_date = acad_year.end_date
 				term.academic_year_id = acad_year.id
 			end
@@ -41,8 +41,8 @@ namespace :db do
 						 {name: 'School of Logic', code:'SOL'},
 						 {name: 'Grammar School', code:'GS'},
 						 {name: 'Early Childhood', code:'EC'},
-						 {name: 'Human Resources', code:'HR'},
 						 {name: 'Business Operations', code:'BO'},
+						 {name: 'Human Resources', code:'HR'},
 						 {name: 'General Affairs', code:'GA'},
 						 {name: 'Public Relations', code:'PR'},
 						 {name: 'Multimedia', code:'MM'},
@@ -84,7 +84,7 @@ namespace :db do
 					department.manager_id = employee.id
 					employee.job_title = 'Head of ' + department.name
 					employee.department_id = department.id
-				end		
+				end
 			end
 		end
 

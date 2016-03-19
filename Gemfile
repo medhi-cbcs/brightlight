@@ -65,11 +65,12 @@ gem 'cocoon'
 gem 'wicked_pdf'
 gem 'wkhtmltopdf-binary', '~> 0.9.9.3'
 
+# Slug for friendly URLs. Using specific fork for Rails 4.0 compatibility
+gem 'slug', git:'https://github.com/subimage/slug.git'
+
 # For creating and importing database
 gem 'activerecord-import'
-
-# For importing data from Excel
-gem 'roo', '~> 2.3.2'
+gem 'seed-fu', '~> 2.3'
 
 # Authorization
 gem 'cancancan', '~> 1.10'
@@ -89,6 +90,12 @@ group :development, :test do
   gem 'forgery'
   gem 'populator'
   gem 'letter_opener'
+
+  # For importing data from Excel
+  gem 'roo', '~> 2.3.2'
+
+  # For connecting to SQL server
+  gem 'tiny_tds'
 end
 
 group :development do

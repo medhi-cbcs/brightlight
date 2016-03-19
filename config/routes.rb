@@ -28,6 +28,9 @@ Rails.application.routes.draw do
         get 'edit_labels'
       end
     end
+    member do
+      get 'update_metadata'
+    end
   end
 
   resources :copy_conditions do
@@ -50,6 +53,7 @@ Rails.application.routes.draw do
       get 'editions'
       post 'add_existing_editions'
       post 'add_isbn'
+      post 'update_metadata'
     end
   end
 

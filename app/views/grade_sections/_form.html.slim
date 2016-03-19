@@ -12,7 +12,8 @@
         = f.text_field :name
       .col.s4
         = f.label :homeroom
-        = f.collection_select :homeroom_id, Employee.all_teachers, :id, :name, prompt: true
+        /= f.collection_select :homeroom_id, Employee.all_teachers, :id, :name, prompt: true
+        = f.collection_select :homeroom_id, Employee.all.active, :id, :name, prompt: true
     
   .card-panel
     .label Student List
@@ -29,4 +30,3 @@
   .toolbar.z-depth-1
     button.btn.waves-effect.waves-light type="submit" Save
     = link_to 'Cancel', @grade_section, class: "waves-effect waves-light btn-flat"
-

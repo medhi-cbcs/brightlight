@@ -1,7 +1,7 @@
 require 'isbndb_client/api.rb'
 
 class BookTitlesController < ApplicationController
-  before_action :set_book_title, only: [:show, :edit, :update, :destroy, :editions, :add_existing_editions, :add_isbn]
+  before_action :set_book_title, only: [:show, :edit, :update, :destroy, :editions, :add_existing_editions, :add_isbn, :update_metadata]
 
   # GET /book_titles
   # GET /book_titles.json
@@ -46,7 +46,7 @@ class BookTitlesController < ApplicationController
     @book_title = BookTitle.new
 
     unless params[:edition].blank?
-      @edition = BookEdition.find params[:edition]
+      @edition = BookEdition.find_by_slug params[:edition]
       @book_title.title = @edition.title
       @book_title.authors = @edition.authors
       @book_title.publisher = @edition.publisher
@@ -94,7 +94,7 @@ class BookTitlesController < ApplicationController
     respond_to do |format|
       if @book_title.save
         # if params[:edition].present?
-        #   @book_edition = BookEdition.find(params[:edition])
+        #   @book_edition = BookEdition.find_by_slug(params[:edition])
         #   @book_edition.book_title_id = @book_title.id
         #   @book_edition.save
         # end
@@ -245,6 +245,14 @@ class BookTitlesController < ApplicationController
       redirect_to @book_title, notice: 'Book titles were successfully merged.'
     else
       render :edit_merge
+    end
+  end
+
+  # POST /book_title/1/update_metadata
+  def update_metadata
+    respond_to do |format|
+      @book_title.book_editions.each { |edition| edition.update_metadata }
+      format.js
     end
   end
 
