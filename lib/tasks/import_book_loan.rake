@@ -29,15 +29,16 @@ namespace :data do
 					student = GradeSectionsStudent.where(academic_year:year).where(grade_section:grade_section).where(order_no:row[header[:class_order]]).first.try(:student)
 				end
 
-				# if RENTSTUDENTID == RENTSTUDENTNUM, it means that this record is for an Employee
-				if row[header[:student_no]] = row[header[:class_order]]
+				# if RENTSTUDENTNUM > 26, it means that this record is for an Employee
+				if row[header[:class_order]] > 26
 					employee_no = row[header[:student_no]]
 					employee = Employee.find_by_employee_number(employee_no)
 				end
 
 				# grade_section = GradeSectionsStudent.where(academic_year:year).where(student:student).first.try(:grade_section)
 
-				if student.present?
+				# if RENTSTUDENTNUM < 26, it means that this record is for a Student
+				if row[header[:class_order]] < 26
 					student_book = StudentBook.new(
 						student: student,
 						book_copy: book_copy,
@@ -51,10 +52,13 @@ namespace :data do
 						grade_subject_code: row[header[:subject_code]],
 						notes: row[header[:notes]],
 						grade_section: grade_section,
-						grade_level: grade_section.try(:grade_level)
+						grade_level: grade_section.try(:grade_level),
+						barcode: row[header[:barcode]]
 					)
 					student_book.save
-					# puts "#{i}. #{student_book.student.try(:name) || 'Student N/A'} (#{student_book.grade_section.try(:name) || "Grade N/A"}) #{student_book.book_copy.try(:barcode) || "Book copy N/A"}"
+					if i % 500 == 0
+						puts "#{i}. #{student_book.student.try(:name) || 'Student N/A'} (#{student_book.grade_section.try(:name) || "Grade N/A"}) #{student_book.book_copy.try(:barcode) || "Book copy N/A"}"
+					end
 				end
 
 				loan = BookLoan.new(
@@ -78,13 +82,16 @@ namespace :data do
 					return_status: row[header[:return_status]],
 					employee_no: employee_no,
 					employee: employee,
-					return_date: row[:return_date]
+					return_date: row[:return_date],
+					student: student
 				)
 				loan.save
-				# if employee.present?
-				# 	puts "#{i}. #{loan.employee.try(:name) || 'Empl N/A'} (#{loan.employee_no || "Empl No N/A"})"
-				# end
-				# puts " - #{loan.book_title.try(:title) || "Book title N/A"}: #{loan.out_date} - #{loan.due_date} (#{year.name})"
+				if i % 500 == 0
+					if employee.present?
+						puts "#{i}. #{loan.employee.try(:name) || 'Empl N/A'} (#{loan.employee_no || "Empl No N/A"})"
+					end
+					puts " - #{loan.book_title.try(:title) || "Book title N/A"}: #{loan.out_date} - #{loan.due_date} (#{year.name})"
+				end
 			end
 		else
 			# Read Book rent from CBCS_INVBOOKSRENT
@@ -114,7 +121,8 @@ namespace :data do
 					grade_subject_code: row[:subject_code],
 					notes: row[:notes],
 					grade_section: grade_section,
-					grade_level: grade_section.try(:grade_level)
+					grade_level: grade_section.try(:grade_level),
+					barcode: row[:barcode]
 			  )
 			  # student_book.save
 				puts "#{i}. #{student_book.student.try(:name) || 'Student N/A'} (#{student_book.grade_section.try(:name) || "Grade N/A"}) #{student_book.book_copy.try(:barcode) || "Book copy N/A"}"
@@ -137,7 +145,8 @@ namespace :data do
 			  	book_category: BookCategory.find_by_code(row[:category]),
 					notes: row[:notes],
 					loan_status: row[:rent_status],
-					return_status: row[:return_status]
+					return_status: row[:return_status],
+					student: student
 			  )
 			  # loan.save
 				puts " - #{loan.book_title.try(:title) || "Book title N/A"}: #{loan.out_date} - #{loan.due_date} (#{year.name})"

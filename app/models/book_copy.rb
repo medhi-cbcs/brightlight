@@ -10,7 +10,7 @@ class BookCopy < ActiveRecord::Base
   after_create :create_initial_condition
 
   def book_title
-  	book_edition.book_title
+  	book_edition.try(:book_title)
   end
 
   def self.copy_with_barcode(barcode)

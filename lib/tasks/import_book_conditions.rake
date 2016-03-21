@@ -15,20 +15,21 @@ namespace :data do
 
 		columns = [:book_copy_id, :barcode, :book_condition_id, :start_date, :academic_year_id, :notes]
 		values = []
+		barcode = ''
+		
 		sheet.each_with_index(header) do |row,i|
 			next if i < 1
+			next if row[:index] == 0
 			# break if i > 3
 			barcode = row[:barcode]
 
 			copy = BookCopy.find_by_barcode(barcode)
-      unless row[:index] == 0
-				if copy.present?
-					data = [copy.id, barcode, conditions[row[:condition_id].to_i - 1], row[:date_input], year_ids[row[:new_acad_year]], row[:notes]]
-				else
-					data = [nil, barcode, conditions[row[:condition_id].to_i - 1], row[:date_input], year_ids[row[:new_acad_year]], barcode]
-				end
-				values << data
+			if copy.present?
+				data = [copy.id, barcode, conditions[row[:condition_id].to_i - 1], row[:date_input], year_ids[row[:new_acad_year]], row[:notes]]
+			else
+				data = [nil, barcode, conditions[row[:condition_id].to_i - 1], row[:date_input], year_ids[row[:new_acad_year]], barcode]
 			end
+			values << data
 
 			# insert to DB every 100 rows
 			if i % 100 == 0
@@ -37,6 +38,12 @@ namespace :data do
 				values = []
 			end
 		end
+
+		# insert the remaining rows, if any
+		if values.count > 0
+			CopyCondition.import columns, values, validates: false
+		end
+		puts "#{i}. #{barcode} Values # #{values.count}"
 
 		# sheet.each_with_index(header) do |row,i|
 		# 	next if i < 1

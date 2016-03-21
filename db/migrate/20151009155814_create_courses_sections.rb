@@ -1,6 +1,6 @@
-class CreateCoursesSections < ActiveRecord::Migration
+class CreateCourseSections < ActiveRecord::Migration
   def change
-    create_table :courses_sections do |t|
+    create_table :course_sections do |t|
       t.string :name
       t.belongs_to :course, index: true, foreign_key: true
       t.belongs_to :grade_section, index: true, foreign_key: true

@@ -3,7 +3,7 @@ h4 Listing Student's Books
 ul#grade-options.dropdown-content
   - GradeLevel.all.each do |grade|
     li 
-      = link_to grade.name, "#!", onclick:"filterSectionOptions(#{grade.id}, #{grade.name});"
+      = link_to grade.name, "#!", onclick:"filterSectionOptions(#{grade.id}, '#{grade.name}');"
 ul#section-options.dropdown-content
   - @grade_sections.each do |section|
     li
@@ -85,6 +85,6 @@ nav
               | Edit
               i.material-icons.left edit
 
-br
 
-= link_to 'New Student book', new_student_book_path
+.toolbar.z-depth-1
+  = will_paginate @employees
