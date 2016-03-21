@@ -7,7 +7,9 @@ class StudentBook < ActiveRecord::Base
   belongs_to :grade_section
   belongs_to :grade_level
   belongs_to :course
-
+  belongs_to :initial_copy_condition, class_name: "BookCondition"
+  belongs_to :end_copy_condition, class_name: "BookCondition"
+  
   validates :student, presence: true
   validates :book_copy, presence: true
   validates :academic_year, presence: true

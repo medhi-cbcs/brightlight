@@ -4,7 +4,8 @@ class StudentBooksController < ApplicationController
   # GET /student_books
   # GET /student_books.json
   def index
-    @student_books = StudentBook.all
+    items_per_page = 30
+    @student_books = StudentBook.paginate(page: params[:page], per_page: items_per_page)
     @grade_level_ids = GradeLevel.all.collect(&:id)
     @grade_sections = GradeSection.with_academic_year(AcademicYear.current_id)
     @grade_sections_ids = @grade_sections.collect(&:id)
