@@ -15,12 +15,12 @@ namespace :data do
 			results = client.execute('SELECT * FROM CBCS_INVBOOKSRENT')
 
 			results.each_with_index do |row, i|
-				next if i < 1
+				# next if i > 58683
 				next if row[header[:index]] == 0
 
 				book_copy = BookCopy.find_by_barcode(row[header[:barcode]])
-				year = AcademicYear.find_by_name(row[header[:academic_year]])
-				new_year = AcademicYear.find_by_name(row[header[:new_academic_year]])
+				year = AcademicYear.find_by_name(row[header[:new_academic_year]])
+				prev_year = AcademicYear.find_by_name(row[header[:academic_year]])
 				student = Student.find_by_student_no(row[header[:student_no]])
 				grade_section = GradeSection.find_by_parallel_code(row[header[:class_level]])
 
@@ -30,7 +30,7 @@ namespace :data do
 				end
 
 				# if RENTSTUDENTNUM > 26, it means that this record is for an Employee
-				if row[header[:class_order]] > 26
+				if row[header[:class_order]].blank? || row[header[:class_order]] > 26
 					employee_no = row[header[:student_no]]
 					employee = Employee.find_by_employee_number(employee_no)
 				end
@@ -38,12 +38,12 @@ namespace :data do
 				# grade_section = GradeSectionsStudent.where(academic_year:year).where(student:student).first.try(:grade_section)
 
 				# if RENTSTUDENTNUM < 26, it means that this record is for a Student
-				if row[header[:class_order]] < 26
+				if row[header[:class_order]].blank? || row[header[:class_order]] < 26
 					student_book = StudentBook.new(
 						student: student,
 						book_copy: book_copy,
 						academic_year: year,
-						new_academic_year: new_year,
+						prev_academic_year: prev_year,
 						issue_date: row[header[:rent_date]],
 						return_date: row[header[:return_date]],
 						student_no: row[header[:student_no]],
@@ -73,7 +73,7 @@ namespace :data do
 					grade_section_code: row[header[:class_level]],
 					grade_subject_code: row[header[:subject_code]],
 					academic_year: year,
-					new_academic_year: new_year,
+					prev_academic_year: prev_year,
 					out_date: row[header[:rent_date]],
 					due_date: row[header[:return_date]],
 					book_category: BookCategory.find_by_code(row[header[:category]]),
@@ -93,6 +93,7 @@ namespace :data do
 					puts " - #{loan.book_title.try(:title) || "Book title N/A"}: #{loan.out_date} - #{loan.due_date} (#{year.name})"
 				end
 			end
+
 		else
 			# Read Book rent from CBCS_INVBOOKSRENT
 	    xl = Roo::Spreadsheet.open('lib/tasks/Database_1.xlsx')
@@ -111,8 +112,8 @@ namespace :data do
 			  student_book = StudentBook.new(
 			  	student: student,
 			  	book_copy: book_copy,
-			  	academic_year: year,
-					new_academic_year: new_year,
+					academic_year: year,
+					prev_academic_year: prev_year,
 					issue_date: row[:rent_date],
 			  	return_date: row[:return_date],
 					student_no: row[:student_no],
@@ -138,8 +139,8 @@ namespace :data do
 			  	roster_no: row[:class_order],
 					grade_section_code: row[:class_level],
 					grade_subject_code: row[:subject_code],
-			  	academic_year: year,
-					new_academic_year: new_year,
+					academic_year: year,
+					prev_academic_year: prev_year,
 					out_date: row[:rent_date],
 			  	due_date: row[:return_date],
 			  	book_category: BookCategory.find_by_code(row[:category]),

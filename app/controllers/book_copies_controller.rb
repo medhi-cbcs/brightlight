@@ -88,10 +88,18 @@ class BookCopiesController < ApplicationController
 
   # GET /book_copies/1/conditions
   def conditions
-    @copy_conditions = CopyCondition.where(book_copy_id:params[:id]).order('created_at DESC')
+    @copy_conditions = CopyCondition.where(book_copy_id:params[:id]).order('academic_year_id DESC, start_date DESC')
     @book_copy = BookCopy.find(params[:id])
     @book_edition = @book_copy.book_edition
     @last_condition = @copy_conditions.first
+  end
+
+  # GET /book_copies/1/conditions
+  def loans
+    @copy_loans = BookLoan.where(book_copy_id:params[:id]).order('academic_year_id DESC, out_date DESC')
+    @book_copy = BookCopy.find(params[:id])
+    @book_edition = @book_copy.book_edition
+    @last_loan = @copy_loans.first
   end
 
   private

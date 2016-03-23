@@ -18,7 +18,7 @@ class BookTitle < ActiveRecord::Base
     elsif /^(?:\d[A-Z\ |-]?){13}$/i =~ query
       joins(:book_editions).where(book_editions:{refno:query.delete(' -')})
 
-    elsif /^(?:[A-Z\ |-]+\d+)$/i =~ query
+    elsif /^(?:[A-Z\ |-]+\d+)$/i =~ query   # checking if it's a barcode
       joins(book_editions: :book_copies).where(book_copies: {barcode: query})
 
     else

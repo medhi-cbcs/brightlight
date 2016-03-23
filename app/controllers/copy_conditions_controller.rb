@@ -50,7 +50,7 @@ class CopyConditionsController < ApplicationController
       barcode: copy_condition_params[:barcode],
       notes: copy_condition_params[:notes],
       start_date: Date.today,
-      user_id: current_user.id
+      user_id: current_user.try(:id)
       )
 
     respond_to do |format|

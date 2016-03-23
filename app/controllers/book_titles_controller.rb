@@ -20,6 +20,8 @@ class BookTitlesController < ApplicationController
       format.html {
         if params[:search]
           @book_titles = BookTitle.search_query(params[:search]).paginate(page: params[:page], per_page: items_per_page)
+        elsif params[:barcode]
+          redirect_to book_copy_conditions_path(BookCopy.find_by_barcode(params[:barcode]))
         else
           @book_titles = BookTitle.paginate(page: params[:page], per_page: items_per_page)
         end

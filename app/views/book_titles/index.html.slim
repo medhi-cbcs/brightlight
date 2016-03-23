@@ -1,5 +1,5 @@
 .row 
-  .col.s6
+  .col.s3
     h4 Books
   .col.s5
     = form_tag({controller:'book_titles', action:'index'}, {method:'get'}) do 
@@ -11,7 +11,17 @@
         - else
           i.material-icons.prefix search
         input.icon-prefix type="text" name="search" placeholder="Search" value=params[:search]    
-
+  .col.s3
+    = form_tag({controller:'book_titles', action:'index'}, {method:'get'}) do 
+      .input-field
+        input type="hidden" name="v" value=@view_style
+        - if params[:barcode].present?
+          i.material-icons.prefix onclick='reset_form()' style='cursor:pointer'
+            | highlight_off
+        - else
+          i.material-icons.prefix search
+        input.icon-prefix type="text" name="barcode" placeholder="Barcode" value=params[:barcode]
+          
 = form_tag do
   nav
     .nav-wrapper

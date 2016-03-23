@@ -4,13 +4,18 @@ h4 Book Condition History
   .row
     .col.s12
       .label Book Title
-      h6 = @book_edition.title
+      h6 = link_to @book_edition.title, @book_edition.book_title
     .col.s3
       .label barcode
       div = @book_copy.barcode
     .col.s3
       .label Book No.
       div = @book_copy.copy_no
+    .col.s6
+      .label ISBN
+      div 
+        = @book_copy.book_edition.isbn 
+        = " (#{@book_copy.book_edition.isbn10})" if @book_copy.book_edition.isbn10.present?
 nav
   .nav-wrapper
     ul
@@ -30,6 +35,8 @@ nav
         th Date
         th Book condition
         th Academic year
+        th Date
+        th Posting
         th Notes
         th Action
 
@@ -40,8 +47,10 @@ nav
         tr
           td = copy_condition.start_date
           td.tooltipped data-position="bottom" data-delay="50" data-tooltip="Last update by: #{user_name} at #{copy_condition.updated_at}"
-            span class="#{copy_condition.book_condition.color}-text" = copy_condition.book_condition.code 
+            span class="#{copy_condition.try(:book_condition).try(:color)}-text" = copy_condition.try(:book_condition).try(:code )
           td = copy_condition.academic_year.name
+          td = copy_condition.start_date
+          td = copy_condition.post == 0 ? "Start" : "Return"
           td = copy_condition.notes
           td.actions
             = link_to edit_copy_condition_path(copy_condition)

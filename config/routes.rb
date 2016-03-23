@@ -41,6 +41,7 @@ Rails.application.routes.draw do
   end
 
   get 'book_copies/:id/conditions' => 'book_copies#conditions', as: :book_copy_conditions
+  get 'book_copies/:id/loans' => 'book_copies#loans', as: :book_copy_loans
 
   resources :book_titles do
     collection do
