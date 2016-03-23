@@ -14,21 +14,19 @@ class GradeSection < ActiveRecord::Base
   has_many :book_labels
   has_many :grade_section_histories
 
-  scope :with_academic_year, lambda {|academic_year| where(academic_year: academic_year)}
-
   accepts_nested_attributes_for :students
   accepts_nested_attributes_for :grade_sections_students, allow_destroy: true, reject_if: :all_blank
 
   def current_students
     grade_sections_students.where(academic_year:academic_year).order(:order_no).map &:student
   end
-  
+
   def textbooks
     course_sections.map { |cs| cs.textbooks } unless course_sections.blank?
   end
 
   def add_student(student, academic_year_id)
-    GradeSectionsStudent.create(grade_section: self, student:student, academic_year_id: academic_year_id || AcademicYear.current_id)
+    GradeSectionsStudent.create(grade_section: self, student:student, academic_year_id: academic_year_id || current_academic_year_id)
   end
 
 end

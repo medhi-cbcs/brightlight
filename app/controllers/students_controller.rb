@@ -1,5 +1,5 @@
 class StudentsController < ApplicationController
-  before_action :set_student, only: [:show, :edit, :update, :destroy]
+  before_action :set_student, only: [:edit, :update, :destroy]
 
   # GET /students
   # GET /students.json
@@ -28,6 +28,8 @@ class StudentsController < ApplicationController
   # GET /students/1
   # GET /students/1.json
   def show
+    @student = Student.where(id: params[:id]).includes([:student_admission_info,:grade_sections_students]).first
+    @current_grade = @student.grade_sections_students.where(academic_year_id:current_academic_year_id).try(:first).try(:grade_section)
   end
 
   # GET /students/new

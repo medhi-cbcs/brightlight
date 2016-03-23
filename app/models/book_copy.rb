@@ -7,7 +7,7 @@ class BookCopy < ActiveRecord::Base
   validates :barcode, presence: true, uniqueness: true
   has_many :copy_conditions
   has_many :book_loans
-  
+
   after_create :create_initial_condition
 
   def book_title
@@ -26,7 +26,7 @@ class BookCopy < ActiveRecord::Base
     def create_initial_condition
       self.copy_conditions << CopyCondition.new(
         book_condition_id: book_condition_id,
-        academic_year_id: AcademicYear.current_id,
+        academic_year_id: current_academic_year_id,
         barcode: barcode,
         notes: 'Initial condition',
         start_date: Date.today

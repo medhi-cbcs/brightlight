@@ -9,7 +9,7 @@ class Student < ActiveRecord::Base
  	belongs_to :person
   validates :name, :gender, presence: true
 
-	scope :current, lambda { joins(:grade_sections_students).where(grade_sections_students: {academic_year: AcademicYear.current_id}) }
+	scope :current, lambda { joins(:grade_sections_students).where(grade_sections_students: {academic_year: current_academic_year_id}) }
   scope :with_academic_year, lambda {|academic_year| joins(:grade_sections_students).where(grade_sections_students: {academic_year: academic_year}) }
 	scope :for_section, lambda {|section| joins(:grade_sections_students).where(grade_sections_students: {grade_section: section}) }
 

@@ -14,7 +14,7 @@ nav
         li.collection-item
           = "Grade #{grade.name}: "
           // TODO: Fix this. We should not need to check academic_year.
-          - grade.grade_sections.where(academic_year:AcademicYear.current_id).each do |section|                        
+          - grade.grade_sections.where(academic_year_id:current_academic_year_id).each do |section|                        
               = link_to edit_labels_grade_level_path(id:grade.id,section:section.name)
                 .chip
                   i.material-icons class

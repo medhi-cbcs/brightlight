@@ -88,7 +88,7 @@ class GradeLevelsController < ApplicationController
     end
 
     def set_year
-      @year_id = params[:year] || AcademicYear.current_id
+      @year_id = params[:year] || current_academic_year_id
       @academic_year = AcademicYear.find(@year_id)
     end
 

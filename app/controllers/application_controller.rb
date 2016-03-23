@@ -7,7 +7,7 @@ class ApplicationController < ActionController::Base
 
   # Authorization using CanCanCan gem
   include CanCan::ControllerAdditions
-  
+
   # Uncomment the next line to ensure authorization check for every single controller acion
   # check_authorization
   rescue_from CanCan::AccessDenied do |exception|
@@ -23,6 +23,10 @@ class ApplicationController < ActionController::Base
     else
       "application"
     end
+  end
+
+  def current_academic_year_id
+  	session[:year_id] ||= AcademicYear.current_id
   end
 
   # rescue_from (ActiveRecord::RecordNotFound) { |exception| handle_exception(exception, 404) }
