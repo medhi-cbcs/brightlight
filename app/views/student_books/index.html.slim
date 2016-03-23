@@ -1,9 +1,14 @@
-h4 Listing Student's Books
+- if params[:st].present?
+  h5 Textbooks Loan for 
+  h4 #{@student.name} (#{@grade_section.name})
+- else
+  h4 Listing Student's Books
 
 ul#grade-options.dropdown-content
   - GradeLevel.all.each do |grade|
     li 
       = link_to grade.name, "#!", onclick:"filterSectionOptions(#{grade.id}, '#{grade.name}');"
+      /= link_to grade.name, "#!", "data-grade-id":"#{grade.id}", "data-grade-name":"#{grade.name}"
 ul#section-options.dropdown-content
   - @grade_sections.each do |section|
     li
@@ -18,13 +23,13 @@ javascript:
   function filterSectionOptions(id, name) {
     var grade_ids = #{raw @grade_level_ids};
     $("#grade").html("Grade "+name);
-    grade_ids.forEach(function(g){ 
-      if(id!=g) { 
+    grade_ids.forEach(function(g){
+      if(id!=g) {
         $(".grade-"+g).hide();
       } else {
         $(".grade-"+id).show();
       }
-    }) 
+    })
   }
   function filterStudentOptions(id, name) {
     $("#section").html("Section "+name);
@@ -37,7 +42,7 @@ javascript:
       $("#student-options").html(list);
     });
   }
-
+  
 nav
   .nav-wrapper
     ul
@@ -60,6 +65,7 @@ nav
   table
     thead
       tr
+        th Title
         th Barcode
         th Label
         th Issue date
@@ -71,19 +77,16 @@ nav
     tbody
       - @student_books.each do |student_book|
         tr
-          td = student_book.barcode
+          td = student_book.book_copy.book_title.try(:title).truncate(40)
+          td = link_to student_book.barcode, student_book.book_copy
           td = student_book.copy_no
           td = student_book.issue_date
           td = student_book.return_date
           td = student_book.initial_copy_condition_id
           td = student_book.end_copy_condition_id
           td 
-            = link_to student_book
-              | Show
+            = link_to student_book_path(student_book,st:params[:st])
               i.material-icons.left visibility
-            = link_to edit_student_book_path(student_book)
-              | Edit
-              i.material-icons.left edit
 
 
 .toolbar.z-depth-1

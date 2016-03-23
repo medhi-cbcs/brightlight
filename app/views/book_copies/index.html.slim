@@ -23,8 +23,8 @@ h4 = @book_edition.title
               .item = @book_edition.isbn13 || "--"
           
           .row style="margin-top: 20px; margin-bottom: 0"
-            .col.s8
-              .label Number of copies:
+            .col.s10
+              .label Number of copies (#{@book_edition.number_of_copies})
               hr
           dl.row
             - @by_condition.each do |c|
@@ -68,9 +68,9 @@ nav
           td = link_to book_copy.barcode, book_copy
           td = book_copy.book_label.try(:name)
           td 
-            - text_color = book_copy.latest_condition.try(:color)
-            span class="#{text_color}-text"
-             = book_copy.latest_condition.present? ? book_copy.latest_condition.code.capitalize : 'N/A'
+            - badge_color = book_copy.latest_condition.try(:color)
+            span.box class="#{badge_color}"
+              = book_copy.latest_condition.present? ? book_copy.latest_condition.code.capitalize : 'N/A'
           td = book_copy.status.present? ? book_copy.status.name : 'N/A'
 
           td.actions

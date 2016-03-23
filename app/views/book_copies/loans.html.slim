@@ -34,14 +34,14 @@ nav
       tr
         th Loaned to
         th Out Date
-        th Due Date
+        th Return Date
         th Academic year
 
 
     tbody
       - @copy_loans.each do |copy_loan|
         tr
-          td = copy_loan.student || copy_loan.employee
+          td = copy_loan.try(:student).try(:name) || copy_loan.try(:employee).try(:name)
           td = copy_loan.out_date
           td = copy_loan.due_date
-          td = copy_loan.academic_year.name
+          td = copy_loan.try(:academic_year).try(:name)

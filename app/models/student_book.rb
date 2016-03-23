@@ -18,4 +18,5 @@ class StudentBook < ActiveRecord::Base
   validates :grade_level, presence: true
   validates :grade_section, presence: true
 
+  scope :current_year, lambda { where(academic_year_id:AcademicYear.current_id) }
 end

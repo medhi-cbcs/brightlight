@@ -10,6 +10,10 @@ class BookCopy < ActiveRecord::Base
 
   after_create :create_initial_condition
 
+  def cover_image
+    book_edition.try(:small_thumbnail) || 'book-icon.png'
+  end
+
   def book_title
   	book_edition.try(:book_title)
   end
