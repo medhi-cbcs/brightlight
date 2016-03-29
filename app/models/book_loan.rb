@@ -8,4 +8,6 @@ class BookLoan < ActiveRecord::Base
   belongs_to :loan_type
   belongs_to :academic_year
   belongs_to :prev_academic_year, class_name: "AcademicYear"
+
+  scope :current, lambda { where(academic_year: AcademicYear.current) }
 end

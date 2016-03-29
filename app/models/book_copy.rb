@@ -30,7 +30,7 @@ class BookCopy < ActiveRecord::Base
     def create_initial_condition
       self.copy_conditions << CopyCondition.new(
         book_condition_id: book_condition_id,
-        academic_year_id: current_academic_year_id,
+        academic_year_id: AcademicYear.current_id,
         barcode: barcode,
         notes: 'Initial condition',
         start_date: Date.today

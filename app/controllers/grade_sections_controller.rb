@@ -28,6 +28,7 @@ class GradeSectionsController < ApplicationController
   def edit
     @grade_level =  @grade_section.grade_level
     @total_students = GradeSectionsStudent.number_of_students(@grade_section, current_academic_year_id)
+    @students = GradeSectionsStudent.where(academic_year_id:current_academic_year_id).where(grade_section:@grade_section)
   end
 
   def students

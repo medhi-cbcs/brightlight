@@ -1,7 +1,6 @@
 Rails.application.routes.draw do
 
   resources :people
-  resources :book_loans
   resources :attachment_types
   resources :book_categories
   resources :subjects
@@ -76,6 +75,13 @@ Rails.application.routes.draw do
       get 'assign'
       post 'label'
       get 'receipt_form'
+    end
+  end
+
+  resources :book_loans do
+    collection do
+      post 'search_student'
+      post 'search_teacher'
     end
   end
 

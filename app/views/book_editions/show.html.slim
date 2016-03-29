@@ -4,7 +4,7 @@ nav
   .nav-wrapper
     ul
       li
-        = link_to book_editions_path
+        = link_to book_editions_path({page:params[:listpage]})
           i.material-icons chevron_left
       li.right
         = link_to book_edition_book_copies_path(@book_edition)

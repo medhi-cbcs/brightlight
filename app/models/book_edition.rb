@@ -194,7 +194,7 @@ class BookEdition < ActiveRecord::Base
   end
 
   def number_of_copies
-    book_copies.length
+    book_copies.count
   end
 
   def isbn
