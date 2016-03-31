@@ -8,7 +8,7 @@ class StudentsController < ApplicationController
       format.html {
         items_per_page = 20
         if params[:search]
-          @students = Student.where('name LIKE ?', "%#{params[:search]}%").paginate(page: params[:page], per_page: items_per_page)
+          @students = Student.where('UPPER(name) LIKE ?', "%#{params[:search].upcase}%").paginate(page: params[:page], per_page: items_per_page)
         else
           @students = Student.paginate(page: params[:page], per_page: items_per_page)
         end

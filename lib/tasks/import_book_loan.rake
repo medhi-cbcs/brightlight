@@ -5,10 +5,12 @@ namespace :data do
 		use_sql_server = true
 
   	header = {student_no:'RENTSTUDENTID',	family_no:'RENTFAMILYID',	class_order:'RENTSTUDENTNUM',	barcode:'RENTBARCODEID',	isbn:'RENTISBN',
-  		refno:'RENTBKREFERENCE', category:'RENTCategory',	rent_status:'RENTSTATUS',	class_level:'RENTClassLevelID',	subject_code:'RENTSubjectID',
+  		refno:'RENTBKREFERENCE', category:'RENTCategory',	rent_status:'RENTSTATUS',	class_level:'RENTClassLevelID',	subject_id:'RENTSubjectID',
   		rent_date:'RENTDATEGET', rent_time:'RENTTIMEGET',	return_date:'RENTDATERETURN',	user_id:'RENTIDUSER',	date_input:'RENTDATEINPUT',
   		time_input:'RENTTIMEINPUT',	index:'RENTINDEX',	notes:'RENTNOTE',	new_academic_year:'RENTNewAcademicYear', academic_year:'RENTYearAcademic',
   		return_status:'RENTRETURNSTATUS',	bkudid:'BKUDID',	noteqpr:'NOTEOPR'}
+
+		subject_classes = ['CG011.1','CG011.2','CG012.1','CG012.2']
 
 		if use_sql_server
 			client = TinyTds::Client.new username: 'dbest1', password: 'Sadrakh201', dataserver:'SERVER3000\CAHAYABANGSA05', database:'PROBEST1_0LD'
@@ -22,7 +24,11 @@ namespace :data do
 				year = AcademicYear.find_by_name(row[header[:new_academic_year]])
 				prev_year = AcademicYear.find_by_name(row[header[:academic_year]])
 				student = Student.find_by_student_no(row[header[:student_no]])
-				grade_section = GradeSection.find_by_parallel_code(row[header[:class_level]])
+				grade_section = if subject_classes.include? row[header[:class_level]]
+                          GradeSection.find_by_subject_code(row[header[:subject_id]])
+                        else
+                          GradeSection.find_by_parallel_code(row[header[:class_level]])
+                        end
 
 				# if student number is missing, look up from the grade_sections_students table
 				if row[header[:student_no]].blank?
@@ -49,13 +55,13 @@ namespace :data do
 						student_no: row[header[:student_no]],
 						roster_no: row[header[:class_order]],
 						grade_section_code: row[header[:class_level]],
-						grade_subject_code: row[header[:subject_code]],
+						grade_subject_code: row[header[:subject_id]],
 						notes: row[header[:notes]],
 						grade_section: grade_section,
 						grade_level: grade_section.try(:grade_level),
 						barcode: row[header[:barcode]]
 					)
-					student_book.save
+					student_book.save(validate: false)
 					if i % 500 == 0
 						puts "#{i}. #{student_book.student.try(:name) || 'Student N/A'} (#{student_book.grade_section.try(:name) || "Grade N/A"}) #{student_book.book_copy.try(:barcode) || "Book copy N/A"}"
 					end
@@ -71,7 +77,7 @@ namespace :data do
 					student_no: (row[header[:student_no]] if student.present?),
 					roster_no: row[header[:class_order]],
 					grade_section_code: row[header[:class_level]],
-					grade_subject_code: row[header[:subject_code]],
+					grade_subject_code: row[header[:subject_id]],
 					academic_year: year,
 					prev_academic_year: prev_year,
 					out_date: row[header[:rent_date]],
@@ -119,7 +125,7 @@ namespace :data do
 					student_no: row[:student_no],
 			  	roster_no: row[:class_order],
 					grade_section_code: row[:class_level],
-					grade_subject_code: row[:subject_code],
+					grade_subject_code: row[:subject_id],
 					notes: row[:notes],
 					grade_section: grade_section,
 					grade_level: grade_section.try(:grade_level),
@@ -138,7 +144,7 @@ namespace :data do
 					student_no: row[:student_no],
 			  	roster_no: row[:class_order],
 					grade_section_code: row[:class_level],
-					grade_subject_code: row[:subject_code],
+					grade_subject_code: row[:subject_id],
 					academic_year: year,
 					prev_academic_year: prev_year,
 					out_date: row[:rent_date],

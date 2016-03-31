@@ -23,7 +23,7 @@ class BookCopy < ActiveRecord::Base
   end
 
   def latest_condition
-    copy_conditions.order('created_at DESC').first.try(:book_condition)
+    copy_conditions.active.order('created_at DESC').first.try(:book_condition)
   end
 
   protected

@@ -27,6 +27,13 @@ nav
         = link_to @last_condition.present? ? check_copy_condition_path(@last_condition) : new_copy_condition_path
           | Update condition
           i.material-icons.left add
+      li.right
+        - if params[:all].present?
+          = link_to book_copy_conditions_path(@book_copy)
+            | Show less
+        - else
+          = link_to book_copy_conditions_path(@book_copy)+"?all=t"
+            | Show all
 
 .card-panel
   table.striped

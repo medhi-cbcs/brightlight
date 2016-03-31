@@ -50,7 +50,10 @@ nav
               .item = @book_edition.refno || 'N/A'
             dd.col.s6
               .label Page count
-              .item = @book_edition.page_count || 'N/A'
+              .item = @book_edition.page_count || 'N/A'            
+            dd.col.s6
+              .label Legacy Code
+              .item = @book_edition.legacy_code || 'N/A'
             dd.col.s6
               .label Price
               .item = @book_edition.price.present? ? "#{@book_edition.currency} #{@book_edition.price.to_digits}" : 'N/A'

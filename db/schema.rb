@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160323010913) do
+ActiveRecord::Schema.define(version: 20160331082743) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -141,6 +141,7 @@ ActiveRecord::Schema.define(version: 20160323010913) do
     t.integer  "attachment_qty"
     t.string   "refno"
     t.string   "slug"
+    t.string   "legacy_code"
   end
 
   add_index "book_editions", ["book_title_id"], name: "index_book_editions_on_book_title_id", using: :btree
@@ -170,6 +171,7 @@ ActiveRecord::Schema.define(version: 20160323010913) do
     t.datetime "updated_at",       null: false
     t.integer  "grade_section_id"
     t.string   "slug"
+    t.integer  "book_no"
   end
 
   add_index "book_labels", ["grade_level_id"], name: "index_book_labels_on_grade_level_id", using: :btree
@@ -253,12 +255,14 @@ ActiveRecord::Schema.define(version: 20160323010913) do
     t.string   "authors"
     t.string   "publisher"
     t.string   "image_url"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
     t.integer  "bkudid"
     t.integer  "subject_id"
     t.string   "subject"
     t.string   "slug"
+    t.string   "subject_level"
+    t.string   "grade_code"
   end
 
   add_index "book_titles", ["slug"], name: "index_book_titles_on_slug", unique: true, using: :btree
@@ -276,6 +280,7 @@ ActiveRecord::Schema.define(version: 20160323010913) do
     t.datetime "created_at",        null: false
     t.datetime "updated_at",        null: false
     t.integer  "post"
+    t.boolean  "deleted_flag"
   end
 
   add_index "copy_conditions", ["academic_year_id"], name: "index_copy_conditions_on_academic_year_id", using: :btree

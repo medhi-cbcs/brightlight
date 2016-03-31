@@ -177,18 +177,6 @@ class BookEdition < ActiveRecord::Base
     self.save
   end
 
-  def create_book_copies(num=1)
-    condition_ids = BookCondition.all.map {|bc| bc.id}
-    status = Status.where(name:'On loan').first
-    num.times do
-      self.book_copies << BookCopy.new(
-        book_condition_id: condition_ids[rand(condition_ids.count)],
-        status_id: status.id,
-        barcode: rand(9876543210)
-      )
-    end
-  end
-
   def has_cover?
     self.small_thumbnail.present?
   end
