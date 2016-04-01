@@ -29,7 +29,7 @@ class StudentsController < ApplicationController
   # GET /students/1.json
   def show
     @student = Student.where(id: params[:id]).includes([:student_admission_info,:grade_sections_students]).first
-    @current_grade = @student.grade_sections_students.where(academic_year_id:current_academic_year_id).try(:first).try(:grade_section)
+    @current_grade = @student.current_grade_section
   end
 
   # GET /students/new

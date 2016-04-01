@@ -81,4 +81,8 @@ class Student < ActiveRecord::Base
       end
     end
   end
+
+	def current_grade_section
+		grade_sections_students.with_academic_year(AcademicYear.current).try(:first).try(:grade_section)
+	end
 end
