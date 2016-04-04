@@ -11,7 +11,6 @@ Rails.application.routes.draw do
   resources :guardians
   resources :book_assignments
   resources :book_grades
-  resources :students
   resources :employees
   resources :products
   resources :academic_years
@@ -70,7 +69,20 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :student_books do
+  resources :students do
+    member do
+      resources :book_loans, shallow: true
+      resources :student_books, shallow: true
+    end
+  end
+
+  resources :employees do
+    member do
+      resources :book_loans, shallow: true
+    end
+  end
+
+  resources :student_books, only: [:index] do
     collection do
       get 'assign'
       post 'label'
@@ -78,7 +90,7 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :book_loans do
+  resources :book_loans, only: [:index] do
     collection do
       post 'search_student'
       post 'search_teacher'

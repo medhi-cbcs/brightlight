@@ -4,7 +4,7 @@ class StudentBooksController < ApplicationController
   # GET /student_books
   # GET /student_books.json
   def index
-    items_per_page = 20
+    items_per_page = 25
     @grade_levels = GradeLevel.all
     @grade_level_ids = @grade_levels.collect(&:id)
     @grade_sections = GradeSection.all
@@ -13,8 +13,8 @@ class StudentBooksController < ApplicationController
       @grade_section = @grade_sections.where(id:params[:s]).first
       @grade_level = @grade_section.grade_level
     end
-    if params[:st].present?
-      @student = Student.where(id:params[:st]).first
+    if params[:id].present?
+      @student = Student.where(id:params[:id]).take
       @student_books = StudentBook.current_year.where(student:@student).includes([:book_copy, book_copy: [:book_edition]]).paginate(page: params[:page], per_page: items_per_page)
       @grade_section = @student.grade_sections_students.where(academic_year_id:current_academic_year_id).try(:first).try(:grade_section)
     else

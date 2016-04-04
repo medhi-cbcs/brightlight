@@ -44,7 +44,7 @@ namespace :data do
 			next if row[header[:index]] == 0
 
 			book_copy = BookCopy.find_by_barcode(row[header[:barcode]])
-			year_name = if row[header[:class_year]].present? && row[header[:new_academic_year]] != row[header[:class_year]]
+			year_name = if row[header[:class_year]].present? && (row[header[:new_academic_year]] != row[header[:class_year]])
 										row[header[:class_year]]
 									else
 										row[header[:new_academic_year]]
@@ -52,7 +52,7 @@ namespace :data do
 			year = AcademicYear.find_by_name(year_name)
 			prev_year = AcademicYear.find_by_name(row[header[:academic_year]])
 			student = Student.find_by_student_no(row[header[:student_no]])
-			grade_section = if subject_classes.include? row[header[:class_level]] && row[header[:subject_id]].present?
+			grade_section = if subject_classes.include?(row[header[:class_level]]) && row[header[:subject_id]].present?
                         GradeSection.find_by_subject_code(row[header[:subject_id]])
                       else
                         GradeSection.find_by_parallel_code(row[header[:class_level]])

@@ -1,13 +1,18 @@
 class Student < ActiveRecord::Base
 	has_many :students_guardians
 	has_many :guardians, through: :students_guardians
-  has_many :grade_sections_students, dependent: :destroy
+  has_many :grade_sections_students
 	has_many :grade_sections, through: :grade_sections_students
 	has_many :course_sections, through: :rosters
   has_many :rosters, dependent: :destroy
 	has_one  :student_admission_info, autosave: true
+	has_many :student_books
+	has_many :book_loans
  	belongs_to :person
   validates :name, :gender, presence: true
+
+	accepts_nested_attributes_for :student_books, allow_destroy: true, reject_if: :all_blank
+	accepts_nested_attributes_for :book_loans, allow_destroy: true, reject_if: :all_blank
 
 	scope :current, lambda { joins(:grade_sections_students).where(grade_sections_students: {academic_year: AcademicYear.current}) }
   scope :with_academic_year, lambda {|academic_year| joins(:grade_sections_students).where(grade_sections_students: {academic_year: academic_year}) }

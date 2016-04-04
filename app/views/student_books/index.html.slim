@@ -22,7 +22,7 @@ ul#student-options.dropdown-content
 javascript:
   function filterSectionOptions(id, name) {
     var grade_ids = #{raw @grade_level_ids};
-    $("#grade").html("Grade "+name);
+    $("#grade").html(name);
     grade_ids.forEach(function(g){
       if(id!=g) {
         $(".grade-"+g).hide();
@@ -32,12 +32,12 @@ javascript:
     })
   }
   function filterStudentOptions(id, name) {
-    $("#section").html("Section "+name);
+    $("#section").html(name);
     $.getJSON("/students.json?section="+id, null, function (data) {
       console.log("Parsing /students.json?section="+id);
       var list = "";
-      $.each(data, function(i,item){
-          list += "<li><a href='/student_books?st="+item.id+"'>"+item.name+"</a></li>";
+      $.each(data, function(i,student){
+          list += "<li><a href='/students/"+student.id+"/student_books'>"+student.name+"</a></li>";
       });
       $("#student-options").html(list);
     });
@@ -46,24 +46,24 @@ javascript:
 nav
   .nav-wrapper
     ul
-      li.right
-        a#student-menu.dropdown-button href="#!" data-activates="student-options"
-          span#student = params[:sid].present? ? "#{@student.name}" : "Choose student" 
-          i.material-icons.right arrow_drop_down
-      li.right
-        a.dropdown-button href="#!" data-activates="section-options"
-          span#section = params[:s].present? ? "Section #{@grade_section.name}" : "Choose section"
-          i.material-icons.right arrow_drop_down
-      li.right
+      li
         a.dropdown-button href="#!" data-activates="grade-options"
-          span#grade = params[:s].present? ? "Grade #{@grade_section.grade_level.name}" : "Choose grade" 
+          span#grade = params[:s].present? ? "#{@grade_section.grade_level.name}" : "Grade" 
+          i.material-icons.right arrow_drop_down
+      li
+        a.dropdown-button href="#!" data-activates="section-options"
+          span#section = params[:s].present? ? "#{@grade_section.name}" : "Class"
+          i.material-icons.right arrow_drop_down
+      li
+        a#student-menu.dropdown-button href="#!" data-activates="student-options"
+          span#student = params[:sid].present? ? "#{@student.name}" : "Student" 
           i.material-icons.right arrow_drop_down
 
 .card-panel
   table
     thead
       tr
-        - if params[:st].present?
+        - if @student.present?
           th No
         th Title
         th Barcode
@@ -77,7 +77,7 @@ nav
     tbody
       - @student_books.each_with_index do |student_book, i|
         tr
-          - if params[:st].present?
+          - if @student.present?
             td = i+1
           td = student_book.book_copy.book_edition.try(:title).truncate(40)
           td = link_to student_book.barcode, student_book.book_copy
