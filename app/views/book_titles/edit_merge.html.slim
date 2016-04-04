@@ -17,9 +17,6 @@
         .input-field
           = f.label :authors, class: 'active'
           = f.collection_select :authors, @book_titles, :authors, :authors
-        .input-field
-          = f.label :publisher, class: 'active'
-          = f.collection_select :publisher, @book_titles, :publisher, :publisher
 
       .row
         h6.grey-text Select cover image:
@@ -41,5 +38,3 @@
       /       td style="vertical-align:top"
       /         - thumbnail = book_title.image_url.present? ? book_title.image_url : 'book-icon.png' 
       /         = image_tag(thumbnail, class: 'list_image')
-
-

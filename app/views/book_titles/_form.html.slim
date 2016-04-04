@@ -16,9 +16,6 @@
           .input-field.col.s8
             = f.label :authors, class: 'active'
             = f.text_field :authors
-          .input-field.col.s8
-            = f.label :publisher, class: 'active'
-            = f.text_field :publisher
           
         .row
           - if @book_title.has_cover?

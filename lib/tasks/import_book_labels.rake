@@ -38,7 +38,7 @@ namespace :data do
 
       results = client.execute("SELECT [RENTClassLevelID],[ParalelLevelName],[RENTSTUDENTNUM],[RENTSubjectID],
                        [RENTBARCODEID],[RENTNewAcademicYear]
-                  FROM [PROBEST1_0LD].[dbo].[CBCS_INVBOOKSRENT]
+                 FROM [PROBEST1_0LD].[dbo].[CBCS_INVBOOKSRENT]
                 INNER JOIN [CBCS_Paralel_Class] on [RENTClassLevelID] = [ParalelLevelID]
                 WHERE [RENTNewAcademicYear] = '2015-2016'
                 ORDER BY [RENTClassLevelID],[RENTSubjectID],[RENTSTUDENTNUM]")
@@ -55,9 +55,7 @@ namespace :data do
         book_copy.book_label = book_label
         book_copy.copy_no = book_label.name
         #book_copy.save
-        #if i % 500 == 0
-          puts "#{i}. #{row[header[:barcode]]}"
-        #end
+        puts "#{i}. #{row[header[:barcode]]}" if i % 500 == 0
       end
     end
   end

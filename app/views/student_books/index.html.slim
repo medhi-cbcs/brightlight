@@ -5,7 +5,7 @@
   h4 Listing Student's Books
 
 ul#grade-options.dropdown-content
-  - GradeLevel.all.each do |grade|
+  - @grade_levels.each do |grade|
     li 
       = link_to grade.name, "#!", onclick:"filterSectionOptions(#{grade.id}, '#{grade.name}');"
       /= link_to grade.name, "#!", "data-grade-id":"#{grade.id}", "data-grade-name":"#{grade.name}"
@@ -77,7 +77,8 @@ nav
     tbody
       - @student_books.each do |student_book|
         tr
-          td = student_book.book_copy.book_title.try(:title).truncate(40)
+          td = student_book.book_copy.book_edition.try(:title).truncate(40)
+          /td Title
           td = link_to student_book.barcode, student_book.book_copy
           td = student_book.copy_no
           td = student_book.issue_date

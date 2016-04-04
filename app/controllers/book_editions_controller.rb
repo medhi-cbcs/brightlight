@@ -57,6 +57,9 @@ class BookEditionsController < ApplicationController
   def update
     respond_to do |format|
       if @book_edition.update(book_edition_params)
+        if book_edition_params[:small_thumbnail].present? and @book_edition.book_title.image_url.blank?
+          @book_edition.book_title.update_attribute :image_url, book_edition_params[:small_thumbnail]
+        end
         nested_form = book_edition_params[:book_copies_attributes].present?
         format.html {
           if nested_form
@@ -88,7 +91,7 @@ class BookEditionsController < ApplicationController
   def update_metadata
     @book_edition = BookEdition.find(params[:id])
     begin
-      @book_edition.update_metadata
+      @book_edition = @book_edition.update_metadata
     rescue
       @error = "ISBN No #{@book_edition.isbn} did not match any book results"
     end
@@ -97,7 +100,8 @@ class BookEditionsController < ApplicationController
         if @error.present?
           redirect_to @book_edition, alert: @error
         else
-          redirect_to @book_edition, notice: "Metadata updated"
+          render :edit # book_edition_path @book_edition
+          # redirect_to edit_book_edition_path @book_edition #, notice: "Metadata updated"
         end
       end
     end
@@ -114,7 +118,7 @@ class BookEditionsController < ApplicationController
       params.require(:book_edition).permit(
         :google_book_id, :isbndb_id, :title, :subtitle, :authors, :publisher, :published_date,
         :description, :isbn10, :isbn13, :page_count, :small_thumbnail, :thumbnail,
-        :language, :edition_info, :tags, :subjects, :book_title_id, :refno, :price, :currency,
+        :language, :edition_info, :tags, :subjects, :book_title_id, :refno, :price, :currency, :legacy_code,
         {:book_copies_attributes => [:id, :book_edition_id, :book_condition_id, :status_id, :barcode, :copy_no, :book_label_id, :_destroy]}
       )
     end

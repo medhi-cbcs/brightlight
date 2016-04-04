@@ -22,7 +22,8 @@ nav
       tr
         td style="vertical-align:top"
           - thumbnail = @book_copy.cover_image
-          = image_tag(thumbnail, class: 'list_image')
+          = link_to @book_copy.book_edition
+            = image_tag(thumbnail, class: 'list_image')
         td
           .list_description
             dl.row
