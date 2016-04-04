@@ -15,7 +15,7 @@ class StudentBooksController < ApplicationController
     end
     if params[:st].present?
       @student = Student.where(id:params[:st]).first
-      @student_books = StudentBook.current_year.where(student:@student).paginate(page: params[:page], per_page: items_per_page)
+      @student_books = StudentBook.current_year.where(student:@student).includes([:book_copy, book_copy: [:book_edition]]).paginate(page: params[:page], per_page: items_per_page)
       @grade_section = @student.grade_sections_students.where(academic_year_id:current_academic_year_id).try(:first).try(:grade_section)
     else
       @student_books = StudentBook.includes([:book_copy, book_copy: [:book_edition]]).paginate(page: params[:page], per_page: items_per_page)

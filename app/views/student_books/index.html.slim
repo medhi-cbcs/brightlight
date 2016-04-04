@@ -60,11 +60,11 @@ nav
           i.material-icons.right arrow_drop_down
 
 .card-panel
-  - if params[:sid].present?
-    .section-header = @student.name
   table
     thead
       tr
+        - if params[:st].present?
+          th No
         th Title
         th Barcode
         th Label
@@ -75,10 +75,11 @@ nav
         th
 
     tbody
-      - @student_books.each do |student_book|
+      - @student_books.each_with_index do |student_book, i|
         tr
+          - if params[:st].present?
+            td = i+1
           td = student_book.book_copy.book_edition.try(:title).truncate(40)
-          /td Title
           td = link_to student_book.barcode, student_book.book_copy
           td = student_book.copy_no
           td = student_book.issue_date
