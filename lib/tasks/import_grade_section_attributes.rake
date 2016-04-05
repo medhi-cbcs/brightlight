@@ -44,7 +44,7 @@ namespace :data do
 			  grade_section.parallel_code = row[:parallel_code]
 			  grade_section.homeroom = Employee.find_by_employee_number(row[:employee_no]) if row[:position] == '001'
 			  grade_section.assistant = Employee.find_by_employee_number(row[:employee_no]) if row[:position] == '003'
-			grade_section.academic_year = AcademicYear.find_by_slug(row[:academic_year])
+				grade_section.academic_year = AcademicYear.find_by_slug(row[:academic_year])
 			  grade_section.save
 			else
 				year = AcademicYear.find_by_slug(row[:academic_year])
