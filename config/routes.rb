@@ -1,7 +1,7 @@
 Rails.application.routes.draw do
 
+  resources :standard_books
   resources :people
-  resources :attachment_types
   resources :book_categories
   resources :subjects
   resources :fine_scales
@@ -11,10 +11,9 @@ Rails.application.routes.draw do
   resources :guardians
   resources :book_assignments
   resources :book_grades
-  resources :employees
-  resources :products
   resources :academic_years
-  resources :rosters
+  resources :employees
+
   resources :courses do
     resources :course_texts, shallow: true
     resources :course_sections, except: :new, shallow: true
@@ -70,25 +69,13 @@ Rails.application.routes.draw do
   end
 
   resources :students do
-    member do
-      resources :book_loans, shallow: true
-      resources :student_books, shallow: true
-    end
+    resources :student_books, shallow: true
   end
 
-  resources :employees do
-    member do
-      resources :book_loans, shallow: true
-    end
-  end
-
-  resources :student_books, only: [:index] do
-    collection do
-      get 'assign'
-      post 'label'
-      get 'receipt_form'
-    end
-  end
+  get 'student_books' => 'student_books#index', as: :all_student_books
+  get 'student_books/assign' => 'student_books#assign', as: :assign_student_books
+  get 'student_books/label' => 'student_books#label', as: :label_student_books
+  get 'student_books/receipt_form' => 'student_books#receipt_form', as: :receipt_form_student_books
 
   resources :book_loans, only: [:index] do
     collection do
@@ -96,6 +83,24 @@ Rails.application.routes.draw do
       post 'search_teacher'
     end
   end
+
+  get  'students/:student_id/book_loans' => 'book_loans#index', as: :student_book_loans
+  post 'students/:student_id/book_loans' => 'book_loans#create'
+  get  'students/:student_id/book_loans/new' => 'book_loans#new', as: :new_student_book_loan
+  get  'students/:student_id/book_loans/:id/edit' => 'book_loans#edit', as: :edit_student_book_loan
+  get  'students/:student_id/book_loans/:id' => 'book_loans#show', as: :student_book_loan
+  patch  'students/:student_id/book_loans/:id' => 'book_loans#update'
+  put  'students/:student_id/book_loans/:id' => 'book_loans#update'
+  delete  'students/:student_id/book_loans/:id' => 'book_loans#destroy'
+
+  get  'employees/:employee_id/book_loans' => 'book_loans#index', as: :employee_book_loans
+  post 'employees/:employee_id/book_loans' => 'book_loans#create'
+  get  'employees/:employee_id/book_loans/new' => 'book_loans#new', as: :new_employee_book_loan
+  get  'employees/:employee_id/book_loans/:id/edit' => 'book_loans#edit', as: :edit_employee_book_loan
+  get  'employees/:employee_id/book_loans/:id' => 'book_loans#show', as: :employee_book_loan
+  patch  'employees/:employee_id/book_loans/:id' => 'book_loans#update'
+  put  'employees/:employee_id/book_loans/:id' => 'book_loans#update'
+  delete  'employees/:employee_id/book_loans/:id' => 'book_loans#destroy'
 
   resources :book_fines do
     collection do

@@ -4,12 +4,12 @@ class BookCopiesController < ApplicationController
   # GET /book_copies
   # GET /book_copies.json
   def index
-    items_per_page = 20
+    items_per_page = 25
+    # TODO: Optimize!
     if params[:book_edition_id]
       @book_edition = BookEdition.find_by_slug(params[:book_edition_id])
       @book_copies = @book_edition.book_copies.includes([:book_condition, :status]).paginate(page: params[:page], per_page: items_per_page)
-      @book_copy = @book_edition.book_copies.new
-      @by_condition = BookCondition.all.map {|bc| [bc, @book_edition.book_copies.select {|c| c.latest_condition == bc}.count ]}
+      @by_condition = BookCondition.all.sorted.map {|bc| [bc, @book_edition.book_copies.select {|c| c.latest_condition == bc}.count ]}
       @by_status = Status.all.map {|bc| [bc, @book_edition.book_copies.select {|c| c.status_id == bc.id}.count ]}
     else
       @book_copies = BookCopy.all

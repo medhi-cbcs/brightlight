@@ -22,7 +22,7 @@ namespace :data do
 				results = client.execute("SELECT * FROM #{table}")
 
 				results.each_with_index do |row, i|
-					barcode = row[header[:barcode]]
+					barcode = row[header[:barcode]].upcase
 
 					copy = BookCopy.find_by_barcode(barcode)
 					deleted_flag = row[header[:index]] == 0

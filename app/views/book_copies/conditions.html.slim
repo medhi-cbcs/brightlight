@@ -42,7 +42,6 @@ nav
         th Date
         th Book condition
         th Academic year
-        th Date
         th Posting
         th Notes
         th Action
@@ -56,7 +55,6 @@ nav
           td.tooltipped data-position="bottom" data-delay="50" data-tooltip="Last update by: #{user_name} at #{copy_condition.updated_at}"
             span.box class="#{copy_condition.try(:book_condition).try(:color)}" = copy_condition.try(:book_condition).try(:code )
           td = copy_condition.academic_year.name
-          td = copy_condition.start_date
           td = copy_condition.post == 0 ? "Start" : "Return"
           td = copy_condition.notes
           td.actions

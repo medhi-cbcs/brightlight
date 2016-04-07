@@ -11,7 +11,7 @@ namespace :data do
 		subject_classes = ['CG011.1','CG011.2','CG012.1','CG012.2']
 
 		client = TinyTds::Client.new username: 'dbest1', password: 'Sadrakh201', dataserver:'SERVER3000\CAHAYABANGSA05', database:'PROBEST1_0LD'
-		results = client.execute('SELECT [RENTSTUDENTID]
+		results = client.execute("SELECT [RENTSTUDENTID]
 						      ,[RENTFAMILYID]
 						      ,[RENTSTUDENTNUM]
 						      ,[RENTBARCODEID]
@@ -38,22 +38,36 @@ namespace :data do
 						  FROM [PROBEST1_0LD].[dbo].[CBCS_INVBOOKSRENT]
 						  LEFT JOIN [CBCS_CLASS_DISTRIBUTION] on ([RENTSTUDENTID] = [DistributionStudentID]
 							and [DistributionClassLevelID] = RENTClassLevelID
-							and [RENTSTUDENTNUM] = DistributionAbsenceListNumber)')
+							and [RENTSTUDENTNUM] = DistributionAbsenceListNumber)")
+		# results = client.execute("SELECT RENTSTUDENTID, RENTFAMILYID, RENTSTUDENTNUM, RENTBARCODEID, RENTISBN, RENTBKREFERENCE, RENTCategory, RENTSTATUS, RENTClassLevelID,
+    #                   RENTSubjectID, RENTDATEGET, RENTTIMEGET, RENTDATERETURN, RENTIDUSER, RENTDATEINPUT, RENTTIMEINPUT, RENTINDEX, RENTNOTE,
+    #                   RENTNewAcademicYear, RENTYearAcademic, RENTRETURNSTATUS, CBCS_INVBOOKSRENT.BKUDID, NOTEOPR, TIMESTAMP
+		# 									FROM CBCS_INVBOOKSRENT")
 
 		results.each_with_index do |row, i|
 			next if row[header[:index]] == 0
 
 			book_copy = BookCopy.find_by_barcode(row[header[:barcode]])
-			year_name = if row[header[:class_year]].present? && (row[header[:new_academic_year]] != row[header[:class_year]])
-										row[header[:class_year]]
-									else
-										row[header[:new_academic_year]]
-									end
+
+			## Trying to 'fix' wrong data in PROBEST1_0LD. I'm not sure if this works. Might as well leave it alone as it is.
+			##  because there are error with conflicting 'rules'
+			##
+			# year_name = if row[header[:student_no]].present?
+			# 							row[header[:new_academic_year]]
+			# 						elsif row[header[:class_year]].present? && (row[header[:new_academic_year]] != row[header[:class_year]])
+			# 							row[header[:class_year]]
+			# 						else
+			# 							row[header[:new_academic_year]]
+			# 						end
+
+			year_name = row[header[:new_academic_year]]
 			year = AcademicYear.find_by_name(year_name)
 			prev_year = AcademicYear.find_by_name(row[header[:academic_year]])
 			student = Student.find_by_student_no(row[header[:student_no]])
 			grade_section = if subject_classes.include?(row[header[:class_level]]) && row[header[:subject_id]].present?
                         GradeSection.find_by_subject_code(row[header[:subject_id]])
+											elsif row[header[:class_level]] == 'CG011.0'
+												GradeSection.find_by_parallel_code('CG011.1')
                       else
                         GradeSection.find_by_parallel_code(row[header[:class_level]])
                       end

@@ -13,10 +13,10 @@ class StudentBooksController < ApplicationController
       @grade_section = @grade_sections.where(id:params[:s]).first
       @grade_level = @grade_section.grade_level
     end
-    if params[:id].present?
-      @student = Student.where(id:params[:id]).take
-      @student_books = StudentBook.current_year.where(student:@student).includes([:book_copy, book_copy: [:book_edition]]).paginate(page: params[:page], per_page: items_per_page)
+    if params[:student_id].present?
+      @student = Student.where(id:params[:student_id]).take
       @grade_section = @student.grade_sections_students.where(academic_year_id:current_academic_year_id).try(:first).try(:grade_section)
+      @student_books = StudentBook.current_year.where(student:@student).where(grade_section:@grade_section).includes([:book_copy, book_copy: [:book_edition]]).paginate(page: params[:page], per_page: items_per_page)
     else
       @student_books = StudentBook.includes([:book_copy, book_copy: [:book_edition]]).paginate(page: params[:page], per_page: items_per_page)
     end
@@ -25,24 +25,29 @@ class StudentBooksController < ApplicationController
   # GET /student_books/1
   # GET /student_books/1.json
   def show
+    @student = @student_book.student
   end
 
-  # GET /student_books/new
+  # GET /students/:student_id/student_books/new
   def new
-    @student_book = StudentBook.new
+    @student = Student.find(params[:student_id])
+    @grade_section = @student.grade_sections_students.where(academic_year_id:current_academic_year_id).try(:first).try(:grade_section)
+    @student_book = @student.student_books.new
   end
 
   # GET /student_books/1/edit
   def edit
+    @student = @student_book.student
   end
 
-  # POST /student_books
-  # POST /student_books.json
+  # POST /students/:student_id/student_books
+  # POST /students/:student_id/student_books.json
   def create
-    @student_book = StudentBook.new(student_book_params)
+    @student = Student.find(params[:student_id])
+    @student_book = @student.student_books.new(student_book_params)
 
     respond_to do |format|
-      if @student_book.save
+      if @student.save
         format.html { redirect_to @student_book, notice: 'Student book was successfully created.' }
         format.json { render :show, status: :created, location: @student_book }
       else
@@ -133,6 +138,8 @@ class StudentBooksController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def student_book_params
-      params.require(:student_book).permit(:student_id, :book_copy_id, :academic_year_id, :course_text_id, :copy_no, :grade_section_id, :grade_level_id, :course_text_id, :course_id, :issue_date, :return_date, :initial_copy_condition_id, :end_copy_condition_id)
+      params.require(:student_book).permit(:student_id, :book_copy_id, :academic_year_id, :course_text_id, :copy_no,
+        :grade_section_id, :grade_level_id, :course_text_id, :course_id, :issue_date, :return_date,
+        :initial_copy_condition_id, :end_copy_condition_id)
     end
 end

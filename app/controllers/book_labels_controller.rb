@@ -10,8 +10,8 @@ class BookLabelsController < ApplicationController
         @acad_year = AcademicYear.current.first
       }
       format.json {
-        search = params[:term] || ""
-        @book_labels = BookLabel.where('name LIKE ?', "#{search}%")
+        search = params[:section] || ""
+        @book_labels = BookLabel.where(grade_section_id: search)
       }
     end
 

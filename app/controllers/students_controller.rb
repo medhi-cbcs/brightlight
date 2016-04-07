@@ -14,8 +14,9 @@ class StudentsController < ApplicationController
         end
       }
       format.json {
-        if params[:section]
+        if params[:section].present?
           @students = Student.for_section(params[:section])
+                        .select('students.id,students.name,grade_sections_students.grade_section_id,grade_sections_students.order_no')
         end
       }
       format.csv {
@@ -89,6 +90,13 @@ class StudentsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def student_params
-      params.require(:student).permit(:name, :first_name, :last_name, :date_of_birth, :admission_no, :family_id, :gender, :blood_type, :nationality, :religion, :address_line1, :address_line2, :city, :state, :postal_code, :country, :mobile_phone, :home_phone, :email, :photo_uri, :status, :status_description, :is_active, :is_deleted, :student_no, :passport_no, :enrollment_date)
+      params.require(:student).permit(:name, :first_name, :last_name, :date_of_birth, :admission_no, :family_id, :gender,
+        :blood_type, :nationality, :religion, :address_line1, :address_line2, :city, :state, :postal_code, :country,
+        :mobile_phone, :home_phone, :email, :photo_uri, :status, :status_description, :is_active, :is_deleted, :student_no,
+        :passport_no, :enrollment_date,
+        {student_books_attributes: [:id, :student_id, :book_copy_id, :academic_year_id, :course_text_id, :copy_no, :grade_section_id,
+            :grade_level_id, :course_id, :issue_date, :return_date, :initial_copy_condition_id, :end_copy_condition_id, :created_at,
+            :updated_at, :barcode, :student_no, :roster_no, :grade_section_code, :grade_subject_code, :notes, :prev_academic_year_id,
+            :_destroy]})
     end
 end

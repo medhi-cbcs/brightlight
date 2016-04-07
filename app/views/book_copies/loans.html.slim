@@ -29,7 +29,7 @@ nav
           i.material-icons.left add
 
 .card-panel
-  table.striped
+  table.striped.compact
     thead
       tr
         th Loaned to
@@ -37,6 +37,7 @@ nav
         th Out Date
         th Return Date
         th Academic year
+        th
 
 
     tbody
@@ -47,3 +48,7 @@ nav
           td = copy_loan.out_date
           td = copy_loan.due_date
           td = copy_loan.try(:academic_year).try(:name)
+          td 
+            - if copy_loan.student.present?
+              = link_to student_student_books_path(copy_loan.student)
+                i.material-icons visibility

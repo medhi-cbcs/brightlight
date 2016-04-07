@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160405004520) do
+ActiveRecord::Schema.define(version: 20160407013001) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -618,6 +618,33 @@ ActiveRecord::Schema.define(version: 20160405004520) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "standard_books", force: :cascade do |t|
+    t.integer  "book_title_id"
+    t.integer  "book_edition_id"
+    t.integer  "book_category_id"
+    t.integer  "grade_level_id"
+    t.integer  "grade_section_id"
+    t.integer  "academic_year_id"
+    t.string   "isbn"
+    t.string   "refno"
+    t.integer  "quantity"
+    t.string   "grade_subject_code"
+    t.string   "grade_name"
+    t.string   "group"
+    t.string   "category"
+    t.string   "bkudid"
+    t.string   "notes"
+    t.datetime "created_at",         null: false
+    t.datetime "updated_at",         null: false
+  end
+
+  add_index "standard_books", ["academic_year_id"], name: "index_standard_books_on_academic_year_id", using: :btree
+  add_index "standard_books", ["book_category_id"], name: "index_standard_books_on_book_category_id", using: :btree
+  add_index "standard_books", ["book_edition_id"], name: "index_standard_books_on_book_edition_id", using: :btree
+  add_index "standard_books", ["book_title_id"], name: "index_standard_books_on_book_title_id", using: :btree
+  add_index "standard_books", ["grade_level_id"], name: "index_standard_books_on_grade_level_id", using: :btree
+  add_index "standard_books", ["grade_section_id"], name: "index_standard_books_on_grade_section_id", using: :btree
+
   create_table "statuses", force: :cascade do |t|
     t.string  "name"
     t.integer "order_no"
@@ -782,4 +809,10 @@ ActiveRecord::Schema.define(version: 20160405004520) do
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
 
+  add_foreign_key "standard_books", "academic_years"
+  add_foreign_key "standard_books", "book_categories"
+  add_foreign_key "standard_books", "book_editions"
+  add_foreign_key "standard_books", "book_titles"
+  add_foreign_key "standard_books", "grade_levels"
+  add_foreign_key "standard_books", "grade_sections"
 end

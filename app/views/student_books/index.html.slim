@@ -1,6 +1,6 @@
-- if params[:st].present?
+- if @student.present?
   h5 Textbooks Loan for 
-  h4 #{@student.name} (#{@grade_section.name})
+  h4 #{@student.name} (#{@grade_section.try(:name)})
 - else
   h4 Listing Student's Books
 
@@ -14,10 +14,6 @@ ul#section-options.dropdown-content
     li
       = link_to section.name, "#!", class:"grade-#{section.grade_level_id}", onclick:"filterStudentOptions(#{section.id}, '#{section.name}');"
 ul#student-options.dropdown-content
-  / - if @grade_section.present?
-  /   - @grade_section.students.each do |student|
-  /     li 
-  /       = link_to student.name, student_books_path(s:"#{@grade_section.id}",sid:"#{student.id}"), class:"student-#{@grade_section.grade_level_id}"
 
 javascript:
   function filterSectionOptions(id, name) {
@@ -34,10 +30,9 @@ javascript:
   function filterStudentOptions(id, name) {
     $("#section").html(name);
     $.getJSON("/students.json?section="+id, null, function (data) {
-      console.log("Parsing /students.json?section="+id);
       var list = "";
       $.each(data, function(i,student){
-          list += "<li><a href='/students/"+student.id+"/student_books'>"+student.name+"</a></li>";
+          list += "<li><a href='/students/"+student.student.id+"/student_books?s="+id+"'>"+student.student.roster_no+". "+student.student.name+"</a></li>";
       });
       $("#student-options").html(list);
     });
@@ -58,6 +53,11 @@ nav
         a#student-menu.dropdown-button href="#!" data-activates="student-options"
           span#student = params[:sid].present? ? "#{@student.name}" : "Student" 
           i.material-icons.right arrow_drop_down
+      - if @student.present?
+        li.right
+          = link_to new_student_student_book_path(student_id:@student.id)
+            | Add book 
+            i.material-icons.left add
 
 .card-panel
   table
@@ -81,13 +81,13 @@ nav
             td = i+1
           td = student_book.book_copy.book_edition.try(:title).truncate(40)
           td = link_to student_book.barcode, student_book.book_copy
-          td = student_book.copy_no
+          td = student_book.book_copy.copy_no
           td = student_book.issue_date
           td = student_book.return_date
           td = student_book.initial_copy_condition_id
           td = student_book.end_copy_condition_id
           td 
-            = link_to student_book_path(student_book,st:params[:st])
+            = link_to student_book
               i.material-icons.left visibility
 
 

@@ -4,7 +4,7 @@ nav
   .nav-wrapper
     ul
       li
-        = link_to student_books_path(st:params[:st])
+        = link_to student_student_books_path(student_id:@student.id)
           i.material-icons chevron_left
       li.right
         = link_to edit_student_book_path(@student_book)
