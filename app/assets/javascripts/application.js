@@ -22,4 +22,5 @@
 //= require filterrific/filterrific-jquery
 //= require dynamic_selectable
 //= require material-init.js
+//= require jquery.scannerdetection
 //= require init.js

@@ -1,5 +1,5 @@
 class BookCopiesController < ApplicationController
-  before_action :set_book_copy, only: [:show, :edit, :destroy]
+  before_action :set_book_copy, only: [:edit, :destroy]
 
   # GET /book_copies
   # GET /book_copies.json
@@ -19,7 +19,15 @@ class BookCopiesController < ApplicationController
   # GET /book_copies/1
   # GET /book_copies/1.json
   def show
-    @related_courses = @book_copy.book_title.courses if @book_copy.book_title.present?
+    respond_to do |format|
+      format.html { set_book_copy }
+      format.json {
+        @book_copy = BookCopy.find_by_barcode(params[:id])
+        if @book_copy.blank?
+          render json: {}, status: :unprocessable_entity
+        end
+      }
+    end
   end
 
   # GET /book_copies/new
@@ -111,7 +119,11 @@ class BookCopiesController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_book_copy
-      @book_copy = BookCopy.find(params[:id])
+      if params[:id][0..2] == 'INV'
+        @book_copy = BookCopy.find_by_barcode(params[:id])
+      else
+        @book_copy = BookCopy.find(params[:id])
+      end
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.

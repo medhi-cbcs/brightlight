@@ -1,3 +1,5 @@
+#barcode 
+
 li
 	.collapsible-header.waves-effect.waves-cyan
 		i.material-icons info_outline
@@ -95,3 +97,9 @@ li
 						= link_to new_user_session_path
 							| Login
 							i.material-icons.left perm_identity
+
+javascript:
+	$("#barcode").scannerDetection();
+	$("#barcode").bind('scannerDetectionComplete',function(e,data){$("#barcode").html(data.string)})
+    .bind('scannerDetectionError',function(e,data){$("#barcode").html(data.string);console.log("Error")})
+		.bind('scannerDetectionReceive',function(e,data){console.log(data)});
