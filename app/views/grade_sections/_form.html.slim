@@ -23,7 +23,7 @@
       .col.s2 Order No
       .col.s4 Action
     #students.row.compact
-      = f.fields_for :grade_sections_students do |grade_section_student|
+      = f.fields_for :grade_sections_students, @students do |grade_section_student|
         .nested-fields
           = render 'grade_sections_student_fields', f: grade_section_student
 

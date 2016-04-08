@@ -4,7 +4,7 @@ namespace :data do
 
     BookCondition.delete_all
     columns = [:code, :description, :color]
-    values = [['New', 'New', 'blue'], ['Good', 'Good', 'green'], ['Fair', 'Fair', 'yellow'], ['Poor', 'Poor', 'red'], ['Missing', 'Missing', 'maroon']]
+    values = [['New', 'New', 'blue'], ['Good', 'Good', 'green'], ['Fair', 'Fair', 'orange'], ['Poor', 'Poor', 'red'], ['Missing', 'Missing', 'maroon']]
     BookCondition.import columns, values
 
 		Status.delete_all

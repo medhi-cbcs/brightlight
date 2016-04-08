@@ -6,7 +6,7 @@ class CopyConditionsController < ApplicationController
   # GET /copy_conditions.json
   def index
     @grade_level_ids = GradeLevel.all.collect(&:id)
-    @grade_sections = GradeSection.with_academic_year(AcademicYear.current_id)
+    @grade_sections = GradeSection.all
     @grade_sections_ids = @grade_sections.collect(&:id)
     if params[:s].present?
       @grade_section = @grade_sections.where(id:params[:s]).first
@@ -50,7 +50,7 @@ class CopyConditionsController < ApplicationController
       barcode: copy_condition_params[:barcode],
       notes: copy_condition_params[:notes],
       start_date: Date.today,
-      user_id: current_user.id
+      user_id: current_user.try(:id)
       )
 
     respond_to do |format|

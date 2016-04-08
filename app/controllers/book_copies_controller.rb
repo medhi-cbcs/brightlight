@@ -1,15 +1,15 @@
 class BookCopiesController < ApplicationController
-  before_action :set_book_copy, only: [:show, :edit, :destroy]
+  before_action :set_book_copy, only: [:edit, :destroy]
 
   # GET /book_copies
   # GET /book_copies.json
   def index
-    items_per_page = 20
+    items_per_page = 25
+    # TODO: Optimize!
     if params[:book_edition_id]
       @book_edition = BookEdition.find_by_slug(params[:book_edition_id])
       @book_copies = @book_edition.book_copies.includes([:book_condition, :status]).paginate(page: params[:page], per_page: items_per_page)
-      @book_copy = @book_edition.book_copies.new
-      @by_condition = BookCondition.all.map {|bc| [bc, @book_edition.book_copies.select {|c| c.latest_condition == bc}.count ]}
+      @by_condition = BookCondition.all.sorted.map {|bc| [bc, @book_edition.book_copies.select {|c| c.latest_condition == bc}.count ]}
       @by_status = Status.all.map {|bc| [bc, @book_edition.book_copies.select {|c| c.status_id == bc.id}.count ]}
     else
       @book_copies = BookCopy.all
@@ -19,7 +19,15 @@ class BookCopiesController < ApplicationController
   # GET /book_copies/1
   # GET /book_copies/1.json
   def show
-    @related_courses = @book_copy.book_title.courses if @book_copy.book_title.present?
+    respond_to do |format|
+      format.html { set_book_copy }
+      format.json {
+        @book_copy = BookCopy.find_by_barcode(params[:id])
+        if @book_copy.blank?
+          render json: {}, status: :unprocessable_entity
+        end
+      }
+    end
   end
 
   # GET /book_copies/new
@@ -37,7 +45,7 @@ class BookCopiesController < ApplicationController
     @book_edition = BookEdition.find_by_slug(params[:book_edition_id])
     @book_copies = @book_edition.book_copies
     @grade_level_ids = GradeLevel.all.collect(&:id)
-    @grade_sections = GradeSection.with_academic_year(AcademicYear.current_id)
+    @grade_sections = GradeSection.all
 
     if params[:s].present?
       @grade_section = @grade_sections.where(id:params[:s]).first
@@ -88,16 +96,34 @@ class BookCopiesController < ApplicationController
 
   # GET /book_copies/1/conditions
   def conditions
-    @copy_conditions = CopyCondition.where(book_copy_id:params[:id]).order('created_at DESC')
+    if params[:all].present?
+      @copy_conditions = CopyCondition.where(book_copy_id:params[:id]).order('academic_year_id DESC, start_date DESC')
+    else
+      @copy_conditions = CopyCondition.where(book_copy_id:params[:id]).where(deleted_flag:false).order('academic_year_id DESC, start_date DESC')
+    end
     @book_copy = BookCopy.find(params[:id])
     @book_edition = @book_copy.book_edition
     @last_condition = @copy_conditions.first
   end
 
+  # GET /book_copies/1/conditions
+  def loans
+    @copy_loans = BookLoan.where(book_copy_id:params[:id])
+                          .includes([:academic_year, :student])
+                          .order('academic_year_id DESC, out_date DESC')
+    @book_copy = BookCopy.find(params[:id])
+    @book_edition = @book_copy.book_edition
+    @last_loan = @copy_loans.first
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_book_copy
-      @book_copy = BookCopy.find(params[:id])
+      if params[:id][0..2] == 'INV'
+        @book_copy = BookCopy.find_by_barcode(params[:id])
+      else
+        @book_copy = BookCopy.find(params[:id])
+      end
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.

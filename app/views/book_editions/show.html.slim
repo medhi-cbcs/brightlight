@@ -4,7 +4,7 @@ nav
   .nav-wrapper
     ul
       li
-        = link_to book_editions_path
+        = link_to book_editions_path({page:params[:listpage]})
           i.material-icons chevron_left
       li.right
         = link_to book_edition_book_copies_path(@book_edition)
@@ -50,7 +50,10 @@ nav
               .item = @book_edition.refno || 'N/A'
             dd.col.s6
               .label Page count
-              .item = @book_edition.page_count || 'N/A'
+              .item = @book_edition.page_count || 'N/A'            
+            dd.col.s6
+              .label Legacy Code
+              .item = @book_edition.legacy_code || 'N/A'
             dd.col.s6
               .label Price
               .item = @book_edition.price.present? ? "#{@book_edition.currency} #{@book_edition.price.to_digits}" : 'N/A'

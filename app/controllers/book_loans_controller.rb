@@ -4,7 +4,15 @@ class BookLoansController < ApplicationController
   # GET /book_loans
   # GET /book_loans.json
   def index
-    @book_loans = BookLoan.all
+    items_per_page = 30
+    @book_loans = BookLoan.includes([:employee,:student])
+      .where(academic_year_id:AcademicYear.current_id)
+      .paginate(page: params[:page], per_page: items_per_page)
+    if params[:student]
+      @book_loans = @book_loans.where(student_id:params[:student])
+    elsif params[:teacher]
+      @book_loans = @book_loans.where(employee_id:params[:teacher])
+    end
   end
 
   # GET /book_loans/1

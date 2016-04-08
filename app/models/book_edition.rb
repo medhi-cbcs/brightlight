@@ -137,9 +137,9 @@ class BookEdition < ActiveRecord::Base
         self.authors = book.authors.join(', ') unless book.authors.blank?
         self.small_thumbnail = book.covers[:small]
         self.thumbnail = book.covers[:thumbnail]
-        book_title = self.book_title
-        book_title.image_url = self.small_thumbnail
-        book_title.save
+        # book_title = self.book_title
+        # book_title.image_url = self.small_thumbnail
+        # book_title.save
       else
         book = ISBNDBClient::API.find(isbn)
         if book.present?
@@ -157,10 +157,11 @@ class BookEdition < ActiveRecord::Base
         self.page_count = book.page_count unless book.page_count.blank?
         self.published_date = book.published_date unless book.published_date.blank?
         self.language = book.language unless book.language.blank?
-        self.save
+        # self.save
       else
         puts "No book info found"
       end
+      return self
     else
       raise "Invalid ISBN"
     end
@@ -177,24 +178,12 @@ class BookEdition < ActiveRecord::Base
     self.save
   end
 
-  def create_book_copies(num=1)
-    condition_ids = BookCondition.all.map {|bc| bc.id}
-    status = Status.where(name:'On loan').first
-    num.times do
-      self.book_copies << BookCopy.new(
-        book_condition_id: condition_ids[rand(condition_ids.count)],
-        status_id: status.id,
-        barcode: rand(9876543210)
-      )
-    end
-  end
-
   def has_cover?
     self.small_thumbnail.present?
   end
 
   def number_of_copies
-    book_copies.length
+    book_copies.count
   end
 
   def isbn

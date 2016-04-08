@@ -13,13 +13,17 @@ nav
       li.right
         = link_to book_copy_conditions_path(@book_copy)
           | Conditions
+      li.right
+        = link_to book_copy_loans_path(@book_copy)
+          | Loans
 .card
   .card-content
     table
       tr
         td style="vertical-align:top"
-          - thumbnail = @book_copy.book_edition.present? ? @book_copy.book_edition.small_thumbnail : 'book-icon.png' 
-          = image_tag(thumbnail, class: 'list_image')
+          - thumbnail = @book_copy.cover_image
+          = link_to @book_copy.book_edition
+            = image_tag(thumbnail, class: 'list_image')
         td
           .list_description
             dl.row
@@ -35,14 +39,16 @@ nav
             dl.row
               dd.col.s6
                 .label ISBN 10
-                .item = @book_copy.book_edition.isbn10.blank? ? '--' : @book_copy.book_edition.isbn10
+                .item = link_to @book_copy.book_edition
+                  = @book_copy.book_edition.isbn10.blank? ? '--' : @book_copy.book_edition.isbn10
               dd.col.s6
                 .label ISBN
-                .item = @book_copy.book_edition.isbn13.blank? ? '--' : @book_copy.book_edition.isbn13
+                .item = link_to @book_copy.book_edition
+                  = @book_copy.book_edition.isbn13.blank? ? '--' : @book_copy.book_edition.isbn13
             dl.row
               dd.col.s6
                 .label Condition
-                .item class="#{@book_copy.latest_condition.try(:color)}-text"
+                span.box class="#{@book_copy.latest_condition.try(:color)}"
                   = @book_copy.latest_condition.present? ? @book_copy.latest_condition.code.capitalize : 'N/A'
               dd.col.s6
                 .label Status

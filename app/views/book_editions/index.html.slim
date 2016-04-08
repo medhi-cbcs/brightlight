@@ -34,7 +34,7 @@ nav
           - if @view_style == :list
             td 
               .list_description
-                div = link_to book_edition.title, book_edition
+                div = link_to book_edition.title, book_edition_path(book_edition, {listpage:params[:page]})
                 - if book_edition.authors.present?
                   span.label Author:
                   span.item = book_edition.authors
@@ -52,12 +52,12 @@ nav
           - else    
             td style="vertical-align:top"
               - thumbnail = book_edition.small_thumbnail.present? ? book_edition.small_thumbnail : 'book-icon.png' 
-              = link_to book_edition
+              = link_to book_edition_path(book_edition, {listpage:params[:page]})
                 = image_tag(thumbnail, class: 'list_image')
             td
               .list_description
                 dl.row
-                  dt = link_to book_edition.title, book_edition
+                  dt = link_to book_edition.title, book_edition_path(book_edition, {listpage:params[:page]})
                   dd = book_edition.subtitle
                   - if book_edition.authors.present?
                     dd.col.s6

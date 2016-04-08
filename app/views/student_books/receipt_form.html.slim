@@ -1,36 +1,40 @@
-h4 LOAN RECEIPT FORM 
-h5 Student Textbooks 
+- if @student.present?
+  h5 LOAN RECEIPT FORM for 
+  h4 #{@student.name} (#{@grade_section.name})
+- else
+  h4 LOAN RECEIPT FORM 
+  h5 Student Textbooks 
 
 ul#grade-options.dropdown-content
   - GradeLevel.all.each do |grade|
     li 
-      = link_to grade.name, "#!", onclick:"filterSectionOptions(#{grade.id}, #{grade.name});"
+      = link_to grade.name, "#!", onclick:"filterSectionOptions(#{grade.id}, '#{grade.name}');"
+      /= link_to grade.name, "#!", "data-grade-id":"#{grade.id}", "data-grade-name":"#{grade.name}"
 ul#section-options.dropdown-content
   - @grade_sections.each do |section|
     li
       = link_to section.name, "#!", class:"grade-#{section.grade_level_id}", onclick:"filterStudentOptions(#{section.id}, '#{section.name}');"
 ul#student-options.dropdown-content
-  - if @labels.present?
-    - @labels.each do |label|
-      li
-        = link_to label.name, receipt_form_student_books_path(l:label.id)
-      
+  / - if @grade_section.present?
+  /   - @grade_section.students.each do |student|
+  /     li 
+  /       = link_to student.name, student_books_path(s:"#{@grade_section.id}",sid:"#{student.id}"), class:"student-#{@grade_section.grade_level_id}"
 
 javascript:
   function filterSectionOptions(id, name) {
     var grade_ids = #{raw @grade_level_ids};
-    $("#grade").html("Grade "+name);
-    grade_ids.forEach(function(g){ 
-      if(id!=g) { 
+    $("#grade").html(name);
+    grade_ids.forEach(function(g){
+      if(id!=g) {
         $(".grade-"+g).hide();
       } else {
         $(".grade-"+id).show();
       }
-    }) 
+    })
   }
   function filterStudentOptions(id, name) {
-    $("#section").html("Section "+name);
-    $.getJSON("/book_labels.json?term="+name, null, function (data) {
+    $("#section").html(name);
+    $.getJSON("/book_labels.json?section="+id, null, function (data) {
       console.log("Parsing /book_labels.json?term="+name);
       var list = "<li><a href='/student_books/receipt_form?gs="+name+"'>All</a></li>";
       $.each(data, function(i,item){

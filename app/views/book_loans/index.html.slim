@@ -1,37 +1,49 @@
-h1 Listing book_loans
+h4 Book Loan Status
 
-table
-  thead
-    tr
-      th Book copy
-      th Book edition
-      th Book title
-      th User
-      th Book category
-      th Loan type
-      th Out date
-      th Due date
-      th Academic year
-      th
-      th
-      th
+nav
+  .nav-wrapper
+    .brand-logo style="margin-left: 20px; font-size:1.5em"
+      | Search by
+    ul.right
+      li
+        = form_tag({controller:'book_loans', action:'index'}, {method: "get", class: "col s6"}) do
+          .input-field
+            = text_field_tag(:student, '', {placeholder:'Student name'})
+            label for="student"
+              i.material-icons.left search
+      li
+        = form_tag({controller:'book_loans', action:'index'}, {method: "get", class: "col s6"}) do
+          .input-field
+            = text_field_tag(:teacher, '', {placeholder:'Teacher name'})
+            label for="teacher"
+              i.material-icons.left search
 
-  tbody
-    - @book_loans.each do |book_loan|
+          
+.card-panel
+  table
+    thead
       tr
-        td = book_loan.book_copy
-        td = book_loan.book_edition
-        td = book_loan.book_title
-        td = book_loan.user
-        td = book_loan.book_category
-        td = book_loan.loan_type
-        td = book_loan.out_date
-        td = book_loan.due_date
-        td = book_loan.academic_year
-        td = link_to 'Show', book_loan
-        td = link_to 'Edit', edit_book_loan_path(book_loan)
-        td = link_to 'Destroy', book_loan, data: {:confirm => 'Are you sure?'}, :method => :delete
+        th Barcode
+        th Book title
+        th Out date
+        th Due date
+        th Academic year
+        th Student
+        th Teacher
 
-br
+    tbody
+      - @book_loans.each do |book_loan|
+        tr
+          td = book_loan.barcode
+          td = book_loan.book_edition.try(:title)
+          td = book_loan.out_date
+          td = book_loan.due_date
+          td = book_loan.academic_year.try(:name)
+          td = book_loan.student.try(:name)
+          td = book_loan.employee.try(:name)
 
-= link_to 'New Book loan', new_book_loan_path
+.toolbar.z-depth-1
+  = will_paginate @book_titles
+/ br
+/ 
+/ = link_to 'New Book loan', new_book_loan_path

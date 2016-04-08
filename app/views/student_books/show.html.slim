@@ -4,7 +4,7 @@ nav
   .nav-wrapper
     ul
       li
-        = link_to student_books_path
+        = link_to student_student_books_path(student_id:@student.id)
           i.material-icons chevron_left
       li.right
         = link_to edit_student_book_path(@student_book)
@@ -13,48 +13,42 @@ nav
 
 
 .card-panel
-  .row
-    .list_description
-      dl
-        dd.col.s2 
-          .label Copy no:
-          .item = @student_book.copy_no || '--' 
-        dd.col.s5 
-          .label Student:
-          .item = @student_book.student.try(:name)
-      dl
-        dd.col.s4 
-          .label Academic year:
-          .item = @student_book.academic_year.try(:name)
-      dl
-        dd.col.s2 
-          .label Book barcode:
-          .item = @student_book.book_copy.try(:barcode)
-      dl
-        dd.col.s9 
-          .label  Book title:
-          .item = @student_book.book_copy.try(:book_edition).try(:title)
-      dl
-        dd.col.s2 
-          .label Grade:
-          .item = @student_book.grade_level.try(:name)
-      dl
-        dd.col.s9 
-          .label Grade section:
-          .item = @student_book.grade_section.try(:name)
-      dl
-        dd.col.s2 
-          .label Issue date:
-          .item = @student_book.issue_date || '--'   
-      dl
-        dd.col.s9 
-          .label Return date:
-          .item = @student_book.return_date || '--'
-      dl
-        dd.col.s2 
-          .label Initial condition:
-          .item = @student_book.initial_copy_condition.try(:name) || '--' 
-      dl
-        dd.col.s9 
-          .label Return condition:
-          .item = @student_book.end_copy_condition.try(:name) || '--'
+  table
+    tr
+      td style="vertical-align:top"
+        - thumbnail = @student_book.book_copy.cover_image 
+        = image_tag(thumbnail, class: 'list_image')
+      td
+        .list_description
+          dl.row
+            dd.col.s4 
+              .label Student:
+              .item = @student_book.student.try(:name)
+            dd.col.s2 
+              .label Grade:
+              .item = @student_book.grade_section.try(:name)
+            dd.col.s6 
+              .label Academic year:
+              .item = @student_book.academic_year.try(:name)
+            dd.col.s2 
+              .label Barcode:
+              .item = @student_book.book_copy.try(:barcode)
+            dd.col.s9 
+              .label Book no:
+              .item = @student_book.copy_no || '--' 
+            dd.col.s12 
+              .label  Book title:
+              .item = link_to @student_book.book_copy.try(:book_edition)
+                = @student_book.book_copy.try(:book_edition).try(:title)
+            dd.col.s2
+              .label Issue date:
+              .item = @student_book.issue_date || '--'   
+            dd.col.s9 
+              .label Return/due date:
+              .item = @student_book.return_date || '--'
+            dd.col.s2
+              .label Initial condition:
+              .item = @student_book.initial_copy_condition.try(:name) || '--' 
+            dd.col.s9 
+              .label Return condition:
+              .item = @student_book.end_copy_condition.try(:name) || '--'

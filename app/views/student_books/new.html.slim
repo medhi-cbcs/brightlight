@@ -1,5 +1,87 @@
 h4 Book Assignment
 
-== render 'form'
+.card-panel
+  .list_description
+    dl.row
+      dt = @student.name
+      dd = "(#{@grade_section.try(:name)})"
 
-= link_to 'Back', student_books_path
+= form_for @student do |f|
+  nav
+    .nav-wrapper
+      .brand-logo style="margin-left: 20px; font-size:1.5em"
+        | Add student textbook 
+      ul
+        li.right
+          / Note: 'Append' new row at the end of the 'tbody#book_copy' node
+          = link_to_add_association f, :student_books, 'data-association-insertion-method' => 'append', 'data-association-insertion-node' => 'tbody#student_book'
+            ' Add Row
+            i.material-icons.left playlist_add
+
+  .card-panel
+    .row
+      table.compact
+        thead
+          th Barcode
+          th Title 
+          th
+        tbody#student_book
+          = f.fields_for :student_book, @student.student_books.build do |student_book|
+            = render 'student_book_fields', f: student_book
+
+  .toolbar.z-depth-1
+    button.btn.waves-effect.waves-light type="submit" Save
+    = link_to 'Cancel', student_student_books_path(@student), class: "waves-effect waves-light btn btn-flat"
+
+/ The following javascript callback function will turn select elements in the dynamically created row 
+/ into MaterializeCSS style selects.
+javascript:
+  $('#book_copy').on('cocoon:after-insert', function() {
+    $('select').material_select();
+  });
+  $(document).ready(function() {
+    var pressed = false;
+    var chars = [];
+    $(window).keypress(function(e) {
+      if (e.which >= 45 && e.which <= 112) {
+          chars.push(String.fromCharCode(e.which));
+      }
+      if (pressed == false) {
+        setTimeout(function(){
+          if (chars.length >= 11) {
+            var barcode = chars.join("");
+            // console.log("Barcode Scanned: " + barcode);
+            // assign value to some input (or do whatever you want)
+            var field = $("[name$='[barcode]']:last");
+            field.val(barcode);
+            $.getJSON("/book_copies/"+barcode+".json", null, function (data) {
+              book = data.book_copy;
+              $(".titles:last").html(book.book_edition.title);
+              $(".add_fields").trigger('click');
+            }).fail(function(){
+              $("[name$='[barcode]']:last").val('');
+              Materialize.toast("Invalid barcode.", 4000, 'red');
+            });            
+          }
+          chars = [];
+          pressed = false;
+        },500);
+      }
+      pressed = true;
+    });
+    $(document).on("keypress","[name$='[barcode]']", (function(e){
+      if ( e.which === 13 ) {
+        e.preventDefault();
+        $.getJSON("/book_copies/"+$(e.target).val()+".json", null, function (data) {
+          book = data.book_copy;
+          $(".titles:last").html(book.book_edition.title);
+          $(".add_fields").trigger('click');
+          $("[name$='[barcode]']:last").focus();
+        }).fail(function(){
+          $(e.target).val('');
+          Materialize.toast("Invalid barcode.", 5000, 'red');
+        });
+      }
+    }));
+  });
+  

@@ -6,8 +6,13 @@ class BookCopy < ActiveRecord::Base
   # validates :book_edition, :book_condition, :copy_no, presence: true
   validates :barcode, presence: true, uniqueness: true
   has_many :copy_conditions
+  has_many :book_loans
 
   after_create :create_initial_condition
+
+  def cover_image
+    book_edition.try(:small_thumbnail) || 'book-icon.png'
+  end
 
   def book_title
   	book_edition.try(:book_title)
@@ -18,7 +23,7 @@ class BookCopy < ActiveRecord::Base
   end
 
   def latest_condition
-    copy_conditions.order('created_at DESC').first.try(:book_condition)
+    copy_conditions.active.order('created_at DESC').first.try(:book_condition)
   end
 
   protected

@@ -18,6 +18,6 @@
             td.wd5 = i+1
             td.wd15 = book.barcode
             td.wd50.ellipsis
-              span = book.book_edition.title
-            td.wd10 = book.book_condition.code
+              span = book.book_edition.try(:title)
+            td.wd10 = book.book_condition.try(:code)
             td.wd20

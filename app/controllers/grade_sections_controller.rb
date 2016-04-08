@@ -6,8 +6,8 @@ class GradeSectionsController < ApplicationController
   # GET /grade_sections.json
   def index
     @grade_level = GradeLevel.find(params[:grade_level_id])
-    @year_id = params[:year] || AcademicYear.current_id
-    @grade_sections = @grade_level.grade_sections.with_academic_year(@year_id).includes([:academic_year, :homeroom])
+    @year_id = params[:year] || current_academic_year_id
+    @grade_sections = @grade_level.grade_sections.includes([:academic_year, :homeroom])
   end
 
   # GET /grade_sections/1
@@ -27,7 +27,8 @@ class GradeSectionsController < ApplicationController
   # GET /grade_sections/1/edit
   def edit
     @grade_level =  @grade_section.grade_level
-    @total_students = GradeSectionsStudent.number_of_students(@grade_section, AcademicYear.current_id)
+    @total_students = GradeSectionsStudent.number_of_students(@grade_section, current_academic_year_id)
+    @students = GradeSectionsStudent.where(academic_year_id:current_academic_year_id).where(grade_section:@grade_section)
   end
 
   def students
@@ -57,7 +58,7 @@ class GradeSectionsController < ApplicationController
   end
 
   def add_students
-    academic_year_id = AcademicYear.current_id
+    academic_year_id = current_academic_year_id
     params[:add].map {|id,on| Student.find(id)}.each do |student|
       @grade_section.add_student(student, academic_year_id)
     end
@@ -122,7 +123,7 @@ class GradeSectionsController < ApplicationController
     end
 
     def set_year
-      @year_id = params[:year] || AcademicYear.current_id
+      @year_id = params[:year] || current_academic_year_id
       @academic_year = AcademicYear.find(@year_id)
     end
 

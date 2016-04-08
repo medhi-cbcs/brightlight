@@ -62,7 +62,10 @@ nav
             dd.col.s5
               .label Student no: 
               .item = @student.student_no
-
+            dd.col.s5
+              .label Grade: 
+              .item = @current_grade.try(:name)
+              
     #tab2.tab-content
       .list_description.col.s12
         dl

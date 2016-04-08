@@ -39,6 +39,9 @@
           = f.label :page_count, class: 'active'
           = f.number_field :page_count
         .input-field.col.s6
+          = f.label :legacy_code, class: 'active'
+          = f.text_field :legacy_code
+        .input-field.col.s6
           = f.label :price, class: 'active'
           = f.text_field :price
         .input-field.col.s6
@@ -56,6 +59,9 @@
         .input-field.col.s6
           = f.label :subjects, class: 'active'
           = f.text_field :subjects
+        .input-field.col.s6
+          = f.label :thumbnail,  class: 'active'
+          = f.text_field :small_thumbnail
           
   .toolbar.z-depth-1
     .actions.col.s12 

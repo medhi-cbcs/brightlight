@@ -26,8 +26,8 @@
           tr
             td = i+1
             td = book.barcode
-            td = truncate(book.book_edition.title, length: 35)
-            td = book.book_condition.code
+            td = truncate(book.book_edition.try(:title), length: 35)
+            td = book.book_condition.try(:code)
             td
     // Footer
     br

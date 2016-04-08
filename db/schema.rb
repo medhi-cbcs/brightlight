@@ -11,7 +11,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160316063932) do
+ActiveRecord::Schema.define(version: 20160407013001) do
+
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
 
   create_table "academic_terms", force: :cascade do |t|
     t.integer  "academic_year_id"
@@ -22,15 +25,15 @@ ActiveRecord::Schema.define(version: 20160316063932) do
     t.datetime "updated_at",       null: false
   end
 
-  add_index "academic_terms", ["academic_year_id"], name: "index_academic_terms_on_academic_year_id"
+  add_index "academic_terms", ["academic_year_id"], name: "index_academic_terms_on_academic_year_id", using: :btree
 
   create_table "academic_terms_courses", id: false, force: :cascade do |t|
     t.integer "academic_term_id"
     t.integer "course_id"
   end
 
-  add_index "academic_terms_courses", ["academic_term_id"], name: "index_academic_terms_courses_on_academic_term_id"
-  add_index "academic_terms_courses", ["course_id"], name: "index_academic_terms_courses_on_course_id"
+  add_index "academic_terms_courses", ["academic_term_id"], name: "index_academic_terms_courses_on_academic_term_id", using: :btree
+  add_index "academic_terms_courses", ["course_id"], name: "index_academic_terms_courses_on_course_id", using: :btree
 
   create_table "academic_years", force: :cascade do |t|
     t.string   "name"
@@ -41,7 +44,7 @@ ActiveRecord::Schema.define(version: 20160316063932) do
     t.string   "slug"
   end
 
-  add_index "academic_years", ["slug"], name: "index_academic_years_on_slug", unique: true
+  add_index "academic_years", ["slug"], name: "index_academic_years_on_slug", unique: true, using: :btree
 
   create_table "attachment_types", force: :cascade do |t|
     t.string   "code"
@@ -65,12 +68,12 @@ ActiveRecord::Schema.define(version: 20160316063932) do
     t.integer  "grade_section_id"
   end
 
-  add_index "book_assignments", ["academic_year_id"], name: "index_book_assignments_on_academic_year_id"
-  add_index "book_assignments", ["book_copy_id"], name: "index_book_assignments_on_book_copy_id"
-  add_index "book_assignments", ["course_text_id"], name: "index_book_assignments_on_course_text_id"
-  add_index "book_assignments", ["grade_section_id"], name: "index_book_assignments_on_grade_section_id"
-  add_index "book_assignments", ["status_id"], name: "index_book_assignments_on_status_id"
-  add_index "book_assignments", ["student_id"], name: "index_book_assignments_on_student_id"
+  add_index "book_assignments", ["academic_year_id"], name: "index_book_assignments_on_academic_year_id", using: :btree
+  add_index "book_assignments", ["book_copy_id"], name: "index_book_assignments_on_book_copy_id", using: :btree
+  add_index "book_assignments", ["course_text_id"], name: "index_book_assignments_on_course_text_id", using: :btree
+  add_index "book_assignments", ["grade_section_id"], name: "index_book_assignments_on_grade_section_id", using: :btree
+  add_index "book_assignments", ["status_id"], name: "index_book_assignments_on_status_id", using: :btree
+  add_index "book_assignments", ["student_id"], name: "index_book_assignments_on_student_id", using: :btree
 
   create_table "book_categories", force: :cascade do |t|
     t.string   "code"
@@ -89,7 +92,7 @@ ActiveRecord::Schema.define(version: 20160316063932) do
     t.string   "slug"
   end
 
-  add_index "book_conditions", ["slug"], name: "index_book_conditions_on_slug", unique: true
+  add_index "book_conditions", ["slug"], name: "index_book_conditions_on_slug", unique: true, using: :btree
 
   create_table "book_copies", force: :cascade do |t|
     t.integer  "book_edition_id"
@@ -103,12 +106,12 @@ ActiveRecord::Schema.define(version: 20160316063932) do
     t.string   "slug"
   end
 
-  add_index "book_copies", ["barcode"], name: "index_book_copies_on_barcode", unique: true
-  add_index "book_copies", ["book_condition_id"], name: "index_book_copies_on_book_condition_id"
-  add_index "book_copies", ["book_edition_id"], name: "index_book_copies_on_book_edition_id"
-  add_index "book_copies", ["book_label_id"], name: "index_book_copies_on_book_label_id"
-  add_index "book_copies", ["slug"], name: "index_book_copies_on_slug", unique: true
-  add_index "book_copies", ["status_id"], name: "index_book_copies_on_status_id"
+  add_index "book_copies", ["barcode"], name: "index_book_copies_on_barcode", unique: true, using: :btree
+  add_index "book_copies", ["book_condition_id"], name: "index_book_copies_on_book_condition_id", using: :btree
+  add_index "book_copies", ["book_edition_id"], name: "index_book_copies_on_book_edition_id", using: :btree
+  add_index "book_copies", ["book_label_id"], name: "index_book_copies_on_book_label_id", using: :btree
+  add_index "book_copies", ["slug"], name: "index_book_copies_on_slug", unique: true, using: :btree
+  add_index "book_copies", ["status_id"], name: "index_book_copies_on_status_id", using: :btree
 
   create_table "book_editions", force: :cascade do |t|
     t.string   "google_book_id"
@@ -138,10 +141,11 @@ ActiveRecord::Schema.define(version: 20160316063932) do
     t.integer  "attachment_qty"
     t.string   "refno"
     t.string   "slug"
+    t.string   "legacy_code"
   end
 
-  add_index "book_editions", ["book_title_id"], name: "index_book_editions_on_book_title_id"
-  add_index "book_editions", ["slug"], name: "index_book_editions_on_slug", unique: true
+  add_index "book_editions", ["book_title_id"], name: "index_book_editions_on_book_title_id", using: :btree
+  add_index "book_editions", ["slug"], name: "index_book_editions_on_slug", unique: true, using: :btree
 
   create_table "book_fines", force: :cascade do |t|
     t.integer  "book_copy_id"
@@ -155,9 +159,9 @@ ActiveRecord::Schema.define(version: 20160316063932) do
     t.datetime "updated_at",       null: false
   end
 
-  add_index "book_fines", ["academic_year_id"], name: "index_book_fines_on_academic_year_id"
-  add_index "book_fines", ["book_copy_id"], name: "index_book_fines_on_book_copy_id"
-  add_index "book_fines", ["student_id"], name: "index_book_fines_on_student_id"
+  add_index "book_fines", ["academic_year_id"], name: "index_book_fines_on_academic_year_id", using: :btree
+  add_index "book_fines", ["book_copy_id"], name: "index_book_fines_on_book_copy_id", using: :btree
+  add_index "book_fines", ["student_id"], name: "index_book_fines_on_student_id", using: :btree
 
   create_table "book_labels", force: :cascade do |t|
     t.integer  "grade_level_id"
@@ -167,12 +171,13 @@ ActiveRecord::Schema.define(version: 20160316063932) do
     t.datetime "updated_at",       null: false
     t.integer  "grade_section_id"
     t.string   "slug"
+    t.integer  "book_no"
   end
 
-  add_index "book_labels", ["grade_level_id"], name: "index_book_labels_on_grade_level_id"
-  add_index "book_labels", ["grade_section_id"], name: "index_book_labels_on_grade_section_id"
-  add_index "book_labels", ["slug"], name: "index_book_labels_on_slug", unique: true
-  add_index "book_labels", ["student_id"], name: "index_book_labels_on_student_id"
+  add_index "book_labels", ["grade_level_id"], name: "index_book_labels_on_grade_level_id", using: :btree
+  add_index "book_labels", ["grade_section_id"], name: "index_book_labels_on_grade_section_id", using: :btree
+  add_index "book_labels", ["slug"], name: "index_book_labels_on_slug", unique: true, using: :btree
+  add_index "book_labels", ["student_id"], name: "index_book_labels_on_student_id", using: :btree
 
   create_table "book_loan_histories", force: :cascade do |t|
     t.integer  "book_title_id"
@@ -194,14 +199,14 @@ ActiveRecord::Schema.define(version: 20160316063932) do
     t.datetime "updated_at",       null: false
   end
 
-  add_index "book_loan_histories", ["academic_year_id"], name: "index_book_loan_histories_on_academic_year_id"
-  add_index "book_loan_histories", ["book_copy_id"], name: "index_book_loan_histories_on_book_copy_id"
-  add_index "book_loan_histories", ["book_edition_id"], name: "index_book_loan_histories_on_book_edition_id"
-  add_index "book_loan_histories", ["book_title_id"], name: "index_book_loan_histories_on_book_title_id"
-  add_index "book_loan_histories", ["condition_in_id"], name: "index_book_loan_histories_on_condition_in_id"
-  add_index "book_loan_histories", ["condition_out_id"], name: "index_book_loan_histories_on_condition_out_id"
-  add_index "book_loan_histories", ["update_by_id"], name: "index_book_loan_histories_on_update_by_id"
-  add_index "book_loan_histories", ["user_id"], name: "index_book_loan_histories_on_user_id"
+  add_index "book_loan_histories", ["academic_year_id"], name: "index_book_loan_histories_on_academic_year_id", using: :btree
+  add_index "book_loan_histories", ["book_copy_id"], name: "index_book_loan_histories_on_book_copy_id", using: :btree
+  add_index "book_loan_histories", ["book_edition_id"], name: "index_book_loan_histories_on_book_edition_id", using: :btree
+  add_index "book_loan_histories", ["book_title_id"], name: "index_book_loan_histories_on_book_title_id", using: :btree
+  add_index "book_loan_histories", ["condition_in_id"], name: "index_book_loan_histories_on_condition_in_id", using: :btree
+  add_index "book_loan_histories", ["condition_out_id"], name: "index_book_loan_histories_on_condition_out_id", using: :btree
+  add_index "book_loan_histories", ["update_by_id"], name: "index_book_loan_histories_on_update_by_id", using: :btree
+  add_index "book_loan_histories", ["user_id"], name: "index_book_loan_histories_on_user_id", using: :btree
 
   create_table "book_loans", force: :cascade do |t|
     t.integer  "book_copy_id"
@@ -214,8 +219,8 @@ ActiveRecord::Schema.define(version: 20160316063932) do
     t.date     "due_date"
     t.integer  "academic_year_id"
     t.integer  "user_id"
-    t.datetime "created_at",           null: false
-    t.datetime "updated_at",           null: false
+    t.datetime "created_at",            null: false
+    t.datetime "updated_at",            null: false
     t.string   "student_no"
     t.string   "roster_no"
     t.string   "barcode"
@@ -223,7 +228,7 @@ ActiveRecord::Schema.define(version: 20160316063932) do
     t.string   "grade_section_code"
     t.string   "grade_subject_code"
     t.string   "notes"
-    t.integer  "new_academic_year_id"
+    t.integer  "prev_academic_year_id"
     t.string   "loan_status"
     t.string   "return_status"
     t.string   "bkudid"
@@ -233,33 +238,35 @@ ActiveRecord::Schema.define(version: 20160316063932) do
     t.integer  "student_id"
   end
 
-  add_index "book_loans", ["academic_year_id"], name: "index_book_loans_on_academic_year_id"
-  add_index "book_loans", ["book_category_id"], name: "index_book_loans_on_book_category_id"
-  add_index "book_loans", ["book_copy_id"], name: "index_book_loans_on_book_copy_id"
-  add_index "book_loans", ["book_edition_id"], name: "index_book_loans_on_book_edition_id"
-  add_index "book_loans", ["book_title_id"], name: "index_book_loans_on_book_title_id"
-  add_index "book_loans", ["employee_id"], name: "index_book_loans_on_employee_id"
-  add_index "book_loans", ["loan_type_id"], name: "index_book_loans_on_loan_type_id"
-  add_index "book_loans", ["new_academic_year_id"], name: "index_book_loans_on_new_academic_year_id"
-  add_index "book_loans", ["person_id"], name: "index_book_loans_on_person_id"
-  add_index "book_loans", ["student_id"], name: "index_book_loans_on_student_id"
-  add_index "book_loans", ["user_id"], name: "index_book_loans_on_user_id"
+  add_index "book_loans", ["academic_year_id"], name: "index_book_loans_on_academic_year_id", using: :btree
+  add_index "book_loans", ["book_category_id"], name: "index_book_loans_on_book_category_id", using: :btree
+  add_index "book_loans", ["book_copy_id"], name: "index_book_loans_on_book_copy_id", using: :btree
+  add_index "book_loans", ["book_edition_id"], name: "index_book_loans_on_book_edition_id", using: :btree
+  add_index "book_loans", ["book_title_id"], name: "index_book_loans_on_book_title_id", using: :btree
+  add_index "book_loans", ["employee_id"], name: "index_book_loans_on_employee_id", using: :btree
+  add_index "book_loans", ["loan_type_id"], name: "index_book_loans_on_loan_type_id", using: :btree
+  add_index "book_loans", ["person_id"], name: "index_book_loans_on_person_id", using: :btree
+  add_index "book_loans", ["prev_academic_year_id"], name: "index_book_loans_on_prev_academic_year_id", using: :btree
+  add_index "book_loans", ["student_id"], name: "index_book_loans_on_student_id", using: :btree
+  add_index "book_loans", ["user_id"], name: "index_book_loans_on_user_id", using: :btree
 
   create_table "book_titles", force: :cascade do |t|
     t.string   "title"
     t.string   "authors"
     t.string   "publisher"
     t.string   "image_url"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
     t.integer  "bkudid"
     t.integer  "subject_id"
     t.string   "subject"
     t.string   "slug"
+    t.string   "subject_level"
+    t.string   "grade_code"
   end
 
-  add_index "book_titles", ["slug"], name: "index_book_titles_on_slug", unique: true
-  add_index "book_titles", ["subject_id"], name: "index_book_titles_on_subject_id"
+  add_index "book_titles", ["slug"], name: "index_book_titles_on_slug", unique: true, using: :btree
+  add_index "book_titles", ["subject_id"], name: "index_book_titles_on_subject_id", using: :btree
 
   create_table "copy_conditions", force: :cascade do |t|
     t.integer  "book_copy_id"
@@ -272,12 +279,14 @@ ActiveRecord::Schema.define(version: 20160316063932) do
     t.date     "end_date"
     t.datetime "created_at",        null: false
     t.datetime "updated_at",        null: false
+    t.integer  "post"
+    t.boolean  "deleted_flag"
   end
 
-  add_index "copy_conditions", ["academic_year_id"], name: "index_copy_conditions_on_academic_year_id"
-  add_index "copy_conditions", ["book_condition_id"], name: "index_copy_conditions_on_book_condition_id"
-  add_index "copy_conditions", ["book_copy_id"], name: "index_copy_conditions_on_book_copy_id"
-  add_index "copy_conditions", ["user_id"], name: "index_copy_conditions_on_user_id"
+  add_index "copy_conditions", ["academic_year_id"], name: "index_copy_conditions_on_academic_year_id", using: :btree
+  add_index "copy_conditions", ["book_condition_id"], name: "index_copy_conditions_on_book_condition_id", using: :btree
+  add_index "copy_conditions", ["book_copy_id"], name: "index_copy_conditions_on_book_copy_id", using: :btree
+  add_index "copy_conditions", ["user_id"], name: "index_copy_conditions_on_user_id", using: :btree
 
   create_table "course_section_histories", force: :cascade do |t|
     t.string   "name"
@@ -290,11 +299,11 @@ ActiveRecord::Schema.define(version: 20160316063932) do
     t.datetime "updated_at",       null: false
   end
 
-  add_index "course_section_histories", ["academic_term_id"], name: "index_course_section_histories_on_academic_term_id"
-  add_index "course_section_histories", ["academic_year_id"], name: "index_course_section_histories_on_academic_year_id"
-  add_index "course_section_histories", ["course_id"], name: "index_course_section_histories_on_course_id"
-  add_index "course_section_histories", ["grade_section_id"], name: "index_course_section_histories_on_grade_section_id"
-  add_index "course_section_histories", ["instructor_id"], name: "index_course_section_histories_on_instructor_id"
+  add_index "course_section_histories", ["academic_term_id"], name: "index_course_section_histories_on_academic_term_id", using: :btree
+  add_index "course_section_histories", ["academic_year_id"], name: "index_course_section_histories_on_academic_year_id", using: :btree
+  add_index "course_section_histories", ["course_id"], name: "index_course_section_histories_on_course_id", using: :btree
+  add_index "course_section_histories", ["grade_section_id"], name: "index_course_section_histories_on_grade_section_id", using: :btree
+  add_index "course_section_histories", ["instructor_id"], name: "index_course_section_histories_on_instructor_id", using: :btree
 
   create_table "course_sections", force: :cascade do |t|
     t.string   "name"
@@ -306,10 +315,10 @@ ActiveRecord::Schema.define(version: 20160316063932) do
     t.string   "slug"
   end
 
-  add_index "course_sections", ["course_id"], name: "index_course_sections_on_course_id"
-  add_index "course_sections", ["grade_section_id"], name: "index_course_sections_on_grade_section_id"
-  add_index "course_sections", ["instructor_id"], name: "index_course_sections_on_instructor_id"
-  add_index "course_sections", ["slug"], name: "index_course_sections_on_slug", unique: true
+  add_index "course_sections", ["course_id"], name: "index_course_sections_on_course_id", using: :btree
+  add_index "course_sections", ["grade_section_id"], name: "index_course_sections_on_grade_section_id", using: :btree
+  add_index "course_sections", ["instructor_id"], name: "index_course_sections_on_instructor_id", using: :btree
+  add_index "course_sections", ["slug"], name: "index_course_sections_on_slug", unique: true, using: :btree
 
   create_table "course_texts", force: :cascade do |t|
     t.integer "course_id"
@@ -317,8 +326,8 @@ ActiveRecord::Schema.define(version: 20160316063932) do
     t.integer "order_no"
   end
 
-  add_index "course_texts", ["book_title_id"], name: "index_course_texts_on_book_title_id"
-  add_index "course_texts", ["course_id"], name: "index_course_texts_on_course_id"
+  add_index "course_texts", ["book_title_id"], name: "index_course_texts_on_book_title_id", using: :btree
+  add_index "course_texts", ["course_id"], name: "index_course_texts_on_course_id", using: :btree
 
   create_table "courses", force: :cascade do |t|
     t.string   "name"
@@ -333,11 +342,11 @@ ActiveRecord::Schema.define(version: 20160316063932) do
     t.string   "slug"
   end
 
-  add_index "courses", ["academic_term_id"], name: "index_courses_on_academic_term_id"
-  add_index "courses", ["academic_year_id"], name: "index_courses_on_academic_year_id"
-  add_index "courses", ["employee_id"], name: "index_courses_on_employee_id"
-  add_index "courses", ["grade_level_id"], name: "index_courses_on_grade_level_id"
-  add_index "courses", ["slug"], name: "index_courses_on_slug", unique: true
+  add_index "courses", ["academic_term_id"], name: "index_courses_on_academic_term_id", using: :btree
+  add_index "courses", ["academic_year_id"], name: "index_courses_on_academic_year_id", using: :btree
+  add_index "courses", ["employee_id"], name: "index_courses_on_employee_id", using: :btree
+  add_index "courses", ["grade_level_id"], name: "index_courses_on_grade_level_id", using: :btree
+  add_index "courses", ["slug"], name: "index_courses_on_slug", unique: true, using: :btree
 
   create_table "departments", force: :cascade do |t|
     t.string   "name"
@@ -348,8 +357,8 @@ ActiveRecord::Schema.define(version: 20160316063932) do
     t.string   "slug"
   end
 
-  add_index "departments", ["manager_id"], name: "index_departments_on_manager_id"
-  add_index "departments", ["slug"], name: "index_departments_on_slug", unique: true
+  add_index "departments", ["manager_id"], name: "index_departments_on_manager_id", using: :btree
+  add_index "departments", ["slug"], name: "index_departments_on_slug", unique: true, using: :btree
 
   create_table "employees", force: :cascade do |t|
     t.string   "name"
@@ -399,10 +408,10 @@ ActiveRecord::Schema.define(version: 20160316063932) do
     t.integer  "family_no"
   end
 
-  add_index "employees", ["department_id"], name: "index_employees_on_department_id"
-  add_index "employees", ["person_id"], name: "index_employees_on_person_id"
-  add_index "employees", ["slug"], name: "index_employees_on_slug", unique: true
-  add_index "employees", ["supervisor_id"], name: "index_employees_on_supervisor_id"
+  add_index "employees", ["department_id"], name: "index_employees_on_department_id", using: :btree
+  add_index "employees", ["person_id"], name: "index_employees_on_person_id", using: :btree
+  add_index "employees", ["slug"], name: "index_employees_on_slug", unique: true, using: :btree
+  add_index "employees", ["supervisor_id"], name: "index_employees_on_supervisor_id", using: :btree
 
   create_table "fine_scales", force: :cascade do |t|
     t.integer  "old_condition_id"
@@ -412,8 +421,8 @@ ActiveRecord::Schema.define(version: 20160316063932) do
     t.datetime "updated_at",       null: false
   end
 
-  add_index "fine_scales", ["new_condition_id"], name: "index_fine_scales_on_new_condition_id"
-  add_index "fine_scales", ["old_condition_id"], name: "index_fine_scales_on_old_condition_id"
+  add_index "fine_scales", ["new_condition_id"], name: "index_fine_scales_on_new_condition_id", using: :btree
+  add_index "fine_scales", ["old_condition_id"], name: "index_fine_scales_on_old_condition_id", using: :btree
 
   create_table "grade_levels", force: :cascade do |t|
     t.string   "name"
@@ -425,8 +434,8 @@ ActiveRecord::Schema.define(version: 20160316063932) do
     t.string   "slug"
   end
 
-  add_index "grade_levels", ["school_level_id"], name: "index_grade_levels_on_school_level_id"
-  add_index "grade_levels", ["slug"], name: "index_grade_levels_on_slug", unique: true
+  add_index "grade_levels", ["school_level_id"], name: "index_grade_levels_on_school_level_id", using: :btree
+  add_index "grade_levels", ["slug"], name: "index_grade_levels_on_slug", unique: true, using: :btree
 
   create_table "grade_section_histories", force: :cascade do |t|
     t.integer  "grade_level_id"
@@ -440,13 +449,14 @@ ActiveRecord::Schema.define(version: 20160316063932) do
     t.string   "subject_code"
     t.string   "parallel_code"
     t.string   "notes"
+    t.integer  "capacity"
   end
 
-  add_index "grade_section_histories", ["academic_year_id"], name: "index_grade_section_histories_on_academic_year_id"
-  add_index "grade_section_histories", ["assistant_id"], name: "index_grade_section_histories_on_assistant_id"
-  add_index "grade_section_histories", ["grade_level_id"], name: "index_grade_section_histories_on_grade_level_id"
-  add_index "grade_section_histories", ["grade_section_id"], name: "index_grade_section_histories_on_grade_section_id"
-  add_index "grade_section_histories", ["homeroom_id"], name: "index_grade_section_histories_on_homeroom_id"
+  add_index "grade_section_histories", ["academic_year_id"], name: "index_grade_section_histories_on_academic_year_id", using: :btree
+  add_index "grade_section_histories", ["assistant_id"], name: "index_grade_section_histories_on_assistant_id", using: :btree
+  add_index "grade_section_histories", ["grade_level_id"], name: "index_grade_section_histories_on_grade_level_id", using: :btree
+  add_index "grade_section_histories", ["grade_section_id"], name: "index_grade_section_histories_on_grade_section_id", using: :btree
+  add_index "grade_section_histories", ["homeroom_id"], name: "index_grade_section_histories_on_homeroom_id", using: :btree
 
   create_table "grade_sections", force: :cascade do |t|
     t.integer  "grade_level_id"
@@ -460,13 +470,14 @@ ActiveRecord::Schema.define(version: 20160316063932) do
     t.string   "subject_code"
     t.string   "parallel_code"
     t.string   "notes"
+    t.integer  "capacity"
   end
 
-  add_index "grade_sections", ["academic_year_id"], name: "index_grade_sections_on_academic_year_id"
-  add_index "grade_sections", ["assistant_id"], name: "index_grade_sections_on_assistant_id"
-  add_index "grade_sections", ["grade_level_id"], name: "index_grade_sections_on_grade_level_id"
-  add_index "grade_sections", ["homeroom_id"], name: "index_grade_sections_on_homeroom_id"
-  add_index "grade_sections", ["slug"], name: "index_grade_sections_on_slug", unique: true
+  add_index "grade_sections", ["academic_year_id"], name: "index_grade_sections_on_academic_year_id", using: :btree
+  add_index "grade_sections", ["assistant_id"], name: "index_grade_sections_on_assistant_id", using: :btree
+  add_index "grade_sections", ["grade_level_id"], name: "index_grade_sections_on_grade_level_id", using: :btree
+  add_index "grade_sections", ["homeroom_id"], name: "index_grade_sections_on_homeroom_id", using: :btree
+  add_index "grade_sections", ["slug"], name: "index_grade_sections_on_slug", unique: true, using: :btree
 
   create_table "grade_sections_students", force: :cascade do |t|
     t.integer  "grade_section_id"
@@ -479,10 +490,10 @@ ActiveRecord::Schema.define(version: 20160316063932) do
     t.string   "notes"
   end
 
-  add_index "grade_sections_students", ["academic_year_id"], name: "index_grade_sections_students_on_academic_year_id"
-  add_index "grade_sections_students", ["grade_section_history_id"], name: "index_grade_sections_students_on_grade_section_history_id"
-  add_index "grade_sections_students", ["grade_section_id"], name: "index_grade_sections_students_on_grade_section_id"
-  add_index "grade_sections_students", ["student_id"], name: "index_grade_sections_students_on_student_id"
+  add_index "grade_sections_students", ["academic_year_id"], name: "index_grade_sections_students_on_academic_year_id", using: :btree
+  add_index "grade_sections_students", ["grade_section_history_id"], name: "index_grade_sections_students_on_grade_section_history_id", using: :btree
+  add_index "grade_sections_students", ["grade_section_id"], name: "index_grade_sections_students_on_grade_section_id", using: :btree
+  add_index "grade_sections_students", ["student_id"], name: "index_grade_sections_students_on_student_id", using: :btree
 
   create_table "guardians", force: :cascade do |t|
     t.string   "name"
@@ -505,8 +516,8 @@ ActiveRecord::Schema.define(version: 20160316063932) do
     t.string   "slug"
   end
 
-  add_index "guardians", ["person_id"], name: "index_guardians_on_person_id"
-  add_index "guardians", ["slug"], name: "index_guardians_on_slug", unique: true
+  add_index "guardians", ["person_id"], name: "index_guardians_on_person_id", using: :btree
+  add_index "guardians", ["slug"], name: "index_guardians_on_slug", unique: true, using: :btree
 
   create_table "loan_types", force: :cascade do |t|
     t.string   "code"
@@ -555,7 +566,7 @@ ActiveRecord::Schema.define(version: 20160316063932) do
     t.integer  "user_id"
   end
 
-  add_index "people", ["user_id"], name: "index_people_on_user_id"
+  add_index "people", ["user_id"], name: "index_people_on_user_id", using: :btree
 
   create_table "products", force: :cascade do |t|
     t.string   "title"
@@ -577,9 +588,9 @@ ActiveRecord::Schema.define(version: 20160316063932) do
     t.datetime "updated_at",        null: false
   end
 
-  add_index "rosters", ["academic_year_id"], name: "index_rosters_on_academic_year_id"
-  add_index "rosters", ["course_section_id"], name: "index_rosters_on_course_section_id"
-  add_index "rosters", ["student_id"], name: "index_rosters_on_student_id"
+  add_index "rosters", ["academic_year_id"], name: "index_rosters_on_academic_year_id", using: :btree
+  add_index "rosters", ["course_section_id"], name: "index_rosters_on_course_section_id", using: :btree
+  add_index "rosters", ["student_id"], name: "index_rosters_on_student_id", using: :btree
 
   create_table "school_levels", force: :cascade do |t|
     t.string   "name"
@@ -597,7 +608,7 @@ ActiveRecord::Schema.define(version: 20160316063932) do
     t.datetime "updated_at",       null: false
   end
 
-  add_index "school_terms", ["academic_year_id"], name: "index_school_terms_on_academic_year_id"
+  add_index "school_terms", ["academic_year_id"], name: "index_school_terms_on_academic_year_id", using: :btree
 
   create_table "school_years", force: :cascade do |t|
     t.string   "name"
@@ -606,6 +617,33 @@ ActiveRecord::Schema.define(version: 20160316063932) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
+
+  create_table "standard_books", force: :cascade do |t|
+    t.integer  "book_title_id"
+    t.integer  "book_edition_id"
+    t.integer  "book_category_id"
+    t.integer  "grade_level_id"
+    t.integer  "grade_section_id"
+    t.integer  "academic_year_id"
+    t.string   "isbn"
+    t.string   "refno"
+    t.integer  "quantity"
+    t.string   "grade_subject_code"
+    t.string   "grade_name"
+    t.string   "group"
+    t.string   "category"
+    t.string   "bkudid"
+    t.string   "notes"
+    t.datetime "created_at",         null: false
+    t.datetime "updated_at",         null: false
+  end
+
+  add_index "standard_books", ["academic_year_id"], name: "index_standard_books_on_academic_year_id", using: :btree
+  add_index "standard_books", ["book_category_id"], name: "index_standard_books_on_book_category_id", using: :btree
+  add_index "standard_books", ["book_edition_id"], name: "index_standard_books_on_book_edition_id", using: :btree
+  add_index "standard_books", ["book_title_id"], name: "index_standard_books_on_book_title_id", using: :btree
+  add_index "standard_books", ["grade_level_id"], name: "index_standard_books_on_grade_level_id", using: :btree
+  add_index "standard_books", ["grade_section_id"], name: "index_standard_books_on_grade_section_id", using: :btree
 
   create_table "statuses", force: :cascade do |t|
     t.string  "name"
@@ -633,8 +671,8 @@ ActiveRecord::Schema.define(version: 20160316063932) do
     t.datetime "updated_at",        null: false
   end
 
-  add_index "student_admission_infos", ["academic_year_id"], name: "index_student_admission_infos_on_academic_year_id"
-  add_index "student_admission_infos", ["student_id"], name: "index_student_admission_infos_on_student_id"
+  add_index "student_admission_infos", ["academic_year_id"], name: "index_student_admission_infos_on_academic_year_id", using: :btree
+  add_index "student_admission_infos", ["student_id"], name: "index_student_admission_infos_on_student_id", using: :btree
 
   create_table "student_books", force: :cascade do |t|
     t.integer  "student_id"
@@ -657,17 +695,17 @@ ActiveRecord::Schema.define(version: 20160316063932) do
     t.string   "grade_section_code"
     t.string   "grade_subject_code"
     t.string   "notes"
-    t.integer  "new_academic_year_id"
+    t.integer  "prev_academic_year_id"
   end
 
-  add_index "student_books", ["academic_year_id"], name: "index_student_books_on_academic_year_id"
-  add_index "student_books", ["book_copy_id"], name: "index_student_books_on_book_copy_id"
-  add_index "student_books", ["course_id"], name: "index_student_books_on_course_id"
-  add_index "student_books", ["course_text_id"], name: "index_student_books_on_course_text_id"
-  add_index "student_books", ["grade_level_id"], name: "index_student_books_on_grade_level_id"
-  add_index "student_books", ["grade_section_id"], name: "index_student_books_on_grade_section_id"
-  add_index "student_books", ["new_academic_year_id"], name: "index_student_books_on_new_academic_year_id"
-  add_index "student_books", ["student_id"], name: "index_student_books_on_student_id"
+  add_index "student_books", ["academic_year_id"], name: "index_student_books_on_academic_year_id", using: :btree
+  add_index "student_books", ["book_copy_id"], name: "index_student_books_on_book_copy_id", using: :btree
+  add_index "student_books", ["course_id"], name: "index_student_books_on_course_id", using: :btree
+  add_index "student_books", ["course_text_id"], name: "index_student_books_on_course_text_id", using: :btree
+  add_index "student_books", ["grade_level_id"], name: "index_student_books_on_grade_level_id", using: :btree
+  add_index "student_books", ["grade_section_id"], name: "index_student_books_on_grade_section_id", using: :btree
+  add_index "student_books", ["prev_academic_year_id"], name: "index_student_books_on_prev_academic_year_id", using: :btree
+  add_index "student_books", ["student_id"], name: "index_student_books_on_student_id", using: :btree
 
   create_table "students", force: :cascade do |t|
     t.string   "name"
@@ -721,8 +759,8 @@ ActiveRecord::Schema.define(version: 20160316063932) do
     t.string   "language"
   end
 
-  add_index "students", ["person_id"], name: "index_students_on_person_id"
-  add_index "students", ["slug"], name: "index_students_on_slug", unique: true
+  add_index "students", ["person_id"], name: "index_students_on_person_id", using: :btree
+  add_index "students", ["slug"], name: "index_students_on_slug", unique: true, using: :btree
 
   create_table "students_guardians", id: false, force: :cascade do |t|
     t.integer  "student_id"
@@ -732,8 +770,8 @@ ActiveRecord::Schema.define(version: 20160316063932) do
     t.datetime "updated_at",  null: false
   end
 
-  add_index "students_guardians", ["guardian_id"], name: "index_students_guardians_on_guardian_id"
-  add_index "students_guardians", ["student_id"], name: "index_students_guardians_on_student_id"
+  add_index "students_guardians", ["guardian_id"], name: "index_students_guardians_on_guardian_id", using: :btree
+  add_index "students_guardians", ["student_id"], name: "index_students_guardians_on_student_id", using: :btree
 
   create_table "subjects", force: :cascade do |t|
     t.string   "code"
@@ -768,7 +806,13 @@ ActiveRecord::Schema.define(version: 20160316063932) do
     t.integer  "roles_mask"
   end
 
-  add_index "users", ["email"], name: "index_users_on_email", unique: true
-  add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
+  add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
+  add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
 
+  add_foreign_key "standard_books", "academic_years"
+  add_foreign_key "standard_books", "book_categories"
+  add_foreign_key "standard_books", "book_editions"
+  add_foreign_key "standard_books", "book_titles"
+  add_foreign_key "standard_books", "grade_levels"
+  add_foreign_key "standard_books", "grade_sections"
 end
