@@ -11,7 +11,8 @@ namespace :data do
           subject_code: section.subject_code,
           parallel_code: section.parallel_code
         )
-        # puts "#{section.grade_section_histories.last.name} #{section.grade_section_histories.last.academic_year.name}"
+        puts "#{section.grade_section_histories.last.name} #{section.grade_section_histories.last.academic_year.name}"
+				section.save
       end
 		end
   end

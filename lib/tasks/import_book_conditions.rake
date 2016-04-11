@@ -18,7 +18,9 @@ namespace :data do
 
 		if use_sql_server
 			client = TinyTds::Client.new username: 'dbest1', password: 'Sadrakh201', dataserver:'SERVER3000\CAHAYABANGSA05', database:'PROBEST1_0LD'
-			['CBCS_INVWRITECONDITIONS','CBCS_INVRETURNCONDITIONS'].each_with_index do |table,post|
+			#['CBCS_INVWRITECONDITIONS','CBCS_INVRETURNCONDITIONS'].each_with_index do |table,post|
+			['CBCS_INVRETURNCONDITIONS'].each_with_index do |table,post|
+				post = 1
 				results = client.execute("SELECT * FROM #{table}")
 
 				results.each_with_index do |row, i|
@@ -26,6 +28,7 @@ namespace :data do
 
 					copy = BookCopy.find_by_barcode(barcode)
 					deleted_flag = row[header[:index]] == 0
+					# puts "#{row[header[:barcode]]}:#{row[header[:condition_id]]}:#{row[header[:new_acad_year]]} | #{copy.try(:book_edition).try(:title)}"
 
 					if copy.present?
 						data = [copy.id, barcode, conditions[row[header[:condition_id]].to_i - 1].id, row[header[:date_input]], year_ids[row[header[:new_acad_year]]], row[header[:notes]], post, deleted_flag]

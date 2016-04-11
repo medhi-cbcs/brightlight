@@ -12,7 +12,7 @@ namespace :data do
       results = client.execute("SELECT WRBARCODEID,RENTClassLevelID,RENTSubjectID,RENTSTUDENTNUM
 							  FROM [PROBEST1_0LD].[dbo].[CBCS_INVWRITEBARCODE]
 							  LEFT JOIN [CBCS_INVBOOKSRENT]
-								ON [WRBARCODEID] = [RENTBARCODEID] and [RENTCategory] = 'TB' and [RENTNewAcademicYear] = #{year}
+								ON [WRBARCODEID] = [RENTBARCODEID] and [RENTCategory] = 'TB' and [RENTNewAcademicYear] = '#{year}'
 							  WHERE [WRINDEX] = 1")
 
 			results.each_with_index do |row, i|
