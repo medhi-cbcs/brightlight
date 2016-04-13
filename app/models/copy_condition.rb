@@ -6,7 +6,7 @@ class CopyCondition < ActiveRecord::Base
 
   # validates :academic_year, :start_date, :book_copy_id, :book_condition, :barcode, presence: true
 
-  scope :current_year, lambda { where(academic_year_id:current_academic_year_id) }
+  scope :current_year, lambda { where(academic_year:AcademicYear.current) }
   scope :active, lambda { where(deleted_flag:false) }
 
   scope :for_label, lambda { |label|

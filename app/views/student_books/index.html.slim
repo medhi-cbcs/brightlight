@@ -1,6 +1,6 @@
 - if @student.present?
   h5 Textbooks Loan for 
-  h4 #{@student.name} (#{@grade_section.try(:name)})
+  h4 #{@student.name} (#{@grade_section.try(:name)}##{@roster_no})
 - else
   h4 Listing Student's Books
 
@@ -60,7 +60,7 @@ nav
             i.material-icons.left add
 
 .card-panel
-  table
+  table.compact
     thead
       tr
         - if @student.present?
@@ -71,7 +71,7 @@ nav
         th Issue date
         th Return date
         th Initial condition
-        th End condition
+        th Return condition
         th
 
     tbody
@@ -84,12 +84,22 @@ nav
           td = student_book.book_copy.copy_no
           td = student_book.issue_date
           td = student_book.return_date
-          td = student_book.initial_copy_condition_id
-          td = student_book.end_copy_condition_id
           td 
-            = link_to student_book
-              i.material-icons.left visibility
+            - if student_book.initial_condition.present?
+              span.box class="#{student_book.initial_condition.color}"
+                = student_book.initial_condition.code
+            - else
+              | N/A
+          td 
+            - if student_book.end_condition.present?
+              span.box class="#{student_book.end_condition.color}"
+                = student_book.end_condition.code
+            - else
+              | N/A
+          td 
+            = link_to student_book, data: {:confirm => 'Are you sure?'}, :method => :delete
+              i.material-icons.red-text delete
 
-
-.toolbar.z-depth-1
-  = will_paginate @employees
+- unless @student.present?
+  .toolbar.z-depth-1
+    = will_paginate @employees

@@ -23,6 +23,9 @@ class BookCopiesController < ApplicationController
       format.html { set_book_copy }
       format.json {
         @book_copy = BookCopy.find_by_barcode(params[:id])
+        if params[:st].present?
+          @student = Student.find params[:st]
+        end
         if @book_copy.blank?
           render json: {}, status: :unprocessable_entity
         end

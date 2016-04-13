@@ -6,7 +6,7 @@ class BookLoansController < ApplicationController
   def index
     items_per_page = 30
     @book_loans = BookLoan.includes([:employee,:student])
-      .where(academic_year_id:AcademicYear.current_id)
+      .where(academic_year:AcademicYear.current)
       .paginate(page: params[:page], per_page: items_per_page)
     if params[:student]
       @book_loans = @book_loans.where(student_id:params[:student])

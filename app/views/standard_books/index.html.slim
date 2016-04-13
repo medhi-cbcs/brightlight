@@ -68,5 +68,7 @@ nav
             = link_to standard_book, data: {:confirm => 'Are you sure?'}, :method => :delete
               i.material-icons.red-text delete
 
-.toolbar.z-depth-1
-  = will_paginate @standard_books
+- unless params[:grade].present?
+  .toolbar.z-depth-1
+    = will_paginate @standard_books
+  

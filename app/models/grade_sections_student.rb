@@ -10,7 +10,7 @@ class GradeSectionsStudent < ActiveRecord::Base
 
   default_scope { order(:order_no) }
 
-  scope :current, lambda { where(academic_year_id: current_academic_year_id) }
+  scope :current, lambda { where(academic_year:AcademicYear.current) }
   scope :with_academic_year, lambda { |academic_year| where(academic_year: academic_year) }
   scope :for_section, lambda { |grade_section| where(grade_section: grade_section) }
 

@@ -63,7 +63,13 @@ class StudentsController < ApplicationController
   def update
     respond_to do |format|
       if @student.update(student_params)
-        format.html { redirect_to @student, notice: 'Student was successfully updated.' }
+        format.html {
+          if student_params[:student_books_attributes].present?
+            redirect_to student_student_books_path(@student), notice: 'Student book was successfully created.'
+          else
+            redirect_to @student, notice: 'Student was successfully created.'
+          end
+        }
         format.json { render :show, status: :ok, location: @student }
       else
         format.html { render :edit }

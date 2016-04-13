@@ -4,6 +4,7 @@ class ApplicationController < ActionController::Base
   protect_from_forgery
   helper_method :current_user
   layout :layout_by_controller
+  before_action :set_current_academic_year
 
   # Authorization using CanCanCan gem
   include CanCan::ControllerAdditions
@@ -23,6 +24,11 @@ class ApplicationController < ActionController::Base
     else
       "application"
     end
+  end
+
+  def set_current_academic_year
+    @current_academic_year = AcademicYear.find(session[:year_id] ||= AcademicYear.current_id)
+    AcademicYear.current = @current_academic_year
   end
 
   def current_academic_year_id

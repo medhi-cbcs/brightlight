@@ -8,7 +8,7 @@ namespace :db do
 
 		# Academic Years and Terms
 		n = 0
-		year = AcademicYear.current.first
+		year = AcademicYear.current
 
 		students = Student.all
 		students_count = students.count

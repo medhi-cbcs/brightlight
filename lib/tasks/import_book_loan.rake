@@ -47,7 +47,7 @@ namespace :data do
 		results.each_with_index do |row, i|
 			next if row[header[:index]] == 0
 
-			book_copy = BookCopy.find_by_barcode(row[header[:barcode]])
+			book_copy = BookCopy.find_by_barcode(row[header[:barcode]].upcase)
 
 			## Trying to 'fix' wrong data in PROBEST1_0LD. I'm not sure if this works. Might as well leave it alone as it is.
 			##  because there are error with conflicting 'rules'
@@ -74,7 +74,7 @@ namespace :data do
 
 			# if student number is missing, look up from the grade_sections_students table
 			if row[header[:student_no]].blank?
-				student = GradeSectionsStudent.where(academic_year:year).where(grade_section:grade_section).where(order_no:row[header[:class_order]]).first.try(:student)
+				student = GradeSectionsStudent.where(academic_year:AcademicYear.find_by_name(row[header[:new_academic_year]])).where(grade_section:grade_section).where(order_no:row[header[:class_order]]).first.try(:student)
 			end
 
 			# if Category == 'TB', it means that this record is for Teachers
@@ -90,6 +90,7 @@ namespace :data do
 				student_book = StudentBook.new(
 					student: student,
 					book_copy: book_copy,
+					book_edition: book_copy.try(:book_edition),
 					academic_year: year,
 					prev_academic_year: prev_year,
 					issue_date: row[header[:rent_date]],
@@ -101,7 +102,10 @@ namespace :data do
 					notes: row[header[:notes]],
 					grade_section: grade_section,
 					grade_level: grade_section.try(:grade_level),
-					barcode: row[header[:barcode]]
+					barcode: row[header[:barcode]],
+					initial_copy_condition: (book_copy.start_condition_in_year(year.id) if book_copy.present?),
+					end_copy_condition: (book_copy.return_condition_in_year(year.id) if book_copy.present?),
+					deleted_flag: false
 				)
 				student_book.save(validate: false)
 				puts "#{i}. #{student_book.student.try(:name) || 'Student N/A'} (#{student_book.grade_section.try(:name) || "Grade N/A"}) #{student_book.book_copy.try(:barcode) || "Book copy N/A"}" if i % 500 == 0
@@ -130,7 +134,8 @@ namespace :data do
 				employee_no: employee_no,
 				employee: employee,
 				return_date: row[:return_date],
-				student: student
+				student: student,
+				deleted_flag: false
 			)
 			loan.save
 

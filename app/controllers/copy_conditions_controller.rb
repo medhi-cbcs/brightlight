@@ -46,7 +46,7 @@ class CopyConditionsController < ApplicationController
     @copy_condition = CopyCondition.new(
       book_copy_id: @book_copy.id,
       book_condition_id: copy_condition_params[:book_condition_id],
-      academic_year_id: current_academic_year_id,
+      academic_year:AcademicYear.current,
       barcode: copy_condition_params[:barcode],
       notes: copy_condition_params[:notes],
       start_date: Date.today,
@@ -74,7 +74,7 @@ class CopyConditionsController < ApplicationController
     @copy_condition = CopyCondition.new(
       book_copy_id: @book_copy.id,
       book_condition_id: copy_condition_params[:book_condition_id],
-      academic_year_id: current_academic_year_id,
+      academic_year:AcademicYear.current,
       barcode: copy_condition_params[:barcode],
       notes: copy_condition_params[:notes],
       start_date: Date.today,

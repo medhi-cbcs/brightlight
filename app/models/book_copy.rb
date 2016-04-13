@@ -10,6 +10,11 @@ class BookCopy < ActiveRecord::Base
 
   after_create :create_initial_condition
 
+  scope :standard_books, lambda { |grade_level_id, year_id|
+    joins("JOIN standard_books ON book_copies.book_edition_id = standard_books.book_edition_id
+            AND standard_books.academic_year_id = #{year_id}")
+  }
+
   def cover_image
     book_edition.try(:small_thumbnail) || 'book-icon.png'
   end
@@ -23,14 +28,30 @@ class BookCopy < ActiveRecord::Base
   end
 
   def latest_condition
-    copy_conditions.active.order('created_at DESC').first.try(:book_condition)
+    copy_conditions.active.order('academic_year_id DESC,created_at DESC').first.try(:book_condition)
+  end
+
+  def current_start_condition
+    copy_conditions.current_year.active.where(post:0).first.try(:book_condition)
+  end
+
+  def last_return_condition
+    copy_conditions.where(post:1).order('academic_year_id DESC').first.try(:book_condition)
+  end
+
+  def start_condition_in_year(academic_year_id)
+    copy_conditions.where(academic_year_id:academic_year_id).where(post:0).order('created_at DESC').first.try(:book_condition)
+  end
+
+  def return_condition_in_year(academic_year_id)
+    copy_conditions.where(post:1).where(academic_year_id:academic_year_id).first.try(:book_condition)
   end
 
   protected
     def create_initial_condition
       self.copy_conditions << CopyCondition.new(
         book_condition_id: book_condition_id,
-        academic_year_id: AcademicYear.current_id,
+        academic_year:AcademicYear.current,
         barcode: barcode,
         notes: 'Initial condition',
         start_date: Date.today

@@ -35,7 +35,8 @@ javascript:
   function filterStudentOptions(id, name) {
     $("#section").html(name);
     $.getJSON("/book_labels.json?section="+id, null, function (data) {
-      var list = "<li><a href='/student_books/receipt_form?gs="+id+"'>All</a></li>";
+      console.log("Parsing /book_labels.json?term="+name);
+      var list = "<li><a href='/student_books/receipt_form?gs="+name+"'>All</a></li>";
       $.each(data, function(i,item){
           list += "<li><a href='/student_books/receipt_form?g="+item.grade_level_id+";l="+item.id+"'>"+item.label+"</a></li>";
       });

@@ -7,7 +7,7 @@ class BookLabelsController < ApplicationController
     respond_to do |format|
       format.html {
         @book_labels = BookLabel.all
-        @acad_year = AcademicYear.current.first
+        @acad_year = AcademicYear.current
       }
       format.json {
         search = params[:section] || ""

@@ -3,14 +3,13 @@ namespace :data do
 	task setup_data: :environment do
 
     BookCondition.delete_all
-    columns = [:code, :description, :color]
-    values = [['New', 'New', 'blue'], ['Good', 'Good', 'green'], ['Fair', 'Fair', 'orange'], ['Poor', 'Poor', 'red'], ['Missing', 'Missing', 'maroon']]
+    columns = [:code, :description, :color, :order_no]
+    values = [['New', 'New', 'blue', 1], ['Good', 'Good', 'green', 2], ['Fair', 'Fair', 'orange', 3], ['Poor', 'Poor', 'red', 4], ['Missing', 'Missing', 'maroon', 5]]
     BookCondition.import columns, values
 
 		Status.delete_all
 		columns = [:name, :order_no]
-		values = [{name:'Available', order_no: 1}, {name:'On loan', order_no: 2}, {name:'In repair', order_no: 3},
-		 					{name:'Missing', order_no: 4}]
+		values = [['Available', 1], ['On loan', 2], ['In repair', 3],['Missing', 4]]
 		Status.import columns, values
 
     BookCategory.delete_all

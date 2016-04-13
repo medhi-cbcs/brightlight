@@ -68,14 +68,15 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :students do
-    resources :student_books, shallow: true
-  end
-
   get 'student_books' => 'student_books#index', as: :all_student_books
   get 'student_books/assign' => 'student_books#assign', as: :assign_student_books
   get 'student_books/label' => 'student_books#label', as: :label_student_books
   get 'student_books/receipt_form' => 'student_books#receipt_form', as: :receipt_form_student_books
+  get 'student_books/by_title' => 'student_books#by_title', as: :by_title_student_books
+
+  resources :students do
+    resources :student_books, shallow: true
+  end
 
   resources :book_loans, only: [:index] do
     collection do

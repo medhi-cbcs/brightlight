@@ -14,9 +14,20 @@ class StudentBooksController < ApplicationController
       @grade_level = @grade_section.grade_level
     end
     if params[:student_id].present?
+      year_id = AcademicYear.current.id
       @student = Student.where(id:params[:student_id]).take
-      @grade_section = @student.grade_sections_students.where(academic_year_id:current_academic_year_id).try(:first).try(:grade_section)
-      @student_books = StudentBook.current_year.where(student:@student).where(grade_section:@grade_section).includes([:book_copy, book_copy: [:book_edition]]).paginate(page: params[:page], per_page: items_per_page)
+      gss = @student.grade_sections_students.where(academic_year_id: year_id).try(:first)
+      @grade_section= gss.try(:grade_section)
+      @roster_no = gss.order_no
+
+      # Notes: Because of data errors in database, we search StudentBook without student_id
+      # =>     but filter it with grade_section, year and roster_no
+      @student_books = StudentBook.where(grade_section:@grade_section)
+                        .where(roster_no:@roster_no.to_s)
+                        .where(academic_year_id:year_id)
+                        .standard_books(@grade_section.grade_level.id, year_id)
+                        .order('standard_books.id')
+                        .includes([:book_copy, book_copy: [:book_edition]])
     else
       @student_books = StudentBook.includes([:book_copy, book_copy: [:book_edition]]).paginate(page: params[:page], per_page: items_per_page)
     end
@@ -31,7 +42,7 @@ class StudentBooksController < ApplicationController
   # GET /students/:student_id/student_books/new
   def new
     @student = Student.find(params[:student_id])
-    @grade_section = @student.grade_sections_students.where(academic_year_id:current_academic_year_id).try(:first).try(:grade_section)
+    @grade_section = @student.grade_sections_students.where(academic_year:AcademicYear.current).try(:first).try(:grade_section)
     @student_book = @student.student_books.new
   end
 
@@ -48,7 +59,7 @@ class StudentBooksController < ApplicationController
 
     respond_to do |format|
       if @student.save
-        format.html { redirect_to @student_book, notice: 'Student book was successfully created.' }
+        format.html { redirect_to student_student_books_path(@student), notice: 'Student book was successfully created.' }
         format.json { render :show, status: :created, location: @student_book }
       else
         format.html { render :new }
@@ -62,7 +73,7 @@ class StudentBooksController < ApplicationController
   def update
     respond_to do |format|
       if @student_book.update(student_book_params)
-        format.html { redirect_to @student_book, notice: 'Student book was successfully updated.' }
+        format.html { redirect_to student_student_books_path(@student), notice: 'Student book was successfully updated.' }
         format.json { render :show, status: :ok, location: @student_book }
       else
         format.html { render :edit }
@@ -96,9 +107,10 @@ class StudentBooksController < ApplicationController
   # DELETE /student_books/1
   # DELETE /student_books/1.json
   def destroy
+    @student = @student_book.student
     @student_book.destroy
     respond_to do |format|
-      format.html { redirect_to student_books_url, notice: 'Student book was successfully destroyed.' }
+      format.html { redirect_to student_student_books_path(student_id:@student.id), notice: 'Student book was successfully destroyed.' }
       format.json { head :no_content }
     end
   end
@@ -106,12 +118,14 @@ class StudentBooksController < ApplicationController
   # GET /student_books/receipt_form
   def receipt_form
     if params[:gs].present?
-      @book_labels = BookLabel.where('name LIKE ?', params[:gs]+"%")
+      @grade_section = GradeSection.find params[:gs]
+      @grade_level = @grade_section.grade_level
+      @book_labels = BookLabel.where(grade_section:@grade_section)
     elsif params[:l].present?
       @book_labels = BookLabel.where(id:params[:l])
-      @grade_level_name = GradeLevel.find(@book_labels.first.grade_level_id).name
+      @grade_level = GradeLevel.find(@book_labels.first.grade_level_id)
+      @grade_level_name = @grade_level.name
       @grade_section_name = @book_labels.first.section_name
-      @labels = BookLabel.where('name LIKE ?', @grade_section_name+"%")
     end
 
     respond_to do |format|
@@ -124,6 +138,34 @@ class StudentBooksController < ApplicationController
         render pdf:         'form.pdf',
                disposition: 'inline',
                template:    'student_books/receipt_form.pdf.slim',
+               layout:      'pdf.html',
+               show_as_html: params.key?('debug')
+      end
+    end
+  end
+
+  # GET /student_books/by_title
+  def by_title
+    if params[:section].present?
+      @grade_section = GradeSection.find_by_slug(params[:section])
+      @grade_level = @grade_section.grade_level
+      @student_books = StudentBook
+                        .standard_books(AcademicYear.current.id)
+                        .where(grade_section:@grade_section)
+                        .where(academic_year_id:AcademicYear.current.id)
+                        .order(:roster_no,:book_edition_id)
+    end
+
+    respond_to do |format|
+      format.html do
+        @grade_level_ids = GradeLevel.all.collect(&:id)
+        @grade_sections = GradeSection.all
+        @grade_sections_ids = @grade_sections.collect(&:id)
+      end
+      format.pdf do
+        render pdf:         'form.pdf',
+               disposition: 'inline',
+               template:    'student_books/by_title.pdf.slim',
                layout:      'pdf.html',
                show_as_html: params.key?('debug')
       end

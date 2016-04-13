@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160407013001) do
+ActiveRecord::Schema.define(version: 20160413020450) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -74,7 +74,7 @@ ActiveRecord::Schema.define(version: 20160407013001) do
   add_index "book_assignments", ["grade_section_id"], name: "index_book_assignments_on_grade_section_id", using: :btree
   add_index "book_assignments", ["status_id"], name: "index_book_assignments_on_status_id", using: :btree
   add_index "book_assignments", ["student_id"], name: "index_book_assignments_on_student_id", using: :btree
-  
+
   create_table "book_categories", force: :cascade do |t|
     t.string   "code"
     t.string   "name"
@@ -89,6 +89,7 @@ ActiveRecord::Schema.define(version: 20160407013001) do
     t.datetime "updated_at",  null: false
     t.string   "color"
     t.string   "slug"
+    t.integer  "order_no"
   end
 
   add_index "book_conditions", ["slug"], name: "index_book_conditions_on_slug", unique: true, using: :btree
@@ -173,9 +174,9 @@ ActiveRecord::Schema.define(version: 20160407013001) do
     t.datetime "updated_at",        null: false
   end
 
-  add_index "book_grades", ["academic_year_id"], name: "index_book_grades_on_academic_year_id"
-  add_index "book_grades", ["book_condition_id"], name: "index_book_grades_on_book_condition_id"
-  add_index "book_grades", ["book_id"], name: "index_book_grades_on_book_id"
+  add_index "book_grades", ["academic_year_id"], name: "index_book_grades_on_academic_year_id", using: :btree
+  add_index "book_grades", ["book_condition_id"], name: "index_book_grades_on_book_condition_id", using: :btree
+  add_index "book_grades", ["book_id"], name: "index_book_grades_on_book_id", using: :btree
 
   create_table "book_labels", force: :cascade do |t|
     t.integer  "grade_level_id"
@@ -250,6 +251,7 @@ ActiveRecord::Schema.define(version: 20160407013001) do
     t.integer  "employee_id"
     t.string   "employee_no"
     t.integer  "student_id"
+    t.boolean  "deleted_flag"
   end
 
   add_index "book_loans", ["academic_year_id"], name: "index_book_loans_on_academic_year_id", using: :btree
@@ -708,10 +710,13 @@ ActiveRecord::Schema.define(version: 20160407013001) do
     t.string   "grade_subject_code"
     t.string   "notes"
     t.integer  "prev_academic_year_id"
+    t.integer  "book_edition_id"
+    t.boolean  "deleted_flag"
   end
 
   add_index "student_books", ["academic_year_id"], name: "index_student_books_on_academic_year_id", using: :btree
   add_index "student_books", ["book_copy_id"], name: "index_student_books_on_book_copy_id", using: :btree
+  add_index "student_books", ["book_edition_id"], name: "index_student_books_on_book_edition_id", using: :btree
   add_index "student_books", ["course_id"], name: "index_student_books_on_course_id", using: :btree
   add_index "student_books", ["course_text_id"], name: "index_student_books_on_course_text_id", using: :btree
   add_index "student_books", ["grade_level_id"], name: "index_student_books_on_grade_level_id", using: :btree
@@ -827,4 +832,5 @@ ActiveRecord::Schema.define(version: 20160407013001) do
   add_foreign_key "standard_books", "book_titles"
   add_foreign_key "standard_books", "grade_levels"
   add_foreign_key "standard_books", "grade_sections"
+  add_foreign_key "student_books", "book_editions"
 end
