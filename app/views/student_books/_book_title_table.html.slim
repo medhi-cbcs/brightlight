@@ -1,0 +1,48 @@
+.card-panel
+  form
+    table.compact.striped
+      thead
+        tr.compact-row
+          th &nbsp;
+          th &nbsp;
+          th &nbsp;
+          th style='text-align:center;' Last
+          th &nbsp;
+          /th colspan=5 style='text-align:center;border-bottom:1px solid grey' Return Condition
+          th &nbsp;
+        tr.compact-row
+          th No
+          th Barcode
+          th Label
+          th style='text-align:center;' Condition
+          th colspan=5 style='text-align:center;' Return Condition
+          th style='text-align:center;' Notes
+      tbody
+        - if book_title.present?
+          /- book_copies = BookCopy.where(book_edition_id:book_title.book_editions.first.id).standard_books(@grade_level.id,AcademicYear.current.id).order('standard_books.id').includes([:book_edition, :book_condition])
+          - book_title[:distributed].each_with_index do |book, i|
+            tr
+              td.wd5 = i+1
+              td.wd20 = link_to book.barcode, book.try(:book_copy)
+              td.wd10
+                span = book.book_copy.try(:copy_no) || 'N/A'
+              td.wd15 style='text-align:center;' 
+                span.box class="#{book.book_copy.try(:current_start_condition).try(:color) || 'white'}"
+                  = book.book_copy.try(:current_start_condition).try(:code) || '?'
+              td.wd5
+                = radio_button_tag "condition#{book.id}", "new[#{book.id}]"
+                = label_tag "condition#{book.id}_new[#{book.id}]", 'New'
+              td.wd5
+                = radio_button_tag "condition#{book.id}", "good[#{book.id}]"
+                = label_tag "condition#{book.id}_good[#{book.id}]", 'Good'
+              td.wd5
+                = radio_button_tag "condition#{book.id}", "fair[#{book.id}]"
+                = label_tag "condition#{book.id}_fair[#{book.id}]", 'Fair'
+              td.wd5
+                = radio_button_tag "condition#{book.id}", "poor[#{book.id}]"
+                = label_tag "condition#{book.id}_poor[#{book.id}]", 'Poor'
+              td.wd5
+                = radio_button_tag "condition#{book.id}", "missing[#{book.id}]"
+                = label_tag "condition#{book.id}_missing[#{book.id}]", 'Missing'
+              td.wd20
+                

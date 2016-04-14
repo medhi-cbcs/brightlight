@@ -58,7 +58,7 @@ nav
           i.material-icons.right arrow_drop_down
       li.right
         a.dropdown-button href="#!" data-activates="grade-options"
-          span#grade = params[:l].present? ? "Grade #{@grade_level_name}" : 'Choose grade'
+          span#grade = params[:l].present? ? "#{@grade_level_name}" : 'Choose grade'
           i.material-icons.right arrow_drop_down
 
 - if @book_labels.present?

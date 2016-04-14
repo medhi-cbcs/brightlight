@@ -12,6 +12,7 @@ class BookCopy < ActiveRecord::Base
 
   scope :standard_books, lambda { |grade_level_id, year_id|
     joins("JOIN standard_books ON book_copies.book_edition_id = standard_books.book_edition_id
+            AND #{grade_level_id} = standard_books.grade_level_id
             AND standard_books.academic_year_id = #{year_id}")
   }
 

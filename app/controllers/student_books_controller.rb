@@ -146,15 +146,36 @@ class StudentBooksController < ApplicationController
 
   # GET /student_books/by_title
   def by_title
-    if params[:section].present?
-      @grade_section = GradeSection.find_by_slug(params[:section])
+    @book_titles = []
+    if params[:s].present?
+      @grade_section = GradeSection.find(params[:s])
       @grade_level = @grade_section.grade_level
-      @student_books = StudentBook
-                        .standard_books(AcademicYear.current.id)
-                        .where(grade_section:@grade_section)
-                        .where(academic_year_id:AcademicYear.current.id)
-                        .order(:roster_no,:book_edition_id)
     end
+    if params[:t].present?
+      @book_titles << {title:BookTitle.find(params[:t])}
+    else
+      @book_titles = StandardBook
+                      .where(grade_level: @grade_level)
+                      .where(academic_year_id: AcademicYear.current.id)
+                      .includes([:book_edition])
+                      .map {|x| {title:x}}
+    end
+    @book_titles.each { |bt| bt[:edition] = bt[:title].book_editions.first }
+    @book_titles.each do |bt|
+      bt[:distributed] = StudentBook
+                      .standard_books(@grade_level.id, AcademicYear.current.id)
+                      .where(academic_year_id: AcademicYear.current.id)
+                      .where(book_edition: bt[:edition])
+                      .where(grade_section: @grade_section)
+                      .order('CAST(roster_no as INT)')
+                      .includes([:book_copy])
+    end
+
+    # @student_books = StudentBook
+    #                   .standard_books(@grade_level.id, AcademicYear.current.id)
+    #                   .where(grade_section: @grade_section)
+    #                   .where(academic_year_id: AcademicYear.current.id)
+    #                   .order(:roster_no,:book_edition_id)
 
     respond_to do |format|
       format.html do

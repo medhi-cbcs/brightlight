@@ -69,7 +69,7 @@ nav
         th Barcode
         th Label
         th Issue date
-        th Return date
+        /th Return date
         th Initial condition
         th Return condition
         th
@@ -79,11 +79,11 @@ nav
         tr
           - if @student.present?
             td = i+1
-          td = student_book.book_copy.book_edition.try(:title).truncate(40)
+          td = student_book.book_copy.book_edition.try(:title).truncate(50)
           td = link_to student_book.barcode, student_book.book_copy
           td = student_book.book_copy.copy_no
           td = student_book.issue_date
-          td = student_book.return_date
+          /td = student_book.return_date
           td 
             - if student_book.initial_condition.present?
               span.box class="#{student_book.initial_condition.color}"

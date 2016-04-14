@@ -1,0 +1,50 @@
+h5 Book List By Title (#{@grade_section.name})
+
+- if @book_title.present?
+  h5 #{@book_title.title} 
+
+- if @book_titles.present?
+  - @book_titles.each do |book_title|
+    h4 = book_title[:title].title
+    table.compact
+      thead
+        tr.compact-row
+          th &nbsp;
+          th &nbsp;
+          th &nbsp;
+          th style='text-align:center;' Last
+          th colspan=5 style='text-align:center;border-bottom:1px solid grey' New Conditions
+          th &nbsp;
+        tr.compact-row
+          th No
+          th Barcode
+          th Label
+          th style='text-align:center;' Condition
+          th.wd5 style='text-align:center;' New
+          th.wd5 style='text-align:center;' Good
+          th.wd5 style='text-align:center;' Fair
+          th.wd5 style='text-align:center;' Poor
+          th.wd5 style='text-align:center;' Missing
+          th style='text-align:center;' Notes
+      tbody
+        - if book_title.present?
+          - book_title[:distributed].each_with_index do |book, i|
+            tr style='border-bottom:1px solid gainsboro'
+              td.wd5 = i+1
+              td.wd15 = book.barcode
+              td.wd10
+                span = book.book_copy.try(:copy_no) || 'N/A'
+              td.wd10 style='text-align:center;' 
+                = book.book_copy.try(:current_start_condition).try(:code)
+              td.wd5 style='text-align:center;' 
+                | &#9744;
+              td.wd5 style='text-align:center;' 
+                | &#9744;
+              td.wd5 style='text-align:center;' 
+                | &#9744;
+              td.wd5 style='text-align:center;' 
+                | &#9744;
+              td.wd5 style='text-align:center;' 
+                | &#9744;
+              td.wd30
+    .page-break
