@@ -8,10 +8,10 @@ class BookLoansController < ApplicationController
     @book_loans = BookLoan.includes([:employee,:student])
       .where(academic_year:AcademicYear.current)
       .paginate(page: params[:page], per_page: items_per_page)
-    if params[:student]
-      @book_loans = @book_loans.where(student_id:params[:student])
-    elsif params[:teacher]
-      @book_loans = @book_loans.where(employee_id:params[:teacher])
+    if params[:student].present?
+      @book_loans = @book_loans.where(student: Student.where("name LIKE ?", '%params[:student]%').first)
+    elsif params[:teacher].present?
+      @book_loans = @book_loans.where(employee: Employee.where("name LIKE ?", '%params[:teacher]%').first)
     end
   end
 

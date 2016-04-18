@@ -9,7 +9,7 @@ namespace :data do
 
 		Status.delete_all
 		columns = [:name, :order_no]
-		values = [['Available', 1], ['On loan', 2], ['In repair', 3],['Missing', 4]]
+		values = [['Available', 1], ['On loan', 2], ['Needs repair', 3], ['In repair', 4], ['Missing', 5]]
 		Status.import columns, values
 
     BookCategory.delete_all

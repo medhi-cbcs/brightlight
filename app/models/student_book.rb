@@ -10,6 +10,7 @@ class StudentBook < ActiveRecord::Base
   belongs_to :course
   belongs_to :initial_copy_condition, class_name: "BookCondition"
   belongs_to :end_copy_condition, class_name: "BookCondition"
+  belongs_to :book_loan
 
   validates :student, presence: true
   validates :book_copy, presence: true
@@ -18,6 +19,8 @@ class StudentBook < ActiveRecord::Base
   # validates :course_text, presence: true
   validates :grade_level, presence: true
   validates :grade_section, presence: true
+
+  accepts_nested_attributes_for :book_loan
 
   scope :current_year, lambda { where(academic_year:AcademicYear.current) }
   scope :standard_books, lambda { |grade_level_id, year_id|
@@ -33,4 +36,5 @@ class StudentBook < ActiveRecord::Base
   def end_condition
     end_copy_condition
   end
+
 end

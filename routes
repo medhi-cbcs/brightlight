@@ -1,4 +1,12 @@
                               Prefix Verb     URI Pattern                                                       Controller#Action
+                      standard_books GET      /standard_books(.:format)                                         standard_books#index
+                                     POST     /standard_books(.:format)                                         standard_books#create
+                   new_standard_book GET      /standard_books/new(.:format)                                     standard_books#new
+                  edit_standard_book GET      /standard_books/:id/edit(.:format)                                standard_books#edit
+                       standard_book GET      /standard_books/:id(.:format)                                     standard_books#show
+                                     PATCH    /standard_books/:id(.:format)                                     standard_books#update
+                                     PUT      /standard_books/:id(.:format)                                     standard_books#update
+                                     DELETE   /standard_books/:id(.:format)                                     standard_books#destroy
                               people GET      /people(.:format)                                                 people#index
                                      POST     /people(.:format)                                                 people#create
                           new_person GET      /people/new(.:format)                                             people#new
@@ -184,6 +192,12 @@ edit_labels_book_edition_book_copies GET      /book_editions/:book_edition_id/bo
                                      PATCH    /grade_levels/:id(.:format)                                       grade_levels#update
                                      PUT      /grade_levels/:id(.:format)                                       grade_levels#update
                                      DELETE   /grade_levels/:id(.:format)                                       grade_levels#destroy
+                   all_student_books GET      /student_books(.:format)                                          student_books#index
+                assign_student_books GET      /student_books/assign(.:format)                                   student_books#assign
+                 label_student_books GET      /student_books/label(.:format)                                    student_books#label
+          receipt_form_student_books GET      /student_books/receipt_form(.:format)                             student_books#receipt_form
+              by_title_student_books GET      /student_books/by_title(.:format)                                 student_books#by_title
+       update_multiple_student_books PUT      /student_books/update_multiple(.:format)                          student_books#update_multiple
                student_student_books GET      /students/:student_id/student_books(.:format)                     student_books#index
                                      POST     /students/:student_id/student_books(.:format)                     student_books#create
             new_student_student_book GET      /students/:student_id/student_books/new(.:format)                 student_books#new
@@ -200,10 +214,6 @@ edit_labels_book_edition_book_copies GET      /book_editions/:book_edition_id/bo
                                      PATCH    /students/:id(.:format)                                           students#update
                                      PUT      /students/:id(.:format)                                           students#update
                                      DELETE   /students/:id(.:format)                                           students#destroy
-                   all_student_books GET      /student_books(.:format)                                          student_books#index
-                assign_student_books GET      /student_books/assign(.:format)                                   student_books#assign
-                 label_student_books GET      /student_books/label(.:format)                                    student_books#label
-          receipt_form_student_books GET      /student_books/receipt_form(.:format)                             student_books#receipt_form
            search_student_book_loans POST     /book_loans/search_student(.:format)                              book_loans#search_student
            search_teacher_book_loans POST     /book_loans/search_teacher(.:format)                              book_loans#search_teacher
                           book_loans GET      /book_loans(.:format)                                             book_loans#index

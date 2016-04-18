@@ -1,3 +1,7 @@
+require 'barby/barcode/code_128'
+require 'barby/outputter/png_outputter'
+require 'barby/outputter/html_outputter'
+
 class StudentBooksController < ApplicationController
   before_action :set_student_book, only: [:show, :edit, :update, :destroy]
 
@@ -151,31 +155,27 @@ class StudentBooksController < ApplicationController
       @grade_section = GradeSection.find(params[:s])
       @grade_level = @grade_section.grade_level
     end
+    @standard_books = StandardBook
+                        .where(grade_level: @grade_level)
+                        .where(academic_year_id: AcademicYear.current.id)
+                        .includes([:book_edition])
     if params[:t].present?
-      @book_titles << {title:BookTitle.find(params[:t])}
+      @book_title_id = params[:t]
+      @book_titles << {title: BookTitle.find(params[:t])}
     else
-      @book_titles = StandardBook
-                      .where(grade_level: @grade_level)
-                      .where(academic_year_id: AcademicYear.current.id)
-                      .includes([:book_edition])
-                      .map {|x| {title:x}}
+      @book_titles = @standard_books.map {|x| {title:x.try(:book_edition).try(:book_title)}}
     end
     @book_titles.each { |bt| bt[:edition] = bt[:title].book_editions.first }
     @book_titles.each do |bt|
-      bt[:distributed] = StudentBook
+      student_books = StudentBook
                       .standard_books(@grade_level.id, AcademicYear.current.id)
                       .where(academic_year_id: AcademicYear.current.id)
                       .where(book_edition: bt[:edition])
                       .where(grade_section: @grade_section)
                       .order('CAST(roster_no as INT)')
                       .includes([:book_copy])
+      bt[:student_books] = student_books
     end
-
-    # @student_books = StudentBook
-    #                   .standard_books(@grade_level.id, AcademicYear.current.id)
-    #                   .where(grade_section: @grade_section)
-    #                   .where(academic_year_id: AcademicYear.current.id)
-    #                   .order(:roster_no,:book_edition_id)
 
     respond_to do |format|
       format.html do
@@ -184,13 +184,33 @@ class StudentBooksController < ApplicationController
         @grade_sections_ids = @grade_sections.collect(&:id)
       end
       format.pdf do
-        render pdf:         'form.pdf',
+        render pdf:         "BookList-#{@grade_section.slug}#{('-'+@book_titles.first[:title].title if params[:t].present?)}",
                disposition: 'inline',
                template:    'student_books/by_title.pdf.slim',
                layout:      'pdf.html',
                show_as_html: params.key?('debug')
       end
     end
+  end
+
+  # PUT /student_books/update_multiple
+  # PUT /student_books/update_multiple.json
+  def update_multiple
+    StudentBook.update(params[:student_books].keys, params[:student_books].values)
+    @book_category = BookCategory.find_by_code 'TB'
+    @current_year = AcademicYear.current.id
+    puts "-+-+ #{params[:student_books]} +-+-"
+
+    params[:book_loans].each do |key, values|
+      puts "==+== #{values} ==+=="
+      book_loan = BookLoan.where(academic_year_id:@current_year).where(book_copy_id:values[:book_copy_id]).take
+      book_loan.update_attribute(:return_date, values[:return_date])
+      book_loan.update_attribute(:user_id, values[:user_id])
+      book_loan.update_attribute(:notes, values[:notes])
+      book_loan.update_attribute(:student_no, values[:student_no])
+    end
+    flash[:notice] = "Book conditions updated!"
+    redirect_to by_title_student_books_path(s:params[:grade_section_id],g:params[:grade_level_id],t:params[:title])
   end
 
   private
@@ -203,6 +223,9 @@ class StudentBooksController < ApplicationController
     def student_book_params
       params.require(:student_book).permit(:student_id, :book_copy_id, :academic_year_id, :course_text_id, :copy_no,
         :grade_section_id, :grade_level_id, :course_text_id, :course_id, :issue_date, :return_date,
-        :initial_copy_condition_id, :end_copy_condition_id)
+        :initial_copy_condition_id, :end_copy_condition_id, :notes, :needs_repair,
+        {book_loan_attributes: [:grade_section_id, :grade_level_id, :academic_year_id, :book_copy_id, :book_edition_id,
+          :book_title_id, :out_date, :return_date, :student_id, :book_category, :student_no, :roster_no,
+          :barcode, :grade_section_code, :grade_subject_code, :notes, :prev_academic_year_id, :user_id]})
     end
 end

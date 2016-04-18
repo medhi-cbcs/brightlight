@@ -761,6 +761,21 @@ a.sidebar-collapse {
   height: 100px !important;
 }
 
+// ======================================== Barby barcode  ==========================================
+table.barby-barcode {
+	border-spacing: 0;
+}
+tr.barby-row {}
+td.barby-cell {
+	width: 2px; height: 20px;
+	padding: 0px;
+  display: table-cell;
+  text-align: left;
+  vertical-align: middle;
+  border-radius: 2px;
+}
+td.barby-cell.on { background: #000; }
+
 // ============================================ jQuery UI ===========================================
 .ui-widget {
 	font-family: Roboto, Arial, sans-serif;

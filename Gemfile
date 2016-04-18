@@ -74,6 +74,10 @@ gem 'slug', git:'https://github.com/subimage/slug.git'
 gem 'activerecord-import'
 gem 'seed-fu', '~> 2.3'
 
+# Barcode generator
+gem 'barby'
+gem 'chunky_png'
+
 # Authorization
 gem 'cancancan', '~> 1.10'
 

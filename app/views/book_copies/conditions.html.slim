@@ -34,7 +34,10 @@ nav
         - else
           = link_to book_copy_conditions_path(@book_copy)+"?all=t"
             | Show all
-
+      li.right
+        = link_to book_copy_loans_path(@book_copy)
+          | Loan History
+          
 .card-panel
   table.striped
     thead

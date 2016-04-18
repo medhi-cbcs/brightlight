@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160413020450) do
+ActiveRecord::Schema.define(version: 20160415085211) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -104,6 +104,7 @@ ActiveRecord::Schema.define(version: 20160413020450) do
     t.datetime "updated_at",        null: false
     t.integer  "book_label_id"
     t.string   "slug"
+    t.boolean  "needs_repair"
   end
 
   add_index "book_copies", ["barcode"], name: "index_book_copies_on_barcode", unique: true, using: :btree
@@ -712,6 +713,7 @@ ActiveRecord::Schema.define(version: 20160413020450) do
     t.integer  "prev_academic_year_id"
     t.integer  "book_edition_id"
     t.boolean  "deleted_flag"
+    t.boolean  "needs_repair"
   end
 
   add_index "student_books", ["academic_year_id"], name: "index_student_books_on_academic_year_id", using: :btree
