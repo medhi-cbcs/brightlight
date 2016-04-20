@@ -97,7 +97,10 @@ li
 						= link_to new_user_session_path
 							| Login
 							i.material-icons.left perm_identity
-
+				li
+					- if current_user
+						= link_to 'Sign out', destroy_user_session_path, method: :delete
+				
 javascript:
 	$("#barcode").scannerDetection();
 	$("#barcode").bind('scannerDetectionComplete',function(e,data){$("#barcode").html(data.string)})

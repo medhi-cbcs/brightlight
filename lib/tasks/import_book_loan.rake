@@ -77,7 +77,7 @@ namespace :data do
 				student = GradeSectionsStudent.where(academic_year:AcademicYear.find_by_name(row[header[:new_academic_year]])).where(grade_section:grade_section).where(order_no:row[header[:class_order]]).first.try(:student)
 			end
 
-			# if Category == 'TB', it means that this record is for Teachers
+			# if Category != 'TB', it means that this record is for Teachers
 			if row[header[:category]] != 'TB'
 				employee_no = row[header[:student_no]]
 				employee = Employee.find_by_employee_number(employee_no)

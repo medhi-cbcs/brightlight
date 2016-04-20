@@ -2,22 +2,23 @@ h4 Listing Standard Books
 
 ul#grade-options.dropdown-content
   li  
-    = link_to 'All', standard_books_path(params.merge(grade:'all'))
+    = link_to 'All', standard_books_path(params.merge(grade:'all').symbolize_keys)
   - GradeLevel.all.each do |grade|
     li 
-      = link_to grade.name, standard_books_path(params.merge(grade:grade.slug))
+      = link_to grade.name, standard_books_path(params.merge(grade:grade.id).symbolize_keys)
 ul#category-options.dropdown-content
   li  
-    = link_to 'All', standard_books_path(params.merge(category:'all'))
+    = link_to 'All', standard_books_path(params.merge(category:'all').symbolize_keys)
   - BookCategory.all.each do |category|
     li 
-      = link_to category.name, standard_books_path(params.merge(category:category.code))    
+      = link_to category.name, standard_books_path(params.merge(category:category.code).symbolize_keys)    
 ul#year-options.dropdown-content
   li  
-    = link_to 'All', standard_books_path(params.merge(year:'all'))
+    = link_to 'All', standard_books_path(params.merge(year:'all').symbolize_keys)
   - AcademicYear.all.each do |year|
     li 
-      = link_to year.name, standard_books_path(params.merge(year:year.slug))
+      = link_to year.name, standard_books_path(params.merge(year:year.slug).symbolize_keys)
+// NOTE: for these wierd .symbolize_keys, refer to this article https://github.com/rails/rails/issues/21645
       
 nav
   .nav-wrapper
@@ -68,7 +69,7 @@ nav
             = link_to standard_book, data: {:confirm => 'Are you sure?'}, :method => :delete
               i.material-icons.red-text delete
 
-- unless params[:grade].present?
+- if @standard_books.total_pages > 1
   .toolbar.z-depth-1
     = will_paginate @standard_books
   

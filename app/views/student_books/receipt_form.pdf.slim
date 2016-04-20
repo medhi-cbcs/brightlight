@@ -21,7 +21,7 @@
           th Notes
     
       tbody style="border-bottom:1px solid black"
-        - book_copies = BookCopy.where(book_label:book_label).standard_books(@grade_level.id,AcademicYear.current.id).includes([:book_edition, :book_condition])
+        - book_copies = BookCopy.where(book_label:book_label).standard_books(@grade_level.id,@grade_section.id,AcademicYear.current.id).includes([:book_edition, :book_condition])
         - book_copies.each_with_index do |book, i|
           tr
             td = i+1

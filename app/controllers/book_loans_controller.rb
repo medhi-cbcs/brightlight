@@ -5,14 +5,39 @@ class BookLoansController < ApplicationController
   # GET /book_loans.json
   def index
     items_per_page = 30
-    @book_loans = BookLoan.includes([:employee,:student])
-      .where(academic_year:AcademicYear.current)
-      .paginate(page: params[:page], per_page: items_per_page)
     if params[:student].present?
-      @book_loans = @book_loans.where(student: Student.where("name LIKE ?", '%params[:student]%').first)
+      @student = Student.where("name LIKE ?", "%#{params[:student]}%").first
+      @book_loans = BookLoan.includes([:student])
+                      .where(academic_year:AcademicYear.current)
+                      .where(student: @student)
     elsif params[:teacher].present?
-      @book_loans = @book_loans.where(employee: Employee.where("name LIKE ?", '%params[:teacher]%').first)
+      @teacher = Employee.where("name LIKE ?", "%#{params[:teacher]}%").first
+      @book_loans = BookLoan.includes([:employee])
+                      .where(academic_year:AcademicYear.current)
+                      .where(employee: @teacher)
+    else
+      @book_loans = BookLoan.includes([:employee,:student])
+                      .where(academic_year:AcademicYear.current)
     end
+
+    # if params[:grade].present? and params[:grade].upcase != 'ALL'
+    #   @grade_level = GradeLevel.find params[:grade]
+    #   @book_loans = @book_loans.where(grade_level:@grade_level).includes([:book_title])
+    # end
+
+    if params[:year].present?
+      @academic_year = AcademicYear.find_by_slug params[:year]
+      @book_loans = @book_loans.where(academic_year:@academic_year) if params[:year].upcase != 'ALL'
+    else
+      @book_loans = @book_loans.where(academic_year:current_academic_year_id)
+    end
+
+    if params[:category].present? and params[:category].upcase != 'ALL'
+      @category = BookCategory.find_by_code params[:category]
+      @book_loans = @book_loans.where(book_category:@category)
+    end
+
+    @book_loans = @book_loans.paginate(page: params[:page], per_page: @items_per_page)
   end
 
   # GET /book_loans/1

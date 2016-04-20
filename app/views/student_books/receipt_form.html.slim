@@ -37,7 +37,7 @@ javascript:
     $.getJSON("/book_labels.json?section="+id, null, function (data) {
       var list = "<li><a href='/student_books/receipt_form?gs="+id+"'>All</a></li>";
       $.each(data, function(i,item){
-          list += "<li><a href='/student_books/receipt_form?g="+item.grade_level_id+";l="+item.id+"'>"+item.label+"</a></li>";
+          list += "<li><a href='/student_books/receipt_form?gs="+item.grade_section_id+"&g="+item.grade_level_id+";l="+item.id+"'>"+item.label+"</a></li>";
       });
       $("#student-options").html(list);
     });

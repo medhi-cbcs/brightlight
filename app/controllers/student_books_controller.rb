@@ -23,13 +23,14 @@ class StudentBooksController < ApplicationController
       gss = @student.grade_sections_students.where(academic_year_id: year_id).try(:first)
       @grade_section= gss.try(:grade_section)
       @roster_no = gss.order_no
-
+      textbook_category_id = BookCategory.find_by_code('TB').id
       # Notes: Because of data errors in database, we search StudentBook without student_id
       # =>     but filter it with grade_section, year and roster_no
       @student_books = StudentBook.where(grade_section:@grade_section)
                         .where(roster_no:@roster_no.to_s)
                         .where(academic_year_id:year_id)
-                        .standard_books(@grade_section.grade_level.id, year_id)
+                        .where('initial_copy_condition_id is not null')
+                        .standard_books(@grade_section.grade_level.id, @grade_section.id, year_id, textbook_category_id)
                         .order('standard_books.id')
                         .includes([:book_copy, book_copy: [:book_edition]])
     else
@@ -155,10 +156,15 @@ class StudentBooksController < ApplicationController
       @grade_section = GradeSection.find(params[:s])
       @grade_level = @grade_section.grade_level
     end
+    @textbook_category_id = BookCategory.find_by_code('TB').id
     @standard_books = StandardBook
                         .where(grade_level: @grade_level)
+                        .where(book_category_id: @textbook_category_id)
                         .where(academic_year_id: AcademicYear.current.id)
                         .includes([:book_edition])
+    if @grade_level.id > 10
+      @standard_books = @standard_books.where(grade_section:@grade_section)
+    end
     if params[:t].present?
       @book_title_id = params[:t]
       @book_titles << {title: BookTitle.find(params[:t])}
@@ -167,14 +173,26 @@ class StudentBooksController < ApplicationController
     end
     @book_titles.each { |bt| bt[:edition] = bt[:title].book_editions.first }
     @book_titles.each do |bt|
-      student_books = StudentBook
-                      .standard_books(@grade_level.id, AcademicYear.current.id)
-                      .where(academic_year_id: AcademicYear.current.id)
-                      .where(book_edition: bt[:edition])
-                      .where(grade_section: @grade_section)
-                      .order('CAST(roster_no as INT)')
-                      .includes([:book_copy])
-      bt[:student_books] = student_books
+      if @grade_level_id == 15
+        student_books = StudentBook
+                        .standard_books(@grade_level.id, @grade_section.id, AcademicYear.current.id, @textbook_category_id)
+                        .where(academic_year_id: AcademicYear.current.id)
+                        .where(grade_section: @grade_section)
+                        .where('initial_copy_condition_id is not null')
+                        .order('CAST(roster_no as INT)')
+                        .includes([:book_copy])
+        bt[:student_books] = student_books
+      else
+        student_books = StudentBook
+                        .standard_books(@grade_level.id, @grade_section.id, AcademicYear.current.id, @textbook_category_id)
+                        .where(academic_year_id: AcademicYear.current.id)
+                        .where(book_edition: bt[:edition])
+                        .where(grade_section: @grade_section)
+                        .where('initial_copy_condition_id is not null')
+                        .order('CAST(roster_no as INT)')
+                        .includes([:book_copy])
+        bt[:student_books] = student_books
+      end
     end
 
     respond_to do |format|

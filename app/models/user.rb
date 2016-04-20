@@ -1,5 +1,5 @@
 class User < ActiveRecord::Base
-  has_one :person
+  has_one :employee, autosave: true
 
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
@@ -29,12 +29,20 @@ class User < ActiveRecord::Base
       if registered_user
         return registered_user
       else
-        user = User.create(name: data["name"],
-          provider:access_token.provider,
-          email: data["email"],
-          uid: access_token.uid ,
-          password: Devise.friendly_token[0,20],
-        )
+        employee = Employee.where(email: data["email"]).first
+        if employee.present?
+          user = User.create(name: data["name"],
+            provider:access_token.provider,
+            email: data["email"],
+            first_name: employee.first_name,
+            last_name: employee.last_name,
+            uid: access_token.uid,
+            password: Devise.friendly_token[0,20],
+          )
+          employee.person_id = user.id
+          employee.save
+        end
+        return user
       end
     end
   end

@@ -12,7 +12,7 @@
 
     tbody
       - if book_label.present?
-        - book_copies = BookCopy.where(book_label:book_label).standard_books(@grade_level.id,AcademicYear.current.id).order('standard_books.id').includes([:book_edition, :book_condition])
+        - book_copies = BookCopy.where(book_label:book_label).standard_books(@grade_level.id,@grade_section.id,AcademicYear.current.id).order('standard_books.id').includes([:book_edition, :book_condition])
         - book_copies.each_with_index do |book, i|
           tr
             td.wd5 = i+1
@@ -20,6 +20,6 @@
             td.wd50.ellipsis
               span = book.book_edition.try(:title)
             td.wd10 
-              span.box class="#{book.latest_condition.color}"
+              span.box class="#{book.latest_condition.try(:color)}"
                 = book.latest_condition.try(:code)
             td.wd20

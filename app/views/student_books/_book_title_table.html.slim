@@ -71,8 +71,8 @@
               td.wd5 style='text-align:center;' 
                 /= check_box_tag "status#{book.id}", "repair[#{book.id}]"
                 /= label_tag "status#{book.id}_repair[#{book.id}]", 'NR', class:'small-radio-label'
-                = f.check_box :needs_repair
-                = f.label :needs_repair, class:'small-radio-label;font-size:2px'
+                = f.check_box :needs_rebinding
+                = f.label :needs_rebinding, 'NR', class:'small-radio-label;font-size:2px'
               td.wd20
                 /= f.text_field_tag "notes#{book.id}"
                 = f.text_field :notes

@@ -10,10 +10,16 @@ class BookCopy < ActiveRecord::Base
 
   after_create :create_initial_condition
 
-  scope :standard_books, lambda { |grade_level_id, year_id|
-    joins("JOIN standard_books ON book_copies.book_edition_id = standard_books.book_edition_id
-            AND #{grade_level_id} = standard_books.grade_level_id
-            AND standard_books.academic_year_id = #{year_id}")
+  scope :standard_books, lambda { |grade_level_id, grade_section_id, year_id|
+    if grade_level_id <= 10
+      joins("JOIN standard_books ON book_copies.book_edition_id = standard_books.book_edition_id
+              AND #{grade_level_id} = standard_books.grade_level_id
+              AND standard_books.academic_year_id = #{year_id}")
+    else
+      joins("JOIN standard_books ON book_copies.book_edition_id = standard_books.book_edition_id
+              AND #{grade_section_id} = standard_books.grade_section_id
+              AND standard_books.academic_year_id = #{year_id}")
+    end
   }
 
   def cover_image

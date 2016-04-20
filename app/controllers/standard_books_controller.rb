@@ -8,10 +8,12 @@ class StandardBooksController < ApplicationController
     @standard_books = StandardBook.all
 
     if params[:grade].present? and params[:grade].upcase != 'ALL'
-      @grade_level = GradeLevel.find_by_slug params[:grade]
-      @standard_books = @standard_books.where(grade_level_id:params[:grade]).includes([:book_title])
-    else
-      @standard_books = @standard_books.paginate(page: params[:page], per_page: @items_per_page)
+      @grade_level = GradeLevel.find params[:grade]
+      @standard_books = @standard_books.where(grade_level:@grade_level).includes([:book_title])
+      if params[:section].present? and @grade_level.id >= 11
+        @grade_section = GradeSection.find params[:section]
+        @standard_books = @standard_books.where(grade_section:@grade_section).includes([:book_title])
+      end
     end
 
     if params[:year].present?
@@ -25,6 +27,8 @@ class StandardBooksController < ApplicationController
       @category = BookCategory.find_by_code params[:category]
       @standard_books = @standard_books.where(book_category:@category)
     end
+
+    @standard_books = @standard_books.paginate(page: params[:page], per_page: @items_per_page)
   end
 
   # GET /standard_books/1

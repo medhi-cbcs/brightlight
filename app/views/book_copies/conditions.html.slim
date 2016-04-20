@@ -27,15 +27,18 @@ nav
         = link_to @last_condition.present? ? check_copy_condition_path(@last_condition) : new_copy_condition_path
           | Update condition
           i.material-icons.left add
-      li.right
+      li.right        
         - if params[:all].present?
           = link_to book_copy_conditions_path(@book_copy)
+            i.material-icons.left filter_list
             | Show less
         - else
           = link_to book_copy_conditions_path(@book_copy)+"?all=t"
+            i.material-icons.left filter_list
             | Show all
       li.right
         = link_to book_copy_loans_path(@book_copy)
+          i.material-icons.left history
           | Loan History
           
 .card-panel
