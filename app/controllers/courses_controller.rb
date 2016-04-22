@@ -1,7 +1,7 @@
 class CoursesController < ApplicationController
   before_action :set_course, only: [:show, :edit, :update, :destroy]
   load_and_authorize_resource
-  
+
   # GET /courses
   # GET /courses.json
   def index
@@ -21,6 +21,7 @@ class CoursesController < ApplicationController
 
   # GET /courses/new
   def new
+    authorize! :manage, Course
     @course = Course.new
     3.times { @course.course_sections.build }
     3.times { @course.course_texts.build }
@@ -28,6 +29,7 @@ class CoursesController < ApplicationController
 
   # GET /courses/1/edit
   def edit
+    authorize! :update, @course
     3.times { @course.course_sections.build } if @course.course_sections.empty?
     3.times { @course.course_texts.build } if @course.course_texts.empty?
     @book_titles = BookTitle.all
@@ -36,6 +38,7 @@ class CoursesController < ApplicationController
   # POST /courses
   # POST /courses.json
   def create
+    authorize! :manage, Course
     @course = Course.new(course_params)
     @course.course_sections.each do |course_section|
       course_section.name = "#{@course.name} #{course_section.grade_section.name}"
@@ -55,6 +58,7 @@ class CoursesController < ApplicationController
   # PATCH/PUT /courses/1
   # PATCH/PUT /courses/1.json
   def update
+    authorize! :update, @course
     respond_to do |format|
       if @course.update(course_params)
         format.html { redirect_to @course, notice: 'Course was successfully updated.' }
@@ -69,6 +73,7 @@ class CoursesController < ApplicationController
   # DELETE /courses/1
   # DELETE /courses/1.json
   def destroy
+    authorize :destroy, @course
     @course.destroy
     respond_to do |format|
       format.html { redirect_to courses_url, notice: 'Course was successfully destroyed.' }

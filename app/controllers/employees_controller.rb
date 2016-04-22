@@ -27,12 +27,13 @@ class EmployeesController < ApplicationController
 
   # GET /employees/new
   def new
+    authorize! :manage, Employee
     @employee = Employee.new
   end
 
   # GET /employees/1/edit
   def edit
-    authorize! :edit, Employee
+    authorize! :update, Employee
   end
 
   # POST /employees
@@ -55,7 +56,7 @@ class EmployeesController < ApplicationController
   # PATCH/PUT /employees/1
   # PATCH/PUT /employees/1.json
   def update
-    authorize! :edit, Employee
+    authorize! :update, Employee
     respond_to do |format|
       if @employee.update(employee_params)
         format.html { redirect_to @employee, notice: 'Employee was successfully updated.' }

@@ -17,7 +17,7 @@ nav
       - GradeLevel.all.each do |grade|
         li
           = link_to courses_path(grade:grade.id)
-            = "Grade #{grade.name}"
+            = "#{grade.name}"
 
 .card-panel
   table.striped

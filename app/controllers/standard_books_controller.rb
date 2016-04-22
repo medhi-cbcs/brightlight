@@ -38,16 +38,19 @@ class StandardBooksController < ApplicationController
 
   # GET /standard_books/new
   def new
+    authorize! :manage, StandardBook
     @standard_book = StandardBook.new
   end
 
   # GET /standard_books/1/edit
   def edit
+    authorize! :update, StandardBook
   end
 
   # POST /standard_books
   # POST /standard_books.json
   def create
+    authorize! :manage, StandardBook
     @standard_book = StandardBook.new(standard_book_params)
 
     respond_to do |format|
@@ -64,6 +67,7 @@ class StandardBooksController < ApplicationController
   # PATCH/PUT /standard_books/1
   # PATCH/PUT /standard_books/1.json
   def update
+    authorize! :update, StandardBook
     respond_to do |format|
       if @standard_book.update(standard_book_params)
         format.html { redirect_to @standard_book, notice: 'Standard book was successfully updated.' }
@@ -78,6 +82,7 @@ class StandardBooksController < ApplicationController
   # DELETE /standard_books/1
   # DELETE /standard_books/1.json
   def destroy
+    authorize! :destroy, StandardBook
     @standard_book.destroy
     respond_to do |format|
       format.html { redirect_to standard_books_url, notice: 'Standard book was successfully destroyed.' }

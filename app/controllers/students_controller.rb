@@ -41,7 +41,7 @@ class StudentsController < ApplicationController
 
   # GET /students/1/edit
   def edit
-    authorize! :edit, Student
+    authorize! :update, Student
   end
 
   # POST /students
@@ -64,7 +64,7 @@ class StudentsController < ApplicationController
   # PATCH/PUT /students/1
   # PATCH/PUT /students/1.json
   def update
-    authorize! :edit, Student
+    authorize! :update, Student
     respond_to do |format|
       if @student.update(student_params)
         format.html {

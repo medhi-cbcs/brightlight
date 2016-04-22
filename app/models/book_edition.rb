@@ -91,7 +91,7 @@ class BookEdition < ActiveRecord::Base
       book_edition.small_thumbnail = book.covers[:small]
       book_edition.thumbnail = book.covers[:thumbnail]
       book_edition.published_date = book.published_date
-      book_edition.language = book.language
+      book_edition.language = book.language unless book.language.blank?
       book_edition.google_book_id = book.id
       return book_edition
     else

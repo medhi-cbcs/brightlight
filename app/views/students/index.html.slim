@@ -2,7 +2,7 @@
   .col.s6
     h4 Students
   .col.s5
-    = form_tag({controller:'students', action:'index'}, {method:'get'}) do 
+    = form_tag({controller:'students', action:'index'}, {method:'get', data:'turboform'}) do 
       .input-field
         input type="hidden" name="v" value=@view_style
         - if params[:search].present?

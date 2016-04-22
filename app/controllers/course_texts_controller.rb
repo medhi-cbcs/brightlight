@@ -22,16 +22,19 @@ class CourseTextsController < ApplicationController
 
   # GET /course_texts/new
   def new
+    authorize! :manage, CourseText
     @course_text = @course.course_texts.build
   end
 
   # GET /course_texts/1/edit
   def edit
+    authorize! :update, @course_text
   end
 
   # POST /course_texts
   # POST /course_texts.json
   def create
+    authorize! :manage, CourseText
     @course_text = @course.course_texts.new(course_text_params)
 
     respond_to do |format|
@@ -48,6 +51,7 @@ class CourseTextsController < ApplicationController
   # PATCH/PUT /course_texts/1
   # PATCH/PUT /course_texts/1.json
   def update
+    authorize! :update, @course_text
     respond_to do |format|
       if @course_text.update(course_text_params)
         format.html { redirect_to course_course_texts_path(@course), notice: 'Course text was successfully updated.' }
@@ -62,6 +66,7 @@ class CourseTextsController < ApplicationController
   # DELETE /course_texts/1
   # DELETE /course_texts/1.json
   def destroy
+    authorize! :destroy, @course_text
     @course_text.destroy
     respond_to do |format|
       format.html { redirect_to course_course_texts_path(@course), notice: 'Course text was successfully removed.' }

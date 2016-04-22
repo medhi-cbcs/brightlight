@@ -22,18 +22,21 @@ class GradeLevelsController < ApplicationController
 
   # GET /grade_levels/new
   def new
+    authorize! :manage, GradeLevel
     @grade_level = GradeLevel.new
     3.times { @grade_level.grade_sections.build }
   end
 
   # GET /grade_levels/1/edit
   def edit
+    authorize! :update, @grade_level
     @grade_sections = @grade_level.grade_sections.includes([:homeroom])
   end
 
   # POST /grade_levels
   # POST /grade_levels.json
   def create
+    authorize! :manage, GradeLevel
     @grade_level = GradeLevel.new(grade_level_params)
 
     respond_to do |format|
@@ -48,6 +51,7 @@ class GradeLevelsController < ApplicationController
   end
 
   def edit_labels
+    authorize! :update, @grade_level
     section_name = params[:section]
     @book_labels = @grade_level.book_labels.where('name LIKE ?', "#{section_name}%")
     @grade_section = @grade_level.grade_sections.where(name:section_name).first
@@ -57,7 +61,7 @@ class GradeLevelsController < ApplicationController
   # PATCH/PUT /grade_levels/1
   # PATCH/PUT /grade_levels/1.json
   def update
-
+    authorize! :update, @grade_level
     respond_to do |format|
       if @grade_level.update(grade_level_params)
         editing_labels = grade_level_params[:book_labels_attributes].present?
@@ -79,6 +83,7 @@ class GradeLevelsController < ApplicationController
   # DELETE /grade_levels/1
   # DELETE /grade_levels/1.json
   def destroy
+    authorize! :destroy, @grade_level
     @grade_level.destroy
     respond_to do |format|
       format.html { redirect_to grade_levels_url, notice: 'Grade level was successfully destroyed.' }

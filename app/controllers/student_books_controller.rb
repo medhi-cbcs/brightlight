@@ -56,6 +56,7 @@ class StudentBooksController < ApplicationController
 
   # GET /students/:student_id/student_books/new
   def new
+    authorize! :manage, StudentBook
     @student = Student.find(params[:student_id])
     @grade_section = @student.grade_sections_students.where(academic_year:AcademicYear.current).try(:first).try(:grade_section)
     @student_book = @student.student_books.new
@@ -63,12 +64,14 @@ class StudentBooksController < ApplicationController
 
   # GET /student_books/1/edit
   def edit
+    authorize! :update, @student_book
     @student = @student_book.student
   end
 
   # POST /students/:student_id/student_books
   # POST /students/:student_id/student_books.json
   def create
+    authorize! :manage, StudentBook
     @student = Student.find(params[:student_id])
     @student_book = @student.student_books.new(student_book_params)
 
@@ -86,6 +89,7 @@ class StudentBooksController < ApplicationController
   # PATCH/PUT /student_books/1
   # PATCH/PUT /student_books/1.json
   def update
+    authorize! :update, @student_book
     respond_to do |format|
       if @student_book.update(student_book_params)
         format.html { redirect_to student_student_books_path(@student), notice: 'Student book was successfully updated.' }
@@ -99,6 +103,7 @@ class StudentBooksController < ApplicationController
 
   # # GET /student_books/assign
   def assign
+    authorize! :update, @student_book
     @grade_section = GradeSection.find(params[:section])
     @students = @grade_section.students
   end
@@ -122,6 +127,7 @@ class StudentBooksController < ApplicationController
   # DELETE /student_books/1
   # DELETE /student_books/1.json
   def destroy
+    authorize! :destroy, @student_book
     @student = @student_book.student
     @student_book.destroy
     respond_to do |format|
@@ -161,12 +167,11 @@ class StudentBooksController < ApplicationController
 
   # GET /student_books/by_title
   def by_title
-
     @book_titles = []
     if params[:s].present?
       @grade_section = GradeSection.find(params[:s])
       @grade_level = @grade_section.grade_level
-      authorize! :edit, StudentBook.where(grade_section:@grade_section).where(academic_year:AcademicYear.current).first
+      authorize! :update, StudentBook.where(grade_section:@grade_section).where(academic_year:AcademicYear.current).first
     end
     @textbook_category_id = BookCategory.find_by_code('TB').id
     @standard_books = StandardBook

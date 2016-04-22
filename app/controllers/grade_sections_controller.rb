@@ -21,12 +21,14 @@ class GradeSectionsController < ApplicationController
 
   # GET /grade_sections/new
   def new
+    authorize! :manage, GradeSection
     @grade_level = GradeLevel.find(params[:grade_level_id])
     @grade_section = @grade_level.grade_sections.new
   end
 
   # GET /grade_sections/1/edit
   def edit
+    authorize! :update, @grade_section
     @grade_level =  @grade_section.grade_level
     @total_students = GradeSectionsStudent.number_of_students(@grade_section, current_academic_year_id)
     @students = GradeSectionsStudent.where(academic_year:AcademicYear.current).where(grade_section:@grade_section)
@@ -59,6 +61,7 @@ class GradeSectionsController < ApplicationController
   end
 
   def add_students
+    authorize! :update, @grade_section
     academic_year_id = current_academic_year_id
     params[:add].map {|id,on| Student.find(id)}.each do |student|
       @grade_section.add_student(student, academic_year_id)
@@ -73,6 +76,7 @@ class GradeSectionsController < ApplicationController
 
   # GET /grade_sections/1/courses
   def assign
+    authorize! :update, @grade_section
     @book_labels = @grade_section.book_labels.where('name LIKE ?', "#{@grade_section.name}%")
     @students = @grade_section.students
   end
@@ -80,6 +84,7 @@ class GradeSectionsController < ApplicationController
   # POST /grade_sections
   # POST /grade_sections.json
   def create
+    authorize! :manage, GradeSection
     @grade_section = GradeSection.new(grade_section_params)
 
     respond_to do |format|
@@ -96,6 +101,7 @@ class GradeSectionsController < ApplicationController
   # PATCH/PUT /grade_sections/1
   # PATCH/PUT /grade_sections/1.json
   def update
+    authorize! :update, @grade_section
     respond_to do |format|
       if @grade_section.update(grade_section_params)
         format.html { redirect_to @grade_section, notice: 'Grade section was successfully updated.' }
@@ -110,6 +116,7 @@ class GradeSectionsController < ApplicationController
   # DELETE /grade_sections/1
   # DELETE /grade_sections/1.json
   def destroy
+    authorize! :destroy, @grade_section
     @grade_section.destroy
     respond_to do |format|
       format.html { redirect_to grade_sections_url, notice: 'Grade section was successfully destroyed.' }

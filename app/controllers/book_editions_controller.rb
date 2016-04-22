@@ -33,7 +33,7 @@ class BookEditionsController < ApplicationController
 
   # GET /book_editions/1/edit
   def edit
-    authorize! :edit, @book_edition
+    authorize! :update, @book_edition
   end
 
   # POST /book_editions
@@ -57,7 +57,7 @@ class BookEditionsController < ApplicationController
   # PATCH/PUT /book_editions/1
   # PATCH/PUT /book_editions/1.json
   def update
-    authorize! :edit, @book_edition
+    authorize! :update, @book_edition
     respond_to do |format|
       if @book_edition.update(book_edition_params)
         if book_edition_params[:small_thumbnail].present? and @book_edition.book_title.image_url.blank?
@@ -93,7 +93,7 @@ class BookEditionsController < ApplicationController
 
   # POST /book_editions/1/update_metadata
   def update_metadata
-    authorize! :edit, @book_edition
+    authorize! :update, @book_edition
     @book_edition = BookEdition.find(params[:id])
     begin
       @book_edition = @book_edition.update_metadata

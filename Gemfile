@@ -24,6 +24,9 @@ gem 'jquery-turbolinks'
 
 gem 'rails-jquery-autocomplete'
 
+# To show progress on link clicks
+gem 'nprogress-rails'
+
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem 'jbuilder', '~> 2.0'
 # bundle exec rake doc:rails generates the API under doc/api.
@@ -51,7 +54,7 @@ gem 'materialize-sass', '0.97.1'
 gem 'jquery-ui-rails'
 
 # Wrapper for Google Books API
-gem 'google_books', git: 'https://github.com/medhiwidjaja/google_books.git', branch: '~> 0.2.2'
+gem 'google_books' ###, git: 'https://github.com/medhiwidjaja/google_books.git'
 
 gem 'hashie'
 

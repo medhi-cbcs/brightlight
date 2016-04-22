@@ -14,16 +14,19 @@ class GuardiansController < ApplicationController
 
   # GET /guardians/new
   def new
+    authorize! :manage, Guardian
     @guardian = Guardian.new
   end
 
   # GET /guardians/1/edit
   def edit
+    authorize! :update, Guardian
   end
 
   # POST /guardians
   # POST /guardians.json
   def create
+    authorize! :manage, Guardian
     @guardian = Guardian.new(guardian_params)
 
     respond_to do |format|
@@ -40,6 +43,7 @@ class GuardiansController < ApplicationController
   # PATCH/PUT /guardians/1
   # PATCH/PUT /guardians/1.json
   def update
+    authorize! :update, Guardian
     respond_to do |format|
       if @guardian.update(guardian_params)
         format.html { redirect_to @guardian, notice: 'Guardian was successfully updated.' }
@@ -54,6 +58,7 @@ class GuardiansController < ApplicationController
   # DELETE /guardians/1
   # DELETE /guardians/1.json
   def destroy
+    authorize! :destroy, Guardian
     @guardian.destroy
     respond_to do |format|
       format.html { redirect_to guardians_url, notice: 'Guardian was successfully destroyed.' }
