@@ -115,6 +115,7 @@ Rails.application.routes.draw do
     sessions: "users/sessions",
     registrations: "users/registrations"
   }
+  resources :users, only: [:index, :show, :edit, :update]
 
   namespace :dynamic_select do
     get ':grade_level_id/grade_sections', to: 'options#grade_sections', as: 'grade_sections'
