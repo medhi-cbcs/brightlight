@@ -7,9 +7,10 @@ nav
         = link_to :back
           i.material-icons chevron_left
       li.right
-        = link_to edit_student_path(@student)
-          | Edit
-          i.material-icons.left edit
+        - if can? :edit, Student
+          = link_to edit_student_path(@student)
+            | Edit
+            i.material-icons.left edit
 
 .card
   .row

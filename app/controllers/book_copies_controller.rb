@@ -47,16 +47,19 @@ class BookCopiesController < ApplicationController
 
   # GET /book_copies/new
   def new
+    authorize! :manage, BookCopy
     @book_edition = BookEdition.find_by_slug(params[:book_edition_id])
     @book_copy = @book_edition.book_copies.new
   end
 
   # GET /book_copies/1/edit
   def edit
+    authorize! :edit, @book_copy
   end
 
   # GET /book_copies/1/edit
   def edit_labels
+    authorize! :edit, BookCopy
     @book_edition = BookEdition.find_by_slug(params[:book_edition_id])
     @book_copies = @book_edition.book_copies
     @grade_level_ids = GradeLevel.all.collect(&:id)
@@ -70,6 +73,7 @@ class BookCopiesController < ApplicationController
   # POST /book_copies
   # POST /book_copies.json
   def create
+    authorize! :manage, BookCopy
     @book_edition = BookEdition.new(book_edition_params)
 
     respond_to do |format|
@@ -86,6 +90,7 @@ class BookCopiesController < ApplicationController
   # PATCH/PUT /book_copies/1
   # PATCH/PUT /book_copies/1.json
   def update
+    authorize! :edit, BookCopy
     @book_edition = BookEdition.find_by_slug(params[:book_edition_id])
     respond_to do |format|
       if @book_edition.update(book_edition_params)
@@ -101,6 +106,7 @@ class BookCopiesController < ApplicationController
   # DELETE /book_copies/1
   # DELETE /book_copies/1.json
   def destroy
+    authorize! :destroy, @book_copy
     book_edition = @book_copy.book_edition
     @book_copy.destroy
     respond_to do |format|

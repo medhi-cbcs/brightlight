@@ -42,14 +42,15 @@ nav
     .brand-logo style="margin-left: 20px; font-size:1.5em"
       | Book Copies
     ul.right
-      li
-        = link_to edit_labels_book_edition_book_copies_path(@book_edition)
-          | Edit labels
-          i.material-icons.left edit
-      li
-        = link_to new_book_edition_book_copy_path(@book_edition)
-          | Create new
-          i.material-icons.left add
+      - if can? :manage, BookCopy
+        li
+          = link_to edit_labels_book_edition_book_copies_path(@book_edition)
+            | Edit labels
+            i.material-icons.left edit
+        li
+          = link_to new_book_edition_book_copy_path(@book_edition)
+            | Create new
+            i.material-icons.left add
 
 
 .card-panel
@@ -76,10 +77,12 @@ nav
           td.actions
             = link_to book_copy
               i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="View" visibility
-            = link_to edit_book_copy_path(book_copy)
-              i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="Edit" edit
-            = link_to book_copy, data: {:confirm => 'Are you sure?'}, :method => :delete, class:'red-text'
-              i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="Delete" delete
+            - if can? :edit, book_copy
+              = link_to edit_book_copy_path(book_copy)
+                i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="Edit" edit
+            - if can? :destroy, book_copy
+              = link_to book_copy, data: {:confirm => 'Are you sure?'}, :method => :delete, class:'red-text'
+                i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="Delete" delete
 
 .toolbar.z-depth-1
   = will_paginate @book_copies

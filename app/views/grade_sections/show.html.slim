@@ -1,14 +1,12 @@
-h5 Section
-
 nav
   .nav-wrapper
     .brand-logo style="margin: 0 20px; font-size:2.5em"
       = @grade_section.name
     ul.right
-      li 
-        = link_to assign_grade_section_path(@grade_section)
-          | Assign book
-          i.material-icons.left book 
+      / li 
+      /   = link_to assign_grade_section_path(@grade_section)
+      /     | Assign book
+      /     i.material-icons.left book 
       li
         = link_to edit_grade_section_path(@grade_section)
           | Edit

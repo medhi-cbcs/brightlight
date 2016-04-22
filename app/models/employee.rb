@@ -1,7 +1,7 @@
 class Employee < ActiveRecord::Base
  	validates :name, presence: true
 
- 	belongs_to :person, class_name: "User"
+ 	belongs_to :user
 	belongs_to :department
 	belongs_to :supervisor, class_name: "Employee"
 	has_many :subordinates, class_name: "Employee", foreign_key: "supervisor_id"

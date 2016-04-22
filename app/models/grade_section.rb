@@ -29,6 +29,14 @@ class GradeSection < ActiveRecord::Base
     course_sections.map { |cs| cs.textbooks } unless course_sections.blank?
   end
 
+  def standard_books
+    if StandardBook.where(academic_year_id:AcademicYear.current.id).where(grade_level_id:self.grade_level_id).count > 1
+      BookTitle.joins(:standard_books).where(standard_books: {grade_section_id:self.id, academic_year_id:AcademicYear.current.id})
+    else
+      BookTitle.joins(:standard_books).where(standard_books: {grade_level_id:self.grade_level_id, academic_year_id:AcademicYear.current.id})
+    end
+  end
+
   def add_student(student, academic_year_id)
     GradeSectionsStudent.create(grade_section: self, student:student, academic_year_id: academic_year_id || current_academic_year_id)
   end

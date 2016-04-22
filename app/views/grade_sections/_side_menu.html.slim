@@ -1,30 +1,11 @@
 li
   .collapsible-header.active
     i.material-icons class
-    | Grade Sections
+    = @grade_section.name
   .collapsible-body
     .cell-row
-      a href="#" 
-        | Courses
-    .cell-row
-      a href="#" 
-        | Students
-li
-  .collapsible-header
-    i.material-icons info_outline
-    | Related
-  .collapsible-body
-    .cell-row
-      a href="#" 
-        | Morbi leo risus
-    .cell-row
-      a href="#" 
-        | Porta ac consectetur ac
-li
-  .collapsible-header
-    i.material-icons subject
-    | Reports
-  .collapsible-body
-    .cell-row
-      a href="#" 
-        | Print detail
+      a href="/student_books/by_title?s=#{@grade_section.id}" 
+        | Student Books
+    / .cell-row
+    /   a href="#" 
+    /     | Receipt Form

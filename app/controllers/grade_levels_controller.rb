@@ -6,13 +6,18 @@ class GradeLevelsController < ApplicationController
   # GET /grade_levels.json
   def index
     # This preloading cuts down the number of database calls to just 4 calls regardless the numbers of grade sections we have
-    @grade_levels = GradeLevel.includes(grade_sections: [:homeroom])
+
+    if params[:year].blank? || params[:year].to_i == current_academic_year_id
+      @grade_levels = GradeLevel.includes(grade_sections: [:homeroom])
+    else
+      @grade_levels = GradeLevel.includes(grade_section_histories: [:homeroom]).where(grade_section_histories: {academic_year_id: params[:year]})
+    end
   end
 
   # GET /grade_levels/1
   # GET /grade_levels/1.json
   def show
-    @grade_sections = @grade_level.grade_sections.includes([:homeroom])
+    @grade_sections = @grade_level.grade_sections.order(:id).includes([:homeroom])
   end
 
   # GET /grade_levels/new

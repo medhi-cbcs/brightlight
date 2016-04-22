@@ -96,9 +96,10 @@ nav
                 = student_book.end_condition.code
             - else
               | N/A
-          td 
-            = link_to student_book, data: {:confirm => 'Are you sure?'}, :method => :delete
-              i.material-icons.red-text delete
+          td
+            - if can? :destroy, student_book
+              = link_to student_book, data: {:confirm => 'Are you sure?'}, :method => :delete
+                i.material-icons.red-text delete
 
 - unless @student.present?
   .toolbar.z-depth-1

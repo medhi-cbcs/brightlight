@@ -45,6 +45,7 @@ class BookTitlesController < ApplicationController
 
   # GET /book_titles/new
   def new
+    authorize! :manage, BookTitle
     @book_title = BookTitle.new
 
     unless params[:edition].blank?
@@ -60,6 +61,7 @@ class BookTitlesController < ApplicationController
 
   # GET /book_titles/1/edit
   def edit
+    authorize! :edit, @book_title
   end
 
   def editions
@@ -91,6 +93,7 @@ class BookTitlesController < ApplicationController
   # POST /book_titles
   # POST /book_titles.json
   def create
+    authorize! :manage, BookTitle
     @book_title = BookTitle.new(book_title_params)
 
     respond_to do |format|
@@ -113,6 +116,7 @@ class BookTitlesController < ApplicationController
   # PATCH/PUT /book_titles/1
   # PATCH/PUT /book_titles/1.json
   def update
+    authorize! :edit, @book_title
     respond_to do |format|
       if @book_title.update(book_title_params)
         format.html { redirect_to @book_title, notice: 'Book title was successfully updated.' }
@@ -127,6 +131,7 @@ class BookTitlesController < ApplicationController
   # DELETE /book_titles/1
   # DELETE /book_titles/1.json
   def destroy
+    authorize! :destroy, @book_title
     @book_title.destroy
     respond_to do |format|
       format.html { redirect_to book_titles_url, notice: 'Book title was successfully deleted.' }
@@ -203,6 +208,7 @@ class BookTitlesController < ApplicationController
 
   # POST /book_titles/delete
   def delete
+    authorize! :destroy, BookTitle
     if params[:merge]
       @book_titles = params[:merge].map {|id,on| BookTitle.find(id)}
       @book_titles.each do |book_title|
@@ -217,6 +223,7 @@ class BookTitlesController < ApplicationController
 
   # POST /book_titles/edit_merge
   def edit_merge
+    authorize! :edit, @book_title
     if params[:merge]
       @book_titles = params[:merge].map {|id,on| BookTitle.find(id)}
       if @book_titles.count > 1
@@ -232,6 +239,7 @@ class BookTitlesController < ApplicationController
 
   # POST /book_titles/merge
   def merge
+    authorize! :edit, BookTitle
     @book_title = BookTitle.new(book_title_params)
     @book_titles = params[:merge].map {|id,on| BookTitle.find(id)}
 
@@ -252,6 +260,7 @@ class BookTitlesController < ApplicationController
 
   # POST /book_title/1/update_metadata
   def update_metadata
+    authorize! :edit, BookTitle
     respond_to do |format|
       @book_title.book_editions.each { |edition| edition.update_metadata }
       format.js

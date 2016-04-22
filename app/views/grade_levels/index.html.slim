@@ -15,13 +15,13 @@ nav
 
     tbody
       - @grade_levels.each do |grade_level|
-        - grade_sections = grade_level.grade_sections
+        - grade_sections = (params[:year].blank? || params[:year].to_i == AcademicYear.current.id) ? grade_level.grade_sections : grade_level.grade_section_histories 
         tr
           td 
             .giant-letter = grade_level.name
           td
             - grade_sections.each do |section|
-              div = link_to section.name, section
+              div =  (params[:year].blank? || params[:year].to_i == AcademicYear.current.id) ? link_to(section.name, section) : section.name
           td
             - grade_sections.each do |section|
               div = section.homeroom.present? ? section.homeroom : '--'

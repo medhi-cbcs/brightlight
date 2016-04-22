@@ -33,11 +33,13 @@ class BookEditionsController < ApplicationController
 
   # GET /book_editions/1/edit
   def edit
+    authorize! :edit, @book_edition
   end
 
   # POST /book_editions
   # POST /book_editions.json
   def create
+    authorize! :manage, BookEdition
     @book_edition = BookEdition.new(book_edition_params)
 
     respond_to do |format|
@@ -55,6 +57,7 @@ class BookEditionsController < ApplicationController
   # PATCH/PUT /book_editions/1
   # PATCH/PUT /book_editions/1.json
   def update
+    authorize! :edit, @book_edition
     respond_to do |format|
       if @book_edition.update(book_edition_params)
         if book_edition_params[:small_thumbnail].present? and @book_edition.book_title.image_url.blank?
@@ -80,6 +83,7 @@ class BookEditionsController < ApplicationController
   # DELETE /book_editions/1
   # DELETE /book_editions/1.json
   def destroy
+    authorize! :destroy, @book_edition
     @book_edition.destroy
     respond_to do |format|
       format.html { redirect_to book_editions_url, notice: 'Book edition was successfully destroyed.' }
@@ -89,6 +93,7 @@ class BookEditionsController < ApplicationController
 
   # POST /book_editions/1/update_metadata
   def update_metadata
+    authorize! :edit, @book_edition
     @book_edition = BookEdition.find(params[:id])
     begin
       @book_edition = @book_edition.update_metadata

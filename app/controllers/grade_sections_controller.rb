@@ -1,5 +1,5 @@
 class GradeSectionsController < ApplicationController
-  before_action :set_grade_section, only: [:show, :edit, :update, :destroy, :students, :courses, :assign, :add_students]
+  before_action :set_grade_section, only: [:edit, :update, :destroy, :students, :courses, :assign, :add_students]
   before_action :set_year, only: [:index, :show, :new, :edit]
 
   # GET /grade_sections
@@ -13,8 +13,9 @@ class GradeSectionsController < ApplicationController
   # GET /grade_sections/1
   # GET /grade_sections/1.json
   def show
-    @grade_level =  @grade_section.grade_level
-    @textbooks = @grade_section.textbooks
+    @grade_section = GradeSection.find_by_slug(params[:id])
+    @grade_level = @grade_section.grade_level
+    @textbooks = @grade_section.standard_books
     @students = @grade_section.current_students
   end
 

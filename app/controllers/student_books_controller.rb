@@ -21,7 +21,7 @@ class StudentBooksController < ApplicationController
       year_id = AcademicYear.current.id
       @student = Student.where(id:params[:student_id]).take
       gss = @student.grade_sections_students.where(academic_year_id: year_id).try(:first)
-      @grade_section= gss.try(:grade_section)
+      @grade_section = gss.try(:grade_section)
       @roster_no = gss.order_no
       textbook_category_id = BookCategory.find_by_code('TB').id
       # Notes: Because of data errors in database, we search StudentBook without student_id
@@ -29,10 +29,20 @@ class StudentBooksController < ApplicationController
       @student_books = StudentBook.where(grade_section:@grade_section)
                         .where(roster_no:@roster_no.to_s)
                         .where(academic_year_id:year_id)
-                        .where('initial_copy_condition_id is not null')
                         .standard_books(@grade_section.grade_level.id, @grade_section.id, year_id, textbook_category_id)
                         .order('standard_books.id')
                         .includes([:book_copy, book_copy: [:book_edition]])
+    elsif params[:t].present?
+      year_id = AcademicYear.current.id
+      @book_title = BookTitle.find params[:t]
+      textbook_category_id = BookCategory.find_by_code('TB').id
+      @student_books = StudentBook.where(grade_section:@grade_section)
+                        .where(academic_year_id:year_id)
+                        .standard_books(@grade_section.grade_level.id, @grade_section.id, year_id, textbook_category_id)
+                        .where(standard_books: {book_title_id: params[:t]})
+                        .order('standard_books.id')
+                        .includes([:book_copy, book_copy: [:book_edition]])
+                        .paginate(page: params[:page], per_page: items_per_page)
     else
       @student_books = StudentBook.includes([:book_copy, book_copy: [:book_edition]]).paginate(page: params[:page], per_page: items_per_page)
     end
@@ -151,10 +161,12 @@ class StudentBooksController < ApplicationController
 
   # GET /student_books/by_title
   def by_title
+
     @book_titles = []
     if params[:s].present?
       @grade_section = GradeSection.find(params[:s])
       @grade_level = @grade_section.grade_level
+      authorize! :edit, StudentBook.where(grade_section:@grade_section).where(academic_year:AcademicYear.current).first
     end
     @textbook_category_id = BookCategory.find_by_code('TB').id
     @standard_books = StandardBook
@@ -162,7 +174,7 @@ class StudentBooksController < ApplicationController
                         .where(book_category_id: @textbook_category_id)
                         .where(academic_year_id: AcademicYear.current.id)
                         .includes([:book_edition])
-    if @grade_level.id > 10
+    if @grade_level.present? && @grade_level.id > 10
       @standard_books = @standard_books.where(grade_section:@grade_section)
     end
     if params[:t].present?

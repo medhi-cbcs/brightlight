@@ -23,13 +23,20 @@ class Ability
 		can :manage, BookCopy
     can :manage, BookCondition
     can :manage, CopyCondition
+    can :manage, StudentBook
+    can :manage, BookLoan
+    can :manage, BookFine
+    can :manage, BookLabel
+    can :manage, StandardBook
     can :read, :all
 	end
 
   # Teacher
   def teacher
-    can :manage, CourseSection, instructor: @user.person.try(:employee)
-    can :manage, GradeSection, homeroom: @user.person.try(:employee)
+    can :manage, CourseSection, instructor: @user.employee
+    can :manage, GradeSection, homeroom: @user.employee
+    can :edit, StudentBook, grade_section: GradeSection.find_by_homeroom_id(@user.employee)
+    can :manage, StandardBook
     can :read, :all
   end
 

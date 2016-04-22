@@ -12,7 +12,10 @@ li
 			li
 				a href="/book_editions" Editions
 			li
-				a href="/student_books" Assignments
+				a href="/student_books" Student Books
+			li
+				a href="/student_books/by_title" Check condition 
+			- if can? :manage, CopyCondition
 			li
 				a href="/copy_conditions/new" Update Condition
 			li

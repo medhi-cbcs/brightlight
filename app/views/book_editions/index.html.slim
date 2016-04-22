@@ -91,11 +91,11 @@ nav
                     dd.col.s12
                       .label Description
                       .item = truncate(strip_tags(book_edition.description), length: 140)
-
-          td 
-            = link_to 'Edit', edit_book_edition_path(book_edition), class: "btn waves-effect waves-teal btn-flat btn-small"
-            br
-            = link_to 'Destroy', book_edition, data: {:confirm => 'Are you sure?'}, :method => :delete, class: "btn waves-effect waves-teal red btn-small"                
+          - if can? :manage, BookEdition
+            td 
+              = link_to 'Edit', edit_book_edition_path(book_edition), class: "btn waves-effect waves-teal btn-flat btn-small"
+              br
+              = link_to 'Destroy', book_edition, data: {:confirm => 'Are you sure?'}, :method => :delete, class: "btn waves-effect waves-teal red btn-small"                
 
 .toolbar.z-depth-1
   = will_paginate @book_editions

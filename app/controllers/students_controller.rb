@@ -35,16 +35,19 @@ class StudentsController < ApplicationController
 
   # GET /students/new
   def new
+    authorize! :manage, Student
     @student = Student.new
   end
 
   # GET /students/1/edit
   def edit
+    authorize! :edit, Student
   end
 
   # POST /students
   # POST /students.json
   def create
+    authorize! :manage, Student
     @student = Student.new(student_params)
 
     respond_to do |format|
@@ -61,6 +64,7 @@ class StudentsController < ApplicationController
   # PATCH/PUT /students/1
   # PATCH/PUT /students/1.json
   def update
+    authorize! :edit, Student
     respond_to do |format|
       if @student.update(student_params)
         format.html {
@@ -81,6 +85,7 @@ class StudentsController < ApplicationController
   # DELETE /students/1
   # DELETE /students/1.json
   def destroy
+    authorize! :destroy, Student
     @student.destroy
     respond_to do |format|
       format.html { redirect_to students_url, notice: 'Student was successfully destroyed.' }

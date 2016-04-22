@@ -32,11 +32,13 @@ class EmployeesController < ApplicationController
 
   # GET /employees/1/edit
   def edit
+    authorize! :edit, Employee
   end
 
   # POST /employees
   # POST /employees.json
   def create
+    authorize! :manage, Employee
     @employee = Employee.new(employee_params)
 
     respond_to do |format|
@@ -53,6 +55,7 @@ class EmployeesController < ApplicationController
   # PATCH/PUT /employees/1
   # PATCH/PUT /employees/1.json
   def update
+    authorize! :edit, Employee
     respond_to do |format|
       if @employee.update(employee_params)
         format.html { redirect_to @employee, notice: 'Employee was successfully updated.' }
@@ -67,6 +70,7 @@ class EmployeesController < ApplicationController
   # DELETE /employees/1
   # DELETE /employees/1.json
   def destroy
+    authorize! :destroy, Employee
     @employee.destroy
     respond_to do |format|
       format.html { redirect_to employees_url, notice: 'Employee was successfully destroyed.' }

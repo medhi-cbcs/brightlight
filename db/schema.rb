@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160419034839) do
+ActiveRecord::Schema.define(version: 20160421070440) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -417,17 +417,17 @@ ActiveRecord::Schema.define(version: 20160419034839) do
     t.datetime "updated_at",                 null: false
     t.integer  "supervisor_id"
     t.integer  "department_id"
-    t.integer  "person_id"
     t.string   "slug"
     t.string   "nick_name"
     t.boolean  "is_active"
     t.integer  "family_no"
+    t.integer  "user_id"
   end
 
   add_index "employees", ["department_id"], name: "index_employees_on_department_id", using: :btree
-  add_index "employees", ["person_id"], name: "index_employees_on_person_id", using: :btree
   add_index "employees", ["slug"], name: "index_employees_on_slug", unique: true, using: :btree
   add_index "employees", ["supervisor_id"], name: "index_employees_on_supervisor_id", using: :btree
+  add_index "employees", ["user_id"], name: "index_employees_on_user_id", using: :btree
 
   create_table "fine_scales", force: :cascade do |t|
     t.integer  "old_condition_id"
@@ -828,6 +828,7 @@ ActiveRecord::Schema.define(version: 20160419034839) do
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
 
+  add_foreign_key "employees", "users"
   add_foreign_key "standard_books", "academic_years"
   add_foreign_key "standard_books", "book_categories"
   add_foreign_key "standard_books", "book_editions"
