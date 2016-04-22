@@ -463,6 +463,16 @@ ul.side-nav.fixed:hover {
     overflow-y: auto
 }
 
+ul {
+	li.user-profile {
+		padding-left: 20px !important;
+		.name {
+			padding-left: 20px;
+			color: $light-grey;
+		}
+	}
+}
+
 .app-side-menu {
 	position: fixed;
 	width: 240px;

@@ -1,23 +1,10 @@
-#barcode 
-
 li
 	.collapsible-header.waves-effect.waves-cyan
-		i.material-icons info_outline
+		i.material-icons search
 		i.mdi-navigation-chevron-right.right
-		| Books
+		| Search
 	.collapsible-body
 		ul
-			li
-				a href="/book_titles" Titles
-			li
-				a href="/book_editions" Editions
-			li
-				a href="/student_books" Student Books
-			li
-				a href="/student_books/by_title" Check condition 
-			- if can? :manage, CopyCondition
-			li
-				a href="/copy_conditions/new" Update Condition
 			li
 				= form_tag({controller:'book_titles', action:'index'}, {method:'get'}) do 
 					.input-field
@@ -38,9 +25,31 @@ li
 						- else
 							i.material-icons.prefix search
 						input.icon-prefix type="text" name="barcode" placeholder="Barcode" value=params[:barcode]
+						
 li
 	.collapsible-header.waves-effect.waves-cyan
-		i.material-icons subject
+		i.material-icons book
+		i.mdi-navigation-chevron-right.right
+		| Books
+	.collapsible-body
+		ul
+			li
+				a href="/book_titles" Titles
+			li
+				a href="/book_editions" Editions
+			li
+				a href="/student_books" Student Books
+			li
+				a href="/book_loans" Book Loan Status
+			li
+				a href="/student_books/by_title" Check condition 
+			- if can? :manage, CopyCondition
+			li
+				a href="/copy_conditions/new" Update Condition
+
+li
+	.collapsible-header.waves-effect.waves-cyan
+		i.material-icons school
 		i.mdi-navigation-chevron-right.right
 		| School
 	.collapsible-body
@@ -50,10 +59,12 @@ li
 			li
 				a href="/grade_levels" Grade Levels
 			li
+				a href="/standard_books" Standard Books
+			li
 				a href="/departments" Departments
 li
 	.collapsible-header.waves-effect.waves-cyan
-		i.material-icons subject
+		i.material-icons people
 		i.mdi-navigation-chevron-right.right
 		| People
 	.collapsible-body
@@ -69,7 +80,7 @@ li
 - if signed_in? and current_user.admin?
 	li
 		.collapsible-header.waves-effect.waves-cyan
-			i.material-icons subject
+			i.material-icons settings_applications
 			i.mdi-navigation-chevron-right.right
 			| Admin
 		.collapsible-body
@@ -79,23 +90,27 @@ li
 				li
 					a href="/book_labels" Book Labels
 				li
+					a href="/book_conditions" Book Condition
+				li
+					a href="/book_categories" Book Category
+				li
 					a href="/users" 
 						| Users
 - if signed_in?
-	li 
+	li
 		.collapsible-header.waves-effect.waves-cyan
-			i.material-icons perm_identity
+			i.material-icons account_box
 			i.mdi-navigation-chevron-right.right
 			| Profile
 		.collapsible-body
 			ul
-				li 			
+				li.user-profile
 					- if current_user
 						- if current_user.image
 							= image_tag current_user.image, alt: current_user.name, class: 'user-avatar'
 						- else
-							i.material-icons perm_identity
-						span.white-text.darken-text-1 = current_user.name
+							i.material-icons.grey-text account_circle
+						span.name = current_user.name
 					- else
 						= link_to new_user_session_path
 							| Login
