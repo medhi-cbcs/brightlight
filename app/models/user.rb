@@ -54,6 +54,7 @@ class User < ActiveRecord::Base
   def roles=(roles)
     roles = [*roles].map { |r| r.to_sym }
     self.roles_mask = (roles & ROLES).map { |r| 2**ROLES.index(r) }.inject(0, :+)
+    puts "Roles = #{roles.join(', ')}"
   end
 
   def roles

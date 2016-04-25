@@ -16,15 +16,15 @@ class UsersController < ApplicationController
   end
 
   def show
-    authorize! :manage, User
+    authorize! :show, @user
   end
 
   def edit
-    authorize! :manage, User
+    authorize! :edit, @user
   end
 
   def update
-    authorize! :manage, User
+    authorize! :edit, @user
 
     respond_to do |format|
       if @user.update(user_params)
@@ -45,6 +45,6 @@ class UsersController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def user_params
-      params.require(:user).permit(:name, :first_name, :last_name, roles: {})
+      params.require(:user).permit(:name, :first_name, :last_name, :roles => [])
     end
 end

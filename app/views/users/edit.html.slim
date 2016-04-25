@@ -12,22 +12,18 @@ h4 Editing User
       .input-field.col.s2
         = f.label :name
         = f.text_field :name
-      
-      .input-field.col.s1
-        = f.check_box :roles, {multiple: true}, 'admin', @user.roles.include?(:admin)
-        = f.label :roles_admin
-      .input-field.col.s1
-        = f.check_box :roles, {multiple: true}, 'inventory', @user.roles.include?(:inventory)
-        = f.label :roles_inventory
-      .input-field.col.s1        
-        = f.check_box :roles, {multiple: true}, 'teacher', @user.roles.include?(:teacher)
-        = f.label :roles_teacher
-        
-      / .col.s2 
-      /   = f.label :employee 
-      /   = f.collection_select(:employee_id, Employee.all, :id, :name, {prompt: true}, {:class => 'browser-default'})
-        
-
+    .row 
+      .input-field.col.s2
+        = label_tag "Roles:"
+      .input-field.col.s2
+        = check_box_tag "user[roles][]", 'admin', @user.roles.include?(:admin), {id: :admin, multiple: true}
+        = label_tag :admin
+      .input-field.col.s2
+        = check_box_tag "user[roles][]", 'inventory', @user.roles.include?(:inventory), {id: :inventory, multiple: true}
+        = label_tag :inventory
+      .input-field.col.s2       
+        = check_box_tag "user[roles][]", 'teacher', @user.roles.include?(:teacher), {id: :teacher, multiple: true}
+        = label_tag :teacher      
 
   .toolbar.z-depth-1
     button.btn.waves-effect.waves-light type="submit" Save

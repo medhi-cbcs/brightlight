@@ -110,7 +110,7 @@ li
 							= image_tag current_user.image, alt: current_user.name, class: 'user-avatar'
 						- else
 							i.material-icons.grey-text account_circle
-						span.name = current_user.name
+						span.name = link_to current_user.name, current_user
 					- else
 						= link_to new_user_session_path
 							| Login
