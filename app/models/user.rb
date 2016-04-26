@@ -47,6 +47,11 @@ class User < ActiveRecord::Base
     end
   end
 
+  # See this post: https://github.com/ryanb/cancan/wiki/ability-for-other-users
+  def ability
+    @ability ||= Ability.new(self)
+  end
+  delegate :can?, :cannot?, :to => :ability
 
   # For authorization
   ROLES = %i[admin manager student teacher staff employee inventory librarian]

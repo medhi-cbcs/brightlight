@@ -4,7 +4,7 @@ class BookTitle < ActiveRecord::Base
   has_many :courses, through: :course_texts
   has_many :book_editions
   has_many :standard_books
-  
+
   accepts_nested_attributes_for :book_editions, reject_if: :all_blank, allow_destroy: true
 
   scope :search_query, lambda { |query|
@@ -21,7 +21,7 @@ class BookTitle < ActiveRecord::Base
       joins(:book_editions).where(book_editions:{refno:query.delete(' -')})
 
     elsif /^(?:[A-Z\ |-]+\d+)$/i =~ query   # checking if it's a barcode
-      joins(book_editions: :book_copies).where(book_copies: {barcode: query})
+      joins(book_editions: :book_copies).where(book_copies: {barcode: query.upcase})
 
     else
       # condition query, parse into individual keywords

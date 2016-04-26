@@ -63,34 +63,37 @@ nav
           / i.material-icons.left add
           
 .card-panel
-  table
-    thead
-      tr
-        th Barcode
-        th Book title
-        th Out date
-        th Due date
-        th Academic year
-        - if params[:student].present?
-          th Student
-        - if params[:teacher].present?
-          th Teacher
-
-    tbody
-      - @book_loans.each do |book_loan|
+  - unless @error.present?
+    table
+      thead
         tr
-          td = link_to book_loan.barcode, book_loan.book_copy
-          td = link_to book_loan.book_edition.try(:title).truncate(50), book_loan.book_edition if book_loan.book_edition.present?
-          td = book_loan.out_date
-          td = book_loan.due_date
-          td = book_loan.academic_year.try(:name)
-          - if book_loan.student.present?
-            td = book_loan.student.name
-          - if book_loan.employee.present?
-            td = book_loan.employee.name
+          th Barcode
+          th Book title
+          th Out date
+          th Due date
+          th Academic year
+          - if params[:student].present?
+            th Student
+          - if params[:teacher].present?
+            th Teacher
 
-.toolbar.z-depth-1
-  = will_paginate @book_titles
+      tbody
+        - @book_loans.each do |book_loan|
+          tr
+            td = link_to book_loan.barcode, book_loan.book_copy
+            td = link_to book_loan.book_edition.try(:title).truncate(50), book_loan.book_edition if book_loan.book_edition.present?
+            td = book_loan.out_date
+            td = book_loan.due_date
+            td = book_loan.academic_year.try(:name)
+            - if book_loan.student.present?
+              td = book_loan.student.name
+            - if book_loan.employee.present?
+              td = book_loan.employee.name
+
+    .toolbar.z-depth-1
+      = will_paginate @book_titles
+  - else 
+    = @error
 
 javascript:
   function reset_student_form() {

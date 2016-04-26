@@ -464,11 +464,15 @@ ul.side-nav.fixed:hover {
 }
 
 ul {
-	li.user-profile {
-		padding-left: 20px !important;
-		.name {
-			padding-left: 20px;
-			color: $light-grey;
+	li {
+		.user-profile {
+			height: 2em;
+			line-height: 2em;
+			padding-left: 0px !important;
+			.name {
+				padding-left: 10px;
+				color: $light-grey;
+			}
 		}
 	}
 }

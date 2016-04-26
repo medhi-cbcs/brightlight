@@ -93,8 +93,8 @@ class BookEditionsController < ApplicationController
 
   # POST /book_editions/1/update_metadata
   def update_metadata
-    authorize! :update, @book_edition
     @book_edition = BookEdition.find(params[:id])
+    authorize! :update, @book_edition
     begin
       @book_edition = @book_edition.update_metadata
     rescue
@@ -105,8 +105,7 @@ class BookEditionsController < ApplicationController
         if @error.present?
           redirect_to @book_edition, alert: @error
         else
-          render :edit # book_edition_path @book_edition
-          # redirect_to edit_book_edition_path @book_edition #, notice: "Metadata updated"
+          render :edit
         end
       end
     end

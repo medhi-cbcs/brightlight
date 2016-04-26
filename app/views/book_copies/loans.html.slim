@@ -43,12 +43,16 @@ nav
     tbody
       - @copy_loans.each do |copy_loan|
         tr
-          td = copy_loan.try(:student).try(:name) || copy_loan.try(:employee).try(:name)
+          td
+            - if copy_loan.student.present?
+              = copy_loan.student.name
+            - elsif copy_loan.employee.present?              
+              = copy_loan.employee.name
           td = copy_loan.grade_section_name
           td = copy_loan.out_date
           td = copy_loan.due_date
           td = copy_loan.try(:academic_year).try(:name)
           td 
-            - if copy_loan.student.present?
+            - if copy_loan.student.present? and copy_loan.try(:academic_year).try(:id) == AcademicYear.current.id
               = link_to student_student_books_path(copy_loan.student)
                 i.material-icons visibility
