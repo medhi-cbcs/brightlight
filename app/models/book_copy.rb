@@ -22,6 +22,10 @@ class BookCopy < ActiveRecord::Base
     end
   }
 
+  scope :with_condition, lambda { |condition_id|
+    joins(:copy_conditions).where(copy_conditions: {book_condition_id: condition_id})
+  }
+
   def cover_image
     book_edition.try(:small_thumbnail) || 'book-icon.png'
   end

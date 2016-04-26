@@ -14,7 +14,10 @@ ul#section-options.dropdown-content
     li
       = link_to section.name, "#!", class:"grade-#{section.grade_level_id}", onclick:"filterStudentOptions(#{section.id}, '#{section.name}');"
 ul#student-options.dropdown-content
-
+  - if @grade_section.present?
+    - Student.for_section(@grade_section.id).each do |student| 
+      li = link_to "#{student.order_no}. #{student.name}", student_student_books_path(s:@grade_section.id) 
+      
 javascript:
   function filterSectionOptions(id, name) {
     var grade_ids = #{raw @grade_level_ids};

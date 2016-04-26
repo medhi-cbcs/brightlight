@@ -42,6 +42,10 @@ nav
     .brand-logo style="margin-left: 20px; font-size:1.5em"
       | Book Copies
     ul.right
+      / li 
+      /   a.dropdown-button href="#!" data-activates="condition-options"
+      /     span#grade = @condition.present? ? "#{@condition.code}" : "Condition" 
+      /     i.material-icons.right arrow_drop_down
       - if can? :manage, BookCopy
         li
           = link_to edit_labels_book_edition_book_copies_path(@book_edition)
@@ -52,6 +56,12 @@ nav
             | Create new
             i.material-icons.left add
 
+ul#condition-options.dropdown-content
+  li  
+    = link_to 'All', book_edition_book_copies_path(params.merge(condition:'all').symbolize_keys)
+  - BookCondition.all.each do |condition|
+    li 
+      = link_to condition.code, book_edition_book_copies_path(params.merge(condition:condition.slug).symbolize_keys)  
 
 .card-panel
   table.striped
@@ -64,7 +74,7 @@ nav
         th Actions
 
     tbody
-      - @book_copies.order(:copy_no).each do |book_copy|
+      - @book_copies.each do |book_copy|
         tr
           td = link_to book_copy.barcode, book_copy
           td = book_copy.book_label.try(:name)
@@ -73,7 +83,7 @@ nav
             span.box class="#{badge_color}"
               = book_copy.latest_condition.present? ? book_copy.latest_condition.code.capitalize : 'N/A'
           td = book_copy.status.present? ? book_copy.status.name : 'N/A'
-
+    
           td.actions
             = link_to book_copy
               i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="View" visibility
