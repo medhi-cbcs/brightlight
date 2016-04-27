@@ -20,6 +20,8 @@ class StudentBook < ActiveRecord::Base
   validates :grade_level, presence: true
   validates :grade_section, presence: true
 
+  around_save :update_book_copy_condition
+
   accepts_nested_attributes_for :book_loan
 
   scope :current_year, lambda { where(academic_year:AcademicYear.current) }
@@ -43,6 +45,21 @@ class StudentBook < ActiveRecord::Base
 
   def end_condition
     end_copy_condition
+  end
+
+  def update_book_copy_condition
+    old_init_condition_id = initial_copy_condition_id
+    old_end_condition_id = end_copy_condition_id
+
+    yield
+
+    if old_init_condition_id != initial_copy_condition_id 
+      book_copy.book_condition_id = initial_copy_condition_id
+      book_copy.save
+    elsif old_end_condition_id != end_copy_condition_id
+      book_copy.book_condition_id = end_copy_condition_id
+      book_copy.save
+    end
   end
 
 end

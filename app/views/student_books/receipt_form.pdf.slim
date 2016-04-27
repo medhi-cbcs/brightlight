@@ -1,10 +1,13 @@
 - if @book_labels
   - @book_labels.each do |book_label|
     // Header
-    div
-      h5 LOAN RECEIPT FORM 
-      h6 Student Textbooks 
-      h4.right = book_label.name
+    .row
+      .col.s12.center 
+        = wicked_pdf_image_tag 'cbcs-headline.jpg'
+      .col.s11                
+        h5 Student Textbooks Loan Receipt Form 
+      .col.s1
+        h4.right = book_label.name
       
     - if params[:sid].present?
       .section-header = @student.name
@@ -27,7 +30,7 @@
             td = i+1
             td = book.barcode
             td = truncate(book.book_edition.try(:title), length: 35)
-            td = book.book_condition.try(:code)
+            td = book.latest_condition.try(:code)
             td
     // Footer
     br
@@ -48,7 +51,7 @@
         | Teacher's Signature
         
       .col.s8
-        h5 Rating scale for fines
+        .table-title Rating scale for fines
         table.compact
           thead 
             th Borrowed book condition 

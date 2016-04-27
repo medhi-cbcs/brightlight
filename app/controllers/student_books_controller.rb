@@ -9,9 +9,9 @@ class StudentBooksController < ApplicationController
   # GET /student_books.json
   def index
     items_per_page = 25
-    @grade_levels = GradeLevel.all
+    @grade_levels = GradeLevel.all.order(:id)
     @grade_level_ids = @grade_levels.collect(&:id)
-    @grade_sections = GradeSection.all
+    @grade_sections = GradeSection.all.order(:id)
     @grade_sections_ids = @grade_sections.collect(&:id)
     if params[:s].present?
       @grade_section = @grade_sections.where(id:params[:s]).first
@@ -234,10 +234,8 @@ class StudentBooksController < ApplicationController
     StudentBook.update(params[:student_books].keys, params[:student_books].values)
     @book_category = BookCategory.find_by_code 'TB'
     @current_year = AcademicYear.current.id
-    puts "-+-+ #{params[:student_books]} +-+-"
 
     params[:book_loans].each do |key, values|
-      puts "==+== #{values} ==+=="
       book_loan = BookLoan.where(academic_year_id:@current_year).where(book_copy_id:values[:book_copy_id]).take
       book_loan.update_attribute(:return_date, values[:return_date])
       book_loan.update_attribute(:user_id, values[:user_id])

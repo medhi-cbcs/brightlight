@@ -8,7 +8,7 @@ class BookCopiesController < ApplicationController
   # GET /book_copies
   # GET /book_copies.json
   def index
-    items_per_page = 2
+    items_per_page = 25
     # TODO: Optimize!
     if params[:book_edition_id].present?
       @book_edition = BookEdition.find_by_slug(params[:book_edition_id])

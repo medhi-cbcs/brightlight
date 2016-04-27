@@ -47,7 +47,7 @@ nav
   .nav-wrapper
     ul
       li 
-        = link_to 'PDF Format', receipt_form_student_books_path(l:params[:l], format: :pdf), target: '_blank'
+        = link_to 'PDF Format', receipt_form_student_books_path(gs:params[:gs], g:params[:g], l:params[:l], format: :pdf), target: '_blank'
       li.right
         a#student-menu.dropdown-button href="#!" data-activates="student-options"
           span#student = params[:l].present? ? "#{@book_labels.first.name}" : 'Choose number'

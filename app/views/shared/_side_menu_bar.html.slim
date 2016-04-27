@@ -34,19 +34,35 @@ li
 	.collapsible-body
 		ul
 			li
-				a href="/book_titles" Titles
+				= link_to 'Titles', book_titles_path
 			li
-				a href="/book_editions" Editions
+				= link_to 'Editions', book_editions_path
 			li
-				a href="/student_books" Student Books
+				= link_to 'Student Books', all_student_books_path
 			li
-				a href="/book_loans" Book Loan Status
+				= link_to 'Book Loan Status', book_loans_path 
 			li
-				a href="/student_books/by_title" Check condition 
-			- if can? :manage, CopyCondition
-			li
-				a href="/copy_conditions/new" Update Condition
+				= link_to 'Check condition', by_title_student_books_path
 
+- if signed_in? and current_user.roles.include? :inventory
+	li 
+		.collapsible-header.waves-effect.waves-cyan
+			i.material-icons view_quilt
+			i.mdi-navigation-chevron-right.right
+			| Inventory
+		.collapsible-body
+			ul
+				li
+					= link_to 'Update Condition', new_copy_condition_path
+				li
+					= link_to 'Book Receipt Form', receipt_form_student_books_path
+				li
+					= link_to 'Standard Books', standard_books_path
+				li
+					a href="#" Book Fine Invoice
+				li
+					a href="#" Book Fine Payment
+			
 li
 	.collapsible-header.waves-effect.waves-cyan
 		i.material-icons school
@@ -55,13 +71,13 @@ li
 	.collapsible-body
 		ul
 			li
-				a href="/courses" Courses
+				= link_to 'Grade Levels', grade_levels_path
 			li
-				a href="/grade_levels" Grade Levels
+				= link_to 'Standard Books', standard_books_path
 			li
-				a href="/standard_books" Standard Books
+				= link_to 'Departments', departments_path
 			li
-				a href="/departments" Departments
+				= link_to 'Courses', courses_path
 li
 	.collapsible-header.waves-effect.waves-cyan
 		i.material-icons people
@@ -120,8 +136,8 @@ li
 					- if current_user
 						= link_to 'Sign out', destroy_user_session_path, method: :delete
 				
-javascript:
-	$("#barcode").scannerDetection();
-	$("#barcode").bind('scannerDetectionComplete',function(e,data){$("#barcode").html(data.string)})
-    .bind('scannerDetectionError',function(e,data){$("#barcode").html(data.string);console.log("Error")})
-		.bind('scannerDetectionReceive',function(e,data){console.log(data)});
+/ javascript:
+/ 	$("#barcode").scannerDetection();
+/ 	$("#barcode").bind('scannerDetectionComplete',function(e,data){$("#barcode").html(data.string)})
+/     .bind('scannerDetectionError',function(e,data){$("#barcode").html(data.string);console.log("Error")})
+/ 		.bind('scannerDetectionReceive',function(e,data){console.log(data)});

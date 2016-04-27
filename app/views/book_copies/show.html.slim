@@ -58,26 +58,25 @@ nav
                 .label Status
                 .item = @book_copy.status.present? ? @book_copy.status.name : 'N/A'
 
-javascript:
-  $(document).ready(function() {
-    var pressed = false;
-    var chars = [];
-    $(window).keypress(function(e) {
-      if (e.which >= 45 && e.which <= 112) {
-          chars.push(String.fromCharCode(e.which));
-      }
-      if (pressed == false) {
-        setTimeout(function(){
-          if (chars.length >= 11) {
-            var barcode = chars.join("");
-            console.log("Barcode Scanned: " + barcode);
-            // assign value to some input (or do whatever you want)
-            window.location = "/book_copies/"+barcode           
-          }
-          chars = [];
-          pressed = false;
-        },500);
-      }
-      pressed = true;
-    });
-  });
+/ javascript:
+/   $(document).ready(function() {
+/     var pressed = false;
+/     var chars = [];
+/     $(window).keypress(function(e) {
+/       if (e.which >= 45 && e.which <= 112) {
+/           chars.push(String.fromCharCode(e.which));
+/       }
+/       if (pressed == false) {
+/         setTimeout(function(){
+/           if (chars.length >= 11) {
+/             var barcode = chars.join("");
+/             // assign value to some input (or do whatever you want)
+/             window.location = "/book_copies/"+barcode           
+/           }
+/           chars = [];
+/           pressed = false;
+/         },500);
+/       }
+/       pressed = true;
+/     });
+/   });
