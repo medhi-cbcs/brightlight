@@ -28,3 +28,8 @@
     = f.label :status
     = f.text_field :status
   .actions = f.submit
+
+.toolbar.z-depth-1
+  .actions.col.s12 
+    button.btn.waves-effect.waves-light type="submit" Save
+    = link_to 'Cancel', @book_edition, class: "waves-effect waves-teal btn-flat"

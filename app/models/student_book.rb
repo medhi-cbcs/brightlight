@@ -38,6 +38,9 @@ class StudentBook < ActiveRecord::Base
               AND standard_books.academic_year_id = #{year_id}")
     end
   }
+  # Fine is applied if end condition is 2 steps worser than the initial condition, of if the book is missing
+  # Here 'missing' is hardcoded with id=5
+  scope :fine_applies, lambda { where('(end_copy_condition_id - initial_copy_condition_id >= 2) OR end_copy_condition_id=5')}
 
   def initial_condition
     initial_copy_condition #|| book_copy.current_start_condition
@@ -47,13 +50,16 @@ class StudentBook < ActiveRecord::Base
     end_copy_condition
   end
 
+  # This method is called by around_save
   def update_book_copy_condition
+    # save old conditions
     old_init_condition_id = initial_copy_condition_id
     old_end_condition_id = end_copy_condition_id
 
-    yield
+    yield # here the record is saved
 
-    if old_init_condition_id != initial_copy_condition_id 
+    # then update book_copy's condition if any of the conditions changes
+    if old_init_condition_id != initial_copy_condition_id
       book_copy.book_condition_id = initial_copy_condition_id
       book_copy.save
     elsif old_end_condition_id != end_copy_condition_id

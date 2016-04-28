@@ -107,6 +107,7 @@ Rails.application.routes.draw do
   resources :book_fines do
     collection do
       get 'calculate'
+      get 'current'
     end
   end
 

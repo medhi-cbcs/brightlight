@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160421070440) do
+ActiveRecord::Schema.define(version: 20160428011341) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -158,6 +158,8 @@ ActiveRecord::Schema.define(version: 20160421070440) do
     t.string   "status"
     t.datetime "created_at",       null: false
     t.datetime "updated_at",       null: false
+    t.float    "percentage"
+    t.string   "currency"
   end
 
   add_index "book_fines", ["academic_year_id"], name: "index_book_fines_on_academic_year_id", using: :btree

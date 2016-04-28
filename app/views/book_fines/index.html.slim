@@ -4,7 +4,7 @@ nav
   .nav-wrapper
     ul.right
       li
-        = link_to calculate_book_fines_path
+        = link_to calculate_book_fines_path, data: {:confirm => 'This will create new records. Are you sure?'}, class:'red-text'
           | Calculate book fines
           i.material-icons.left local_atm
       li
@@ -19,10 +19,10 @@ nav
       tr
         th Barcode 
         th Title
-        th Old condition
-        th New condition
-        th Fine
-        th Academic year
+        th Initial <br> condition
+        th End <br> condition
+        th
+          .right Fine <br> amount
         th Student
         th Status
         th Actions
@@ -33,16 +33,16 @@ nav
         tr
           td = book_fine.book_copy.try(:barcode)
           td = book_fine.book_copy.try(:book_edition).try(:title)
-          td = book_fine.old_condition_id
-          td = book_fine.new_condition_id
-          td = book_fine.fine
-          td = book_fine.academic_year
-          td = book_fine.student
+          td = book_fine.old_condition.code
+          td = book_fine.new_condition.code
+          td
+            .right = number_to_currency(book_fine.fine, unit:book_fine.currency)
+          td = book_fine.try(:student).try(:name)
           td = book_fine.status
           td
-            = link_to book_fine
-              i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="View" visibility
-            = link_to edit_book_fine_path(book_fine)
-              i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="Edit" edit
+            / = link_to book_fine
+            /   i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="View" visibility
+            / = link_to edit_book_fine_path(book_fine)
+            /   i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="Edit" edit
             = link_to book_fine, data: {:confirm => 'Are you sure?'}, :method => :delete, class:'red-text'
               i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="Delete" delete

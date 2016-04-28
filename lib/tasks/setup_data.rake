@@ -57,5 +57,10 @@ namespace :data do
 		end.reduce([]){|a,x| a<<x.first;a<<x.last}
 		AcademicTerm.import columns, values
 
+		FineScale.delete_all
+		columns = [:old_condition_id, :new_condition_id, :percentage]
+		values = [[1, 4, 0.65], [1, 3, 0.30], [2, 4, 0.30], [1, 5, 1.0], [2, 5, 1.0], [3, 5, 1.0], [4, 5, 1.0]]
+		FineScale.import columns, values
+
   end
 end
