@@ -2,12 +2,12 @@ h4 Student Textbook Fines
 
 nav
   .nav-wrapper
-    ul.right
+    ul
       li
         = link_to calculate_book_fines_path, data: {:confirm => 'This will create new records. Are you sure?'}, class:'red-text'
           | Calculate book fines
           i.material-icons.left local_atm
-      li
+      li.right
         = link_to new_book_fine_path
           | Create new
           i.material-icons.left add
@@ -40,8 +40,8 @@ nav
           td = book_fine.try(:student).try(:name)
           td = book_fine.status
           td
-            / = link_to book_fine
-            /   i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="View" visibility
+            = link_to book_fine
+              i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="View" payment
             / = link_to edit_book_fine_path(book_fine)
             /   i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="Edit" edit
             = link_to book_fine, data: {:confirm => 'Are you sure?'}, :method => :delete, class:'red-text'
