@@ -1,8 +1,10 @@
 # Book Labels are in the form of GradeSection.name#number, such as '1A#12' or '12C#3'
 class BookLabel < ActiveRecord::Base
   belongs_to :grade_level
+  belongs_to :grade_section
   belongs_to :student
-
+  has_many   :book_copies
+  
   validates :name, presence: true, uniqueness: true
 
   def self.for_name(name)

@@ -1,0 +1,25 @@
+.card-panel
+  - if params[:sid].present?
+    .section-header = @student.name
+  table.compact
+    thead
+      tr
+        th No
+        th Barcode
+        th Title
+        th Conditions
+        th Notes
+
+    tbody
+      - if book_label.present?
+        - book_copies = BookCopy.where(book_label:book_label).standard_books(@grade_level.id,@grade_section.id,AcademicYear.current.id).order('standard_books.id').includes([:book_edition, :book_condition])
+        - book_copies.each_with_index do |book, i|
+          tr
+            td.wd5 = i+1
+            td.wd15 = link_to book.barcode, book
+            td.wd50.ellipsis
+              span = book.book_edition.try(:title)
+            td.wd10 
+              span.box class="#{book.latest_condition.try(:color)}"
+                = book.latest_condition.try(:code)
+            td.wd20

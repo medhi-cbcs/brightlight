@@ -1,0 +1,84 @@
+.card-panel 
+  table.compact.striped
+    thead
+      tr.compact-row
+        th &nbsp;
+        th &nbsp;
+        th &nbsp;
+        th style='text-align:center;' Last
+        th colspan=5 style='text-align:center;border-bottom:1px solid grey' New Conditions
+        th style='text-align:center;font-size:0.9rem' Needs
+        th &nbsp;
+      tr.compact-row
+        th No
+        th style='text-align:center;' Barcode
+        th style='text-align:center;' Label
+        th style='text-align:center;' Condition
+        th.wd5 style='text-align:center;font-size:0.9rem' New
+        th.wd5 style='text-align:center;font-size:0.9rem' Good
+        th.wd5 style='text-align:center;font-size:0.9rem' Fair
+        th.wd5 style='text-align:center;font-size:0.9rem' Poor
+        th.wd5 style='text-align:center;font-size:0.9rem' Missing
+        th.wd5 style='text-align:center;font-size:0.9rem' Rebinding 
+        th style='text-align:center;' Notes
+    tbody
+      - if book_title.present?
+        /- book_copies = BookCopy.where(book_edition_id:book_title.book_editions.first.id).standard_books(@grade_level.id,AcademicYear.current.id).order('standard_books.id').includes([:book_edition, :book_condition])
+        - book_title[:student_books].each_with_index do |book, i|
+          = fields_for "book_loans[]", book do |f|
+            = f.hidden_field :grade_section_id, value: @grade_section.id 
+            = f.hidden_field :grade_level_id, value: @grade_level.id 
+            = f.hidden_field :academic_year_id, value: @current_year
+            = f.hidden_field :book_copy_id, value: book.book_copy_id 
+            = f.hidden_field :book_edition_id, value: book.book_edition_id
+            = f.hidden_field :book_title_id, value: @book_title_id
+            = f.hidden_field :out_date, value: book.issue_date
+            = f.hidden_field :return_date, value: Date.today
+            = f.hidden_field :student_id, value: book.student_id
+            = f.hidden_field :book_category, value: @book_category
+            = f.hidden_field :student_no, value: book.student_no 
+            = f.hidden_field :roster_no, value: book.roster_no 
+            = f.hidden_field :barcode, value: book.barcode  
+            = f.hidden_field :grade_section_code, value: book.grade_section_code
+            = f.hidden_field :grade_subject_code, value: book.grade_subject_code
+            = f.hidden_field :notes, value: book.notes 
+            = f.hidden_field :prev_academic_year_id, value: AcademicYear.current.id-1 
+            = f.hidden_field :user_id, value: current_user.id if current_user
+          = fields_for "student_books[]", book do |f|
+            tr
+              td.wd5 = i+1
+              td.wd10 = link_to book.barcode, book.try(:book_copy)
+              td.wd5 style='text-align:center;' 
+                span = book.book_copy.try(:copy_no) || 'N/A'
+              td.wd10 style='text-align:center;' 
+                span.box class="#{book.book_copy.try(:current_start_condition).try(:color) || 'white'}"
+                  = book.book_copy.try(:current_start_condition).try(:code) || '?'
+              td.wd5 style='text-align:center;' 
+                = f.radio_button :end_copy_condition_id, 1
+                = f.label :end_copy_condition_id_1, "New", class:'small-radio-label'
+              td.wd5 style='text-align:center;' 
+                = f.radio_button :end_copy_condition_id, 2
+                = f.label :end_copy_condition_id_2, "Good", class:'small-radio-label'
+              td.wd5 style='text-align:center;' 
+                = f.radio_button :end_copy_condition_id, 3
+                = f.label :end_copy_condition_id_3, "Fair", class:'small-radio-label'
+              td.wd5 style='text-align:center;' 
+                = f.radio_button :end_copy_condition_id, 4
+                = f.label :end_copy_condition_id_4, "Poor", class:'small-radio-label'
+              td.wd5 style='text-align:center;' 
+                = f.radio_button :end_copy_condition_id, 5
+                = f.label :end_copy_condition_id_5, "Missing", class:'small-radio-label'
+              td.wd5 style='text-align:center;' 
+                /= check_box_tag "status#{book.id}", "repair[#{book.id}]"
+                /= label_tag "status#{book.id}_repair[#{book.id}]", 'NR', class:'small-radio-label'
+                = f.check_box :needs_rebinding
+                = f.label :needs_rebinding, 'NR', class:'small-radio-label;font-size:2px'
+              td.wd20
+                /= f.text_field_tag "notes#{book.id}"
+                = f.text_field :notes
+css:
+  .small-radio-label {
+    font-size:0.8rem !important;
+    padding-left: 0px !important;
+    padding-top:20px !important;
+  }

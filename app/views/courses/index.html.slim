@@ -5,7 +5,7 @@ nav
     ul
       li.tooltipped data-position="bottom" data-delay="50" data-tooltip="Show only selected grade"
         a.dropdown-button href="#!" data-activates="grades-list"
-          = params[:grade_id] ? "Grade #{GradeLevel.where(id:params[:grade_id]).first.name}" : "Filter grade"
+          = params[:grade] ? "Grade #{GradeLevel.where(id:params[:grade]).first.name}" : "Filter grade"
           i.material-icons.right arrow_drop_down
           i.material-icons.left filter_list
       li.right.tooltipped data-position="bottom" data-delay="50" data-tooltip="Create new course"
@@ -16,8 +16,8 @@ nav
     ul#grades-list.dropdown-content
       - GradeLevel.all.each do |grade|
         li
-          = link_to courses_path(grade_id:grade.id)
-            = "Grade #{grade.name}"
+          = link_to courses_path(grade:grade.id)
+            = "#{grade.name}"
 
 .card-panel
   table.striped
@@ -50,4 +50,3 @@ nav
 
 .toolbar.z-depth-1
   = will_paginate
-

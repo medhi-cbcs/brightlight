@@ -1,35 +1,36 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
-  google_book_id: MyString
-  isbndb_id: MyString
-  title: MyString
+  google_book_id: NULL
+  isbndb_id: NULL
+  title: Writing with Ease
   subtitle: MyString
-  authors: MyString
-  publisher: MyString
+  authors: Susan Wise Bauer
+  publisher: Peace Hill Press
   published_date: 2015-09-30
   description: MyString
-  isbn10: 1
-  isbn13: 1
-  page_count: 1
-  small_thumbnail: MyString
-  thumbnail: MyString
+  isbn10: 1933339292
+  isbn13: 9781933339290
+  page_count: 400
+  small_thumbnail: http://books.google.co.id/books/content?id=MqPK-koIo9IC&printsec=frontcover&img=1&zoom=1&source=gbs_api
+  thumbnail: http://books.google.co.id/books/content?id=MqPK-koIo9IC&printsec=frontcover&img=1&zoom=5&source=gbs_api
   language: MyString
   edition_info: MyString
   tags: MyString
   subjects: MyString
+  book_title_id: 1
 
 two:
   google_book_id: MyString
   isbndb_id: MyString
-  title: MyString
+  title: Saxon Math 1
   subtitle: MyString
-  authors: MyString
-  publisher: MyString
+  authors: Nancy Larson
+  publisher: Saxon Publishers
   published_date: 2015-09-30
   description: MyString
-  isbn10: 1
-  isbn13: 1
+  isbn10: 160032570X
+  isbn13: 9781600325700
   page_count: 1
   small_thumbnail: MyString
   thumbnail: MyString
@@ -37,3 +38,4 @@ two:
   edition_info: MyString
   tags: MyString
   subjects: MyString
+  book_title_id: 2

@@ -1,13 +1,15 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
-one:
-  title: MyString
-  author: MyString
-  publisher: MyString
-  image_url: MyString
+english:
+  id: 1
+  title: Writing with Ease
+  authors: Susan Wise Bauer
+  publisher: Peace Hill Press
+  image_url: http://books.google.co.id/books/content?id=MqPK-koIo9IC&printsec=frontcover&img=1&zoom=1&source=gbs_api
 
-two:
-  title: MyString
-  author: MyString
-  publisher: MyString
-  image_url: MyString
+math:
+  id: 2
+  title: Saxon Math 1
+  authors: Nancy Larson
+  publisher: Saxon Publishers
+  image_url: http://books.google.co.id/books/content?id=xidWPgAACAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api

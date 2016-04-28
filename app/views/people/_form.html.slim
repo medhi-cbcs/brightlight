@@ -1,0 +1,111 @@
+= form_for @person do |f|
+  - if @person.errors.any?
+    #error_explanation
+      h2 = "#{pluralize(@person.errors.count, "error")} prohibited this person from being saved:"
+      ul
+        - @person.errors.full_messages.each do |message|
+          li = message
+
+  .field
+    = f.label :full_name
+    = f.text_field :full_name
+  .field
+    = f.label :first_name
+    = f.text_field :first_name
+  .field
+    = f.label :last_name
+    = f.text_field :last_name
+  .field
+    = f.label :nick_name
+    = f.text_field :nick_name
+  .field
+    = f.label :date_of_birth
+    = f.date_select :date_of_birth
+  .field
+    = f.label :place_of_birth
+    = f.text_field :place_of_birth
+  .field
+    = f.label :gender
+    = f.text_field :gender
+  .field
+    = f.label :passport_no
+    = f.text_field :passport_no
+  .field
+    = f.label :blood_type
+    = f.text_field :blood_type
+  .field
+    = f.label :mobile_phone
+    = f.text_field :mobile_phone
+  .field
+    = f.label :home_phone
+    = f.text_field :home_phone
+  .field
+    = f.label :other_phone
+    = f.text_field :other_phone
+  .field
+    = f.label :email
+    = f.text_field :email
+  .field
+    = f.label :other_email
+    = f.text_field :other_email
+  .field
+    = f.label :bbm_pin
+    = f.text_field :bbm_pin
+  .field
+    = f.label :sm_twitter
+    = f.text_field :sm_twitter
+  .field
+    = f.label :sm_facebook
+    = f.text_field :sm_facebook
+  .field
+    = f.label :sm_line
+    = f.text_field :sm_line
+  .field
+    = f.label :sm_path
+    = f.text_field :sm_path
+  .field
+    = f.label :sm_instagram
+    = f.text_field :sm_instagram
+  .field
+    = f.label :sm_google_plus
+    = f.text_field :sm_google_plus
+  .field
+    = f.label :sm_linked_in
+    = f.text_field :sm_linked_in
+  .field
+    = f.label :gravatar
+    = f.text_field :gravatar
+  .field
+    = f.label :photo_uri
+    = f.text_field :photo_uri
+  .field
+    = f.label :nationality
+    = f.text_field :nationality
+  .field
+    = f.label :religion
+    = f.text_field :religion
+  .field
+    = f.label :address_line1
+    = f.text_field :address_line1
+  .field
+    = f.label :address_line2
+    = f.text_field :address_line2
+  .field
+    = f.label :kecamatan
+    = f.text_field :kecamatan
+  .field
+    = f.label :kabupaten
+    = f.text_field :kabupaten
+  .field
+    = f.label :city
+    = f.text_field :city
+  .field
+    = f.label :postal_code
+    = f.text_field :postal_code
+  .field
+    = f.label :state
+    = f.text_field :state
+  .field
+    = f.label :country
+    = f.text_field :country
+  .actions = f.submit

@@ -15,7 +15,7 @@ namespace :db do
 		students_count = students.count
 
 		no_of_sections = GradeSection.all.count
-		
+
 		# Randomly assign each student to a grade section
 		puts "Assigning students to grade sections"
 		[year2015, year2014, year2013, year2012, year2011].each do |year|
@@ -32,12 +32,12 @@ namespace :db do
 					section.grade_level_id = grade.id
 					section.homeroom_id = teachers[rand(teachers_count)].id
 					section.academic_year_id = past_year_id
-					s += 1			
+					s += 1
 				end
 			end
 
 			puts "Populating students for year #{ay.name}"
-			GradeSectionsStudent.with_academic_year_id(year.id).find_each do |gss|
+			GradeSectionsStudent.with_academic_year(year).find_each do |gss|
 				student_id = gss.student_id
 				grade_level = gss.grade_section.grade_level
 				if grade_level.id > 2 							# assuming grade_level ids are sequential

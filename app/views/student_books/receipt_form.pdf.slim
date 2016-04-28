@@ -1,0 +1,110 @@
+- if @book_labels
+  - @book_labels.each do |book_label|
+    // Header
+    .row
+      .col.s12.center 
+        = wicked_pdf_image_tag 'cbcs-headline.jpg'
+      .col.s11                
+        h5 Student Textbooks Loan Receipt Form 
+      .col.s1
+        h4.right = book_label.name
+      
+    - if params[:sid].present?
+      .section-header = @student.name
+      
+    
+    // The table
+    table.compact
+      thead style="border-bottom:1px solid black"
+        tr
+          th No
+          th Barcode
+          th Title
+          th Conditions
+          th Notes
+    
+      tbody style="border-bottom:1px solid black"
+        - book_copies = BookCopy.where(book_label:book_label).standard_books(@grade_level.id,@grade_section.id,AcademicYear.current.id).includes([:book_edition, :book_condition])
+        - book_copies.each_with_index do |book, i|
+          tr
+            td = i+1
+            td = book.barcode
+            td = truncate(book.book_edition.try(:title), length: 35)
+            td = book.latest_condition.try(:code)
+            td
+    // Footer
+    br
+    .row
+      .col.s4
+        | Bandung, ......................
+        br
+        br
+        br
+        br
+        br
+        | Parent's signature
+        br
+        br 
+        br
+        br
+        br
+        | Teacher's Signature
+        
+      .col.s8
+        .table-title Rating scale for fines
+        table.compact
+          thead 
+            th Borrowed book condition 
+            th Returned condition
+            th Fine 
+          tbody
+            tr
+              td All conditions 
+              td Missing
+              td 100% of total book price
+            tr
+              td New  
+              td Poor 
+              td 65% of total book price
+            tr
+              td New 
+              td Fair
+              td 30% of total book price
+            tr
+              td Good  
+              td Poor 
+              td 30% of total book price        
+    .page-break
+
+
+scss:
+  .page-break { display:block; clear:both; page-break-after:always; }
+  table.compact {
+  	width: 100%;
+
+  	td.ellipsize {
+  		overflow: hidden;
+  		text-overflow: ellipsis;
+  		display: block;
+  		white-space: nowrap;
+  	}
+  	td {
+  		padding-top: 2px;
+  		padding-bottom: 2px;
+  	}
+  	.ellipsis {
+  	    position: relative;
+  	}
+  	.ellipsis:before {
+  	    content: '&nbsp;';
+  	    visibility: hidden;
+  	}
+  	.ellipsis span {
+  	    position: absolute;
+  	    left: 0;
+  	    right: 0;
+  	    white-space: nowrap;
+  	    overflow: hidden;
+  	    text-overflow: ellipsis;
+  	}
+  }

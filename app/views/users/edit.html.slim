@@ -1,0 +1,30 @@
+h4 Editing User
+
+= form_for @user do |f|
+  .card-panel
+    - if @user.errors.any?
+      #error_explanation
+        h2 = "#{pluralize(@user.errors.count, "error")} prohibited this user from being saved:"
+        ul
+          - @user.errors.full_messages.each do |message|
+            li = message
+    .row
+      .input-field.col.s2
+        = f.label :name
+        = f.text_field :name
+    .row 
+      .input-field.col.s2
+        = label_tag "Roles:"
+      .input-field.col.s2
+        = check_box_tag "user[roles][]", 'admin', @user.roles.include?(:admin), {id: :admin, multiple: true}
+        = label_tag :admin
+      .input-field.col.s2
+        = check_box_tag "user[roles][]", 'inventory', @user.roles.include?(:inventory), {id: :inventory, multiple: true}
+        = label_tag :inventory
+      .input-field.col.s2       
+        = check_box_tag "user[roles][]", 'teacher', @user.roles.include?(:teacher), {id: :teacher, multiple: true}
+        = label_tag :teacher      
+
+  .toolbar.z-depth-1
+    button.btn.waves-effect.waves-light type="submit" Save
+    = link_to 'Cancel', users_path, class: "waves-effect waves-light btn-flat"

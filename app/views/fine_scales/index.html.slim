@@ -1,0 +1,33 @@
+h4 Scale Ratings for Textbook Fines
+
+nav
+  .nav-wrapper
+    ul.right
+      li
+        = link_to new_fine_scale_path
+          | Create new
+          i.material-icons.left add
+          
+.card-panel
+  table
+    thead
+      tr
+        th Old condition
+        th New condition
+        th Fine scale (percentage)
+        th Actions
+
+
+    tbody
+      - @fine_scales.each do |fine_scale|
+        tr
+          td = fine_scale.old_condition.try(:code)
+          td = fine_scale.new_condition.try(:code)
+          td = fine_scale.percentage
+          td 
+            = link_to fine_scale
+              i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="View" visibility
+            = link_to edit_fine_scale_path(fine_scale)
+              i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="Edit" edit
+            = link_to fine_scale, data: {:confirm => 'Are you sure?'}, :method => :delete
+              i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="Delete" delete

@@ -6,7 +6,7 @@ namespace :db do
 
 		GradeLevel.all.each do |grade|
       grade.grade_sections.each do |section|
-        25.times do |i|
+        15.times do |i|
           BookLabel.create(grade_level_id:grade.id, name:"#{section.name}##{i.to_s}")
         end
       end

@@ -1,0 +1,9 @@
+= form_for @loan_form do |f|
+  - if @loan_form.errors.any?
+    #error_explanation
+      h2 = "#{pluralize(@loan_form.errors.count, "error")} prohibited this loan_form from being saved:"
+      ul
+        - @loan_form.errors.full_messages.each do |message|
+          li = message
+
+  .actions = f.submit

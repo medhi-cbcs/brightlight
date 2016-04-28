@@ -4,18 +4,22 @@ nav
   .nav-wrapper
     ul
       li
-        = link_to book_editions_path
+        = link_to book_editions_path({page:params[:listpage]})
           i.material-icons chevron_left
       li.right
         = link_to book_edition_book_copies_path(@book_edition)
           i.material-icons.left book
           | Copies
           span.badge.blue.grey-text.text-lighten-5 = @book_edition.number_of_copies
-      li.right
-        = link_to edit_book_edition_path(@book_edition)
-          i.material-icons.left edit
-          | Edit
-
+      - if can? :edit, @book_edition
+        li.right
+          = link_to edit_book_edition_path(@book_edition)
+            i.material-icons.left edit
+            | Edit
+        li.right
+          = link_to update_metadata_book_edition_path(id:@book_edition.id)
+            i.material-icons.left autorenew
+            | Update Metadata
 .card-panel
   table
     tr
@@ -43,8 +47,17 @@ nav
               .label Published Date
               .item = @book_edition.published_date || 'N/A'
             dd.col.s6
+              .label Reference No
+              .item = @book_edition.refno || 'N/A'
+            dd.col.s6
               .label Page count
-              .item = @book_edition.page_count || 'N/A'
+              .item = @book_edition.page_count || 'N/A'            
+            dd.col.s6
+              .label Legacy Code
+              .item = @book_edition.legacy_code || 'N/A'
+            dd.col.s6
+              .label Price
+              .item = @book_edition.price.present? ? "#{@book_edition.currency} #{@book_edition.price.to_digits}" : 'N/A'
             dd.col.s12
               .label Description
               .item = strip_tags(@book_edition.description) || 'N/A'
@@ -53,8 +66,3 @@ nav
               .item = @book_edition.book_title ? link_to(@book_edition.book_title.title, @book_edition.book_title) : "--" 
 
     
-
-
-
-
-

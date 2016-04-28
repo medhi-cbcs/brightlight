@@ -3,10 +3,12 @@ class BookEdition < ActiveRecord::Base
   validates :isbn10, uniqueness: true, allow_blank: true, allow_nil: true
   validates :isbn13, uniqueness: true, allow_blank: true, allow_nil: true
 
+  slug :isbn_or_title_for_slug
+
   belongs_to :book_title
   has_many :book_copies
   accepts_nested_attributes_for :book_copies, allow_destroy: true, reject_if: :all_blank
-  
+
   filterrific(
     default_filter_params: { sorted_by: 'created_at_desc' },
     available_filters: [
@@ -24,7 +26,7 @@ class BookEdition < ActiveRecord::Base
     # check if search query looks like an isbn number
     if /^(?:\d[\ |-]?){9}[\d|X]$/i =~ query.to_s
       where(isbn10:query.delete('- '))
-      
+
     elsif /^(?:\d[\ |-]?){13}$/i =~ query.to_s
       where(isbn13:query.delete('- '))
 
@@ -49,7 +51,7 @@ class BookEdition < ActiveRecord::Base
       )
     end
   }
-  
+
   scope :sorted_by, lambda { |sort_option|
     # extract the sort direction from the param value.
     direction = (sort_option =~ /desc$/) ? 'desc' : 'asc'
@@ -76,7 +78,7 @@ class BookEdition < ActiveRecord::Base
   end
 
   def self.searchGoogleAPI(isbn)
-    results = GoogleBooks::API.search("isbn:#{isbn}")
+    results = GoogleBooks::API.search("isbn:#{isbn}",{api_key:ENV["GOOGLE_API_KEY"]})
     unless results.total_results == 0
       book_edition = BookEdition.new
       book = results.first
@@ -88,11 +90,11 @@ class BookEdition < ActiveRecord::Base
       book_edition.page_count = book.page_count
       book_edition.small_thumbnail = book.covers[:small]
       book_edition.thumbnail = book.covers[:thumbnail]
-      book_edition.published_date = book.published_date 
-      book_edition.language = book.language
+      book_edition.published_date = book.published_date
+      book_edition.language = book.language unless book.language.blank?
       book_edition.google_book_id = book.id
       return book_edition
-    else 
+    else
       return nil
     end
   end
@@ -113,13 +115,55 @@ class BookEdition < ActiveRecord::Base
       book_edition.isbn13 = book.isbn
       book_edition.isbn10 = book.isbn10
       book_edition.page_count = book.page_count
-      book_edition.published_date = book.published_date 
+      book_edition.published_date = book.published_date
       book_edition.edition_info = book.edition_info
       book_edition.language = book.language
       book_edition.isbndb_id = book.book_id
       return book_edition
     else
-      return nil
+      raise ISBNDBClient::API::Error
+    end
+  end
+
+  def update_metadata
+    unless isbn.blank?
+      results = GoogleBooks::API.search("isbn:#{isbn13}") if isbn13.present?
+      if results.total_results == 0 and isbn10.present?
+        results = GoogleBooks::API.search("isbn:#{isbn10}")
+      end
+      unless results.total_results == 0
+        book = results.first
+        self.google_book_id = book.id
+        self.authors = book.authors.join(', ') unless book.authors.blank?
+        self.small_thumbnail = book.covers[:small]
+        self.thumbnail = book.covers[:thumbnail]
+        # book_title = self.book_title
+        # book_title.image_url = self.small_thumbnail
+        # book_title.save
+      else
+        book = ISBNDBClient::API.find(isbn)
+        if book.present?
+          self.isbndb_id = book.book_id
+          self.authors = book.authors.map {|data| data['name']}.join(', ') unless book.authors.blank?
+          self.description = book.description unless book.description.blank?
+          self.edition_info = book.edition_info unless book.edition_info.blank?
+        end
+      end
+      if book.present?
+        self.title = book.title
+        self.publisher = book.publisher unless book.publisher.blank?
+        self.isbn13 ||= book.isbn
+        self.isbn10 ||= book.respond_to?(:isbn_10) ? book.isbn_10 : book.isbn10
+        self.page_count = book.page_count unless book.page_count.blank?
+        self.published_date = book.published_date unless book.published_date.blank?
+        self.language = book.language unless book.language.blank?
+        # self.save
+      else
+        puts "No book info found"
+      end
+      return self
+    else
+      raise "Invalid ISBN"
     end
   end
 
@@ -134,24 +178,19 @@ class BookEdition < ActiveRecord::Base
     self.save
   end
 
-  def create_book_copies(num=1)
-    condition_ids = BookCondition.all.map {|bc| bc.id}
-    status = Status.where(name:'On loan').first
-    num.times do
-      self.book_copies << BookCopy.new(
-        book_condition_id: condition_ids[rand(condition_ids.count)],
-        status_id: status.id,
-        barcode: rand(9876543210)
-      )
-    end
-  end
-
   def has_cover?
     self.small_thumbnail.present?
   end
 
   def number_of_copies
-    book_copies.length
+    book_copies.count
   end
-  
+
+  def isbn
+    isbn13 || isbn10
+  end
+
+  def isbn_or_title_for_slug
+    "#{isbn || refno}-#{title}".truncate(40)
+  end
 end

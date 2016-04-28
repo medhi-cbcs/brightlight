@@ -1,5 +1,5 @@
 .row 
-  .col.s6
+  .col.s3
     h4 Books
   .col.s5
     = form_tag({controller:'book_titles', action:'index'}, {method:'get'}) do 
@@ -11,7 +11,17 @@
         - else
           i.material-icons.prefix search
         input.icon-prefix type="text" name="search" placeholder="Search" value=params[:search]    
-
+  .col.s3
+    = form_tag({controller:'book_titles', action:'index'}, {method:'get'}) do 
+      .input-field
+        input type="hidden" name="v" value=@view_style
+        - if params[:barcode].present?
+          i.material-icons.prefix onclick='reset_form()' style='cursor:pointer'
+            | highlight_off
+        - else
+          i.material-icons.prefix search
+        input.icon-prefix type="text" name="barcode" placeholder="Barcode" value=params[:barcode]
+          
 = form_tag do
   nav
     .nav-wrapper
@@ -20,7 +30,7 @@
           li
             button.btn#merge-button formaction="#{edit_merge_book_titles_path}" Merge
           li
-            = link_to delete_book_titles_path, id:"delete-button"
+            button.btn.red formaction="#{delete_book_titles_path}"
               i.material-icons delete
         li
           = link_to new_book_title_path
@@ -40,42 +50,8 @@
       table.striped
         tbody
           - @book_titles.each do |book_title|
-            tr
-              td
-                input.checkbox type="checkbox" id="cb-#{book_title.id}" name="merge[#{book_title.id}]" onchange="toggle_toolbar_menu()"
-                / This label is required for Materialize CSS to work
-                = label_tag "cb-#{book_title.id}", ""
-              - if @view_style == :list
-                td
-                  .list_description
-                    div = link_to book_title.title, book_title
-                    - if book_title.authors.present?
-                      span.label Author:
-                      span.item = book_title.authors
-                    - if book_title.publisher.present?
-                      span.label Publisher:
-                      span.item = book_title.publisher
-
-                td = link_to 'Edit', edit_book_title_path(book_title), class: "btn waves-effect waves-yellow btn-flat btn-small"
-
-              - else
-                td style="vertical-align:top"
-                  - thumbnail = book_title.image_url.present? ? book_title.image_url : 'book-icon.png' 
-                  = image_tag(thumbnail, class: 'list_image')
-                td
-                  .list_description
-                    dl.row
-                      dt = link_to book_title.title, book_title
-                      - if book_title.authors.present?
-                        dd
-                          .label Author:
-                          .item = book_title.authors
-                      - if book_title.publisher.present?
-                        dd
-                          .label Publisher:
-                          .item = book_title.publisher
-
-                td = link_to 'Edit', edit_book_title_path(book_title), class: "btn waves-effect waves-teal btn-flat btn-small"
+            tr id="title-#{book_title.id}"
+              = render partial:"book_edition_row", locals: {book_title:book_title, view_style:@view_style}
 
 .toolbar.z-depth-1
   = will_paginate @book_titles

@@ -1,14 +1,15 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
-one:
-  name: MyString
-  first_name: MyString
-  last_name: MyString
-  date_of_birth: 2015-10-07
-  admission_no: MyString
-  family_id: 1
-  gender: MyString
-  blood_type: MyString
+thomas:
+  id: 1
+  name: Thomas Hardana
+  first_name: Thomas
+  last_name: Hardana
+  date_of_birth: 2010-10-07
+  admission_no: 2
+  family_id: 55
+  gender: M
+  blood_type: O
   nationality: MyString
   religion: MyString
   address_line1: MyString
@@ -19,24 +20,25 @@ one:
   country: MyString
   mobile_phone: MyString
   home_phone: MyString
-  email: MyString
+  email: tom@yahuu.com
   photo_uri: MyString
   status: MyString
   status_description: MyString
-  is_active: false
+  is_active: true
   is_deleted: false
-  student_no: 1
+  student_no: 100
   passport_no: MyString
-  enrollment_date: MyString
+  enrollment_date: 2014-10-07
 
-two:
-  name: MyString
-  first_name: MyString
-  last_name: MyString
-  date_of_birth: 2015-10-07
-  admission_no: MyString
-  family_id: 1
-  gender: MyString
+anne:
+  id: 2
+  name: Anne Rangga
+  first_name: Anne
+  last_name: Rangga
+  date_of_birth: 2000-10-07
+  admission_no: 1
+  family_id: 11
+  gender: F
   blood_type: MyString
   nationality: MyString
   religion: MyString
@@ -48,12 +50,12 @@ two:
   country: MyString
   mobile_phone: MyString
   home_phone: MyString
-  email: MyString
+  email: ann@yahuu.com
   photo_uri: MyString
   status: MyString
   status_description: MyString
-  is_active: false
+  is_active: true
   is_deleted: false
-  student_no: 1
+  student_no: 80
   passport_no: MyString
-  enrollment_date: MyString
+  enrollment_date: 2011-10-07

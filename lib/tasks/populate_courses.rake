@@ -5,8 +5,8 @@ namespace :db do
 		Course.delete_all
 
 		puts "Populating Courses"
-		['Math', 'English', 'PE', 'Writing', 'Arts', 'Science', 'History', 'Bible',
-			'Geography', 'Music', 'Biology', 'Physics'
+		['Math', 'English', 'Writing', 'Science', 'History', 'Bible',
+			'Geography', 'Biology', 'Physics'
 		].each do |course_name|
 			# Create courses in each grade level
 			GradeLevel.find_each do |grade_level|
@@ -16,7 +16,7 @@ namespace :db do
 				course.grade_level_id = grade_level.id
 				course.academic_year = year
 				course.academic_terms << year.academic_terms.first
-				course.academic_terms << year.academic_terms.last	
+				course.academic_terms << year.academic_terms.last
 				course.save
 				puts course.name
 

@@ -1,0 +1,108 @@
+p#notice = notice
+
+p
+  strong Full name:
+  = @person.full_name
+p
+  strong First name:
+  = @person.first_name
+p
+  strong Last name:
+  = @person.last_name
+p
+  strong Nick name:
+  = @person.nick_name
+p
+  strong Date of birth:
+  = @person.date_of_birth
+p
+  strong Place of birth:
+  = @person.place_of_birth
+p
+  strong Gender:
+  = @person.gender
+p
+  strong Passport no:
+  = @person.passport_no
+p
+  strong Blood type:
+  = @person.blood_type
+p
+  strong Mobile phone:
+  = @person.mobile_phone
+p
+  strong Home phone:
+  = @person.home_phone
+p
+  strong Other phone:
+  = @person.other_phone
+p
+  strong Email:
+  = @person.email
+p
+  strong Other email:
+  = @person.other_email
+p
+  strong Bbm pin:
+  = @person.bbm_pin
+p
+  strong Twitter:
+  = @person.sm_twitter
+p
+  strong Facebook:
+  = @person.sm_facebook
+p
+  strong Line:
+  = @person.sm_line
+p
+  strong Path:
+  = @person.sm_path
+p
+  strong Instagram:
+  = @person.sm_instagram
+p
+  strong Google+:
+  = @person.sm_google_plus
+p
+  strong Linked-in:
+  = @person.sm_linked_in
+p
+  strong Gravatar:
+  = @person.gravatar
+p
+  strong Photo uri:
+  = @person.photo_uri
+p
+  strong Nationality:
+  = @person.nationality
+p
+  strong Religion:
+  = @person.religion
+p
+  strong Address line1:
+  = @person.address_line1
+p
+  strong Address line2:
+  = @person.address_line2
+p
+  strong Kecamatan:
+  = @person.kecamatan
+p
+  strong Kabupaten:
+  = @person.kabupaten
+p
+  strong City:
+  = @person.city
+p
+  strong Postal code:
+  = @person.postal_code
+p
+  strong State:
+  = @person.state
+p
+  strong Country:
+  = @person.country
+
+= link_to 'Edit', edit_person_path(@person)
+'|
+= link_to 'Back', people_path

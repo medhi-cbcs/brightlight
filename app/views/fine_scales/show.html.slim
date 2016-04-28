@@ -1,0 +1,15 @@
+p#notice = notice
+
+p
+  strong Old condition:
+  = @fine_scale.old_condition_id
+p
+  strong New condition:
+  = @fine_scale.new_condition_id
+p
+  strong Fine scale:
+  = @fine_scale.percentage
+
+= link_to 'Edit', edit_fine_scale_path(@fine_scale)
+'|
+= link_to 'Back', fine_scales_path

@@ -13,7 +13,7 @@ html
 
 		meta name="viewport" content="width=device-width, initial-scale=1.0"
 
-	body class="#{ controller.controller_name} blue-grey lighten-5"
+	body class="#{controller.controller_name} blue-grey lighten-#{current_user.admin? ? 1 : 5}"
 		header
 			= render 'shared/layout/header'
 
@@ -27,12 +27,12 @@ html
 			//= render 'shared/layout/footer'
 			
 			= yield :javascript
-			
-			-if Rails.env.development?
-				.container
-					ul.collapsible data-collapsible="expandable" style="padding-bottom:0px; box-shadow:none; border:none"
-						li style="color: white;"
-							.collapsible-header style="background-color:#389bfe; border:none"
-								| Copyright © 2015 Brightlight. All rights reserved.
-							.collapsible-body
+						
+			.container
+				ul.collapsible data-collapsible="expandable" style="padding-bottom:0px; box-shadow:none; border:none"
+					li style="color: white;"
+						.collapsible-header style="background-color:#e7580b; border:none"
+							| Brightlight. Copyright © 2015 Cahaya Bangsa Classical School. All rights reserved.
+						.collapsible-body
+							-if Rails.env.development?
 								= debug(params)

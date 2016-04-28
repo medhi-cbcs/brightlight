@@ -33,11 +33,13 @@ class BookEditionsController < ApplicationController
 
   # GET /book_editions/1/edit
   def edit
+    authorize! :update, @book_edition
   end
 
   # POST /book_editions
   # POST /book_editions.json
   def create
+    authorize! :manage, BookEdition
     @book_edition = BookEdition.new(book_edition_params)
 
     respond_to do |format|
@@ -55,8 +57,12 @@ class BookEditionsController < ApplicationController
   # PATCH/PUT /book_editions/1
   # PATCH/PUT /book_editions/1.json
   def update
+    authorize! :update, @book_edition
     respond_to do |format|
       if @book_edition.update(book_edition_params)
+        if book_edition_params[:small_thumbnail].present? and @book_edition.book_title.image_url.blank?
+          @book_edition.book_title.update_attribute :image_url, book_edition_params[:small_thumbnail]
+        end
         nested_form = book_edition_params[:book_copies_attributes].present?
         format.html {
           if nested_form
@@ -77,6 +83,7 @@ class BookEditionsController < ApplicationController
   # DELETE /book_editions/1
   # DELETE /book_editions/1.json
   def destroy
+    authorize! :destroy, @book_edition
     @book_edition.destroy
     respond_to do |format|
       format.html { redirect_to book_editions_url, notice: 'Book edition was successfully destroyed.' }
@@ -84,10 +91,30 @@ class BookEditionsController < ApplicationController
     end
   end
 
+  # POST /book_editions/1/update_metadata
+  def update_metadata
+    @book_edition = BookEdition.find(params[:id])
+    authorize! :update, @book_edition
+    begin
+      @book_edition = @book_edition.update_metadata
+    rescue
+      @error = "ISBN No #{@book_edition.isbn} did not match any book results"
+    end
+    respond_to do |format|
+      format.html do
+        if @error.present?
+          redirect_to @book_edition, alert: @error
+        else
+          render :edit
+        end
+      end
+    end
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_book_edition
-      @book_edition = BookEdition.find(params[:id])
+      @book_edition = BookEdition.find_by_slug(params[:id])
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.
@@ -95,7 +122,7 @@ class BookEditionsController < ApplicationController
       params.require(:book_edition).permit(
         :google_book_id, :isbndb_id, :title, :subtitle, :authors, :publisher, :published_date,
         :description, :isbn10, :isbn13, :page_count, :small_thumbnail, :thumbnail,
-        :language, :edition_info, :tags, :subjects, :book_title_id,
+        :language, :edition_info, :tags, :subjects, :book_title_id, :refno, :price, :currency, :legacy_code,
         {:book_copies_attributes => [:id, :book_edition_id, :book_condition_id, :status_id, :barcode, :copy_no, :book_label_id, :_destroy]}
       )
     end

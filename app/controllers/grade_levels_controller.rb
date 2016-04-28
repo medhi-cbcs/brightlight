@@ -6,29 +6,37 @@ class GradeLevelsController < ApplicationController
   # GET /grade_levels.json
   def index
     # This preloading cuts down the number of database calls to just 4 calls regardless the numbers of grade sections we have
-    @grade_levels = GradeLevel.includes(grade_sections: [:homeroom, :academic_year])
+
+    if params[:year].blank? || params[:year].to_i == current_academic_year_id
+      @grade_levels = GradeLevel.includes(grade_sections: [:homeroom])
+    else
+      @grade_levels = GradeLevel.includes(grade_section_histories: [:homeroom]).where(grade_section_histories: {academic_year_id: params[:year]})
+    end
   end
 
   # GET /grade_levels/1
   # GET /grade_levels/1.json
   def show
-    @grade_sections = @grade_level.grade_sections.with_academic_year_id(@year_id).includes([:academic_year, :homeroom])
+    @grade_sections = @grade_level.grade_sections.order(:id).includes([:homeroom])
   end
 
   # GET /grade_levels/new
   def new
+    authorize! :manage, GradeLevel
     @grade_level = GradeLevel.new
     3.times { @grade_level.grade_sections.build }
   end
 
   # GET /grade_levels/1/edit
   def edit
-    @grade_sections = @grade_level.grade_sections.with_academic_year_id(@year_id).includes([:academic_year, :homeroom])
+    authorize! :update, @grade_level
+    @grade_sections = @grade_level.grade_sections.includes([:homeroom])
   end
 
   # POST /grade_levels
   # POST /grade_levels.json
   def create
+    authorize! :manage, GradeLevel
     @grade_level = GradeLevel.new(grade_level_params)
 
     respond_to do |format|
@@ -43,14 +51,17 @@ class GradeLevelsController < ApplicationController
   end
 
   def edit_labels
+    authorize! :update, @grade_level
     section_name = params[:section]
     @book_labels = @grade_level.book_labels.where('name LIKE ?', "#{section_name}%")
+    @grade_section = @grade_level.grade_sections.where(name:section_name).first
+    @students = @grade_section.students
   end
 
   # PATCH/PUT /grade_levels/1
   # PATCH/PUT /grade_levels/1.json
   def update
-
+    authorize! :update, @grade_level
     respond_to do |format|
       if @grade_level.update(grade_level_params)
         editing_labels = grade_level_params[:book_labels_attributes].present?
@@ -72,6 +83,7 @@ class GradeLevelsController < ApplicationController
   # DELETE /grade_levels/1
   # DELETE /grade_levels/1.json
   def destroy
+    authorize! :destroy, @grade_level
     @grade_level.destroy
     respond_to do |format|
       format.html { redirect_to grade_levels_url, notice: 'Grade level was successfully destroyed.' }
@@ -82,11 +94,11 @@ class GradeLevelsController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_grade_level
-      @grade_level = GradeLevel.find(params[:id])
+      @grade_level = GradeLevel.find_by_slug(params[:id])
     end
 
     def set_year
-      @year_id = params[:year] || AcademicYear.current_id
+      @year_id = params[:year] || current_academic_year_id
       @academic_year = AcademicYear.find(@year_id)
     end
 
@@ -94,6 +106,6 @@ class GradeLevelsController < ApplicationController
     def grade_level_params
       params.require(:grade_level).permit(:name, :order_no,
                                          {:grade_sections_attributes => [:name, :homeroom_id, :academic_year_id, :_destroy, :id]},
-                                         {:book_labels_attributes => [:id, :name, :_destroy]})
+                                         {:book_labels_attributes => [:id, :name, :student_id, :_destroy]})
     end
 end

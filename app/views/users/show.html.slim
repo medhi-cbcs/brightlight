@@ -1,0 +1,29 @@
+h4 = @user.name
+
+nav
+  .nav-wrapper
+    ul
+      li
+        = link_to :back
+          i.material-icons chevron_left
+      li.right
+        - if can? :edit, User
+          = link_to edit_user_path(@user)
+            | Edit
+            i.material-icons.left edit
+
+.card-panel
+  .list_description
+    dl.row
+      dd.col.s4
+        .label User Name
+        .item = @user.name
+      dd.col.s4
+        .label Roles
+        .item = @user.roles.map(&:to_s).map(&:capitalize).join(', ')
+      dd.col.s4
+        .label Employee profile
+        .item 
+          = link_to @user.employee
+            i.material-icons account_circle
+  

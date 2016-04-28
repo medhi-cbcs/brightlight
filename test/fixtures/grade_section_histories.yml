@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  grade_level_id: 
+  grade_section_id: 
+  academic_year_id: 
+  homeroom_id: 
+  name: MyString
+
+two:
+  grade_level_id: 
+  grade_section_id: 
+  academic_year_id: 
+  homeroom_id: 
+  name: MyString

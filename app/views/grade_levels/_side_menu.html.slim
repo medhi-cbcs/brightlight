@@ -1,23 +1,15 @@
 li
   .collapsible-header.active
     i.material-icons class
-    | Grade Levels
+    = @grade_level.try(:name) || "Grade Level"
   .collapsible-body
     .cell-row
-      a href="#" 
-        | Sections
-    .cell-row
-      a href="#" 
-        | Courses
-li
-  .collapsible-header.active
-    i.material-icons query_builder
-    | Actions
-  .collapsible-body
-    = link_to 'Add Grade Level', new_grade_level_path, class: "btn waves-effect waves-teal btn-default"
-    
-    - if params[:id] and action_name != 'edit'
-      = link_to 'Edit', edit_grade_level_path(@grade_level), class: "btn waves-effect waves-teal btn-flat"
+      = link_to standard_books_path(grade:@grade_level.try(:id))
+        | Standard Books
+    / .cell-row
+    /   a href="#" 
+    /     | Courses
+
 li
   .collapsible-header
     i.material-icons settings
@@ -27,25 +19,7 @@ li
       = label_tag :academic_year
       - selected = params[:year] || AcademicYear.current
       = collection_select nil, :year, AcademicYear.all, :id, :name, {selected:selected}, {onchange: 'set_academic_year($(this).val())'}
-li
-  .collapsible-header
-    i.material-icons info_outline
-    | Related
-  .collapsible-body
-    .cell-row
-      a href="#" 
-        | Morbi leo risus
-    .cell-row
-      a href="#" 
-        | Porta ac consectetur ac
-li
-  .collapsible-header
-    i.material-icons subject
-    | Reports
-  .collapsible-body
-    .cell-row
-      a href="#" 
-        | Print detail
+
 
 javascript:
   function set_academic_year(value) {

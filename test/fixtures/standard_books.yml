@@ -1,0 +1,35 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  book_title_id: 
+  book_edition_id: 
+  book_category_id: 
+  isbn: MyString
+  refno: MyString
+  quantity: MyString
+  grade_subject_code: MyString
+  grade_name: MyString
+  grade_level_id: 
+  grade_section_id: 
+  group: MyString
+  category: MyString
+  bkudid: MyString
+  notes: MyString
+  academic_year_id: 
+
+two:
+  book_title_id: 
+  book_edition_id: 
+  book_category_id: 
+  isbn: MyString
+  refno: MyString
+  quantity: MyString
+  grade_subject_code: MyString
+  grade_name: MyString
+  grade_level_id: 
+  grade_section_id: 
+  group: MyString
+  category: MyString
+  bkudid: MyString
+  notes: MyString
+  academic_year_id: 

@@ -7,9 +7,10 @@ nav
         = link_to :back
           i.material-icons chevron_left
       li.right
-        = link_to edit_student_path(@student)
-          | Edit
-          i.material-icons.left edit
+        - if can? :edit, Student
+          = link_to edit_student_path(@student)
+            | Edit
+            i.material-icons.left edit
 
 .card
   .row
@@ -22,19 +23,25 @@ nav
         li.tab.col.s3
           a href='#tab3' Contacts
         li.tab.col.s3
-          a href='#tab4' Details
+          a href='#tab4' Admission
 
     #tab1.tab-content
       .col.s2
         .card
           .card-image
-            - avatar = @student.gender == 'F' ? 'female-child-avatar.png' : 'male-child-avatar.png'
+            - avatar = @student.gender[0].upcase == 'F' ? 'female-child-avatar.png' : 'male-child-avatar.png'
             = image_tag (@student.photo_uri.present? ? @student.photo_uri : avatar), class: 'media-object show-image'
           .card-content
             p.small-text = @student.name
       .col.s10
         .list_description
-          dl
+          dl          
+            dd.col.s5
+              .label Full name: 
+              .item = @student.name
+            dd.col.s5
+              .label Nick name: 
+              .item = @student.nick_name
             dd.col.s5
               .label First name: 
               .item = @student.first_name
@@ -45,18 +52,21 @@ nav
               .label Date of birth:
               .item = @student.date_of_birth
             dd.col.s5
-              .label Admission no: 
-              .item = @student.admission_no
+              .label Place of birth: 
+              .item = @student.place_of_birth
             dd.col.s5
-              .label Family: 
-              .item = @student.family_id
+              .label Family No: 
+              .item = @student.family_no
             dd.col.s5
               .label Gender: 
               .item = @student.gender
             dd.col.s5
               .label Student no: 
               .item = @student.student_no
-
+            dd.col.s5
+              .label Grade: 
+              .item = @current_grade.try(:name)
+              
     #tab2.tab-content
       .list_description.col.s12
         dl
@@ -73,14 +83,17 @@ nav
             .label Passport no: 
             .item = @student.passport_no
           dd.col.s4
-            .label Enrollment date:
-            .item = @student.enrollment_date
+            .label Language: 
+            .item = @student.language.titleize
           dd.col.s4
-            .label Is active:
-            .item = @student.is_active
+            .label Living with: 
+            .item = @student.living_with.titleize
           dd.col.s4
-            .label Is deleted:
-            .item = @student.is_deleted
+            .label Birth order/No of siblings: 
+            .item = "#{@student.birth_order}/#{@student.siblings}"
+          dd.col.s4
+            .label Step siblings/Adopted siblings: 
+            .item = "#{@student.step_siblings || '-'}/#{@student.adopted_siblings || '-'}"  
 
     #tab3.tab-content
       .col.s4
@@ -102,7 +115,7 @@ nav
             dd
               .label Email: 
               .item = @student.email
-        
+            
       - @student.students_guardians.each do |g|
         .col.s4
           .list_description
@@ -132,13 +145,49 @@ nav
       .list_description.col.s12
         dl
           dd.col.s4
-            .label Blood type:: 
-            .item = @student.blood_type
+            .label Previous School
+            .item = @student.student_admission_info.prev_sch_name || '-'
+          dd.col.s4
+            .label Previous Grade
+            .item = @student.student_admission_info.prev_sch_grade || '-'
+          dd.col.s4
+            .label Prev. School Address
+            .item = @student.student_admission_info.prev_sch_address || '-'
+          dd.col.s4
+            .label SKHUN: 
+            .item = @student.student_admission_info.skhun || '-'
+          dd.col.s4
+            .label SKHUN Date: 
+            .item = @student.student_admission_info.skhun_date || '-'
+          dd.col.s4
+            .label NISN: 
+            .item = @student.student_admission_info.nisn || '-'
+          dd.col.s4
+            .label Diploma: 
+            .item = @student.student_admission_info.diploma || '-'
+          dd.col.s4
+            .label Diploma date: 
+            .item = @student.student_admission_info.diploma_date || '-'
+          dd.col.s4
+            .label Duration: 
+            .item = @student.student_admission_info.nisn || '-'
           dd.col.s4
             .label Status: 
-            .item = @student.status
+            .item = @student.student_admission_info.status || '-'
           dd.col.s4
-            .label Status description:
-            .item = @student.status_description
-
-
+            .label Acceptance date: 
+            .item = @student.student_admission_info.acceptance_date_1 || '-'
+          dd.col.s4
+            .label Acceptance date 2: 
+            .item = @student.student_admission_info.acceptance_date_2 || '-'
+          dd.col.s4
+            .label Academic Year: 
+            .item = @student.student_admission_info.academic_year.try(:name) || '-'
+          dd.col.s4
+            .label Reason:
+            .item = @student.student_admission_info.reason || '-'
+          dd.col.s4
+            .label Notes:
+            .item = @student.student_admission_info.notes  || '-'
+            
+            

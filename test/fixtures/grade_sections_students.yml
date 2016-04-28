@@ -1,11 +1,11 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
-  grade_section_id: 
-  student_id: 
-  num: 1
+  grade_section_id: 1
+  student_id: 1
+  order_no: 1
 
 two:
-  grade_section_id: 
-  student_id: 
-  num: 1
+  grade_section_id: 2
+  student_id: 2
+  order_no: 1

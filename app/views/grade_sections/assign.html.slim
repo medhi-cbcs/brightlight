@@ -1,0 +1,35 @@
+= form_for @grade_section do |f|
+  nav
+    .nav-wrapper
+      .brand-logo style="margin-left: 20px; font-size:1.5em"
+        | Assign Book Labels
+      ul.right
+        li
+          = link_to_add_association f, :book_labels, class: "waves-effect waves-teal", 'data-association-insertion-method' => 'append', 'data-association-insertion-node' => '#book_label'
+            ' Add Label
+            i.material-icons.left playlist_add
+            
+  - if @grade_section.errors.any?
+    .card-panel
+      #error_explanation
+        h2 = "#{pluralize(@grade_level.errors.count, "error")} prohibited this grade_section from being saved:"
+        ul
+          - @grade_level.errors.full_messages.each do |message|
+            li = message
+    
+  .card-panel
+    #book_label
+      = f.fields_for :book_labels, @book_labels do |book_label|
+        .nested-fields
+          = render 'book_label_fields', f: book_label
+  
+  #placemark
+  .toolbar.z-depth-1
+    button.btn.waves-effect.waves-light type="submit" Save
+    = link_to 'Cancel', book_labels_path, class: "waves-effect waves-light btn-flat"
+
+javascript:
+  $('#book_label')
+    .on('cocoon:after-insert', function(e, added_task) {
+      $("#placemark").scrollTo();
+  })

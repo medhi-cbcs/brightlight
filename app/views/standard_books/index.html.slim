@@ -1,0 +1,75 @@
+h4 Listing Standard Books
+
+ul#grade-options.dropdown-content
+  li  
+    = link_to 'All', standard_books_path(params.merge(grade:'all').symbolize_keys)
+  - GradeLevel.all.each do |grade|
+    li 
+      = link_to grade.name, standard_books_path(params.merge(grade:grade.id).symbolize_keys)
+ul#category-options.dropdown-content
+  li  
+    = link_to 'All', standard_books_path(params.merge(category:'all').symbolize_keys)
+  - BookCategory.all.each do |category|
+    li 
+      = link_to category.name, standard_books_path(params.merge(category:category.code).symbolize_keys)    
+ul#year-options.dropdown-content
+  li  
+    = link_to 'All', standard_books_path(params.merge(year:'all').symbolize_keys)
+  - AcademicYear.all.each do |year|
+    li 
+      = link_to year.name, standard_books_path(params.merge(year:year.slug).symbolize_keys)
+// NOTE: for these wierd .symbolize_keys, refer to this article https://github.com/rails/rails/issues/21645
+      
+nav
+  .nav-wrapper
+    ul
+      li
+        a.dropdown-button href="#!" data-activates="grade-options"
+          span#grade = @grade_level.present? ? "#{@grade_level.name}" : "Grade" 
+          i.material-icons.right arrow_drop_down
+      li
+        a.dropdown-button href="#!" data-activates="category-options"
+          span#grade = @category.present? ? "#{@category.name}" : "Category" 
+          i.material-icons.right arrow_drop_down
+      li
+        a.dropdown-button href="#!" data-activates="year-options"
+          span#grade = @academic_year.present? ? "#{@academic_year.name}" : "Academic Year" 
+          i.material-icons.right arrow_drop_down
+      li.right
+        = link_to new_standard_book_path
+          | New Standard book
+          i.material-icons.left add
+          
+.card-panel
+  table.striped.compact
+    thead
+      tr
+        th No
+        th Book title
+        th Category
+        th Quantity
+        th Grade name
+        th Academic year
+        th
+
+    tbody
+      - @standard_books.each_with_index do |standard_book, i|
+        tr
+          td = i+1
+          td = link_to standard_book.book_title.title.truncate(50), standard_book.book_title
+          td = standard_book.book_category.try(:code)
+          td = standard_book.quantity
+          td = standard_book.grade_name
+          td = standard_book.academic_year.try(:name)
+          td 
+            = link_to standard_book
+              i.material-icons visibility
+            = link_to edit_standard_book_path(standard_book)
+              i.material-icons edit
+            = link_to standard_book, data: {:confirm => 'Are you sure?'}, :method => :delete
+              i.material-icons.red-text delete
+
+- if @standard_books.total_pages > 1
+  .toolbar.z-depth-1
+    = will_paginate @standard_books
+  

@@ -1,5 +1,4 @@
-/label Course name
-h4 = @course.name
+h4 Textbooks for #{@course.name}
 
 nav
   .nav-wrapper
@@ -85,15 +84,16 @@ nav
 - else
   .row
     - @course_texts.each do |course_text|
-      .col.s3
-        .card.medium
+      .col.s12.m3.l3
+        .card.book-info
           .card-image
             - thumbnail = course_text.book_title.image_url.present? ? course_text.book_title.image_url : 'book-icon.png' 
-            = image_tag(thumbnail, class: 'list_image activator')           
-          .card-content
-            span.card-title.truncate.grey-text.text-darken-3.activator 
-              = course_text.book_title.title
-              i.material-icons.right more_vert
+            = image_tag(thumbnail, class: 'activator')           
+          /.card-content
+          /span.card-title.truncate.grey-text.text-darken-3.activator style="margin: 0 5px;font-size:large" 
+          .book-title.activator
+            = course_text.book_title.title
+            i.material-icons.right more_vert
           .card-action
             = link_to course_text.book_title
               i.material-icons.left.tooltipped data-position="bottom" data-delay="50" data-tooltip="Show" visibility
@@ -107,8 +107,3 @@ nav
             p = course_text.book_title.authors
             .label Publisher
             p = course_text.book_title.publisher
-
-
-
-
-

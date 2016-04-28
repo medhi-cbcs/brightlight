@@ -1,0 +1,23 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  book_copy_id: 
+  book_edition_id: 
+  book_title_id: 
+  user_id: 
+  book_category_id: 
+  loan_type_id: 
+  out_date: 2016-02-24
+  due_date: 2016-02-24
+  academic_year_id: 
+
+two:
+  book_copy_id: 
+  book_edition_id: 
+  book_title_id: 
+  user_id: 
+  book_category_id: 
+  loan_type_id: 
+  out_date: 2016-02-24
+  due_date: 2016-02-24
+  academic_year_id: 
