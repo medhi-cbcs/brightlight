@@ -1,9 +1,10 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
-one:
-  name: MyString
-  first_name: MyString
-  last_name: MyString
+father:
+  id: 1
+  name: Brian Hardana
+  first_name: Brian
+  last_name: Hardana
   mobile_phone: MyString
   home_phone: MyString
   office_phone: MyString
@@ -14,12 +15,13 @@ one:
   state: MyString
   postal_code: MyString
   country: MyString
-  family_no: 1
+  family_no: 55
 
-two:
-  name: MyString
-  first_name: MyString
-  last_name: MyString
+mother:
+  id: 2
+  name: Susie Hardana
+  first_name: Susie
+  last_name: Hardana
   mobile_phone: MyString
   home_phone: MyString
   office_phone: MyString
@@ -30,4 +32,4 @@ two:
   state: MyString
   postal_code: MyString
   country: MyString
-  family_no: 1
+  family_no: 55

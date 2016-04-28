@@ -1,5 +1,6 @@
 class CourseSectionsController < ApplicationController
   before_action :set_course_section, only: [:show, :edit, :update, :destroy]
+  load_and_authorize_resource
 
   # GET /course_sections
   # GET /course_sections.json
@@ -7,7 +8,7 @@ class CourseSectionsController < ApplicationController
     @course = Course.find(params[:course_id])
     items_per_page = 20
     if params[:grade_id]
-      @course_sections = CourseSection.with_grade_level_id(params[:grade_id]).paginate(page: params[:page], per_page: items_per_page)
+      @course_sections = CourseSection.with_grade_level(params[:grade_id]).paginate(page: params[:page], per_page: items_per_page)
     elsif params[:course_id]
       @course_sections = @course.course_sections
     end
@@ -21,11 +22,13 @@ class CourseSectionsController < ApplicationController
 
   # GET /course_sections/1/edit
   def edit
+    authorize! :update, @course_section
   end
 
   # POST /course_sections
   # POST /course_sections.json
   def create
+    authorize! :manage, CourseSection
     @course_section = CourseSection.new(course_section_params)
 
     respond_to do |format|
@@ -42,6 +45,7 @@ class CourseSectionsController < ApplicationController
   # PATCH/PUT /course_sections/1
   # PATCH/PUT /course_sections/1.json
   def update
+    authorize! :update, @course_section
     respond_to do |format|
       if @course_section.update(course_section_params)
         format.html { redirect_to @course_section, notice: 'Course section was successfully updated.' }
@@ -56,6 +60,7 @@ class CourseSectionsController < ApplicationController
   # DELETE /course_sections/1
   # DELETE /course_sections/1.json
   def destroy
+    authorize! :destroy, @course_section
     @course_section.destroy
     respond_to do |format|
       format.html { redirect_to course_sections_url, notice: 'Course section was successfully destroyed.' }

@@ -7,11 +7,11 @@ class BookLabelsController < ApplicationController
     respond_to do |format|
       format.html {
         @book_labels = BookLabel.all
-        @acad_year = AcademicYear.current.first
+        @acad_year = AcademicYear.current
       }
       format.json {
-        search = params[:term] || ""
-        @book_labels = BookLabel.where('name LIKE ?', "#{search}%")
+        search = params[:section] || ""
+        @book_labels = BookLabel.where(grade_section_id: search)
       }
     end
 

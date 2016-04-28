@@ -3,6 +3,8 @@ class BookTitle < ActiveRecord::Base
   has_many :course_texts
   has_many :courses, through: :course_texts
   has_many :book_editions
+  has_many :standard_books
+
   accepts_nested_attributes_for :book_editions, reject_if: :all_blank, allow_destroy: true
 
   scope :search_query, lambda { |query|
@@ -14,6 +16,12 @@ class BookTitle < ActiveRecord::Base
 
     elsif /^(?:\d[\ |-]?){13}$/i =~ query
       joins(:book_editions).where(book_editions:{isbn13:query.delete(' -')})
+
+    elsif /^(?:\d[A-Z\ |-]?){13}$/i =~ query
+      joins(:book_editions).where(book_editions:{refno:query.delete(' -')})
+
+    elsif /^(?:[A-Z\ |-]+\d+)$/i =~ query   # checking if it's a barcode
+      joins(book_editions: :book_copies).where(book_copies: {barcode: query.upcase})
 
     else
       # condition query, parse into individual keywords
@@ -39,6 +47,10 @@ class BookTitle < ActiveRecord::Base
 
   def has_cover?
     self.book_editions.reduce(true) { |a, edition| a && edition.has_cover? }
+  end
+
+  def number_of_copies
+    self.book_editions.reduce(0) {|t, edition| t + edition.number_of_copies }
   end
 
 end

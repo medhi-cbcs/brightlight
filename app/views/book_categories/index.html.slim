@@ -1,0 +1,23 @@
+h1 Listing book_categories
+
+table
+  thead
+    tr
+      th Code
+      th Name
+      th
+      th
+      th
+
+  tbody
+    - @book_categories.each do |book_category|
+      tr
+        td = book_category.code
+        td = book_category.name
+        td = link_to 'Show', book_category
+        td = link_to 'Edit', edit_book_category_path(book_category)
+        td = link_to 'Destroy', book_category, data: {:confirm => 'Are you sure?'}, :method => :delete
+
+br
+
+= link_to 'New Book category', new_book_category_path

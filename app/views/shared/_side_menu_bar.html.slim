@@ -1,34 +1,86 @@
 li
 	.collapsible-header.waves-effect.waves-cyan
-		i.material-icons info_outline
+		i.material-icons search
+		i.mdi-navigation-chevron-right.right
+		| Search
+	.collapsible-body
+		ul
+			li
+				= form_tag({controller:'book_titles', action:'index'}, {method:'get'}) do 
+					.input-field
+						input type="hidden" name="v" value=@view_style
+						- if params[:search].present?
+							i.material-icons.prefix onclick='reset_form()' style='cursor:pointer'
+								| highlight_off
+						- else
+							i.material-icons.prefix search
+						input.icon-prefix type="text" name="search" placeholder="Title/ISBN" value=params[:search]
+			li
+				= form_tag({controller:'book_titles', action:'index'}, {method:'get'}) do 
+					.input-field
+						input type="hidden" name="v" value=@view_style
+						- if params[:barcode].present?
+							i.material-icons.prefix onclick='reset_form()' style='cursor:pointer'
+								| highlight_off
+						- else
+							i.material-icons.prefix search
+						input.icon-prefix type="text" name="barcode" placeholder="Barcode" value=params[:barcode]
+						
+li
+	.collapsible-header.waves-effect.waves-cyan
+		i.material-icons book
 		i.mdi-navigation-chevron-right.right
 		| Books
 	.collapsible-body
 		ul
 			li
-				a href="/book_titles" Titles
+				= link_to 'Titles', book_titles_path
 			li
-				a href="/book_editions" Editions
+				= link_to 'Editions', book_editions_path
 			li
-				a href="/student_books" Assignments
+				= link_to 'Student Books', all_student_books_path
 			li
-				a href="/copy_conditions/new" Update Condition
+				= link_to 'Book Loan Status', book_loans_path 
+			li
+				= link_to 'Check condition', by_title_student_books_path
+
+- if signed_in? and current_user.roles.include? :inventory
+	li 
+		.collapsible-header.waves-effect.waves-cyan
+			i.material-icons view_quilt
+			i.mdi-navigation-chevron-right.right
+			| Inventory
+		.collapsible-body
+			ul
+				li
+					= link_to 'Update Condition', new_copy_condition_path
+				li
+					= link_to 'Book Receipt Form', receipt_form_student_books_path
+				li
+					= link_to 'Standard Books', standard_books_path
+				li
+					a href="#" Book Fine Invoice
+				li
+					a href="#" Book Fine Payment
+			
 li
 	.collapsible-header.waves-effect.waves-cyan
-		i.material-icons subject
+		i.material-icons school
 		i.mdi-navigation-chevron-right.right
 		| School
 	.collapsible-body
 		ul
 			li
-				a href="/courses" Courses
+				= link_to 'Grade Levels', grade_levels_path
 			li
-				a href="/grade_levels" Grade Levels
+				= link_to 'Standard Books', standard_books_path
 			li
-				a href="/departments" Departments
+				= link_to 'Departments', departments_path
+			li
+				= link_to 'Courses', courses_path
 li
 	.collapsible-header.waves-effect.waves-cyan
-		i.material-icons subject
+		i.material-icons people
 		i.mdi-navigation-chevron-right.right
 		| People
 	.collapsible-body
@@ -41,35 +93,51 @@ li
 				a href="/employees?q=teacher" Teachers
 			li
 				a href="/employees?q=staff" Staff
-li
-	.collapsible-header.waves-effect.waves-cyan
-		i.material-icons subject
-		i.mdi-navigation-chevron-right.right
-		| Admin
-	.collapsible-body
-		ul
-			li
-				a href="/academic_years" Academic Years
-			li
-				a href="/book_labels" Book Labels
-			li
-				a href="/users" 
-					| Users
-li 
-	.collapsible-header.waves-effect.waves-cyan
-		i.material-icons perm_identity
-		i.mdi-navigation-chevron-right.right
-		| Profile
-	.collapsible-body
-		ul
-			li 			
-				- if current_user
-					- if current_user.image
-						= image_tag current_user.image, alt: current_user.name, class: 'user-avatar'
+- if signed_in? and current_user.admin?
+	li
+		.collapsible-header.waves-effect.waves-cyan
+			i.material-icons.red-text settings_applications
+			i.mdi-navigation-chevron-right.right
+			span.red-text Admin
+		.collapsible-body
+			ul
+				li
+					a href="/academic_years" Academic Years
+				li
+					a href="/book_labels" Book Labels
+				li
+					a href="/book_conditions" Book Condition
+				li
+					a href="/book_categories" Book Category
+				li
+					a href="/users" 
+						| Users
+- if signed_in?
+	li
+		.collapsible-header.waves-effect.waves-cyan
+			i.material-icons account_box
+			i.mdi-navigation-chevron-right.right
+			| Profile
+		.collapsible-body
+			ul
+				li.user-profile
+					- if current_user
+						= link_to current_user
+							- if current_user.image
+								= image_tag current_user.image, alt: current_user.name, class: 'user-avatar'
+							- else
+								i.material-icons.grey-text account_circle
+							span.name = current_user.name
 					- else
-						i.material-icons perm_identity
-					= current_user.name
-				- else
-					= link_to new_user_session_path
-						| Login
-						i.material-icons.left perm_identity
+						= link_to new_user_session_path
+							| Login
+							i.material-icons.left perm_identity
+				li
+					- if current_user
+						= link_to 'Sign out', destroy_user_session_path, method: :delete
+				
+/ javascript:
+/ 	$("#barcode").scannerDetection();
+/ 	$("#barcode").bind('scannerDetectionComplete',function(e,data){$("#barcode").html(data.string)})
+/     .bind('scannerDetectionError',function(e,data){$("#barcode").html(data.string);console.log("Error")})
+/ 		.bind('scannerDetectionReceive',function(e,data){console.log(data)});

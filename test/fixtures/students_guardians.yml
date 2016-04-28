@@ -1,11 +1,11 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
-one:
-  student_id: 
-  guardian_id: 
-  relation: MyString
+toms_dad:
+  student_id: 1
+  guardian_id: 1
+  relation: Father
 
-two:
-  student_id: 
-  guardian_id: 
-  relation: MyString
+toms_mom:
+  student_id: 1
+  guardian_id: 2
+  relation: Mother

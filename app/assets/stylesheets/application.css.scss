@@ -12,11 +12,10 @@
  *
  *= require material-icons
  *= require jquery-ui
+ *= require normalize
+ *= require materialize_components
+ *= require materialize/extras/nouislider
+ *= require nprogress
+ *= require site
  *= require_self
  */
-
-@import "normalize";
-@import "materialize_components";
-@import "materialize/extras/nouislider";
-@import "site";
-

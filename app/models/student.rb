@@ -1,14 +1,27 @@
 class Student < ActiveRecord::Base
 	has_many :students_guardians
 	has_many :guardians, through: :students_guardians
-  has_many :grade_sections_students, dependent: :destroy
+  has_many :grade_sections_students
 	has_many :grade_sections, through: :grade_sections_students
 	has_many :course_sections, through: :rosters
   has_many :rosters, dependent: :destroy
-  
+	has_one  :student_admission_info, autosave: true
+	has_many :student_books
+	has_many :book_loans
+ 	belongs_to :person
   validates :name, :gender, presence: true
-  
-  scope :with_academic_year_id, lambda {|id| where(grade_sections_students: {academic_year_id: id})}
+
+	accepts_nested_attributes_for :student_books, allow_destroy: true, reject_if: :all_blank
+	accepts_nested_attributes_for :book_loans, allow_destroy: true, reject_if: :all_blank
+
+	scope :current, lambda { joins(:grade_sections_students).where(grade_sections_students: {academic_year: AcademicYear.current}) }
+  scope :with_academic_year, lambda {|academic_year| joins(:grade_sections_students).where(grade_sections_students: {academic_year: academic_year}) }
+	scope :for_section, lambda {|section|
+		joins(:grade_sections_students)
+		.where(grade_sections_students: {grade_section: section,academic_year: AcademicYear.current})
+		.select('students.id,students.name,grade_sections_students.grade_section_id,grade_sections_students.order_no')
+		.order('grade_sections_students.order_no')
+	}
 
   filterrific(
     default_filter_params: { sorted_by: 'created_at_desc' },
@@ -74,4 +87,12 @@ class Student < ActiveRecord::Base
       end
     end
   end
+
+	def current_grade_section
+		grade_sections_students.with_academic_year(AcademicYear.current).try(:first).try(:grade_section)
+	end
+
+	def current_roster_no
+		grade_sections_students.with_academic_year(AcademicYear.current).try(:first).try(:order_no)
+	end
 end

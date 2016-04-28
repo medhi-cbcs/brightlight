@@ -4,7 +4,9 @@ source 'https://rubygems.org'
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '4.2.4'
 # Use sqlite3 as the database for Active Record
-gem 'sqlite3'
+#gem 'sqlite3'
+# Use PostgresSQL
+gem 'pg', '~> 0.18.4'
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 5.0'
 # Use Uglifier as compressor for JavaScript assets
@@ -21,6 +23,9 @@ gem 'turbolinks'
 gem 'jquery-turbolinks'
 
 gem 'rails-jquery-autocomplete'
+
+# To show progress on link clicks
+gem 'nprogress-rails'
 
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem 'jbuilder', '~> 2.0'
@@ -49,7 +54,7 @@ gem 'materialize-sass', '0.97.1'
 gem 'jquery-ui-rails'
 
 # Wrapper for Google Books API
-gem 'google_books', git: 'https://github.com/medhiwidjaja/google_books.git', branch: '~> 0.2.2'
+gem 'google_books' ###, git: 'https://github.com/medhiwidjaja/google_books.git'
 
 gem 'hashie'
 
@@ -60,6 +65,24 @@ gem 'omniauth-google-oauth2'
 
 # Nested form handling
 gem 'cocoon'
+
+# For converting HTML to PDF
+gem 'wicked_pdf'
+gem 'wkhtmltopdf-binary', '~> 0.9.9.3'
+
+# Slug for friendly URLs. Using specific fork for Rails 4.0 compatibility
+gem 'slug', git:'https://github.com/subimage/slug.git'
+
+# For creating and importing database
+gem 'activerecord-import'
+gem 'seed-fu', '~> 2.3'
+
+# Barcode generator
+gem 'barby'
+gem 'chunky_png'
+
+# Authorization
+gem 'cancancan', '~> 1.10'
 
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
@@ -76,6 +99,12 @@ group :development, :test do
   gem 'forgery'
   gem 'populator'
   gem 'letter_opener'
+
+  # For importing data from Excel
+  gem 'roo', '~> 2.3.2'
+
+  # For connecting to SQL server
+  gem 'tiny_tds'
 end
 
 group :development do
@@ -84,9 +113,8 @@ group :development do
 
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'spring'
-  
+
   # irb messed up on Windows, use pry to replace irb as console
   gem 'pry-rails'
 
 end
-

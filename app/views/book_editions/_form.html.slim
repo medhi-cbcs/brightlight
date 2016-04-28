@@ -33,8 +33,20 @@
           = f.label 'ISBN 13', class: 'active'
           = f.text_field :isbn13
         .input-field.col.s6
+          = f.label :reference, class: 'active'
+          = f.number_field :refno
+        .input-field.col.s6
           = f.label :page_count, class: 'active'
           = f.number_field :page_count
+        .input-field.col.s6
+          = f.label :legacy_code, class: 'active'
+          = f.text_field :legacy_code
+        .input-field.col.s6
+          = f.label :price, class: 'active'
+          = f.text_field :price
+        .input-field.col.s6
+          = f.label :currency, class: 'active'
+          = f.text_field :currency          
         .input-field.col.s6
           = f.label :language, class: 'active'
           = f.text_field :language
@@ -47,10 +59,15 @@
         .input-field.col.s6
           = f.label :subjects, class: 'active'
           = f.text_field :subjects
-
+        .input-field.col.s6
+          = f.label :thumbnail,  class: 'active'
+          = f.text_field :small_thumbnail
+          
   .toolbar.z-depth-1
     .actions.col.s12 
       button.btn.waves-effect.waves-light type="submit" Save
       = link_to 'Cancel', @book_edition, class: "waves-effect waves-teal btn-flat"
       - if params[:action] =~ /edit/
         = link_to 'Delete', @book_edition, data: {confirm: 'Are you sure?'}, method: :delete, class: "right btn waves-effect waves-teal red"
+  
+  div.right.grey-text.text-lighten-2 #{f.object.id} : #{f.object.book_title.try(:bkudid)}

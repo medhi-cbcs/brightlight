@@ -1,0 +1,19 @@
+h1 Listing loan_forms
+
+table
+  thead
+    tr
+      th
+      th
+      th
+
+  tbody
+    - @loan_forms.each do |loan_form|
+      tr
+        td = link_to 'Show', loan_form
+        td = link_to 'Edit', edit_loan_form_path(loan_form)
+        td = link_to 'Destroy', loan_form, data: {:confirm => 'Are you sure?'}, :method => :delete
+
+br
+
+= link_to 'New Loan form', new_loan_form_path

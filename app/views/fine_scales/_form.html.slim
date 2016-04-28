@@ -1,0 +1,21 @@
+= form_for @fine_scale do |f|
+  .card-panel
+    - if @fine_scale.errors.any?
+      #error_explanation
+        h2 = "#{pluralize(@fine_scale.errors.count, "error")} prohibited this fine_scale from being saved:"
+        ul
+          - @fine_scale.errors.full_messages.each do |message|
+            li = message
+
+    .field
+      = f.label :old_condition_id
+      = f.collection_select :old_condition_id, BookCondition.all, :id, :code
+    .field
+      = f.label :new_condition_id
+      = f.collection_select :new_condition_id, BookCondition.all, :id, :code
+    .field
+      = f.label 'Percentage Amount of Book Price'
+      = f.text_field :percentage
+      
+  .toolbar.z-depth-1
+    button.btn.waves-effect.waves-light type="submit" Save

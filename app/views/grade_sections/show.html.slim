@@ -1,14 +1,13 @@
-h5 Section
-
 nav
   .nav-wrapper
     .brand-logo style="margin: 0 20px; font-size:2.5em"
       = @grade_section.name
-      /- unless @grade_section.academic_year_id == current_academic_year_id
-    .brand-logo style="margin: 0 20px; font-size:1.5em; padding-left:5em"
-      = AcademicYear.find(@grade_section.academic_year_id).name
-    ul
-      li.right
+    ul.right
+      / li 
+      /   = link_to assign_grade_section_path(@grade_section)
+      /     | Assign book
+      /     i.material-icons.left book 
+      li
         = link_to edit_grade_section_path(@grade_section)
           | Edit
           i.material-icons.left edit
@@ -43,11 +42,10 @@ nav
           th No
           th Name
         tbody
-          - i = 0
-          - @grade_section.students.each do |student|
+          - @students.each_with_index do |student, i|
             tr
               td style="width:40px"
-                = "#{i += 1}. "
+                = "#{i + 1}. "
               td
                 = link_to student.name, student
 
@@ -58,32 +56,31 @@ nav
           th No
           th Name
         tbody
-          - i = 0
-          - @grade_section.course_sections.each do |course_section|
+          - @grade_section.course_sections.each_with_index do |course_section, i|
             tr
               td style="width:40px"
-                = "#{i += 1}. "
+                = "#{i + 1}. "
               td
                 = link_to course_section.name ? course_section.name : '-- Missing name --', course_section, class:"#{'red-text' if course_section.name.blank?}"
 
 
     #tab3.tab-content
       .label Textbooks
-      table.striped.compact
-        thead
-          th No
-          th Title
-          th Author
-        tbody
-          - i = 0
-          - if @textbooks.flatten.length > 0
-            - @textbooks.flatten.each do |book|
-              tr
-                td style="width:40px"
-                  = "#{i += 1}. "
-                td
-                  = link_to book.title, book unless book.blank?
-                td
-                  = book.authors unless book.blank?
-
-
+      - unless @textbooks.nil?
+        table.striped.compact
+          thead
+            th No
+            th Title
+            th Author
+          tbody
+            - if @textbooks.flatten.length > 0
+              - @textbooks.flatten.each_with_index do |book, i|
+                tr
+                  td style="width:40px"
+                    = "#{i + 1}. "
+                  td
+                    = link_to book.title, book unless book.blank?
+                  td
+                    = book.authors unless book.blank?
+      - else
+        h6 No textbooks

@@ -2,7 +2,8 @@
 .container
   a.sidebar-collapse.top-nav.hide-on-large-only.waves-effect.waves-light.btn-floating.btn-medium href="#" data-activates="nav-mobile"
     i.mdi-navigation-menu
-ul#nav-mobile.side-nav.fixed
+- style_color = current_user.admin? ? 'red darken-3' : ''
+ul#nav-mobile.side-nav.fixed class="#{style_color}"
   li.logo
     a#logo-container.brand-logo href="#{dashboard_path}"  style="font-size:2em; color:white"
       = image_tag 'lightbulb-icon.png', class: "logo-icon"
@@ -10,7 +11,6 @@ ul#nav-mobile.side-nav.fixed
     li.no-padding
       ul.collapsible data-collapsible='accordion'
         = render "#{controller_name}/side_menu"
-  li.no-padding
+  li.no-padding class="#{style_color}"
     ul.collapsible data-collapsible='accordion'
       = render 'shared/side_menu_bar'
-

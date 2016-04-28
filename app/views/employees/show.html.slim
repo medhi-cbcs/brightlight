@@ -7,9 +7,10 @@ nav
         = link_to :back
           i.material-icons chevron_left
       li.right
-        = link_to edit_employee_path(@employee)
-          | Edit
-          i.material-icons.left edit
+        - if can? :edit, Employee
+          = link_to edit_employee_path(@employee)
+            | Edit
+            i.material-icons.left edit
 
 .card
   .row
@@ -76,7 +77,7 @@ nav
             .label Address
             .item = @employee.home_address_line1
             .item = @employee.home_address_line2        
-            .item = @employee.home_city + ' ' + @employee.home_postal_code
+            .item = "#{@employee.home_city} #{@employee.home_postal_code}"
             .item = @employee.home_state
             .item = @employee.home_country
           dd.col.s4
@@ -150,5 +151,3 @@ nav
           dd.col.s4
             .label 2nd Education school:
             .item = @employee.education_school2
-
-

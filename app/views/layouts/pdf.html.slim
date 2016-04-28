@@ -1,0 +1,69 @@
+doctype html
+// TODO: Fix me! Had to specify Arial font. wicked_pdf can't load Roboto fonts as local asset ("Not allowed to load local....")
+html style="font-family:Arial,sans-serif; background-color:white;color:rgba(0,0,0,1)"
+  head
+    title Brightlight
+    script src="http://html5shiv.googlecode.com/svn/trunk/html5.js" type="text/javascript"
+    /= wicked_pdf_stylesheet_link_tag "application", media: "all", 'data-turbolinks-track' => true
+    = wicked_pdf_stylesheet_link_tag "material-icons", media: "all", 'data-turbolinks-track' => true
+    = wicked_pdf_stylesheet_link_tag "jquery-ui", media: "all", 'data-turbolinks-track' => true
+    = wicked_pdf_stylesheet_link_tag "normalize", media: "all", 'data-turbolinks-track' => true
+    = wicked_pdf_stylesheet_link_tag "materialize_components_pdf", media: "all", 'data-turbolinks-track' => true
+    = wicked_pdf_stylesheet_link_tag "materialize/extras/nouislider", media: "all", 'data-turbolinks-track' => true
+    = wicked_pdf_stylesheet_link_tag "site", media: "all", 'data-turbolinks-track' => true
+    /= wicked_pdf_stylesheet_link_tag "fonts", media: "all", 'data-turbolinks-track' => true
+
+    / css:
+    /   @font-face {
+    /     font-family: "Roboto";
+    /     src: local(Roboto Thin), url('Roboto-Thin.eot');
+    /     src: url('Roboto-Thin.eot?#iefix') format("embedded-opentype"), url('Roboto-Thin.woff2' ) format("woff2"), url('Roboto-Thin.woff' ) format("woff"), url('Roboto-Thin.ttf' ) format("truetype");
+    /     font-weight: 200
+    /   }
+    / 
+    /   @font-face {
+    /     font-family: "Roboto";
+    /     src: local(Roboto Light), url('Roboto-Light.eot');
+    /     src: url('Roboto-Light.eot?#iefix') format("embedded-opentype"), url('Roboto-Light.woff2') format("woff2"), url('Roboto-Light.woff') format("woff"), url('Roboto-Light.ttf') format("truetype");
+    /     font-weight: 300
+    /   }
+    / 
+    /   @font-face {
+    /     font-family: "Roboto";
+    /     src: local(Roboto Regular), url('Roboto-Regular.eot');
+    /     src: url('Roboto-Regular.eot?#iefix') format("embedded-opentype"), url('Roboto-Regular.woff2') format("woff2"), url('Roboto-Regular.woff') format("woff"), url('Roboto-Regular.ttf') format("truetype");
+    /     font-weight: 400
+    /   }
+    / 
+    /   @font-face {
+    /     font-family: "Roboto";
+    /     src: local(Roboto Medium), url('Roboto-Medium.eot');
+    /     src: url('Roboto-Medium.eot?#iefix') format("embedded-opentype"), url('Roboto-Medium.woff2') format("woff2"), url('Roboto-Medium.woff') format("woff"), url('Roboto-Medium.ttf') format("truetype");
+    /     font-weight: 500
+    /   }
+    / 
+    /   @font-face {
+    /     font-family: "Roboto";
+    /     src: local(Roboto Bold), url('Roboto-Bold.eot');
+    /     src: url('Roboto-Bold.eot?#iefix') format("embedded-opentype"), url('Roboto-Bold.woff2') format("woff2"), url('Roboto-Bold.woff') format("woff"), url('Roboto-Bold.ttf') format("truetype");
+    /     font-weight: 700
+    /   }
+    / = stylesheet_link_tag(ApplicationHelper.asset_data_base64("material-icons"), media: "all", 'data-turbolinks-track' => true)
+    / = stylesheet_link_tag(ApplicationHelper.asset_data_base64("jquery-ui"), media: "all", 'data-turbolinks-track' => true)
+    / = stylesheet_link_tag ApplicationHelper.asset_data_base64("normalize"), media: "all", 'data-turbolinks-track' => true
+    / = stylesheet_link_tag ApplicationHelper.asset_data_base64("materialize_components"), media: "all", 'data-turbolinks-track' => true
+    / = stylesheet_link_tag ApplicationHelper.asset_data_base64("materialize/extras/nouislider"), media: "all", 'data-turbolinks-track' => true
+    / = stylesheet_link_tag ApplicationHelper.asset_data_base64("site"), media: "all", 'data-turbolinks-track' => true
+    
+    / link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"
+
+    = javascript_include_tag "application", 'data-turbolinks-track' => true  
+    /= javascript_include_tag ApplicationHelper.asset_data_base64("application"), 'data-turbolinks-track' => true
+
+    meta name="viewport" content="width=device-width, initial-scale=1.0"
+
+  body
+    main
+      .container
+        section
+          = yield :layout

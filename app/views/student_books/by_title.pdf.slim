@@ -1,0 +1,61 @@
+- if @book_title.present?
+  h5 Book List By Title (#{@grade_section.name})
+  h5 #{@book_title.title} 
+
+- if @book_titles.present?
+  - @book_titles.each_with_index do |book_title, i|
+    h5 Book List By Title (#{@grade_section.name})
+    h5 = book_title[:title].title
+    table.compact
+      thead
+        tr.compact-row
+          th &nbsp;
+          th &nbsp;
+          th &nbsp;
+          th style='text-align:center;' Last
+          th colspan=5 style='text-align:center;border-bottom:1px solid grey' New Conditions
+          th style='text-align:center;font-size:0.9rem' Needs Re-
+          th &nbsp;
+        tr.compact-row
+          th No
+          th style='text-align:center;' Barcode
+          th style='text-align:center;' Label
+          th style='text-align:center;' Condition
+          th.wd5 style='text-align:center;font-size:0.9rem' New
+          th.wd5 style='text-align:center;font-size:0.9rem' Good
+          th.wd5 style='text-align:center;font-size:0.9rem' Fair
+          th.wd5 style='text-align:center;font-size:0.9rem' Poor
+          th.wd5 style='text-align:center;font-size:0.9rem' Missing
+          th.wd5 style='text-align:center;font-size:0.9rem' binding 
+          th style='text-align:center;' Notes
+      tbody
+        - if book_title.present?
+          - book_title[:student_books].each_with_index do |book, i|
+            tr style='border-bottom:1px solid gainsboro'
+              td.wd5 = i+1
+              td.wd20 style='text-align:center'
+                - barcode = Barby::Code128B.new(book.barcode)
+                - filepath = "public/assets/images/#{book.barcode.upcase}.PNG"
+                - File.open(filepath,'wb'){|file| file.write barcode.to_png(height:20,margin:0)} unless File.exist?(filepath)
+                = wicked_pdf_image_tag  "/assets/images/#{book.barcode.upcase}.PNG"
+                /=raw Barby::HtmlOutputter.new(Barby::Code128B.new(book.barcode)).to_html 
+                = book.barcode
+              td.wd10 style='text-align:center;'
+                span = book.book_copy.try(:copy_no) || 'N/A'
+              td.wd10 style='text-align:center;' 
+                = book.book_copy.try(:current_start_condition).try(:code)
+              td.wd5 style='text-align:center;' 
+                | &#9744;
+              td.wd5 style='text-align:center;' 
+                | &#9744;
+              td.wd5 style='text-align:center;' 
+                | &#9744;
+              td.wd5 style='text-align:center;' 
+                | &#9744;
+              td.wd5 style='text-align:center;' 
+                | &#9744;
+              td.wd5 style='text-align:center;' 
+                | &#9744;
+              td.wd25
+    - if i < @book_titles.count-1
+      .page-break

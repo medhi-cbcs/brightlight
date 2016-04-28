@@ -1,16 +1,19 @@
 Rails.application.routes.draw do
 
+  resources :standard_books
+  resources :people
+  resources :book_categories
+  resources :subjects
+  resources :fine_scales
   resources :book_labels
   resources :rosters
   resources :departments
   resources :guardians
   resources :book_assignments
   resources :book_grades
-  resources :students
-  resources :employees
-  resources :products
   resources :academic_years
-  resources :rosters
+  resources :employees
+
   resources :courses do
     resources :course_texts, shallow: true
     resources :course_sections, except: :new, shallow: true
@@ -22,6 +25,9 @@ Rails.application.routes.draw do
         get 'edit_labels'
       end
     end
+    member do
+      get 'update_metadata'
+    end
   end
 
   resources :copy_conditions do
@@ -32,6 +38,7 @@ Rails.application.routes.draw do
   end
 
   get 'book_copies/:id/conditions' => 'book_copies#conditions', as: :book_copy_conditions
+  get 'book_copies/:id/loans' => 'book_copies#loans', as: :book_copy_loans
 
   resources :book_titles do
     collection do
@@ -44,6 +51,7 @@ Rails.application.routes.draw do
       get 'editions'
       post 'add_existing_editions'
       post 'add_isbn'
+      post 'update_metadata'
     end
   end
 
@@ -55,14 +63,51 @@ Rails.application.routes.draw do
       member do
         get 'students'
         post 'add_students'
+        get 'assign'
       end
     end
   end
 
-  resources :student_books do
+  get 'student_books' => 'student_books#index', as: :all_student_books
+  get 'student_books/assign' => 'student_books#assign', as: :assign_student_books
+  get 'student_books/label' => 'student_books#label', as: :label_student_books
+  get 'student_books/receipt_form' => 'student_books#receipt_form', as: :receipt_form_student_books
+  get 'student_books/by_title' => 'student_books#by_title', as: :by_title_student_books
+  put 'student_books/update_multiple' => 'student_books#update_multiple', as: :update_multiple_student_books
+
+  resources :students do
+    resources :student_books, shallow: true
+  end
+
+  resources :book_loans, only: [:index] do
     collection do
-      get 'assign'
-      post 'label'
+      post 'search_student'
+      post 'search_teacher'
+    end
+  end
+
+  get  'students/:student_id/book_loans' => 'book_loans#index', as: :student_book_loans
+  post 'students/:student_id/book_loans' => 'book_loans#create'
+  get  'students/:student_id/book_loans/new' => 'book_loans#new', as: :new_student_book_loan
+  get  'students/:student_id/book_loans/:id/edit' => 'book_loans#edit', as: :edit_student_book_loan
+  get  'students/:student_id/book_loans/:id' => 'book_loans#show', as: :student_book_loan
+  patch  'students/:student_id/book_loans/:id' => 'book_loans#update'
+  put  'students/:student_id/book_loans/:id' => 'book_loans#update'
+  delete  'students/:student_id/book_loans/:id' => 'book_loans#destroy'
+
+  get  'employees/:employee_id/book_loans' => 'book_loans#index', as: :employee_book_loans
+  post 'employees/:employee_id/book_loans' => 'book_loans#create'
+  get  'employees/:employee_id/book_loans/new' => 'book_loans#new', as: :new_employee_book_loan
+  get  'employees/:employee_id/book_loans/:id/edit' => 'book_loans#edit', as: :edit_employee_book_loan
+  get  'employees/:employee_id/book_loans/:id' => 'book_loans#show', as: :employee_book_loan
+  patch  'employees/:employee_id/book_loans/:id' => 'book_loans#update'
+  put  'employees/:employee_id/book_loans/:id' => 'book_loans#update'
+  delete  'employees/:employee_id/book_loans/:id' => 'book_loans#destroy'
+
+  resources :book_fines do
+    collection do
+      get 'calculate'
+      get 'current'
     end
   end
 
@@ -71,6 +116,7 @@ Rails.application.routes.draw do
     sessions: "users/sessions",
     registrations: "users/registrations"
   }
+  resources :users, only: [:index, :show, :edit, :update]
 
   namespace :dynamic_select do
     get ':grade_level_id/grade_sections', to: 'options#grade_sections', as: 'grade_sections'

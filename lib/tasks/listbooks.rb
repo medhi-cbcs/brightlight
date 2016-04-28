@@ -1,5 +1,5 @@
 
-cc = GradeSection.with_academic_year_id(6).where(grade_level:1).joins(:students).group("grade_sections.name").count
+cc = GradeSection.with_academic_year(6).where(grade_level:1).joins(:students).group("grade_sections.name").count
 
 s1a = GradeSection.first
 m1a = s1a.course_sections.first

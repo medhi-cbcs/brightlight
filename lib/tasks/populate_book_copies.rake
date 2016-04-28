@@ -9,7 +9,7 @@ namespace :db do
     new_condition_id = BookCondition.where(code:'New').first.id
     status = Status.where(name:'On loan').first
 
-		academic_year_id = AcademicYear.current_id
+		academic_year_id = AcademicYear.current.id
 		user = User.first
 
 		n = 0

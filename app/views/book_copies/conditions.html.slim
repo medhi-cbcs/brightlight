@@ -4,13 +4,18 @@ h4 Book Condition History
   .row
     .col.s12
       .label Book Title
-      h6 = @book_edition.title
+      h6 = link_to @book_edition.title, @book_edition.book_title
     .col.s3
       .label barcode
       div = @book_copy.barcode
     .col.s3
       .label Book No.
       div = @book_copy.copy_no
+    .col.s6
+      .label ISBN
+      div 
+        = @book_copy.book_edition.isbn 
+        = " (#{@book_copy.book_edition.isbn10})" if @book_copy.book_edition.isbn10.present?
 nav
   .nav-wrapper
     ul
@@ -22,7 +27,20 @@ nav
         = link_to @last_condition.present? ? check_copy_condition_path(@last_condition) : new_copy_condition_path
           | Update condition
           i.material-icons.left add
-
+      li.right        
+        - if params[:all].present?
+          = link_to book_copy_conditions_path(@book_copy)
+            i.material-icons.left filter_list
+            | Show less
+        - else
+          = link_to book_copy_conditions_path(@book_copy)+"?all=t"
+            i.material-icons.left filter_list
+            | Show all
+      li.right
+        = link_to book_copy_loans_path(@book_copy)
+          i.material-icons.left history
+          | Loan History
+          
 .card-panel
   table.striped
     thead
@@ -30,19 +48,20 @@ nav
         th Date
         th Book condition
         th Academic year
+        th Posting
         th Notes
         th Action
 
     tbody
       - @copy_conditions.each do |copy_condition|
-        - color = BookCondition::COLORS[copy_condition.book_condition.code.downcase]
         - user = User.where(id:copy_condition.user_id).first
         - user_name = user.name rescue 'N/A'
         tr
           td = copy_condition.start_date
           td.tooltipped data-position="bottom" data-delay="50" data-tooltip="Last update by: #{user_name} at #{copy_condition.updated_at}"
-            span class="#{color}-text" = copy_condition.book_condition.code 
+            span.box class="#{copy_condition.try(:book_condition).try(:color)}" = copy_condition.try(:book_condition).try(:code )
           td = copy_condition.academic_year.name
+          td = copy_condition.post == 0 ? "Start" : "Return"
           td = copy_condition.notes
           td.actions
             = link_to edit_copy_condition_path(copy_condition)

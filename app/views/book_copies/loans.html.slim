@@ -1,0 +1,58 @@
+h4 Book Loan History
+
+.card-panel
+  .row
+    .col.s12
+      .label Book Title
+      h6 = link_to @book_edition.title, @book_edition.book_title
+    .col.s3
+      .label barcode
+      div = @book_copy.barcode
+    .col.s3
+      .label Book No.
+      div = @book_copy.copy_no
+    .col.s6
+      .label ISBN
+      div 
+        = @book_copy.book_edition.isbn 
+        = " (#{@book_copy.book_edition.isbn10})" if @book_copy.book_edition.isbn10.present?
+nav
+  .nav-wrapper
+    ul
+      li
+        = link_to @book_copy
+          i.material-icons.left chevron_left
+          | Book Copy
+      li.right
+        = link_to book_copy_conditions_path(@book_copy)
+          i.material-icons.right chevron_right
+          | Condition History
+
+.card-panel
+  table.striped.compact
+    thead
+      tr
+        th Loaned to
+        th Grade
+        th Out Date
+        th Return Date
+        th Academic year
+        th
+
+
+    tbody
+      - @copy_loans.each do |copy_loan|
+        tr
+          td
+            - if copy_loan.student.present?
+              = copy_loan.student.name
+            - elsif copy_loan.employee.present?              
+              = copy_loan.employee.name
+          td = copy_loan.grade_section_name
+          td = copy_loan.out_date
+          td = copy_loan.due_date
+          td = copy_loan.try(:academic_year).try(:name)
+          td 
+            - if copy_loan.student.present? and copy_loan.try(:academic_year).try(:id) == AcademicYear.current.id
+              = link_to student_student_books_path(copy_loan.student)
+                i.material-icons visibility

@@ -13,9 +13,6 @@
                 dd.col.s6
                   .label Author
                   .item = @book_title.authors
-                dd.col.s6 
-                  .label Publisher
-                  .item = @book_title.publisher
 
 nav
   .nav-wrapper
@@ -28,14 +25,15 @@ nav
             = text_field_tag(:isbn, '', {placeholder:' Add ISBN'})
             label for="isbn"
               i.material-icons.left playlist_add
-      li
-        = link_to editions_book_title_path(@book_title), class: 'waves-effect waves-light'
-          i.material-icons.left add 
-          | Add existing
-      li
-        = link_to edit_book_title_path(@book_title), class: 'waves-effect waves-light'
-          i.material-icons.left edit
-          | Edit
+      - if can? :edit, BookTitle
+        li
+          = link_to editions_book_title_path(@book_title), class: 'waves-effect waves-light'
+            i.material-icons.left add 
+            | Add existing
+        li
+          = link_to edit_book_title_path(@book_title), class: 'waves-effect waves-light'
+            i.material-icons.left edit
+            | Edit
 
 .card-panel
   table.striped
@@ -57,5 +55,5 @@ nav
         td = edition.isbn10
         td = edition.isbn13
         td.tooltipped data-position="bottom" data-delay="50" data-tooltip="View copies of this edition"
-          = link_to edition.number_of_copies, book_edition_book_copies_path(edition)
-
+          = link_to book_edition_book_copies_path(edition)
+            span.box = edition.number_of_copies

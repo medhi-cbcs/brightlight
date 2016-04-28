@@ -6,7 +6,7 @@
       = f.text_field :name
     .input-field.col.s5
       = f.label :homeroom_id, class: 'active'
-      = f.collection_select :homeroom_id, Employee.all_teachers, :id, :name, {prompt: true}, {:class => 'browser-default'}
+      = f.collection_select :homeroom_id, Employee.all.active, :id, :name, {prompt: true}, {:class => 'browser-default'}
       / Note: without {:class => 'browser-default'} the above line will not work if we use Materialize CSS framework
     .input-field.col.s3
       = link_to_remove_association "Remove", f, class: "waves-effect waves-teal btn btn-flat red-text btn-small"

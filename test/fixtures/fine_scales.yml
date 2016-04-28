@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  old_condition_id_id: 
+  new_condition_id_id: 
+  fine_scale: MyString
+
+two:
+  old_condition_id_id: 
+  new_condition_id_id: 
+  fine_scale: MyString

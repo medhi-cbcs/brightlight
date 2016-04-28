@@ -12,7 +12,8 @@
         = f.text_field :name
       .col.s4
         = f.label :homeroom
-        = f.collection_select :homeroom_id, Employee.all_teachers, :id, :name, prompt: true
+        /= f.collection_select :homeroom_id, Employee.all_teachers, :id, :name, prompt: true
+        = f.collection_select :homeroom_id, Employee.all.active, :id, :name, prompt: true
     
   .card-panel
     .label Student List
@@ -22,11 +23,10 @@
       .col.s2 Order No
       .col.s4 Action
     #students.row.compact
-      = f.fields_for :grade_sections_students do |grade_section_student|
+      = f.fields_for :grade_sections_students, @students do |grade_section_student|
         .nested-fields
           = render 'grade_sections_student_fields', f: grade_section_student
 
   .toolbar.z-depth-1
     button.btn.waves-effect.waves-light type="submit" Save
     = link_to 'Cancel', @grade_section, class: "waves-effect waves-light btn-flat"
-

@@ -10,7 +10,7 @@
             | highlight_off
         - else
           i.material-icons.prefix search
-        input.icon-prefix type="text" name="search" placeholder="Search" value=params[:search]    
+        input.icon-prefix type="text" name="search" placeholder="Title or ISBN" value=params[:search]    
     javascript:
       function reset_form() {
         window.location="#{book_editions_path(v:'list')}"
@@ -34,7 +34,7 @@ nav
           - if @view_style == :list
             td 
               .list_description
-                div = link_to book_edition.title, book_edition
+                div = link_to book_edition.title, book_edition_path(book_edition, {listpage:params[:page]})
                 - if book_edition.authors.present?
                   span.label Author:
                   span.item = book_edition.authors
@@ -52,12 +52,12 @@ nav
           - else    
             td style="vertical-align:top"
               - thumbnail = book_edition.small_thumbnail.present? ? book_edition.small_thumbnail : 'book-icon.png' 
-              = link_to book_edition
+              = link_to book_edition_path(book_edition, {listpage:params[:page]})
                 = image_tag(thumbnail, class: 'list_image')
             td
               .list_description
                 dl.row
-                  dt = link_to book_edition.title, book_edition
+                  dt = link_to book_edition.title, book_edition_path(book_edition, {listpage:params[:page]})
                   dd = book_edition.subtitle
                   - if book_edition.authors.present?
                     dd.col.s6
@@ -83,15 +83,21 @@ nav
                     dd.col.s6
                       .label Page count
                       .item = book_edition.page_count
+                  - if book_edition.price.present?
+                    dd.col.s6
+                      .label Price
+                      .item = "#{book_edition.currency} #{book_edition.price.to_digits}"
                   - if book_edition.description.present?
                     dd.col.s12
                       .label Description
                       .item = truncate(strip_tags(book_edition.description), length: 140)
+          - if can? :manage, BookEdition
+            td 
+              = link_to edit_book_edition_path(book_edition)
+                i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="Edit" edit
+              = link_to book_edition, data: {:confirm => 'Are you sure?'}, :method => :delete, class:'red-text'            
+                i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="Delete" delete
 
-          td 
-            = link_to 'Edit', edit_book_edition_path(book_edition), class: "btn waves-effect waves-teal btn-flat btn-small"
-            br
-            = link_to 'Destroy', book_edition, data: {:confirm => 'Are you sure?'}, :method => :delete, class: "btn waves-effect waves-teal red btn-small"                
-
+                
 .toolbar.z-depth-1
   = will_paginate @book_editions

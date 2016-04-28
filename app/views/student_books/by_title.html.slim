@@ -1,0 +1,74 @@
+h5 Check Book Condition and Return #{'( '+@grade_section.name+' )' if @grade_section.present?}
+- if @book_title.present?
+  h4 #{@book_title.title} 
+
+ul#grade-options.dropdown-content
+  - GradeLevel.all.each do |grade|
+    li 
+      = link_to grade.name, "#!", onclick:"filterSectionOptions(#{grade.id}, '#{grade.name}');"
+ul#section-options.dropdown-content
+  - @grade_sections.each do |section|
+    li
+      = link_to section.name, "#!", class:"grade-#{section.grade_level_id}", onclick:"filterTitleOptions(#{section.grade_level_id}, #{section.id}, '#{section.name}');"
+ul#title-options.dropdown-content
+  - if @standard_books.present?
+    li = link_to 'All', by_title_student_books_path(s:@grade_section.id, g:@grade_level.id)
+    - @standard_books.each do |standard_book|
+      li = link_to standard_book.book_title.title, by_title_student_books_path(s:@grade_section.id, g:@grade_level.id, t:standard_book.book_title_id)
+
+javascript:
+  function filterSectionOptions(id, name) {
+    var grade_ids = #{raw @grade_level_ids};
+    $("#grade").html(name);
+    grade_ids.forEach(function(g){
+      if(id!=g) {
+        $(".grade-"+g).hide();
+      } else {
+        $(".grade-"+id).show();
+      }
+    })
+  }
+  function filterTitleOptions(grade_level_id, grade_section_id, section_name) {
+    $("#section").html(section_name);
+    $.getJSON("/standard_books.json?grade="+grade_level_id+"&section="+grade_section_id+"&category="+"TB", null, function (data) {
+      var list = "<li><a href='/student_books/by_title?s="+grade_section_id+";"+"g="+grade_level_id+"'>All</a></li>";
+      $.each(data, function(i,item){
+          list += "<li><a href='/student_books/by_title?s="+grade_section_id+";g="+item.grade_level_id+";t="+item.id+"'>"+item.title+"</a></li>";
+      });
+      $("#title-options").html(list);
+    });
+  }
+
+/= form_for :student_book, url: update_multiple_student_books_path do |f|
+= form_tag update_multiple_student_books_path, method: :put do
+  nav
+    .nav-wrapper
+      ul
+        li 
+          = link_to 'PDF Format', by_title_student_books_path(s:params[:s],t:params[:t], format: :pdf), target: '_blank'
+        - if @book_titles.present?
+          li  
+            button.btn.waves-effect.waves-light type="submit" Save 
+        li.right
+          a#student-menu.dropdown-button href="#!" data-activates="title-options"
+            span#title = params[:t].present? ? "#{@book_titles.first[:title].title.truncate(30)}" : 'Choose book'
+            i.material-icons.right arrow_drop_down
+        li.right
+          a.dropdown-button href="#!" data-activates="section-options"
+            span#section = params[:l].present? ? "Section #{@grade_section_name}" : 'Choose class'
+            i.material-icons.right arrow_drop_down
+        li.right
+          a.dropdown-button href="#!" data-activates="grade-options"
+            span#grade = params[:l].present? ? "Grade #{@grade_level_name}" : 'Choose grade'
+            i.material-icons.right arrow_drop_down
+
+  - if @book_titles.present?
+    - @book_titles.each do |book_title|
+      h4 = book_title[:title].title
+      = render partial: 'book_title_table', locals: {book_title: book_title}
+      .page-break    
+    .toolbar.z-depth-1
+      button.btn.waves-effect.waves-light type="submit" Save
+  - else
+    #message.card-panel.grey.lighten-1
+      .center.white-text Please choose Grade Level, Class and Book Title

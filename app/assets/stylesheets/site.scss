@@ -36,7 +36,27 @@ $muted-red:				#f5494d;
 }
 
 // ============================================ Table ===============================================
-
+table {
+		td.wd5  { width:  5%; }
+		td.wd10 { width: 10%; }
+		td.wd15 { width: 15%;	}
+		td.wd20 {	width: 20%;	}
+		td.wd25 {	width: 25%;	}
+		td.wd30 {	width: 30%;	}
+		td.wd35 {	width: 35%;	}
+		td.wd40 {	width: 40%;	}
+		td.wd45 {	width: 45%;	}
+		td.wd50 {	width: 50%;	}
+		td.wd55 {	width: 55%;	}
+		td.wd60 {	width: 60%;	}
+		td.wd65 {	width: 65%;	}
+		td.wd70 {	width: 70%;	}
+		td.wd75 {	width: 75%;	}
+		td.wd80 {	width: 80%;	}
+		td.wd85 {	width: 85%;	}
+		td.wd90 {	width: 90%;	}
+		td.wd95 {	width: 95%;	}
+}
 table.compact {
 	width: 100%;
 	// white-space: nowrap;
@@ -45,43 +65,71 @@ table.compact {
 	td.ellipsize {
 		overflow: hidden;
 		text-overflow: ellipsis;
+		display: block;
+		white-space: nowrap;
 	}
 	td {
 		padding-top: 4px;
 		padding-bottom: 4px;
-
-		.compact-cell {
-			position: relative;
-		}
-		.compact-cell:before {
-			content: attr(data-spacer);
+	}
+	.ellipsis {
+	    position: relative;
+	}
+	.ellipsis:before {
+	    content: '&nbsp;';
+	    visibility: hidden;
+	}
+	.ellipsis span {
 	    position: absolute;
-	    max-width: 100%;
+	    left: 0;
+	    right: 0;
 	    white-space: nowrap;
 	    overflow: hidden;
 	    text-overflow: ellipsis;
-		}
-		.compact-cell:after {
-		    content: attr(data-spacer);
-		    display: inline-block;
-		    height: 0;
-		    overflow: hidden;
-		}
-		.dont-truncate {
-		    white-space: nowrap;
-		}
-		.content {
-			position: absolute;
-	    max-width: 100%;
-	    white-space: nowrap;
-	    overflow: hidden;
-	    text-overflow: ellipsis;
-		}
-		.spacer {
-	    height: 0;
-	    overflow: hidden;
+	}
+
+	thead {
+		tr.compact-row {
+			th {
+				padding-top: 2px;
+				padding-bottom: 2px;
+			}
 		}
 	}
+
+	// td {
+	// 	.compact-cell {
+	// 		position: relative;
+	// 	}
+	// 	.compact-cell:before {
+	// 		content: attr(data-spacer);
+	//     position: absolute;
+	//     max-width: 100%;
+	//     white-space: nowrap;
+	//     overflow: hidden;
+	//     text-overflow: ellipsis;
+	// 	}
+	// 	.compact-cell:after {
+	// 	    content: attr(data-spacer);
+	// 	    display: inline-block;
+	// 	    height: 0;
+	// 	    overflow: hidden;
+	// 	}
+	// 	.dont-truncate {
+	// 	    white-space: nowrap;
+	// 	}
+	// 	.content {
+	// 		position: absolute;
+	//     max-width: 100%;
+	//     white-space: nowrap;
+	//     overflow: hidden;
+	//     text-overflow: ellipsis;
+	// 	}
+	// 	.spacer {
+	//     height: 0;
+	//     overflow: hidden;
+	// 	}
+	// }
 }
 
 td.actions {
@@ -90,6 +138,11 @@ td.actions {
 	}
 }
 
+.table-title {
+	text-align: center;
+	font-weight: bold;
+	font-size: 1.2em;
+}
 
 // ============================================ Forms ===============================================
 
@@ -184,12 +237,35 @@ form {
 	padding: 0;
 	display: block;
 }
+
+button {
+	i.material-icons {
+		line-height: 36px !important;
+	}
+}
+
+button.delete-button {
+	color: $muted-red;
+	background-color: $lighter-grey;
+}
+
+button.delete-button :hover {
+	background-color: $light-grey;
+}
+
 // ========================================= Typography =============================================
 
 .giant-letter {
-	font-size: 4rem;
+	font-size: 3rem;
 }
 
+span.box {
+  background-color: #039be5;
+  border-radius: 4px;
+  color: whitesmoke;
+  min-width: 3rem;
+  padding: 3px 15px;
+}
 // ============================================ Buttons =============================================
 
 .btn-small {
@@ -221,6 +297,10 @@ nav {
 				}
 			}
 		}
+		i {
+	    height: 56px;
+	    line-height: 52px;
+		}
 	}
 	.input-field {
 		input {
@@ -231,6 +311,13 @@ nav {
         border-bottom: 2px dotted gray;
       }
 		}
+	}
+}
+
+@media only screen and (min-width: 601px) {
+	nav, nav .nav-wrapper i, nav a.button-collapse, nav a.button-collapse i {
+    height: 64px;
+    line-height: 64px;
 	}
 }
 
@@ -381,6 +468,20 @@ ul.side-nav.fixed:hover {
     overflow-y: auto
 }
 
+ul {
+	li {
+		.user-profile {
+			height: 2em;
+			line-height: 2em;
+			padding-left: 0px !important;
+			.name {
+				padding-left: 10px;
+				color: $light-grey;
+			}
+		}
+	}
+}
+
 .app-side-menu {
 	position: fixed;
 	width: 240px;
@@ -459,7 +560,7 @@ ul.side-nav.fixed:hover {
 	}
 
 	dd {
-		margin: 0;
+		margin: 8px 0;
 	}
 
 	.label {
@@ -590,18 +691,47 @@ section {
 		text-overflow: ellipsis;
 	}
 }
+
+// For PDF forms
+.page-break { display:block; clear:both; page-break-after:always; }
+
 // ============================================ Card ===========================================
 
-.card {
+
+.card.book-info {
+	height: 370px;
+	position: relative;
+
+	.card-image {
+		height: 250px;
+		overflow: hidden;
+	}
+	.book-title {
+		margin: 0 5px;
+		font-size: large;
+		font-weight: 300;
+		color: #424242 !important;
+		display: block;
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
+
+	i.material-icons {
+		margin-right: 10px;
+	}
+
 	.card-action {
 		.row {
 			margin-bottom: 0;
 		}
 
 		a {
-			margin: 0 1em;
+			margin: 0 5px;
 		}
-
+		i.material-icons {
+			margin-right: 10px;
+		}
 		button {
 			margin: 0 1em;
 		}
@@ -649,6 +779,21 @@ a.sidebar-collapse {
   width: 100px;
   height: 100px !important;
 }
+
+// ======================================== Barby barcode  ==========================================
+table.barby-barcode {
+	border-spacing: 0;
+}
+tr.barby-row {}
+td.barby-cell {
+	width: 2px; height: 20px;
+	padding: 0px;
+  display: table-cell;
+  text-align: left;
+  vertical-align: middle;
+  border-radius: 2px;
+}
+td.barby-cell.on { background: #000; }
 
 // ============================================ jQuery UI ===========================================
 .ui-widget {

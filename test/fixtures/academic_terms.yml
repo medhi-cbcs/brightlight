@@ -1,11 +1,13 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
-one:
-  academic_year_id: 
-  start_date: 2015-10-07
-  end_date: 2015-10-07
+sem1-2015-2016:
+  academic_year_id: 5
+  name: 'Semester 1 2015-2016'
+  start_date: 2015-06-07
+  end_date: 2015-12-31
 
-two:
-  academic_year_id: 
-  start_date: 2015-10-07
-  end_date: 2015-10-07
+sem2-2015-2016:
+  academic_year_id: 6
+  name: 'Semester 2 2014-2015'
+  start_date: 2015-01-01
+  end_date: 2016-06-06

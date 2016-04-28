@@ -1,0 +1,25 @@
+h1 Listing subjects
+
+table
+  thead
+    tr
+      th Code
+      th Name
+      th Description
+      th
+      th
+      th
+
+  tbody
+    - @subjects.each do |subject|
+      tr
+        td = subject.code
+        td = subject.name
+        td = subject.description
+        td = link_to 'Show', subject
+        td = link_to 'Edit', edit_subject_path(subject)
+        td = link_to 'Destroy', subject, data: {:confirm => 'Are you sure?'}, :method => :delete
+
+br
+
+= link_to 'New Subject', new_subject_path

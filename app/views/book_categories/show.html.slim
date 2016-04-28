@@ -1,0 +1,12 @@
+p#notice = notice
+
+p
+  strong Code:
+  = @book_category.code
+p
+  strong Name:
+  = @book_category.name
+
+= link_to 'Edit', edit_book_category_path(@book_category)
+'|
+= link_to 'Back', book_categories_path

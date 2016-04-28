@@ -1,0 +1,15 @@
+p#notice = notice
+
+p
+  strong Code:
+  = @subject.code
+p
+  strong Name:
+  = @subject.name
+p
+  strong Description:
+  = @subject.description
+
+= link_to 'Edit', edit_subject_path(@subject)
+'|
+= link_to 'Back', subjects_path

@@ -1,0 +1,33 @@
+p#notice = notice
+
+p
+  strong Book copy:
+  = @book_loan.book_copy
+p
+  strong Book edition:
+  = @book_loan.book_edition
+p
+  strong Book title:
+  = @book_loan.book_title
+p
+  strong User:
+  = @book_loan.user
+p
+  strong Book category:
+  = @book_loan.book_category
+p
+  strong Loan type:
+  = @book_loan.loan_type
+p
+  strong Out date:
+  = @book_loan.out_date
+p
+  strong Due date:
+  = @book_loan.due_date
+p
+  strong Academic year:
+  = @book_loan.academic_year
+
+= link_to 'Edit', edit_book_loan_path(@book_loan)
+'|
+= link_to 'Back', book_loans_path

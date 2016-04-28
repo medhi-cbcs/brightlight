@@ -1,9 +1,17 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
-one:
-  code: MyString
-  description: MyString
+new:
+  code: New
+  description: New
 
-two:
-  code: MyString
-  description: MyString
+good:
+  code: Good
+  description: Good
+
+fair:
+  code: Fair
+  description: Fair
+
+poor:
+  code: Poor
+  description: Poor

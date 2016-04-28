@@ -4,6 +4,6 @@
 			= Student.where(id:f.object.student_id).first.name if f.object.student_id
 	.input-field.col.s2
 		/= f.label :order_no, class: 'active'
-		= f.number_field :order_no
+		= f.number_field :order_no, min:1, max:@total_students
 	.input-field.col.s4 style="padding-top:8px"
 		= link_to_remove_association "Remove", f, class: "waves-effect waves-teal btn btn-flat red-text btn-small"

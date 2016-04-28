@@ -1,0 +1,27 @@
+p#notice = notice
+
+p
+  strong Book copy:
+  = @book_fine.book_copy
+p
+  strong Old condition:
+  = @book_fine.old_condition_id
+p
+  strong New condition:
+  = @book_fine.new_condition_id
+p
+  strong Fine:
+  = @book_fine.fine
+p
+  strong Academic year:
+  = @book_fine.academic_year
+p
+  strong Student:
+  = @book_fine.student
+p
+  strong Status:
+  = @book_fine.status
+
+= link_to 'Edit', edit_book_fine_path(@book_fine)
+'|
+= link_to 'Back', book_fines_path

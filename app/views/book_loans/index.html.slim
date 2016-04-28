@@ -1,0 +1,116 @@
+.row 
+  .col.s4
+    h4 Book Loan Status
+  .col.s4
+    #student-form
+      = form_tag({controller:'book_loans', action:'index'}, {method: "get"}) do
+        .input-field
+          - if params[:student].present?
+            i.material-icons.prefix onclick='reset_student_form()' style='cursor:pointer'
+              | highlight_off
+          - else
+            i.material-icons.prefix search
+          = text_field_tag(:student, params[:student], {placeholder:'Student name'})
+  .col.s4
+    #teacher-form
+      = form_tag({controller:'book_loans', action:'index'}, {method: "get"}) do
+        .input-field
+          - if params[:teacher].present?
+            i.material-icons.prefix onclick='reset_teacher_form()' style='cursor:pointer'
+              | highlight_off
+          - else
+            i.material-icons.prefix search
+          = text_field_tag(:teacher, params[:teacher], {placeholder:'Teacher name'})
+
+/ ul#grade-options.dropdown-content
+/   li  
+/     = link_to 'All', book_loans_path(params.merge(grade:'all').symbolize_keys)
+/   - GradeLevel.all.each do |grade|
+/     li 
+/       = link_to grade.name, book_loans_path(params.merge(grade:grade.id).symbolize_keys)
+ul#category-options.dropdown-content
+  li  
+    = link_to 'All', book_loans_path(params.merge(category:'all').symbolize_keys)
+  - BookCategory.all.each do |category|
+    li 
+      = link_to category.name, book_loans_path(params.merge(category:category.code).symbolize_keys)    
+ul#year-options.dropdown-content
+  li  
+    = link_to 'All', book_loans_path(params.merge(year:'all').symbolize_keys)
+  - AcademicYear.all.each do |year|
+    li 
+      = link_to year.name, book_loans_path(params.merge(year:year.slug).symbolize_keys)
+// NOTE: for these wierd .symbolize_keys, refer to this article https://github.com/rails/rails/issues/21645
+
+nav
+  .nav-wrapper
+    ul
+      / li
+      /   a.dropdown-button href="#!" data-activates="grade-options"
+      /     span#grade = @grade_level.present? ? "#{@grade_level.name}" : "Grade" 
+      /     i.material-icons.right arrow_drop_down
+      li
+        a.dropdown-button href="#!" data-activates="category-options"
+          span#grade = @category.present? ? "#{@category.name}" : "Category" 
+          i.material-icons.right arrow_drop_down
+      li
+        a.dropdown-button href="#!" data-activates="year-options"
+          span#grade = @academic_year.present? ? "#{@academic_year.name}" : "Academic Year" 
+          i.material-icons.right arrow_drop_down
+      li.right
+        / = link_to new_book_loans_path
+          / | New loan
+          / i.material-icons.left add
+          
+.card-panel
+  - unless @error.present?
+    table
+      thead
+        tr
+          th Barcode
+          th Book title
+          th Out date
+          th Due date
+          th Academic year
+          - if params[:student].present?
+            th Student
+          - if params[:teacher].present?
+            th Teacher
+
+      tbody
+        - @book_loans.each do |book_loan|
+          tr
+            td = link_to book_loan.barcode, book_loan.book_copy
+            td = link_to book_loan.book_edition.try(:title).truncate(50), book_loan.book_edition if book_loan.book_edition.present?
+            td = book_loan.out_date
+            td = book_loan.due_date
+            td = book_loan.academic_year.try(:name)
+            - if book_loan.student.present?
+              td = book_loan.student.name
+            - if book_loan.employee.present?
+              td = book_loan.employee.name
+
+    .toolbar.z-depth-1
+      = will_paginate @book_titles
+  - else 
+    = @error
+
+javascript:
+  function reset_student_form() {
+    $("#student").val("");
+    $("#student-form label").html("<i class='material-icons prefix'>search</i>")
+    var newUrl = refineUrl();
+    window.history.pushState("", "Book Loans", newUrl );
+  }
+  function reset_teacher_form() {
+    $("#teacher").val("");
+    $("#teacher-form label").html("<i class='material-icons prefix'>search</i>")
+    var newUrl = refineUrl();
+    window.history.pushState("", "Book Loans", newUrl );
+  }
+
+  function refineUrl()
+  {
+      var url = window.location.href;
+      return url.split("?")[0];     
+  }

@@ -1,0 +1,51 @@
+p#notice = notice
+
+p
+  strong Book title:
+  = @standard_book.book_title
+p
+  strong Book edition:
+  = @standard_book.book_edition
+p
+  strong Book category:
+  = @standard_book.book_category
+p
+  strong Isbn:
+  = @standard_book.isbn
+p
+  strong Refno:
+  = @standard_book.refno
+p
+  strong Quantity:
+  = @standard_book.quantity
+p
+  strong Grade subject code:
+  = @standard_book.grade_subject_code
+p
+  strong Grade name:
+  = @standard_book.grade_name
+p
+  strong Grade level:
+  = @standard_book.grade_level
+p
+  strong Grade section:
+  = @standard_book.grade_section
+p
+  strong Group:
+  = @standard_book.group
+p
+  strong Category:
+  = @standard_book.category
+p
+  strong Bkudid:
+  = @standard_book.bkudid
+p
+  strong Notes:
+  = @standard_book.notes
+p
+  strong Academic year:
+  = @standard_book.academic_year
+
+= link_to 'Edit', edit_standard_book_path(@standard_book)
+'|
+= link_to 'Back', standard_books_path

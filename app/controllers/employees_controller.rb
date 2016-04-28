@@ -8,14 +8,14 @@ class EmployeesController < ApplicationController
       format.html {
         items_per_page = 20
         if params[:search]
-          @employees = Employee.where('name LIKE ?', "%#{params[:search]}%").paginate(page: params[:page], per_page: items_per_page)
+          @employees = Employee.where('UPPER(name) LIKE ?', "%#{params[:search].upcase}%").paginate(page: params[:page], per_page: items_per_page)
         else
           @employees = Employee.paginate(page: params[:page], per_page: items_per_page)
         end
       }
-      format.csv { 
+      format.csv {
         @employees = Employee.all
-        render text: @employees.to_csv 
+        render text: @employees.to_csv
       }
     end
   end
@@ -27,16 +27,19 @@ class EmployeesController < ApplicationController
 
   # GET /employees/new
   def new
+    authorize! :manage, Employee
     @employee = Employee.new
   end
 
   # GET /employees/1/edit
   def edit
+    authorize! :update, Employee
   end
 
   # POST /employees
   # POST /employees.json
   def create
+    authorize! :manage, Employee
     @employee = Employee.new(employee_params)
 
     respond_to do |format|
@@ -53,6 +56,7 @@ class EmployeesController < ApplicationController
   # PATCH/PUT /employees/1
   # PATCH/PUT /employees/1.json
   def update
+    authorize! :update, Employee
     respond_to do |format|
       if @employee.update(employee_params)
         format.html { redirect_to @employee, notice: 'Employee was successfully updated.' }
@@ -67,6 +71,7 @@ class EmployeesController < ApplicationController
   # DELETE /employees/1
   # DELETE /employees/1.json
   def destroy
+    authorize! :destroy, Employee
     @employee.destroy
     respond_to do |format|
       format.html { redirect_to employees_url, notice: 'Employee was successfully destroyed.' }
