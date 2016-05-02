@@ -4,11 +4,12 @@ class CreateCourseSectionHistories < ActiveRecord::Migration
       t.string :name
       t.belongs_to :course, index: true, foreign_key: true
       t.belongs_to :grade_section, index: true, foreign_key: true
-      t.belongs_to :instructor, index: true, foreign_key: true
+      t.belongs_to :instructor, index: true #, foreign_key: true
       t.belongs_to :academic_year, index: true, foreign_key: true
       t.belongs_to :academic_term, index: true, foreign_key: true
 
       t.timestamps null: false
     end
+    add_foreign_key :course_section_histories, :employees, column: :instructor_id
   end
 end

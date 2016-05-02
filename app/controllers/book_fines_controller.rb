@@ -1,6 +1,8 @@
 class BookFinesController < ApplicationController
   before_action :set_book_fine, only: [:show, :edit, :update, :destroy]
 
+  autocomplete :student, :name
+
   # GET /book_fines
   # GET /book_fines.json
   def index
@@ -88,6 +90,6 @@ class BookFinesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def book_fine_params
-      params.require(:book_fine).permit(:book_copy_id, :old_condition_id, :new_condition_id, :fine, :academic_year_id, :student_id, :status)
+      params.require(:book_fine).permit(:book_copy_id, :old_condition_id, :new_condition_id, :fine, :currency, :academic_year_id, :student_id, :status)
     end
 end

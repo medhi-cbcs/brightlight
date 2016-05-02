@@ -37,15 +37,16 @@
       .input-field.col.s2
         = f.label :academic_year
         = text_field_tag :year, AcademicYear.current.name, disabled:true
-        = f.hidden_field :academic_year, value:AcademicYear.current.id
+        = f.hidden_field :academic_year_id, value:AcademicYear.current.id
       .input-field.col.s4
         = f.label :student
-        = f.text_field :student
+        = f.hidden_field :student_id
+        = f.autocomplete_field :student, autocomplete_student_name_book_fines_path, id_element: "#book_fine_student_id"
 
-.toolbar.z-depth-1
-  .actions.col.s12 
-    button.btn.waves-effect.waves-light type="submit" Save
-    = link_to 'Cancel', :back, class: "waves-effect waves-teal btn-flat"
+  .toolbar.z-depth-1
+    .actions.col.s12 
+      button.btn.waves-effect.waves-light type="submit" Save
+      = link_to 'Cancel', :back, class: "waves-effect waves-teal btn-flat"
 
 javascript:
   $(document).ready(function() {
@@ -70,7 +71,7 @@ javascript:
               $("label[for=book_fine_old_condition]").attr('class','active');
               $("[name$='[old_condition_id]']").val(book.book_condition_id);
               $("label[for=book_fine_book_price]").attr('class','active');
-              $("[name$='[book_copy_id]']").val(book.book_copy_id);
+              $("[name$='[book_copy_id]']").val(book.id);
             }).fail(function(){
               $("[name$='[book_copy_id]']").val('');
               Materialize.toast("Invalid barcode.", 4000, 'red');
@@ -94,7 +95,7 @@ javascript:
           $("label[for=book_fine_old_condition]").attr('class','active');
           $("[name$='[old_condition_id]']").val(book.book_condition_id);
           $("label[for=book_fine_book_price]").attr('class','active');
-          $("[name$='[book_copy_id]']").val(book.book_copy_id);
+          $("[name$='[book_copy_id]']").val(book.id);
         }).fail(function(){
           $(e.target).val('');
           Materialize.toast("Invalid barcode.", 5000, 'red');

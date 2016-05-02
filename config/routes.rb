@@ -108,6 +108,7 @@ Rails.application.routes.draw do
     collection do
       get 'calculate'
       get 'current'
+      get 'autocomplete_student_name'
     end
   end
 

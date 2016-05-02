@@ -22,6 +22,7 @@ gem 'jquery-rails'
 gem 'turbolinks'
 gem 'jquery-turbolinks'
 
+# Autocomplete in forms, using jQuery to get list of matched records
 gem 'rails-jquery-autocomplete'
 
 # To show progress on link clicks
