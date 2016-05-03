@@ -28,6 +28,17 @@ li
 						
 li
 	.collapsible-header.waves-effect.waves-cyan
+		i.material-icons library_books
+		i.mdi-navigation-chevron-right.right
+		| Student Books
+	.collapsible-body
+		ul
+			li
+				= link_to 'List by title', by_title_student_books_path
+			li
+				= link_to 'List by student', by_student_student_books_path
+li
+	.collapsible-header.waves-effect.waves-cyan
 		i.material-icons book
 		i.mdi-navigation-chevron-right.right
 		| Books
@@ -38,11 +49,7 @@ li
 			li
 				= link_to 'Editions', book_editions_path
 			li
-				= link_to 'Student Books', all_student_books_path
-			li
-				= link_to 'Book Loan Status', book_loans_path 
-			li
-				= link_to 'Check condition', by_title_student_books_path
+				= link_to 'Standard Books', standard_books_path
 
 - if signed_in? and current_user.roles.include? :inventory
 	li 
@@ -57,7 +64,9 @@ li
 				li
 					= link_to 'Book Receipt Form', receipt_form_student_books_path
 				li
-					= link_to 'Standard Books', standard_books_path
+					= link_to 'Student Books', all_student_books_path
+				li
+					= link_to 'Book Loan Status', book_loans_path 
 				li
 					= link_to 'Textbook Fines', book_fines_path
 				li
