@@ -1,35 +1,105 @@
 = form_for @book_fine do |f|
-  - if @book_fine.errors.any?
-    #error_explanation
-      h2 = "#{pluralize(@book_fine.errors.count, "error")} prohibited this book_fine from being saved:"
-      ul
-        - @book_fine.errors.full_messages.each do |message|
-          li = message
+  .card-panel
+    .row
+      - if @book_fine.errors.any?
+        #error_explanation
+          h2 = "#{pluralize(@book_fine.errors.count, "error")} prohibited this book_fine from being saved:"
+          ul
+            - @book_fine.errors.full_messages.each do |message|
+              li = message
+    .row
+      .input-field.col.s2
+        = f.label :barcode
+        = text_field_tag :barcode
+      .input-field.col.s2
+        = image_tag '', class:'barcode'
+      .input-field.col.s8
+        .title &nbsp;
+      = f.hidden_field :book_copy_id
+    .row
+      .input-field.col.s2
+        = f.label :old_condition, class:'active'
+        = text_field_tag :old_condition, nil, disabled:true
+        = f.hidden_field :old_condition_id
+      .input-field.col.s2
+        = f.label "New condition", class:'active'
+        = f.collection_select :new_condition_id, BookCondition.all, :id, :code
+      .input-field.col.s2
+        = f.label :book_price
+        = text_field_tag :book_price, nil, disabled:true
+      .input-field.col.s1
+        = f.label :currency
+        = f.text_field :currency
+      .input-field.col.s2
+        = f.label :fine
+        = f.text_field :fine
+    .row
+      .input-field.col.s2
+        = f.label :academic_year
+        = text_field_tag :year, AcademicYear.current.name, disabled:true
+        = f.hidden_field :academic_year_id, value:AcademicYear.current.id
+      .input-field.col.s4
+        = f.label :student
+        = f.hidden_field :student_id
+        = f.autocomplete_field :student, autocomplete_student_name_book_fines_path, id_element: "#book_fine_student_id"
 
-  .field
-    = f.label :book_copy
-    = f.text_field :book_copy
-  .field
-    = f.label :old_condition_id
-    = f.number_field :old_condition_id
-  .field
-    = f.label :new_condition_id
-    = f.number_field :new_condition_id
-  .field
-    = f.label :fine
-    = f.text_field :fine
-  .field
-    = f.label :academic_year
-    = f.text_field :academic_year
-  .field
-    = f.label :student
-    = f.text_field :student
-  .field
-    = f.label :status
-    = f.text_field :status
-  .actions = f.submit
+  .toolbar.z-depth-1
+    .actions.col.s12 
+      button.btn.waves-effect.waves-light type="submit" Save
+      = link_to 'Cancel', :back, class: "waves-effect waves-teal btn-flat"
 
-.toolbar.z-depth-1
-  .actions.col.s12 
-    button.btn.waves-effect.waves-light type="submit" Save
-    = link_to 'Cancel', @book_edition, class: "waves-effect waves-teal btn-flat"
+javascript:
+  $(document).ready(function() {
+    var pressed = false;
+    var chars = [];
+    $(window).keypress(function(e) {
+      if (e.which >= 45 && e.which <= 112) {
+          chars.push(String.fromCharCode(e.which));
+      }
+      if (pressed == false) {
+        setTimeout(function(){
+          if (chars.length >= 11) {
+            var barcode = chars.join("");
+            console.log("Barcode Scanned: " + barcode);
+            $.getJSON("/book_copies/"+barcode+".json", null, function (data) {
+              book = data.book_copy;
+              $("#barcode").focus().val(barcode);
+              $("img.barcode").attr('src',"/assets/images/"+book.barcode+".PNG")
+              $(".title").html(book.book_edition.title);
+              $("#book_price").val(book.book_edition.currency+book.book_edition.price);
+              $("#old_condition").val(book.book_condition);
+              $("label[for=book_fine_old_condition]").attr('class','active');
+              $("[name$='[old_condition_id]']").val(book.book_condition_id);
+              $("label[for=book_fine_book_price]").attr('class','active');
+              $("[name$='[book_copy_id]']").val(book.id);
+            }).fail(function(){
+              $("[name$='[book_copy_id]']").val('');
+              Materialize.toast("Invalid barcode.", 4000, 'red');
+            });            
+          }
+          chars = [];
+          pressed = false;
+        },500);
+      }
+      pressed = true;
+    });
+    $(document).on("keypress","#barcode", (function(e){
+      if ( e.which === 13 ) {
+        e.preventDefault();
+        $.getJSON("/book_copies/"+$(e.target).val()+".json", null, function (data) {
+          book = data.book_copy;
+          $("img.barcode").attr('src',"/assets/images/"+book.barcode+".PNG")
+          $(".title").html(book.book_edition.title);
+          $("#book_price").val(book.book_edition.currency+book.book_edition.price);
+          $("#old_condition").val(book.book_condition);
+          $("label[for=book_fine_old_condition]").attr('class','active');
+          $("[name$='[old_condition_id]']").val(book.book_condition_id);
+          $("label[for=book_fine_book_price]").attr('class','active');
+          $("[name$='[book_copy_id]']").val(book.id);
+        }).fail(function(){
+          $(e.target).val('');
+          Materialize.toast("Invalid barcode.", 5000, 'red');
+        });
+      }
+    }));
+  });

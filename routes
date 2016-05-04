@@ -234,6 +234,8 @@ edit_labels_book_edition_book_copies GET      /book_editions/:book_edition_id/bo
                                      PUT      /employees/:employee_id/book_loans/:id(.:format)                  book_loans#update
                                      DELETE   /employees/:employee_id/book_loans/:id(.:format)                  book_loans#destroy
                 calculate_book_fines GET      /book_fines/calculate(.:format)                                   book_fines#calculate
+                  current_book_fines GET      /book_fines/current(.:format)                                     book_fines#current
+autocomplete_student_name_book_fines GET      /book_fines/autocomplete_student_name(.:format)                   book_fines#autocomplete_student_name
                           book_fines GET      /book_fines(.:format)                                             book_fines#index
                                      POST     /book_fines(.:format)                                             book_fines#create
                        new_book_fine GET      /book_fines/new(.:format)                                         book_fines#new
@@ -259,6 +261,11 @@ edit_labels_book_edition_book_copies GET      /book_editions/:book_edition_id/bo
                                      PATCH    /users(.:format)                                                  users/registrations#update
                                      PUT      /users(.:format)                                                  users/registrations#update
                                      DELETE   /users(.:format)                                                  users/registrations#destroy
+                               users GET      /users(.:format)                                                  users#index
+                           edit_user GET      /users/:id/edit(.:format)                                         users#edit
+                                user GET      /users/:id(.:format)                                              users#show
+                                     PATCH    /users/:id(.:format)                                              users#update
+                                     PUT      /users/:id(.:format)                                              users#update
        dynamic_select_grade_sections GET      /dynamic_select/:grade_level_id/grade_sections(.:format)          dynamic_select/options#grade_sections
           dynamic_select_book_labels GET      /dynamic_select/:section/book_labels(.:format)                    dynamic_select/options#book_labels
                                 root GET      /                                                                 welcome#index

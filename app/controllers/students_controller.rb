@@ -2,7 +2,8 @@ class StudentsController < ApplicationController
   before_action :set_student, only: [:edit, :update, :destroy]
 
   # GET /students
-  # GET /students.json
+  # GET /students.json?section=1
+  # GET /students.csv
   def index
     respond_to do |format|
       format.html {

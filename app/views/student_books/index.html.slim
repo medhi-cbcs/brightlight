@@ -1,6 +1,5 @@
 - if @student.present?
-  h5 Textbooks Loan for 
-  h4 #{@student.name} (#{@grade_section.try(:name)}##{@roster_no})
+  h4 Textbooks Loan
 - else
   h4 Listing Student's Books
 
@@ -8,15 +7,16 @@ ul#grade-options.dropdown-content
   - @grade_levels.each do |grade|
     li 
       = link_to grade.name, "#!", onclick:"filterSectionOptions(#{grade.id}, '#{grade.name}');"
-      /= link_to grade.name, "#!", "data-grade-id":"#{grade.id}", "data-grade-name":"#{grade.name}"
+
 ul#section-options.dropdown-content
   - @grade_sections.each do |section|
     li
       = link_to section.name, "#!", class:"grade-#{section.grade_level_id}", onclick:"filterStudentOptions(#{section.id}, '#{section.name}');"
+
 ul#student-options.dropdown-content
   - if @grade_section.present?
     - Student.for_section(@grade_section.id).each do |student| 
-      li = link_to "#{student.order_no}. #{student.name}", student_student_books_path(s:@grade_section.id) 
+      li = link_to "#{student.order_no}. #{student.name}", student_student_books_path(student_id:student.id,s:@grade_section.id) 
       
 javascript:
   function filterSectionOptions(id, name) {
@@ -35,9 +35,10 @@ javascript:
     $.getJSON("/students.json?section="+id, null, function (data) {
       var list = "";
       $.each(data, function(i,student){
-          list += "<li><a href='/students/"+student.student.id+"/student_books?s="+id+"'>"+student.student.roster_no+". "+student.student.name+"</a></li>";
+        list += "<li><a href='/students/"+student.student.id+"/student_books?s="+id+"'>"+student.student.roster_no+". "+student.student.name+"</a></li>";
       });
       $("#student-options").html(list);
+      $("#student-menu").dropdown();
     });
   }
   
@@ -54,56 +55,27 @@ nav
           i.material-icons.right arrow_drop_down
       li
         a#student-menu.dropdown-button href="#!" data-activates="student-options"
-          span#student = params[:sid].present? ? "#{@student.name}" : "Student" 
-          i.material-icons.right arrow_drop_down
+          span#student Student
+          i.material-icons.right arrow_drop_down      
       - if @student.present?
         li.right
           = link_to new_student_student_book_path(student_id:@student.id)
             | Add book 
             i.material-icons.left add
+      li.right  
+        = link_to 'PDF Format', all_student_books_path(s:params[:s], student_id:params[:student_id], format: :pdf), target: '_blank'
 
-.card-panel
-  table.compact
-    thead
-      tr
-        - if @student.present?
-          th No
-        th Title
-        th Barcode
-        th Label
-        th Issue date
-        /th Return date
-        th Initial condition
-        th Return condition
-        th
+- if @students.present?
+  - @students.each do |student|
+    - gss = student.grade_sections_students.where(academic_year_id: @year_id).try(:first)
+    - grade_section = gss.try(:grade_section)
+    - roster_no = gss.order_no
+    - student_books = @student_books.where(roster_no:roster_no.to_s)
+    == render(partial: 'student_book_list', locals: {student_books:student_books, student:student, grade_section:grade_section, roster_no:roster_no})
 
-    tbody
-      - @student_books.each_with_index do |student_book, i|
-        tr
-          - if @student.present?
-            td = i+1
-          td = student_book.book_copy.book_edition.try(:title).truncate(50)
-          td = link_to student_book.barcode, student_book.book_copy
-          td = student_book.book_copy.copy_no
-          td = student_book.issue_date
-          /td = student_book.return_date
-          td 
-            - if student_book.initial_condition.present?
-              span.box class="#{student_book.initial_condition.color}"
-                = student_book.initial_condition.code
-            - else
-              | N/A
-          td 
-            - if student_book.end_condition.present?
-              span.box class="#{student_book.end_condition.color}"
-                = student_book.end_condition.code
-            - else
-              | N/A
-          td
-            - if can? :destroy, student_book
-              = link_to student_book, data: {:confirm => 'Are you sure?'}, :method => :delete
-                i.material-icons.red-text delete
+- else
+  == render(partial: 'student_book_list', locals: {student_books:@student_books, student:@student, grade_section:@grade_section, roster_no:@roster_no})
 
-- unless @student.present?
+- if @student_books.respond_to? :total_pages
   .toolbar.z-depth-1
-    = will_paginate @employees
+    = will_paginate @student_books

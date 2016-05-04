@@ -37,9 +37,10 @@ class User < ActiveRecord::Base
             first_name: employee.first_name,
             last_name: employee.last_name,
             uid: access_token.uid,
+            image_url: access_token.extra.raw_info["picture"],
             password: Devise.friendly_token[0,20],
           )
-          employee.person_id = user.id
+          employee.user_id = user.id
           employee.save
         end
         return user
