@@ -73,6 +73,7 @@ Rails.application.routes.draw do
   get 'student_books/label' => 'student_books#label', as: :label_student_books
   get 'student_books/receipt_form' => 'student_books#receipt_form', as: :receipt_form_student_books
   get 'student_books/by_title' => 'student_books#by_title', as: :by_title_student_books
+  get 'student_books/by_student' => 'student_books#by_student', as: :by_student_student_books
   put 'student_books/update_multiple' => 'student_books#update_multiple', as: :update_multiple_student_books
 
   resources :students do
@@ -108,6 +109,7 @@ Rails.application.routes.draw do
     collection do
       get 'calculate'
       get 'current'
+      get 'autocomplete_student_name'
     end
   end
 

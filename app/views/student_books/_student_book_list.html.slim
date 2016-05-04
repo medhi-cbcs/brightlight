@@ -1,0 +1,43 @@
+.card-panel
+  - if student.present?
+    h5 #{student.name} (#{grade_section.try(:name)}##{roster_no})
+  table.compact
+    thead
+      tr
+        - if student.present?
+          th No
+        th Title
+        th Barcode
+        th Label
+        th Issue date
+        /th Return date
+        th Initial condition
+        th Return condition
+        th
+
+    tbody
+      - student_books.each_with_index do |student_book, i|
+        tr
+          - if student.present?
+            td = i+1
+          td = student_book.book_copy.book_edition.try(:title).truncate(50)
+          td = link_to student_book.barcode, student_book.book_copy
+          td = student_book.book_copy.copy_no
+          td = student_book.issue_date
+          /td = student_book.return_date
+          td 
+            - if student_book.initial_condition.present?
+              span.box class="#{student_book.initial_condition.color}"
+                = student_book.initial_condition.code
+            - else
+              | N/A
+          td 
+            - if student_book.end_condition.present?
+              span.box class="#{student_book.end_condition.color}"
+                = student_book.end_condition.code
+            - else
+              | N/A
+          td
+            - if can? :destroy, student_book
+              = link_to student_book, data: {:confirm => 'Are you sure?'}, :method => :delete
+                i.material-icons.red-text delete

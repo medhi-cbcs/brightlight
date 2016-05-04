@@ -27,6 +27,8 @@ json.book_copy do
     json.isbn13 @book_copy.book_edition.isbn13
     json.authors @book_copy.book_edition.authors
     json.publisher @book_copy.book_edition.publisher
+    json.price @book_copy.book_edition.price
+    json.currency @book_copy.book_edition.currency
   end
 
   if @student.present?

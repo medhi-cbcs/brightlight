@@ -31,12 +31,24 @@ class Ability
     can :read, :all
 	end
 
+	def manager
+    can :manage, CourseSection
+    can :manage, GradeSection
+    can :manage, StudentBook
+    can :manage, StandardBook
+    can :read, :all
+	end
+
   # Teacher
   def teacher
     can :manage, CourseSection, instructor: @user.employee
     can :manage, GradeSection, homeroom: @user.employee
     can :manage, StudentBook, grade_section: GradeSection.find_by_homeroom_id(@user.employee)
     can :manage, StandardBook
+    can :read, :all
+  end
+
+  def staff
     can :read, :all
   end
 

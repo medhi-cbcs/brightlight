@@ -136,7 +136,7 @@ class BookCopiesController < ApplicationController
     @copy_loans = BookLoan.where(book_copy_id:params[:id])
                           .includes([:academic_year, :student])
                           .order('academic_year_id DESC, out_date DESC')
-    @book_copy = BookCopy.find(params[:id])
+    @book_copy = BookCopy.where(id:params[:id]).includes([:book_edition]).take
     @book_edition = @book_copy.book_edition
     @last_loan = @copy_loans.first
   end
