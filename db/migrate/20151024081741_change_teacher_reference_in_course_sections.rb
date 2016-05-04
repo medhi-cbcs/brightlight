@@ -1,7 +1,7 @@
 class ChangeTeacherReferenceInCourseSections < ActiveRecord::Migration
   def change
-  	remove_column :courses_sections, :instructor
-  	remove_column :courses_sections, :employee_id
-  	add_reference :courses_sections, :instructor, index: true
+  	remove_column :course_sections, :instructor
+  	remove_column :course_sections, :employee_id
+  	add_reference :course_sections, :instructor, index: true
   end
 end
