@@ -36,7 +36,7 @@ test:
 production:
   <<: *default
   # database: db/production.sqlite3
-  database: brightlight_test
+  database: brightlight
   username: brightlight
   password: <%= ENV['POSTIT_DATABASE_PASSWORD'] %>
   host: localhost
