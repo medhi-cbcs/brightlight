@@ -18,7 +18,7 @@ development:
   # <<: *default
   # database: db/development.sqlite3
   <<: *default
-  database: brightlight_test
+  database: brightlight_development
   pool: 5
   username: brightlight
   password: Sadrakh201

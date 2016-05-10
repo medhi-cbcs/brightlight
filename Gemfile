@@ -55,7 +55,7 @@ gem 'materialize-sass', '0.97.1'
 gem 'jquery-ui-rails'
 
 # Wrapper for Google Books API
-gem 'google_books' ###, git: 'https://github.com/medhiwidjaja/google_books.git'
+gem 'google_books', git: 'https://github.com/medhiwidjaja/google_books.git'
 
 gem 'hashie'
 
