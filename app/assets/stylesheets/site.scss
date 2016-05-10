@@ -480,8 +480,8 @@ ul.side-nav.fixed:hover {
 ul {
 	li {
 		.user-profile {
-			height: 2em;
-			line-height: 2em;
+			height: 60px !important;
+			line-height: 60px !important;
 			padding-left: 0px !important;
 			.name {
 				padding-left: 10px;
@@ -777,7 +777,7 @@ a.sidebar-collapse {
 // ============================================ Login Page ===========================================
 
 .login-form {
-  width: 310px;
+  // width: 310px;
 }
 .login-form-text{
   text-transform: uppercase;
