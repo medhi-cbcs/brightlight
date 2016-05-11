@@ -15,7 +15,8 @@
  *= require normalize
  *= require materialize_components
  *= require materialize/extras/nouislider
- *= require nprogress
  *= require site
  *= require_self
  */
+$nprogress-color: 		 #e7580b;
+@import 'nprogress';

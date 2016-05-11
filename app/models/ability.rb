@@ -24,6 +24,7 @@ class Ability
     can :manage, BookCondition
     can :manage, CopyCondition
     can :manage, StudentBook
+    can :manage, Student
     can :manage, BookLoan
     can :manage, BookFine
     can :manage, BookLabel

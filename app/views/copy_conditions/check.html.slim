@@ -1,11 +1,13 @@
 h4 Book Condition Checking
 
-nav
-  .nav-wrapper
-    ul
-      li
-        = link_to :back
-          i.material-icons chevron_left
-
 = form_for @copy_condition, url: {action: :check_update}, method: :post do |f|
+  nav
+    .nav-wrapper
+      ul
+        li
+          = link_to :back
+            i.material-icons chevron_left
+        li.right
+          button.btn.waves-effect.waves-light type="submit" Save 
+
   == render partial: 'fields', locals: {f: f}

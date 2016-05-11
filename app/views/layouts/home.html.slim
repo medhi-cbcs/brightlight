@@ -14,15 +14,14 @@ html
 
     meta name="viewport" content="width=device-width, initial-scale=1.0"
 
-  body class="main-home #{controller.controller_name} blue darken-4"
+  body class="main-home #{controller.controller_name} white"
     header
       = render 'shared/layout/header'
     
-    main
+    main#main
       .container
         = render 'shared/flash_messages'
-        section
-          = yield :layout
+        = yield :layout
 
     footer.page-footer style="padding-top:0"
       //= render 'shared/layout/footer'
