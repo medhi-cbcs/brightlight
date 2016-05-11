@@ -1,5 +1,5 @@
 .row
-	.col.s5.offset-s3
+	.col.s12
 		= form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :post }) do |f|	
 			= devise_error_messages!
 			.card
@@ -13,8 +13,7 @@
 				.card-action
 					button.btn type="submit" Send me reset password instructions
 
-	.col.s3
+	.col.s12
 		.card
 			.card-content.white
 				= render "devise/shared/links"
-

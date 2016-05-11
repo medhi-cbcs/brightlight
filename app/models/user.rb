@@ -39,6 +39,7 @@ class User < ActiveRecord::Base
             uid: access_token.uid,
             image_url: access_token.extra.raw_info["picture"],
             password: Devise.friendly_token[0,20],
+            roles: roles_from_job_title(employee.job_title)
           )
           employee.user_id = user.id
           employee.save
@@ -60,7 +61,6 @@ class User < ActiveRecord::Base
   def roles=(roles)
     roles = [*roles].map { |r| r.to_sym }
     self.roles_mask = (roles & ROLES).map { |r| 2**ROLES.index(r) }.inject(0, :+)
-    puts "Roles = #{roles.join(', ')}"
   end
 
   def roles
@@ -77,4 +77,11 @@ class User < ActiveRecord::Base
     self.has_role? :admin
   end
 
+  def valid_role(string)
+    ROLES.include? string.downcase.to_sym
+  end
+
+  def roles_from_job_title(job_title)
+    job_title.split(',').map(&:strip).map(&:downcase).map(&:to_sym) & ROLES
+  end
 end

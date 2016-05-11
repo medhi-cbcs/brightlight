@@ -1,5 +1,5 @@
 #login-page.row
-	.card.z-depth-4.col.s12.m5.l5.zero-padding
+	.card.z-depth-4.zero-padding
 		= form_for(resource, as: resource_name, url: session_path(resource_name), html: {class: 'login-form'}) do |f|
 			.card-content.white
 				.center
@@ -11,7 +11,7 @@
 					.input-field.col.s12
 						i.mdi-action-lock-outline.prefix
 						= f.password_field :password, autocomplete: "off"
-
+			
 					- if devise_mapping.rememberable?
 						.input-field.col.s12.m12.l12
 							= f.check_box :remember_me

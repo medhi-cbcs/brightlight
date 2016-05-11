@@ -30,9 +30,7 @@ class StudentBooksController < ApplicationController
       # =>     but filter it with grade_section, year and roster_no
       @student_books = StudentBook.where(grade_section:@grade_section)
                         .where(roster_no:@roster_no.to_s)
-                        .where(academic_year_id:@year_id)
-                        .standard_books(@grade_section.grade_level.id, @grade_section.id, @year_id, textbook_category_id)
-                        .order('standard_books.id')
+                        .where(academic_year_id:@year_id)                        
                         .includes([:book_copy, book_copy: [:book_edition]])
     # elsif params[:t].present?
     #   year_id = AcademicYear.current.id
@@ -94,9 +92,9 @@ class StudentBooksController < ApplicationController
   # POST /students/:student_id/student_books
   # POST /students/:student_id/student_books.json
   def create
-    authorize! :manage, StudentBook
     @student = Student.find(params[:student_id])
     @student_book = @student.student_books.new(student_book_params)
+    authorize! :create, @student_book
 
     respond_to do |format|
       if @student.save
