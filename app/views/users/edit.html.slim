@@ -9,22 +9,35 @@ h4 Editing User
           - @user.errors.full_messages.each do |message|
             li = message
     .row
-      .input-field.col.s2
+      .input-field.col.s12
         = f.label :name
         = f.text_field :name
     .row 
       .input-field.col.s2
         = label_tag "Roles:"
+    .row 
       .input-field.col.s2
         = check_box_tag "user[roles][]", 'admin', @user.roles.include?(:admin), {id: :admin, multiple: true}
         = label_tag :admin
       .input-field.col.s2
-        = check_box_tag "user[roles][]", 'inventory', @user.roles.include?(:inventory), {id: :inventory, multiple: true}
-        = label_tag :inventory
+        = check_box_tag "user[roles][]", 'manager', @user.roles.include?(:manager), {id: :manager, multiple: true}
+        = label_tag :manager
       .input-field.col.s2       
         = check_box_tag "user[roles][]", 'teacher', @user.roles.include?(:teacher), {id: :teacher, multiple: true}
         = label_tag :teacher      
-
+      .input-field.col.s2
+        = check_box_tag "user[roles][]", 'staff', @user.roles.include?(:staff), {id: :staff, multiple: true}
+        = label_tag :staff
+      .input-field.col.s2
+        = check_box_tag "user[roles][]", 'inventory', @user.roles.include?(:inventory), {id: :inventory, multiple: true}
+        = label_tag :inventory
+      .input-field.col.s2       
+        = check_box_tag "user[roles][]", 'librarian', @user.roles.include?(:librarian), {id: :librarian, multiple: true}
+        = label_tag :librarian  
+      .input-field.col.s2       
+        = check_box_tag "user[roles][]", 'student', @user.roles.include?(:student), {id: :student, multiple: true}
+        = label_tag :student 
+            
   .toolbar.z-depth-1
     button.btn.waves-effect.waves-light type="submit" Save
     = link_to 'Cancel', users_path, class: "waves-effect waves-light btn-flat"
