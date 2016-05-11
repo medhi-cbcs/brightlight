@@ -1,4 +1,12 @@
 GIT
+  remote: https://github.com/medhiwidjaja/google_books.git
+  revision: 9eb8634b7a5d8f6bb4d8533a7e3f22d85f53ab0d
+  specs:
+    google_books (0.2.2)
+      hashie (>= 1.1.0)
+      httparty (>= 0.8.1)
+
+GIT
   remote: https://github.com/subimage/slug.git
   revision: b87459597136858e3c5069e97664f3367a7bf3e2
   specs:
@@ -84,9 +92,6 @@ GEM
     forgery (0.6.0)
     globalid (0.3.6)
       activesupport (>= 4.1.0)
-    google_books (0.2.2)
-      hashie (>= 1.1.0)
-      httparty (>= 0.8.1)
     hashie (3.4.2)
     httparty (0.13.7)
       json (~> 1.8)
@@ -269,7 +274,7 @@ DEPENDENCIES
   devise
   filterrific
   forgery
-  google_books
+  google_books!
   hashie
   jbuilder (~> 2.0)
   jquery-rails
@@ -301,3 +306,6 @@ DEPENDENCIES
   wicked_pdf
   will_paginate (~> 3.0.6)
   wkhtmltopdf-binary (~> 0.9.9.3)
+
+BUNDLED WITH
+   1.12.1
