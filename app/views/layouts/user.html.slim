@@ -15,13 +15,22 @@ html
 
 	body class="#{ controller.controller_name} blue-grey lighten-1"
 		header
-			= render 'shared/layout/header'
+			- if signed_in?
+				= render 'shared/layout/header'
 
-		main#main
+		- if signed_in?
+			main#main
+				.container
+					= render 'shared/flash_messages'
+					section
+						= yield :layout
+		- else 
 			.container
 				= render 'shared/flash_messages'
 				section
-					= yield :layout
+					.row
+						.col.s12.offset-m4.m4
+							= yield :layout
 
 		footer.page-footer style="padding-top:0"
 			//= render 'shared/layout/footer'
