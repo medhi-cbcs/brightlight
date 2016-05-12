@@ -21,8 +21,10 @@ namespace :data do
                       copy_no: book_label.try(:name)
                     )
         book_copy.save
+        puts "Book Copy #{loan.barcode} [#{book_label.name}] (#{book_title.title}) created"
       else
         book_copy = BookCopy.where(barcode:loan.barcode).take
+        puts "*** Book Copy #{loan.barcode} [#{book_label.try(:name)}] (#{book_title.title}) already present"
       end
       # Save the BookLoan record with the new book_copy_id
       loan.book_copy_id = book_copy.id
@@ -30,7 +32,7 @@ namespace :data do
 
       # Now update missing data in CopyCondition and StudentBook records with the new book_copy.id
       CopyCondition.where('book_copy_id is null').where(barcode:loan.barcode).update_all(book_copy_id: book_copy.id)
-      StudentBook.where('book_copy_id is null').where(barcode:loan.barcode).update_all(book_copy_id: book_copy.id)
+      StudentBook.where('book_copy_id is null').where(barcode:loan.barcode).update_all("book_copy_id = #{book_copy.id}, book_edition_id = #{book_edition.id}")
     end
 
   end
