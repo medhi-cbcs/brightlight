@@ -7,7 +7,6 @@
           - @copy_condition.errors.full_messages.each do |message|
             li = message
     .input-field.col.s4
-      /= f.label :barcode, class:'active'
       - if params[:action] =~ /check/
         = f.text_field :barcode, disabled:true
         = f.hidden_field :barcode

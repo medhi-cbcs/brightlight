@@ -1,12 +1,3 @@
-GIT
-  remote: https://github.com/subimage/slug.git
-  revision: b87459597136858e3c5069e97664f3367a7bf3e2
-  specs:
-    slug (4.0.0)
-      activerecord (> 3.0.0)
-      activesupport (> 3.0.0)
-      rake
-
 GEM
   remote: https://rubygems.org/
   specs:
@@ -219,6 +210,10 @@ GEM
       railties (>= 3.1, < 5.0)
       slim (~> 3.0)
     slop (3.6.0)
+    slug (4.0.0)
+      activerecord (> 3.0.0)
+      activesupport (> 3.0.0)
+      rake
     spring (1.4.0)
     sprockets (3.3.5)
       rack (> 1, < 3)
@@ -291,7 +286,7 @@ DEPENDENCIES
   sdoc (~> 0.4.0)
   seed-fu (~> 2.3)
   slim-rails
-  slug!
+  slug
   spring
   tiny_tds
   turbolinks
