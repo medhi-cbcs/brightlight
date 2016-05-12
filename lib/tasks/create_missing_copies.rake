@@ -32,9 +32,7 @@ namespace :data do
 
       # Now update missing data in CopyCondition and StudentBook records with the new book_copy.id
       CopyCondition.where('book_copy_id is null').where(barcode:loan.barcode).update_all(book_copy_id: book_copy.id)
-      StudentBook.where('book_copy_id is null').where(barcode:loan.barcode).update_all(book_edition_id: book_edition.id)
-      StudentBook.where('book_copy_id is null').where(barcode:loan.barcode).update_all(book_copy_id: book_copy.id)
-
+      StudentBook.where('book_copy_id is null').where(barcode:loan.barcode).update_all("book_copy_id = #{book_copy.id}, book_edition_id = #{book_edition.id}")
     end
 
   end
