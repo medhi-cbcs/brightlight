@@ -13,6 +13,7 @@ Rails.application.routes.draw do
   resources :book_grades
   resources :academic_years
   resources :employees
+  resources :copy_conditions
 
   resources :courses do
     resources :course_texts, shallow: true
@@ -30,13 +31,8 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :copy_conditions do
-    member do
-      get 'check'
-      post 'check_update'
-    end
-  end
-
+  get 'book_copies/:id/copy_conditions/check' => 'copy_conditions#check', as: :check_copy_condition
+  post 'book_copies/:id/copy_conditions/check_update' => 'copy_conditions#check_update'
   get 'book_copies/:id/conditions' => 'book_copies#conditions', as: :book_copy_conditions
   get 'book_copies/:id/loans' => 'book_copies#loans', as: :book_copy_loans
 

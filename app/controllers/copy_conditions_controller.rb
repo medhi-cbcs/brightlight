@@ -1,5 +1,5 @@
 class CopyConditionsController < ApplicationController
-  before_action :set_copy_condition, only: [:show, :edit, :check, :update, :destroy]
+  before_action :set_copy_condition, only: [:show, :edit, :update, :destroy]
   include ApplicationHelper
 
   # GET /copy_conditions
@@ -33,11 +33,6 @@ class CopyConditionsController < ApplicationController
     @user = User.where(id:@copy_condition.user_id).first
   end
 
-  # GET /copy_conditions/1/check
-  def check
-    @user = User.where(id:@copy_condition.user_id).first
-  end
-
   # POST /copy_conditions
   # POST /copy_conditions.json
   def create
@@ -66,24 +61,30 @@ class CopyConditionsController < ApplicationController
     end
   end
 
-  # POST /copy_conditions/1/check_update
-  # POST /copy_conditions/1/check_update.json
+  # GET /book_copies/1/copy_conditions/1/check
+  def check
+    @book_copy = BookCopy.find params[:id]
+    @copy_condition = CopyCondition.new
+  end
+
+  # POST /book_copies/1/copy_conditions/1/check_update
+  # POST /book_copies/1/copy_conditions/1/check_update.json
   def check_update
-    @book_copy = BookCopy.copy_with_barcode(copy_condition_params[:barcode])
-    @old_condition = CopyCondition.find(params[:id]) if params[:id].present?
-    @copy_condition = CopyCondition.new(
-      book_copy_id: @book_copy.id,
-      book_condition_id: copy_condition_params[:book_condition_id],
-      academic_year:AcademicYear.current,
-      barcode: copy_condition_params[:barcode],
-      notes: copy_condition_params[:notes],
-      start_date: Date.today,
-      user_id: current_user.id
-      )
+    @book_copy = BookCopy.find params[:id]
+    @copy_condition = CopyCondition.new(copy_condition_params)
+      # book_copy_id: @book_copy.id,
+      # book_condition_id: copy_condition_params[:book_condition_id],
+      # academic_year:AcademicYear.current,
+      # barcode: copy_condition_params[:barcode],
+      # notes: copy_condition_params[:notes],
+      # start_date: Date.today,
+      # user_id: copy_condition_params[:user_id]
+      # )
 
     respond_to do |format|
       if @copy_condition.save
-        @old_condition.update(end_date:Date.today) if @old_condition.present?
+        old_copy_condition = @book_copy.latest_copy_condition
+        old_copy_condition.update(end_date:Date.today) if old_copy_condition.present?
         @book_copy.update(book_condition_id:@copy_condition.book_condition_id)
         format.html { redirect_to book_copy_conditions_url(@book_copy.id), notice: 'Copy condition was successfully updated.' }
         format.json { render :show, status: :created, location: @copy_condition }
@@ -128,6 +129,6 @@ class CopyConditionsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def copy_condition_params
-      params.require(:copy_condition).permit(:book_copy_id, :book_condition_id, :academic_year_id, :barcode, :notes, :user_id, :start_date, :end_date)
+      params.require(:copy_condition).permit(:book_copy_id, :book_condition_id, :academic_year_id, :barcode, :notes, :post, :user_id, :start_date, :end_date, :deleted_flag)
     end
 end

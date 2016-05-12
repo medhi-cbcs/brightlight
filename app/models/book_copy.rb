@@ -4,6 +4,7 @@ class BookCopy < ActiveRecord::Base
   belongs_to :status
   belongs_to :book_label
   # validates :book_edition, :book_condition, :copy_no, presence: true
+  validates :book_edition, presence: true
   validates :barcode, presence: true, uniqueness: true
   has_many :copy_conditions
   has_many :book_loans
@@ -38,8 +39,12 @@ class BookCopy < ActiveRecord::Base
   	BookCopy.where(barcode:barcode).first
   end
 
+  def latest_copy_condition
+    copy_conditions.active.order('academic_year_id DESC,created_at DESC').first
+  end
+
   def latest_condition
-    copy_conditions.active.order('academic_year_id DESC,created_at DESC').first.try(:book_condition)
+    latest_copy_condition.try(:book_condition)
   end
 
   def current_start_condition
