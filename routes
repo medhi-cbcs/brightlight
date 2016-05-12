@@ -103,6 +103,14 @@
                                      PATCH    /employees/:id(.:format)                                          employees#update
                                      PUT      /employees/:id(.:format)                                          employees#update
                                      DELETE   /employees/:id(.:format)                                          employees#destroy
+                     copy_conditions GET      /copy_conditions(.:format)                                        copy_conditions#index
+                                     POST     /copy_conditions(.:format)                                        copy_conditions#create
+                  new_copy_condition GET      /copy_conditions/new(.:format)                                    copy_conditions#new
+                 edit_copy_condition GET      /copy_conditions/:id/edit(.:format)                               copy_conditions#edit
+                      copy_condition GET      /copy_conditions/:id(.:format)                                    copy_conditions#show
+                                     PATCH    /copy_conditions/:id(.:format)                                    copy_conditions#update
+                                     PUT      /copy_conditions/:id(.:format)                                    copy_conditions#update
+                                     DELETE   /copy_conditions/:id(.:format)                                    copy_conditions#destroy
                  course_course_texts GET      /courses/:course_id/course_texts(.:format)                        course_texts#index
                                      POST     /courses/:course_id/course_texts(.:format)                        course_texts#create
               new_course_course_text GET      /courses/:course_id/course_texts/new(.:format)                    course_texts#new
@@ -144,16 +152,8 @@ edit_labels_book_edition_book_copies GET      /book_editions/:book_edition_id/bo
                                      PATCH    /book_editions/:id(.:format)                                      book_editions#update
                                      PUT      /book_editions/:id(.:format)                                      book_editions#update
                                      DELETE   /book_editions/:id(.:format)                                      book_editions#destroy
-                check_copy_condition GET      /copy_conditions/:id/check(.:format)                              copy_conditions#check
-         check_update_copy_condition POST     /copy_conditions/:id/check_update(.:format)                       copy_conditions#check_update
-                     copy_conditions GET      /copy_conditions(.:format)                                        copy_conditions#index
-                                     POST     /copy_conditions(.:format)                                        copy_conditions#create
-                  new_copy_condition GET      /copy_conditions/new(.:format)                                    copy_conditions#new
-                 edit_copy_condition GET      /copy_conditions/:id/edit(.:format)                               copy_conditions#edit
-                      copy_condition GET      /copy_conditions/:id(.:format)                                    copy_conditions#show
-                                     PATCH    /copy_conditions/:id(.:format)                                    copy_conditions#update
-                                     PUT      /copy_conditions/:id(.:format)                                    copy_conditions#update
-                                     DELETE   /copy_conditions/:id(.:format)                                    copy_conditions#destroy
+                check_copy_condition GET      /book_copies/:id/copy_conditions/check(.:format)                  copy_conditions#check
+                                     POST     /book_copies/:id/copy_conditions/check_update(.:format)           copy_conditions#check_update
                 book_copy_conditions GET      /book_copies/:id/conditions(.:format)                             book_copies#conditions
                      book_copy_loans GET      /book_copies/:id/loans(.:format)                                  book_copies#loans
               edit_merge_book_titles POST     /book_titles/edit_merge(.:format)                                 book_titles#edit_merge
@@ -197,6 +197,7 @@ edit_labels_book_edition_book_copies GET      /book_editions/:book_edition_id/bo
                  label_student_books GET      /student_books/label(.:format)                                    student_books#label
           receipt_form_student_books GET      /student_books/receipt_form(.:format)                             student_books#receipt_form
               by_title_student_books GET      /student_books/by_title(.:format)                                 student_books#by_title
+            by_student_student_books GET      /student_books/by_student(.:format)                               student_books#by_student
        update_multiple_student_books PUT      /student_books/update_multiple(.:format)                          student_books#update_multiple
                student_student_books GET      /students/:student_id/student_books(.:format)                     student_books#index
                                      POST     /students/:student_id/student_books(.:format)                     student_books#create

@@ -30,12 +30,14 @@ class BookCopiesController < ApplicationController
     respond_to do |format|
       format.html {
         set_book_copy
-        @barcode = Barby::Code128B.new(@book_copy.barcode)
-        filepath = "public/assets/images/#{@book_copy.barcode.upcase}.PNG"
-        File.open(filepath, 'wb') do |file|
-          file.write @barcode.to_png(height:20,margin:0)
-        end unless File.exist?(filepath)
-        @barcode_for_html = Barby::HtmlOutputter.new(@barcode)
+        if @book_copy.present?
+          @barcode = Barby::Code128B.new(@book_copy.barcode)
+          filepath = "public/assets/images/#{@book_copy.barcode.upcase}.PNG"
+          File.open(filepath, 'wb') do |file|
+            file.write @barcode.to_png(height:20,margin:0)
+          end unless File.exist?(filepath)
+          @barcode_for_html = Barby::HtmlOutputter.new(@barcode)
+        end
       }
       format.json {
         @book_copy = BookCopy.find_by_barcode(params[:id])
