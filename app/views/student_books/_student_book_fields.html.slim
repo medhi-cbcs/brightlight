@@ -5,12 +5,7 @@ tr.nested-fields
   td
     .input-field
       .titles &nbsp;
-    / td
-    /   .input-field
-    /     .book_numbers &nbsp;
-    / td
-    /   .input-field
-    /     .book_loans &nbsp;
+
     = f.hidden_field :book_copy_id, class:'book_copy_ids'
     = f.hidden_field :academic_year_id, class:'academic_year_ids'
     = f.hidden_field :copy_no, class:'copy_nos'
@@ -22,6 +17,8 @@ tr.nested-fields
     = f.hidden_field :student_no, class:'student_nos'
     = f.hidden_field :roster_no, class:'roster_nos'
     = f.hidden_field :prev_academic_year_id, class:'prev_academic_year_ids'
+    = f.hidden_field :book_edition_id, class:'book_edition_ids'
+    //= hidden_field_tag :book_title_id, class:'book_title_ids'
     
   td
     = link_to_remove_association "Remove", f, class: "waves-effect waves-teal btn btn-flat red-text btn-small"

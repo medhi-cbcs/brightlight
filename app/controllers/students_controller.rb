@@ -70,6 +70,7 @@ class StudentsController < ApplicationController
       if @student.update(student_params)
         format.html {
           if student_params[:student_books_attributes].present?
+            update_book_loans @student, student_params[:student_books_attributes]
             redirect_to student_student_books_path(@student), notice: 'Student book was successfully created.'
           else
             redirect_to @student, notice: 'Student was successfully created.'
@@ -100,6 +101,27 @@ class StudentsController < ApplicationController
       @student = Student.where(id: params[:id]).includes([:student_admission_info]).first
     end
 
+    def update_book_loans(student,params)
+      params.each do |key, values|
+        puts key
+        puts values
+        next if values[:_destroy] != "false"
+        next if values.delete_if{|k,v| k=="_destroy" || v==""}.empty?
+        book_loan = BookLoan.new(
+          book_copy_id: values["book_copy_id"],
+          book_edition_id: values["book_edition_id"],
+          book_title_id: BookEdition.find(values["book_edition_id"].to_i).try(:book_title_id),
+          out_date: Date.today,
+          academic_year_id: values["academic_year_id"],
+          student_no: values["student_no"],
+          roster_no: values["roster_no"],
+          barcode: values["barcode"],
+          student_id: student.id
+        )
+        book_loan.save
+      end
+    end
+
     # Never trust parameters from the scary internet, only allow the white list through.
     def student_params
       params.require(:student).permit(:name, :first_name, :last_name, :date_of_birth, :admission_no, :family_id, :gender,
@@ -109,6 +131,6 @@ class StudentsController < ApplicationController
         {student_books_attributes: [:id, :student_id, :book_copy_id, :academic_year_id, :course_text_id, :copy_no, :grade_section_id,
             :grade_level_id, :course_id, :issue_date, :return_date, :initial_copy_condition_id, :end_copy_condition_id, :created_at,
             :updated_at, :barcode, :student_no, :roster_no, :grade_section_code, :grade_subject_code, :notes, :prev_academic_year_id,
-            :_destroy]})
+            :book_edition_id, :_destroy]})
     end
 end
