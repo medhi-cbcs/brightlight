@@ -50,6 +50,9 @@ class CopyConditionsController < ApplicationController
 
     respond_to do |format|
       if @copy_condition.save
+        # Now update the book's initial condition
+        student_book = StudentBook.where(academic_year:AcademicYear.current.id).where(book_copy:@book_copy).take
+        student_book.update(initial_copy_condition_id: @copy_condition.book_condition_id)
         @old_condition.update(end_date:Date.today) if @old_condition.present?
         @book_copy.update(book_condition_id:@copy_condition.book_condition_id)
         format.html { redirect_to book_copy_conditions_url(@book_copy.id), notice: 'Copy condition was successfully updated.' }
@@ -83,6 +86,8 @@ class CopyConditionsController < ApplicationController
 
     respond_to do |format|
       if @copy_condition.save
+        student_book = StudentBook.where(academic_year:AcademicYear.current.id).where(book_copy:@book_copy).take
+        student_book.update(initial_copy_condition_id: @copy_condition.book_condition_id)
         old_copy_condition = @book_copy.latest_copy_condition
         old_copy_condition.update(end_date:Date.today) if old_copy_condition.present?
         @book_copy.update(book_condition_id:@copy_condition.book_condition_id)

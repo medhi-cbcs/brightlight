@@ -12,8 +12,9 @@ html
 		= javascript_include_tag "application", 'data-turbolinks-track' => true
 
 		meta name="viewport" content="width=device-width, initial-scale=1.0"
-
-	body class="#{controller.controller_name} blue-grey lighten-#{current_user.admin? ? 1 : 5}"
+	
+	- color_shade = current_user.try(:admin?) ? 1 : 5
+	body class="#{controller.controller_name} blue-grey lighten-#{color_shade}"
 		header
 			= render 'shared/layout/header'
 
