@@ -38,32 +38,33 @@ nav
           i.material-icons.right arrow_drop_down
 
 - @students.each do |student|
-  .card-panel 
-    h5 = "#{student.name} (#{student.current_grade_section.name}##{student.current_roster_no})"
-    table.compact.striped
-      thead
-        tr.compact-row
-        tr.compact-row
-          th No
-          th style='text-align:center;' Title
-          th style='text-align:center;' Barcode
-          th style='text-align:center;' Initial Condition
-          th style='text-align:center;' End Condition
-          th style='text-align:center;' Fine
-      tbody                          
-        - missing_books = @student_books.where(grade_section:student.current_grade_section).where(roster_no:student.current_roster_no)
-        - missing_books.each_with_index do |book, i|
-          tr style='border-bottom:1px solid gainsboro'
-            td.wd5 = i+1
-            td.wd20
-              span = book.try(:book_edition).try(:title).truncate(40)
-            td.wd5 style='text-align:center'          
-              = book.barcode
-            td.wd10 style='text-align:center;' 
-              = book.initial_copy_condition.try(:code)
-            td.wd5 style='text-align:center;' 
-              = book.end_copy_condition.try(:code)
-            td.wd5 style='text-align:right;'
-              - pct = FineScale.fine_percentage_for_condition_change(book.initial_copy_condition_id,book.end_copy_condition_id)
-              - fine = pct * book.book_copy.try(:book_edition).try(:price).try(:to_f)
-              = "#{book.book_copy.try(:book_edition).try(:currency)} #{fine}"
+  .card-panel
+    - unless student.blank?
+      h5 = "#{student.name} (#{student.current_grade_section.name}##{student.current_roster_no})"
+      table.compact.striped
+        thead
+          tr.compact-row
+          tr.compact-row
+            th No
+            th style='text-align:center;' Title
+            th style='text-align:center;' Barcode
+            th style='text-align:center;' Initial Condition
+            th style='text-align:center;' End Condition
+            th style='text-align:center;' Fine
+        tbody                          
+          - missing_books = @student_books.where(grade_section:student.current_grade_section).where(roster_no:student.current_roster_no)
+          - missing_books.each_with_index do |book, i|
+            tr style='border-bottom:1px solid gainsboro'
+              td.wd5 = i+1
+              td.wd20
+                span = book.try(:book_edition).try(:title).truncate(40)
+              td.wd5 style='text-align:center'          
+                = book.barcode
+              td.wd10 style='text-align:center;' 
+                = book.try(:initial_copy_condition).try(:code)
+              td.wd5 style='text-align:center;' 
+                = book.try(:end_copy_condition).try(:code)
+              td.wd5 style='text-align:right;'
+                - pct = FineScale.fine_percentage_for_condition_change(book.initial_copy_condition_id,book.end_copy_condition_id)
+                - fine = pct * book.try(:book_copy).try(:book_edition).try(:price).try(:to_f)
+                = "#{book.try(:book_copy).try(:book_edition).try(:currency)} #{fine}"
