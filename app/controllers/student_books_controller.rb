@@ -188,6 +188,36 @@ class StudentBooksController < ApplicationController
 
   # GET /students/1/student_books/by_title
   def missing
+    @year_id = AcademicYear.current.id
+    @grade_level_ids = GradeLevel.all.collect(&:id)
+    @grade_sections = GradeSection.where(academic_year_id: @year_id)
+    @grade_sections_ids = @grade_sections.collect(&:id)
+
+    @grade_section = GradeSection.where(id:params[:s]).take if params[:s].present?
+    @grade_level = GradeLevel.where(id:params[:l]).take if params[:l].present?
+
+    @textbook_category_id = BookCategory.find_by_code('TB').id
+    missing = BookCondition.find_by_slug('missing')
+
+    if @grade_section.present?
+      @students = Student.joins(:student_books).where(student_books: {end_copy_condition:missing}).uniq
+      @student_books = StudentBook
+                        .where(academic_year_id: @year_id)
+                        .where(end_copy_condition: missing)
+                        .where(grade_section:@grade_section)
+      @students = Student.joins(:student_books)
+                        .where(student_books: {end_copy_condition:missing, grade_section:@grade_section})
+                        .uniq
+    else
+      @students = Student.joins(:student_books).where(student_books: {end_copy_condition:missing}).uniq
+      @student_books = StudentBook
+                        .where(academic_year_id: @year_id)
+                        .where(end_copy_condition: missing)
+    end
+
+    respond_to do |format|
+      format.html
+    end
   end
 
   # GET /student_books/by_title

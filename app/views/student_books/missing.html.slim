@@ -1,0 +1,69 @@
+h5 Missing Books 
+
+ul#grade-options.dropdown-content
+  - GradeLevel.all.each do |grade|
+    li 
+      = link_to grade.name, "#!", onclick:"filterSectionOptions(#{grade.id}, '#{grade.name}');"
+
+ul#section-options.dropdown-content
+  - @grade_sections.each do |section|
+    li
+      = link_to section.name, missing_student_books_path(l:section.grade_level_id,s:section.id), class:"grade-#{section.grade_level_id}"
+      
+javascript:
+  function filterSectionOptions(id, name) {
+    var grade_ids = #{raw @grade_level_ids};
+    $("#grade").html(name);
+    grade_ids.forEach(function(g){
+      if(id!=g) {
+        $(".grade-"+g).hide();
+      } else {
+        $(".grade-"+id).show();
+      }
+    })
+  }
+
+nav
+  .nav-wrapper
+    ul
+      /li 
+      /  = link_to 'PDF Format', missing_student_books_path(s:params[:s],l:params[:l], format: :pdf), target: '_blank'
+      li.right
+        a.dropdown-button href="#!" data-activates="section-options"
+          span#section = params[:s].present? ? "#{@grade_section.name}" : 'Choose class'
+          i.material-icons.right arrow_drop_down
+      li.right
+        a.dropdown-button href="#!" data-activates="grade-options"
+          span#grade = params[:l].present? ? "#{@grade_level.name}" : 'Choose grade'
+          i.material-icons.right arrow_drop_down
+
+- @students.each do |student|
+  .card-panel 
+    h5 = "#{student.name} (#{student.current_grade_section.name}##{student.current_roster_no})"
+    table.compact.striped
+      thead
+        tr.compact-row
+        tr.compact-row
+          th No
+          th style='text-align:center;' Title
+          th style='text-align:center;' Barcode
+          th style='text-align:center;' Initial Condition
+          th style='text-align:center;' End Condition
+          th style='text-align:center;' Fine
+      tbody                          
+        - missing_books = @student_books.where(grade_section:student.current_grade_section).where(roster_no:student.current_roster_no)
+        - missing_books.each_with_index do |book, i|
+          tr style='border-bottom:1px solid gainsboro'
+            td.wd5 = i+1
+            td.wd20
+              span = book.try(:book_edition).try(:title).truncate(40)
+            td.wd5 style='text-align:center'          
+              = book.barcode
+            td.wd10 style='text-align:center;' 
+              = book.initial_copy_condition.try(:code)
+            td.wd5 style='text-align:center;' 
+              = book.end_copy_condition.try(:code)
+            td.wd5 style='text-align:right;'
+              - pct = FineScale.fine_percentage_for_condition_change(book.initial_copy_condition_id,book.end_copy_condition_id)
+              - fine = pct * book.book_copy.try(:book_edition).try(:price).try(:to_f)
+              = "#{book.book_copy.try(:book_edition).try(:currency)} #{fine}"
