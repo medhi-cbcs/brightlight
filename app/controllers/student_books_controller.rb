@@ -30,7 +30,7 @@ class StudentBooksController < ApplicationController
       # =>     but filter it with grade_section, year and roster_no
       @student_books = StudentBook.where(grade_section:@grade_section)
                         .where(roster_no:@roster_no.to_s)
-                        .where(academic_year_id:@year_id)                        
+                        .where(academic_year_id:@year_id)
                         .includes([:book_copy, book_copy: [:book_edition]])
     # elsif params[:t].present?
     #   year_id = AcademicYear.current.id
@@ -184,6 +184,10 @@ class StudentBooksController < ApplicationController
                show_as_html: params.key?('debug')
       end
     end
+  end
+
+  # GET /students/1/student_books/by_title
+  def missing
   end
 
   # GET /student_books/by_title
