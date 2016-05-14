@@ -218,6 +218,13 @@ class StudentBooksController < ApplicationController
 
     respond_to do |format|
       format.html
+      format.pdf do
+        render pdf:         "Missing_Book_List#{('-'+@grade_section.name if @grade_section.present?)}",
+               disposition: 'inline',
+               template:    'student_books/missing.pdf.slim',
+               layout:      'pdf.html',
+               show_as_html: params.key?('screen')
+      end
     end
   end
 
