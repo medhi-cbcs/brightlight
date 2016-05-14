@@ -202,6 +202,7 @@ class StudentBooksController < ApplicationController
     if @grade_section.present?
       @students = Student.joins(:student_books).where(student_books: {end_copy_condition:missing}).uniq
       @student_books = StudentBook
+                        .standard_books(@grade_section.grade_level.id, @grade_section.id, @year_id, @textbook_category_id)
                         .where(academic_year_id: @year_id)
                         .where(end_copy_condition: missing)
                         .where(grade_section:@grade_section)
@@ -217,6 +218,13 @@ class StudentBooksController < ApplicationController
 
     respond_to do |format|
       format.html
+      format.pdf do
+        render pdf:         "Missing_Book_List#{('-'+@grade_section.name if @grade_section.present?)}",
+               disposition: 'inline',
+               template:    'student_books/missing.pdf.slim',
+               layout:      'pdf.html',
+               show_as_html: params.key?('screen')
+      end
     end
   end
 
