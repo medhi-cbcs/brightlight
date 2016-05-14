@@ -66,5 +66,5 @@ nav
                 = book.try(:end_copy_condition).try(:code)
               td.wd5 style='text-align:right;'
                 - pct = FineScale.fine_percentage_for_condition_change(book.initial_copy_condition_id,book.end_copy_condition_id)
-                - fine = pct * book.try(:book_copy).try(:book_edition).try(:price).try(:to_f)
+                - fine = pct * (book.try(:book_copy).try(:book_edition).try(:price).try(:to_f) || 0.0)
                 = "#{book.try(:book_copy).try(:book_edition).try(:currency)} #{fine}"

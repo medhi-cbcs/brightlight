@@ -202,6 +202,7 @@ class StudentBooksController < ApplicationController
     if @grade_section.present?
       @students = Student.joins(:student_books).where(student_books: {end_copy_condition:missing}).uniq
       @student_books = StudentBook
+                        .standard_books(@grade_section.grade_level.id, @grade_section.id, @year_id, @textbook_category_id)
                         .where(academic_year_id: @year_id)
                         .where(end_copy_condition: missing)
                         .where(grade_section:@grade_section)
