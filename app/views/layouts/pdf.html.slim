@@ -1,6 +1,6 @@
 doctype html
 // TODO: Fix me! Had to specify Arial font. wicked_pdf can't load Roboto fonts as local asset ("Not allowed to load local....")
-html style="font-family:Roboto,Arial,sans-serif; background-color:white;color:rgba(0,0,0,1)"
+html
   head
     title Brightlight
     script src="http://html5shiv.googlecode.com/svn/trunk/html5.js" type="text/javascript"
@@ -67,3 +67,10 @@ html style="font-family:Roboto,Arial,sans-serif; background-color:white;color:rg
       .container
         section
           = yield :layout
+
+css:
+  html {
+    font-family: Roboto,Arial,sans-serif; 
+    background-color: white;
+    color:rgba(0,0,0,1)
+  }
