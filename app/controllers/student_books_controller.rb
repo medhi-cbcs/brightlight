@@ -214,6 +214,7 @@ class StudentBooksController < ApplicationController
       @student_books = StudentBook
                         .where(academic_year_id: @year_id)
                         .where(end_copy_condition: missing)
+                        .order(:grade_section_id,'CAST(roster_no AS int)')
     end
 
     respond_to do |format|

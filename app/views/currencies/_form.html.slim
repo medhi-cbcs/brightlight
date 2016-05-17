@@ -1,0 +1,21 @@
+= form_for @currency do |f|
+  - if @currency.errors.any?
+    #error_explanation
+      h2 = "#{pluralize(@currency.errors.count, "error")} prohibited this currency from being saved:"
+      ul
+        - @currency.errors.full_messages.each do |message|
+          li = message
+
+  .field
+    = f.label :foreign
+    = f.text_field :foreign
+  .field
+    = f.label :base
+    = f.text_field :base
+  .field
+    = f.label :rate
+    = f.text_field :rate
+  .field
+    = f.label :user
+    = f.text_field :user
+  .actions = f.submit
