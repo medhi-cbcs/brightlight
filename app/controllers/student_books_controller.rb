@@ -200,21 +200,39 @@ class StudentBooksController < ApplicationController
     missing = BookCondition.find_by_slug('missing')
 
     if @grade_section.present?
-      @students = Student.joins(:student_books).where(student_books: {end_copy_condition:missing}).uniq
       @student_books = StudentBook
                         .standard_books(@grade_section.grade_level.id, @grade_section.id, @year_id, @textbook_category_id)
                         .where(academic_year_id: @year_id)
                         .where(end_copy_condition: missing)
                         .where(grade_section:@grade_section)
-      @students = Student.joins(:student_books)
-                        .where(student_books: {end_copy_condition:missing, grade_section:@grade_section})
-                        .uniq
+                        .order('CAST(roster_no AS int)')
+
+      # Fallback to using SQL statement. See comment below.
+      @students = Student.find_by_sql [
+                    "SELECT DISTINCT students.*, student_books.grade_section_id, CAST(student_books.roster_no AS int)
+                     FROM students
+                     INNER JOIN student_books ON student_books.student_id = students.id
+                     WHERE student_books.end_copy_condition_id = ? AND grade_section_id = ?
+                     ORDER BY student_books.grade_section_id, CAST(student_books.roster_no AS int)",
+                     missing.id, @grade_section.id
+                  ]
     else
-      @students = Student.joins(:student_books).where(student_books: {end_copy_condition:missing}).uniq
+      ## The following statement, unforetunately, won't work. So we fallback to sql statement.
+      # @students = Student.joins(:student_books)
+      #                   .where(student_books: {end_copy_condition:missing})
+      #                   .order('student_books.grade_section_id' ,'CAST(student_books.roster_no AS int)')
+      #                   .uniq
+      @students = Student.find_by_sql [
+                    "SELECT DISTINCT students.*, student_books.grade_section_id, CAST(student_books.roster_no AS int)
+                     FROM students
+                     INNER JOIN student_books ON student_books.student_id = students.id
+                     WHERE student_books.end_copy_condition_id = ?
+                     ORDER BY student_books.grade_section_id, CAST(student_books.roster_no AS int)", missing.id
+                  ]
       @student_books = StudentBook
                         .where(academic_year_id: @year_id)
                         .where(end_copy_condition: missing)
-                        .order(:grade_section_id,'CAST(roster_no AS int)')
+                        .order('grade_section_id ASC' ,'CAST(roster_no AS int)')
     end
 
     respond_to do |format|
