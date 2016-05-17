@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
 
+  resources :currencies
   resources :standard_books
   resources :people
   resources :book_categories

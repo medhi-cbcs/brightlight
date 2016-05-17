@@ -1,0 +1,27 @@
+h1 Listing currencies
+
+table
+  thead
+    tr
+      th Foreign
+      th Base
+      th Rate
+      th User
+      th
+      th
+      th
+
+  tbody
+    - @currencies.each do |currency|
+      tr
+        td = currency.foreign
+        td = currency.base
+        td = currency.rate
+        td = currency.user
+        td = link_to 'Show', currency
+        td = link_to 'Edit', edit_currency_path(currency)
+        td = link_to 'Destroy', currency, data: {:confirm => 'Are you sure?'}, :method => :delete
+
+br
+
+= link_to 'New Currency', new_currency_path

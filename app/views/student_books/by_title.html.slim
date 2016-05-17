@@ -31,9 +31,9 @@ javascript:
   function filterTitleOptions(grade_level_id, grade_section_id, section_name) {
     $("#section").html(section_name);
     $.getJSON("/standard_books.json?grade="+grade_level_id+"&section="+grade_section_id+"&category="+"TB", null, function (data) {
-      var list = "<li><a href='/student_books/by_title?s="+grade_section_id+";"+"g="+grade_level_id+"'>All</a></li>";
+      var list = "<li><a href='/student_books/by_title?s="+grade_section_id+"&"+"g="+grade_level_id+"'>All</a></li>";
       $.each(data, function(i,item){
-          list += "<li><a href='/student_books/by_title?s="+grade_section_id+";g="+item.grade_level_id+";t="+item.id+"'>"+item.title+"</a></li>";
+          list += "<li><a href='/student_books/by_title?s="+grade_section_id+"&g="+item.grade_level_id+"&t="+item.id+"'>"+item.title+"</a></li>";
       });
       $("#title-options").html(list);
     });
