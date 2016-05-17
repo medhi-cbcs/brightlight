@@ -261,7 +261,7 @@ class StudentBooksController < ApplicationController
                         .where(book_category_id: @textbook_category_id)
                         .where(academic_year_id: AcademicYear.current.id)
                         .includes([:book_edition])
-    if @grade_level.present? && @grade_level.id > 10
+    if @grade_level.present? && [11,12].include?(@grade_level.id)
       @standard_books = @standard_books.where(grade_section:@grade_section)
     end
     if params[:t].present?
@@ -326,7 +326,7 @@ class StudentBooksController < ApplicationController
                         .where(book_category_id: @textbook_category_id)
                         .where(academic_year_id: AcademicYear.current.id)
                         .includes([:book_edition])
-    if @grade_level.present? && @grade_level.id > 10
+    if @grade_level.present? && [11,12].include?(@grade_level.id)
       @standard_books = @standard_books.where(grade_section:@grade_section)
     end
 
