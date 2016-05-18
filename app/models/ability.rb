@@ -30,6 +30,7 @@ class Ability
     can :manage, BookLabel
     can :manage, StandardBook
     can :manage, Currency
+    can :manage, GradeSection
     can :read, :all
 	end
 
