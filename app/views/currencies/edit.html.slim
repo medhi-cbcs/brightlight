@@ -1,8 +1,11 @@
-h1 Editing currency
+h4 Editing currency
 
+nav
+  .nav-wrapper
+    ul 
+      li
+        = link_to currencies_path
+          | All
+          i.material-icons.left chevron_left
+          
 == render 'form'
-
-= link_to 'Show', @currency
-'|
-= link_to 'Back', currencies_path
-

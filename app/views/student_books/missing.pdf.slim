@@ -27,7 +27,7 @@ h5 Missing Books Notification  #{@grade_section.name if @grade_section.present?}
           - total_missing_books = 0
           - missing_books.each_with_index do |book, i|
             - total_missing_books += 1
-            tr style='border-bottom:1px solid gainsboro'
+            tr.nobreak style='border-bottom:1px solid gainsboro'
               td.wd3 = i+1
               td.wd20
                 span = book.try(:book_edition).try(:title).truncate(50)
@@ -47,16 +47,16 @@ h5 Missing Books Notification  #{@grade_section.name if @grade_section.present?}
               td.wd3 style='text-align:center;background-color:LightGrey'
                 | &#9744;
           -if total_usd > 0.0
-            tr
+            tr.nobreak
               td colspan=2
               td.wd5 style='text-align:right;font-weight:bold' Total USD 
               td.wd5 style='text-align:right;font-weight:bold' =  total_usd 
           -if total_idr > 0.0
-            tr 
+            tr.nobreak
               td colspan=2
               td.wd5 style='text-align:right;font-weight:bold' Total IDR 
               td.wd5 style='text-align:right;font-weight:bold' =  total_idr    
-          tr 
+          tr.nobreak
             td colspan=5
               p style="font-size:8pt"
                 | I acknowledge that I have missed #{total_missing_books} book(s). I will try to look for the missing book(s) and return it to Inventory by May 20, 2016 during school hours. If I do not return the book(s) by then, I will have to to pay for the fee according to the current book price. Inventory will strictly reject any books returned after the due date for any reasons. Students who return the books between May 16-18, 2016 can pick the book again for final examination preparation by May 24, 2016 at the latest.

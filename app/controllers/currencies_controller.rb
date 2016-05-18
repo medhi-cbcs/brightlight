@@ -4,7 +4,8 @@ class CurrenciesController < ApplicationController
   # GET /currencies
   # GET /currencies.json
   def index
-    @currencies = Currency.all
+    @currencies = Currency.all.order('updated_at DESC')
+    @currency = Currency.new
   end
 
   # GET /currencies/1
@@ -14,21 +15,24 @@ class CurrenciesController < ApplicationController
 
   # GET /currencies/new
   def new
+    authorize! :create, Currency
     @currency = Currency.new
   end
 
   # GET /currencies/1/edit
   def edit
+    authorize! :update, Currency
   end
 
   # POST /currencies
   # POST /currencies.json
   def create
+    authorize! :create, Currency
     @currency = Currency.new(currency_params)
 
     respond_to do |format|
       if @currency.save
-        format.html { redirect_to @currency, notice: 'Currency was successfully created.' }
+        format.html { redirect_to currencies_url, notice: 'Currency was successfully created.' }
         format.json { render :show, status: :created, location: @currency }
       else
         format.html { render :new }
@@ -40,9 +44,10 @@ class CurrenciesController < ApplicationController
   # PATCH/PUT /currencies/1
   # PATCH/PUT /currencies/1.json
   def update
+    authorize! :update, Currency
     respond_to do |format|
       if @currency.update(currency_params)
-        format.html { redirect_to @currency, notice: 'Currency was successfully updated.' }
+        format.html { redirect_to currencies_url, notice: 'Currency was successfully updated.' }
         format.json { render :show, status: :ok, location: @currency }
       else
         format.html { render :edit }
@@ -54,6 +59,7 @@ class CurrenciesController < ApplicationController
   # DELETE /currencies/1
   # DELETE /currencies/1.json
   def destroy
+    authorize! :destroy, Currency
     @currency.destroy
     respond_to do |format|
       format.html { redirect_to currencies_url, notice: 'Currency was successfully destroyed.' }
