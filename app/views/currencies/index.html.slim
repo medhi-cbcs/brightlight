@@ -3,7 +3,7 @@ h4 Currency Rates
 nav
   .nav-wrapper
     .brand-logo style="margin-left: 20px; font-size:1.5em"
-      = "USD = Rp#{Currency.rate_to_idr('USD').try(:rate)}"
+      = "USD = Rp#{Currency.dollar_rate}"
     ul
       li.right.tooltipped data-position="bottom" data-delay="50" data-tooltip="Add new currency rate"         
         = link_to "#", onclick:"show_form()"
