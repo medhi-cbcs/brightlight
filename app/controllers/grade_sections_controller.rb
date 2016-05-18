@@ -16,7 +16,7 @@ class GradeSectionsController < ApplicationController
     @grade_section = GradeSection.find_by_slug(params[:id])
     @grade_level = @grade_section.grade_level
     @textbooks = @grade_section.standard_books
-    @students = @grade_section.current_students
+    @gss = @grade_section.current_year_students
   end
 
   # GET /grade_sections/new

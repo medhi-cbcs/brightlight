@@ -42,12 +42,12 @@ nav
           th No
           th Name
         tbody
-          - @students.each_with_index do |student, i|
+          - @gss.each do |gss|
             tr
               td style="width:40px"
-                = "#{i + 1}. "
+                = "#{gss.order_no}. "
               td
-                = link_to student.name, student
+                = link_to gss.student.name, gss.student
 
     #tab2.tab-content
       .label Course Sections

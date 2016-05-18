@@ -78,7 +78,13 @@ class StudentsController < ApplicationController
         }
         format.json { render :show, status: :ok, location: @student }
       else
-        format.html { render :edit }
+        format.html {
+          if student_params[:student_books_attributes].present?
+            redirect_to new_student_student_book_path(@student), alert: 'Book could not be added.'
+          else
+            render :edit
+          end
+        }
         format.json { render json: @student.errors, status: :unprocessable_entity }
       end
     end

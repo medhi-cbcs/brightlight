@@ -19,6 +19,8 @@ class StudentBook < ActiveRecord::Base
   # validates :course_text, presence: true
   validates :grade_level, presence: true
   validates :grade_section, presence: true
+  validates :book_copy, uniqueness: { scope: [:academic_year_id, :student_id],
+    message: "cannot add same book for the same student in the same year" }
 
   around_save :update_book_copy_condition
 

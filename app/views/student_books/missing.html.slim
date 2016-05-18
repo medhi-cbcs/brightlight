@@ -73,13 +73,21 @@ nav
                 - total_usd += fine if currency == 'USD'
                 - total_idr += fine if currency == 'IDR'
                 = "#{currency} #{fine}"
-          -if total_usd > 0.0
-            tr
-              td colspan=4  
-              td.wd5 style='text-align:right;' Total USD 
-              td.wd5 style='text-align:right;' =  total_usd 
-          -if total_idr > 0.0
-            tr 
-              td colspan=4 
-              td.wd5 style='text-align:right;' Total IDR 
-              td.wd5 style='text-align:right;' =  total_idr           
+          / -if total_usd > 0.0
+          /   tr
+          /     td colspan=4  
+          /     td.wd5 style='text-align:right;' Total USD 
+          /     td.wd5 style='text-align:right;' =  total_usd 
+          / -if total_idr > 0.0
+          /   tr 
+          /     td colspan=4 
+          /     td.wd5 style='text-align:right;' Total IDR 
+          /     td.wd5 style='text-align:right;' =  total_idr           
+          tr 
+            td colspan=2
+              -if total_usd > 0.0
+                p = "USD 1 = Rp#{Currency.dollar_rate}"
+            td colspan=2 
+            td.wd5 style='text-align:right;' Total IDR 
+            td.wd5 style='text-align:right;' =  total_idr +  total_usd * Currency.dollar_rate
+      

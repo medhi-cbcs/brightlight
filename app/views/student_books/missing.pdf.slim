@@ -46,16 +46,22 @@ h5 Missing Books Notification  #{@grade_section.name if @grade_section.present?}
                 | &#9744;
               td.wd3 style='text-align:center;background-color:LightGrey'
                 | &#9744;
-          -if total_usd > 0.0
-            tr.nobreak
-              td colspan=2
-              td.wd5 style='text-align:right;font-weight:bold' Total USD 
-              td.wd5 style='text-align:right;font-weight:bold' =  total_usd 
-          -if total_idr > 0.0
-            tr.nobreak
-              td colspan=2
-              td.wd5 style='text-align:right;font-weight:bold' Total IDR 
-              td.wd5 style='text-align:right;font-weight:bold' =  total_idr    
+          / -if total_usd > 0.0
+          /   tr.nobreak
+          /     td colspan=2
+          /     td.wd5 style='text-align:right;font-weight:bold' Total USD 
+          /     td.wd5 style='text-align:right;font-weight:bold' =  total_usd 
+          / -if total_idr > 0.0
+          /   tr.nobreak
+          /     td colspan=2
+          /     td.wd5 style='text-align:right;font-weight:bold' Total IDR 
+          /     td.wd5 style='text-align:right;font-weight:bold' =  total_idr    
+          tr 
+            td colspan=2
+              -if total_usd > 0.0
+                p style="font-size:9pt" = "(USD 1 = Rp#{Currency.dollar_rate})"
+            td.wd5 style='text-align:right;' Total IDR 
+            td.wd5 style='text-align:right;' =  total_idr +  total_usd * Currency.dollar_rate
           tr.nobreak
             td colspan=5
               p style="font-size:8pt"

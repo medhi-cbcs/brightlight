@@ -12,6 +12,6 @@ class BookLoan < ActiveRecord::Base
   scope :current, lambda { where(academic_year: AcademicYear.current) }
 
   def grade_section_name
-    student.grade_section_with_academic_year_id(self.academic_year_id).try(:name)
+    student.grade_section_with_academic_year_id(self.academic_year_id).try(:name) if student.present?
   end
 end
