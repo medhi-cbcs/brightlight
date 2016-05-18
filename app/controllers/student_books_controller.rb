@@ -159,6 +159,7 @@ class StudentBooksController < ApplicationController
 
   # GET /student_books/receipt_form
   def receipt_form
+    authorize! :manage, StudentBook
     if params[:gs].present?
       @grade_section = GradeSection.find params[:gs]
       @grade_level = @grade_section.grade_level
@@ -188,6 +189,7 @@ class StudentBooksController < ApplicationController
 
   # GET /students/1/student_books/by_title
   def missing
+    authorize! :manage, StudentBook
     @year_id = AcademicYear.current.id
     @grade_level_ids = GradeLevel.all.collect(&:id)
     @grade_sections = GradeSection.where(academic_year_id: @year_id)
@@ -249,6 +251,7 @@ class StudentBooksController < ApplicationController
 
   # GET /student_books/by_title
   def by_title
+    authorize! :manage, StudentBook
     @book_titles = []
     if params[:s].present?
       @grade_section = GradeSection.find(params[:s])
@@ -312,6 +315,7 @@ class StudentBooksController < ApplicationController
 
   # GET /student_books/by_student
   def by_student
+    authorize! :manage, StudentBook
     @book_titles = []
     if params[:s].present?
       @grade_section = GradeSection.find(params[:s])
@@ -374,6 +378,7 @@ class StudentBooksController < ApplicationController
   # PUT /student_books/update_multiple
   # PUT /student_books/update_multiple.json
   def update_multiple
+    authorize! :manage, StudentBook
     StudentBook.update(params[:student_books].keys, params[:student_books].values)
     @book_category = BookCategory.find_by_code 'TB'
     @current_year = AcademicYear.current.id

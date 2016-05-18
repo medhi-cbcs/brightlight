@@ -53,7 +53,7 @@ li
 			li
 				= link_to 'Standard Books', standard_books_path
 
-- if signed_in? and current_user.roles.include? :inventory
+- if signed_in? and current_user.has_role? :inventory
 	li 
 		.collapsible-header.waves-effect.waves-cyan
 			i.material-icons view_quilt
@@ -75,7 +75,8 @@ li
 					a href="#" Book Fine Invoice
 				li
 					a href="#" Book Fine Payment
-			
+				li
+					= link_to 'Currency Rates', currencies_path			
 li
 	.collapsible-header.waves-effect.waves-cyan
 		i.material-icons school

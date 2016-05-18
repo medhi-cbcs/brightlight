@@ -1,21 +1,22 @@
-= form_for @currency do |f|
-  - if @currency.errors.any?
-    #error_explanation
-      h2 = "#{pluralize(@currency.errors.count, "error")} prohibited this currency from being saved:"
-      ul
-        - @currency.errors.full_messages.each do |message|
-          li = message
-
-  .field
-    = f.label :foreign
-    = f.text_field :foreign
-  .field
-    = f.label :base
-    = f.text_field :base
-  .field
-    = f.label :rate
-    = f.text_field :rate
-  .field
-    = f.label :user
-    = f.text_field :user
-  .actions = f.submit
+.card-panel
+  = form_for @currency do |f|
+    - if @currency.errors.any?
+      #error_explanation
+        h2 = "#{pluralize(@currency.errors.count, "error")} prohibited this currency from being saved:"
+        ul
+          - @currency.errors.full_messages.each do |message|
+            li = message
+    .row
+      .input-field.col.s2
+        = f.label :foreign
+        = f.text_field :foreign
+      .input-field.col.s2
+        = f.label :base
+        = f.text_field :base
+      .input-field.col.s3
+        = f.label :rate
+        = f.text_field :rate
+        = f.hidden_field :user, value: current_user
+      .col.s5
+        button.btn.waves-effect.waves-light type="submit" Save
+        = link_to 'Cancel', "#", class: "waves-effect waves-light btn-flat", onclick:"hide_form()"
