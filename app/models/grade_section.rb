@@ -18,7 +18,7 @@ class GradeSection < ActiveRecord::Base
   accepts_nested_attributes_for :grade_sections_students, allow_destroy: true, reject_if: :all_blank
 
   def current_year_students
-    grade_sections_students.where(academic_year:academic_year)
+    grade_sections_students.where(academic_year:academic_year).includes([:student])
   end
 
   def current_students
