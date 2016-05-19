@@ -1,4 +1,12 @@
                               Prefix Verb     URI Pattern                                                       Controller#Action
+                          currencies GET      /currencies(.:format)                                             currencies#index
+                                     POST     /currencies(.:format)                                             currencies#create
+                        new_currency GET      /currencies/new(.:format)                                         currencies#new
+                       edit_currency GET      /currencies/:id/edit(.:format)                                    currencies#edit
+                            currency GET      /currencies/:id(.:format)                                         currencies#show
+                                     PATCH    /currencies/:id(.:format)                                         currencies#update
+                                     PUT      /currencies/:id(.:format)                                         currencies#update
+                                     DELETE   /currencies/:id(.:format)                                         currencies#destroy
                       standard_books GET      /standard_books(.:format)                                         standard_books#index
                                      POST     /standard_books(.:format)                                         standard_books#create
                    new_standard_book GET      /standard_books/new(.:format)                                     standard_books#new
@@ -199,6 +207,7 @@ edit_labels_book_edition_book_copies GET      /book_editions/:book_edition_id/bo
               by_title_student_books GET      /student_books/by_title(.:format)                                 student_books#by_title
             by_student_student_books GET      /student_books/by_student(.:format)                               student_books#by_student
        update_multiple_student_books PUT      /student_books/update_multiple(.:format)                          student_books#update_multiple
+               missing_student_books GET      /student_books/missing(.:format)                                  student_books#missing
                student_student_books GET      /students/:student_id/student_books(.:format)                     student_books#index
                                      POST     /students/:student_id/student_books(.:format)                     student_books#create
             new_student_student_book GET      /students/:student_id/student_books/new(.:format)                 student_books#new
