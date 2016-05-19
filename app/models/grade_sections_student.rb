@@ -7,6 +7,7 @@ class GradeSectionsStudent < ActiveRecord::Base
   validates :grade_section, presence: true
   validates :student, presence: true
   validates :academic_year, presence: true
+  validates :student, uniqueness: {scope: :academic_year_id}
 
   default_scope { order(:order_no) }
 

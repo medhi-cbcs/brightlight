@@ -20,7 +20,7 @@ nav
   .nav-wrapper
     ul.right
       li
-        - if can? :manage, User
+        - if can? :manage, Student
           = link_to new_student_path
             | Add New Student
             i.material-icons.left add

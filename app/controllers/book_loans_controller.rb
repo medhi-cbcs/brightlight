@@ -6,7 +6,7 @@ class BookLoansController < ApplicationController
   def index
     items_per_page = 30
     if params[:student].present?
-      @student = Student.where("name LIKE ?", "%#{params[:student]}%").first
+      @student = Student.where("lower(name) LIKE ?", "%#{params[:student].downcase}%").first
       if @student.present?
         @book_loans = BookLoan.includes([:student])
                         .where(academic_year:AcademicYear.current)
