@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
 
+  resources :templates
   resources :currencies
   resources :standard_books
   resources :people

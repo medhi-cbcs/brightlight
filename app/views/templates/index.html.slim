@@ -1,0 +1,39 @@
+h4 Templates
+
+nav
+  .nav-wrapper
+    ul.right
+      li
+        /- if can? :manage, Template
+        = link_to new_template_path
+          | Create New Template
+          i.material-icons.left add
+            
+.card-panel
+  table.compact.striped
+    thead
+      tr
+        th Name
+        th Target
+        th Group
+        th Category
+        th Active
+        th Language
+        th
+
+    tbody
+      - @templates.each do |template|
+        tr
+          td = template.name
+          td = template.target
+          td = template.group
+          td = template.category
+          td = template.active
+          td = template.language
+          td 
+            = link_to template
+              i.material-icons visibility
+            = link_to edit_template_path(template)
+              i.material-icons edit
+            = link_to template, data: {:confirm => 'Are you sure?'}, :method => :delete, class:'red-text'
+              i.material-icons delete 

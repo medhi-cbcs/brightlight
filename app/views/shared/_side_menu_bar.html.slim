@@ -71,8 +71,18 @@ li
 					= link_to 'Book Loan Status', book_loans_path 
 				li
 					= link_to 'Textbook Fines', book_fines_path
+- if signed_in? and current_user.has_role? :inventory
+	li 
+		.collapsible-header.waves-effect.waves-cyan
+			i.material-icons settings
+			i.mdi-navigation-chevron-right.right
+			| Settings
+		.collapsible-body
+			ul
 				li
 					= link_to 'Currency Rates', currencies_path			
+				li
+					= link_to 'Templates', templates_path
 li
 	.collapsible-header.waves-effect.waves-cyan
 		i.material-icons school

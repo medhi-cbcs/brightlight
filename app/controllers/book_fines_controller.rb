@@ -14,6 +14,7 @@ class BookFinesController < ApplicationController
     end
     @book_fines = BookFine.where(academic_year:@academic_year).order(:student_id)
     @students = Student.joins(:book_fines).where(book_fines: {academic_year: @academic_year}).uniq
+    @grade_sections = @students.map(&:current_grade_section).sort.uniq
     if params[:st].present?
       @student = Student.where(id:params[:st]).take
       @book_fines = @book_fines.where(student_id:params[:st])
@@ -87,13 +88,14 @@ class BookFinesController < ApplicationController
   def notification
     authorize! :manage, BookFine
     @academic_year = AcademicYear.find params[:year]
+    @template = Template.where(target:'book_fine').take
     if params[:st].present?
       @student = Student.where(id:params[:st]).take
       @book_fines = BookFine.where(academic_year:@academic_year).where(student_id:params[:st])
     end
 
     respond_to do |format|
-      format.html 
+      format.html
       format.pdf do
         render pdf:         "notification-#{@student.student_no}.pdf",
                disposition: 'inline',

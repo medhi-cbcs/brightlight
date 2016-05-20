@@ -31,6 +31,7 @@ class Ability
     can :manage, StandardBook
     can :manage, Currency
     can :manage, GradeSection
+    can :manage, Template
     can :read, :all
 	end
 

@@ -6,16 +6,37 @@ ul#year-options.dropdown-content
   - AcademicYear.all.each do |year|
     li 
       = link_to year.name, book_fines_path(params.merge(year:year.slug).symbolize_keys)
+ul#section-options.dropdown-content
+  - @grade_sections.each do |section| 
+    li = link_to "#{section.name}", "#", onclick:"filterSectionOptions(#{section.id}, '#{section.name}');"
 ul#student-options.dropdown-content
+  li = link_to "All", book_fines_path
   - @students.each do |student| 
-    li = link_to "#{student.name}", book_fines_path(st:student.id,year:@academic_year.id) 
-      
+    li = link_to "#{student.name}", book_fines_path(st:student.id,year:@academic_year.id) , class:"section-#{student.current_grade_section.id}"
+
+javascript:
+  function filterSectionOptions(id, name) {
+    var section_ids = #{raw @grade_sections.map &:id};
+    $("#section").html(name);
+    section_ids.forEach(function(s){
+      if(id != s) {
+        $(".section-" + s).hide();
+      } else {
+        $(".section-" + id).show();
+      }
+    })
+  }
+        
 nav
   .nav-wrapper
     ul
       li   
         a.dropdown-button href="#!" data-activates="year-options"
           span#grade = @academic_year.present? ? "#{@academic_year.name}" : "Academic Year" 
+          i.material-icons.right arrow_drop_down
+      li   
+        a.dropdown-button href="#!" data-activates="section-options"
+          span#section = "Class" 
           i.material-icons.right arrow_drop_down
       li   
         a.dropdown-button href="#!" data-activates="student-options"
@@ -57,23 +78,25 @@ nav
           td = link_to book_fine.book_copy.try(:book_edition).try(:title), book_fine.book_copy.try(:book_edition)
           td = book_fine.old_condition.try(:code)
           td = book_fine.new_condition.try(:code)
-          td = 100 * book_fine.try(:percentage) || 0
+          td = number_to_percentage(100 * book_fine.try(:percentage) || 0, precision:0)
           td
-            .right = number_to_currency(book_fine.fine.try(:to_f) || 0.0, {unit:book_fine.currency=='USD' ? "$":"Rp"})
+            .right 
+              - if book_fine.currency == 'USD'
+                = number_to_currency(book_fine.fine.try(:to_f) || 0.0, unit:'$')
+              - elsif book_fine.currency == 'IDR'
+                = number_to_currency(book_fine.fine.try(:to_f) || 0.0, unit:'Rp', precision: 0)
           td = book_fine.try(:student).try(:name)
           td = book_fine.status
           td
             = link_to book_fine
               i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="View" payment
-            / = link_to edit_book_fine_path(book_fine)
-            /   i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="Edit" edit
             = link_to book_fine, data: {:confirm => 'Are you sure?'}, :method => :delete, class:'red-text'
               i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="Delete" delete
       - if @student.present?
         tr 
           td colspan=3
           td colspan=2 Total
-          td = number_to_currency(total_idr + Currency.dollar_rate * total_usd, {unit:'Rp'})
+          td = number_to_currency(total_idr + (Currency.dollar_rate * total_usd).round(-2), {unit:'Rp'})
           td colspan=3 style="text-align:right;" USD 1 = Rp#{Currency.dollar_rate}
           
 - if @student.present?

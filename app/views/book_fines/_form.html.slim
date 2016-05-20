@@ -29,11 +29,11 @@
         = f.label :percentage
         = f.number_field :percentage
       .input-field.col.s1
-        = f.label :currency
-        = f.text_field :currency
+        = f.label :currency, class:'active'
+        = f.select :currency, [['USD', 'USD'], ['IDR', 'IDR']]
       .input-field.col.s2
         = f.label :fine
-        = f.number_field :fine
+        = f.number_field :fine, step:'any'
     .row
       .input-field.col.s2
         = f.label :academic_year
