@@ -1,27 +1,61 @@
-p#notice = notice
+h4 Book Fine 
 
-p
-  strong Book copy:
-  = @book_fine.book_copy
-p
-  strong Old condition:
-  = @book_fine.old_condition_id
-p
-  strong New condition:
-  = @book_fine.new_condition_id
-p
-  strong Fine:
-  = @book_fine.fine
-p
-  strong Academic year:
-  = @book_fine.academic_year
-p
-  strong Student:
-  = @book_fine.student
-p
-  strong Status:
-  = @book_fine.status
+nav
+  .nav-wrapper
+    ul
+      li  
+        = link_to book_fines_path 
+          | Back 
+          i.material-icons.left chevron_left
+      li.right
+        = link_to edit_book_fine_path(@book_fine)
+          | Edit 
+          i.material-icons.left edit
 
-= link_to 'Edit', edit_book_fine_path(@book_fine)
-'|
-= link_to 'Back', book_fines_path
+.card
+  .card-content
+    table
+      tr
+        td style="vertical-align:top"
+          - thumbnail = @book_copy.cover_image
+          = link_to @book_copy.book_edition
+            = image_tag(thumbnail, class: 'list_image')
+        td
+          .list_description
+            dl.row
+              dd.col.s6
+                .label Student
+                .item = @book_fine.student.present? ? @book_fine.student.name : 'N/A'   
+            dl.row
+              dd.col.s12
+                .label Title
+                .item = @book_copy.book_edition.title
+            dl.row
+              dd.col.s4
+                .label Barcode
+                .item = @book_copy.barcode
+              dd.col.s4 
+                .label Label
+                .item = @book_copy.book_label.present? ? @book_copy.book_label.name : "--"
+            dl.row
+              dd.col.s4
+                .label Initial Condition
+                span.box class="#{@book_fine.old_condition.try(:color)}"
+                  = @book_fine.old_condition.present? ? @book_fine.old_condition.code.capitalize : 'N/A'
+              dd.col.s4
+                .label Return Condition
+                span.box class="#{@book_fine.new_condition.try(:color)}"
+                  = @book_fine.new_condition.present? ? @book_fine.new_condition.code.capitalize : 'N/A'
+            dl.row
+              dd.col.s4
+                .label Book Price
+                .item = @book_copy.try(:price) || 'N/A'
+              dd.col.s4
+                .label Fine Amount
+                .item = @book_fine.fine || 'N/A'                
+            dl.row            
+              dd.col.s6
+                .label Status
+                .item = @book_fine.status || '--' 
+                
+                

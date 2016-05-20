@@ -1,0 +1,31 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  name: MyString
+  header: MyString
+  opening: MyString
+  body: MyString
+  closing: MyString
+  footer: MyString
+  target: MyString
+  group: MyString
+  category: MyString
+  active: MyString
+  academic_year_id: 
+  user_id: 
+  language: MyString
+
+two:
+  name: MyString
+  header: MyString
+  opening: MyString
+  body: MyString
+  closing: MyString
+  footer: MyString
+  target: MyString
+  group: MyString
+  category: MyString
+  active: MyString
+  academic_year_id: 
+  user_id: 
+  language: MyString

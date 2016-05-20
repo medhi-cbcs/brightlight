@@ -85,6 +85,9 @@ gem 'chunky_png'
 # Authorization
 gem 'cancancan', '~> 1.10'
 
+# WYSIWYG editing using TinyMCE 
+gem 'tinymce-rails'
+
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 
