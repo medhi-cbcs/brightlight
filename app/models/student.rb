@@ -8,6 +8,7 @@ class Student < ActiveRecord::Base
 	has_one  :student_admission_info, autosave: true
 	has_many :student_books
 	has_many :book_loans
+	has_many :book_fines
  	belongs_to :person
   validates :name, :gender, presence: true
 
