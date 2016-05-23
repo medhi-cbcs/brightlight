@@ -38,6 +38,12 @@ class BookFinesController < ApplicationController
   # GET /book_fines/1/edit
   def edit
     authorize! :manage, BookFine
+    @book_copy = @book_fine.book_copy
+    @book_edition = @book_copy.try(:book_edition)
+    @book_title = @book_edition.try(:title)
+    @currency = @book_edition.try(:currency)
+    @price = @book_edition.try(:price)
+    @barcode = @book_copy.try(:barcode)
   end
 
   # POST /book_fines

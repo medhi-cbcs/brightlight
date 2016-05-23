@@ -10,13 +10,16 @@
     .row
       .input-field.col.s2
         = f.label :barcode
-        = text_field_tag :barcode
+        = text_field_tag :barcode, @barcode
       .input-field.col.8
         = f.label :title
-        = text_field_tag nil, f.object.try(:book_copy).try(:book_edition).try(:title), disabled:true, class:'title'
+        = text_field_tag nil, @book_title, disabled:true, class:'title'
+      .input-field.col.s1
+        = f.label :currency
+        = text_field_tag nil, @currency, disabled:true
       .input-field.col.s2
         = f.label :book_price
-        = text_field_tag f.object.try(:book_copy).try(:book_edition).try(:price), nil, disabled:true        
+        = text_field_tag nil, @price, disabled:true, id: 'book_price'
       = f.hidden_field :book_copy_id
     .row
       .input-field.col.s2
@@ -26,8 +29,8 @@
         = f.label "New condition", class:'active'
         = f.collection_select :new_condition_id, BookCondition.all, :id, :code
       .input-field.col.s2
-        = f.label :percentage
-        = f.number_field :percentage
+        = f.label :percentage, class:'active'  
+        = f.select :percentage, FineScale.all.collect{|f| [f.percent_format,f.percentage]}.sort.uniq
       .input-field.col.s1
         = f.label :currency, class:'active'
         = f.select :currency, [['USD', 'USD'], ['IDR', 'IDR']]
@@ -104,4 +107,8 @@ javascript:
         });
       }
     }));
+    $("#book_fine_percentage").on('change', function(e) {
+      var total = parseFloat($("#book_price").val()) * parseFloat($("#book_fine_percentage option:selected").val());
+      $("#book_fine_fine").val(total.toFixed(2));
+    });
   });

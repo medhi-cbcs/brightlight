@@ -89,7 +89,9 @@ nav
           td = book_fine.status
           td
             = link_to book_fine
-              i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="View" payment
+              i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="View" visibility
+            = link_to edit_book_fine_path book_fine
+              i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="Edit" edit
             = link_to book_fine, data: {:confirm => 'Are you sure?'}, :method => :delete, class:'red-text'
               i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="Delete" delete
       - if @student.present?
