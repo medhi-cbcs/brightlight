@@ -1,0 +1,45 @@
+p#notice = notice
+
+p
+  strong Invoice number:
+  = @invoice.invoice_number
+p
+  strong Invoice date:
+  = @invoice.invoice_date
+p
+  strong Bill to:
+  = @invoice.bill_to
+p
+  strong Student:
+  = @invoice.student
+p
+  strong Grade section:
+  = @invoice.grade_section
+p
+  strong Roster no:
+  = @invoice.roster_no
+p
+  strong Total amount:
+  = @invoice.total_amount
+p
+  strong Received by:
+  = @invoice.received_by
+p
+  strong Paid by:
+  = @invoice.paid_by
+p
+  strong Paid amount:
+  = @invoice.paid_amount
+p
+  strong Currency:
+  = @invoice.currency
+p
+  strong Notes:
+  = @invoice.notes
+p
+  strong User:
+  = @invoice.user
+
+= link_to 'Edit', edit_invoice_path(@invoice)
+'|
+= link_to 'Back', invoices_path

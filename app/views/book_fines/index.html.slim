@@ -11,6 +11,8 @@ ul#section-options.dropdown-content
     li = link_to "#{section.name}", "#", onclick:"filterSectionOptions(#{section.id}, '#{section.name}');"
 ul#student-options.dropdown-content
   li = link_to "All", book_fines_path
+  - @grade_sections.each do |section| 
+    li = link_to "All #{section.name}", book_fines_path(s:section.id,year:@academic_year.id) , class:"section-#{section.id}"
   - @students.each do |student| 
     li = link_to "#{student.name}", book_fines_path(st:student.id,year:@academic_year.id) , class:"section-#{student.current_grade_section.id}"
 
@@ -104,4 +106,4 @@ nav
 - if @student.present?
   .toolbar.z-depth-1
     = link_to 'Notification', notification_book_fines_path(st:@student.id, year:@academic_year.id), class: "btn btn-default waves-effect waves-light"
-    = link_to 'Payment', payment_book_fines_path(st:@student), class: "btn btn-default waves-effect waves-light disabled"
+    = link_to 'Payment', payment_book_fines_path(st:@student), class: "btn btn-default waves-effect waves-light"

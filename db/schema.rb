@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160520034656) do
+ActiveRecord::Schema.define(version: 20160523074551) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -534,6 +534,46 @@ ActiveRecord::Schema.define(version: 20160520034656) do
   add_index "guardians", ["person_id"], name: "index_guardians_on_person_id", using: :btree
   add_index "guardians", ["slug"], name: "index_guardians_on_slug", unique: true, using: :btree
 
+  create_table "invoices", force: :cascade do |t|
+    t.integer  "invoice_number"
+    t.date     "invoice_date"
+    t.string   "bill_to"
+    t.integer  "student_id"
+    t.string   "grade_section"
+    t.string   "roster_no"
+    t.string   "total_amount"
+    t.string   "received_by"
+    t.string   "paid_by"
+    t.string   "paid_amount"
+    t.string   "currency"
+    t.string   "notes"
+    t.boolean  "paid"
+    t.string   "statuses"
+    t.string   "tag"
+    t.integer  "user_id"
+    t.datetime "created_at",     null: false
+    t.datetime "updated_at",     null: false
+  end
+
+  add_index "invoices", ["student_id"], name: "index_invoices_on_student_id", using: :btree
+  add_index "invoices", ["user_id"], name: "index_invoices_on_user_id", using: :btree
+
+  create_table "line_items", force: :cascade do |t|
+    t.string   "description"
+    t.string   "quantity"
+    t.string   "price"
+    t.string   "ext1"
+    t.string   "ext2"
+    t.string   "ext3"
+    t.string   "notes"
+    t.string   "status"
+    t.integer  "invoice_id"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+  end
+
+  add_index "line_items", ["invoice_id"], name: "index_line_items_on_invoice_id", using: :btree
+
   create_table "loan_types", force: :cascade do |t|
     t.string   "code"
     t.string   "name"
@@ -851,6 +891,9 @@ ActiveRecord::Schema.define(version: 20160520034656) do
 
   add_foreign_key "course_section_histories", "employees", column: "instructor_id"
   add_foreign_key "currencies", "users"
+  add_foreign_key "invoices", "students"
+  add_foreign_key "invoices", "users"
+  add_foreign_key "line_items", "invoices"
   add_foreign_key "templates", "academic_years"
   add_foreign_key "templates", "users"
 end

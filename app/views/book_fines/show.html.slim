@@ -17,8 +17,8 @@ nav
     table
       tr
         td style="vertical-align:top"
-          - thumbnail = @book_copy.cover_image
-          = link_to @book_copy.book_edition
+          - thumbnail = @book_copy.try(:cover_image)
+          = link_to @book_edition
             = image_tag(thumbnail, class: 'list_image')
         td
           .list_description
@@ -29,7 +29,7 @@ nav
             dl.row
               dd.col.s12
                 .label Title
-                .item = @book_copy.book_edition.title
+                .item = @book_edition.try(:title)
             dl.row
               dd.col.s4
                 .label Barcode
@@ -49,7 +49,7 @@ nav
             dl.row
               dd.col.s4
                 .label Book Price
-                .item = @book_copy.try(:price) || 'N/A'
+                .item = @book_edition.try(:price) || 'N/A'
               dd.col.s4
                 .label Fine Amount
                 .item = @book_fine.fine || 'N/A'                
