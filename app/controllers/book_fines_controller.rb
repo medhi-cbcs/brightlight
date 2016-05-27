@@ -145,13 +145,14 @@ class BookFinesController < ApplicationController
     @tag = Digest::MD5.hexdigest "#{@academic_year.id}-#{@student.id}-#{@total_idr_amount}"
 
     # Take the last created invoice with the tag, or create one if none found
-    unless @invoice = Invoice.where(tag: @tag).order('created_at DESC').take
+    @invoice = Invoice.where(tag: @tag).order('created_at DESC').take
+    unless @invoice.present?
       @invoice = Invoice.create(
                    student: @student,
                    bill_to: @student.name,
                    grade_section: @student.current_grade_section.name,
                    roster_no: @student.current_roster_no,
-                   total_amount: @total_idr_amount.to_f.round(2),
+                   total_amount: @total_idr_amount.to_f.round(-2),
                    currency: @currency,
                    statuses: 'Created',
                    paid: false,
@@ -159,13 +160,13 @@ class BookFinesController < ApplicationController
                    user: current_user
                  )
       @book_fines.each do |f|
-        @invoice.line_items << LineItem.new(
-                                      description: f.book_copy.try(:book_edition).try(:title),
-                                      price: f.currency=="USD" ? f.fine * @dollar : f.fine,
-                                      ext1: f.old_condition.code,
-                                      ext2: f.new_condition.code,
-                                      ext3: "#{f.percentage * 100}%"
-                                    )
+        idr_amount = f.currency=="USD" ? f.fine * @dollar : f.fine
+        @invoice.line_items.create(description: f.book_copy.try(:book_edition).try(:title),
+                                    price: f.currency=="USD" ? f.fine * @dollar : f.fine,
+                                    ext1: f.old_condition.code,
+                                    ext2: f.new_condition.code,
+                                    ext3: "#{f.percentage * 100}%"
+                                  )
       end
     end
     @print_date = Date.today.strftime("%d-%m-%Y")
@@ -178,7 +179,7 @@ class BookFinesController < ApplicationController
     end
     @template.placeholders = {
       receipt_date: @print_date,
-      receipt_no: @invoice.invoice_number,
+      receipt_no: @invoice.id,
       student_name: @student.name,
       student_grade: @student.current_grade_section.name,
       student_no: @student.current_roster_no,

@@ -1,14 +1,22 @@
 nav
   .nav-wrapper
-    ul
+    ul     
       li
         = link_to '#', onclick: 'window.print();return false;' 
           | Print
           i.material-icons.left print
-      li.right
-        button.btn.waves-effect.waves-light Pay
+    ul.right
+      li
+        - modal_form = @invoice.paid ? '#paid-invoice' : '#pay-form'
+        = link_to modal_form, id:'pay-button', class:"modal-trigger btn waves-effect waves-light #{@invoice.paid ? 'green' : ''}"
+          = @invoice.paid ? "Paid" : "Pay"
+          i.material-icons.left payment
 
-            
+#pay-form.modal.modal-fixed-footer
+  = render partial:'invoices/finalize_form', locals: {invoice: @invoice, student: @student}
+#paid-invoice.modal.modal-fixed-footer
+  = render partial:'invoices/paid_invoice', locals: {invoice: @invoice, student: @student}
+          
 = @template.substituted_header.html_safe
 = @template.substituted_opening.html_safe
 

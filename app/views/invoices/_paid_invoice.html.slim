@@ -1,0 +1,37 @@
+.modal-content
+  h5 Paid Invoice
+  .row 
+    .col.s3.offset-s6
+      .label Invoice Number
+      .item = @invoice.id
+    .col.s3
+      .label Invoice Date
+      .item = @invoice.invoice_date
+  hr
+  .row
+    .col.s7
+      .label Bill to
+      .item = @invoice.bill_to
+    .col.s5
+      .label Class # No
+      .item #{@invoice.grade_section} # #{@invoice.roster_no}
+  .row
+    .col.s4
+      .label Total Amount
+      .item = number_to_currency(@invoice.total_amount, {unit:@invoice.currency, precision:0})
+    .col.s4
+      .label Paid Amount
+      .item = number_to_currency(@invoice.paid_amount, {unit:@invoice.currency, precision:0})
+  .row
+    .col.s4
+      .label Received by
+      .item = @invoice.received_by
+    .col.s4
+      .label Paid by
+      .item = @invoice.paid_by
+  .row
+    .col.s12
+      .label Notes
+      .item = @invoice.notes
+.modal-footer
+  = link_to "Close", "#!", class:"modal-action modal-close waves-effect waves-light btn-flat"

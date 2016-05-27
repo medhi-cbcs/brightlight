@@ -1,7 +1,5 @@
 Rails.application.routes.draw do
 
-  resources :line_items
-  resources :invoices
   resources :templates
   resources :currencies
   resources :standard_books
@@ -65,6 +63,13 @@ Rails.application.routes.draw do
         post 'add_students'
         get 'assign'
       end
+    end
+  end
+
+  resources :invoices do
+    resources :line_items
+    member do
+      patch 'finalize'
     end
   end
 

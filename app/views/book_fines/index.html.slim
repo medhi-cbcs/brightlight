@@ -87,7 +87,7 @@ nav
                 = number_to_currency(book_fine.fine.try(:to_f) || 0.0, unit:'$')
               - elsif book_fine.currency == 'IDR'
                 = number_to_currency(book_fine.fine.try(:to_f) || 0.0, unit:'Rp', precision: 0)
-          td = book_fine.try(:student).try(:name)
+          td = link_to book_fine.try(:student).try(:name), book_fines_path(st:book_fine.student_id,year:@academic_year.id)
           td = book_fine.status
           td
             = link_to book_fine

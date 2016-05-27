@@ -8,7 +8,6 @@ class Template < ActiveRecord::Base
   def method_missing(meth)
     if method = meth.to_s.match(/substituted_(.*)/)
       if str = self[method[1]]
-        puts "#{meth} #{method} #{str}"
         self.placeholders.each do |key, value|
           next if key.blank?
           placeholder = "##{key.to_s}#"

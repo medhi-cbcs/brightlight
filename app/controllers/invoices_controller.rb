@@ -1,5 +1,5 @@
 class InvoicesController < ApplicationController
-  before_action :set_invoice, only: [:show, :edit, :update, :destroy]
+  before_action :set_invoice, only: [:show, :edit, :update, :destroy, :finalize]
 
   # GET /invoices
   # GET /invoices.json
@@ -61,6 +61,20 @@ class InvoicesController < ApplicationController
     end
   end
 
+  # PATCH/PUT /invoices/1/finalize
+  # PATCH/PUT /invoices/1/finalize.json
+  def finalize
+    respond_to do |format|
+      if @invoice.update(invoice_params)
+        format.html { redirect_to @invoice, notice: 'Invoice payment was successfully saved.' }
+        format.json { render :show, status: :created, location: @invoice }
+      else
+        format.html { render :new }
+        format.json { render json: @invoice.errors, status: :unprocessable_entity }
+      end
+    end
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_invoice
@@ -69,6 +83,6 @@ class InvoicesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def invoice_params
-      params.require(:invoice).permit(:invoice_number, :invoice_date, :bill_to, :student_id, :grade_section, :roster_no, :total_amount, :received_by, :paid_by, :paid_amount, :currency, :notes, :user_id)
+      params.require(:invoice).permit(:invoice_number, :invoice_date, :bill_to, :student_id, :grade_section, :roster_no, :total_amount, :received_by, :paid_by, :paid_amount, :currency, :notes, :paid, :statuses, :user_id)
     end
 end
