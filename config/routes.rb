@@ -81,6 +81,7 @@ Rails.application.routes.draw do
   get 'student_books/by_student' => 'student_books#by_student', as: :by_student_student_books
   put 'student_books/update_multiple' => 'student_books#update_multiple', as: :update_multiple_student_books
   get 'student_books/missing' => 'student_books#missing', as: :missing_student_books
+  get 'student_books/pnnrb' => 'student_books#pnnrb', as: :pnnrb_student_books
 
   resources :students do
     resources :student_books, shallow: true
