@@ -11,6 +11,8 @@ ul#section-options.dropdown-content
     li = link_to "#{section.name}", "#", onclick:"filterSectionOptions(#{section.id}, '#{section.name}');"
 ul#student-options.dropdown-content
   li = link_to "All", book_fines_path
+  - @grade_sections.each do |section| 
+    li = link_to "All #{section.name}", book_fines_path(s:section.id,year:@academic_year.id) , class:"section-#{section.id}"
   - @students.each do |student| 
     li = link_to "#{student.name}", book_fines_path(st:student.id,year:@academic_year.id) , class:"section-#{student.current_grade_section.id}"
 
@@ -85,11 +87,13 @@ nav
                 = number_to_currency(book_fine.fine.try(:to_f) || 0.0, unit:'$')
               - elsif book_fine.currency == 'IDR'
                 = number_to_currency(book_fine.fine.try(:to_f) || 0.0, unit:'Rp', precision: 0)
-          td = book_fine.try(:student).try(:name)
+          td = link_to book_fine.try(:student).try(:name), book_fines_path(st:book_fine.student_id,year:@academic_year.id)
           td = book_fine.status
           td
             = link_to book_fine
-              i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="View" payment
+              i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="View" visibility
+            = link_to edit_book_fine_path book_fine
+              i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="Edit" edit
             = link_to book_fine, data: {:confirm => 'Are you sure?'}, :method => :delete, class:'red-text'
               i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="Delete" delete
       - if @student.present?
@@ -102,4 +106,4 @@ nav
 - if @student.present?
   .toolbar.z-depth-1
     = link_to 'Notification', notification_book_fines_path(st:@student.id, year:@academic_year.id), class: "btn btn-default waves-effect waves-light"
-    = link_to 'Payment', payment_book_fines_path(st:@student), class: "btn btn-default waves-effect waves-light disabled"
+    = link_to 'Payment', payment_book_fines_path(st:@student), class: "btn btn-default waves-effect waves-light"

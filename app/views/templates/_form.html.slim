@@ -17,6 +17,10 @@
           li = message
 
   .card-panel
+    | The following placeholders are available for the template: #receipt_no#, #student_name#, #student_no#, #grade_section#, 
+      #academic_year#, #invoice_date#, #receipt_amount#, #receipt_amount_in_words#
+    
+  .card-panel
     .row
       .col.s3
         .input-field
@@ -51,18 +55,22 @@
         .label Header
         .input-field
           = f.text_area :header, class:"tinymce", rows: 2, cols: 120
+    .row
       .col.s12
         .label Opening
         .input-field
           = f.text_area :opening, class:"tinymce", rows: 20, cols: 120
+    .row
       .col.s12
         .label Body
         .input-field
           = f.text_area :body, class:"tinymce", rows: 20, cols: 120
+    .row
       .col.s12
         .label Closing
         .input-field
           = f.text_area :closing, class:"tinymce", rows: 20, cols: 120
+    .row
       .col.s12
         .label Footer
         .input-field

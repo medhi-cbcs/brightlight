@@ -19,4 +19,7 @@
         = f.hidden_field :user, value: current_user
       .col.s5
         button.btn.waves-effect.waves-light type="submit" Save
-        = link_to 'Cancel', "#", class: "waves-effect waves-light btn-flat", onclick:"hide_form()"
+        - if params[:action] =~ /edit/
+          = link_to 'Cancel', :back, class: "waves-effect waves-light btn-flat"
+        - else
+          = link_to 'Cancel', "#", class: "waves-effect waves-light btn-flat", onclick:"hide_form()"

@@ -1,0 +1,45 @@
+h1 Listing invoices
+
+table
+  thead
+    tr
+      th Invoice number
+      th Invoice date
+      th Bill to
+      th Student
+      th Grade section
+      th Roster no
+      th Total amount
+      th Received by
+      th Paid by
+      th Paid amount
+      th Currency
+      th Notes
+      th User
+      th
+      th
+      th
+
+  tbody
+    - @invoices.each do |invoice|
+      tr
+        td = invoice.invoice_number
+        td = invoice.invoice_date
+        td = invoice.bill_to
+        td = invoice.student
+        td = invoice.grade_section
+        td = invoice.roster_no
+        td = invoice.total_amount
+        td = invoice.received_by
+        td = invoice.paid_by
+        td = invoice.paid_amount
+        td = invoice.currency
+        td = invoice.notes
+        td = invoice.user
+        td = link_to 'Show', invoice
+        td = link_to 'Edit', edit_invoice_path(invoice)
+        td = link_to 'Destroy', invoice, data: {:confirm => 'Are you sure?'}, :method => :delete
+
+br
+
+= link_to 'New Invoice', new_invoice_path

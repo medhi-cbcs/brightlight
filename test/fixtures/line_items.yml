@@ -1,0 +1,19 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  description: MyString
+  quantity: MyString
+  price: MyString
+  ext1: MyString
+  ext2: MyString
+  ext3: MyString
+  invoice_id: 
+
+two:
+  description: MyString
+  quantity: MyString
+  price: MyString
+  ext1: MyString
+  ext2: MyString
+  ext3: MyString
+  invoice_id: 

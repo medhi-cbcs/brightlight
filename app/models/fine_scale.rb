@@ -5,4 +5,8 @@ class FineScale < ActiveRecord::Base
   def self.fine_percentage_for_condition_change(old, new)
     FineScale.where(old_condition:old).where(new_condition:new).pluck(:percentage).first || 0.0
   end
+
+  def percent_format
+    "#{percentage*100} %"
+  end
 end

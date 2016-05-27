@@ -59,6 +59,9 @@ gem 'google_books' #, git: 'https://github.com/medhiwidjaja/google_books.git'
 
 gem 'hashie'
 
+# To convert number to words
+gem 'numbers_and_words'
+
 # Login with Devise & OmniAuth Google+ OAuth2
 gem 'devise'
 gem 'omniauth'
@@ -85,7 +88,7 @@ gem 'chunky_png'
 # Authorization
 gem 'cancancan', '~> 1.10'
 
-# WYSIWYG editing using TinyMCE 
+# WYSIWYG editing using TinyMCE
 gem 'tinymce-rails'
 
 # Use ActiveModel has_secure_password

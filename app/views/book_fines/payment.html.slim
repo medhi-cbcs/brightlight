@@ -1,0 +1,61 @@
+nav
+  .nav-wrapper
+    ul     
+      li
+        = link_to '#', onclick: 'window.print();return false;' 
+          | Print
+          i.material-icons.left print
+    ul.right
+      li
+        - modal_form = @invoice.paid ? '#paid-invoice' : '#pay-form'
+        = link_to modal_form, id:'pay-button', class:"modal-trigger btn waves-effect waves-light #{@invoice.paid ? 'green' : ''}"
+          = @invoice.paid ? "Paid" : "Pay"
+          i.material-icons.left payment
+
+#pay-form.modal.modal-fixed-footer
+  = render partial:'invoices/finalize_form', locals: {invoice: @invoice, student: @student}
+#paid-invoice.modal.modal-fixed-footer
+  = render partial:'invoices/paid_invoice', locals: {invoice: @invoice, student: @student}
+          
+= @template.substituted_header.html_safe
+= @template.substituted_opening.html_safe
+
+.container style="margin:10px 0"
+  table.compact.striped
+    thead 
+      tr.grey.lighten-2
+        th Textbook Title 
+        th style='text-align:center' Borrow <br> Condition 
+        th style='text-align:center' Return <br> Condition 
+        th style='text-align:right' % Fine 
+        th style='text-align:right' Fine 
+    tbody 
+      - total = 0.0
+      - @book_fines.each do |book_fine|
+        - if book_fine.currency == 'USD'
+          - fine = Currency.dollar_rate * book_fine.fine.try(:to_f) || 0.0  
+        - elsif book_fine.currency == 'IDR'
+          - fine = book_fine.fine.try(:to_f) || 0.0
+        - total += fine
+        tr 
+          td = book_fine.try(:book_copy).try(:book_edition).try(:title).truncate(60)
+          td style='text-align:center' = book_fine.old_condition.try(:code) 
+          td style='text-align:center' = book_fine.new_condition.try(:code) 
+          td style='text-align:right' = number_to_percentage(book_fine.percentage * 100, precision:0)
+          td style='text-align:right' = number_to_currency(fine.round(-2), {unit:'Rp', precision:0})
+      tr.grey.lighten-2
+        td colspan=3 
+        td Total
+        td style='text-align:right' = number_to_currency(total.round(-2), {unit:'Rp', precision:0})
+      
+= @template.substituted_closing.html_safe
+= @template.substituted_footer.html_safe
+
+css:
+  td,th {
+    padding:0
+  }
+  @page { 
+    size: auto; 
+    margin: 0.5cm 1cm 
+  }

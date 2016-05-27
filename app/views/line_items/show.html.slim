@@ -1,0 +1,27 @@
+p#notice = notice
+
+p
+  strong Description:
+  = @line_item.description
+p
+  strong Quantity:
+  = @line_item.quantity
+p
+  strong Price:
+  = @line_item.price
+p
+  strong Ext1:
+  = @line_item.ext1
+p
+  strong Ext2:
+  = @line_item.ext2
+p
+  strong Ext3:
+  = @line_item.ext3
+p
+  strong Invoice:
+  = @line_item.invoice
+
+= link_to 'Edit', edit_line_item_path(@line_item)
+'|
+= link_to 'Back', line_items_path

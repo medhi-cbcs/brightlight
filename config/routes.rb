@@ -66,6 +66,13 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :invoices do
+    resources :line_items
+    member do
+      patch 'finalize'
+    end
+  end
+
   get 'student_books' => 'student_books#index', as: :all_student_books
   get 'student_books/assign' => 'student_books#assign', as: :assign_student_books
   get 'student_books/label' => 'student_books#label', as: :label_student_books
