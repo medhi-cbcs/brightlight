@@ -22,14 +22,28 @@ json.book_copy do
   end
 
   json.book_edition do
-    json.title @book_copy.book_edition.title
-    json.isbn10 @book_copy.book_edition.isbn10
-    json.isbn13 @book_copy.book_edition.isbn13
-    json.authors @book_copy.book_edition.authors
-    json.publisher @book_copy.book_edition.publisher
-    json.price @book_copy.book_edition.price
-    json.currency @book_copy.book_edition.currency
-    json.book_title_id @book_copy.book_edition.book_title_id
+    if @book_edition.present?
+      json.id @book_edition.id
+      json.title @book_edition.title
+      json.isbn10 @book_edition.isbn10
+      json.isbn13 @book_edition.isbn13
+      json.authors @book_edition.authors
+      json.publisher @book_edition.publisher
+      json.price @book_edition.price
+      json.currency @book_edition.currency
+      json.small_thumbnail @book_edition.small_thumbnail
+    end
+  end
+
+  json.book_title do
+    if @book_title.present?
+      json.id @book_title.id
+      json.title @book_title.title
+      json.bkudid @book_title.bkudid
+      json.subject @book_title.subject
+      json.subject_level @book_title.subject_level
+      json.grade_code @book_title.grade_code
+    end
   end
 
   if @student.present?
@@ -41,6 +55,17 @@ json.book_copy do
       json.roster_no gss.try(:order_no)
       json.grade_section_id gss.try(:grade_section_id)
       json.grade_level_id gss.try(:grade_section).try(:grade_level_id)
+    end
+  end
+
+  if @employee.present?
+    json.employee do
+      json.id @employee.id
+      json.name @employee.name
+      json.first_name @employee.first_name
+      json.last_name @employee.last_name
+      json.nick_name @employee.nick_name
+      json.employee_number @employee.employee_number
     end
   end
 end
