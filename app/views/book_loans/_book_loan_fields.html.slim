@@ -1,0 +1,21 @@
+tr.nested-fields
+  td
+    .input-field
+      = f.text_field :barcode, class:'barcodes'
+  td
+    .input-field
+      .titles &nbsp;
+
+    = f.hidden_field :book_copy_id, class:'book_copy_ids'
+    = f.hidden_field :academic_year_id, class:'academic_year_ids'
+    = f.hidden_field :out_date, class:'out_dates', value: Date.today
+    = f.hidden_field :employee_id, class:'employee_ids', value: employee.id
+    = f.hidden_field :employee_no, class:'employee_nos', value: employee.employee_number
+    = f.hidden_field :book_edition_id, class:'book_edition_ids'
+    = f.hidden_field :book_title_id, class:'book_title_ids'
+    = f.hidden_field :bkudid, class:'bkudids'
+    = f.hidden_field :loan_status, class:'loan_statuses', value: 'B'
+    = f.hidden_field :user_id, class:'user_ids', value: user.id
+    
+  td
+    = link_to_remove_association "Remove", f, class: "waves-effect waves-teal btn btn-flat red-text btn-small"

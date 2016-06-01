@@ -5,6 +5,10 @@ nav
         = link_to '#', onclick: 'window.print();return false;' 
           | Print
           i.material-icons.left print
+      li
+        = link_to payment_book_fines_path(st:@student.id, format: :pdf), target: '_blank'
+          | PDF
+          i.material-icons.left description
     ul.right
       li
         - modal_form = @invoice.paid ? '#paid-invoice' : '#pay-form'
@@ -52,10 +56,42 @@ nav
 = @template.substituted_footer.html_safe
 
 css:
+  @media print {
+    /*
+    	html, body {
+    		font: 12pt Arial, sans-serif;
+    		line-height: 1.1;
+    	}
+      @page { 
+        size: 21.0cm 14.85cm; 
+        margin: 0cm 0cm 
+      }
+      body {
+        width: 210mm;
+        height: 148.5mm;
+      }
+    */
+    html, body {
+      display: block; 
+      font-family: "Calibri";
+      font-size: 12pt;
+      margin: 0;
+    }
+    @page {
+      size: 21.59cm 13.97cm;
+    }
+  	.card, .card-panel {
+  		border: 0 0 1px 0;
+  		box-shadow: none;
+  		padding: 0;
+  	}
+  	h5, h6 {
+  		font-size: 1.2rem;
+  	}
+  	h4 {
+  		font-size: 1.4rem;
+  	}
+  }
   td,th {
     padding:0
-  }
-  @page { 
-    size: auto; 
-    margin: 0.5cm 1cm 
   }

@@ -17,8 +17,10 @@ class BookFinesController < ApplicationController
     #   @students = Student.eager_load([:book_fines,:grade_sections_students]).where("book_fines.academic_year_id = ? and grade_sections_students.academic_year_id = ?", @academic_year.id, @academic_year.id)
 
     @book_fines = BookFine.where(academic_year:@academic_year).order(:student_id)
-    @students = Student.joins(:book_fines).where(book_fines: {academic_year: @academic_year}).uniq
-    @grade_sections = @students.map(&:current_grade_section).sort.uniq
+    @students = Student.joins(:book_fines).where(book_fines: {academic_year: @academic_year}).uniq.eager_load(:grade_sections_students).where('grade_sections_students.academic_year_id = ?', @academic_year.id).eager_load(:grade_sections)
+    @grade_sections = GradeSection.joins(:grade_sections_students)
+                      .where('grade_sections_students.student_id in (SELECT DISTINCT "students".id FROM "students" INNER JOIN "book_fines" ON "book_fines"."student_id" = "students"."id" WHERE "book_fines"."academic_year_id" = ?) and grade_sections_students.academic_year_id = ?', @academic_year.id, @academic_year.id)
+                      .sort.uniq
     if params[:st].present?
       @student = Student.where(id:params[:st]).take
       @book_fines = @book_fines.where(student_id:params[:st])
@@ -31,6 +33,8 @@ class BookFinesController < ApplicationController
           WHERE grade_sections_students.grade_section_id = ?
           AND grade_sections_students.academic_year_id = ?)", @grade_section.id, @academic_year.id)
     end
+    @book_fines = @book_fines.includes([:student,:old_condition,:new_condition]).includes(:book_copy => :book_edition)
+    @dollar_rate = Currency.dollar_rate
   end
 
   # GET /book_fines/1
@@ -187,6 +191,19 @@ class BookFinesController < ApplicationController
       receipt_amount_in_words: @total_idr_amount.to_f.round(-2).to_words.split.map(&:capitalize).join(' '),
       academic_year: @academic_year.name
     }
+
+    respond_to do |format|
+      format.html
+      format.pdf do
+        render pdf:         "Receipt #{('-'+@student.name if @student.present?)}",
+               disposition: 'inline',
+               template:    'book_fines/payment.pdf.slim',
+               layout:      'pdf.html',
+               page_height: '5.5in',
+               page_width:  '8.5in',               
+               show_as_html: params.key?('debug')
+      end
+    end
   end
 
   # DELETE /book_fines/1

@@ -5,7 +5,7 @@ ul#year-options.dropdown-content
     = link_to 'All', book_fines_path(params.merge(year:'all').symbolize_keys)
   - AcademicYear.all.each do |year|
     li 
-      = link_to year.name, book_fines_path(params.merge(year:year.slug).symbolize_keys)
+      = link_to year.name, book_fines_path(params.merge(year:year.id).symbolize_keys)
 ul#section-options.dropdown-content
   - @grade_sections.each do |section| 
     li = link_to "#{section.name}", "#", onclick:"filterSectionOptions(#{section.id}, '#{section.name}');"
@@ -14,7 +14,7 @@ ul#student-options.dropdown-content
   - @grade_sections.each do |section| 
     li = link_to "All #{section.name}", book_fines_path(s:section.id,year:@academic_year.id) , class:"section-#{section.id}"
   - @students.each do |student| 
-    li = link_to "#{student.name}", book_fines_path(st:student.id,year:@academic_year.id) , class:"section-#{student.current_grade_section.id}"
+    li = link_to "#{student.name}", book_fines_path(st:student.id,year:@academic_year.id) , class:"section-#{student.grade_sections_students.take.grade_section_id}"
 
 javascript:
   function filterSectionOptions(id, name) {
@@ -100,8 +100,8 @@ nav
         tr 
           td colspan=3
           td colspan=2 Total
-          td = number_to_currency(total_idr + (Currency.dollar_rate * total_usd).round(-2), {unit:'Rp'})
-          td colspan=3 style="text-align:right;" USD 1 = Rp#{Currency.dollar_rate}
+          td = number_to_currency(total_idr + (@dollar_rate * total_usd).round(-2), {unit:'Rp'})
+          td colspan=3 style="text-align:right;" USD 1 = Rp#{@dollar_rate}
           
 - if @student.present?
   .toolbar.z-depth-1
