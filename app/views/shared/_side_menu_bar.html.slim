@@ -43,6 +43,16 @@ li
 				= link_to "Poor/Need Rebinding", pnnrb_student_books_path
 li
 	.collapsible-header.waves-effect.waves-cyan
+		i.material-icons library_books
+		i.mdi-navigation-chevron-right.right
+		| Teacher's Books
+	.collapsible-body
+		ul
+			li
+				= link_to 'List', teachers_book_loans_path		
+				
+li
+	.collapsible-header.waves-effect.waves-cyan
 		i.material-icons book
 		i.mdi-navigation-chevron-right.right
 		| Books
