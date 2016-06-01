@@ -87,13 +87,12 @@ Rails.application.routes.draw do
     resources :student_books, shallow: true
   end
 
-  resources :book_loans
-  # resources :book_loans, only: [:index] do
-  #   collection do
-  #     post 'search_student'
-  #     post 'search_teacher'
-  #   end
-  # end
+  # resources :book_loans
+  resources :book_loans do
+    collection do
+      get 'teachers'
+    end
+  end
 
   get  'students/:student_id/book_loans' => 'book_loans#index', as: :student_book_loans
   post 'students/:student_id/book_loans' => 'book_loans#create'

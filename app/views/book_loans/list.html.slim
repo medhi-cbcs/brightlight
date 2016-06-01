@@ -3,7 +3,6 @@ h4 = @teacher.name
 
 ul#teacher-options.dropdown-content
   li  
-    = link_to 'All', employee_book_loans_path
   - @teachers.all.each do |teacher|
     li 
       = link_to teacher.name, employee_book_loans_path(teacher)    

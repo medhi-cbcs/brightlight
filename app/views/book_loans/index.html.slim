@@ -1,6 +1,7 @@
-h4 Book Loan Status
 .row 
-  .col.s4
+  .col.s12.m4.l4
+    h4 Book Loan Status
+  .col.s6.m4.l4
     #student-form
       = form_tag({controller:'book_loans', action:'index'}, {method: "get"}) do
         .input-field
@@ -10,7 +11,7 @@ h4 Book Loan Status
           - else
             i.material-icons.prefix search
           = text_field_tag(:student, params[:student], {placeholder:'Student name'})
-  .col.s4
+  .col.s6.m4.l4
     #teacher-form
       = form_tag({controller:'book_loans', action:'index'}, {method: "get"}) do
         .input-field

@@ -125,6 +125,12 @@ class BookLoansController < ApplicationController
 
   #### This section deals with teacher's loan
 
+  # GET book_loans/teachers
+  def teachers
+    authorize! :read, BookLoan
+    @teachers = Employee.joins(:book_loans).where(book_loans: {academic_year: AcademicYear.current}).order(:name).uniq
+  end
+
   # GET employees/:employee_id/book_loans
   def list
     authorize! :read, BookLoan
@@ -169,9 +175,10 @@ class BookLoansController < ApplicationController
     authorize! :manage, BookLoan
     @teacher = Employee.find params[:employee_id]
     @book_loan = BookLoan.find params[:id]
+    borrower_matched = @teacher == @book_loan.employee
 
     respond_to do |format|
-      if @book_loan.update(book_loan_params)
+      if borrower_matched and @book_loan.update(book_loan_params)
         format.html { redirect_to employee_book_loan_path(employee_id:@teacher.id, id:@book_loan.id) }
         format.json { render :show, status: :ok, location: @book_loan }
       else
