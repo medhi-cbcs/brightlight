@@ -5,7 +5,7 @@ ul#year-options.dropdown-content
     = link_to 'All', book_fines_path(params.merge(year:'all').symbolize_keys)
   - AcademicYear.all.each do |year|
     li 
-      = link_to year.name, book_fines_path(params.merge(year:year.slug).symbolize_keys)
+      = link_to year.name, book_fines_path(params.merge(year:year.id).symbolize_keys)
 ul#section-options.dropdown-content
   - @grade_sections.each do |section| 
     li = link_to "#{section.name}", "#", onclick:"filterSectionOptions(#{section.id}, '#{section.name}');"

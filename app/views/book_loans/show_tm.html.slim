@@ -1,4 +1,4 @@
-h4 Book Loan Record
+h4 Teacher Book Loan Record
 
 nav
   .nav-wrapper
@@ -7,7 +7,7 @@ nav
         = link_to :back
           i.material-icons chevron_left
       li 
-        = link_to edit_employee_book_loan_path(employee_id:@employee.id, id:@book_loan.id)
+        = link_to scan_employee_book_loans_path(employee_id:@teacher.id)
           i.material-icons edit
       li 
         = link_to @book_loan, data: {:confirm => 'Are you sure?'}, :method => :delete, class:'red-text'            

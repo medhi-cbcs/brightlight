@@ -1,4 +1,4 @@
-.label Teacher Book Loans For
+.label Teacher Books
 h4 = @teacher.name
 
 ul#teacher-options.dropdown-content
@@ -26,11 +26,16 @@ nav
         a.dropdown-button href="#!" data-activates="year-options"
           span#year = @academic_year.present? ? "#{@academic_year.name}" : "Academic Year" 
           i.material-icons.right arrow_drop_down
+    ul.right
+      li
+        = link_to scan_employee_book_loans_path(@teacher)
+          | Scan book
+          i.material-icons.left import_contacts
       li.right
-        = link_to new_employee_book_loan_path(@teacher)
+        = link_to new_employee_book_loans_path(@teacher)
           | Add new book
           i.material-icons.left add
-          
+              
 .card-panel
   - unless @error.present?
     table
@@ -47,7 +52,7 @@ nav
           tr
             td = link_to book_loan.barcode, book_loan.book_copy
             td = link_to book_loan.book_edition.try(:title).truncate(50), book_loan.book_edition if book_loan.book_edition.present?
-            td = book_loan.out_date
+            td = link_to book_loan.out_date, employee_book_loan_path(employee_id: @teacher.id, id:book_loan.id)
             td = book_loan.return_date
             td = book_loan.return_status == 'R' ? '&#9745;'.html_safe : ''
 

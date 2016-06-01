@@ -1,19 +1,15 @@
 h4 New Book Loan
 
-.card-panel
-  .list_description
-    dl.row
-      dt = @teacher.name
-
 = form_for @teacher do |f|
   nav
     .nav-wrapper
       .brand-logo style="margin-left: 20px; font-size:1.5em"
-        | Add teacher's book
+        = @teacher.name
       ul
         li.right
           / Note: 'Append' new row at the end of the 'tbody#book_loans' node
-          = link_to_add_association f, :book_loans, 'data-association-insertion-method' => 'append', 'data-association-insertion-node' => 'tbody#book_loans'
+          / Do not forget to put local variables below (the same as in render partial:'book_loan_fields')
+          = link_to_add_association f, :book_loans, 'data-association-insertion-method' => 'append', 'data-association-insertion-node' => 'tbody#book_loans', render_options: { locals: {employee: @teacher, user: current_user} }
             ' Add Row
             i.material-icons.left playlist_add
 
@@ -25,12 +21,12 @@ h4 New Book Loan
           th Title 
           th
         tbody#book_loans
-          = f.fields_for :book_loans, @student.student_books.build do |student_book|
-            = render 'student_book_fields', f: student_book
+          = f.fields_for :book_loans, @teacher.book_loans.build do |book_loan|
+            = render partial: 'book_loan_fields', locals: { f: book_loan, employee: @teacher, user: current_user }
 
   .toolbar.z-depth-1
     button.btn.waves-effect.waves-light type="submit" Save
-    = link_to 'Cancel', student_student_books_path(@student), class: "waves-effect waves-light btn btn-flat"
+    = link_to 'Cancel', employee_book_loans_path(@teacher), class: "waves-effect waves-light btn btn-flat"
 
 / The following javascript callback function will turn select elements in the dynamically created row 
 / into MaterializeCSS style selects.
@@ -41,10 +37,6 @@ javascript:
   $(document).ready(function() {
     var pressed = false;
     var chars = [];
-    var grade_section_id = #{raw @grade_section.id};
-    var grade_level_id = #{raw @grade_section.grade_level_id};
-    var student_no = "#{raw @student.student_no}";
-    var roster_no = "#{raw @student.current_roster_no}";
     $(window).keypress(function(e) {
       if (e.which >= 45 && e.which <= 112) {
           chars.push(String.fromCharCode(e.which));
@@ -57,25 +49,8 @@ javascript:
             // assign value to some input (or do whatever you want)
             var field = $("[name$='[barcode]']:last");
             field.val(barcode);
-            $.getJSON("/book_copies/"+barcode+".json?st="+#{@student.id}, null, function (data) {
-              book = data.book_copy;
-              $(".titles:last").html(book.book_edition.title);
-              // $(".book_numbers:last").html(book.copy_no);
-              // $(".book_loans:last").html(book.loans.student_name);
-              $(".book_copy_ids:last").val(book.id);
-              $(".academic_year_ids:last").val(book.academic_year.academic_year_id);
-              $(".copy_nos:last").val(book.copy_no);
-              $(".grade_level_ids:last").val(grade_level_id);
-              $(".grade_section_ids:last").val(grade_section_id);
-              $(".issue_dates:last").val(book.academic_year.start_date);
-              $(".return_dates:last").val(book.academic_year.end_date);
-              $(".initial_copy_condition_ids:last").val(book.book_condition_id);
-              $(".student_nos:last").val(student_no);
-              $(".roster_nos:last").val(roster_no);
-              $(".prev_academic_year_ids:last").val(book.academic_year.prev_academic_year_id);
-              $(".book_edition_ids:last").val(book.book_edition_id);
-              //$(".book_title_ids:last").val(book.book_edition.book_title_id);
-              $(".add_fields").trigger('click');
+            $.getJSON("/book_copies/"+barcode+".json?empl="+#{@teacher.id}, null, function (data) {
+              insert_values(data);
             }).fail(function(){
               $("[name$='[barcode]']:last").val('');
               Materialize.toast("Invalid barcode.", 4000, 'red');
@@ -91,22 +66,7 @@ javascript:
       if ( e.which === 13 ) {
         e.preventDefault();
         $.getJSON("/book_copies/"+$(e.target).val()+".json", null, function (data) {
-          book = data.book_copy;
-          $(".titles:last").html(book.book_edition.title);
-          $(".book_copy_ids:last").val(book.id);
-          $(".academic_year_ids:last").val(book.academic_year.academic_year_id);
-          $(".copy_nos:last").val(book.copy_no);
-          $(".grade_level_ids:last").val(grade_level_id);
-          $(".grade_section_ids:last").val(grade_section_id);
-          $(".issue_dates:last").val(book.academic_year.start_date);
-          $(".return_dates:last").val(book.academic_year.end_date);
-          $(".initial_copy_condition_ids:last").val(book.book_condition_id);
-          $(".student_nos:last").val(student_no);
-          $(".roster_nos:last").val(roster_no);
-          $(".prev_academic_year_ids:last").val(book.academic_year.prev_academic_year_id);
-          $(".book_edition_ids:last").val(book.book_edition_id);
-          //$(".book_title_ids:last").val(book.book_edition.book_title_id);
-          $(".add_fields").trigger('click');
+          insert_values(data);
           $("[name$='[barcode]']:last").focus();
         }).fail(function(){
           $(e.target).val('');
@@ -114,5 +74,16 @@ javascript:
         });
       }
     }));
+    var insert_values = function (data) {
+      book = data.book_copy;
+      $(".titles:last").html(book.book_edition.title);
+      $(".book_copy_ids:last").val(book.id);
+      $(".academic_year_ids:last").val(book.academic_year.academic_year_id);
+      $(".book_edition_ids:last").val(book.book_edition.id);
+      $(".book_title_ids:last").val(book.book_title.id);
+      $(".barcodes:last").val(book.barcode);
+      $(".bkudids:last").val(book.book_title.bkudid);
+      $(".add_fields").trigger('click');      
+    }
   });
   

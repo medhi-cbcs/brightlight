@@ -16,9 +16,13 @@ json.book_copy do
     json.prev_academic_year_id year_id-1
   end
 
-  current_holder = @book_copy.book_loans.where(academic_year_id:year_id).take.try(:student)
+  loan = @book_copy.book_loans.where(academic_year_id:year_id).order('created_at DESC').take
   json.loans do
-    json.student_name current_holder.try(:name)
+    json.id             loan.id
+    json.student_id     loan.try(:student_id)
+    json.student_name   loan.try(:student).try(:name)
+    json.employee_id    loan.try(:employee_id)
+    json.employee_name  loan.try(:employee).try(:name)
   end
 
   json.book_edition do

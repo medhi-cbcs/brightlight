@@ -191,6 +191,19 @@ class BookFinesController < ApplicationController
       receipt_amount_in_words: @total_idr_amount.to_f.round(-2).to_words.split.map(&:capitalize).join(' '),
       academic_year: @academic_year.name
     }
+
+    respond_to do |format|
+      format.html
+      format.pdf do
+        render pdf:         "Receipt #{('-'+@student.name if @student.present?)}",
+               disposition: 'inline',
+               template:    'book_fines/payment.pdf.slim',
+               layout:      'pdf.html',
+               page_height: '5.5in',
+               page_width:  '8.5in',               
+               show_as_html: params.key?('debug')
+      end
+    end
   end
 
   # DELETE /book_fines/1

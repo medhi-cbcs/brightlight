@@ -1,36 +1,44 @@
-br
-table
-  tr
-  	td
-      .list_description
-        dl.row
-          h5 Academic Year
+h4 Academic Year
+
+nav
+  .nav-wrapper
+    ul
+      li
+        = link_to academic_years_path
+          i.material-icons chevron_left
+    ul.right
+      li
+        = link_to edit_academic_year_path(@academic_year)
+          | Edit 
+          i.material-icons.left edit
+      li
+        = link_to new_academic_year_path
+          | New 
+          i.material-icons.left add
+
+.card
+  .card-content
+    .list_description
+      dl.row
+        dd.col.s4
+          .label Name
+          .item = @academic_year.name
+        dd.col.s4
+          .label Start Date
+          .item = @academic_year.start_date
+        dd.col.s4 
+          .label End Date
+          .item = @academic_year.end_date
+      dl.row
+        h6 Terms
+      - @academic_year.academic_terms.each do |term|
         dl.row
           dd.col.s4
             .label Name
-            .item = @academic_year.name
+            .item = term.name
           dd.col.s4
             .label Start Date
-            .item = @academic_year.start_date
+            .item = term.start_date
           dd.col.s4 
             .label End Date
-            .item = @academic_year.end_date
-        dl.row
-          h6 Terms
-        - @academic_year.academic_terms.each do |term|
-          dl.row
-            dd.col.s4
-              .label Name
-              .item = term.name
-            dd.col.s4
-              .label Start Date
-              .item = term.start_date
-            dd.col.s4 
-              .label End Date
-              .item = term.end_date
-
-.toolbar.actions
-  = link_to '< Back', :back, class: 'btn btn-flat'
-  = link_to 'Edit', edit_academic_year_path(@academic_year), class: 'btn btn-primary'
-  = link_to 'Add new', new_academic_year_path, class: 'btn btn-primary'
-
+            .item = term.end_date
