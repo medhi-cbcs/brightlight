@@ -1,0 +1,81 @@
+= tinymce_assets
+= form_for @template do |f|
+  nav
+    .nav-wrapper
+      ul
+        li
+          = link_to templates_path 
+            i.material-icons.left chevron_left
+        li.right
+          button.btn.waves-effect.waves-light type="submit" Save
+          
+  - if @template.errors.any?
+    #error_explanation
+      h2 = "#{pluralize(@template.errors.count, "error")} prohibited this template from being saved:"
+      ul
+        - @template.errors.full_messages.each do |message|
+          li = message
+
+  .card-panel
+    | The following placeholders are available for the template: #receipt_no#, #student_name#, #student_no#, #grade_section#, 
+      #academic_year#, #invoice_date#, #receipt_amount#, #receipt_amount_in_words#
+    
+  .card-panel
+    .row
+      .col.s3
+        .input-field
+          = f.label :name
+          = f.text_field :name
+      .col.s3
+        .input-field
+          = f.label :target
+          = f.text_field :target
+      .col.s3
+        .input-field
+          = f.label :group
+          = f.text_field :group
+      .col.s3
+        .input-field
+          = f.label :category
+          = f.text_field :category
+      .col.s3
+        .input-field
+          = f.label :active
+          = f.text_field :active
+      / .col.s3
+      /   .input-field
+      /   = f.label :academic_year
+      /   = f.text_field :academic_year
+      .col.s3
+        .input-field
+          = f.label :language
+          = f.text_field :language
+    .row
+      .col.s12
+        .label Header
+        .input-field
+          = f.text_area :header, class:"tinymce", rows: 2, cols: 120
+    .row
+      .col.s12
+        .label Opening
+        .input-field
+          = f.text_area :opening, class:"tinymce", rows: 20, cols: 120
+    .row
+      .col.s12
+        .label Body
+        .input-field
+          = f.text_area :body, class:"tinymce", rows: 20, cols: 120
+    .row
+      .col.s12
+        .label Closing
+        .input-field
+          = f.text_area :closing, class:"tinymce", rows: 20, cols: 120
+    .row
+      .col.s12
+        .label Footer
+        .input-field
+          = f.text_area :footer, class:"tinymce", rows: 2, cols: 120
+
+    = f.hidden_field :user, value: current_user
+    
+    = tinymce

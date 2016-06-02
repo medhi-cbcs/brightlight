@@ -1,0 +1,51 @@
+nav
+  .nav-wrapper
+    ul
+      li
+        = link_to templates_path 
+          | All templates
+          i.material-icons.left chevron_left
+      li.right
+        = link_to edit_template_path(@template) 
+          | Edit 
+          i.material-icons.left edit
+          
+.card-panel
+  .row 
+    .col.s12
+      strong Name:
+      = @template.name
+
+.card-panel
+  = @template.header.html_safe
+
+  = @template.opening.html_safe
+
+  = @template.body.html_safe
+
+  = @template.closing.html_safe
+
+  = @template.footer.html_safe
+
+.card-panel
+  p
+    strong Target:
+    = @template.target
+  p
+    strong Group:
+    = @template.group
+  p
+    strong Category:
+    = @template.category
+  p
+    strong Active:
+    = @template.active
+  p
+    strong Academic year:
+    = @template.academic_year
+  p
+    strong Language:
+    = @template.language
+
+css:
+  td, th { padding:0 }

@@ -4,13 +4,14 @@ html
   head
     title Brightlight
     script src="http://html5shiv.googlecode.com/svn/trunk/html5.js" type="text/javascript"
-    /= wicked_pdf_stylesheet_link_tag "application", media: "all", 'data-turbolinks-track' => true
-    = wicked_pdf_stylesheet_link_tag "material-icons", media: "all", 'data-turbolinks-track' => true
-    = wicked_pdf_stylesheet_link_tag "jquery-ui", media: "all", 'data-turbolinks-track' => true
-    = wicked_pdf_stylesheet_link_tag "normalize", media: "all", 'data-turbolinks-track' => true
-    = wicked_pdf_stylesheet_link_tag "materialize_components_pdf", media: "all", 'data-turbolinks-track' => true
-    = wicked_pdf_stylesheet_link_tag "materialize/extras/nouislider", media: "all", 'data-turbolinks-track' => true
-    = wicked_pdf_stylesheet_link_tag "site", media: "all", 'data-turbolinks-track' => true
+    link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/3.18.1/build/cssreset-context/cssreset-context-min.css"
+    = stylesheet_link_tag "application", media: "all", 'data-turbolinks-track' => true
+    / = wicked_pdf_stylesheet_link_tag "material-icons", media: "all", 'data-turbolinks-track' => true
+    / = wicked_pdf_stylesheet_link_tag "jquery-ui", media: "all", 'data-turbolinks-track' => true
+    / = wicked_pdf_stylesheet_link_tag "normalize", media: "all", 'data-turbolinks-track' => true
+    / = wicked_pdf_stylesheet_link_tag "materialize_components_pdf", media: "all", 'data-turbolinks-track' => true
+    / = wicked_pdf_stylesheet_link_tag "materialize/extras/nouislider", media: "all", 'data-turbolinks-track' => true
+    / = wicked_pdf_stylesheet_link_tag "site", media: "all", 'data-turbolinks-track' => true
     /= wicked_pdf_stylesheet_link_tag "fonts", media: "all", 'data-turbolinks-track' => true
 
     / css:
@@ -69,8 +70,89 @@ html
           = yield :layout
 
 css:
-  html {
-    font-family: Roboto,Arial,sans-serif; 
+  body {
+    font-family: 'Roboto','Arial','sans-serif'; 
+    font-weight: 300;
     background-color: white;
     color:rgba(0,0,0,1)
   }
+  .panel {
+    border-bottom: grey solid 1px;
+    margin: 30px 0px;
+    padding: 0 10px;
+  }
+  .right {
+    float: right !important;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    font-weight: 400;
+  }
+  h1 { font-size: 1.65rem; }
+  h2 { font-size: 1.55rem; }
+  h3 { font-size: 1.4rem; }
+  h4 { font-size: 1.22rem; }
+  h5 { font-size: 1.1rem; }
+  h6 { font-size: 1.1rem; }   
+   
+  table.compact {
+    width: 100%;
+  }
+  table, th, td {
+    border: none;
+  }
+  table {
+    border-collapse: collapse;
+    border-spacing: 0;
+  }
+  thead {
+    border-bottom: 1px solid #d0d0d0;
+    display: table-header-group;
+    vertical-align: middle;
+    border-color: inherit;
+  }
+  tr {
+    display: table-row;
+    vertical-align: inherit;
+    border-color: inherit;
+  }
+  table.compact thead tr.compact-row th {
+    padding-top: 2px;
+    padding-bottom: 2px;
+  }
+  td, th {
+    padding: 15px 5px;
+    display: table-cell;
+    text-align: left;
+    vertical-align: middle;
+    border-radius: 2px;
+  }
+  tbody {
+    display: table-row-group;
+    vertical-align: middle;
+    border-color: inherit;
+  }
+  table.striped > tbody > tr > td {
+    border-radius: 0px;
+  }
+  table.compact td {
+    padding-top: 4px;
+    padding-bottom: 4px;
+  }
+  td, th {
+    padding: 15px 5px;
+    display: table-cell;
+    text-align: left;
+    vertical-align: middle;
+  }
+  table td.wd25 { width: 25%; }
+  table td.wd17 { width: 17%; }
+  table td.wd20 { width: 20%; }
+  table td.wd10 { width: 10%; }
+  table td.wd5 { width: 5%; }
+  table td.wd3 { width: 3%; }
+  table td.wd15 { width: 15%; }  
+  
+  .page-break { display:block; clear:both; page-break-after:always; }
+  .alwaysbreak { page-break-before: always; }
+  .nobreak:before { clear:both; }
+  .nobreak { page-break-inside: avoid; }

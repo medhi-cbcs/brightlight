@@ -19,6 +19,8 @@ class StudentBook < ActiveRecord::Base
   # validates :course_text, presence: true
   validates :grade_level, presence: true
   validates :grade_section, presence: true
+  validates :book_copy, uniqueness: { scope: [:academic_year_id, :student_id],
+    message: "cannot add same book for the same student in the same year" }
 
   around_save :update_book_copy_condition
 
@@ -26,16 +28,16 @@ class StudentBook < ActiveRecord::Base
 
   scope :current_year, lambda { where(academic_year:AcademicYear.current) }
   scope :standard_books, lambda { |grade_level_id, grade_section_id, year_id, category_id|
-    if grade_level_id <= 10
+    if [11,12].include? grade_level_id
       joins("JOIN standard_books ON student_books.book_edition_id = standard_books.book_edition_id
-              AND #{grade_level_id} = standard_books.grade_level_id
-              AND standard_books.book_category_id = #{category_id}
-              AND standard_books.academic_year_id = #{year_id}")
+      AND #{grade_section_id} = standard_books.grade_section_id
+      AND standard_books.book_category_id = #{category_id}
+      AND standard_books.academic_year_id = #{year_id}")
     else
       joins("JOIN standard_books ON student_books.book_edition_id = standard_books.book_edition_id
-              AND #{grade_section_id} = standard_books.grade_section_id
-              AND standard_books.book_category_id = #{category_id}
-              AND standard_books.academic_year_id = #{year_id}")
+      AND #{grade_level_id} = standard_books.grade_level_id
+      AND standard_books.book_category_id = #{category_id}
+      AND standard_books.academic_year_id = #{year_id}")
     end
   }
   # Fine is applied if end condition is 2 steps worser than the initial condition, of if the book is missing

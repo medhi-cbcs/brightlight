@@ -10,43 +10,48 @@
     .row
       .input-field.col.s2
         = f.label :barcode
-        = text_field_tag :barcode
+        = text_field_tag :barcode, @barcode
+      .input-field.col.8
+        = f.label :title
+        = text_field_tag nil, @book_title, disabled:true, class:'title'
+      .input-field.col.s1
+        = f.label :currency
+        = text_field_tag nil, @currency, disabled:true
       .input-field.col.s2
-        = image_tag '', class:'barcode'
-      .input-field.col.s8
-        .title &nbsp;
+        = f.label :book_price
+        = text_field_tag nil, @price, disabled:true, id: 'book_price'
       = f.hidden_field :book_copy_id
     .row
       .input-field.col.s2
         = f.label :old_condition, class:'active'
-        = text_field_tag :old_condition, nil, disabled:true
-        = f.hidden_field :old_condition_id
+        = f.collection_select :old_condition_id, BookCondition.all, :id, :code
       .input-field.col.s2
         = f.label "New condition", class:'active'
         = f.collection_select :new_condition_id, BookCondition.all, :id, :code
       .input-field.col.s2
-        = f.label :book_price
-        = text_field_tag :book_price, nil, disabled:true
+        = f.label :percentage, class:'active'  
+        = f.select :percentage, FineScale.all.collect{|f| [f.percent_format,f.percentage]}.sort.uniq
       .input-field.col.s1
-        = f.label :currency
-        = f.text_field :currency
+        = f.label :currency, class:'active'
+        = f.select :currency, [['USD', 'USD'], ['IDR', 'IDR']]
       .input-field.col.s2
         = f.label :fine
-        = f.text_field :fine
+        = f.number_field :fine, step:'any'
     .row
       .input-field.col.s2
         = f.label :academic_year
         = text_field_tag :year, AcademicYear.current.name, disabled:true
         = f.hidden_field :academic_year_id, value:AcademicYear.current.id
       .input-field.col.s4
-        = f.label :student
+        = f.label :student, class:'active'
+        = text_field_tag nil, f.object.try(:student).try(:name), disabled:true 
         = f.hidden_field :student_id
-        = f.autocomplete_field :student, autocomplete_student_name_book_fines_path, id_element: "#book_fine_student_id"
+        /= f.autocomplete_field :student, autocomplete_student_name_book_fines_path, id_element: "#book_fine_student_id"
 
   .toolbar.z-depth-1
     .actions.col.s12 
       button.btn.waves-effect.waves-light type="submit" Save
-      = link_to 'Cancel', :back, class: "waves-effect waves-teal btn-flat"
+      = link_to 'Cancel', @book_fine, class: "waves-effect waves-teal btn-flat"
 
 javascript:
   $(document).ready(function() {
@@ -102,4 +107,8 @@ javascript:
         });
       }
     }));
+    $("#book_fine_percentage").on('change', function(e) {
+      var total = parseFloat($("#book_price").val()) * parseFloat($("#book_fine_percentage option:selected").val());
+      $("#book_fine_fine").val(total.toFixed(2));
+    });
   });

@@ -39,6 +39,18 @@ li
 				= link_to 'List by student', by_student_student_books_path
 			li
 				= link_to 'Missing books', missing_student_books_path
+			li 
+				= link_to "Poor/Need Rebinding", pnnrb_student_books_path
+li
+	.collapsible-header.waves-effect.waves-cyan
+		i.material-icons library_books
+		i.mdi-navigation-chevron-right.right
+		| Teacher's Books
+	.collapsible-body
+		ul
+			li
+				= link_to 'List', teachers_book_loans_path		
+				
 li
 	.collapsible-header.waves-effect.waves-cyan
 		i.material-icons book
@@ -53,7 +65,7 @@ li
 			li
 				= link_to 'Standard Books', standard_books_path
 
-- if signed_in? and current_user.roles.include? :inventory
+- if signed_in? and current_user.has_role? :inventory
 	li 
 		.collapsible-header.waves-effect.waves-cyan
 			i.material-icons view_quilt
@@ -71,11 +83,18 @@ li
 					= link_to 'Book Loan Status', book_loans_path 
 				li
 					= link_to 'Textbook Fines', book_fines_path
+- if signed_in? and current_user.has_role? :inventory
+	li 
+		.collapsible-header.waves-effect.waves-cyan
+			i.material-icons settings
+			i.mdi-navigation-chevron-right.right
+			| Settings
+		.collapsible-body
+			ul
 				li
-					a href="#" Book Fine Invoice
+					= link_to 'Currency Rates', currencies_path			
 				li
-					a href="#" Book Fine Payment
-			
+					= link_to 'Templates', templates_path
 li
 	.collapsible-header.waves-effect.waves-cyan
 		i.material-icons school

@@ -1,0 +1,31 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  invoice_number: 1
+  invoice_date: 2016-05-23
+  bill_to: MyString
+  student_id: 
+  grade_section: MyString
+  roster_no: MyString
+  total_amount: MyString
+  received_by: MyString
+  paid_by: MyString
+  paid_amount: MyString
+  currency: MyString
+  notes: MyString
+  user_id: 
+
+two:
+  invoice_number: 1
+  invoice_date: 2016-05-23
+  bill_to: MyString
+  student_id: 
+  grade_section: MyString
+  roster_no: MyString
+  total_amount: MyString
+  received_by: MyString
+  paid_by: MyString
+  paid_amount: MyString
+  currency: MyString
+  notes: MyString
+  user_id: 

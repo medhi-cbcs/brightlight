@@ -32,17 +32,6 @@ class StudentBooksController < ApplicationController
                         .where(roster_no:@roster_no.to_s)
                         .where(academic_year_id:@year_id)
                         .includes([:book_copy, book_copy: [:book_edition]])
-    # elsif params[:t].present?
-    #   year_id = AcademicYear.current.id
-    #   @book_title = BookTitle.find params[:t]
-    #   textbook_category_id = BookCategory.find_by_code('TB').id
-    #   @student_books = StudentBook.where(grade_section:@grade_section)
-    #                     .where(academic_year_id:year_id)
-    #                     .standard_books(@grade_section.grade_level.id, @grade_section.id, @year_id, textbook_category_id)
-    #                     .where(standard_books: {book_title_id: params[:t]})
-    #                     .order('standard_books.id')
-    #                     .includes([:book_copy, book_copy: [:book_edition]])
-    #                     .paginate(page: params[:page], per_page: items_per_page)
 
     elsif params[:s].present?
       @students = @grade_section.current_students
@@ -51,7 +40,6 @@ class StudentBooksController < ApplicationController
                         .standard_books(@grade_section.grade_level.id, @grade_section.id, @year_id, textbook_category_id)
                         .order('roster_no ASC, standard_books.id ASC')
                         .includes([:book_copy, book_copy: [:book_edition]])
-
     else
       @student_books = StudentBook.includes([:book_copy, book_copy: [:book_edition]])
                         .paginate(page: params[:page], per_page: items_per_page)
@@ -129,22 +117,6 @@ class StudentBooksController < ApplicationController
     @students = @grade_section.students
   end
 
-  # # POST /grade_section/1/student_books/label
-  # # POST /grade_section/1/student_books/label.json
-  # def label
-  #   @grade_section = GradeSection.new(params[:grade_section_id])
-  #
-  #   respond_to do |format|
-  #     if @grade_section.save
-  #       format.html { redirect_to @student_book, notice: 'Student book was successfully created.' }
-  #       format.json { render :show, status: :created, location: @student_book }
-  #     else
-  #       format.html { render :new }
-  #       format.json { render json: @student_book.errors, status: :unprocessable_entity }
-  #     end
-  #   end
-  # end
-
   # DELETE /student_books/1
   # DELETE /student_books/1.json
   def destroy
@@ -159,6 +131,7 @@ class StudentBooksController < ApplicationController
 
   # GET /student_books/receipt_form
   def receipt_form
+    authorize! :manage, StudentBook
     if params[:gs].present?
       @grade_section = GradeSection.find params[:gs]
       @grade_level = @grade_section.grade_level
@@ -186,8 +159,9 @@ class StudentBooksController < ApplicationController
     end
   end
 
-  # GET /students/1/student_books/by_title
+  # GET /student_books/missing
   def missing
+    authorize! :manage, StudentBook
     @year_id = AcademicYear.current.id
     @grade_level_ids = GradeLevel.all.collect(&:id)
     @grade_sections = GradeSection.where(academic_year_id: @year_id)
@@ -200,20 +174,39 @@ class StudentBooksController < ApplicationController
     missing = BookCondition.find_by_slug('missing')
 
     if @grade_section.present?
-      @students = Student.joins(:student_books).where(student_books: {end_copy_condition:missing}).uniq
       @student_books = StudentBook
                         .standard_books(@grade_section.grade_level.id, @grade_section.id, @year_id, @textbook_category_id)
                         .where(academic_year_id: @year_id)
                         .where(end_copy_condition: missing)
                         .where(grade_section:@grade_section)
-      @students = Student.joins(:student_books)
-                        .where(student_books: {end_copy_condition:missing, grade_section:@grade_section})
-                        .uniq
+                        .order('CAST(roster_no AS int)')
+
+      # Fallback to using SQL statement. See comment below.
+      @students = Student.find_by_sql [
+                    "SELECT DISTINCT students.*, student_books.grade_section_id, CAST(student_books.roster_no AS int)
+                     FROM students
+                     INNER JOIN student_books ON student_books.student_id = students.id
+                     WHERE student_books.end_copy_condition_id = ? AND grade_section_id = ?
+                     ORDER BY student_books.grade_section_id, CAST(student_books.roster_no AS int)",
+                     missing.id, @grade_section.id
+                  ]
     else
-      @students = Student.joins(:student_books).where(student_books: {end_copy_condition:missing}).uniq
+      ## The following statement, unforetunately, won't work. So we fallback to sql statement.
+      # @students = Student.joins(:student_books)
+      #                   .where(student_books: {end_copy_condition:missing})
+      #                   .order('student_books.grade_section_id' ,'CAST(student_books.roster_no AS int)')
+      #                   .uniq
+      @students = Student.find_by_sql [
+                    "SELECT DISTINCT students.*, student_books.grade_section_id, CAST(student_books.roster_no AS int)
+                     FROM students
+                     INNER JOIN student_books ON student_books.student_id = students.id
+                     WHERE student_books.end_copy_condition_id = ?
+                     ORDER BY student_books.grade_section_id, CAST(student_books.roster_no AS int)", missing.id
+                  ]
       @student_books = StudentBook
                         .where(academic_year_id: @year_id)
                         .where(end_copy_condition: missing)
+                        .order('grade_section_id ASC' ,'CAST(roster_no AS int)')
     end
 
     respond_to do |format|
@@ -228,8 +221,49 @@ class StudentBooksController < ApplicationController
     end
   end
 
+  # GET /student_books/pnnrb
+  def pnnrb
+    authorize! :read, @student_book
+    @year_id = AcademicYear.current.id
+    @grade_level_ids = GradeLevel.all.collect(&:id)
+    @grade_sections = GradeSection.where(academic_year_id: @year_id)
+    @grade_sections_ids = @grade_sections.collect(&:id)
+
+    @grade_section = GradeSection.where(id:params[:s]).take if params[:s].present?
+    @grade_level = GradeLevel.where(id:params[:l]).take if params[:l].present?
+    @textbook_category_id = BookCategory.find_by_code('TB').id
+    poor = BookCondition.find_by_slug('poor')
+
+    if @grade_section.present?
+      @student_books = StudentBook
+                        .standard_books(@grade_section.grade_level.id, @grade_section.id, @year_id, @textbook_category_id)
+                        .where(academic_year_id: @year_id)
+                        .where("end_copy_condition_id = ? OR needs_rebinding = true", poor.id)
+                        .where(grade_section:@grade_section)
+                        .order(:book_edition_id, 'CAST(roster_no AS int)')
+
+    else
+      @student_books = StudentBook
+                        .where(academic_year_id: @year_id)
+                        .where("end_copy_condition_id = ? OR needs_rebinding = true", poor.id)
+                        .order(:book_edition_id, 'CAST(roster_no AS int)')
+    end
+
+    respond_to do |format|
+      format.html
+      format.pdf do
+        render pdf:         "List of Poor Book or Needs Rebinding#{('-'+@grade_section.name if @grade_section.present?)}",
+               disposition: 'inline',
+               template:    'student_books/pnnrb.pdf.slim',
+               layout:      'pdf.html',
+               show_as_html: params.key?('screen')
+      end
+    end
+  end
+
   # GET /student_books/by_title
   def by_title
+    authorize! :manage, StudentBook
     @book_titles = []
     if params[:s].present?
       @grade_section = GradeSection.find(params[:s])
@@ -242,7 +276,7 @@ class StudentBooksController < ApplicationController
                         .where(book_category_id: @textbook_category_id)
                         .where(academic_year_id: AcademicYear.current.id)
                         .includes([:book_edition])
-    if @grade_level.present? && @grade_level.id > 10
+    if @grade_level.present? && [11,12].include?(@grade_level.id)
       @standard_books = @standard_books.where(grade_section:@grade_section)
     end
     if params[:t].present?
@@ -293,6 +327,7 @@ class StudentBooksController < ApplicationController
 
   # GET /student_books/by_student
   def by_student
+    authorize! :manage, StudentBook
     @book_titles = []
     if params[:s].present?
       @grade_section = GradeSection.find(params[:s])
@@ -307,7 +342,7 @@ class StudentBooksController < ApplicationController
                         .where(book_category_id: @textbook_category_id)
                         .where(academic_year_id: AcademicYear.current.id)
                         .includes([:book_edition])
-    if @grade_level.present? && @grade_level.id > 10
+    if @grade_level.present? && [11,12].include?(@grade_level.id)
       @standard_books = @standard_books.where(grade_section:@grade_section)
     end
 
@@ -355,6 +390,7 @@ class StudentBooksController < ApplicationController
   # PUT /student_books/update_multiple
   # PUT /student_books/update_multiple.json
   def update_multiple
+    authorize! :manage, StudentBook
     StudentBook.update(params[:student_books].keys, params[:student_books].values)
     @book_category = BookCategory.find_by_code 'TB'
     @current_year = AcademicYear.current.id

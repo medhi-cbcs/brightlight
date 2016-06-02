@@ -1,0 +1,21 @@
+stash@{0}: WIP on develop: be5ba96 Merge branch 'Testing' into develop
+stash@{1}: WIP on Testing: ddf9621 GoogleBook Gem using my branch
+stash@{2}: WIP on Testing: 56cbd7f Remove a migration
+stash@{3}: WIP on master: 7b5f0f0 Merge branch 'develop'
+stash@{4}: WIP on master: c9e83ff Merge branch 'develop'
+stash@{5}: WIP on Testing: 2ef288e Fixed User login with Google
+stash@{6}: WIP on Testing: 3e8a3d3 Merge branch 'import' of bitbucket.org:medhiwidjaja/brightlight into import
+stash@{7}: WIP on distribution: addd166 BookLabel, code clean up
+stash@{8}: WIP on distribution: ceb2950 Merge branch 'db/cond' into develop
+stash@{9}: On db/cond: Trying to correct BookCopy new
+stash@{10}: WIP on ui/redesign: c347a8d Interim commit. sidebar
+stash@{11}: WIP on ui/redesign: 147910d Related course in sidebar of BookCopy
+stash@{12}: WIP on ui/redesign: 147910d Related course in sidebar of BookCopy
+stash@{13}: WIP on ui/autocomplete: 8af2a16 Fixed bud in isbndb library
+stash@{14}: WIP on admin-setup: 3ccd560 Set course_texts as nested resource under course
+stash@{15}: WIP on admin-setup: c553628 Add prompt to select form
+stash@{16}: WIP on admin-setup: f3b6f3a Employee forms and model references
+stash@{17}: WIP on admin-setup: 0dc7eb4 Course and main menu
+stash@{18}: WIP on develop: 99266d6 Interim commit. Authorization with Google
+stash@{19}: WIP on experiment: 37173cc Experiment
+stash@{20}: WIP on master: 6262339 Initial commit

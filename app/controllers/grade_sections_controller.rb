@@ -16,7 +16,7 @@ class GradeSectionsController < ApplicationController
     @grade_section = GradeSection.find_by_slug(params[:id])
     @grade_level = @grade_section.grade_level
     @textbooks = @grade_section.standard_books
-    @students = @grade_section.current_students
+    @gss = @grade_section.current_year_students
   end
 
   # GET /grade_sections/new
@@ -64,7 +64,13 @@ class GradeSectionsController < ApplicationController
     authorize! :update, @grade_section
     academic_year_id = current_academic_year_id
     params[:add].map {|id,on| Student.find(id)}.each do |student|
-      @grade_section.add_student(student, academic_year_id)
+      @gss = GradeSectionsStudent.new(grade_section: @grade_section, student:student, academic_year_id: academic_year_id || current_academic_year_id)
+      if @gss.save
+        next
+      else
+        #render :students
+        redirect_to students_grade_section_path, alert: 'Students already added' and return
+      end
     end
     redirect_to @grade_section, notice: 'Students successfully added'
   end

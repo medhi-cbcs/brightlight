@@ -1,9 +1,50 @@
 h4 Student Textbook Fines
 
+ul#year-options.dropdown-content
+  li  
+    = link_to 'All', book_fines_path(params.merge(year:'all').symbolize_keys)
+  - AcademicYear.all.each do |year|
+    li 
+      = link_to year.name, book_fines_path(params.merge(year:year.id).symbolize_keys)
+ul#section-options.dropdown-content
+  - @grade_sections.each do |section| 
+    li = link_to "#{section.name}", "#", onclick:"filterSectionOptions(#{section.id}, '#{section.name}');"
+ul#student-options.dropdown-content
+  li = link_to "All", book_fines_path
+  - @grade_sections.each do |section| 
+    li = link_to "All #{section.name}", book_fines_path(s:section.id,year:@academic_year.id) , class:"section-#{section.id}"
+  - @students.each do |student| 
+    li = link_to "#{student.name}", book_fines_path(st:student.id,year:@academic_year.id) , class:"section-#{student.grade_sections_students.take.grade_section_id}"
+
+javascript:
+  function filterSectionOptions(id, name) {
+    var section_ids = #{raw @grade_sections.map &:id};
+    $("#section").html(name);
+    section_ids.forEach(function(s){
+      if(id != s) {
+        $(".section-" + s).hide();
+      } else {
+        $(".section-" + id).show();
+      }
+    })
+  }
+        
 nav
   .nav-wrapper
     ul
-      li
+      li   
+        a.dropdown-button href="#!" data-activates="year-options"
+          span#grade = @academic_year.present? ? "#{@academic_year.name}" : "Academic Year" 
+          i.material-icons.right arrow_drop_down
+      li   
+        a.dropdown-button href="#!" data-activates="section-options"
+          span#section = "Class" 
+          i.material-icons.right arrow_drop_down
+      li   
+        a.dropdown-button href="#!" data-activates="student-options"
+          span#grade = @student.present? ? "#{@student.name}" : "Student" 
+          i.material-icons.right arrow_drop_down
+      li.right
         = link_to calculate_book_fines_path, data: {:confirm => 'This will create new records. Are you sure?'}, class:'red-text'
           | Calculate book fines
           i.material-icons.left local_atm
@@ -12,15 +53,15 @@ nav
           | Create new
           i.material-icons.left add
 
-
 .card-panel
   table.striped
     thead
       tr
-        th Barcode 
+        th No 
         th Title
         th Initial <br> condition
         th End <br> condition
+        th Fine %
         th
           .right Fine <br> amount
         th Student
@@ -29,20 +70,40 @@ nav
 
 
     tbody
+      - total_idr = 0.0
+      - total_usd = 0.0
       - @book_fines.each do |book_fine|
+        - total_idr += book_fine.fine.try(:to_f) || 0.0 if book_fine.currency == 'IDR'
+        - total_usd += book_fine.fine.try(:to_f) || 0.0 if book_fine.currency == 'USD'
         tr
-          td = book_fine.book_copy.try(:barcode)
-          td = book_fine.book_copy.try(:book_edition).try(:title)
-          td = book_fine.old_condition.code
-          td = book_fine.new_condition.code
+          td = link_to book_fine.book_copy.try(:copy_no), book_fine.book_copy
+          td = link_to book_fine.book_copy.try(:book_edition).try(:title), book_fine.book_copy.try(:book_edition)
+          td = book_fine.old_condition.try(:code)
+          td = book_fine.new_condition.try(:code)
+          td = number_to_percentage(100 * book_fine.try(:percentage) || 0, precision:0)
           td
-            .right = number_to_currency(book_fine.fine, unit:book_fine.currency)
-          td = book_fine.try(:student).try(:name)
+            .right 
+              - if book_fine.currency == 'USD'
+                = number_to_currency(book_fine.fine.try(:to_f) || 0.0, unit:'$')
+              - elsif book_fine.currency == 'IDR'
+                = number_to_currency(book_fine.fine.try(:to_f) || 0.0, unit:'Rp', precision: 0)
+          td = link_to book_fine.try(:student).try(:name), book_fines_path(st:book_fine.student_id,year:@academic_year.id)
           td = book_fine.status
           td
             = link_to book_fine
-              i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="View" payment
-            / = link_to edit_book_fine_path(book_fine)
-            /   i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="Edit" edit
+              i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="View" visibility
+            = link_to edit_book_fine_path book_fine
+              i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="Edit" edit
             = link_to book_fine, data: {:confirm => 'Are you sure?'}, :method => :delete, class:'red-text'
               i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="Delete" delete
+      - if @student.present?
+        tr 
+          td colspan=3
+          td colspan=2 Total
+          td = number_to_currency(total_idr + (@dollar_rate * total_usd).round(-2), {unit:'Rp'})
+          td colspan=3 style="text-align:right;" USD 1 = Rp#{@dollar_rate}
+          
+- if @student.present?
+  .toolbar.z-depth-1
+    = link_to 'Notification', notification_book_fines_path(st:@student.id, year:@academic_year.id), class: "btn btn-default waves-effect waves-light"
+    = link_to 'Payment', payment_book_fines_path(st:@student), class: "btn btn-default waves-effect waves-light"

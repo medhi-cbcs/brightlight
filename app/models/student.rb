@@ -8,6 +8,7 @@ class Student < ActiveRecord::Base
 	has_one  :student_admission_info, autosave: true
 	has_many :student_books
 	has_many :book_loans
+	has_many :book_fines
  	belongs_to :person
   validates :name, :gender, presence: true
 
@@ -89,10 +90,24 @@ class Student < ActiveRecord::Base
   end
 
 	def current_grade_section
-		grade_sections_students.with_academic_year(AcademicYear.current).try(:first).try(:grade_section)
+		grade_section_with_academic_year_id(AcademicYear.current)
 	end
 
 	def current_roster_no
-		grade_sections_students.with_academic_year(AcademicYear.current).try(:first).try(:order_no)
+		roster_no_with_academic_year_id(AcademicYear.current)
+	end
+
+	def roster_no_with_academic_year_id(academic_year_id)
+		grade_sections_students
+				.with_academic_year(academic_year_id)
+				.includes([:grade_section])
+				.take.try(:order_no)
+	end
+
+	def grade_section_with_academic_year_id(academic_year_id)
+		grade_sections_students
+				.with_academic_year(academic_year_id)
+				.includes([:grade_section])
+				.take.try(:grade_section)
 	end
 end

@@ -8,15 +8,11 @@ class BookLoan < ActiveRecord::Base
   belongs_to :loan_type
   belongs_to :academic_year
   belongs_to :prev_academic_year, class_name: "AcademicYear"
-
+  belongs_to :user
+  
   scope :current, lambda { where(academic_year: AcademicYear.current) }
 
   def grade_section_name
-    subject_classes = ['CG011.1','CG011.2','CG012.1','CG012.2']
-    if subject_classes.include? grade_section_code
-      GradeSection.select(:name).where(subject_code: grade_subject_code).take.try(:name)
-    else
-      GradeSection.select(:name).where(parallel_code: grade_section_code).take.try(:name)
-    end
+    student.grade_section_with_academic_year_id(self.academic_year_id).try(:name) if student.present?
   end
 end

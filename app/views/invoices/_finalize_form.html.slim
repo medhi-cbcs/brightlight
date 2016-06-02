@@ -1,0 +1,56 @@
+/ This form is used inside book_fines #payment
+/ Needs local variables: invoice and student
+
+= form_for invoice, url: finalize_invoice_path(invoice), remote: true do |f| 
+  .modal-content
+    h5 Payment
+    .row 
+      .input-field.col.s3.offset-s6
+        = f.label :invoice_number
+        = f.number_field :invoice_number, value: f.object.id, readonly:true
+      .input-field.col.s3
+        = f.label :invoice_date, class:'active'
+        = f.date_field :invoice_date, value: Date.today, readonly:true
+    .row
+      .input-field.col.s7
+        = f.label :bill_to
+        = f.text_field :bill_to, value: student.name, readonly:true
+      .input-field.col.s1
+        = f.label :currency
+        = f.text_field :currency, readonly:true
+      .input-field.col.s2
+        = f.label :total_amount
+        = f.text_field :total_amount, readonly:true
+      .input-field.col.s2
+        = f.label :paid_amount
+        = f.text_field :paid_amount, value: f.object.total_amount
+    .row
+      .input-field.col.s4.offset-s4
+        = f.label :received_by
+        = f.text_field :received_by, value: current_user.name, readonly:true
+      .input-field.col.s4
+        = f.label :paid_by
+        = f.text_field :paid_by
+    .row
+      .input-field.col.s12
+        = f.label :notes
+        = f.text_field :notes
+    = f.hidden_field :user_id, value: current_user.id
+    = f.hidden_field :paid, value: true 
+    = f.hidden_field :statuses, value: f.object.statuses+" Paid" 
+
+  .modal-footer
+    = link_to "Cancel", "#!", class:"modal-action modal-close waves-effect waves-green btn-flat"
+    button.btn.waves-effect.waves-light.modal-action.modal-close type="submit" Pay!
+
+javascript:
+  $(document).ready(function(){
+    $('.edit_invoice')
+      .bind("ajax:success", function(data, status, xhr) {
+        Materialize.toast('Invoice payment successfully saved.', 4000, "green");
+        $("#pay-button").attr("href", "#paid-invoice").html("Paid").addClass("green");
+      })
+      .bind("ajax:error", function(xhr, status, error) {
+        Materialize.toast('Invoice payment failed.', 4000, "red");
+      });
+  })

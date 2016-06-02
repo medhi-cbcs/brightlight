@@ -1,12 +1,13 @@
 class BookLoansController < ApplicationController
   before_action :set_book_loan, only: [:show, :edit, :update, :destroy]
+  skip_before_filter :verify_authenticity_token, only: [:update]
 
   # GET /book_loans
   # GET /book_loans.json
   def index
     items_per_page = 30
     if params[:student].present?
-      @student = Student.where("name LIKE ?", "%#{params[:student]}%").first
+      @student = Student.where("lower(name) LIKE ?", "%#{params[:student].downcase}%").first
       if @student.present?
         @book_loans = BookLoan.includes([:student])
                         .where(academic_year:AcademicYear.current)
@@ -16,7 +17,6 @@ class BookLoansController < ApplicationController
       end
     elsif params[:teacher].present?
       @teacher = Employee.where("lower(name) LIKE ?", "%#{params[:teacher].downcase}%").first
-      puts "#{params[:teacher]} => #{@teacher.try(:name) || 'N/A'}"
       if @teacher.present?
         @book_loans = BookLoan.includes([:employee])
                         .where(academic_year:AcademicYear.current)
@@ -35,7 +35,6 @@ class BookLoansController < ApplicationController
       end
     elsif params[:employee_id].present?
       @teacher = Employee.find(params[:employee_id])
-      puts "#{params[:teacher]} => #{@teacher.try(:name) || 'N/A'}"
       if @teacher.present?
         @book_loans = BookLoan.includes([:employee])
                         .where(academic_year:AcademicYear.current)
@@ -124,6 +123,93 @@ class BookLoansController < ApplicationController
     end
   end
 
+  #### This section deals with teacher's loan
+
+  # GET book_loans/teachers
+  def teachers
+    authorize! :read, BookLoan
+    @teachers = Employee.joins(:book_loans).where(book_loans: {academic_year: AcademicYear.current}).order(:name).uniq
+  end
+
+  # GET employees/:employee_id/book_loans
+  def list
+    authorize! :read, BookLoan
+    @teacher = Employee.find params[:employee_id]
+    @teachers = Employee.joins(:book_loans).where(book_loans: {academic_year: AcademicYear.current}).order(:name).uniq
+    @items_per_page = 30
+    if @teacher.present?
+      @book_loans = BookLoan.includes([:employee])
+                      .where(employee: @teacher)
+                      .paginate(page: params[:page], per_page: @items_per_page)
+    else
+      @error = "Teacher with name like #{params[:teacher]} was not found."
+    end
+    if params[:year].present? && params[:year].downcase != 'all'
+      @academic_year = AcademicYear.find params[:year]
+      @book_loans = @book_loans.where(academic_year:@academic_year)
+    elsif params[:year].blank?
+      @academic_year = AcademicYear.current
+      @book_loans = @book_loans.where(academic_year:@academic_year)
+    elsif params[:year].present? && params[:year].downcase != 'all'
+      @book_loans = @book_loans.order(:academic_year_id)
+    end
+  end
+
+  def show_tm
+    @teacher = Employee.find params[:employee_id]
+    @book_loan = BookLoan.find params[:id]
+  end
+
+  def new_tm
+    authorize! :manage, BookLoan
+    @teacher = Employee.find params[:employee_id]
+    @book_loan = BookLoan.new
+  end
+
+  def scan
+    authorize! :scan, BookLoan
+    @teacher = Employee.find params[:employee_id]
+  end
+
+  def update_tm
+    authorize! :manage, BookLoan
+    @teacher = Employee.find params[:employee_id]
+    @book_loan = BookLoan.find params[:id]
+    borrower_matched = @teacher == @book_loan.employee
+
+    respond_to do |format|
+      if borrower_matched and @book_loan.update(book_loan_params)
+        format.html { redirect_to employee_book_loan_path(employee_id:@teacher.id, id:@book_loan.id) }
+        format.json { render :show, status: :ok, location: @book_loan }
+      else
+        format.html { render :edit_tm }
+        format.json { render json: @book_loan.errors, status: :unprocessable_entity }
+      end
+
+    end
+  end
+
+  def create_multiple
+    authorize! :manage, BookLoan
+    @current_year = AcademicYear.current.id
+
+    params[:book_loans].each do |key, values|
+      book_loan = BookLoan.where(academic_year_id:@current_year).where(book_copy_id:values[:book_copy_id]).take
+      book_loan.update_attribute(:return_date, values[:return_date])
+      book_loan.update_attribute(:user_id, values[:user_id])
+      book_loan.update_attribute(:notes, values[:notes])
+      book_loan.update_attribute(:student_no, values[:student_no])
+    end
+    flash[:notice] = "Book conditions updated!"
+    if params[:student_form].present?
+      redirect_to by_student_student_books_path(s:params[:grade_section_id],g:params[:grade_level_id],st:params[:st])
+    else
+      redirect_to by_title_student_books_path(s:params[:grade_section_id],g:params[:grade_level_id],t:params[:title])
+    end
+  end
+
+  ####
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_book_loan
@@ -132,6 +218,7 @@ class BookLoansController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def book_loan_params
-      params.require(:book_loan).permit(:book_copy_id, :book_edition_id, :book_title_id, :user_id, :book_category_id, :loan_type_id, :out_date, :due_date, :academic_year_id)
+      params.require(:book_loan).permit(:book_copy_id, :book_edition_id, :book_title_id, :user_id, :book_category_id,
+        :loan_type_id, :out_date, :due_date, :academic_year_id, :barcode, :return_date, :return_status, :notes)
     end
 end

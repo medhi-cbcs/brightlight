@@ -15,8 +15,8 @@ h5 Check Book Condition and Return #{'( '+@grade_section.name+' )' if @grade_sec
           th &nbsp;
           th &nbsp;
           th &nbsp;
-          th style='text-align:center;' Last
-          th colspan=5 style='text-align:center;border-bottom:1px solid grey' New Conditions
+          th style='text-align:center;' Borrow
+          th colspan=5 style='text-align:center;border-bottom:1px solid grey' Return Condition
           th style='text-align:center;font-size:0.9rem' Needs Re-
           th &nbsp;
         tr.compact-row
@@ -48,18 +48,19 @@ h5 Check Book Condition and Return #{'( '+@grade_section.name+' )' if @grade_sec
             td.wd10 style='text-align:center;' 
               = book.book_copy.try(:current_start_condition).try(:code)
             td.wd5 style='text-align:center;' 
-              | &#9744;
+              = book.end_copy_condition_id == 1 ? '&#9745;'.html_safe : '&#9744;'.html_safe
             td.wd5 style='text-align:center;' 
-              | &#9744;
+              = book.end_copy_condition_id == 2 ? '&#9745;'.html_safe : '&#9744;'.html_safe
             td.wd5 style='text-align:center;' 
-              | &#9744;
+              = book.end_copy_condition_id == 3 ? '&#9745;'.html_safe : '&#9744;'.html_safe
             td.wd5 style='text-align:center;' 
-              | &#9744;
+              = book.end_copy_condition_id == 4 ? '&#9745;'.html_safe : '&#9744;'.html_safe
             td.wd5 style='text-align:center;' 
-              | &#9744;
+              = book.end_copy_condition_id == 5 ? '&#9745;'.html_safe : '&#9744;'.html_safe
             td.wd5 style='text-align:center;' 
-              | &#9744;
+              = book.needs_rebinding == 1 ? '&#9745;'.html_safe : '&#9744;'.html_safe
             td.wd25
+              = book.notes
     - if count < @students.count-1
       .page-break    
     

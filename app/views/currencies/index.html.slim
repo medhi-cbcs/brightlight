@@ -1,0 +1,45 @@
+h4 Currency Rates
+
+nav
+  .nav-wrapper
+    .brand-logo style="margin-left: 20px; font-size:1.5em"
+      = "USD = Rp#{Currency.dollar_rate}"
+    ul
+      li.right.tooltipped data-position="bottom" data-delay="50" data-tooltip="Add new currency rate"         
+        = link_to "#", onclick:"show_form()"
+          | New Currency Rate
+          i.material-icons.left playlist_add
+
+#add-new style="display:none"
+  == render "form"
+  
+.card-panel
+  table.striped
+    thead
+      tr
+        th Foreign
+        th Base
+        th style='text-align:right;' Rate
+        th style='text-align:center;' Date
+        th Actions
+
+    tbody
+      - @currencies.each do |currency|
+        tr
+          td = currency.foreign
+          td = currency.base
+          td style='text-align:right;' = currency.rate
+          td style='text-align:center;' = currency.created_at.to_date
+          td 
+            = link_to edit_currency_path(currency)
+              i.material-icons edit
+            = link_to currency, data: {:confirm => 'Are you sure?'}, :method => :delete, class:"red-text"
+              i.material-icons delete
+
+javascript:
+  function show_form() {
+    $("#add-new").show();
+  }
+  function hide_form() {
+    $("#add-new").hide();
+  }

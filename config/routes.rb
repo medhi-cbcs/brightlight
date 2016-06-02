@@ -1,5 +1,7 @@
 Rails.application.routes.draw do
 
+  resources :templates
+  resources :currencies
   resources :standard_books
   resources :people
   resources :book_categories
@@ -64,6 +66,13 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :invoices do
+    resources :line_items
+    member do
+      patch 'finalize'
+    end
+  end
+
   get 'student_books' => 'student_books#index', as: :all_student_books
   get 'student_books/assign' => 'student_books#assign', as: :assign_student_books
   get 'student_books/label' => 'student_books#label', as: :label_student_books
@@ -72,15 +81,16 @@ Rails.application.routes.draw do
   get 'student_books/by_student' => 'student_books#by_student', as: :by_student_student_books
   put 'student_books/update_multiple' => 'student_books#update_multiple', as: :update_multiple_student_books
   get 'student_books/missing' => 'student_books#missing', as: :missing_student_books
-  
+  get 'student_books/pnnrb' => 'student_books#pnnrb', as: :pnnrb_student_books
+
   resources :students do
     resources :student_books, shallow: true
   end
 
-  resources :book_loans, only: [:index] do
+  # resources :book_loans
+  resources :book_loans do
     collection do
-      post 'search_student'
-      post 'search_teacher'
+      get 'teachers'
     end
   end
 
@@ -93,20 +103,22 @@ Rails.application.routes.draw do
   put  'students/:student_id/book_loans/:id' => 'book_loans#update'
   delete  'students/:student_id/book_loans/:id' => 'book_loans#destroy'
 
-  get  'employees/:employee_id/book_loans' => 'book_loans#index', as: :employee_book_loans
-  post 'employees/:employee_id/book_loans' => 'book_loans#create'
-  get  'employees/:employee_id/book_loans/new' => 'book_loans#new', as: :new_employee_book_loan
-  get  'employees/:employee_id/book_loans/:id/edit' => 'book_loans#edit', as: :edit_employee_book_loan
-  get  'employees/:employee_id/book_loans/:id' => 'book_loans#show', as: :employee_book_loan
-  patch  'employees/:employee_id/book_loans/:id' => 'book_loans#update'
-  put  'employees/:employee_id/book_loans/:id' => 'book_loans#update'
-  delete  'employees/:employee_id/book_loans/:id' => 'book_loans#destroy'
+  get  'employees/:employee_id/book_loans' => 'book_loans#list', as: :employee_book_loans
+  post 'employees/:employee_id/book_loans' => 'book_loans#create_tm'
+  get  'employees/:employee_id/book_loans/new' => 'book_loans#new_tm', as: :new_employee_book_loans
+  get  'employees/:employee_id/book_loans/scan' => 'book_loans#scan', as: :scan_employee_book_loans
+  get  'employees/:employee_id/book_loans/:id' => 'book_loans#show_tm', as: :employee_book_loan
+  patch  'employees/:employee_id/book_loans/:id' => 'book_loans#update_tm'
+  put  'employees/:employee_id/book_loans/:id' => 'book_loans#update_tm'
+  delete  'employees/:employee_id/book_loans/:id' => 'book_loans#destroy_tm'
 
   resources :book_fines do
     collection do
       get 'calculate'
       get 'current'
       get 'autocomplete_student_name'
+      get 'notification'
+      get 'payment'
     end
   end
 

@@ -49,37 +49,45 @@ nav
             th No
             th style='text-align:center;' Title
             th style='text-align:center;' Barcode
-            th style='text-align:center;' Initial Condition
-            th style='text-align:center;' End Condition
-            th style='text-align:center;' Fine
+            th style='text-align:center;' Initial <br> Condition
+            th style='text-align:center;' End  <br> Condition
+            th style='text-align:right;' Fine
         tbody                                    
           - total_usd = 0.0
           - total_idr = 0.0
           - missing_books.each_with_index do |book, i|
             tr style='border-bottom:1px solid gainsboro'
-              td.wd5 = i+1
-              td.wd20
+              td.wd3 = i+1
+              td.wd40
                 span = book.try(:book_edition).try(:title).truncate(40)
-              td.wd5 style='text-align:center'          
+              td.wd17 style='text-align:center'          
                 = book.barcode
               td.wd10 style='text-align:center;' 
                 = book.try(:initial_copy_condition).try(:code)
-              td.wd5 style='text-align:center;' 
+              td.wd10 style='text-align:center;' 
                 = book.try(:end_copy_condition).try(:code)
-              td.wd5 style='text-align:right;'
+              td.wd20 style='text-align:right;'
                 - pct = FineScale.fine_percentage_for_condition_change(book.initial_copy_condition_id,book.end_copy_condition_id)
                 - fine = pct * (book.try(:book_copy).try(:book_edition).try(:price).try(:to_f) || 0.0)
                 - currency = book.try(:book_copy).try(:book_edition).try(:currency).try(:upcase)
                 - total_usd += fine if currency == 'USD'
                 - total_idr += fine if currency == 'IDR'
                 = "#{currency} #{fine}"
-          -if total_usd > 0.0
-            tr
-              td colspan=4  
-              td.wd5 style='text-align:right;' Total USD 
-              td.wd5 style='text-align:right;' =  total_usd 
-          -if total_idr > 0.0
-            tr 
-              td colspan=4 
-              td.wd5 style='text-align:right;' Total IDR 
-              td.wd5 style='text-align:right;' =  total_idr           
+          / -if total_usd > 0.0
+          /   tr
+          /     td colspan=4  
+          /     td.wd5 style='text-align:right;' Total USD 
+          /     td.wd5 style='text-align:right;' =  total_usd 
+          / -if total_idr > 0.0
+          /   tr 
+          /     td colspan=4 
+          /     td.wd5 style='text-align:right;' Total IDR 
+          /     td.wd5 style='text-align:right;' =  total_idr           
+          tr 
+            td colspan=2
+              -if total_usd > 0.0
+                p = "USD 1 = Rp#{Currency.dollar_rate}"
+            td colspan=2 
+            td.wd5 style='text-align:right;' Total IDR 
+            td.wd5 style='text-align:right;' =  total_idr +  total_usd * Currency.dollar_rate
+      

@@ -10,7 +10,7 @@ class StandardBooksController < ApplicationController
     if params[:grade].present? and params[:grade].upcase != 'ALL'
       @grade_level = GradeLevel.find params[:grade]
       @standard_books = @standard_books.where(grade_level:@grade_level).includes([:book_title])
-      if params[:section].present? and @grade_level.id >= 11
+      if params[:section].present? and [11,12].include? @grade_level.id 
         @grade_section = GradeSection.find params[:section]
         @standard_books = @standard_books.where(grade_section:@grade_section).includes([:book_title])
       end

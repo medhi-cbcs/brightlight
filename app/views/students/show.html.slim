@@ -84,10 +84,10 @@ nav
             .item = @student.passport_no
           dd.col.s4
             .label Language: 
-            .item = @student.language.titleize
+            .item = @student.language.try(:titleize)
           dd.col.s4
             .label Living with: 
-            .item = @student.living_with.titleize
+            .item = @student.living_with.try(:titleize)
           dd.col.s4
             .label Birth order/No of siblings: 
             .item = "#{@student.birth_order}/#{@student.siblings}"
@@ -128,66 +128,66 @@ nav
                 .label Address
                 .item = g.guardian.address_line1
                 .item = g.guardian.address_line2        
-                .item = g.guardian.city + ' ' + g.guardian.postal_code
+                .item = g.guardian.try(:city) + ' ' + g.guardian.try(:postal_code)
                 .item = g.guardian.state
                 .item = g.guardian.country
               dd
                 .label Mobile phone:
-                .item = g.guardian.mobile_phone
+                .item = g.guardian.try(:mobile_phone)
               dd
                 .label Home phone:
-                .item = g.guardian.home_phone
+                .item = g.guardian.try(:home_phone)
               dd
                 .label Office phone: 
-                .item = g.guardian.office_phone
+                .item = g.guardian.try(:office_phone)
 
     #tab4.tab-content
       .list_description.col.s12
         dl
           dd.col.s4
             .label Previous School
-            .item = @student.student_admission_info.prev_sch_name || '-'
+            .item = @student.student_admission_info.try(:prev_sch_name) || '-'
           dd.col.s4
             .label Previous Grade
-            .item = @student.student_admission_info.prev_sch_grade || '-'
+            .item = @student.student_admission_info.try(:prev_sch_grade) || '-'
           dd.col.s4
             .label Prev. School Address
-            .item = @student.student_admission_info.prev_sch_address || '-'
+            .item = @student.student_admission_info.try(:prev_sch_address) || '-'
           dd.col.s4
             .label SKHUN: 
-            .item = @student.student_admission_info.skhun || '-'
+            .item = @student.student_admission_info.try(:skhun) || '-'
           dd.col.s4
             .label SKHUN Date: 
-            .item = @student.student_admission_info.skhun_date || '-'
+            .item = @student.student_admission_info.try(:skhun_date) || '-'
           dd.col.s4
             .label NISN: 
-            .item = @student.student_admission_info.nisn || '-'
+            .item = @student.student_admission_info.try(:nisn) || '-'
           dd.col.s4
             .label Diploma: 
-            .item = @student.student_admission_info.diploma || '-'
+            .item = @student.student_admission_info.try(:diploma) || '-'
           dd.col.s4
             .label Diploma date: 
-            .item = @student.student_admission_info.diploma_date || '-'
+            .item = @student.student_admission_info.try(:diploma_date) || '-'
           dd.col.s4
             .label Duration: 
-            .item = @student.student_admission_info.nisn || '-'
+            .item = @student.student_admission_info.try(:duration) || '-'
           dd.col.s4
             .label Status: 
-            .item = @student.student_admission_info.status || '-'
+            .item = @student.student_admission_info.try(:status) || '-'
           dd.col.s4
             .label Acceptance date: 
-            .item = @student.student_admission_info.acceptance_date_1 || '-'
+            .item = @student.student_admission_info.try(:acceptance_date_1) || '-'
           dd.col.s4
             .label Acceptance date 2: 
-            .item = @student.student_admission_info.acceptance_date_2 || '-'
+            .item = @student.student_admission_info.try(:acceptance_date_2) || '-'
           dd.col.s4
             .label Academic Year: 
-            .item = @student.student_admission_info.academic_year.try(:name) || '-'
+            .item = @student.student_admission_info.try(:academic_year).try(:name) || '-'
           dd.col.s4
             .label Reason:
-            .item = @student.student_admission_info.reason || '-'
+            .item = @student.student_admission_info.try(:reason) || '-'
           dd.col.s4
             .label Notes:
-            .item = @student.student_admission_info.notes  || '-'
+            .item = @student.student_admission_info.try(:notes)  || '-'
             
             

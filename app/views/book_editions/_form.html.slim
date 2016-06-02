@@ -8,58 +8,61 @@
             - @book_edition.errors.full_messages.each do |message|
               li = message
       .row
-        .input-field.col.s6
+        .input-field.col.s12
           = f.label :title, class: 'active'
           = f.text_field :title
-        .input-field.col.s6
+        .input-field.col.s12
           = f.label :subtitle, class: 'active'
           = f.text_field :subtitle
-        .input-field.col.s6
+        .input-field.col.s4
           = f.label :authors, class: 'active'
           = f.text_field :authors
-        .input-field.col.s6
+        .input-field.col.s4
           = f.label :publisher, class: 'active'
           = f.text_field :publisher
-        .input-field.col.s6
+        .input-field.col.s4
           = f.label :published_date, class: 'active'
           = f.text_field :published_date
         .input-field.col.s12
           = f.text_area :description, class: 'materialize-textarea'
           = f.label :description, class: 'active'
-        .input-field.col.s6
+      .row
+        .input-field.col.s3
           = f.label 'ISBN 10', class: 'active'
           = f.text_field :isbn10
-        .input-field.col.s6
+        .input-field.col.s3
           = f.label 'ISBN 13', class: 'active'
           = f.text_field :isbn13
-        .input-field.col.s6
+        .input-field.col.s3
           = f.label :reference, class: 'active'
           = f.number_field :refno
-        .input-field.col.s6
-          = f.label :page_count, class: 'active'
-          = f.number_field :page_count
-        .input-field.col.s6
+        .input-field.col.s3
           = f.label :legacy_code, class: 'active'
           = f.text_field :legacy_code
-        .input-field.col.s6
+      .row
+        .input-field.col.s2
+          = f.label :currency, class: 'active'
+          = f.select :currency, [['USD', 'USD'], ['IDR', 'IDR']]          
+        .input-field.col.s2
           = f.label :price, class: 'active'
           = f.text_field :price
-        .input-field.col.s6
-          = f.label :currency, class: 'active'
-          = f.text_field :currency          
-        .input-field.col.s6
+        .input-field.col.s2
+          = f.label :page_count, class: 'active'
+          = f.number_field :page_count
+        .input-field.col.s2
           = f.label :language, class: 'active'
           = f.text_field :language
-        .input-field.col.s6
+      .row
+        .input-field.col.s4
           = f.label :edition_info, class: 'active'
           = f.text_field :edition_info
-        .input-field.col.s6
+        .input-field.col.s4
           = f.label :tags, class: 'active'
           = f.text_field :tags
-        .input-field.col.s6
+        .input-field.col.s4
           = f.label :subjects, class: 'active'
           = f.text_field :subjects
-        .input-field.col.s6
+        .input-field.col.s12
           = f.label :thumbnail,  class: 'active'
           = f.text_field :small_thumbnail
           

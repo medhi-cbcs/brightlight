@@ -24,11 +24,16 @@ class Ability
     can :manage, BookCondition
     can :manage, CopyCondition
     can :manage, StudentBook
-    can :manage, Student
     can :manage, BookLoan
     can :manage, BookFine
     can :manage, BookLabel
     can :manage, StandardBook
+    can :manage, Currency
+    can :manage, GradeSection
+    can :manage, Template
+    can :manage, Student  # for nested form in StudentBook
+    can :update, Employee # for nested form in BookLoan
+    can :scan, BookLoan
     can :read, :all
 	end
 
@@ -44,8 +49,9 @@ class Ability
   def teacher
     can :manage, CourseSection, instructor: @user.employee
     can :manage, GradeSection, homeroom: @user.employee
-    can :manage, StudentBook, grade_section: GradeSection.find_by_homeroom_id(@user.employee)
+    can :manage, StudentBook #, grade_section: GradeSection.find_by_homeroom_id(@user.employee)
     can :manage, StandardBook
+    can :scan, BookLoan
     can :read, :all
   end
 

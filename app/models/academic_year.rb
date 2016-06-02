@@ -6,11 +6,12 @@ class AcademicYear < ActiveRecord::Base
 	slug  :name
   scope :current_year, lambda { where("? between start_date and end_date", Date.today) }
   scope :for_date, lambda { |date| where("? between start_date and end_date", date) }
+	default_scope { order(:slug) }
 
 	class << self
     attr_accessor :current
- 	end
-	
+	end
+
   def self.current_id
   	self.current_year.take.id
   end
