@@ -129,6 +129,7 @@ class BookLoansController < ApplicationController
   def teachers
     authorize! :read, BookLoan
     @teachers = Employee.joins(:book_loans).where(book_loans: {academic_year: AcademicYear.current}).order(:name).uniq
+    @employees = Employee.where('email is not null').order(:name)
   end
 
   # GET employees/:employee_id/book_loans
