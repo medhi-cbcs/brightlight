@@ -26,13 +26,15 @@ nav
           span#year = @academic_year.present? ? "#{@academic_year.name}" : "Academic Year" 
           i.material-icons.right arrow_drop_down
     ul.right
+      li 
+        = link_to employee_book_loans_path(@teacher, format: :pdf), target: '_blank'
       li
         = link_to scan_employee_book_loans_path(@teacher)
-          | Scan book
+          | Scan
           i.material-icons.left import_contacts
       li.right
         = link_to new_employee_book_loans_path(@teacher)
-          | Add new book
+          | Add
           i.material-icons.left add
               
 .card-panel

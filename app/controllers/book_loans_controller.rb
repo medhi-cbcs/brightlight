@@ -153,6 +153,17 @@ class BookLoansController < ApplicationController
     elsif params[:year].present? && params[:year].downcase != 'all'
       @book_loans = @book_loans.order(:academic_year_id)
     end
+
+    respond_to do |format|
+      format.html
+      format.pdf do
+        render pdf:         "Teacher's Books -#{@teacher.name}.pdf",
+               disposition: 'inline',
+               template:    'book_loans/list.pdf.slim',
+               layout:      'pdf.html',
+               show_as_html: params.key?('debug')
+      end
+    end
   end
 
   def show_tm

@@ -1,12 +1,10 @@
-= @template.header.html_safe
-= @template.opening.html_safe
-
-p <strong>Name/Class</strong>: #{@student.name} / #{@student.current_grade_section.name}
+= @template.substituted_header.html_safe
+= @template.substituted_opening.html_safe
 
 p Fine Detail:
 
 .container
-  table.compact.striped
+  table.compact.striped.template-body
     thead 
       tr.grey.lighten-2
         th Textbook Title 
@@ -33,8 +31,8 @@ p Fine Detail:
         td Total
         td style='text-align:right' = number_to_currency(total.round(-2), {unit:'Rp', precision:0})
       
-= @template.closing.html_safe
-= @template.footer.html_safe
+= @template.substituted_closing.html_safe
+= @template.substituted_footer.html_safe
   
   
     
