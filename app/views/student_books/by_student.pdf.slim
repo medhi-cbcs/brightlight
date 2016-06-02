@@ -33,7 +33,7 @@ h5 Check Book Condition and Return #{'( '+@grade_section.name+' )' if @grade_sec
           th style='text-align:center;' Notes
       tbody                          
         - student_books.each_with_index do |book, i|
-          tr style='border-bottom:1px solid gainsboro'
+          tr style='border-bottom:1px solid gainsboro;height:60px'
             td.wd3 = i+1
             td.wd20
               span = book.try(:book_edition).try(:title).truncate(40)
