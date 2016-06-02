@@ -1,11 +1,9 @@
 .label Teacher Books
 
 ul#teacher-options.dropdown-content
-  li  
   - @teachers.all.each do |teacher|
     li 
       = link_to teacher.name, employee_book_loans_path(teacher)    
-// NOTE: for these wierd .symbolize_keys, refer to this article https://github.com/rails/rails/issues/21645
 
 nav
   .nav-wrapper
@@ -14,6 +12,6 @@ nav
         a.dropdown-button href="#!" data-activates="teacher-options"
           span#teacher = @teacher.present? ? "#{@teacher.name}" : "Teacher name" 
           i.material-icons.right arrow_drop_down
-              
+
 .card-panel
   | No teacher is selected.

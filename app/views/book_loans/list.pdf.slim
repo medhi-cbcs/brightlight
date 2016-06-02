@@ -1,0 +1,41 @@
+.label Teacher Books
+h4 = @teacher.name
+              
+.card-panel
+  - unless @error.present?
+    table
+      thead
+        tr
+          th Barcode
+          th Book title
+          th Out date
+          th Return date
+          th Checked?
+
+      tbody
+        - @book_loans.each do |book_loan|
+          tr
+            td = link_to book_loan.barcode, book_loan.book_copy
+            td = link_to book_loan.book_edition.try(:title).truncate(50), book_loan.book_edition if book_loan.book_edition.present?
+            td = link_to book_loan.out_date, employee_book_loan_path(employee_id: @teacher.id, id:book_loan.id)
+            td = book_loan.return_date
+            td = book_loan.return_status == 'R' ? '&#9745;'.html_safe : ''
+
+    .toolbar.z-depth-1
+      = will_paginate @book_titles
+  - else 
+    = @error
+
+javascript:
+  function reset_teacher_form() {
+    $("#teacher").val("");
+    $("#teacher-form label").html("<i class='material-icons prefix'>search</i>")
+    var newUrl = refineUrl();
+    window.history.pushState("", "Book Loans", newUrl );
+  }
+
+  function refineUrl()
+  {
+      var url = window.location.href;
+      return url.split("?")[0];     
+  }

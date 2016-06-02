@@ -118,20 +118,14 @@ class BookFinesController < ApplicationController
     else
       @template = Template.where(target:'book_fine').take
     end
+
     if params[:st].present?
       @student = Student.where(id:params[:st]).take
       @book_fines = BookFine.where(academic_year:@academic_year).where(student_id:params[:st])
-    end
-
-    respond_to do |format|
-      format.html
-      format.pdf do
-        render pdf:         "notification-#{@student.student_no}.pdf",
-               disposition: 'inline',
-               template:    'book_fines/notification.pdf.slim',
-               layout:      'pdf.html',
-               show_as_html: params.key?('debug')
-      end
+      @template.placeholders = {
+        student_name: @student.name,
+        grade_section: @student.current_grade_section.name
+      }
     end
   end
 
@@ -200,7 +194,7 @@ class BookFinesController < ApplicationController
                template:    'book_fines/payment.pdf.slim',
                layout:      'pdf.html',
                page_height: '5.5in',
-               page_width:  '8.5in',               
+               page_width:  '8.5in',
                show_as_html: params.key?('debug')
       end
     end
