@@ -1,4 +1,12 @@
                               Prefix Verb     URI Pattern                                                       Controller#Action
+                           templates GET      /templates(.:format)                                              templates#index
+                                     POST     /templates(.:format)                                              templates#create
+                        new_template GET      /templates/new(.:format)                                          templates#new
+                       edit_template GET      /templates/:id/edit(.:format)                                     templates#edit
+                            template GET      /templates/:id(.:format)                                          templates#show
+                                     PATCH    /templates/:id(.:format)                                          templates#update
+                                     PUT      /templates/:id(.:format)                                          templates#update
+                                     DELETE   /templates/:id(.:format)                                          templates#destroy
                           currencies GET      /currencies(.:format)                                             currencies#index
                                      POST     /currencies(.:format)                                             currencies#create
                         new_currency GET      /currencies/new(.:format)                                         currencies#new
@@ -200,6 +208,23 @@ edit_labels_book_edition_book_copies GET      /book_editions/:book_edition_id/bo
                                      PATCH    /grade_levels/:id(.:format)                                       grade_levels#update
                                      PUT      /grade_levels/:id(.:format)                                       grade_levels#update
                                      DELETE   /grade_levels/:id(.:format)                                       grade_levels#destroy
+                  invoice_line_items GET      /invoices/:invoice_id/line_items(.:format)                        line_items#index
+                                     POST     /invoices/:invoice_id/line_items(.:format)                        line_items#create
+               new_invoice_line_item GET      /invoices/:invoice_id/line_items/new(.:format)                    line_items#new
+              edit_invoice_line_item GET      /invoices/:invoice_id/line_items/:id/edit(.:format)               line_items#edit
+                   invoice_line_item GET      /invoices/:invoice_id/line_items/:id(.:format)                    line_items#show
+                                     PATCH    /invoices/:invoice_id/line_items/:id(.:format)                    line_items#update
+                                     PUT      /invoices/:invoice_id/line_items/:id(.:format)                    line_items#update
+                                     DELETE   /invoices/:invoice_id/line_items/:id(.:format)                    line_items#destroy
+                    finalize_invoice PATCH    /invoices/:id/finalize(.:format)                                  invoices#finalize
+                            invoices GET      /invoices(.:format)                                               invoices#index
+                                     POST     /invoices(.:format)                                               invoices#create
+                         new_invoice GET      /invoices/new(.:format)                                           invoices#new
+                        edit_invoice GET      /invoices/:id/edit(.:format)                                      invoices#edit
+                             invoice GET      /invoices/:id(.:format)                                           invoices#show
+                                     PATCH    /invoices/:id(.:format)                                           invoices#update
+                                     PUT      /invoices/:id(.:format)                                           invoices#update
+                                     DELETE   /invoices/:id(.:format)                                           invoices#destroy
                    all_student_books GET      /student_books(.:format)                                          student_books#index
                 assign_student_books GET      /student_books/assign(.:format)                                   student_books#assign
                  label_student_books GET      /student_books/label(.:format)                                    student_books#label
@@ -208,6 +233,7 @@ edit_labels_book_edition_book_copies GET      /book_editions/:book_edition_id/bo
             by_student_student_books GET      /student_books/by_student(.:format)                               student_books#by_student
        update_multiple_student_books PUT      /student_books/update_multiple(.:format)                          student_books#update_multiple
                missing_student_books GET      /student_books/missing(.:format)                                  student_books#missing
+                 pnnrb_student_books GET      /student_books/pnnrb(.:format)                                    student_books#pnnrb
                student_student_books GET      /students/:student_id/student_books(.:format)                     student_books#index
                                      POST     /students/:student_id/student_books(.:format)                     student_books#create
             new_student_student_book GET      /students/:student_id/student_books/new(.:format)                 student_books#new
@@ -224,9 +250,15 @@ edit_labels_book_edition_book_copies GET      /book_editions/:book_edition_id/bo
                                      PATCH    /students/:id(.:format)                                           students#update
                                      PUT      /students/:id(.:format)                                           students#update
                                      DELETE   /students/:id(.:format)                                           students#destroy
-           search_student_book_loans POST     /book_loans/search_student(.:format)                              book_loans#search_student
-           search_teacher_book_loans POST     /book_loans/search_teacher(.:format)                              book_loans#search_teacher
+                 teachers_book_loans GET      /book_loans/teachers(.:format)                                    book_loans#teachers
                           book_loans GET      /book_loans(.:format)                                             book_loans#index
+                                     POST     /book_loans(.:format)                                             book_loans#create
+                       new_book_loan GET      /book_loans/new(.:format)                                         book_loans#new
+                      edit_book_loan GET      /book_loans/:id/edit(.:format)                                    book_loans#edit
+                           book_loan GET      /book_loans/:id(.:format)                                         book_loans#show
+                                     PATCH    /book_loans/:id(.:format)                                         book_loans#update
+                                     PUT      /book_loans/:id(.:format)                                         book_loans#update
+                                     DELETE   /book_loans/:id(.:format)                                         book_loans#destroy
                   student_book_loans GET      /students/:student_id/book_loans(.:format)                        book_loans#index
                                      POST     /students/:student_id/book_loans(.:format)                        book_loans#create
                new_student_book_loan GET      /students/:student_id/book_loans/new(.:format)                    book_loans#new
@@ -235,17 +267,19 @@ edit_labels_book_edition_book_copies GET      /book_editions/:book_edition_id/bo
                                      PATCH    /students/:student_id/book_loans/:id(.:format)                    book_loans#update
                                      PUT      /students/:student_id/book_loans/:id(.:format)                    book_loans#update
                                      DELETE   /students/:student_id/book_loans/:id(.:format)                    book_loans#destroy
-                 employee_book_loans GET      /employees/:employee_id/book_loans(.:format)                      book_loans#index
-                                     POST     /employees/:employee_id/book_loans(.:format)                      book_loans#create
-              new_employee_book_loan GET      /employees/:employee_id/book_loans/new(.:format)                  book_loans#new
-             edit_employee_book_loan GET      /employees/:employee_id/book_loans/:id/edit(.:format)             book_loans#edit
-                  employee_book_loan GET      /employees/:employee_id/book_loans/:id(.:format)                  book_loans#show
-                                     PATCH    /employees/:employee_id/book_loans/:id(.:format)                  book_loans#update
-                                     PUT      /employees/:employee_id/book_loans/:id(.:format)                  book_loans#update
-                                     DELETE   /employees/:employee_id/book_loans/:id(.:format)                  book_loans#destroy
+                 employee_book_loans GET      /employees/:employee_id/book_loans(.:format)                      book_loans#list
+                                     POST     /employees/:employee_id/book_loans(.:format)                      book_loans#create_tm
+             new_employee_book_loans GET      /employees/:employee_id/book_loans/new(.:format)                  book_loans#new_tm
+            scan_employee_book_loans GET      /employees/:employee_id/book_loans/scan(.:format)                 book_loans#scan
+                  employee_book_loan GET      /employees/:employee_id/book_loans/:id(.:format)                  book_loans#show_tm
+                                     PATCH    /employees/:employee_id/book_loans/:id(.:format)                  book_loans#update_tm
+                                     PUT      /employees/:employee_id/book_loans/:id(.:format)                  book_loans#update_tm
+                                     DELETE   /employees/:employee_id/book_loans/:id(.:format)                  book_loans#destroy_tm
                 calculate_book_fines GET      /book_fines/calculate(.:format)                                   book_fines#calculate
                   current_book_fines GET      /book_fines/current(.:format)                                     book_fines#current
 autocomplete_student_name_book_fines GET      /book_fines/autocomplete_student_name(.:format)                   book_fines#autocomplete_student_name
+             notification_book_fines GET      /book_fines/notification(.:format)                                book_fines#notification
+                  payment_book_fines GET      /book_fines/payment(.:format)                                     book_fines#payment
                           book_fines GET      /book_fines(.:format)                                             book_fines#index
                                      POST     /book_fines(.:format)                                             book_fines#create
                        new_book_fine GET      /book_fines/new(.:format)                                         book_fines#new
