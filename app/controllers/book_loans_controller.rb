@@ -136,11 +136,9 @@ class BookLoansController < ApplicationController
     authorize! :read, BookLoan
     @teacher = Employee.find params[:employee_id]
     @teachers = Employee.joins(:book_loans).where(book_loans: {academic_year: AcademicYear.current}).order(:name).uniq
-    @items_per_page = 30
     if @teacher.present?
       @book_loans = BookLoan.includes([:employee])
                       .where(employee: @teacher)
-                      .paginate(page: params[:page], per_page: @items_per_page)
     else
       @error = "Teacher with name like #{params[:teacher]} was not found."
     end
@@ -155,12 +153,16 @@ class BookLoansController < ApplicationController
     end
 
     respond_to do |format|
-      format.html
+      format.html do
+        @items_per_page = 30
+        @book_loans = @book_loans.paginate(page: params[:page], per_page: @items_per_page)
+      end
       format.pdf do
         render pdf:         "Teacher's Books -#{@teacher.name}.pdf",
                disposition: 'inline',
                template:    'book_loans/list.pdf.slim',
                layout:      'pdf.html',
+               header:      { left: "Teacher's Books", right: '[page] of [topage]' },
                show_as_html: params.key?('debug')
       end
     end
