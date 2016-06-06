@@ -139,11 +139,13 @@ class BookLoansController < ApplicationController
     @teacher = Employee.find params[:employee_id]
     @teachers = Employee.joins(:book_loans).where(book_loans: {academic_year: AcademicYear.current}).order(:name).uniq
     if @teacher.present?
-      @book_loans = BookLoan.includes([:employee])
+      @book_loans = BookLoan.includes([:employee]).includes([:book_copy,:book_edition])
                       .where(employee: @teacher)
     else
       @error = "Teacher with name like #{params[:teacher]} was not found."
     end
+
+    # academic_year
     if params[:year].present? && params[:year].downcase != 'all'
       @academic_year = AcademicYear.find params[:year]
       @book_loans = @book_loans.where(academic_year:@academic_year)
@@ -151,7 +153,7 @@ class BookLoansController < ApplicationController
       @academic_year = AcademicYear.current
       @book_loans = @book_loans.where(academic_year:@academic_year)
     elsif params[:year].present? && params[:year].downcase == 'all'
-      @book_loans = @book_loans.order('academic_year_id DESC','return_date ASC')
+      @book_loans = @book_loans.order('academic_year_id DESC')
     end
 
     respond_to do |format|

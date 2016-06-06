@@ -44,6 +44,8 @@ nav
           | Add
           i.material-icons.left add
               
+#show-loan.modal.modal-fixed-footer
+
 .card-panel
   - unless @error.present?
     table
@@ -60,7 +62,7 @@ nav
           tr
             td = link_to book_loan.barcode, book_loan.book_copy
             td = link_to book_loan.book_edition.try(:title).truncate(50), book_loan.book_edition if book_loan.book_edition.present?
-            td = link_to book_loan.out_date, employee_book_loan_path(employee_id: @teacher.id, id:book_loan.id)
+            td = link_to book_loan.out_date, employee_book_loan_path(employee_id: @teacher.id, id:book_loan.id), remote:true
             td = book_loan.return_date
             td = book_loan.return_status == 'R' ? '&#9745;'.html_safe : ''
   - else 
