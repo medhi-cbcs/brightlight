@@ -118,8 +118,9 @@ class BookLoansController < ApplicationController
   def destroy
     @book_loan.destroy
     respond_to do |format|
-      format.html { redirect_to book_loans_url, notice: 'Book loan was successfully destroyed.' }
+      format.html { redirect_to book_loans_path, notice: 'Book loan was successfully destroyed.' }
       format.json { head :no_content }
+      format.js { head :no_content }
     end
   end
 

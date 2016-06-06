@@ -14,7 +14,7 @@ html
 		meta name="viewport" content="width=device-width, initial-scale=1.0"
 	
 	- color_shade = current_user.try(:admin?) ? 1 : 5
-	body class="#{controller.controller_name} blue-grey lighten-#{color_shade}"
+	body class="#{controller.controller_name} blue-grey lighten-5"
 		header
 			= render 'shared/layout/header'
 

@@ -59,14 +59,12 @@ nav
             th Out date
             th Due date
             th Academic year
-            - if params[:student].present?
-              th Student
-            - if params[:teacher].present?
-              th Teacher
+            th Name
+            th Actions
 
         tbody
           - @book_loans.each do |book_loan|
-            tr
+            tr id="row-#{book_loan.id}"
               td = link_to book_loan.barcode, book_loan.book_copy
               td = link_to book_loan.book_edition.try(:title).truncate(50), book_loan.book_edition if book_loan.book_edition.present?
               td = book_loan.out_date
@@ -76,12 +74,20 @@ nav
                 td = book_loan.student.name
               - if book_loan.employee.present?
                 td = book_loan.employee.name
+              td 
+                = link_to book_loan, remote: true
+                  i.material-icons visibility
+                = link_to book_loan, data: {id: book_loan.id, confirm: 'Are you sure?'}, :method => :delete, class:"red-text delete-link", remote: true
+                  i.material-icons delete
 
-      .toolbar.z-depth-1
-        = will_paginate @book_titles
     - else 
       = @error
-
+              
+  .toolbar.z-depth-1
+    = will_paginate @book_titles
+    
+#show-loan.modal.modal-fixed-footer
+  
 javascript:
   function reset_student_form() {
     $("#student").val("");
@@ -101,3 +107,9 @@ javascript:
       var url = window.location.href;
       return url.split("?")[0];     
   }
+
+  $('.delete-link').bind('ajax:complete', function() {
+    var id = $(this).data("id");
+    $("tr#row-"+id).remove();
+    Materialize.toast("Book Loan record deleted", 4000, "green");
+  });
