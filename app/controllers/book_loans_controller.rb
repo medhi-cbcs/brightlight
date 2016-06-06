@@ -150,8 +150,8 @@ class BookLoansController < ApplicationController
     elsif params[:year].blank?
       @academic_year = AcademicYear.current
       @book_loans = @book_loans.where(academic_year:@academic_year)
-    elsif params[:year].present? && params[:year].downcase != 'all'
-      @book_loans = @book_loans.order(:academic_year_id)
+    elsif params[:year].present? && params[:year].downcase == 'all'
+      @book_loans = @book_loans.order('academic_year_id DESC','return_date ASC')
     end
 
     respond_to do |format|
