@@ -1,4 +1,5 @@
 class BookLoan < ActiveRecord::Base
+  validates :book_copy, presence:true 
   belongs_to :book_copy
   belongs_to :book_edition
   belongs_to :book_title
@@ -9,7 +10,7 @@ class BookLoan < ActiveRecord::Base
   belongs_to :academic_year
   belongs_to :prev_academic_year, class_name: "AcademicYear"
   belongs_to :user
-  
+
   scope :current, lambda { where(academic_year: AcademicYear.current) }
 
   def grade_section_name

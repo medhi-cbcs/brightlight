@@ -35,6 +35,7 @@ nav
         th Loaned to
         th Grade
         th Out Date
+        th Due Date
         th Return Date
         th Academic year
         th
@@ -51,6 +52,7 @@ nav
           td = copy_loan.grade_section_name
           td = copy_loan.out_date
           td = copy_loan.due_date
+          td = copy_loan.return_date
           td = copy_loan.try(:academic_year).try(:name)
           td 
             - if copy_loan.student.present? and copy_loan.try(:academic_year).try(:id) == AcademicYear.current.id

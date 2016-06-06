@@ -45,8 +45,6 @@ javascript:
         setTimeout(function(){
           if (chars.length >= 11) {
             var barcode = chars.join("");
-            // console.log("Barcode Scanned: " + barcode);
-            // assign value to some input (or do whatever you want)
             var field = $("[name$='[barcode]']:last");
             field.val(barcode);
             $.getJSON("/book_copies/"+barcode+".json?empl="+#{@teacher.id}, null, function (data) {
@@ -62,10 +60,12 @@ javascript:
       }
       pressed = true;
     });
-    $(document).on("keypress","[name$='[barcode]']", (function(e){
-      if ( e.which === 13 ) {
+    $(document).on("keypress","[name$='[barcode]']", (function(e){  
+      var c = String.fromCharCode(e.which);
+      if ( $.trim($(e.target).val()).length >= 10 ) {
+        var barcode = $.trim($(e.target).val()+c);
         e.preventDefault();
-        $.getJSON("/book_copies/"+$(e.target).val()+".json", null, function (data) {
+        $.getJSON("/book_copies/"+barcode+".json", null, function (data) {
           insert_values(data);
           $("[name$='[barcode]']:last").focus();
         }).fail(function(){
@@ -84,6 +84,6 @@ javascript:
       $(".barcodes:last").val(book.barcode);
       $(".bkudids:last").val(book.book_title.bkudid);
       $(".add_fields").trigger('click');      
-    }
+    };
   });
   

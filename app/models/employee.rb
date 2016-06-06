@@ -9,7 +9,9 @@ class Employee < ActiveRecord::Base
   has_many :grade_sections, foreign_key: "homeroom_id"
   has_many :course_sections, foreign_key: "instructor_id"
 
-  accepts_nested_attributes_for :book_loans, allow_destroy: true, reject_if: :all_blank
+  accepts_nested_attributes_for :book_loans,
+    allow_destroy: true,
+    reject_if: proc { |attributes| attributes['book_copy_id'].blank? }
 
 	scope :all_teachers, lambda { where(job_title:'Teacher') }
   scope :active, lambda { where(is_active:true).order(:name) }

@@ -62,8 +62,6 @@ nav
           = link_to new_student_student_book_path(student_id:@student.id)
             | Add book 
             i.material-icons.left add
-      li.right  
-        = link_to 'PDF Format', all_student_books_path(s:params[:s], student_id:params[:student_id], format: :pdf), target: '_blank'
 
 - if @students.present?
   - @students.each do |student|

@@ -58,12 +58,12 @@ nav
             td = link_to book_loan.out_date, employee_book_loan_path(employee_id: @teacher.id, id:book_loan.id)
             td = book_loan.return_date
             td = book_loan.return_status == 'R' ? '&#9745;'.html_safe : ''
-
-    .toolbar.z-depth-1
-      = will_paginate @book_titles
   - else 
     = @error
 
+.toolbar.z-depth-1
+  = will_paginate @book_titles
+  
 javascript:
   function reset_teacher_form() {
     $("#teacher").val("");
