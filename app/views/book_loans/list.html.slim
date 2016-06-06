@@ -27,9 +27,14 @@ nav
           i.material-icons.right arrow_drop_down
     ul.right
       li 
-        = link_to employee_book_loans_path(@teacher, format: :pdf), target: '_blank'
-          | PDF
-          i.material-icons.left description
+        -if @academic_year.present?
+          = link_to employee_book_loans_path(@teacher, year: @academic_year.id, format: :pdf), target: '_blank'
+            | PDF
+            i.material-icons.left description
+        - else
+          = link_to employee_book_loans_path(@teacher, format: :pdf), target: '_blank'
+            | PDF
+            i.material-icons.left description
       li
         = link_to scan_employee_book_loans_path(@teacher)
           | Scan

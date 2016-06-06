@@ -34,7 +34,7 @@ javascript:
             // assign value to some input (or do whatever you want)
             var field = $("[name$='[barcode]']:last");
             field.val(barcode);
-            $.getJSON("/book_copies/"+barcode+".json?empl="+#{@teacher.id}, null, function (data) {
+            $.getJSON("/book_copies/"+barcode+".json?empl="+#{@teacher.id}+"&anyyear=t", null, function (data) {
               update_book_loan(data);              
               $("[name$='[barcode]']:last").focus();
             }).fail(function(){
@@ -67,7 +67,7 @@ javascript:
         dataType: 'json',
         success: function(m) {
           Materialize.toast('Book checked', 5000, 'green');
-          $("tbody#book_loans").append("<tr><td>"+book.barcode+"</td><td>"+book.book_edition.title+"</td><td>Returned</td><td>"+today.toUTCString()+"</td></tr>");
+          $("tbody#book_loans").prepend("<tr><td>"+book.barcode+"</td><td>"+book.book_edition.title+"</td><td>Returned</td><td>"+today.toUTCString()+"</td></tr>");
         },
         error: function(e) {
           Materialize.toast('Book check error', 5000, 'red');
