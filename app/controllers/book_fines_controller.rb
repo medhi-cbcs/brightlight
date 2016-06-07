@@ -17,7 +17,13 @@ class BookFinesController < ApplicationController
     #   @students = Student.eager_load([:book_fines,:grade_sections_students]).where("book_fines.academic_year_id = ? and grade_sections_students.academic_year_id = ?", @academic_year.id, @academic_year.id)
 
     @book_fines = BookFine.where(academic_year:@academic_year).order(:student_id)
-    @students = Student.joins(:book_fines).where(book_fines: {academic_year: @academic_year}).uniq.eager_load(:grade_sections_students).where('grade_sections_students.academic_year_id = ?', @academic_year.id).eager_load(:grade_sections)
+    @students = Student.joins(:book_fines)
+      .where(book_fines: {academic_year: @academic_year})
+      .uniq
+      .eager_load(:grade_sections_students)
+      .where('grade_sections_students.academic_year_id = ?', @academic_year.id)
+      .eager_load(:grade_sections)
+      .order(:name)
     @grade_sections = GradeSection.joins(:grade_sections_students)
                       .where('grade_sections_students.student_id in (SELECT DISTINCT "students".id FROM "students" INNER JOIN "book_fines" ON "book_fines"."student_id" = "students"."id" WHERE "book_fines"."academic_year_id" = ?) and grade_sections_students.academic_year_id = ?', @academic_year.id, @academic_year.id)
                       .sort.uniq
@@ -49,6 +55,7 @@ class BookFinesController < ApplicationController
     @book_copy = @book_fine.book_copy
     @book_edition = @book_copy.try(:book_edition)
     @student = @book_fine.student
+    @academic_year = AcademicYear.current
   end
 
   # GET /book_fines/new
@@ -213,6 +220,7 @@ class BookFinesController < ApplicationController
     respond_to do |format|
       format.html { redirect_to book_fines_url, notice: 'Book fine was successfully destroyed.' }
       format.json { head :no_content }
+      format.js { head :no_content }
     end
   end
 
@@ -224,7 +232,7 @@ class BookFinesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def book_fine_params
-      params.require(:book_fine).permit(:book_copy_id, :old_condition_id, :new_condition_id, :fine, :currency, :academic_year_id, :student_id, :status)
+      params.require(:book_fine).permit(:book_copy_id, :old_condition_id, :new_condition_id, :fine, :percentage, :currency, :academic_year_id, :student_id, :status)
     end
 
     def helpers
