@@ -65,16 +65,10 @@ nav
         th
           .right Fine <br> amount
         th Student
-        th Status
         th Actions
 
-
     tbody
-      - total_idr = 0.0
-      - total_usd = 0.0
       - @book_fines.each do |book_fine|
-        - total_idr += book_fine.fine.try(:to_f) || 0.0 if book_fine.currency == 'IDR'
-        - total_usd += book_fine.fine.try(:to_f) || 0.0 if book_fine.currency == 'USD'
         tr
           td = link_to book_fine.book_copy.try(:copy_no), book_fine.book_copy
           td = link_to book_fine.book_copy.try(:book_edition).try(:title), book_fine.book_copy.try(:book_edition)
@@ -87,8 +81,11 @@ nav
                 = number_to_currency(book_fine.fine.try(:to_f) || 0.0, unit:'$')
               - elsif book_fine.currency == 'IDR'
                 = number_to_currency(book_fine.fine.try(:to_f) || 0.0, unit:'Rp', precision: 0)
-          td = link_to book_fine.try(:student).try(:name), book_fines_path(st:book_fine.student_id,year:@academic_year.id)
-          td = book_fine.status
+          td 
+            - if @student.blank?
+              = link_to book_fine.try(:student).try(:name), book_fines_path(st:book_fine.student_id,year:@academic_year.id)
+            - else 
+              = book_fine.student.name
           td
             = link_to book_fine
               i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="View" visibility
@@ -100,10 +97,21 @@ nav
         tr 
           td colspan=3
           td colspan=2 Total
-          td = number_to_currency(total_idr + (@dollar_rate * total_usd).round(-2), {unit:'Rp'})
+          td 
+            .right
+              = number_to_currency(@total_idr_amount.round(-2), {unit:'Rp', precision: 0})
           td colspan=3 style="text-align:right;" USD 1 = Rp#{@dollar_rate}
           
 - if @student.present?
   .toolbar.z-depth-1
     = link_to 'Notification', notification_book_fines_path(st:@student.id, year:@academic_year.id), class: "btn btn-default waves-effect waves-light"
     = link_to 'Payment', payment_book_fines_path(st:@student), class: "btn btn-default waves-effect waves-light"
+    
+    - if @paid 
+      .notes.right.green-text
+        | Paid
+        i.material-icons.left done
+    - else 
+      .notes.right.red-text
+        | Not Paid
+        i.material-icons.left not_interested
