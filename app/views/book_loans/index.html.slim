@@ -66,7 +66,9 @@ nav
           - @book_loans.each do |book_loan|
             tr id="row-#{book_loan.id}"
               td = link_to book_loan.barcode, book_loan.book_copy
-              td = link_to book_loan.book_edition.try(:title).truncate(50), book_loan.book_edition if book_loan.book_edition.present?
+              td 
+                - if book_loan.book_edition.present?
+                  = link_to book_loan.book_edition.try(:title).truncate(50), book_loan.book_edition, remote:true 
               td = book_loan.out_date
               td = book_loan.due_date
               td = book_loan.academic_year.try(:name)
@@ -86,7 +88,7 @@ nav
   .toolbar.z-depth-1
     = will_paginate @book_titles
     
-#show-loan.modal.modal-fixed-footer
+#show-modal.modal.modal-fixed-footer
   
 javascript:
   function reset_student_form() {
