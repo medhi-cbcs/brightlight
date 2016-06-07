@@ -17,13 +17,25 @@ class BookFinesController < ApplicationController
     #   @students = Student.eager_load([:book_fines,:grade_sections_students]).where("book_fines.academic_year_id = ? and grade_sections_students.academic_year_id = ?", @academic_year.id, @academic_year.id)
 
     @book_fines = BookFine.where(academic_year:@academic_year).order(:student_id)
-    @students = Student.joins(:book_fines).where(book_fines: {academic_year: @academic_year}).uniq.eager_load(:grade_sections_students).where('grade_sections_students.academic_year_id = ?', @academic_year.id).eager_load(:grade_sections)
+    @students = Student.joins(:book_fines)
+      .where(book_fines: {academic_year: @academic_year})
+      .uniq
+      .eager_load(:grade_sections_students)
+      .where('grade_sections_students.academic_year_id = ?', @academic_year.id)
+      .eager_load(:grade_sections)
+      .order(:name)
     @grade_sections = GradeSection.joins(:grade_sections_students)
                       .where('grade_sections_students.student_id in (SELECT DISTINCT "students".id FROM "students" INNER JOIN "book_fines" ON "book_fines"."student_id" = "students"."id" WHERE "book_fines"."academic_year_id" = ?) and grade_sections_students.academic_year_id = ?', @academic_year.id, @academic_year.id)
                       .sort.uniq
+    @dollar_rate = Currency.dollar_rate
     if params[:st].present?
       @student = Student.where(id:params[:st]).take
       @book_fines = @book_fines.where(student_id:params[:st])
+      @total_idr_amount = @book_fines.reduce(BigDecimal.new("0")){|sum,f| sum + ( f.currency=="USD" ? f.fine * @dollar_rate : f.fine )}
+      tag = Digest::MD5.hexdigest "#{@academic_year.id}-#{@student.id}-#{@total_idr_amount}"
+      # Take the last created invoice with the tag, or create one if none found
+      invoice = Invoice.where(tag: tag).order('created_at DESC').take
+      @paid = invoice.paid if invoice.present?
     end
     if params[:s].present?
       @grade_section = GradeSection.where(id:params[:s]).take
@@ -34,7 +46,6 @@ class BookFinesController < ApplicationController
           AND grade_sections_students.academic_year_id = ?)", @grade_section.id, @academic_year.id)
     end
     @book_fines = @book_fines.includes([:student,:old_condition,:new_condition]).includes(:book_copy => :book_edition)
-    @dollar_rate = Currency.dollar_rate
   end
 
   # GET /book_fines/1
@@ -44,6 +55,7 @@ class BookFinesController < ApplicationController
     @book_copy = @book_fine.book_copy
     @book_edition = @book_copy.try(:book_edition)
     @student = @book_fine.student
+    @academic_year = AcademicYear.current
   end
 
   # GET /book_fines/new
@@ -136,8 +148,8 @@ class BookFinesController < ApplicationController
     @student = Student.where(id:params[:st]).includes(:grade_sections_students).take
     @book_fines = BookFine.where(academic_year:@academic_year).where(student_id:params[:st]).includes([:book_copy, :old_condition, :new_condition])
     @currency = "Rp"
-    @dollar = Currency.dollar_rate
-    @total_idr_amount = @book_fines.reduce(BigDecimal.new("0")){|sum,f| sum + ( f.currency=="USD" ? f.fine * @dollar : f.fine )}
+    @dollar_rate = Currency.dollar_rate
+    @total_idr_amount = @book_fines.reduce(BigDecimal.new("0")){|sum,f| sum + ( f.currency=="USD" ? f.fine * @dollar_rate : f.fine )}
 
     # The tag is to identify the invoice with the book fines
     @tag = Digest::MD5.hexdigest "#{@academic_year.id}-#{@student.id}-#{@total_idr_amount}"
@@ -158,9 +170,9 @@ class BookFinesController < ApplicationController
                    user: current_user
                  )
       @book_fines.each do |f|
-        idr_amount = f.currency=="USD" ? f.fine * @dollar : f.fine
+        idr_amount = f.currency=="USD" ? f.fine * @dollar_rate : f.fine
         @invoice.line_items.create(description: f.book_copy.try(:book_edition).try(:title),
-                                    price: f.currency=="USD" ? f.fine * @dollar : f.fine,
+                                    price: f.currency=="USD" ? f.fine * @dollar_rate : f.fine,
                                     ext1: f.old_condition.code,
                                     ext2: f.new_condition.code,
                                     ext3: "#{f.percentage * 100}%"
@@ -208,6 +220,7 @@ class BookFinesController < ApplicationController
     respond_to do |format|
       format.html { redirect_to book_fines_url, notice: 'Book fine was successfully destroyed.' }
       format.json { head :no_content }
+      format.js { head :no_content }
     end
   end
 
@@ -219,7 +232,7 @@ class BookFinesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def book_fine_params
-      params.require(:book_fine).permit(:book_copy_id, :old_condition_id, :new_condition_id, :fine, :currency, :academic_year_id, :student_id, :status)
+      params.require(:book_fine).permit(:book_copy_id, :old_condition_id, :new_condition_id, :fine, :percentage, :currency, :academic_year_id, :student_id, :status)
     end
 
     def helpers

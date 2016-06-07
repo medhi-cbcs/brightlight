@@ -1,0 +1,6 @@
+$("#show-modal").html("<div class='modal-content'><h5>Book Fine</h5>" +
+  "<%=j render(partial: 'book_fine_record', locals: {book_fine: @book_fine, book_copy:@book_copy, book_edition:@book_edition})%>"
+  + "</div><div class='modal-footer'>" +
+    "<a href='#!' class='modal-action modal-close waves-effect waves-light btn-flat'>Close</a></div>"
+);
+$('#show-modal').openModal();

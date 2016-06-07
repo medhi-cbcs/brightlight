@@ -5,7 +5,11 @@ nav
     ul
       li  
         = link_to book_fines_path 
-          | Back 
+          | All 
+          i.material-icons.left chevron_left
+      li  
+        = link_to book_fines_path(st:@student.try(:id),year:@academic_year.id)
+          = @student.try(:name) 
           i.material-icons.left chevron_left
       li.right
         = link_to edit_book_fine_path(@book_fine)
@@ -14,48 +18,17 @@ nav
 
 .card
   .card-content
-    table
-      tr
-        td style="vertical-align:top"
-          - thumbnail = @book_copy.try(:cover_image)
-          = link_to @book_edition
-            = image_tag(thumbnail, class: 'list_image')
-        td
-          .list_description
-            dl.row
-              dd.col.s6
-                .label Student
-                .item = @book_fine.student.present? ? @book_fine.student.name : 'N/A'   
-            dl.row
-              dd.col.s12
-                .label Title
-                .item = @book_edition.try(:title)
-            dl.row
-              dd.col.s4
-                .label Barcode
-                .item = @book_copy.barcode
-              dd.col.s4 
-                .label Label
-                .item = @book_copy.book_label.present? ? @book_copy.book_label.name : "--"
-            dl.row
-              dd.col.s4
-                .label Initial Condition
-                span.box class="#{@book_fine.old_condition.try(:color)}"
-                  = @book_fine.old_condition.present? ? @book_fine.old_condition.code.capitalize : 'N/A'
-              dd.col.s4
-                .label Return Condition
-                span.box class="#{@book_fine.new_condition.try(:color)}"
-                  = @book_fine.new_condition.present? ? @book_fine.new_condition.code.capitalize : 'N/A'
-            dl.row
-              dd.col.s4
-                .label Book Price
-                .item = @book_edition.try(:price) || 'N/A'
-              dd.col.s4
-                .label Fine Amount
-                .item = @book_fine.fine || 'N/A'                
-            dl.row            
-              dd.col.s6
-                .label Status
-                .item = @book_fine.status || '--' 
-                
+    = render partial: 'book_fine_record', locals: {book_fine: @book_fine, book_copy: @book_copy, book_edition: @book_edition}
+
+.toolbar.z-depth-1
+  = link_to 'Notification', notification_book_fines_path(st:@student.id, year:@academic_year.id), class: "btn btn-default waves-effect waves-light"
+  = link_to 'Payment', payment_book_fines_path(st:@student), class: "btn btn-default waves-effect waves-light"
+  - if @paid 
+    .notes.right.green-text
+      | Paid
+      i.material-icons.left done
+  - else 
+    .notes.right.red-text
+      | Not Paid
+      i.material-icons.left not_interested              
                 

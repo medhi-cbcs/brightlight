@@ -7,6 +7,10 @@ class FineScale < ActiveRecord::Base
   end
 
   def percent_format
-    "#{percentage*100} %"
+    "#{percentage*100}%"
+  end
+
+  def self.collection_for_select
+    all.collect{|f| [f.percent_format,f.percentage]}.uniq.sort{|a,b| b[1] <=> a[1]}
   end
 end
