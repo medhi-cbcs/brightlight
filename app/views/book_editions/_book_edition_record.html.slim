@@ -1,0 +1,43 @@
+table
+  tr
+    td style="vertical-align:top"
+      - thumbnail = book_edition.small_thumbnail.present? ? book_edition.small_thumbnail : 'book-icon.png' 
+      = image_tag(thumbnail, class: 'list_image')
+    td
+      .list_description
+        dl.row
+          dt = book_edition.title
+          dd = book_edition.subtitle
+          dd.col.s6
+            .label Author
+            .item = book_edition.authors || 'N/A'
+          dd.col.s6
+            .label ISBN 10
+            .item = book_edition.isbn10 || 'N/A'
+          dd.col.s6 
+            .label Publisher
+            .item = book_edition.publisher || 'N/A'
+          dd.col.s6
+            .label ISBN
+            .item = book_edition.isbn13 || 'N/A'
+          dd.col.s6 
+            .label Published Date
+            .item = book_edition.published_date || 'N/A'
+          dd.col.s6
+            .label Reference No
+            .item = book_edition.refno || 'N/A'
+          dd.col.s6
+            .label Page count
+            .item = book_edition.page_count || 'N/A'            
+          dd.col.s6
+            .label Legacy Code
+            .item = book_edition.legacy_code || 'N/A'
+          dd.col.s6
+            .label Price
+            .item = book_edition.price.present? ? "#{book_edition.currency} #{book_edition.price.to_digits}" : 'N/A'
+          dd.col.s12
+            .label Description
+            .item = strip_tags(book_edition.description) || 'N/A'
+          dd.col.s6
+            .label Title group
+            .item = book_edition.book_title ? link_to(book_edition.book_title.title, book_edition.book_title) : "--" 
