@@ -156,6 +156,13 @@ class BookLoansController < ApplicationController
       @book_loans = @book_loans.order('academic_year_id DESC')
     end
 
+    # Checked filter
+    if params[:checked] == 't'
+      @book_loans = @book_loans.where(return_status:'R')
+    elsif params[:checked] == 'f'
+      @book_loans = @book_loans.where(return_status:nil)
+    end
+
     respond_to do |format|
       format.html do
         @items_per_page = 30
