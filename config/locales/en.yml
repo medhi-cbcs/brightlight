@@ -23,6 +23,9 @@ en:
   hello: "Hello world"
   errors:
     "404":
-      description: "The page which you are looking is not exist!"
-      heading: "Record is not found"
+      description: "The page you were looking for does not exist!"
+      heading: "Record was not found"
       subheading: ""
+  will_paginate:
+    previous_label: "&#x3008;"
+    next_label: "&#x3009;"

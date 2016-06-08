@@ -13,6 +13,7 @@ $darker-grey:			#292c33;
 $dark-grey:				#2d3039;
 $brightBlue:			#389bfe;
 $muted-red:				#f5494d;
+$kuning-podang:	  #e7580b;
 
 .show-image {
 	width:  120px;
@@ -396,8 +397,14 @@ nav ul a.btn-floating {
 
 	.pagination {
 		margin-top: 4px;
+		.current {
+		  color: #fff;
+			background-color: $kuning-podang;
+		}
+		.previous_page, .next_page {
+			font-weight: bold;
+		}
 	}
-
 	.notes {
 		padding-top: 6px;
 	}
