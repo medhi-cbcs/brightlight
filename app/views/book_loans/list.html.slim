@@ -13,7 +13,14 @@ ul#year-options.dropdown-content
     li 
       = link_to year.name, employee_book_loans_path(params.merge(year:year.id).symbolize_keys)
 // NOTE: for these wierd .symbolize_keys, refer to this article https://github.com/rails/rails/issues/21645
-
+ul#checked-options.dropdown-content
+  li 
+    = link_to 'All', employee_book_loans_path
+  li
+    = link_to 'Yes', employee_book_loans_path(checked:'t')
+  li
+    = link_to 'No', employee_book_loans_path(checked:'f')
+    
 nav
   .nav-wrapper
     ul
@@ -55,7 +62,10 @@ nav
           th Book title
           th Out date
           th Return date
-          th Checked?
+          th
+            a.dropdown-button href="#!" data-activates="checked-options" data-beloworigin="true" 
+              | Checked?
+              i.material-icons.left arrow_drop_down          
 
       tbody
         - @book_loans.each do |book_loan|
@@ -66,7 +76,7 @@ nav
                 = link_to book_loan.book_edition.try(:title).truncate(50), book_loan.book_edition, remote: true
             td = link_to book_loan.out_date, employee_book_loan_path(employee_id: @teacher.id, id:book_loan.id), remote:true
             td = book_loan.return_date
-            td = book_loan.return_status == 'R' ? '&#9745;'.html_safe : ''
+            td style='text-align:center' = book_loan.return_status == 'R' ? '&#9745;'.html_safe : ''
   - else 
     = @error
 
