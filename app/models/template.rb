@@ -11,7 +11,7 @@ class Template < ActiveRecord::Base
         self.placeholders.each do |key, value|
           next if key.blank?
           placeholder = "##{key.to_s}#"
-          str.gsub!(placeholder, value.to_s || '')
+          str.gsub!(placeholder, value.to_s || '')          
         end
         return str
       else

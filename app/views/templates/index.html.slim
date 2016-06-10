@@ -28,7 +28,7 @@ nav
           td = template.target
           td = template.group
           td = template.category
-          td = template.active
+          td = template.active == 'true' ? 'Yes' : 'No'
           td = template.language
           td 
             = link_to template

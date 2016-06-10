@@ -18,18 +18,18 @@
 
   .card-panel
     | The following placeholders are available for the template: #receipt_no#, #student_name#, #student_no#, #grade_section#, 
-      #academic_year#, #invoice_date#, #receipt_amount#, #receipt_amount_in_words#
+      #academic_year#, #invoice_date#, #receipt_amount#, #receipt_amount_in_words#, #received_by#, #paid_by#
     
   .card-panel
     .row
-      .col.s3
+      .col.s6
         .input-field
           = f.label :name
           = f.text_field :name
-      .col.s3
+      .col.s6
         .input-field
-          = f.label :target
-          = f.text_field :target
+          = f.label :target, class:'active'
+          = f.select :target, options_for_select([['Book Fine Notification', 'book_fine'], ['Fine Receipt', 'book_fine_receipt']]), {prompt:'Please select'}
       .col.s3
         .input-field
           = f.label :group
@@ -40,8 +40,8 @@
           = f.text_field :category
       .col.s3
         .input-field
-          = f.label :active
-          = f.text_field :active
+          = f.label :active, class:'active'
+          = f.select :active, options_for_select([['Yes', true], ['No', false]]), {prompt:'Please select'}
       / .col.s3
       /   .input-field
       /   = f.label :academic_year

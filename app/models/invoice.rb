@@ -6,4 +6,6 @@ class Invoice < ActiveRecord::Base
   validates :total_amount, presence: true
   validates :bill_to, presence: true
   validates :student_id, presence: true
+  validates :tag, uniqueness: true
+
 end

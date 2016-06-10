@@ -12,10 +12,12 @@ nav
           
 .card-panel
   .row 
-    .col.s12
-      strong Name:
-      = @template.name
-
+    .col.s10
+      .label Name:
+      .item = @template.name
+    .col.s2
+      .label Active:
+      .item = @template.active == 'true' ? "Yes" : "No"
 .card-panel
   = @template.header.html_safe
 
@@ -28,24 +30,22 @@ nav
   = @template.footer.html_safe
 
 .card-panel
-  p
-    strong Target:
-    = @template.target
-  p
-    strong Group:
-    = @template.group
-  p
-    strong Category:
-    = @template.category
-  p
-    strong Active:
-    = @template.active
-  p
-    strong Academic year:
-    = @template.academic_year
-  p
-    strong Language:
-    = @template.language
+  .row
+    .col.s3
+      .label Target:
+      .item = @template.target
+    .col.s3
+      .label Group:
+      .item = @template.group || '-'
+    .col.s2
+      .label Category:
+      .item = @template.category || '-'
+    .col.s2
+      .label Academic year:
+      .item = @template.academic_year || '-'
+    .col.s2
+      .label Language:
+      .item = @template.language || '-'
 
 css:
   td, th { padding:0 }

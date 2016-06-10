@@ -128,16 +128,18 @@ class BookFinesController < ApplicationController
     if params[:template].present?
       @template = Template.find params[:template]
     else
-      @template = Template.where(target:'book_fine').take
+      @template = Template.where(target:'book_fine').where(active:'true').take
     end
 
     if params[:st].present?
       @student = Student.where(id:params[:st]).take
       @book_fines = BookFine.where(academic_year:@academic_year).where(student_id:params[:st])
-      @template.placeholders = {
-        student_name: @student.name,
-        grade_section: @student.current_grade_section.name
-      }
+      if @template
+        @template.placeholders = {
+          student_name: @student.name,
+          grade_section: @student.current_grade_section.name
+        }
+      end
     end
   end
 
@@ -150,53 +152,34 @@ class BookFinesController < ApplicationController
     @currency = "Rp"
     @dollar_rate = Currency.dollar_rate
     @total_idr_amount = @book_fines.reduce(BigDecimal.new("0")){|sum,f| sum + ( f.currency=="USD" ? f.fine * @dollar_rate : f.fine )}
+    @invoice = BookFine.create_invoice_for student:@student,
+                  total_amount: @total_idr_amount,
+                  academic_year: @academic_year,
+                  exchange_rate: @dollar_rate,
+                  current_user: current_user
 
-    # The tag is to identify the invoice with the book fines
-    @tag = Digest::MD5.hexdigest "#{@academic_year.id}-#{@student.id}-#{@total_idr_amount}"
-
-    # Take the last created invoice with the tag, or create one if none found
-    @invoice = Invoice.where(tag: @tag).order('created_at DESC').take
-    unless @invoice.present?
-      @invoice = Invoice.create(
-                   student: @student,
-                   bill_to: @student.name,
-                   grade_section: @student.current_grade_section.name,
-                   roster_no: @student.current_roster_no,
-                   total_amount: @total_idr_amount.to_f.round(-2),
-                   currency: @currency,
-                   statuses: 'Created',
-                   paid: false,
-                   tag: @tag,
-                   user: current_user
-                 )
-      @book_fines.each do |f|
-        idr_amount = f.currency=="USD" ? f.fine * @dollar_rate : f.fine
-        @invoice.line_items.create(description: f.book_copy.try(:book_edition).try(:title),
-                                    price: f.currency=="USD" ? f.fine * @dollar_rate : f.fine,
-                                    ext1: f.old_condition.code,
-                                    ext2: f.new_condition.code,
-                                    ext3: "#{f.percentage * 100}%"
-                                  )
-      end
-    end
     @print_date = Date.today.strftime("%d-%m-%Y")
 
     # Use the specified template or the default one if none given
     if params[:template].present?
       @template = Template.find params[:template]
     else
-      @template = Template.where(target:'book_fine_receipt').take
+      @template = Template.where(target:'book_fine_receipt').where(active:'true').take
     end
-    @template.placeholders = {
-      receipt_date: @print_date,
-      receipt_no: @invoice.id,
-      student_name: @student.name,
-      student_grade: @student.current_grade_section.name,
-      student_no: @student.current_roster_no,
-      receipt_amount: helpers.number_to_currency(@total_idr_amount.to_f.round(-2), {unit:'Rp', precision:0}),
-      receipt_amount_in_words: @total_idr_amount.to_f.round(-2).to_words.split.map(&:capitalize).join(' '),
-      academic_year: @academic_year.name
-    }
+    if @template
+      @template.placeholders = {
+        receipt_date: @print_date,
+        receipt_no: @invoice.id,
+        student_name: @student.name,
+        student_grade: @student.current_grade_section.name,
+        student_no: @student.current_roster_no,
+        receipt_amount: helpers.number_to_currency(@total_idr_amount.to_f.round(-2), {unit:'Rp', precision:0}),
+        receipt_amount_in_words: @total_idr_amount.to_f.round(-2).to_words.split.map(&:capitalize).join(' '),
+        academic_year: @academic_year.name,
+        received_by: @invoice.received_by,
+        paid_by: @invoice.paid_by
+      }
+    end
 
     respond_to do |format|
       format.html

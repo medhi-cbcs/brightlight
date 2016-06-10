@@ -1,38 +1,46 @@
-= @template.substituted_header.html_safe
-= @template.substituted_opening.html_safe
+- if @template
+  = @template.substituted_header.html_safe
+  = @template.substituted_opening.html_safe
 
-p Fine Detail:
+  p Fine Detail:
 
-.container
-  table.compact.striped.template-body
-    thead 
-      tr.grey.lighten-2
-        th Textbook Title 
-        th style='text-align:center' Borrow <br> Condition 
-        th style='text-align:center' Return <br> Condition 
-        th style='text-align:right' % Fine 
-        th style='text-align:right' Fine 
-    tbody 
-      - total = 0.0
-      - @book_fines.each do |book_fine|
-        - if book_fine.currency == 'USD'
-          - fine = Currency.dollar_rate * book_fine.fine.try(:to_f) || 0.0  
-        - elsif book_fine.currency == 'IDR'
-          - fine = book_fine.fine.try(:to_f) || 0.0
-        - total += fine
-        tr 
-          td = book_fine.try(:book_copy).try(:book_edition).try(:title)
-          td style='text-align:center' = book_fine.old_condition.try(:code) 
-          td style='text-align:center' = book_fine.new_condition.try(:code) 
-          td style='text-align:right' = number_to_percentage(book_fine.percentage * 100, precision:0)
-          td style='text-align:right' = number_to_currency(fine.round(-2), {unit:'Rp', precision:0})
-      tr.grey.lighten-2
-        td colspan=3 
-        td Total
-        td style='text-align:right' = number_to_currency(total.round(-2), {unit:'Rp', precision:0})
+  .container
+    table.compact.striped.template-body
+      thead 
+        tr.grey.lighten-2
+          th Textbook Title 
+          th style='text-align:center' Borrow <br> Condition 
+          th style='text-align:center' Return <br> Condition 
+          th style='text-align:right' % Fine 
+          th style='text-align:right' Fine 
+      tbody 
+        - total = 0.0
+        - @book_fines.each do |book_fine|
+          - if book_fine.currency == 'USD'
+            - fine = Currency.dollar_rate * book_fine.fine.try(:to_f) || 0.0  
+          - elsif book_fine.currency == 'IDR'
+            - fine = book_fine.fine.try(:to_f) || 0.0
+          - total += fine
+          tr 
+            td = book_fine.try(:book_copy).try(:book_edition).try(:title)
+            td style='text-align:center' = book_fine.old_condition.try(:code) 
+            td style='text-align:center' = book_fine.new_condition.try(:code) 
+            td style='text-align:right' = number_to_percentage(book_fine.percentage * 100, precision:0)
+            td style='text-align:right' = number_to_currency(fine.round(-2), {unit:'Rp', precision:0})
+        tr.grey.lighten-2
+          td colspan=3 
+          td Total
+          td style='text-align:right' = number_to_currency(total.round(-2), {unit:'Rp', precision:0})
+        
+  = @template.substituted_closing.html_safe
+  = @template.substituted_footer.html_safe
+  
+- else 
+  #error_explanation
+    p No template is active Book Fine Notification.
+    p Please create or activate a template.
+    p Go to #{link_to "Settings &raquo; Templates".html_safe, templates_path}
       
-= @template.substituted_closing.html_safe
-= @template.substituted_footer.html_safe
-  
-  
+    
+      
     
