@@ -25,7 +25,7 @@ nav
       - @templates.each do |template|
         tr
           td = template.name
-          td = template.target
+          td = TemplateTarget.find_by_code(@template.target).try(:name)
           td = template.group
           td = template.category
           td = template.active == 'true' ? 'Yes' : 'No'

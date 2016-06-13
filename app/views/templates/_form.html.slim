@@ -29,7 +29,7 @@
       .col.s6
         .input-field
           = f.label :target, class:'active'
-          = f.select :target, options_for_select([['Book Fine Notification', 'book_fine'], ['Fine Receipt', 'book_fine_receipt']]), {prompt:'Please select'}
+          = f.collection_select :target, TemplateTarget.all, :code, :name, {prompt:'Please select'}
       .col.s3
         .input-field
           = f.label :group

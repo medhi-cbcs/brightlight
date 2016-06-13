@@ -19,21 +19,22 @@ nav
       .label Active:
       .item = @template.active == 'true' ? "Yes" : "No"
 .card-panel
-  = @template.header.html_safe
+  .template
+    = @template.header.html_safe
 
-  = @template.opening.html_safe
+    = @template.opening.html_safe
 
-  = @template.body.html_safe
+    = @template.body.html_safe
 
-  = @template.closing.html_safe
+    = @template.closing.html_safe
 
-  = @template.footer.html_safe
+    = @template.footer.html_safe
 
 .card-panel
   .row
     .col.s3
       .label Target:
-      .item = @template.target
+      .item = TemplateTarget.find_by_code(@template.target).try(:name)
     .col.s3
       .label Group:
       .item = @template.group || '-'
@@ -46,6 +47,3 @@ nav
     .col.s2
       .label Language:
       .item = @template.language || '-'
-
-css:
-  td, th { padding:0 }

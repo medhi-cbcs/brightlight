@@ -136,13 +136,29 @@ class StudentBooksController < ApplicationController
       @grade_section = GradeSection.find params[:gs]
       @grade_level = @grade_section.grade_level
       @book_labels = BookLabel.where(grade_section:@grade_section)
-    elsif params[:l].present?
-      @book_labels = BookLabel.where(id:params[:l])
-      @grade_level = GradeLevel.find(@book_labels.first.grade_level_id)
+    end
+    if params[:l].present?
+      @book_labels = @book_labels.where(id:params[:l])
+      @grade_level ||= GradeLevel.find(@book_labels.first.grade_level_id)
       @grade_level_name = @grade_level.name
       @grade_section_name = @book_labels.first.section_name
     end
 
+    # Use the specified template or the default one if none given
+    if params[:template].present?
+      @template = Template.find params[:template]
+    else
+      @template = Template.where(target:'student_book_receipt').where(active:'true').take
+    end
+    if @template
+      @template.placeholders = {
+        grade_section: @grade_section_name,
+        academic_year: AcademicYear.current.name,
+        student_name: ''
+      }
+    end
+    @book_copies = BookCopy.standard_books(@grade_level.id,@grade_section.id,AcademicYear.current.id)
+                    .includes([:book_edition])
     respond_to do |format|
       format.html do
         @grade_level_ids = GradeLevel.all.collect(&:id)

@@ -1,0 +1,15 @@
+p#notice = notice
+
+p
+  strong Name:
+  = @template_target.name
+p
+  strong Code:
+  = @template_target.code
+p
+  strong Description:
+  = @template_target.description
+
+= link_to 'Edit', edit_template_target_path(@template_target)
+'|
+= link_to 'Back', template_targets_path

@@ -44,7 +44,9 @@ class BookCopy < ActiveRecord::Base
   end
 
   def latest_condition
-    latest_copy_condition.try(:book_condition)
+    copy_conditions.active.order('copy_conditions.academic_year_id DESC,copy_conditions.created_at DESC')
+      .select('book_conditions.code')
+      .joins(:book_condition).take
   end
 
   def current_start_condition

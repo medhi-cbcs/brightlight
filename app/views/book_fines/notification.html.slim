@@ -1,6 +1,6 @@
 - if @template
-  = @template.substituted_header.html_safe
-  = @template.substituted_opening.html_safe
+  = @template.substituted :header
+  = @template.substituted :opening
 
   p Fine Detail:
 
@@ -32,8 +32,8 @@
           td Total
           td style='text-align:right' = number_to_currency(total.round(-2), {unit:'Rp', precision:0})
         
-  = @template.substituted_closing.html_safe
-  = @template.substituted_footer.html_safe
+  = @template.substituted :closing
+  = @template.substituted :footer
   
 - else 
   #error_explanation

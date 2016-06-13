@@ -1,5 +1,5 @@
 - if @template      
-  /= @template.substituted_header.html_safe
+  = @template.substituted :header, pdf: true
   / - str = @template.header
   / - @template.placeholders.each do |key, value|
   /   - next if key.blank?
@@ -11,23 +11,23 @@
   / - str.gsub! img_match[1], "file:///#{Rails.root.join('assets','images',url_match[1]+'-'+url_match[2]+"."+url_match[3])}"
   / = str.html_safe
   
-  table.compact
-    tr
-      td style='width: 481px; height: 103px;'
-        = wicked_pdf_image_tag 'cbcs-headline.jpg', size:'348x62'
-        /= image_tag "file:///#{Rails.root}/app/assets/images/cbcs-headline.jpg", size:'348x62'
-      td 
-        h5
-          span style='font-size:14pt' Receipt <br> Kuitansi
-      td style='width:191px' &nbsp;
-      td style='width: 11px; height: 53px;'
-        p No
-        p Date 
-      td style='width: 136px; text-align: right; height: 53px;'
-        p = @invoice.id
-        p = @print_date
+  / table.compact
+  /   tr
+  /     td style='width: 481px; height: 103px;'
+  /       = wicked_pdf_image_tag 'cbcs-headline.jpg', size:'348x62'
+  /       /= image_tag "file:///#{Rails.root}/app/assets/images/cbcs-headline.jpg", size:'348x62'
+  /     td 
+  /       h5
+  /         span style='font-size:14pt' Receipt <br> Kuitansi
+  /     td style='width:191px' &nbsp;
+  /     td style='width: 11px; height: 53px;'
+  /       p No
+  /       p Date 
+  /     td style='width: 136px; text-align: right; height: 53px;'
+  /       p = @invoice.id
+  /       p = @print_date
         
-  = @template.substituted_opening.html_safe
+  = @template.substituted :opening, pdf: true
 
   .container style="margin:10px 0"
     table.compact.striped
@@ -57,8 +57,8 @@
           td Total
           td style='text-align:right' = number_to_currency(total.round(-2), {unit:'Rp', precision:0})
         
-  = @template.substituted_closing.html_safe
-  = @template.substituted_footer.html_safe
+  = @template.substituted :closing, pdf: true
+  = @template.substituted :footer, pdf: true
 
 - else
   p No template is active Fine Receipt.

@@ -63,6 +63,11 @@ nav
 
 - if @book_labels.present?
   - @book_labels.each do |book_label|
-    h4 = book_label.name
-    = render partial: 'receipt_form_table', locals: {book_label: book_label}
+    .template
+      = @template.substituted :header, roster_no: book_label.name
+      = @template.substituted :opening 
+      = render partial: 'receipt_form_table', locals: {book_label: book_label}
+      = @template.substituted :closing 
+      = @template.substituted :footer
+
     .page-break
