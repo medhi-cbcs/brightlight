@@ -258,6 +258,12 @@ class StudentBooksController < ApplicationController
     end
   end
 
+  # POST /student_books/finalize
+  def finalize
+    authorize! :manage, StudentBook
+    puts params[:academic_year_id]
+  end
+
   # GET /student_books/by_title
   def by_title
     authorize! :manage, StudentBook
