@@ -133,7 +133,7 @@ class Student < ActiveRecord::Base
 			 INNER JOIN student_books ON student_books.student_id = students.id
 			 WHERE student_books.end_copy_condition_id = ? AND grade_section_id = ?
 			 ORDER BY student_books.grade_section_id, CAST(student_books.roster_no AS int)",
-			 missing.id, section.id
+			 condition.id, section.id
 		]
 	end
 
