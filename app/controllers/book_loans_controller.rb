@@ -195,6 +195,7 @@ class BookLoansController < ApplicationController
     @teacher = Employee.find params[:employee_id]
   end
 
+  # PUT /employees/:employee_id/book_loans/:id
   def update_tm
     authorize! :manage, BookLoan
     @teacher = Employee.find params[:employee_id]

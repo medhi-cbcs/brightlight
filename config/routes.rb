@@ -83,6 +83,7 @@ Rails.application.routes.draw do
   put 'student_books/update_multiple' => 'student_books#update_multiple', as: :update_multiple_student_books
   get 'student_books/missing' => 'student_books#missing', as: :missing_student_books
   get 'student_books/pnnrb' => 'student_books#pnnrb', as: :pnnrb_student_books
+  get 'student_books/finalize' => 'student_books#finalize', as: :finalize_student_books
 
   resources :students do
     resources :student_books, shallow: true
@@ -141,6 +142,7 @@ Rails.application.routes.draw do
   # You can have the root of your site routed with "root"
   root 'welcome#index'
   get :dashboard, to: 'welcome#dashboard'
+  get :inventory_mtce, to: 'welcome#inventory_mtce'
 
   # For authorization with OmniAuth2
   get '/auth/:provider/callback', to: 'sessions#create'

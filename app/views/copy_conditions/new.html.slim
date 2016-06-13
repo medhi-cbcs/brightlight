@@ -11,6 +11,15 @@ h4 Book Condition Checking
           button.btn.waves-effect.waves-light type="submit" Save 
 
   .card-panel
+    .row      
+      .input-field 
+        .label Select book condition
+        - BookCondition.where.not(slug:'missing').each do |book_condition|
+          .col.s1
+            = radio_button_tag :book_condition, book_condition.id, book_condition.id==1 ? true : false, class: 'with-gap'
+            = label_tag "book_condition_#{book_condition.id}", book_condition.code
+        
+  .card-panel
     .row
       - if @copy_condition.errors.any?
         #error_explanation
