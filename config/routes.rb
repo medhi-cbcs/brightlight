@@ -36,6 +36,7 @@ Rails.application.routes.draw do
 
   get 'book_copies/:id/copy_conditions/check' => 'copy_conditions#check', as: :check_copy_condition
   post 'book_copies/:id/copy_conditions/check_update' => 'copy_conditions#check_update'
+  put 'book_copies/:id/copy_conditions/create' => 'copy_conditions#create', as: :create_book_copy_condition
   get 'book_copies/:id/conditions' => 'book_copies#conditions', as: :book_copy_conditions
   get 'book_copies/:id/loans' => 'book_copies#loans', as: :book_copy_loans
 
