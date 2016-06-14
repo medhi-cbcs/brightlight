@@ -15,9 +15,10 @@ nav
         a.dropdown-button href="#!" data-activates="teacher-options"
           span#teacher = @teacher.present? ? "#{@teacher.name}" : "Teacher name" 
           i.material-icons.right arrow_drop_down
-      li.right
-        a.dropdown-button href="#!" data-activates="new-loans-options"
-          | New Loan
-          i.material-icons.right arrow_drop_down
+      - if can? :manage, BookLoan
+        li.right
+          a.dropdown-button href="#!" data-activates="new-loans-options"
+            | New Loan
+            i.material-icons.right arrow_drop_down
 .card-panel
   | No teacher is selected.

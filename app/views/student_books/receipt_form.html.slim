@@ -46,8 +46,9 @@ javascript:
 nav
   .nav-wrapper
     ul
-      li 
-        = link_to 'PDF Format', receipt_form_student_books_path(gs:params[:gs], g:params[:g], l:params[:l], format: :pdf), target: '_blank'
+      - if @book_copies.present?
+        li 
+          = link_to 'PDF Format', receipt_form_student_books_path(gs:params[:gs], g:params[:g], l:params[:l], format: :pdf), target: '_blank'
       li.right
         a#student-menu.dropdown-button href="#!" data-activates="student-options"
           span#student = params[:l].present? ? "#{@book_labels.first.name}" : 'Choose number'
@@ -63,6 +64,11 @@ nav
 
 - if @book_labels.present?
   - @book_labels.each do |book_label|
-    h4 = book_label.name
-    = render partial: 'receipt_form_table', locals: {book_label: book_label}
+    .template
+      /= @template.substituted :header, roster_no: book_label.name
+      /= @template.substituted :opening 
+      = render partial: 'receipt_form_table', locals: {book_label: book_label}
+      /= @template.substituted :closing 
+      /= @template.substituted :footer
+
     .page-break

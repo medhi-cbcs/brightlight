@@ -125,9 +125,9 @@ class BookCopiesController < ApplicationController
   # GET /book_copies/1/conditions
   def conditions
     if params[:all].present?
-      @copy_conditions = CopyCondition.where(book_copy_id:params[:id]).order('academic_year_id DESC, start_date DESC')
+      @copy_conditions = CopyCondition.where(book_copy_id:params[:id]).order('academic_year_id DESC, updated_at DESC')
     else
-      @copy_conditions = CopyCondition.where(book_copy_id:params[:id]).where(deleted_flag:false).order('academic_year_id DESC, start_date DESC')
+      @copy_conditions = CopyCondition.where(book_copy_id:params[:id]).where.not(deleted_flag:true).order('academic_year_id DESC, updated_at DESC')
     end
     @book_copy = BookCopy.find(params[:id])
     @book_edition = @book_copy.book_edition

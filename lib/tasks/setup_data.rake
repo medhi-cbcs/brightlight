@@ -62,5 +62,9 @@ namespace :data do
 		values = [[1, 4, 0.65], [1, 3, 0.30], [2, 4, 0.30], [1, 5, 1.0], [2, 5, 1.0], [3, 5, 1.0], [4, 5, 1.0]]
 		FineScale.import columns, values
 
+		TemplateTarget.delete_all
+		columns = [:name, :code, :description]
+		values = [['Book Fine Notification', 'book_fine','Notification Letter for Book Fine'], ['CBCS Book Fine Receipt', 'book_fine_receipt',''], ['Student Book Receipt Form','student_book_receipt','']]
+		TemplateTarget.import columns, values
   end
 end

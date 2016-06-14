@@ -1,7 +1,7 @@
 .card-panel
   - if params[:sid].present?
     .section-header = @student.name
-  table.compact
+  table.compact style="margin: 1.2em 0"
     thead
       tr
         th No
@@ -12,8 +12,7 @@
 
     tbody
       - if book_label.present?
-        - book_copies = BookCopy.where(book_label:book_label).standard_books(@grade_level.id,@grade_section.id,AcademicYear.current.id).order('standard_books.id').includes([:book_edition, :book_condition])
-        - book_copies.each_with_index do |book, i|
+        - @book_copies.where(book_label:book_label).each_with_index do |book, i|
           tr
             td.wd5 = i+1
             td.wd15 = link_to book.barcode, book

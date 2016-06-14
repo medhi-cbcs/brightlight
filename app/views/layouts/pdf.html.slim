@@ -68,7 +68,7 @@ html
         section
           = yield :layout
 
-css:
+scss:
   body {
     font-family: 'Roboto','Arial','sans-serif'; 
     font-weight: 300;
@@ -155,3 +155,41 @@ css:
   .alwaysbreak { page-break-before: always; }
   .nobreak:before { clear:both; }
   .nobreak { page-break-inside: avoid; }
+  .template {
+    td, th {
+      padding: 0
+    }
+
+    table.template-body {
+       font-size:16px;
+    }
+  }
+  table.compact {
+  	width: 100%;
+
+  	td.ellipsize {
+  		overflow: hidden;
+  		text-overflow: ellipsis;
+  		display: block;
+  		white-space: nowrap;
+  	}
+  	td {
+  		padding-top: 2px;
+  		padding-bottom: 2px;
+  	}
+  	.ellipsis {
+  	    position: relative;
+  	}
+  	.ellipsis:before {
+  	    content: '&nbsp;';
+  	    visibility: hidden;
+  	}
+  	.ellipsis span {
+  	    position: absolute;
+  	    left: 0;
+  	    right: 0;
+  	    white-space: nowrap;
+  	    overflow: hidden;
+  	    text-overflow: ellipsis;
+  	}
+  }

@@ -30,13 +30,8 @@ javascript:
         setTimeout(function(){
           if (chars.length >= 11) {
             var barcode = chars.join("");
-            // console.log("Barcode Scanned: " + barcode);
-            // assign value to some input (or do whatever you want)
-            var field = $("[name$='[barcode]']:last");
-            field.val(barcode);
             $.getJSON("/book_copies/"+barcode+".json?empl="+#{@teacher.id}+"&anyyear=t", null, function (data) {
               update_book_loan(data);              
-              $("[name$='[barcode]']:last").focus();
             }).fail(function(){
               $(e.target).val('');
               Materialize.toast("Invalid barcode.", 5000, 'red');

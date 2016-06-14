@@ -38,7 +38,7 @@ nav
           i.material-icons.right arrow_drop_down
 
 - @students.each do |student|
-  - missing_books = @student_books.where(grade_section:student.current_grade_section).where(roster_no:student.current_roster_no)
+  - missing_books = @student_books.where(grade_section:student.current_grade_section,roster_no:student.current_roster_no).includes([:book_edition, :book_copy, :initial_copy_condition, :end_copy_condition])
   - unless missing_books.blank?
     .card-panel    
       h5 = "#{student.name} (#{student.current_grade_section.name}##{student.current_roster_no})"

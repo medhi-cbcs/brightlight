@@ -110,4 +110,31 @@ class Student < ActiveRecord::Base
 				.includes([:grade_section])
 				.take.try(:grade_section)
 	end
+
+	def self.having_books_with_condition(condition)
+	  ## The following statement, unforetunately, won't work. So we fallback to sql statement.
+	  # @students = Student.joins(:student_books)
+	  #                   .where(student_books: {end_copy_condition:missing})
+	  #                   .order('student_books.grade_section_id' ,'CAST(student_books.roster_no AS int)')
+	  #                   .uniq
+		Student.find_by_sql [
+			"SELECT DISTINCT students.*, student_books.grade_section_id, CAST(student_books.roster_no AS int)
+			 FROM students
+			 INNER JOIN student_books ON student_books.student_id = students.id
+			 WHERE student_books.end_copy_condition_id = ?
+			 ORDER BY student_books.grade_section_id, CAST(student_books.roster_no AS int)", condition.id
+		]
+	end
+
+	def self.in_section_having_books_with_condition(condition, section:)
+		Student.find_by_sql [
+			"SELECT DISTINCT students.*, student_books.grade_section_id, CAST(student_books.roster_no AS int)
+			 FROM students
+			 INNER JOIN student_books ON student_books.student_id = students.id
+			 WHERE student_books.end_copy_condition_id = ? AND grade_section_id = ?
+			 ORDER BY student_books.grade_section_id, CAST(student_books.roster_no AS int)",
+			 condition.id, section.id
+		]
+	end
+
 end

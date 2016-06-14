@@ -7,4 +7,8 @@ class WelcomeController < ApplicationController
 
 	def dashboard
 	end
+
+	def inventory_mtce
+		authorize! :manage, BookLoan
+	end
 end
