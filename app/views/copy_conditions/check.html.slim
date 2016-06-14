@@ -20,7 +20,7 @@ h4 Book Condition Checking
               li = message
       .input-field.col.s4
         = f.text_field :barcode, disabled:true, value:@book_copy.barcode
-        = f.hidden_field :barcode
+        = f.hidden_field :barcode, value:@book_copy.barcode
       -if @book_copy.latest_condition.present?
         .input-field.col.s2
           = label :present_condition, :present_condition
