@@ -27,7 +27,7 @@
             tr
               td = i+1
               td = book.barcode
-              td = truncate(book.book_edition.try(:title), length: 35)
+              td = truncate(book.book_edition.try(:title), length: 45)
               td = book.latest_condition.try(:code)
               td
       

@@ -137,6 +137,8 @@ class StudentBooksController < ApplicationController
       @grade_section = GradeSection.find params[:gs]
       @grade_level = @grade_section.grade_level
       @book_labels = BookLabel.where(grade_section:@grade_section)
+      @book_copies = BookCopy.standard_books(@grade_level.id,@grade_section.id,AcademicYear.current.id)
+                    .includes([:book_edition])
     end
     if params[:l].present?
       @book_labels = @book_labels.where(id:params[:l])
@@ -158,8 +160,7 @@ class StudentBooksController < ApplicationController
         student_name: ''
       }
     end
-    @book_copies = BookCopy.standard_books(@grade_level.id,@grade_section.id,AcademicYear.current.id)
-                    .includes([:book_edition])
+
     respond_to do |format|
       format.html do
         @grade_level_ids = GradeLevel.all.collect(&:id)
