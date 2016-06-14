@@ -46,10 +46,11 @@ nav
         = link_to scan_employee_book_loans_path(@teacher)
           | Scan
           i.material-icons.left import_contacts
-      li.right
-        = link_to new_employee_book_loans_path(@teacher)
-          | Add
-          i.material-icons.left add
+      - if can? :manage, BookLoan
+        li
+          = link_to new_employee_book_loans_path(@teacher)
+            | Add
+            i.material-icons.left add
               
 #show-modal.modal.modal-fixed-footer
 
@@ -66,17 +67,24 @@ nav
             a.dropdown-button href="#!" data-activates="checked-options" data-beloworigin="true" 
               | Checked?
               i.material-icons.left arrow_drop_down          
-
+          th Actions
+            
       tbody
         - @book_loans.each do |book_loan|
-          tr
+          tr id="row-#{book_loan.id}"
             td = link_to book_loan.barcode, book_loan.book_copy
             td 
               - if book_loan.book_edition.present?
                 = link_to book_loan.book_edition.try(:title).truncate(50), book_loan.book_edition, remote: true
-            td = link_to book_loan.out_date, employee_book_loan_path(employee_id: @teacher.id, id:book_loan.id), remote:true
+            td = book_loan.out_date
             td = book_loan.return_date
             td style='text-align:center' = book_loan.return_status == 'R' ? '&#9745;'.html_safe : ''
+            td 
+              = link_to employee_book_loan_path(employee_id: @teacher.id, id:book_loan.id), remote:true
+                i.material-icons visibility
+              - if can? :delete, BookLoan
+                = link_to book_loan, data: {id: book_loan.id, confirm: 'Are you sure?'}, :method => :delete, class:"red-text delete-link", remote: true
+                  i.material-icons delete
   - else 
     = @error
 
@@ -84,15 +92,8 @@ nav
   = will_paginate @book_titles
   
 javascript:
-  function reset_teacher_form() {
-    $("#teacher").val("");
-    $("#teacher-form label").html("<i class='material-icons prefix'>search</i>")
-    var newUrl = refineUrl();
-    window.history.pushState("", "Book Loans", newUrl );
-  }
-
-  function refineUrl()
-  {
-      var url = window.location.href;
-      return url.split("?")[0];     
-  }
+  $('.delete-link').bind('ajax:complete', function() {
+    var id = $(this).data("id");
+    $("tr#row-"+id).remove();
+    Materialize.toast("Book Fine record deleted", 4000, "green");
+  });
