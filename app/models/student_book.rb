@@ -40,6 +40,7 @@ class StudentBook < ActiveRecord::Base
       AND standard_books.academic_year_id = #{year_id}")
     end
   }
+
   # Fine is applied if end condition is 2 steps worser than the initial condition, of if the book is missing
   # Here 'missing' is hardcoded with id=5
   scope :fine_applies, lambda { where('(end_copy_condition_id - initial_copy_condition_id >= 2) OR end_copy_condition_id=5')}

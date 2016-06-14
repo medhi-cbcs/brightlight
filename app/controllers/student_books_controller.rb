@@ -258,10 +258,15 @@ class StudentBooksController < ApplicationController
     end
   end
 
-  # POST /student_books/finalize
+  # POST /student_books/finalize.js
   def finalize
     authorize! :manage, StudentBook
-    puts params[:academic_year_id]
+    academic_year_id = params[:finalize_year].to_i
+
+    BookCopy.update_conditions_from_student_books academic_year_id, academic_year_id+1
+    respond_to do |format|
+      format.js
+    end
   end
 
   # GET /student_books/by_title
@@ -271,7 +276,7 @@ class StudentBooksController < ApplicationController
     if params[:s].present?
       @grade_section = GradeSection.find(params[:s])
       @grade_level = @grade_section.grade_level
-      authorize! :update, StudentBook.where(grade_section:@grade_section).where(academic_year:AcademicYear.current).first
+      # authorize! :update, StudentBook.where(grade_section:@grade_section).where(academic_year:AcademicYear.current).first
     end
     @textbook_category_id = BookCategory.find_by_code('TB').id
     @standard_books = StandardBook

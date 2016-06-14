@@ -45,7 +45,7 @@ class BookCopy < ActiveRecord::Base
 
   def latest_condition
     copy_conditions.active.order('copy_conditions.academic_year_id DESC,copy_conditions.created_at DESC')
-      .select('book_conditions.code')
+      .select('book_conditions.*')
       .joins(:book_condition).take
   end
 
@@ -63,6 +63,37 @@ class BookCopy < ActiveRecord::Base
 
   def return_condition_in_year(academic_year_id)
     copy_conditions.where(post:1).where(academic_year_id:academic_year_id).first.try(:book_condition)
+  end
+
+  # Create copy_conditions records based
+  def self.update_conditions_from_student_books(academic_year_id, next_academic_year_id)
+    category = BookCategory.find_by_code 'TB'
+    columns = [:book_copy_id, :barcode, :book_condition_id, :start_date, :end_date, :academic_year_id, :notes, :post, :deleted_flag]
+		return_conditions = []
+    starting_conditions = []
+    GradeSection.all.each do |grade_section|
+      grade_level_id = grade_section.grade_level_id
+      student_books = StudentBook.where(academic_year_id:academic_year_id)
+                        .standard_books(grade_level_id, grade_section.id, academic_year_id, category.id)
+                        .where(grade_section: grade_section)
+                        .where.not(end_copy_condition_id:nil)
+                        .where.not(book_copy_id:nil)
+                        .includes([:book_copy])
+      if student_books.present?
+        student_books.each_with_index do |sb, i|
+          return_condition = [sb.book_copy_id, sb.barcode, sb.end_copy_condition_id, sb.return_date, sb.return_date, academic_year_id, sb.notes, 1, false]
+          return_conditions << return_condition
+          starting_condition = [sb.book_copy_id, sb.barcode, sb.end_copy_condition_id, sb.return_date, nil, next_academic_year_id, sb.notes, 0, false]
+          starting_conditions << starting_condition
+        end
+  			if return_conditions.count > 0
+  				CopyCondition.import columns, return_conditions
+          CopyCondition.import columns, starting_conditions
+  			end
+				return_conditions = []
+        starting_conditions = []
+      end
+    end
   end
 
   protected
