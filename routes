@@ -1,4 +1,12 @@
                               Prefix Verb     URI Pattern                                                       Controller#Action
+                    template_targets GET      /template_targets(.:format)                                       template_targets#index
+                                     POST     /template_targets(.:format)                                       template_targets#create
+                 new_template_target GET      /template_targets/new(.:format)                                   template_targets#new
+                edit_template_target GET      /template_targets/:id/edit(.:format)                              template_targets#edit
+                     template_target GET      /template_targets/:id(.:format)                                   template_targets#show
+                                     PATCH    /template_targets/:id(.:format)                                   template_targets#update
+                                     PUT      /template_targets/:id(.:format)                                   template_targets#update
+                                     DELETE   /template_targets/:id(.:format)                                   template_targets#destroy
                            templates GET      /templates(.:format)                                              templates#index
                                      POST     /templates(.:format)                                              templates#create
                         new_template GET      /templates/new(.:format)                                          templates#new
@@ -170,6 +178,7 @@ edit_labels_book_edition_book_copies GET      /book_editions/:book_edition_id/bo
                                      DELETE   /book_editions/:id(.:format)                                      book_editions#destroy
                 check_copy_condition GET      /book_copies/:id/copy_conditions/check(.:format)                  copy_conditions#check
                                      POST     /book_copies/:id/copy_conditions/check_update(.:format)           copy_conditions#check_update
+          create_book_copy_condition PUT      /book_copies/:id/copy_conditions/create(.:format)                 copy_conditions#create
                 book_copy_conditions GET      /book_copies/:id/conditions(.:format)                             book_copies#conditions
                      book_copy_loans GET      /book_copies/:id/loans(.:format)                                  book_copies#loans
               edit_merge_book_titles POST     /book_titles/edit_merge(.:format)                                 book_titles#edit_merge
@@ -234,6 +243,7 @@ edit_labels_book_edition_book_copies GET      /book_editions/:book_edition_id/bo
        update_multiple_student_books PUT      /student_books/update_multiple(.:format)                          student_books#update_multiple
                missing_student_books GET      /student_books/missing(.:format)                                  student_books#missing
                  pnnrb_student_books GET      /student_books/pnnrb(.:format)                                    student_books#pnnrb
+              finalize_student_books POST     /student_books/finalize(.:format)                                 student_books#finalize
                student_student_books GET      /students/:student_id/student_books(.:format)                     student_books#index
                                      POST     /students/:student_id/student_books(.:format)                     student_books#create
             new_student_student_book GET      /students/:student_id/student_books/new(.:format)                 student_books#new
@@ -288,6 +298,15 @@ autocomplete_student_name_book_fines GET      /book_fines/autocomplete_student_n
                                      PATCH    /book_fines/:id(.:format)                                         book_fines#update
                                      PUT      /book_fines/:id(.:format)                                         book_fines#update
                                      DELETE   /book_fines/:id(.:format)                                         book_fines#destroy
+            initialize_book_receipts POST     /book_receipts/initialize(.:format)                               book_receipts#initialize
+                       book_receipts GET      /book_receipts(.:format)                                          book_receipts#index
+                                     POST     /book_receipts(.:format)                                          book_receipts#create
+                    new_book_receipt GET      /book_receipts/new(.:format)                                      book_receipts#new
+                   edit_book_receipt GET      /book_receipts/:id/edit(.:format)                                 book_receipts#edit
+                        book_receipt GET      /book_receipts/:id(.:format)                                      book_receipts#show
+                                     PATCH    /book_receipts/:id(.:format)                                      book_receipts#update
+                                     PUT      /book_receipts/:id(.:format)                                      book_receipts#update
+                                     DELETE   /book_receipts/:id(.:format)                                      book_receipts#destroy
                     new_user_session GET      /users/sign_in(.:format)                                          users/sessions#new
                         user_session POST     /users/sign_in(.:format)                                          users/sessions#create
                 destroy_user_session DELETE   /users/sign_out(.:format)                                         users/sessions#destroy
@@ -314,4 +333,5 @@ autocomplete_student_name_book_fines GET      /book_fines/autocomplete_student_n
           dynamic_select_book_labels GET      /dynamic_select/:section/book_labels(.:format)                    dynamic_select/options#book_labels
                                 root GET      /                                                                 welcome#index
                            dashboard GET      /dashboard(.:format)                                              welcome#dashboard
+                      inventory_mtce GET      /inventory_mtce(.:format)                                         welcome#inventory_mtce
                                      GET      /auth/:provider/callback(.:format)                                sessions#create
