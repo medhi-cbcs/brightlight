@@ -420,6 +420,10 @@ class StudentBooksController < ApplicationController
     end
   end
 
+  # POST /student_books/prepare.js
+  def prepare
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_student_book

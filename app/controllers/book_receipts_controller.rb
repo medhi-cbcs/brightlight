@@ -4,6 +4,7 @@ class BookReceiptsController < ApplicationController
   # GET /book_receipts
   # GET /book_receipts.json
   def index
+    authorize! :manage, BookReceipt
     @book_receipts = BookReceipt.all
     authorize! :manage, StudentBook
     if params[:gs].present?
@@ -104,10 +105,10 @@ class BookReceiptsController < ApplicationController
     end
   end
 
-  # POST /book_receipts/initialize.js
-  def initialize
+  # POST /book_receipts/prepare.js
+  def prepare
     authorize! :manage, BookReceipt
-    academic_year_id = params[:initialize_year].to_i
+    academic_year_id = params[:book_receipt_year].to_i
 
     BookReceipt.initialize_with_student_books academic_year_id-1, academic_year_id
     respond_to do |format|

@@ -85,7 +85,7 @@ Rails.application.routes.draw do
   get 'student_books/missing' => 'student_books#missing', as: :missing_student_books
   get 'student_books/pnnrb' => 'student_books#pnnrb', as: :pnnrb_student_books
   post 'student_books/finalize' => 'student_books#finalize', as: :finalize_student_books
-  post 'student_books/initialize' => 'student_books#initialize', as: :initialize_student_books
+  post 'student_books/prepare_student_books' => 'student_books#prepare', as: :prepare_student_books
 
   resources :students do
     resources :student_books, shallow: true
@@ -129,7 +129,7 @@ Rails.application.routes.draw do
 
   resources :book_receipts do
     collection do
-      post 'initialize'
+      post 'prepare'
     end
   end
 

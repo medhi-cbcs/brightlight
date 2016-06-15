@@ -28,7 +28,7 @@ class BookReceipt < ActiveRecord::Base
                         .where(academic_year_id:previous_year_id)
                         .standard_books(grade_section.grade_level.id, grade_section.id, new_year_id, textbook_category.id)
       student_books.each do |sb|
-        data = [sb.book_copy_id, sb.barcode, sb.book_edition_id, new_year_id, sb.initial_condition_id, 
+        data = [sb.book_copy_id, sb.barcode, sb.book_edition_id, new_year_id, sb.initial_copy_condition_id,
                 sb.grade_section_id, sb.grade_level_id, sb.roster_no.to_i, sb.course_id]
         values << data
       end
