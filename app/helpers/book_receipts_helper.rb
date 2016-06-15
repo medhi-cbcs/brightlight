@@ -1,0 +1,2 @@
+module BookReceiptsHelper
+end

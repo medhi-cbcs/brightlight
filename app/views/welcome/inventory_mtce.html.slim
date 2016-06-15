@@ -1,38 +1,55 @@
 h4 Maintenance
-      
+.card-panel.red.lighten-3
+  | These actions should only be run once per academic year. Please make sure you set the correct academic year.
+    
 .card-panel
+  // TODO: sections should be collapsible
   
-  h5 Student Book Condition
+  h5 Student Books
   hr
   = form_tag finalize_student_books_path, remote:true do 
     .row
       .col.s2
         .label Academic Year 
-        = select_tag :finalize_year, options_from_collection_for_select(AcademicYear.where('id>10 and id<20'),'id','name', AcademicYear.current.id), include_blank: 'None'
-      .col.s3
-        .label Finalize Student Book Condition
+        = select_tag :finalize_year, options_from_collection_for_select(@academic_years,'id','name', @current_year_id), include_blank: 'None'
+      .col.s2
+        .label 
         button.btn.waves-effect.waves-light type="submit" Finalize 
       .col.s7
         .label Description
         | This will finalize student books condition checking and prepare starting conditions for each student book copy for the next academic year
-  
-  h5 Progression
   hr
-  strong Academic Year
-  .row
-    .col.s2
-      .label Old
-      = select_tag :current_year, options_from_collection_for_select(AcademicYear.where('id>10 and id<20'),'id','name', AcademicYear.current.id), include_blank: 'None'
-    
-    .col.s2
-      .label New
-      = select_tag :next_year, options_from_collection_for_select(AcademicYear.where('id>10 and id<20'),'id','name', AcademicYear.current.id), include_blank: 'None'
-
-  .row
-    .col.s4
-      = link_to "Teacher Book Loans", "#!", class: 'btn btn-default disabled'
-    .col.s8 This will create new Teacher Book Loan records based on returned books from last academic year
-  .row
-    .col.s4
-      = link_to "Student Book Loans", "#!", class: 'btn btn-default disabled'
-    .col.s8 This will create new Student Book Loan records based on Student Book Receipt Form
+  = form_tag initialize_book_receipts_path, remote:true do 
+    .row
+      .col.s2
+        .label Academic Year 
+        = select_tag :book_receipt_year, options_from_collection_for_select(@academic_years,'id','name', @current_year_id), include_blank: 'None'
+      .col.s2
+        button.btn.waves-effect.waves-light type="submit" Initialize 
+      .col.s7
+        .label Description
+        | This will prepare book receipt forms for each student based on the finalized Student Book conditions
+  hr
+  = form_tag initialize_student_books_path, remote:true do 
+    .row
+      .col.s2
+        .label Academic Year 
+        = select_tag :student_loan_year, options_from_collection_for_select(@academic_years,'id','name', @current_year_id), include_blank: 'None'
+      .col.s2
+        button.btn.waves-effect.waves-light type="submit" Create
+      .col.s7
+        .label Description
+        | This will create new Student Book Loan records based on Student Book Receipt Form
+      
+  h5 Teacher's Books
+  hr
+  = form_tag initialize_teachers_book_loans_path, remote:true do 
+    .row
+      .col.s2
+        .label Academic Year
+        = select_tag :teacher_loan_year, options_from_collection_for_select(@academic_years,'id','name', @current_year_id), include_blank: 'None'
+      .col.s2
+        button.btn.waves-effect.waves-light type="submit" Create
+      .col.s7 
+        .label Description
+        | This will create new Teacher Book Loan records based on returned books from last academic year

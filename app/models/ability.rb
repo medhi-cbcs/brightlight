@@ -31,6 +31,7 @@ class Ability
     can :manage, Currency
     can :manage, GradeSection
     can :manage, Template
+    can :manage, BookReceipt
     can :manage, Student  # for nested form in StudentBook
     can :update, Employee # for nested form in BookLoan
     can :scan, BookLoan
