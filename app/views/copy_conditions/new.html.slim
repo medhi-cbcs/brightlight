@@ -1,40 +1,50 @@
-h4 Book Condition Checking
+h4 Update Book Condition
 
-= form_for @copy_condition do |f|
-  nav
-    .nav-wrapper
-      ul
-        li
-          = link_to :back
-            i.material-icons chevron_left
-        li.right
-          button.btn.waves-effect.waves-light type="submit" Save 
 
-  .card-panel
-    .row
-      - if @copy_condition.errors.any?
-        #error_explanation
-          h2 = "#{pluralize(@copy_condition.errors.count, "error")} prohibited this copy_condition from being saved:"
-          ul
-            - @copy_condition.errors.full_messages.each do |message|
-              li = message
-      .input-field.col.s4
-        = f.text_field :barcode, disabled:true, placeholder: 'Barcode'
-        = f.hidden_field :barcode
-      .input-field.col.s2
-        = f.label 'New condition', class:'active'
-        = f.collection_select :book_condition_id, BookCondition.all, :id, :code, {selected: @copy_condition.book_condition_id}
-      .input-field.col.s12
-        .titles
-      .input-field.col.s12
-        = f.label :notes
-        = f.text_field :notes, value: ""
-        = f.hidden_field :user_id, value: current_user.try(:id)
+nav
+  .nav-wrapper
+    .brand-logo style="margin-left: 20px; font-size:1.5em"
+      | Scan book barcode
+      
+.card-panel
+  form.row
+    - if @copy_condition.errors.any?
+      #error_explanation
+        h2 = "#{pluralize(@copy_condition.errors.count, "error")} prohibited this copy_condition from being saved:"
+        ul
+          - @copy_condition.errors.full_messages.each do |message|
+            li = message
 
+    .input-field.col.s2
+      = label_tag 'New condition', nil, class:'active'
+      = select_tag :book_condition_id, options_from_collection_for_select(BookCondition.all, :id, :code)
+    .input-field.col.s6 
+      .col.s6
+        = radio_button_tag :post, 0, true, class: 'with-gap'
+        = label_tag "post_0", "Initial condition"
+      .col.s6
+        = radio_button_tag :post, 1, false, class: 'with-gap'
+        = label_tag "post_1", "Return condition"
+    .input-field.col.s12
+      = label_tag :notes, nil, class:'active'
+      = text_field_tag :notes
+      = hidden_field_tag :user_id, value: current_user.try(:id)
+
+.card-panel
+  .row
+    table.compact
+      thead
+        th Barcode
+        th Title 
+        th Condition
+        th Posting
+        th Notes
+      tbody#conditions
+        
 javascript:
   $(document).ready(function() {
     var pressed = false;
-    var chars = [];
+    var chars = [];    
     $(window).keypress(function(e) {
       if (e.which >= 45 && e.which <= 112) {
           chars.push(String.fromCharCode(e.which));
@@ -43,17 +53,11 @@ javascript:
         setTimeout(function(){
           if (chars.length >= 11) {
             var barcode = chars.join("");
-            // console.log("Barcode Scanned: " + barcode);
-            // assign value to some input (or do whatever you want)
-            var field = $("[name$='[barcode]']");
-            field.val(barcode);
             $.getJSON("/book_copies/"+barcode+".json", null, function (data) {
-              book = data.book_copy;
-              $(".titles:last").html(book.book_edition.title);
-              $(".add_fields").trigger('click');
+              update_book_condition(data);
             }).fail(function(){
-              $("[name$='[barcode]']:last").val('');
-              Materialize.toast("Invalid barcode.", 4000, 'red');
+              $(e.target).val('');
+              Materialize.toast("Invalid barcode.", 5000, 'red');
             });            
           }
           chars = [];
@@ -62,18 +66,36 @@ javascript:
       }
       pressed = true;
     });
-    $(document).on("keypress","[name$='[barcode]']", (function(e){
-      if ( e.which === 13 ) {
-        e.preventDefault();
-        $.getJSON("/book_copies/"+$(e.target).val()+".json", null, function (data) {
-          book = data.book_copy;
-          $(".titles:last").html(book.book_edition.title);
-          $(".add_fields").trigger('click');
-          $("[name$='[barcode]']:last").focus();
-        }).fail(function(){
-          $(e.target).val('');
-          Materialize.toast("Invalid barcode.", 5000, 'red');
-        });
-      }
-    }));
+
+    var update_book_condition = function (data) {
+      var book = data.book_copy;
+      var currentUserId = #{raw current_user.try(:id) || 0};
+      var academicYearId = book.academic_year.academic_year_id;
+      url = "/book_copies/"+ book.id + "/copy_conditions/create";
+      var dataToSend = new Object();
+      var today = new Date();
+      dataToSend = { copy_condition: { book_copy_id: book.id, barcode: book.barcode, 
+                                        post: $("[name=post]:checked").val(), 
+                                        notes: $("[name=notes]").val(),
+                                        book_condition_id: $("#book_condition_id").val(),
+                                        academic_year_id: academicYearId,
+                                        start_date: today.toISOString(), 
+                                        deleted_flag: false,
+                                        user_id: currentUserId }};
+      var jsonData = JSON.stringify(dataToSend);
+      $.ajax({
+        type: 'PUT',
+        contentType: "application/json; charset=utf-8",
+        url: url,
+        data: jsonData,
+        dataType: 'json',
+        success: function(m) {
+          Materialize.toast('Book checked', 5000, 'green');
+          $("tbody#conditions").prepend("<tr><td>"+book.barcode+"</td><td>"+book.book_edition.title+"</td><td>"+$("#book_condition_id option:selected").text()+"</td><td>"+($("[name=post]:checked").val() === "0" ? "Initial" : "Return")+"</td><td>"+$("[name=notes]").val()+"</td></tr>");
+        },
+        error: function(e) {
+          Materialize.toast('Book check error', 5000, 'red');
+        }
+      });      
+    }
   });

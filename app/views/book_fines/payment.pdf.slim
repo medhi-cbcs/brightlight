@@ -1,53 +1,69 @@
+- if @template      
+  = @template.substituted :header, pdf: true
+  / - str = @template.header
+  / - @template.placeholders.each do |key, value|
+  /   - next if key.blank?
+  /   - placeholder = "##{key.to_s}#"
+  /   - str.gsub!(placeholder, value.to_s || '')   
+  / - img_match = str.match /img.*src=\"([^ ]+)\"/
+  / - url_match = img_match[1].match /.+assets\/([a-zA-Z0-9-]+)-([a-z0-9]+)\.(jpg|png)/
+  / /- str.gsub! match[2], "file:////#{Rails.root}/app/assets/images"  
+  / - str.gsub! img_match[1], "file:///#{Rails.root.join('assets','images',url_match[1]+'-'+url_match[2]+"."+url_match[3])}"
+  / = str.html_safe
+  
+  / table.compact
+  /   tr
+  /     td style='width: 481px; height: 103px;'
+  /       = wicked_pdf_image_tag 'cbcs-headline.jpg', size:'348x62'
+  /       /= image_tag "file:///#{Rails.root}/app/assets/images/cbcs-headline.jpg", size:'348x62'
+  /     td 
+  /       h5
+  /         span style='font-size:14pt' Receipt <br> Kuitansi
+  /     td style='width:191px' &nbsp;
+  /     td style='width: 11px; height: 53px;'
+  /       p No
+  /       p Date 
+  /     td style='width: 136px; text-align: right; height: 53px;'
+  /       p = @invoice.id
+  /       p = @print_date
         
-/= @template.substituted_header.html_safe
-table.compact
-  tr
-    td style='width: 481px; height: 103px;'
-      = wicked_pdf_image_tag 'cbcs-headline.jpg', size:'348x62'
-    td 
-      h5
-        span style='font-size:14pt' Receipt <br> Kuitansi
-    td style='width:191px' &nbsp;
-    td style='width: 11px; height: 53px;'
-      p No
-      p Date 
-    td style='width: 136px; text-align: right; height: 53px;'
-      p = @invoice.id
-      p = @print_date
-      
-= @template.substituted_opening.html_safe
+  = @template.substituted :opening, pdf: true
 
-.container style="margin:10px 0"
-  table.compact.striped
-    thead 
-      tr.grey.lighten-2
-        th Textbook Title 
-        th style='text-align:center' Borrow <br> Condition 
-        th style='text-align:center' Return <br> Condition 
-        th style='text-align:right' % Fine 
-        th style='text-align:right' Fine 
-    tbody 
-      - total = 0.0
-      - @book_fines.each do |book_fine|
-        - if book_fine.currency == 'USD'
-          - fine = Currency.dollar_rate * book_fine.fine.try(:to_f) || 0.0  
-        - elsif book_fine.currency == 'IDR'
-          - fine = book_fine.fine.try(:to_f) || 0.0
-        - total += fine
-        tr 
-          td = book_fine.try(:book_copy).try(:book_edition).try(:title).truncate(60)
-          td style='text-align:center' = book_fine.old_condition.try(:code) 
-          td style='text-align:center' = book_fine.new_condition.try(:code) 
-          td style='text-align:right' = number_to_percentage(book_fine.percentage * 100, precision:0)
-          td style='text-align:right' = number_to_currency(fine.round(-2), {unit:'Rp', precision:0})
-      tr.grey.lighten-2
-        td colspan=3 
-        td Total
-        td style='text-align:right' = number_to_currency(total.round(-2), {unit:'Rp', precision:0})
-      
-= @template.substituted_closing.html_safe
-= @template.substituted_footer.html_safe
+  .container style="margin:10px 0"
+    table.compact.striped
+      thead 
+        tr.grey.lighten-2
+          th Textbook Title 
+          th style='text-align:center' Borrow <br> Condition 
+          th style='text-align:center' Return <br> Condition 
+          th style='text-align:right' % Fine 
+          th style='text-align:right' Fine 
+      tbody 
+        - total = 0.0
+        - @book_fines.each do |book_fine|
+          - if book_fine.currency == 'USD'
+            - fine = Currency.dollar_rate * book_fine.fine.try(:to_f) || 0.0  
+          - elsif book_fine.currency == 'IDR'
+            - fine = book_fine.fine.try(:to_f) || 0.0
+          - total += fine
+          tr 
+            td = book_fine.try(:book_copy).try(:book_edition).try(:title).truncate(60)
+            td style='text-align:center' = book_fine.old_condition.try(:code) 
+            td style='text-align:center' = book_fine.new_condition.try(:code) 
+            td style='text-align:right' = number_to_percentage(book_fine.percentage * 100, precision:0)
+            td style='text-align:right' = number_to_currency(fine.round(-2), {unit:'Rp', precision:0})
+        tr.grey.lighten-2
+          td colspan=3 
+          td Total
+          td style='text-align:right' = number_to_currency(total.round(-2), {unit:'Rp', precision:0})
+        
+  = @template.substituted :closing, pdf: true
+  = @template.substituted :footer, pdf: true
 
+- else
+  p No template is active Fine Receipt.
+  p Please create or activate a template.
+    
 css:
 	html, body {
 		font: 11pt sans-serif;

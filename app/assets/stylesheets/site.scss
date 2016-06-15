@@ -15,6 +15,10 @@ $brightBlue:			#389bfe;
 $muted-red:				#f5494d;
 $kuning-podang:	  #e7580b;
 
+.maroon {
+	background-color: maroon !important;
+}
+
 .show-image {
 	width:  120px;
 }
@@ -151,9 +155,20 @@ td.actions {
 	font-size: 1.2em;
 }
 
-table.template-body {
-	 font-size:16px;
+
+
+// ========================================= Template  ==============================================
+
+.template {
+	td, th {
+		padding: 0
+	}
+
+	table.template-body {
+		 font-size:16px;
+	}
 }
+
 // ============================================ Forms ===============================================
 
 

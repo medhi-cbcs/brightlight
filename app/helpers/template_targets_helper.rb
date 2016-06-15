@@ -1,0 +1,2 @@
+module TemplateTargetsHelper
+end

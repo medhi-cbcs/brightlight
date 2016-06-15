@@ -4,7 +4,7 @@ class CopyCondition < ActiveRecord::Base
   belongs_to :academic_year
   belongs_to :user   # user that did the checking
 
-  # validates :academic_year, :start_date, :book_copy_id, :book_condition, :barcode, presence: true
+  validates :academic_year, :start_date, :book_copy_id, :book_condition, :barcode, presence: true
 
   scope :current_year, lambda { where(academic_year:AcademicYear.current) }
   scope :active, lambda { where(deleted_flag:false) }

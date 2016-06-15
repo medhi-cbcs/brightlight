@@ -25,4 +25,51 @@ class BookFine < ActiveRecord::Base
       }
     end)
   end
+
+  def self.create_invoice_for(student:, total_amount:, academic_year:, exchange_rate:1, foreign_currency:'USD', invoice_currency:'Rp', round_to_hundreds:true, current_user: )
+    book_fines = self.where(academic_year:academic_year).where(student:student)
+
+    # The tag is to identify the invoice with the book fines
+    tag = Digest::MD5.hexdigest "#{academic_year.id}-#{student.id}-#{total_amount}"
+    invoice = Invoice.find_by_tag tag
+    unless invoice.present?
+      invoice = Invoice.create(
+          student: student,
+          bill_to: student.name,
+          grade_section: student.current_grade_section.name,
+          roster_no: student.current_roster_no,
+          total_amount: round_to_hundreds ? total_amount.to_f.round(-2) : total_amount,
+          currency: invoice_currency,
+          statuses: 'Created',
+          paid: false,
+          tag: tag,
+          user: current_user
+      )
+      if invoice.valid?
+        invoice.line_items.create(
+          book_fines.map do |book_fine|
+            idr_amount = book_fine.currency==foreign_currency ? book_fine.fine * exchange_rate : book_fine.fine
+            {
+              description: book_fine.book_copy.try(:book_edition).try(:title),
+              price: idr_amount,
+              ext1: book_fine.old_condition.code,
+              ext2: book_fine.new_condition.code,
+              ext3: "#{book_fine.percentage * 100}%"
+            }
+          end
+        )
+        # book_fines.each do |f|
+        #   idr_amount = f.currency==foreign_currency ? f.fine * exchange_rate : f.fine
+        #   invoice.line_items.create(description: f.book_copy.try(:book_edition).try(:title),
+        #                               price: f.currency==foreign_currency ? f.fine * exchange_rate : f.fine,
+        #                               ext1: f.old_condition.code,
+        #                               ext2: f.new_condition.code,
+        #                               ext3: "#{f.percentage * 100}%"
+        #                             )
+        # end
+      end
+    end
+    return invoice
+  end
+
 end

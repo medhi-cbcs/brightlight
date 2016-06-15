@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
 
+  resources :template_targets
   resources :templates
   resources :currencies
   resources :standard_books
@@ -35,6 +36,7 @@ Rails.application.routes.draw do
 
   get 'book_copies/:id/copy_conditions/check' => 'copy_conditions#check', as: :check_copy_condition
   post 'book_copies/:id/copy_conditions/check_update' => 'copy_conditions#check_update'
+  put 'book_copies/:id/copy_conditions/create' => 'copy_conditions#create', as: :create_book_copy_condition
   get 'book_copies/:id/conditions' => 'book_copies#conditions', as: :book_copy_conditions
   get 'book_copies/:id/loans' => 'book_copies#loans', as: :book_copy_loans
 
@@ -82,6 +84,7 @@ Rails.application.routes.draw do
   put 'student_books/update_multiple' => 'student_books#update_multiple', as: :update_multiple_student_books
   get 'student_books/missing' => 'student_books#missing', as: :missing_student_books
   get 'student_books/pnnrb' => 'student_books#pnnrb', as: :pnnrb_student_books
+  post 'student_books/finalize' => 'student_books#finalize', as: :finalize_student_books
 
   resources :students do
     resources :student_books, shallow: true
@@ -140,6 +143,7 @@ Rails.application.routes.draw do
   # You can have the root of your site routed with "root"
   root 'welcome#index'
   get :dashboard, to: 'welcome#dashboard'
+  get :inventory_mtce, to: 'welcome#inventory_mtce'
 
   # For authorization with OmniAuth2
   get '/auth/:provider/callback', to: 'sessions#create'
