@@ -2,13 +2,8 @@
   - @book_labels.each do |book_label|
     .template
       // Header
-      / .row
-      /   .col.s12.center 
-      /     = wicked_pdf_image_tag 'cbcs-headline.jpg'
-      /   .col.s11                
-      /     h5 Student Textbooks Loan Receipt Form 
-      /   .col.s1
-      /     h4.right = book_label.name
+      / We need to specify option pdf:true, so that the template will convert image URL to
+      / point to a local file when generating the PDF file
       = @template.substituted :header, roster_no: book_label.name, pdf: true  
       = @template.substituted :opening, pdf: true
       
