@@ -1,0 +1,60 @@
+p#notice = notice
+
+p
+  strong Book copy:
+  = @book_receipt.book_copy
+p
+  strong Academic year:
+  = @book_receipt.academic_year
+p
+  strong Student:
+  = @book_receipt.student
+p
+  strong Book edition:
+  = @book_receipt.book_edition
+p
+  strong Grade section:
+  = @book_receipt.grade_section
+p
+  strong Grade level:
+  = @book_receipt.grade_level
+p
+  strong Roster no:
+  = @book_receipt.roster_no
+p
+  strong Copy no:
+  = @book_receipt.copy_no
+p
+  strong Issue date:
+  = @book_receipt.issue_date
+p
+  strong Initial condition:
+  = @book_receipt.initial_condition
+p
+  strong Return condition:
+  = @book_receipt.return_condition
+p
+  strong Barcode:
+  = @book_receipt.barcode
+p
+  strong Notes:
+  = @book_receipt.notes
+p
+  strong Grade section code:
+  = @book_receipt.grade_section_code
+p
+  strong Grade subject code:
+  = @book_receipt.grade_subject_code
+p
+  strong Course:
+  = @book_receipt.course
+p
+  strong Course text:
+  = @book_receipt.course_text
+p
+  strong Active:
+  = @book_receipt.active
+
+= link_to 'Edit', edit_book_receipt_path(@book_receipt)
+'|
+= link_to 'Back', book_receipts_path

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160610074229) do
+ActiveRecord::Schema.define(version: 20160615053548) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -253,6 +253,40 @@ ActiveRecord::Schema.define(version: 20160610074229) do
   add_index "book_loans", ["prev_academic_year_id"], name: "index_book_loans_on_prev_academic_year_id", using: :btree
   add_index "book_loans", ["student_id"], name: "index_book_loans_on_student_id", using: :btree
   add_index "book_loans", ["user_id"], name: "index_book_loans_on_user_id", using: :btree
+
+  create_table "book_receipts", force: :cascade do |t|
+    t.integer  "book_copy_id"
+    t.integer  "academic_year_id"
+    t.integer  "student_id"
+    t.integer  "book_edition_id"
+    t.integer  "grade_section_id"
+    t.integer  "grade_level_id"
+    t.integer  "roster_no"
+    t.string   "copy_no"
+    t.date     "issue_date"
+    t.integer  "initial_condition_id"
+    t.integer  "return_condition_id"
+    t.string   "barcode"
+    t.string   "notes"
+    t.string   "grade_section_code"
+    t.string   "grade_subject_code"
+    t.integer  "course_id"
+    t.integer  "course_text_id"
+    t.boolean  "active"
+    t.datetime "created_at",           null: false
+    t.datetime "updated_at",           null: false
+  end
+
+  add_index "book_receipts", ["academic_year_id"], name: "index_book_receipts_on_academic_year_id", using: :btree
+  add_index "book_receipts", ["book_copy_id"], name: "index_book_receipts_on_book_copy_id", using: :btree
+  add_index "book_receipts", ["book_edition_id"], name: "index_book_receipts_on_book_edition_id", using: :btree
+  add_index "book_receipts", ["course_id"], name: "index_book_receipts_on_course_id", using: :btree
+  add_index "book_receipts", ["course_text_id"], name: "index_book_receipts_on_course_text_id", using: :btree
+  add_index "book_receipts", ["grade_level_id"], name: "index_book_receipts_on_grade_level_id", using: :btree
+  add_index "book_receipts", ["grade_section_id"], name: "index_book_receipts_on_grade_section_id", using: :btree
+  add_index "book_receipts", ["initial_condition_id"], name: "index_book_receipts_on_initial_condition_id", using: :btree
+  add_index "book_receipts", ["return_condition_id"], name: "index_book_receipts_on_return_condition_id", using: :btree
+  add_index "book_receipts", ["student_id"], name: "index_book_receipts_on_student_id", using: :btree
 
   create_table "book_titles", force: :cascade do |t|
     t.string   "title"

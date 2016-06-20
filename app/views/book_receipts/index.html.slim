@@ -1,0 +1,74 @@
+- if @student.present?
+  h5 LOAN RECEIPT FORM for 
+  h4 #{@student.name} (#{@grade_section.name})
+- else
+  h4 LOAN RECEIPT FORM 
+  h5 Student Textbooks 
+
+ul#grade-options.dropdown-content
+  - GradeLevel.all.each do |grade|
+    li 
+      = link_to grade.name, "#!", onclick:"filterSectionOptions(#{grade.id}, '#{grade.name}');"
+      /= link_to grade.name, "#!", "data-grade-id":"#{grade.id}", "data-grade-name":"#{grade.name}"
+ul#section-options.dropdown-content
+  - @grade_sections.each do |section|
+    li
+      = link_to section.name, "#!", class:"grade-#{section.grade_level_id}", onclick:"filterStudentOptions(#{section.id}, '#{section.name}');"
+ul#student-options.dropdown-content
+  / - if @grade_section.present?
+  /   - @grade_section.students.each do |student|
+  /     li 
+  /       = link_to student.name, student_books_path(s:"#{@grade_section.id}",sid:"#{student.id}"), class:"student-#{@grade_section.grade_level_id}"
+
+javascript:
+  function filterSectionOptions(id, name) {
+    var grade_ids = #{raw @grade_level_ids};
+    $("#grade").html(name);
+    grade_ids.forEach(function(g){
+      if(id!=g) {
+        $(".grade-"+g).hide();
+      } else {
+        $(".grade-"+id).show();
+      }
+    })
+  }
+  function filterStudentOptions(id, name) {
+    $("#section").html(name);
+    $.getJSON("/book_labels.json?section="+id, null, function (data) {
+      var list = "<li><a href='/student_books/receipt_form?gs="+id+"'>All</a></li>";
+      $.each(data, function(i,item){
+          list += "<li><a href='/student_books/receipt_form?gs="+item.grade_section_id+"&g="+item.grade_level_id+";l="+item.id+"'>"+item.label+"</a></li>";
+      });
+      $("#student-options").html(list);
+    });
+  }
+
+nav
+  .nav-wrapper
+    ul
+      - if @book_copies.present?
+        li 
+          = link_to 'PDF Format', receipt_form_student_books_path(gs:params[:gs], g:params[:g], l:params[:l], format: :pdf), target: '_blank'
+      li.right
+        a#student-menu.dropdown-button href="#!" data-activates="student-options"
+          span#student = params[:l].present? ? "#{@book_labels.first.name}" : 'Choose number'
+          i.material-icons.right arrow_drop_down
+      li.right
+        a.dropdown-button href="#!" data-activates="section-options"
+          span#section = params[:l].present? ? "Section #{@grade_section_name}" : 'Choose section'
+          i.material-icons.right arrow_drop_down
+      li.right
+        a.dropdown-button href="#!" data-activates="grade-options"
+          span#grade = params[:l].present? ? "#{@grade_level_name}" : 'Choose grade'
+          i.material-icons.right arrow_drop_down
+
+- if @book_labels.present?
+  - @book_labels.each do |book_label|
+    .template
+      /= @template.substituted :header, roster_no: book_label.name
+      /= @template.substituted :opening 
+      = render partial: 'receipt_form_table', locals: {book_label: book_label}
+      /= @template.substituted :closing 
+      /= @template.substituted :footer
+
+    .page-break

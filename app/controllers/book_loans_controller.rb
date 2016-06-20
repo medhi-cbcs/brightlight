@@ -233,6 +233,16 @@ class BookLoansController < ApplicationController
     end
   end
 
+  def initialize_teachers
+    authorize! :manage, BookLoan
+    academic_year_id = params[:teacher_loan_year].to_i
+
+    BookLoan.initialize_teacher_loans_from_previous_year academic_year_id-1, academic_year_id
+    respond_to do |format|
+      format.js
+    end
+  end
+
   ####
 
   private
