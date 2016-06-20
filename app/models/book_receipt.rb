@@ -18,6 +18,7 @@ class BookReceipt < ActiveRecord::Base
   validates :initial_condition, presence:true
 
   def self.initialize_with_student_books(previous_year_id, new_year_id)
+    puts "BookReceipt: Initializing year #{AcademicYear.find(new_year_id).name} using data from #{AcademicYear.find(pre).name}"
     columns = [:book_copy_id, :barcode, :book_edition_id, :academic_year_id, :initial_condition_id,
                :grade_section_id, :grade_level_id, :roster_no, :course_id]
     values = []

@@ -3,7 +3,6 @@ Rails.application.routes.draw do
   resources :template_targets
   resources :templates
   resources :currencies
-  resources :standard_books
   resources :people
   resources :book_categories
   resources :subjects
@@ -124,6 +123,12 @@ Rails.application.routes.draw do
       get 'autocomplete_student_name'
       get 'notification'
       get 'payment'
+    end
+  end
+
+  resources :standard_books do
+    collection do
+      post 'prepare'
     end
   end
 

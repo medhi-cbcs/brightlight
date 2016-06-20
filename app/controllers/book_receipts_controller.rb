@@ -110,9 +110,15 @@ class BookReceiptsController < ApplicationController
     authorize! :manage, BookReceipt
     academic_year_id = params[:book_receipt_year].to_i
 
-    BookReceipt.initialize_with_student_books academic_year_id-1, academic_year_id
     respond_to do |format|
-      format.js
+      format.js do
+        if BookReceipt.where(academic_year_id:academic_year_id).count > 0
+          @error = "Error: records are not empty for the academic year #{AcademicYear.find(academic_year_id).name}"
+        else
+          BookReceipt.initialize_with_student_books academic_year_id-1, academic_year_id
+          @message = "Initialization completed."
+        end
+      end
     end
   end
 
