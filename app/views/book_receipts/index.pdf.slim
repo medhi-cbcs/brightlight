@@ -1,0 +1,33 @@
+- if @book_labels
+  - @book_labels.each do |book_label|
+    .template
+      // Header
+      / We need to specify option pdf:true, so that the template will convert image URL to
+      / point to a local file when generating the PDF file
+      = @template.substituted :header, roster_no: book_label.name, pdf: true  
+      = @template.substituted :opening, pdf: true
+      
+      // BODY: The table
+      table.compact style="margin: 1.2em 0"
+        thead style="border-bottom:1px solid black"
+          tr
+            th No
+            th Barcode
+            th Title
+            th Conditions
+            th Notes
+      
+        tbody style="border-bottom:1px solid black"          
+          - @book_copies.where(roster_no:book_label.book_no).each_with_index do |book, i|
+            tr
+              td = i+1
+              td = book.barcode
+              td = truncate(book.book_edition.try(:title), length: 45)
+              td = book.try(:book_copy).try(:latest_condition).try(:code)
+              td
+      
+      = @template.substituted :closing, pdf: true
+      = @template.substituted :footer, pdf: true
+    .page-break
+
+  

@@ -237,9 +237,15 @@ class BookLoansController < ApplicationController
     authorize! :manage, BookLoan
     academic_year_id = params[:teacher_loan_year].to_i
 
-    BookLoan.initialize_teacher_loans_from_previous_year academic_year_id-1, academic_year_id
     respond_to do |format|
-      format.js
+      format.js do
+        if BookLoan.where(academic_year_id:academic_year_id).where.not(employee_id:nil).count > 0
+          @error = "Error: records are not empty for the academic year #{AcademicYear.find(academic_year_id).name}"
+        else
+          BookLoan.initialize_teacher_loans_from_previous_year academic_year_id-1, academic_year_id
+          @message = "Initialization completed."
+        end
+      end
     end
   end
 

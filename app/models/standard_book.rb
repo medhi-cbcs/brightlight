@@ -11,9 +11,9 @@ class StandardBook < ActiveRecord::Base
                 :academic_year_id, :isbn, :refno, :quantity, :grade_subject_code, :grade_name,
                 :group, :category, :bkudid]
     values = []
-    StandardBook.where(academic_year_id: previous_year_id).each do |sb|
+    StandardBook.where(academic_year_id: prev_academic_year_id).each do |sb|
       data = [sb.book_title_id, sb.book_edition_id, sb.book_category_id, sb.grade_level_id, sb.grade_section_id,
-                sb.academic_year_id, sb.isbn, sb.refno, sb.quantity, sb.grade_subject_code, sb.grade_name,
+                new_academic_year_id, sb.isbn, sb.refno, sb.quantity, sb.grade_subject_code, sb.grade_name,
                 sb.group, sb.category, sb.bkudid]
       values << data
     end
