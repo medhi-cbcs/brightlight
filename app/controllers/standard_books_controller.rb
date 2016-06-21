@@ -10,7 +10,7 @@ class StandardBooksController < ApplicationController
     if params[:grade].present? and params[:grade].upcase != 'ALL'
       @grade_level = GradeLevel.find params[:grade]
       @standard_books = @standard_books.where(grade_level:@grade_level).includes([:book_title])
-      if params[:section].present? and [11,12].include? @grade_level.id 
+      if params[:section].present? and [11,12].include? @grade_level.id
         @grade_section = GradeSection.find params[:section]
         @standard_books = @standard_books.where(grade_section:@grade_section).includes([:book_title])
       end
@@ -87,6 +87,23 @@ class StandardBooksController < ApplicationController
     respond_to do |format|
       format.html { redirect_to standard_books_url, notice: 'Standard book was successfully destroyed.' }
       format.json { head :no_content }
+    end
+  end
+
+  # POST /standard_books/prepare.js
+  def prepare
+    authorize! :manage, StandardBook
+    academic_year_id = params[:standard_book_year].to_i
+
+    respond_to do |format|
+      format.js do
+        if StandardBook.where(academic_year_id:academic_year_id).count > 0
+          @error = "Error: records are not empty for the academic year #{AcademicYear.find(academic_year_id).name}"
+        else
+          StandardBook.initialize_from_previous_year academic_year_id-1, academic_year_id
+          @message = "Initialization completed."
+        end
+      end
     end
   end
 
