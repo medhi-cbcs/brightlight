@@ -6,13 +6,14 @@ class BookReceiptsController < ApplicationController
   def index
     authorize! :manage, BookReceipt
     @book_receipts = BookReceipt.all
-    authorize! :manage, StudentBook
+    year = AcademicYear.where(id:params[:year]).take || AcademicYear.current
+
     if params[:gs].present?
       @grade_section = GradeSection.find params[:gs]
       @grade_level = @grade_section.grade_level
       @book_labels = BookLabel.where(grade_section:@grade_section)
-      @book_copies = BookCopy.standard_books(@grade_level.id,@grade_section.id,AcademicYear.current.id)
-                    .includes([:book_edition])
+      @book_copies = BookReceipt.where(academic_year:year,grade_section:@grade_section)
+                      .includes([:book_edition])
     end
     if params[:l].present?
       @book_labels = @book_labels.where(id:params[:l])
@@ -30,7 +31,7 @@ class BookReceiptsController < ApplicationController
     if @template
       @template.placeholders = {
         grade_section: @grade_section_name,
-        academic_year: AcademicYear.current.name,
+        academic_year: year.name,
         student_name: ''
       }
     end
@@ -42,9 +43,9 @@ class BookReceiptsController < ApplicationController
         @grade_sections_ids = @grade_sections.collect(&:id)
       end
       format.pdf do
-        render pdf:         'form.pdf',
+        render pdf:         'receipt_form.pdf',
                disposition: 'inline',
-               template:    'student_books/receipt_form.pdf.slim',
+               template:    'book_receipts/index.pdf.slim',
                layout:      'pdf.html',
                show_as_html: params.key?('debug')
       end
@@ -122,6 +123,52 @@ class BookReceiptsController < ApplicationController
     end
   end
 
+  # GET /book_receipts/receipt_form
+  def receipt_form
+    authorize! :manage, BookReceipt
+    if params[:gs].present?
+      @grade_section = GradeSection.find params[:gs]
+      @grade_level = @grade_section.grade_level
+      @book_labels = BookLabel.where(grade_section:@grade_section)
+      @book_copies = BookCopy.standard_books(@grade_level.id,@grade_section.id,AcademicYear.current.id)
+                    .includes([:book_edition])
+    end
+    if params[:l].present?
+      @book_labels = @book_labels.where(id:params[:l])
+      @grade_level ||= GradeLevel.find(@book_labels.first.grade_level_id)
+      @grade_level_name = @grade_level.name
+      @grade_section_name = @book_labels.first.section_name
+    end
+
+    # Use the specified template or the default one if none given
+    if params[:template].present?
+      @template = Template.find params[:template]
+    else
+      @template = Template.where(target:'student_book_receipt').where(active:'true').take
+    end
+    if @template
+      @template.placeholders = {
+        grade_section: @grade_section_name,
+        academic_year: AcademicYear.current.name,
+        student_name: ''
+      }
+    end
+
+    respond_to do |format|
+      format.html do
+        @grade_level_ids = GradeLevel.all.collect(&:id)
+        @grade_sections = GradeSection.all
+        @grade_sections_ids = @grade_sections.collect(&:id)
+      end
+      format.pdf do
+        render pdf:         'form.pdf',
+               disposition: 'inline',
+               template:    'student_books/receipt_form.pdf.slim',
+               layout:      'pdf.html',
+               show_as_html: params.key?('debug')
+      end
+    end
+  end
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_book_receipt

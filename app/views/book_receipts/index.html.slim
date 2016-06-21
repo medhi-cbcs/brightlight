@@ -35,9 +35,9 @@ javascript:
   function filterStudentOptions(id, name) {
     $("#section").html(name);
     $.getJSON("/book_labels.json?section="+id, null, function (data) {
-      var list = "<li><a href='/student_books/receipt_form?gs="+id+"'>All</a></li>";
+      var list = "<li><a href='/book_receipts?gs="+id+"'>All</a></li>";
       $.each(data, function(i,item){
-          list += "<li><a href='/student_books/receipt_form?gs="+item.grade_section_id+"&g="+item.grade_level_id+";l="+item.id+"'>"+item.label+"</a></li>";
+          list += "<li><a href='/book_receipts?gs="+item.grade_section_id+"&g="+item.grade_level_id+"&l="+item.id+"&year=16"+"'>"+item.label+"</a></li>";
       });
       $("#student-options").html(list);
     });
@@ -48,7 +48,7 @@ nav
     ul
       - if @book_copies.present?
         li 
-          = link_to 'PDF Format', receipt_form_student_books_path(gs:params[:gs], g:params[:g], l:params[:l], format: :pdf), target: '_blank'
+          = link_to 'PDF Format', book_receipts_path(gs:params[:gs], g:params[:g], l:params[:l], year:params[:year], format: :pdf), target: '_blank'
       li.right
         a#student-menu.dropdown-button href="#!" data-activates="student-options"
           span#student = params[:l].present? ? "#{@book_labels.first.name}" : 'Choose number'
