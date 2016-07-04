@@ -68,6 +68,8 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :grade_section_histories, only: [:index, :show]
+
   resources :invoices do
     resources :line_items
     member do

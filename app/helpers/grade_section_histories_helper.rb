@@ -1,0 +1,2 @@
+module GradeSectionHistoriesHelper
+end

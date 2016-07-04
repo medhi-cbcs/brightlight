@@ -1,0 +1,25 @@
+.card-panel
+  .list_description
+    dl.row
+      dd.col.s4
+        .label Grade
+        .item = link_to @grade_section.grade_level.name, @grade_section.grade_level
+      dd.col.s4
+        .label Homeroom teacher
+        .item = @grade_section.homeroom.present? ? link_to(@grade_section.homeroom, @grade_section.homeroom) : '--'
+      dd.col.s4
+        .label Academic Year
+        .item = @grade_section.academic_year.present? ? @grade_section.academic_year.name : "--"
+
+.card-panel
+  table.striped.compact
+    thead
+      th No
+      th Student Name
+    tbody
+      - @gss.each do |gss|
+        tr
+          td style="width:40px"
+            = "#{gss.order_no}. "
+          td
+            = link_to gss.student.name, gss.student

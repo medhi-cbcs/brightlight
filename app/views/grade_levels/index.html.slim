@@ -29,7 +29,7 @@ ul#year-options.dropdown-content
             .giant-letter = grade_level.name
           td
             - grade_sections.each do |section|
-              div =  (params[:year].blank? || params[:year].to_i == AcademicYear.current_id) ? link_to(section.name, grade_section_path(section, year:params[:year])) : link_to(section.name, grade_section_histories_path(section, year:params[:year]))
+              div =  (params[:year].blank? || params[:year].to_i == AcademicYear.current_id) ? link_to(section.name, grade_section_path(section, year:params[:year])) : link_to(section.name, grade_section_history_path(section, year:params[:year]))
               /div = link_to section.name, grade_section_path(section, year:params[:year])
           td
             - grade_sections.each do |section|

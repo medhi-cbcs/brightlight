@@ -10,7 +10,7 @@ class GradeLevelsController < ApplicationController
     if params[:year].blank? || params[:year].to_i == AcademicYear.current_id
       @grade_levels = GradeLevel.includes(grade_sections: [:homeroom])
     else
-      @grade_levels = GradeLevel.includes(grade_section_histories: [:homeroom]).where(grade_section_histories: {academic_year_id: params[:year]})
+      @grade_levels = GradeLevel.includes(grade_section_histories: [:homeroom]).where(grade_section_histories: {academic_year_id: params[:year]}).order('grade_levels.id, grade_section_histories.name')
     end
   end
 
