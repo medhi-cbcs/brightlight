@@ -11,6 +11,6 @@ class WelcomeController < ApplicationController
 	def inventory_mtce
 		authorize! :manage, BookLoan
 		@academic_years = AcademicYear.where('id>10 and id<20')
-		@current_year_id = AcademicYear.current.id
+		@current_year_id = AcademicYear.current_id
 	end
 end

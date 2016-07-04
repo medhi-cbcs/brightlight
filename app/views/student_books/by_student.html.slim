@@ -114,7 +114,7 @@ javascript:
                 = f.hidden_field :grade_section_code, value: book.grade_section_code
                 = f.hidden_field :grade_subject_code, value: book.grade_subject_code
                 = f.hidden_field :notes, value: book.notes 
-                = f.hidden_field :prev_academic_year_id, value: AcademicYear.current.id-1 
+                = f.hidden_field :prev_academic_year_id, value: AcademicYear.current_id-1 
                 = f.hidden_field :user_id, value: current_user.id if current_user
               = fields_for "student_books[]", book do |f|
                 tr

@@ -30,10 +30,10 @@ class GradeSection < ActiveRecord::Base
   end
 
   def standard_books
-    if StandardBook.where(academic_year_id:AcademicYear.current.id).where(grade_level_id:self.grade_level_id).count > 1
-      BookTitle.joins(:standard_books).where(standard_books: {grade_section_id:self.id, academic_year_id:AcademicYear.current.id})
+    if StandardBook.where(academic_year_id:AcademicYear.current_id).where(grade_level_id:self.grade_level_id).count > 1
+      BookTitle.joins(:standard_books).where(standard_books: {grade_section_id:self.id, academic_year_id:AcademicYear.current_id})
     else
-      BookTitle.joins(:standard_books).where(standard_books: {grade_level_id:self.grade_level_id, academic_year_id:AcademicYear.current.id})
+      BookTitle.joins(:standard_books).where(standard_books: {grade_level_id:self.grade_level_id, academic_year_id:AcademicYear.current_id})
     end
   end
 

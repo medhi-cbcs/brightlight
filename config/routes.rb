@@ -17,7 +17,7 @@ Rails.application.routes.draw do
   resources :employees
   resources :copy_conditions
   resources :book_conditions
-  
+
   resources :courses do
     resources :course_texts, shallow: true
     resources :course_sections, except: :new, shallow: true
@@ -75,7 +75,7 @@ Rails.application.routes.draw do
     end
   end
 
-  get 'student_books' => 'student_books#index', as: :all_student_books
+  get 'student_books' => 'student_books#index', as: :student_books
   get 'student_books/assign' => 'student_books#assign', as: :assign_student_books
   get 'student_books/label' => 'student_books#label', as: :label_student_books
   get 'student_books/receipt_form' => 'student_books#receipt_form', as: :receipt_form_student_books

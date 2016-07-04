@@ -130,7 +130,7 @@ class BookReceiptsController < ApplicationController
       @grade_section = GradeSection.find params[:gs]
       @grade_level = @grade_section.grade_level
       @book_labels = BookLabel.where(grade_section:@grade_section)
-      @book_copies = BookCopy.standard_books(@grade_level.id,@grade_section.id,AcademicYear.current.id)
+      @book_copies = BookCopy.standard_books(@grade_level.id,@grade_section.id,AcademicYear.current_id)
                     .includes([:book_edition])
     end
     if params[:l].present?

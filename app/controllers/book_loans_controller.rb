@@ -10,7 +10,7 @@ class BookLoansController < ApplicationController
       @student = Student.where("lower(name) LIKE ?", "%#{params[:student].downcase}%").first
       if @student.present?
         @book_loans = BookLoan.includes([:student])
-                        .where(academic_year:AcademicYear.current)
+                        .where(academic_year_id:AcademicYear.current_id)
                         .where(student: @student)
       else
         @error = "Student with name like #{params[:student]} was not found."
@@ -19,7 +19,7 @@ class BookLoansController < ApplicationController
       @teacher = Employee.where("lower(name) LIKE ?", "%#{params[:teacher].downcase}%").first
       if @teacher.present?
         @book_loans = BookLoan.includes([:employee])
-                        .where(academic_year:AcademicYear.current)
+                        .where(academic_year_id:AcademicYear.current_id)
                         .where(employee: @teacher)
       else
         @error = "Teacher with name like #{params[:teacher]} was not found."
@@ -28,7 +28,7 @@ class BookLoansController < ApplicationController
       @student = Student.find(params[:student_id])
       if @student.present?
         @book_loans = BookLoan.includes([:student])
-                        .where(academic_year:AcademicYear.current)
+                        .where(academic_year_id:AcademicYear.current_id)
                         .where(student: @student)
       else
         @error = "Something went awry... I'm confused."
@@ -37,14 +37,14 @@ class BookLoansController < ApplicationController
       @teacher = Employee.find(params[:employee_id])
       if @teacher.present?
         @book_loans = BookLoan.includes([:employee])
-                        .where(academic_year:AcademicYear.current)
+                        .where(academic_year_id:AcademicYear.current_id)
                         .where(employee: @teacher)
       else
         @error = "Something went awry... I'm confused."
       end
     else
       @book_loans = BookLoan.includes([:employee,:student])
-                      .where(academic_year:AcademicYear.current)
+                      .where(academic_year_id:AcademicYear.current_id)
     end
 
     # if params[:grade].present? and params[:grade].upcase != 'ALL'
@@ -57,7 +57,7 @@ class BookLoansController < ApplicationController
         @academic_year = AcademicYear.find_by_slug params[:year]
         @book_loans = @book_loans.where(academic_year:@academic_year) if params[:year].upcase != 'ALL'
       else
-        @book_loans = @book_loans.where(academic_year:current_academic_year_id)
+        @book_loans = @book_loans.where(academic_year:AcademicYear.current_id)
       end
 
       if params[:category].present? and params[:category].upcase != 'ALL'
@@ -129,7 +129,7 @@ class BookLoansController < ApplicationController
   # GET book_loans/teachers
   def teachers
     authorize! :read, BookLoan
-    @teachers = Employee.joins(:book_loans).where(book_loans: {academic_year: AcademicYear.current}).order(:name).uniq
+    @teachers = Employee.joins(:book_loans).where(book_loans: {academic_year_id: AcademicYear.current_id}).order(:name).uniq
     @employees = Employee.where('email is not null').order(:name)
   end
 
@@ -137,7 +137,7 @@ class BookLoansController < ApplicationController
   def list
     authorize! :read, BookLoan
     @teacher = Employee.find params[:employee_id]
-    @teachers = Employee.joins(:book_loans).where(book_loans: {academic_year: AcademicYear.current}).order(:name).uniq
+    @teachers = Employee.joins(:book_loans).where(book_loans: {academic_year_id: AcademicYear.current_id}).order(:name).uniq
     if @teacher.present?
       @book_loans = BookLoan.includes([:employee]).includes([:book_copy,:book_edition])
                       .where(employee: @teacher)
@@ -216,7 +216,7 @@ class BookLoansController < ApplicationController
 
   def create_multiple
     authorize! :manage, BookLoan
-    @current_year = AcademicYear.current.id
+    @current_year = AcademicYear.current_id
 
     params[:book_loans].each do |key, values|
       book_loan = BookLoan.where(academic_year_id:@current_year).where(book_copy_id:values[:book_copy_id]).take

@@ -7,7 +7,7 @@ class GradeLevelsController < ApplicationController
   def index
     # This preloading cuts down the number of database calls to just 4 calls regardless the numbers of grade sections we have
 
-    if params[:year].blank? || params[:year].to_i == current_academic_year_id
+    if params[:year].blank? || params[:year].to_i == AcademicYear.current_id
       @grade_levels = GradeLevel.includes(grade_sections: [:homeroom])
     else
       @grade_levels = GradeLevel.includes(grade_section_histories: [:homeroom]).where(grade_section_histories: {academic_year_id: params[:year]})

@@ -44,7 +44,7 @@
       .input-field.col.s4
         = f.label :academic_year, class:'active'
         = text_field_tag :year, AcademicYear.current.name, disabled:true
-        = f.hidden_field :academic_year_id, value:AcademicYear.current.id
+        = f.hidden_field :academic_year_id, value:AcademicYear.current_id
       .input-field.col.s8
         = f.label :student, class:'active'
         = text_field_tag nil, f.object.try(:student).try(:name), disabled:true 

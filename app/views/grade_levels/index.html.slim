@@ -2,9 +2,17 @@ h4 Grade Levels
 
 nav
   .nav-wrapper
-    .brand-logo.right style="margin: 0 20px; font-size:1.5em"
-      | #{@academic_year.name}
+    li.right
+      a.dropdown-button href="#!" data-activates="year-options"
+        span#grade = @academic_year.present? ? "#{@academic_year.name}" : "Academic Year" 
+        i.material-icons.right arrow_drop_down
 
+ul#year-options.dropdown-content
+  li  
+  - AcademicYear.where('id>10 and id<20').each do |year|
+    li 
+      = link_to year.name, grade_levels_path(params.merge(year:year.id).symbolize_keys)
+      
 .card-panel
   table.striped
     thead
@@ -15,18 +23,19 @@ nav
 
     tbody
       - @grade_levels.each do |grade_level|
-        - grade_sections = (params[:year].blank? || params[:year].to_i == AcademicYear.current.id) ? grade_level.grade_sections : grade_level.grade_section_histories 
+        - grade_sections = (params[:year].blank? || params[:year].to_i == AcademicYear.current_id) ? grade_level.grade_sections : grade_level.grade_section_histories 
         tr
           td 
             .giant-letter = grade_level.name
           td
             - grade_sections.each do |section|
-              div =  (params[:year].blank? || params[:year].to_i == AcademicYear.current.id) ? link_to(section.name, section) : section.name
+              div =  (params[:year].blank? || params[:year].to_i == AcademicYear.current_id) ? link_to(section.name, grade_section_path(section, year:params[:year])) : link_to(section.name, grade_section_histories_path(section, year:params[:year]))
+              /div = link_to section.name, grade_section_path(section, year:params[:year])
           td
             - grade_sections.each do |section|
               div = section.homeroom.present? ? section.homeroom : '--'
           td
-            = link_to 'Show', grade_level_path(grade_level), class: "btn waves-effect waves-teal btn-small"
+            = link_to 'Show', grade_level_path(grade_level, year:params[:year]), class: "btn waves-effect waves-teal btn-small"
             br
-            = link_to 'Edit', edit_grade_level_path(grade_level), class: "btn waves-effect waves-teal btn-small"
+            = link_to 'Edit', edit_grade_level_path(grade_level, year:params[:year]), class: "btn waves-effect waves-teal btn-small"
         

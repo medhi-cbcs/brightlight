@@ -34,7 +34,7 @@ h4 Book Condition Checking
         = f.label :notes
         = f.text_field :notes, value: ""
         = f.hidden_field :user_id, value: current_user.try(:id)
-        = f.hidden_field :academic_year_id, value: AcademicYear.current.id
+        = f.hidden_field :academic_year_id, value: AcademicYear.current_id
         = f.hidden_field :book_copy_id, value: @book_copy.id
         = f.hidden_field :post, value: 0
         = f.hidden_field :start_date, value: Date.today
