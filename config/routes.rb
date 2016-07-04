@@ -16,7 +16,8 @@ Rails.application.routes.draw do
   resources :academic_years
   resources :employees
   resources :copy_conditions
-
+  resources :book_conditions
+  
   resources :courses do
     resources :course_texts, shallow: true
     resources :course_sections, except: :new, shallow: true

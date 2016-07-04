@@ -1,0 +1,27 @@
+// All of these form and url acrobats because we use slugs for BookCondition, and one of the value is 'new'. DUH....
+.card
+  .card-content
+    - if @book_condition.errors.any?
+      #error_explanation
+        h2 = "#{pluralize(@book_condition.errors.count, "error")} prohibited this book_condition from being saved:"
+        ul
+          - @book_condition.errors.full_messages.each do |message|
+            li = message
+    .row
+      .input-field.col.s4
+        = f.label "Code"
+        = f.text_field :code
+      .input-field.col.s4
+        = f.label "Color"
+        = f.text_field :color
+      .input-field.col.s4
+        = f.label "Sort No"
+        = f.text_field :order_no
+    .row
+      .input-field.col.s12
+        = f.label "Description"
+        = f.text_field :description  
+    
+  .card-action
+    button.btn.waves-effect.waves-light type="submit" Save
+    = link_to 'Cancel', book_conditions_path, class: "waves-effect waves-teal btn-flat"
