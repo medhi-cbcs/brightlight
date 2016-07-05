@@ -10,14 +10,22 @@ class GradeLevelsController < ApplicationController
     if params[:year].blank? || params[:year].to_i == AcademicYear.current_id
       @grade_levels = GradeLevel.includes(grade_sections: [:homeroom])
     else
-      @grade_levels = GradeLevel.includes(grade_section_histories: [:homeroom]).where(grade_section_histories: {academic_year_id: params[:year]}).order('grade_levels.id, grade_section_histories.name')
+      @grade_levels = GradeLevel.includes(grade_section_histories: [:homeroom])
+                        .where(grade_section_histories: {academic_year_id: params[:year]})
+                        .order('grade_levels.id, grade_section_histories.name')
     end
   end
 
   # GET /grade_levels/1
   # GET /grade_levels/1.json
   def show
-    @grade_sections = @grade_level.grade_sections.order(:id).includes([:homeroom])
+    if params[:year].blank? || params[:year].to_i == AcademicYear.current_id
+      @grade_sections = @grade_level.grade_sections.order(:id).includes([:homeroom])
+    else
+      @grade_sections = @grade_level.grade_section_histories
+                          .where(grade_section_histories: {academic_year_id: params[:year]})
+                          .order(:id).includes([:homeroom])
+    end
   end
 
   # GET /grade_levels/new

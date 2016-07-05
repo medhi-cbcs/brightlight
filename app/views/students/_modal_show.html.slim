@@ -1,0 +1,10 @@
+.modal-content
+  h5 Student Record
+  = render partial: 'student_identity_record', locals: {student:@student}
+  
+.modal-footer
+  .left
+    - if can? :view, Student
+      = link_to student, class:"modal-action modal-close waves-effect waves-light btn btn-flat"
+        | Student Record        
+  = link_to "Close", "#!", class:"modal-action modal-close waves-effect waves-light btn-flat"

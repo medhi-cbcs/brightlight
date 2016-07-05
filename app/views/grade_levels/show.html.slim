@@ -1,5 +1,8 @@
-h4 #{@grade_level.name}
-/ #{@academic_year.name unless @academic_year.id == current_academic_year_id}
+.row
+  .col.s6
+    h4 #{@grade_level.name}
+  .col.s6
+    h5.right #{@academic_year.name}
 
 nav
   .nav-wrapper

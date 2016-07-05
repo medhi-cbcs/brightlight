@@ -2,14 +2,15 @@ h4 Grade Levels
 
 nav
   .nav-wrapper
-    li.right
-      a.dropdown-button href="#!" data-activates="year-options"
-        span#grade = @academic_year.present? ? "#{@academic_year.name}" : "Academic Year" 
-        i.material-icons.right arrow_drop_down
+    ul
+      li.right
+        a.dropdown-button href="#!" data-activates="year-options"
+          span#grade = @academic_year.present? ? "#{@academic_year.name}" : "Academic Year" 
+          i.material-icons.right arrow_drop_down
 
 ul#year-options.dropdown-content
   li  
-  - AcademicYear.where('id>10 and id<20').each do |year|
+  - AcademicYear.list_for_menu.each do |year|
     li 
       = link_to year.name, grade_levels_path(params.merge(year:year.id).symbolize_keys)
       

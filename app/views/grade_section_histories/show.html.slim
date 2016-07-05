@@ -9,9 +9,8 @@
         .item = @grade_section.homeroom.present? ? link_to(@grade_section.homeroom, @grade_section.homeroom) : '--'
       dd.col.s4
         .label Academic Year
-        .item = @grade_section.academic_year.present? ? @grade_section.academic_year.name : "--"
+        h5 style="margin:0px" = @grade_section.academic_year.present? ? @grade_section.academic_year.name : "--"
 
-.card-panel
   table.striped.compact
     thead
       th No
