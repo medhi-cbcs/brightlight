@@ -1,3 +1,8 @@
+nav
+  .nav-wrapper
+    .brand-logo style="margin: 0 20px; font-size:2.5em"
+      = @grade_section.name
+
 .card-panel
   .list_description
     dl.row
@@ -21,4 +26,6 @@
           td style="width:40px"
             = "#{gss.order_no}. "
           td
-            = link_to gss.student.name, gss.student
+            = link_to gss.student.name, gss.student, remote:true
+
+#show-modal.modal.modal-fixed-footer
