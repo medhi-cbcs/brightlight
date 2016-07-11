@@ -3,6 +3,9 @@ h4 Grade Levels
 nav
   .nav-wrapper
     ul
+      li 
+        - if can? :manage, GradeSection
+          = link_to "Archive", archive_grade_levels_path, data: {:confirm => 'Are you sure?'}, remote: true, class: 'red-text'
       li.right
         a.dropdown-button href="#!" data-activates="year-options"
           span#grade = @academic_year.present? ? "#{@academic_year.name}" : "Academic Year" 

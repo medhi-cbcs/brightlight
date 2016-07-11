@@ -56,6 +56,10 @@ Rails.application.routes.draw do
   end
 
   resources :grade_levels do
+    collection do
+      get 'archive'
+    end
+    
     member do
       get 'edit_labels'
     end

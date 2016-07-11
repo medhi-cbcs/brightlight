@@ -66,6 +66,31 @@ class GradeLevelsController < ApplicationController
     @students = @grade_section.students
   end
 
+  def archive
+    authorize! :update, @grade_level
+
+    GradeSection.all.each do |grade_section|
+      gsh = GradeSectionHistory.new(
+              grade_level_id: grade_section.grade_level_id,
+              grade_section_id: grade_section.id,
+              name: grade_section.name,
+              homeroom_id: grade_section.homeroom_id,
+              assistant_id: grade_section.assistant_id,
+              academic_year_id: grade_section.academic_year_id,
+              subject_code: grade_section.subject_code,
+              parallel_code: grade_section.parallel_code,
+              capacity: grade_section.capacity,
+              notes: grade_section.notes
+      )
+      gsh.save
+    end
+    @message = "Archive completed"
+
+    respond_to do |format|
+      format.js { head :no_content }
+    end
+  end
+
   # PATCH/PUT /grade_levels/1
   # PATCH/PUT /grade_levels/1.json
   def update
