@@ -1,5 +1,5 @@
 .card-panel
-  - if params[:sid].present?
+  - if @student.present?
     .section-header = @student.name
   table.compact style="margin: 1.2em 0"
     thead
@@ -9,16 +9,27 @@
         th Title
         th Conditions
         th Notes
+        th Action
 
     tbody
-      - if book_label.present?
-        - @book_copies.where(roster_no:book_label.book_no).each_with_index do |book, i|
-          tr
-            td.wd5 = i+1
-            td.wd15 = link_to book.barcode, book
-            td.wd50.ellipsis
-              span = book.book_edition.try(:title)
-            td.wd10 
-              span.box class="#{book.try(:book_copy).try(:latest_condition).try(:color)}"
-                = book.try(:book_copy).try(:latest_condition).try(:code)
-            td.wd20
+      /- if book_label.present?
+      - book_copies.each_with_index do |book, i|
+        tr id="row-#{book.id}"
+          td.wd5 = i+1
+          td.wd15 = link_to book.barcode, book
+          td.wd50.ellipsis
+            span = book.book_edition.try(:title)
+          td.wd10 
+            span.box class="#{book.try(:book_copy).try(:latest_condition).try(:color)}"
+              = book.try(:book_copy).try(:latest_condition).try(:code)
+          td.wd20
+          td.wd5
+            = link_to book, data: {id: book.id, confirm: 'Are you sure?'}, :method => :delete, class:"red-text delete-link", remote: true
+              i.material-icons delete
+
+javascript:              
+  $('.delete-link').bind('ajax:complete', function() {
+    var id = $(this).data("id");
+    $("tr#row-"+id).remove();
+    Materialize.toast("Book deleted", 4000, "green");
+  });

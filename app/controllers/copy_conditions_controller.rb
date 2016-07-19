@@ -54,6 +54,7 @@ class CopyConditionsController < ApplicationController
   def check
     @book_copy = BookCopy.find params[:id]
     @copy_condition = CopyCondition.new
+    @academic_year = @book_copy.latest_copy_condition.academic_year
   end
 
   # POST /book_copies/1/copy_conditions/1/check_update

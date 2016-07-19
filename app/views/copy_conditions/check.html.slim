@@ -28,13 +28,15 @@ h4 Book Condition Checking
       .input-field.col.s2
         = f.label 'New condition', class:'active'
         = f.collection_select :book_condition_id, BookCondition.all, :id, :code
+      .input-field.col.s2
+        = f.label 'Academic Year', class:'active'
+        = f.collection_select :academic_year_id, AcademicYear.list_for_menu, :id, :name, selected: @academic_year.id
       .input-field.col.s12
         .titles
       .input-field.col.s12
         = f.label :notes
-        = f.text_field :notes, value: ""
+        = f.text_field :notes, value: ""    
         = f.hidden_field :user_id, value: current_user.try(:id)
-        = f.hidden_field :academic_year_id, value: AcademicYear.current_id
         = f.hidden_field :book_copy_id, value: @book_copy.id
         = f.hidden_field :post, value: 0
         = f.hidden_field :start_date, value: Date.today

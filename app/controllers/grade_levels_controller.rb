@@ -61,8 +61,10 @@ class GradeLevelsController < ApplicationController
   def edit_labels
     authorize! :update, @grade_level
     section_name = params[:section]
-    @book_labels = @grade_level.book_labels.where('name LIKE ?', "#{section_name}%")
-    @grade_section = @grade_level.grade_sections.where(name:section_name).first
+    # @book_labels = @grade_level.book_labels.where('name LIKE ?', "#{section_name}%")
+    # @grade_section = @grade_level.grade_sections.where(name:section_name).first
+    @grade_section = GradeSection.find params[:section]
+    @book_labels = @grade_section.book_labels
     @students = @grade_section.students
   end
 

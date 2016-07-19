@@ -5,21 +5,21 @@ class BookReceiptsController < ApplicationController
   # GET /book_receipts.json
   def index
     authorize! :manage, BookReceipt
-    @book_receipts = BookReceipt.all
-    year = AcademicYear.where(id:params[:year]).take || AcademicYear.current
+    @academic_year = AcademicYear.where(id:params[:year]).take || AcademicYear.current
 
     if params[:gs].present?
       @grade_section = GradeSection.find params[:gs]
       @grade_level = @grade_section.grade_level
-      @book_labels = BookLabel.where(grade_section:@grade_section)
-      @book_copies = BookReceipt.where(academic_year:year,grade_section:@grade_section)
+      @grade_level_name = @grade_level.name
+      @grade_section_name = @grade_section.name
+      @book_labels = BookLabel.where(grade_section:@grade_section).order(:book_no)
+      @book_copies = BookReceipt.where(academic_year:@academic_year,grade_section:@grade_section)
                       .includes([:book_edition])
     end
-    if params[:l].present?
-      @book_labels = @book_labels.where(id:params[:l])
-      @grade_level ||= GradeLevel.find(@book_labels.first.grade_level_id)
-      @grade_level_name = @grade_level.name
-      @grade_section_name = @book_labels.first.section_name
+    if params[:r].present?
+      @roster_no = params[:r].to_i
+      @book_labels = @book_labels.where(book_no: @roster_no)
+      @book_copies = @book_copies.where(roster_no: @roster_no)
     end
 
     # Use the specified template or the default one if none given
@@ -31,7 +31,7 @@ class BookReceiptsController < ApplicationController
     if @template
       @template.placeholders = {
         grade_section: @grade_section_name,
-        academic_year: year.name,
+        academic_year: @academic_year.name,
         student_name: ''
       }
     end

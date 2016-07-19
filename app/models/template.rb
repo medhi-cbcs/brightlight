@@ -24,17 +24,20 @@ class Template < ActiveRecord::Base
 
   def substituted(section, options={})
     if self.respond_to? section
-      text = self.method(section).call
+      text = String.new self.method(section).call
       self.placeholders.merge!(options)
       self.placeholders.each do |key, value|
         next if key.blank?
         placeholder = "##{key.to_s}#"
         text.gsub!(placeholder, value.to_s || '')
       end
-      if options[:pdf]==true && img_match = text.match(/img.*src=\"([^ ]+)\"/)
+      img_match = text.match(/img.*src=\"([^ ]+)\"/)
+      if options[:pdf]==true && img_match.present?
         url_match = img_match[1].match /.+assets\/([a-zA-Z0-9-]+)-([a-z0-9]+)\.(jpg|png)/
         # text.gsub! match[2], "file:////#{Rails.root}/app/assets/images"
-        text.gsub! img_match[1], "file:///#{Rails.root}/app/assets/images/#{url_match[1]}.#{url_match[3]}"
+        if url_match.present?
+          text.gsub! img_match[1], "file:///#{Rails.root}/app/assets/images/#{url_match[1]}.#{url_match[3]}"
+        end
       end
       return text.html_safe
     end

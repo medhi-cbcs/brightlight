@@ -59,7 +59,7 @@ Rails.application.routes.draw do
     collection do
       get 'archive'
     end
-    
+
     member do
       get 'edit_labels'
     end
@@ -71,6 +71,8 @@ Rails.application.routes.draw do
       end
     end
   end
+
+  get 'grade_sections/:id/edit_labels' => 'grade_sections#edit_labels', as: :edit_labels_grade_section
 
   resources :grade_section_histories, only: [:index, :show]
 

@@ -25,6 +25,14 @@ class GradeSection < ActiveRecord::Base
     grade_sections_students.where(academic_year:academic_year).order(:order_no).map &:student
   end
 
+  def number_of_students_for_academic_year_id(year_id)
+    self.grade_sections_students.where(academic_year_id:year_id).count
+  end
+
+  def number_of_students_for_current_academic_year
+    number_of_students_for_academic_year_id AcademicYear.current_id
+  end
+
   def textbooks
     course_sections.map { |cs| cs.textbooks } unless course_sections.blank?
   end
