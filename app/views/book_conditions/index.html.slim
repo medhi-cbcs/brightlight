@@ -1,0 +1,39 @@
+h4 Listing Book Conditions
+
+nav
+  .nav-wrapper
+    ul.right
+      - if can? :manage, BookCopy
+        li
+          = link_to new_book_condition_path
+            | Create new
+            i.material-icons.left add
+            
+.card-panel
+  table
+    thead
+      tr
+        th Code
+        th Color
+        th Description        
+        th Sort order
+    tbody
+      - @book_conditions.each do |book_condition|
+        tr
+          td = book_condition.code
+          td
+            span.box class="#{book_condition.color}"
+              = book_condition.color
+          td = book_condition.description
+          td = book_condition.order_no
+
+          td.actions
+            // All of these form and url acrobats because we use slugs for BookCondition, and one of the value is 'new'. DUH....
+            = link_to book_condition_path(id:book_condition.id)
+              i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="View" visibility
+            - if can? :edit, book_condition
+              = link_to edit_book_condition_path(id:book_condition.id)
+                i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="Edit" edit
+            - if can? :destroy, book_condition_path(id:book_condition.id)
+              = link_to book_condition_path(id:book_condition.id), data: {:confirm => 'Are you sure?'}, :method => :delete, class:'red-text'
+                i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="Delete" delete

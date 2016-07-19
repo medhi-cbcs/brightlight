@@ -55,6 +55,6 @@ nav
           td = copy_loan.return_date
           td = copy_loan.try(:academic_year).try(:name)
           td 
-            - if copy_loan.student.present? and copy_loan.try(:academic_year).try(:id) == AcademicYear.current.id
+            - if copy_loan.student.present? and copy_loan.try(:academic_year).try(:id) == AcademicYear.current_id
               = link_to student_student_books_path(copy_loan.student)
                 i.material-icons visibility

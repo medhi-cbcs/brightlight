@@ -23,7 +23,7 @@
         th style='text-align:center;' Notes
     tbody
       - if book_title.present?
-        /- book_copies = BookCopy.where(book_edition_id:book_title.book_editions.first.id).standard_books(@grade_level.id,AcademicYear.current.id).order('standard_books.id').includes([:book_edition, :book_condition])
+        /- book_copies = BookCopy.where(book_edition_id:book_title.book_editions.first.id).standard_books(@grade_level.id,AcademicYear.current_id).order('standard_books.id').includes([:book_edition, :book_condition])
         - book_title[:student_books].each_with_index do |book, i|
           = fields_for "book_loans[]", book do |f|
             = f.hidden_field :grade_section_id, value: @grade_section.id 
@@ -42,7 +42,7 @@
             = f.hidden_field :grade_section_code, value: book.grade_section_code
             = f.hidden_field :grade_subject_code, value: book.grade_subject_code
             = f.hidden_field :notes, value: book.notes 
-            = f.hidden_field :prev_academic_year_id, value: AcademicYear.current.id-1 
+            = f.hidden_field :prev_academic_year_id, value: AcademicYear.current_id-1 
             = f.hidden_field :user_id, value: current_user.id if current_user
           = fields_for "student_books[]", book do |f|
             tr

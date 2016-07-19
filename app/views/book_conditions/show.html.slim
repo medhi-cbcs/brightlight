@@ -1,0 +1,23 @@
+h4 Book Condition
+
+.card
+  .card-content
+    .row
+      .col.s4
+        .label Code
+        .item = @book_condition.code
+      .col.s4
+        .label Color
+        .item 
+          span.box class="#{@book_condition.color}" = @book_condition.color
+      .col.s4
+        .label Sort No
+        .item = @book_condition.order_no
+    .row
+      .col.s12
+        .label Description
+        .item = @book_condition.description  
+  .card-action
+    // All of these form and url acrobats because we use slugs for BookCondition, and one of the value is 'new'. DUH....
+    = link_to 'Edit', edit_book_condition_path(id:@book_condition.id)
+    = link_to 'Back', book_conditions_path

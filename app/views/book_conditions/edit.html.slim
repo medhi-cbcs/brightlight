@@ -1,0 +1,6 @@
+h4 Editing Book Condition
+
+// All of these form and url acrobats because we use slugs for BookCondition, and one of the value is 'new'. DUH....
+
+= form_for @book_condition, url: {action: "update"} do |f|
+  == render partial: 'form', locals: {f: f}

@@ -54,6 +54,7 @@ class CopyConditionsController < ApplicationController
   def check
     @book_copy = BookCopy.find params[:id]
     @copy_condition = CopyCondition.new
+    @academic_year = @book_copy.latest_copy_condition.academic_year
   end
 
   # POST /book_copies/1/copy_conditions/1/check_update
@@ -64,7 +65,7 @@ class CopyConditionsController < ApplicationController
 
     respond_to do |format|
       if @copy_condition.save
-        student_book = StudentBook.where(academic_year:AcademicYear.current.id).where(book_copy:@book_copy).take
+        student_book = StudentBook.where(academic_year:AcademicYear.current_id).where(book_copy:@book_copy).take
         student_book.update(initial_copy_condition_id: @copy_condition.book_condition_id) if student_book.present?
         old_copy_condition = @book_copy.latest_copy_condition
         old_copy_condition.update(end_date:Date.today) if old_copy_condition.present?

@@ -16,6 +16,7 @@ Rails.application.routes.draw do
   resources :academic_years
   resources :employees
   resources :copy_conditions
+  resources :book_conditions
 
   resources :courses do
     resources :course_texts, shallow: true
@@ -55,6 +56,10 @@ Rails.application.routes.draw do
   end
 
   resources :grade_levels do
+    collection do
+      get 'archive'
+    end
+
     member do
       get 'edit_labels'
     end
@@ -67,6 +72,10 @@ Rails.application.routes.draw do
     end
   end
 
+  get 'grade_sections/:id/edit_labels' => 'grade_sections#edit_labels', as: :edit_labels_grade_section
+
+  resources :grade_section_histories, only: [:index, :show]
+
   resources :invoices do
     resources :line_items
     member do
@@ -74,7 +83,7 @@ Rails.application.routes.draw do
     end
   end
 
-  get 'student_books' => 'student_books#index', as: :all_student_books
+  get 'student_books' => 'student_books#index', as: :student_books
   get 'student_books/assign' => 'student_books#assign', as: :assign_student_books
   get 'student_books/label' => 'student_books#label', as: :label_student_books
   get 'student_books/receipt_form' => 'student_books#receipt_form', as: :receipt_form_student_books

@@ -1,5 +1,8 @@
-h4 #{@grade_level.name}
-/ #{@academic_year.name unless @academic_year.id == current_academic_year_id}
+.row
+  .col.s6
+    h4 #{@grade_level.name}
+  .col.s6
+    h5.right #{@academic_year.name}
 
 nav
   .nav-wrapper
@@ -27,6 +30,6 @@ nav
       - @grade_sections.each do |section|
         tr
           td
-            .item = link_to section.name, section
+            .item = link_to section.name, grade_section_path(section, year:params[:year])
           td
             .item = section.homeroom.present? ? link_to(section.homeroom, section.homeroom) : '--'

@@ -1,8 +1,8 @@
 - if @student.present?
-  h5 LOAN RECEIPT FORM for 
+  h5 Loan Receipt Form for 
   h4 #{@student.name} (#{@grade_section.name})
 - else
-  h4 LOAN RECEIPT FORM 
+  h4 Loan Receipt Form #{@academic_year.name}
   h5 Student Textbooks 
 
 ul#grade-options.dropdown-content
@@ -13,12 +13,48 @@ ul#grade-options.dropdown-content
 ul#section-options.dropdown-content
   - @grade_sections.each do |section|
     li
-      = link_to section.name, "#!", class:"grade-#{section.grade_level_id}", onclick:"filterStudentOptions(#{section.id}, '#{section.name}');"
-ul#student-options.dropdown-content
-  / - if @grade_section.present?
-  /   - @grade_section.students.each do |student|
-  /     li 
-  /       = link_to student.name, student_books_path(s:"#{@grade_section.id}",sid:"#{student.id}"), class:"student-#{@grade_section.grade_level_id}"
+      = link_to section.name, "#!", class:"grade-#{section.grade_level_id}", onclick:"filterRosterOptions(#{section.id}, '#{section.name}');"
+ul#roster-options.dropdown-content
+  - @grade_sections.each do |section|
+    li = link_to 'All', book_receipts_path(gs:"#{section.id}",year:params[:year]), class:"section-#{section.id}", style:"display:#{section==@grade_section ? 'block' : 'none'}"
+    - section.number_of_students_for_current_academic_year.times do |number|
+      li 
+        = link_to number+1, book_receipts_path(gs:"#{section.id}",r:"#{number+1}", year:params[:year]), class:"section-#{section.id}", style:"display:#{section==@grade_section ? 'block' : 'none'}"
+
+nav
+  .nav-wrapper
+    ul
+      - if @book_copies.present?
+        li 
+          = link_to 'PDF Format', book_receipts_path(gs:params[:gs], g:params[:g], r:params[:r], year:params[:year], format: :pdf), target: '_blank'
+      li.right
+        a#roster-menu.dropdown-button href="#!" data-activates="roster-options"
+          span#roster = params[:r].present? ? "#{@roster_no}" : 'Choose a number'
+          i.material-icons.right arrow_drop_down
+      li.right
+        a.dropdown-button href="#!" data-activates="section-options"
+          span#section = params[:gs].present? ? "#{@grade_section_name}" : 'Choose a section'
+          i.material-icons.right arrow_drop_down
+      li.right
+        a.dropdown-button href="#!" data-activates="grade-options"
+          span#grade = params[:l].present? ? "#{@grade_level_name}" : 'Choose a grade'
+          i.material-icons.right arrow_drop_down
+
+- if @roster_no.present?
+  .template
+    = render 'receipt_form_table'
+- else
+  - @grade_section.number_of_students_for_current_academic_year.times do |number|
+    .template
+      h5 = number+1
+      /= @template.substituted :header, roster_no: book_label.name
+      /= @template.substituted :opening 
+      /= render partial: 'receipt_form_table', locals: {book_label: book_label} 
+      = render partial: 'receipt_form_table', locals: {book_copies: @book_copies.where(roster_no: number+1)}
+      /= @template.substituted :closing 
+      /= @template.substituted :footer
+
+    .page-break
 
 javascript:
   function filterSectionOptions(id, name) {
@@ -32,43 +68,14 @@ javascript:
       }
     })
   }
-  function filterStudentOptions(id, name) {
+  function filterRosterOptions(id, name) {
+    var section_ids = #{raw @grade_sections_ids};
     $("#section").html(name);
-    $.getJSON("/book_labels.json?section="+id, null, function (data) {
-      var list = "<li><a href='/book_receipts?gs="+id+"'>All</a></li>";
-      $.each(data, function(i,item){
-          list += "<li><a href='/book_receipts?gs="+item.grade_section_id+"&g="+item.grade_level_id+"&l="+item.id+"&year=16"+"'>"+item.label+"</a></li>";
-      });
-      $("#student-options").html(list);
-    });
+    section_ids.forEach(function(g){
+      if(id!=g) {
+        $(".section-"+g).hide();
+      } else {
+        $(".section-"+id).show();
+      }
+    })
   }
-
-nav
-  .nav-wrapper
-    ul
-      - if @book_copies.present?
-        li 
-          = link_to 'PDF Format', book_receipts_path(gs:params[:gs], g:params[:g], l:params[:l], year:params[:year], format: :pdf), target: '_blank'
-      li.right
-        a#student-menu.dropdown-button href="#!" data-activates="student-options"
-          span#student = params[:l].present? ? "#{@book_labels.first.name}" : 'Choose number'
-          i.material-icons.right arrow_drop_down
-      li.right
-        a.dropdown-button href="#!" data-activates="section-options"
-          span#section = params[:l].present? ? "Section #{@grade_section_name}" : 'Choose section'
-          i.material-icons.right arrow_drop_down
-      li.right
-        a.dropdown-button href="#!" data-activates="grade-options"
-          span#grade = params[:l].present? ? "#{@grade_level_name}" : 'Choose grade'
-          i.material-icons.right arrow_drop_down
-
-- if @book_labels.present?
-  - @book_labels.each do |book_label|
-    .template
-      /= @template.substituted :header, roster_no: book_label.name
-      /= @template.substituted :opening 
-      = render partial: 'receipt_form_table', locals: {book_label: book_label}
-      /= @template.substituted :closing 
-      /= @template.substituted :footer
-
-    .page-break
