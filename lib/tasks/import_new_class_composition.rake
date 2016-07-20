@@ -2,7 +2,7 @@ namespace :data do
 	desc "Import new class composition"
 	task import_new_class_composition: :environment do
 
-    xl = Roo::Spreadsheet.open('tmp/Class Composition 2016-2017.xlsx')
+    xl = Roo::Spreadsheet.open('lib/tasks/Class Composition 2016-2017.xlsx')
     sheet = xl.sheet('class-composition-2016-2017')
 
     header = {no:'No',name:'Name',student_no:'School UD ID', family_no:'Family UD ID', roster_no:'Roster No',
