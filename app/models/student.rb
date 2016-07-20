@@ -10,7 +10,7 @@ class Student < ActiveRecord::Base
 	has_many :book_loans
 	has_many :book_fines
  	belongs_to :person
-  validates :name, :gender, presence: true
+  validates :name, :student_no, presence: true
 
 	accepts_nested_attributes_for :student_books, allow_destroy: true, reject_if: :all_blank
 	accepts_nested_attributes_for :book_loans, allow_destroy: true, reject_if: :all_blank

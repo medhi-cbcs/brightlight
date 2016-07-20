@@ -17,7 +17,7 @@ namespace :data do
                   gender:     row[:gender].try(:downcase)
                 )
       student.save
-      puts "#{i}. #{student.name} (No:#{student.student_no}/Fam:#{student.family_no})"
+      puts "#{i}. #{student.name} (#{student.gender}) (No:#{student.student_no}/Fam:#{student.family_no})"
     end
   end
 end
