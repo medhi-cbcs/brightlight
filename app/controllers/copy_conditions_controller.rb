@@ -26,6 +26,7 @@ class CopyConditionsController < ApplicationController
   # GET /copy_conditions/new
   def new
     @copy_condition = CopyCondition.new
+    @academic_year = AcademicYear.current
   end
 
   # GET /copy_conditions/1/edit
