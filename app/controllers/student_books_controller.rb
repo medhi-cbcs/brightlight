@@ -18,7 +18,8 @@ class StudentBooksController < ApplicationController
       @grade_level = @grade_section.grade_level
     end
 
-    @year_id = AcademicYear.current.id
+    @year_id = AcademicYear.find_by_slug(params[:year]).try(:id) || AcademicYear.current_id
+    @academic_year = AcademicYear.find @year_id
     textbook_category_id = BookCategory.find_by_code('TB').id
 
     if params[:student_id].present?
@@ -43,6 +44,7 @@ class StudentBooksController < ApplicationController
                         .includes([:book_copy, book_copy: [:book_edition]])
     else
       @student_books = StudentBook.includes([:book_copy, book_copy: [:book_edition]])
+                        .where(academic_year_id:@year_id)
                         .paginate(page: params[:page], per_page: items_per_page)
     end
 
@@ -137,7 +139,7 @@ class StudentBooksController < ApplicationController
       @grade_section = GradeSection.find params[:gs]
       @grade_level = @grade_section.grade_level
       @book_labels = BookLabel.where(grade_section:@grade_section)
-      @book_copies = BookCopy.standard_books(@grade_level.id,@grade_section.id,AcademicYear.current.id)
+      @book_copies = BookCopy.standard_books(@grade_level.id,@grade_section.id,AcademicYear.current_id)
                     .includes([:book_edition])
     end
     if params[:l].present?
@@ -180,7 +182,7 @@ class StudentBooksController < ApplicationController
   # GET /student_books/missing
   def missing
     authorize! :manage, StudentBook
-    @year_id = AcademicYear.current.id
+    @year_id = AcademicYear.current_id
     @grade_level_ids = GradeLevel.all.collect(&:id)
     @grade_sections = GradeSection.where(academic_year_id: @year_id)
     @grade_sections_ids = @grade_sections.collect(&:id)
@@ -222,7 +224,7 @@ class StudentBooksController < ApplicationController
   # GET /student_books/pnnrb
   def pnnrb
     authorize! :read, @student_book
-    @year_id = AcademicYear.current.id
+    @year_id = AcademicYear.current_id
     @grade_level_ids = GradeLevel.all.collect(&:id)
     @grade_sections = GradeSection.where(academic_year_id: @year_id)
     @grade_sections_ids = @grade_sections.collect(&:id)
@@ -283,7 +285,7 @@ class StudentBooksController < ApplicationController
     @standard_books = StandardBook
                         .where(grade_level: @grade_level)
                         .where(book_category_id: @textbook_category_id)
-                        .where(academic_year_id: AcademicYear.current.id)
+                        .where(academic_year_id: AcademicYear.current_id)
                         .includes([:book_edition])
     if @grade_level.present? && [11,12].include?(@grade_level.id)
       @standard_books = @standard_books.where(grade_section:@grade_section)
@@ -300,16 +302,16 @@ class StudentBooksController < ApplicationController
     @book_titles.each do |bt|
       if @grade_level_id == 15
         student_books = StudentBook
-                        .standard_books(@grade_level.id, @grade_section.id, AcademicYear.current.id, @textbook_category_id)
-                        .where(academic_year_id: AcademicYear.current.id)
+                        .standard_books(@grade_level.id, @grade_section.id, AcademicYear.current_id, @textbook_category_id)
+                        .where(academic_year_id: AcademicYear.current_id)
                         .where(grade_section: @grade_section)
                         .order('CAST(roster_no as INT)')
                         .includes([:book_copy])
         bt[:student_books] = student_books
       else
         student_books = StudentBook
-                        .standard_books(@grade_level.id, @grade_section.id, AcademicYear.current.id, @textbook_category_id)
-                        .where(academic_year_id: AcademicYear.current.id)
+                        .standard_books(@grade_level.id, @grade_section.id, AcademicYear.current_id, @textbook_category_id)
+                        .where(academic_year_id: AcademicYear.current_id)
                         .where(book_edition: bt[:edition])
                         .where(grade_section: @grade_section)
                         .order('CAST(roster_no as INT)')
@@ -344,12 +346,12 @@ class StudentBooksController < ApplicationController
       authorize! :update, StudentBook.where(grade_section:@grade_section).where(academic_year:AcademicYear.current).first
     end
 
-    @year_id = AcademicYear.current.id
+    @year_id = AcademicYear.current_id
     @textbook_category_id = BookCategory.find_by_code('TB').id
     @standard_books = StandardBook
                         .where(grade_level: @grade_level)
                         .where(book_category_id: @textbook_category_id)
-                        .where(academic_year_id: AcademicYear.current.id)
+                        .where(academic_year_id: AcademicYear.current_id)
                         .includes([:book_edition])
     if @grade_level.present? && [11,12].include?(@grade_level.id)
       @standard_books = @standard_books.where(grade_section:@grade_section)
@@ -402,7 +404,7 @@ class StudentBooksController < ApplicationController
     authorize! :manage, StudentBook
     StudentBook.update(params[:student_books].keys, params[:student_books].values)
     @book_category = BookCategory.find_by_code 'TB'
-    @current_year = AcademicYear.current.id
+    @current_year = AcademicYear.current_id
 
     params[:book_loans].each do |key, values|
       book_loan = BookLoan.where(academic_year_id:@current_year, book_copy_id:values[:book_copy_id]).take

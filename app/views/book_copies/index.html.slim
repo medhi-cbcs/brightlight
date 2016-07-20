@@ -87,9 +87,9 @@ ul#condition-options.dropdown-content
           td.actions
             = link_to book_copy
               i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="View" visibility
-            - if can? :edit, book_copy
-              = link_to edit_book_copy_path(book_copy)
-                i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="Edit" edit
+            / - if can? :edit, book_copy
+            /   = link_to edit_book_copy_path(book_copy)
+            /     i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="Edit" edit
             - if can? :destroy, book_copy
               = link_to book_copy, data: {:confirm => 'Are you sure?'}, :method => :delete, class:'red-text'
                 i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="Delete" delete

@@ -365,6 +365,15 @@ nav ul a.btn-floating {
 	}
 }
 
+.dropdown-content {
+	li {
+		& > a, & > span {
+			font-size: 1.1rem;
+			padding: 0.6rem 1rem;
+		}
+	}
+}
+
 // ============================================ Toolbar =============================================
 
 .toolbar {

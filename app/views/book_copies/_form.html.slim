@@ -1,6 +1,6 @@
-.card
-  .card-content
-    = form_for [@book_edition, @book_copy] do |f| 
+= form_for [@book_edition, @book_copy] do |f| 
+  .card
+    .card-content
       table
         tr
           td style="vertical-align:top"
@@ -34,11 +34,9 @@
                 = f.label 'Label', class: 'active'
                 = f.text_field :copy_no
 
-  br
-  .card-action
-    button.btn.waves-effect.waves-light type="submit" Save
-    = link_to 'Cancel', book_edition_book_copies_path(@book_copy.book_edition), class: "waves-effect waves-teal btn-flat"
+    .card-action
+      button.btn.waves-effect.waves-light type="submit" Save
+      = link_to 'Cancel', book_edition_book_copies_path(@book_copy.book_edition), class: "waves-effect waves-teal btn-flat"
 
 
       
-

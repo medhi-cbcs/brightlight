@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160615053548) do
+ActiveRecord::Schema.define(version: 20160711042035) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -537,6 +537,7 @@ ActiveRecord::Schema.define(version: 20160615053548) do
     t.integer  "academic_year_id"
     t.integer  "grade_section_history_id"
     t.string   "notes"
+    t.string   "track"
   end
 
   add_index "grade_sections_students", ["academic_year_id"], name: "index_grade_sections_students_on_academic_year_id", using: :btree

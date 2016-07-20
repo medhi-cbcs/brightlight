@@ -25,15 +25,26 @@ class GradeSection < ActiveRecord::Base
     grade_sections_students.where(academic_year:academic_year).order(:order_no).map &:student
   end
 
+  def number_of_students_for_academic_year_id(year_id)
+    self.grade_sections_students.where(academic_year_id:year_id).count
+  end
+
+  def number_of_students_for_current_academic_year
+    number_of_students_for_academic_year_id AcademicYear.current_id
+  end
+
   def textbooks
     course_sections.map { |cs| cs.textbooks } unless course_sections.blank?
   end
 
   def standard_books
-    if StandardBook.where(academic_year_id:AcademicYear.current.id).where(grade_level_id:self.grade_level_id).count > 1
-      BookTitle.joins(:standard_books).where(standard_books: {grade_section_id:self.id, academic_year_id:AcademicYear.current.id})
+    grade_section_books = StandardBook.where(academic_year_id:AcademicYear.current_id,grade_section_id:self.id)
+    if grade_section_books.count > 1
+      grade_section_books.includes(:book_edition)
+      #BookTitle.joins(:standard_books).where(standard_books: {grade_section_id:self.id, academic_year_id:AcademicYear.current_id})
     else
-      BookTitle.joins(:standard_books).where(standard_books: {grade_level_id:self.grade_level_id, academic_year_id:AcademicYear.current.id})
+      StandardBook.where(academic_year_id:AcademicYear.current_id,grade_level_id:self.grade_level_id).includes(:book_edition)
+      #BookTitle.joins(:standard_books).where(standard_books: {grade_level_id:self.grade_level_id, academic_year_id:AcademicYear.current_id})
     end
   end
 

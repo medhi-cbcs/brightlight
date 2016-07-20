@@ -1,0 +1,20 @@
+tr.nested-fields
+  td
+    .input-field
+      = f.text_field :barcode
+  td
+    .input-field
+      .titles &nbsp;
+
+    = f.hidden_field :book_copy_id, class:'book_copy_ids'
+    = f.hidden_field :academic_year_id, class:'academic_year_ids'
+    = f.hidden_field :copy_no, class:'copy_nos'
+    = f.hidden_field :grade_level_id, class:'grade_level_ids'
+    = f.hidden_field :grade_section_id, class:'grade_section_ids'
+    = f.hidden_field :issue_date, class:'issue_dates'
+    = f.hidden_field :initial_condition_id, class:'initial_copy_condition_ids'
+    = f.hidden_field :roster_no, value: @roster_no, class:'roster_nos'
+    = f.hidden_field :book_edition_id, class:'book_edition_ids'
+    
+  td
+    = link_to_remove_association "Remove", f, class: "waves-effect waves-teal btn btn-flat red-text btn-small"

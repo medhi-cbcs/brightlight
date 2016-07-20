@@ -7,17 +7,25 @@ class GradeLevelsController < ApplicationController
   def index
     # This preloading cuts down the number of database calls to just 4 calls regardless the numbers of grade sections we have
 
-    if params[:year].blank? || params[:year].to_i == current_academic_year_id
+    if params[:year].blank? || params[:year].to_i == AcademicYear.current_id
       @grade_levels = GradeLevel.includes(grade_sections: [:homeroom])
     else
-      @grade_levels = GradeLevel.includes(grade_section_histories: [:homeroom]).where(grade_section_histories: {academic_year_id: params[:year]})
+      @grade_levels = GradeLevel.includes(grade_section_histories: [:homeroom])
+                        .where(grade_section_histories: {academic_year_id: params[:year]})
+                        .order('grade_levels.id, grade_section_histories.name')
     end
   end
 
   # GET /grade_levels/1
   # GET /grade_levels/1.json
   def show
-    @grade_sections = @grade_level.grade_sections.order(:id).includes([:homeroom])
+    if params[:year].blank? || params[:year].to_i == AcademicYear.current_id
+      @grade_sections = @grade_level.grade_sections.order(:id).includes([:homeroom])
+    else
+      @grade_sections = @grade_level.grade_section_histories
+                          .where(grade_section_histories: {academic_year_id: params[:year]})
+                          .order(:id).includes([:homeroom])
+    end
   end
 
   # GET /grade_levels/new
@@ -53,9 +61,36 @@ class GradeLevelsController < ApplicationController
   def edit_labels
     authorize! :update, @grade_level
     section_name = params[:section]
-    @book_labels = @grade_level.book_labels.where('name LIKE ?', "#{section_name}%")
-    @grade_section = @grade_level.grade_sections.where(name:section_name).first
+    # @book_labels = @grade_level.book_labels.where('name LIKE ?', "#{section_name}%")
+    # @grade_section = @grade_level.grade_sections.where(name:section_name).first
+    @grade_section = GradeSection.find params[:section]
+    @book_labels = @grade_section.book_labels
     @students = @grade_section.students
+  end
+
+  def archive
+    authorize! :update, @grade_level
+
+    GradeSection.all.each do |grade_section|
+      gsh = GradeSectionHistory.new(
+              grade_level_id: grade_section.grade_level_id,
+              grade_section_id: grade_section.id,
+              name: grade_section.name,
+              homeroom_id: grade_section.homeroom_id,
+              assistant_id: grade_section.assistant_id,
+              academic_year_id: grade_section.academic_year_id,
+              subject_code: grade_section.subject_code,
+              parallel_code: grade_section.parallel_code,
+              capacity: grade_section.capacity,
+              notes: grade_section.notes
+      )
+      gsh.save
+    end
+    @message = "Archive completed"
+
+    respond_to do |format|
+      format.js { head :no_content }
+    end
   end
 
   # PATCH/PUT /grade_levels/1

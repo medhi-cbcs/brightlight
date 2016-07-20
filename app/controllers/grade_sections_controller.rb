@@ -1,5 +1,5 @@
 class GradeSectionsController < ApplicationController
-  before_action :set_grade_section, only: [:edit, :update, :destroy, :students, :courses, :assign, :add_students]
+  before_action :set_grade_section, only: [:edit, :update, :destroy, :students, :courses, :assign, :add_students, :edit_labels]
   before_action :set_year, only: [:index, :show, :new, :edit]
 
   # GET /grade_sections
@@ -32,6 +32,12 @@ class GradeSectionsController < ApplicationController
     @grade_level =  @grade_section.grade_level
     @total_students = GradeSectionsStudent.number_of_students(@grade_section, current_academic_year_id)
     @students = GradeSectionsStudent.where(academic_year:AcademicYear.current).where(grade_section:@grade_section)
+  end
+
+  def edit_labels
+    authorize! :update, @grade_section
+    @book_labels = @grade_section.book_labels
+    @students = @grade_section.students
   end
 
   def students

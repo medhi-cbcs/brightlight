@@ -1,0 +1,23 @@
+h1 Listing Grade Section History
+
+nav
+  .nav-wrapper
+    .brand-logo.right style="margin: 0 20px; font-size:1.5em"
+      | #{@academic_year.name}
+
+.card-panel      
+  table.striped
+    thead
+      tr
+        th Section
+        th Teacher
+
+    tbody
+      - @grade_sections.each do |grade_section|
+        tr
+          td
+            = link_to grade_section.name, grade_section
+          td
+            = grade_section.homeroom.present? ? link_to(grade_section.homeroom) : '--'
+
+= link_to 'New Grade section history', new_grade_section_history_path

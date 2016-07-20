@@ -26,46 +26,7 @@ nav
           a href='#tab4' Admission
 
     #tab1.tab-content
-      .col.s2
-        .card
-          .card-image
-            - avatar = @student.gender[0].upcase == 'F' ? 'female-child-avatar.png' : 'male-child-avatar.png'
-            = image_tag (@student.photo_uri.present? ? @student.photo_uri : avatar), class: 'media-object show-image'
-          .card-content
-            p.small-text = @student.name
-      .col.s10
-        .list_description
-          dl          
-            dd.col.s5
-              .label Full name: 
-              .item = @student.name
-            dd.col.s5
-              .label Nick name: 
-              .item = @student.nick_name
-            dd.col.s5
-              .label First name: 
-              .item = @student.first_name
-            dd.col.s5
-              .label Last name: 
-              .item = @student.last_name
-            dd.col.s5
-              .label Date of birth:
-              .item = @student.date_of_birth
-            dd.col.s5
-              .label Place of birth: 
-              .item = @student.place_of_birth
-            dd.col.s5
-              .label Family No: 
-              .item = @student.family_no
-            dd.col.s5
-              .label Gender: 
-              .item = @student.gender
-            dd.col.s5
-              .label Student no: 
-              .item = @student.student_no
-            dd.col.s5
-              .label Grade: 
-              .item = @current_grade.try(:name)
+      = render partial: 'student_identity_record', locals: {student: @student}
               
     #tab2.tab-content
       .list_description.col.s12
