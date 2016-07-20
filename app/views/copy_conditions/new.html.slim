@@ -14,10 +14,15 @@ nav
         ul
           - @copy_condition.errors.full_messages.each do |message|
             li = message
-
+    .input-field.col.s2
+      = label_tag 'Barcode', nil, class:'active'
+      = text_field_tag :barcode
     .input-field.col.s2
       = label_tag 'New condition', nil, class:'active'
       = select_tag :book_condition_id, options_from_collection_for_select(BookCondition.all, :id, :code)
+    .input-field.col.s2
+      = label_tag 'Academic Year', nil, class:'active'
+      = select_tag :academic_year_id, options_from_collection_for_select(AcademicYear.list_for_menu, :id, :name, @academic_year.id)
     .input-field.col.s6 
       .col.s6
         = radio_button_tag :post, 0, true, class: 'with-gap'
@@ -53,6 +58,7 @@ javascript:
         setTimeout(function(){
           if (chars.length >= 11) {
             var barcode = chars.join("");
+            $("[name='barcode']").val(barcode);
             $.getJSON("/book_copies/"+barcode+".json", null, function (data) {
               update_book_condition(data);
             }).fail(function(){
@@ -66,11 +72,23 @@ javascript:
       }
       pressed = true;
     });
-
+    $(document).on("keypress","[name='barcode']", (function(e){  
+      var c = String.fromCharCode(e.which);
+      if ( $.trim($(e.target).val()).length >= 10 ) {
+        var barcode = $.trim($(e.target).val()+c);
+        $("[name='barcode']").val(barcode);
+        e.preventDefault();
+        $.getJSON("/book_copies/"+barcode+".json", null, function (data) {
+          update_book_condition(data);
+        }).fail(function(){
+          $(e.target).val('');
+          Materialize.toast("Invalid barcode.", 5000, 'red');
+        });
+      }
+    }));
     var update_book_condition = function (data) {
       var book = data.book_copy;
       var currentUserId = #{raw current_user.try(:id) || 0};
-      var academicYearId = book.academic_year.academic_year_id;
       url = "/book_copies/"+ book.id + "/copy_conditions/create";
       var dataToSend = new Object();
       var today = new Date();
@@ -78,7 +96,7 @@ javascript:
                                         post: $("[name=post]:checked").val(), 
                                         notes: $("[name=notes]").val(),
                                         book_condition_id: $("#book_condition_id").val(),
-                                        academic_year_id: academicYearId,
+                                        academic_year_id: $("[name=academic_year_id]").val(),
                                         start_date: today.toISOString(), 
                                         deleted_flag: false,
                                         user_id: currentUserId }};
