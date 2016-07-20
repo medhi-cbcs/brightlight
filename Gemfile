@@ -100,15 +100,15 @@ gem 'tinymce-rails'
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 
+# For importing data from Excel
+gem 'roo', '~> 2.3.2'
+
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug'
   gem 'forgery'
   gem 'populator'
   gem 'letter_opener'
-
-  # For importing data from Excel
-  gem 'roo', '~> 2.3.2'
 
   # For connecting to SQL server
   gem 'tiny_tds'
