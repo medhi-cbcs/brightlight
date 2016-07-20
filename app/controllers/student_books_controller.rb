@@ -25,16 +25,17 @@ class StudentBooksController < ApplicationController
     if params[:student_id].present?
       @student = Student.where(id:params[:student_id]).take
       gss = @student.grade_sections_students.where(academic_year_id: @year_id).try(:first)
-      @grade_section = gss.try(:grade_section)
-      @roster_no = gss.order_no
-      # Notes: Because of data errors in database, we search StudentBook without student_id
-      # =>     but filter it with grade_section, year and roster_no
-      @student_books = StudentBook.where(grade_section:@grade_section)
-                        .standard_books(@grade_section.grade_level.id, @grade_section.id, @year_id, textbook_category_id)
-                        .where(roster_no:@roster_no.to_s)
-                        .where(academic_year_id:@year_id)
-                        .includes([:book_copy, book_copy: [:book_edition]])
-
+      if gss.present?
+        @grade_section = gss.grade_section
+        @roster_no = gss.order_no
+        # Notes: Because of data errors in database, we search StudentBook without student_id
+        # =>     but filter it with grade_section, year and roster_no
+        @student_books = StudentBook.where(grade_section:@grade_section)
+                          .standard_books(@grade_section.grade_level.id, @grade_section.id, @year_id, textbook_category_id)
+                          .where(roster_no:@roster_no.to_s)
+                          .where(academic_year_id:@year_id)
+                          .includes([:book_copy, book_copy: [:book_edition]])
+      end
     elsif params[:s].present?
       @students = @grade_section.current_students
       @student_books = StudentBook.where(grade_section:@grade_section)

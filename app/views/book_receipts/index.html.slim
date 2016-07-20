@@ -43,7 +43,7 @@ nav
 - if @roster_no.present?
   .template
     = render 'receipt_form_table'
-- else
+- elsif @grade_section.present?
   - @grade_section.number_of_students_for_current_academic_year.times do |number|
     .template
       h5 = number+1

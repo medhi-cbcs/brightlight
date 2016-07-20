@@ -20,7 +20,7 @@ ul#student-options.dropdown-content
 ul#year-options.dropdown-content
   li  
     = link_to 'All', student_books_path(params.merge(year:'all').symbolize_keys)
-  - AcademicYear.where('id>10 and id<20').each do |year|
+  - AcademicYear.list_for_menu.each do |year|
     li 
       = link_to year.name, student_books_path(params.merge(year:year.slug).symbolize_keys)
           
@@ -82,7 +82,8 @@ nav
     == render(partial: 'student_book_list', locals: {student_books:student_books, student:student, grade_section:grade_section, roster_no:roster_no})
 
 - else
-  == render(partial: 'student_book_list', locals: {student_books:@student_books, student:@student, grade_section:@grade_section, roster_no:@roster_no})
+  - if @student_books.present?
+    == render(partial: 'student_book_list', locals: {student_books:@student_books, student:@student, grade_section:@grade_section, roster_no:@roster_no})
 
 - if @student_books.respond_to? :total_pages
   .toolbar.z-depth-1
