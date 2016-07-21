@@ -40,6 +40,7 @@ class StandardBooksController < ApplicationController
   def new
     authorize! :manage, StandardBook
     @standard_book = StandardBook.new
+    @academic_year = AcademicYear.find_by_slug(params[:year]) || AcademicYear.current
   end
 
   # GET /standard_books/1/edit
