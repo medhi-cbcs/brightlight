@@ -1,34 +1,37 @@
 class StandardBooksController < ApplicationController
   before_action :set_standard_book, only: [:show, :edit, :update, :destroy]
+  autocomplete :book_edition, :title, full: true, extra_data: [:book_title_id]
 
   # GET /standard_books
   # GET /standard_books.json
   def index
     @items_per_page = 25
-    @standard_books = StandardBook.all
 
-    if params[:grade].present? and params[:grade].upcase != 'ALL'
-      @grade_level = GradeLevel.find params[:grade]
-      @standard_books = @standard_books.where(grade_level:@grade_level).includes([:book_title])
-      if params[:section].present? and [11,12].include? @grade_level.id
-        @grade_section = GradeSection.find params[:section]
-        @standard_books = @standard_books.where(grade_section:@grade_section).includes([:book_title])
+    if params[:grade_level_id].present?
+      @grade_level = GradeLevel.find params[:grade_level_id]
+      @standard_books = StandardBook.where(grade_level:@grade_level).includes([:book_title])
+
+      if params[:track].present?
+        if params[:track].upcase != 'ALL'
+          @track = params[:track]
+          @standard_books = @standard_books.where(track:@track)
+        end
       end
-    end
 
-    if params[:year].present?
-      @academic_year = AcademicYear.find_by_slug params[:year]
-      @standard_books = @standard_books.where(academic_year:@academic_year) if params[:year].upcase != 'ALL'
-    else
-      @standard_books = @standard_books.where(academic_year:current_academic_year_id)
-    end
+      if params[:year].present?
+        @academic_year = AcademicYear.find_by_slug params[:year]
+        @standard_books = @standard_books.where(academic_year:@academic_year) if params[:year].upcase != 'ALL'
+      else
+        @standard_books = @standard_books.where(academic_year:current_academic_year_id)
+      end
 
-    if params[:category].present? and params[:category].upcase != 'ALL'
-      @category = BookCategory.find_by_code params[:category]
-      @standard_books = @standard_books.where(book_category:@category)
-    end
+      if params[:category].present? and params[:category].upcase != 'ALL'
+        @category = BookCategory.find_by_code params[:category]
+        @standard_books = @standard_books.where(book_category:@category)
+      end
 
-    @standard_books = @standard_books.paginate(page: params[:page], per_page: @items_per_page)
+      @standard_books = @standard_books.paginate(page: params[:page], per_page: @items_per_page)
+    end
   end
 
   # GET /standard_books/1
@@ -40,6 +43,7 @@ class StandardBooksController < ApplicationController
   def new
     authorize! :manage, StandardBook
     @standard_book = StandardBook.new
+    @grade_level = GradeLevel.find params[:grade_level_id]
     @academic_year = AcademicYear.find_by_slug(params[:year]) || AcademicYear.current
   end
 
@@ -58,9 +62,14 @@ class StandardBooksController < ApplicationController
       if @standard_book.save
         format.html { redirect_to @standard_book, notice: 'Standard book was successfully created.' }
         format.json { render :show, status: :created, location: @standard_book }
+        format.js
       else
-        format.html { render :new }
+        format.html {
+          @academic_year = AcademicYear.find_by_slug(params[:year]) || AcademicYear.current
+          render :new
+        }
         format.json { render json: @standard_book.errors, status: :unprocessable_entity }
+        format.js { render :save_error }
       end
     end
   end
@@ -116,6 +125,6 @@ class StandardBooksController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def standard_book_params
-      params.require(:standard_book).permit(:book_title_id, :book_edition_id, :book_category_id, :isbn, :refno, :quantity, :grade_subject_code, :grade_name, :grade_level_id, :grade_section_id, :group, :category, :bkudid, :notes, :academic_year_id)
+      params.require(:standard_book).permit(:book_title_id, :book_edition_id, :book_category_id, :isbn, :refno, :quantity, :grade_subject_code, :grade_name, :grade_level_id, :grade_section_id, :group, :category, :bkudid, :notes, :academic_year_id, :track)
     end
 end

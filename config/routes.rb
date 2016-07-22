@@ -55,6 +55,9 @@ Rails.application.routes.draw do
     end
   end
 
+  # For some reasons this line should be placed before the "resources :standard_books" line for autocomplete to work
+  get 'standard_books/autocomplete_book_edition_title' => 'standard_books/autocomplete_book_edition_title', as: :autocomplete_book_edition_title_standard_books
+
   resources :grade_levels do
     collection do
       get 'archive'
@@ -62,6 +65,7 @@ Rails.application.routes.draw do
 
     member do
       get 'edit_labels'
+      post 'add_standard_books'
     end
     resources :grade_sections, shallow: true do
       member do
@@ -69,6 +73,14 @@ Rails.application.routes.draw do
         post 'add_students'
         get 'assign'
       end
+    end
+
+    resources :standard_books, shallow: true
+  end
+
+  resources :standard_books, only:[:index] do
+    collection do
+      post 'prepare'
     end
   end
 
@@ -132,12 +144,6 @@ Rails.application.routes.draw do
       get 'autocomplete_student_name'
       get 'notification'
       get 'payment'
-    end
-  end
-
-  resources :standard_books do
-    collection do
-      post 'prepare'
     end
   end
 
