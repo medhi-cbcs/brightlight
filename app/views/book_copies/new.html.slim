@@ -36,7 +36,7 @@
       ul
         li.right
           / Note: 'Append' new row at the end of the 'tbody#book_copy' node
-          = link_to_add_association f, :book_copies, 'data-association-insertion-method' => 'append', 'data-association-insertion-node' => 'tbody#book_copy'
+          = link_to_add_association f, :book_copies, 'data-association-insertion-method' => 'prepend', 'data-association-insertion-node' => 'tbody#book_copy'
             ' Add Row
             i.material-icons.left playlist_add
 
@@ -61,4 +61,53 @@
 javascript:
   $('#book_copy').on('cocoon:after-insert', function() {
     $('select').material_select();
+  });
+
+  $(document).ready(function() {
+    var pressed = false;
+    var chars = [];
+    $(window).keypress(function(e) {
+      if (e.which >= 45 && e.which <= 112) {
+          chars.push(String.fromCharCode(e.which));
+      }
+      if (pressed == false) {
+        setTimeout(function(){
+          if (chars.length >= 11) {
+            var barcode = chars.join("");
+            $.getJSON("/book_copies/"+barcode+"/check_barcode.json", null, function (data) {
+              /* Barcode already exists in database */
+              Materialize.toast("Error: barcode already exists.", 4000, 'red');
+            }).fail(function(){
+              /* Entered barcode doesn't exist in the database */
+              insert_values(barcode);
+            });            
+          }
+          chars = [];
+          pressed = false;
+        },500);
+      }
+      pressed = true;
+    });
+    $(document).on("keypress","[name$='[barcode]']", (function(e){  
+      var c = String.fromCharCode(e.which);
+      if ( $.trim($(e.target).val()).length >= 10 ) {
+        var barcode = $.trim($(e.target).val()+c);
+        e.preventDefault();
+        $.getJSON("/book_copies/"+barcode+"/check_barcode.json", null, function (data) {
+          /* Barcode already exists in database */
+          $(e.target).val('');
+          Materialize.toast("Invalid barcode.", 5000, 'red');
+        }).fail(function(){
+          /* Entered barcode doesn't exist in the database */
+          insert_values();
+          $("[name$='[barcode]']:first").focus();
+        });
+      }
+    }));
+    var insert_values = function (barcode) {
+      $("[name$='[barcode]']:first").val(barcode);
+      $("[name$='[book_condition_id]']:first").val($("[name$='[book_condition_id]']:last").val());
+      $('select').material_select();
+      $(".add_fields").trigger('click');      
+    };
   });
