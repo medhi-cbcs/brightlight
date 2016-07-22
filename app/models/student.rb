@@ -90,25 +90,24 @@ class Student < ActiveRecord::Base
   end
 
 	def current_grade_section
-		grade_section_with_academic_year_id(AcademicYear.current)
+		grade_section_with_academic_year_id(AcademicYear.current_id)
 	end
 
 	def current_roster_no
-		roster_no_with_academic_year_id(AcademicYear.current)
+		roster_no_with_academic_year_id(AcademicYear.current_id)
 	end
 
 	def roster_no_with_academic_year_id(academic_year_id)
 		grade_sections_students
 				.with_academic_year(academic_year_id)
-				.includes([:grade_section])
-				.take.try(:order_no)
+				.pluck(:order_no)
+				.first
 	end
 
 	def grade_section_with_academic_year_id(academic_year_id)
-		grade_sections_students
-				.with_academic_year(academic_year_id)
-				.includes([:grade_section])
-				.take.try(:grade_section)
+		GradeSection.joins(:grade_sections_students)
+			.where(grade_sections_students: {academic_year_id:academic_year_id, student:self})
+			.select('grade_sections.*, grade_sections_students.track as track').take
 	end
 
 	def self.having_books_with_condition(condition)

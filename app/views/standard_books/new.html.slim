@@ -1,3 +1,61 @@
 h4 New Standard Book
 
-== render 'form'
+= form_for [@grade_level,@standard_book], remote:true do |f|
+  nav
+    .nav-wrapper
+      ul
+        li 
+          = link_to grade_level_standard_books_path(@grade_level)
+            i.material-icons.left chevron_left
+        li.right
+          button.btn.waves-effect.waves-light type="submit" Save
+
+  - if @standard_book.errors.any?
+    .card-panel
+      #error_explanation
+        h2 = "#{pluralize(@standard_book.errors.count, "error")} prohibited this standard_book from being saved:"
+        ul
+          - @standard_book.errors.full_messages.each do |message|
+            li = message
+            
+  .card-panel 
+    .row
+      .input-field.col.s3
+        = f.label :grade_level, class:'active'
+        = f.collection_select :grade_level_id, GradeLevel.all, :id, :name, selected:params[:grade_level_id]
+      .input-field.col.s3
+        = f.label :track, class:'active'
+        = f.select :track, options_for_select([['None', nil],['NS','NS'],['SS','SS']])
+      .input-field.col.s3
+        = f.label :academic_year, class:'active'
+        = f.collection_select :academic_year_id, AcademicYear.list_for_menu, :id, :name, selected:@academic_year.id
+      .input-field.col.s3
+        = f.label :book_category, class:'active'
+        = f.collection_select :book_category_id, BookCategory.all, :id, :name, selected:1
+      .input-field.col.s3
+        = f.label :quantity
+        = f.number_field :quantity
+      .input-field.col.s9
+        = f.label :notes
+        = f.text_field :notes
+      .input-field.col.s12 
+        = f.hidden_field :book_edition_id
+        = f.hidden_field :book_title_id
+        = autocomplete_field_tag :book_edition_title, '', autocomplete_book_edition_title_standard_books_path, update_elements: {:id => '#standard_book_book_edition_id', :book_title_id => '#standard_book_book_title_id'}
+    
+  .card-panel
+    table#book_list
+      
+  / .card-panel
+  /   = form_for_filterrific @filterrific do |f|
+  /     .row.list_description
+  /       .col.s4
+  /         .label Filter term
+  /         = f.text_field :search_query, class: 'filterrific-periodically-observed'
+  /       .col.s3
+  /         .label Sorted by
+  /         = f.select :sorted_by, @filterrific.select_options[:sorted_by]
+  /       .col.s3
+  /         = link_to 'Reset filters', reset_filterrific_url, class:"btn waves-effect waves-teal btn-flat"
+  / 
+  / = render partial: 'book_edition_form', locals: { form:f, editions: @editions }
