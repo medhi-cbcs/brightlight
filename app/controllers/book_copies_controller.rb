@@ -52,6 +52,20 @@ class BookCopiesController < ApplicationController
     end
   end
 
+  # GET /book_copies/1/check_barcode.json
+  def check_barcode
+    set_book_copy
+    respond_to do |format|
+      format.json {
+        if @book_copy.present?
+          render json: { barcode: @book_copy.barcode }
+        else
+          render json: {}, status: :unprocessable_entity
+        end
+      }
+    end
+  end
+
   # GET /book_copies/new
   def new
     authorize! :manage, BookCopy

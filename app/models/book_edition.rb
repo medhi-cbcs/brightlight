@@ -7,7 +7,7 @@ class BookEdition < ActiveRecord::Base
 
   belongs_to :book_title
   has_many :book_copies
-  accepts_nested_attributes_for :book_copies, allow_destroy: true, reject_if: :all_blank
+  accepts_nested_attributes_for :book_copies, allow_destroy: true, reject_if: proc { |attributes| attributes['barcode'].blank? }
 
   filterrific(
     default_filter_params: { sorted_by: 'created_at_desc' },

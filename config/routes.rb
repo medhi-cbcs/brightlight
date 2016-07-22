@@ -39,6 +39,7 @@ Rails.application.routes.draw do
   put 'book_copies/:id/copy_conditions/create' => 'copy_conditions#create', as: :create_book_copy_condition
   get 'book_copies/:id/conditions' => 'book_copies#conditions', as: :book_copy_conditions
   get 'book_copies/:id/loans' => 'book_copies#loans', as: :book_copy_loans
+  get 'book_copies/:id/check_barcode' => 'book_copies#check_barcode', as: :book_copy_check_barcode
 
   resources :book_titles do
     collection do

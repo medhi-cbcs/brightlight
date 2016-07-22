@@ -41,6 +41,7 @@ h4 New Standard Book
       .input-field.col.s12 
         = f.hidden_field :book_edition_id
         = f.hidden_field :book_title_id
+        = label_tag :book_edition_title, "Book Title", class: 'active'
         = autocomplete_field_tag :book_edition_title, '', autocomplete_book_edition_title_standard_books_path, update_elements: {:id => '#standard_book_book_edition_id', :book_title_id => '#standard_book_book_title_id'}
     
   .card-panel
