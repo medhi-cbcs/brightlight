@@ -1,0 +1,4 @@
+<% js = escape_javascript(
+  render(partial: 'book_edition_form', locals: { editions: @editions })
+) %>
+$("#filterrific_results").html("<%= js %>");

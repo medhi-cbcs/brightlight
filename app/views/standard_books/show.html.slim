@@ -1,50 +1,52 @@
-p#notice = notice
+h4 Standard Book
 
-p
-  strong Book title:
-  = @standard_book.book_title
-p
-  strong Book edition:
-  = @standard_book.book_edition
-p
-  strong Book category:
-  = @standard_book.book_category
-p
-  strong Isbn:
-  = @standard_book.isbn
-p
-  strong Refno:
-  = @standard_book.refno
-p
-  strong Quantity:
-  = @standard_book.quantity
-p
-  strong Grade subject code:
-  = @standard_book.grade_subject_code
-p
-  strong Grade name:
-  = @standard_book.grade_name
-p
-  strong Grade level:
-  = @standard_book.grade_level
-p
-  strong Grade section:
-  = @standard_book.grade_section
-p
-  strong Group:
-  = @standard_book.group
-p
-  strong Category:
-  = @standard_book.category
-p
-  strong Bkudid:
-  = @standard_book.bkudid
-p
-  strong Notes:
-  = @standard_book.notes
-p
-  strong Academic year:
-  = @standard_book.academic_year
+.card-panel
+  .row 
+    .col.s12
+      strong Book title:
+      = @standard_book.book_title.try(:title)
+    .col.s12
+      strong Book edition:
+      = @standard_book.book_edition.try(:title)
+    .col.s4
+      strong Book category:
+      = @standard_book.book_category
+    .col.s4
+      strong Isbn:
+      = @standard_book.isbn
+    .col.s4
+      strong Refno:
+      = @standard_book.refno
+    .col.s4
+      strong Quantity:
+      = @standard_book.quantity
+    .col.s4
+      strong Grade subject code:
+      = @standard_book.grade_subject_code
+    .col.s4
+      strong Grade name:
+      = @standard_book.grade_name
+    .col.s4
+      strong Grade level:
+      = @standard_book.grade_level.try(:name)
+    .col.s4
+      strong Grade section:
+      = @standard_book.grade_section.try(:name)
+    .col.s4
+      strong Group:
+      = @standard_book.group
+    .col.s4
+      strong Category:
+      = @standard_book.category
+    .col.s4
+      strong Bkudid:
+      = @standard_book.bkudid
+    .col.s4
+      strong Notes:
+      = @standard_book.notes
+    .col.s4
+      strong Academic year:
+      = @standard_book.academic_year.try(:name)
 
 = link_to 'Edit', edit_standard_book_path(@standard_book)
 '|

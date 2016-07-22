@@ -1,0 +1,15 @@
+tr
+  td style="vertical-align:top"
+    - thumbnail = book_edition.small_thumbnail.present? ? book_edition.small_thumbnail : 'book-icon.png' 
+    = image_tag(thumbnail, class: 'list_image')
+  td
+    .list_description
+      dl.row
+        dt = book_edition.title
+        dd = book_edition.subtitle
+        dd.col.s6
+          .label Author
+          .item = book_edition.authors || 'N/A'
+        dd.col.s6
+          .label Publisher
+          .item = book_edition.publisher || 'N/A'

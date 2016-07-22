@@ -68,6 +68,18 @@ class GradeLevelsController < ApplicationController
     @students = @grade_section.students
   end
 
+  def add_standard_books
+    if params[:add]
+      params[:add].map {|id,on| BookEdition.find(id)}.each do |edition|
+        @book_title.book_editions << edition
+      end
+      redirect_to @book_title, notice: 'Standard books successfully added'
+    else
+      flash[:warning] = 'You must select at least one.'
+      redirect_to :back
+    end
+  end
+
   def archive
     authorize! :update, @grade_level
 
@@ -129,7 +141,7 @@ class GradeLevelsController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_grade_level
-      @grade_level = GradeLevel.find_by_slug(params[:id])
+      @grade_level = GradeLevel.find(params[:id])
     end
 
     def set_year
