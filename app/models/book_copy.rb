@@ -103,7 +103,8 @@ class BookCopy < ActiveRecord::Base
         academic_year:AcademicYear.current,
         barcode: barcode,
         notes: 'Initial condition',
-        start_date: Date.today
+        start_date: Date.today,
+        post: 0
       )
     end
 end
