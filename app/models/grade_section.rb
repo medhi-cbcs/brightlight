@@ -13,9 +13,13 @@ class GradeSection < ActiveRecord::Base
   has_many :student_books
   has_many :book_labels
   has_many :grade_section_histories
+  has_many :book_receipts
 
   accepts_nested_attributes_for :students
   accepts_nested_attributes_for :grade_sections_students, allow_destroy: true, reject_if: :all_blank
+  accepts_nested_attributes_for :book_receipts,
+    allow_destroy: true,
+    reject_if: proc { |attributes| attributes['book_copy_id'].blank? }
 
   def current_year_students
     grade_sections_students.where(academic_year:academic_year).includes([:student])

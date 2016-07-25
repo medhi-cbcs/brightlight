@@ -36,10 +36,11 @@ nav
       - if @book_copies.present?
         li 
           = link_to 'PDF Format', book_receipts_path(gs:params[:gs], g:params[:g], r:params[:r], year:params[:year], format: :pdf), target: '_blank'
-      li 
-        = link_to new_book_receipt_path(gs:params[:gs], g:params[:g], r:params[:r], year:params[:year])
-          | Add book 
-          i.material-icons.left add
+      - if @grade_section.present? and @roster_no.present? and @academic_year.present?
+        li 
+          = link_to new_book_receipt_path(gs:params[:gs], g:params[:g], r:params[:r], year:params[:year])
+            | Add book 
+            i.material-icons.left add
       li.right
         a#roster-menu.dropdown-button href="#!" data-activates="roster-options"
           span#roster = params[:r].present? ? "#{@roster_no}" : 'Choose a number'

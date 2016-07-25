@@ -1,63 +1,33 @@
 = form_for @book_receipt do |f|
-  - if @book_receipt.errors.any?
-    #error_explanation
-      h2 = "#{pluralize(@book_receipt.errors.count, "error")} prohibited this book_receipt from being saved:"
-      ul
-        - @book_receipt.errors.full_messages.each do |message|
-          li = message
 
-  .field
-    = f.label :book_copy
-    = f.text_field :book_copy
-  .field
-    = f.label :academic_year
-    = f.text_field :academic_year
-  .field
-    = f.label :student
-    = f.text_field :student
-  .field
-    = f.label :book_edition
-    = f.text_field :book_edition
-  .field
-    = f.label :grade_section
-    = f.text_field :grade_section
-  .field
-    = f.label :grade_level
-    = f.text_field :grade_level
-  .field
-    = f.label :roster_no
-    = f.number_field :roster_no
-  .field
-    = f.label :copy_no
-    = f.text_field :copy_no
-  .field
-    = f.label :issue_date
-    = f.date_select :issue_date
-  .field
-    = f.label :initial_condition
-    = f.text_field :initial_condition
-  .field
-    = f.label :return_condition
-    = f.text_field :return_condition
-  .field
-    = f.label :barcode
-    = f.text_field :barcode
-  .field
-    = f.label :notes
-    = f.text_field :notes
-  .field
-    = f.label :grade_section_code
-    = f.text_field :grade_section_code
-  .field
-    = f.label :grade_subject_code
-    = f.text_field :grade_subject_code
-  .field
-    = f.label :course
-    = f.text_field :course
-  .field
-    = f.label :course_text
-    = f.text_field :course_text
-  .field
-    = f.label :active
-    = f.check_box :active
-  .actions = f.submit
+  nav
+    .nav-wrapper
+      ul
+        li.right
+          button.btn.waves-effect.waves-light type='submit' Save
+          
+  - if @book_receipt.errors.any?
+    .card-panel
+      #error_explanation
+        h2 = "#{pluralize(@book_receipt.errors.count, "error")} prohibited this book_receipt from being saved:"
+        ul
+          - @book_receipt.errors.full_messages.each do |message|
+            li = message
+  .card-panel
+    .row
+      .input-field.col.s2
+        = f.label :barcode
+        = f.text_field :barcode, disabled: true
+      .input-field.col.s10
+        = label_tag :title 
+        = text_field_tag :title, @book_receipt.book_edition.title, disabled: true
+      .input-field.col.s2
+        = f.label :initial_condition, class: 'active'
+        = f.collection_select :initial_condition_id, BookCondition.all, :id, :code
+      .input-field.col.s10
+        = f.label :notes
+        = f.text_field :notes
+  
+  = hidden_field_tag :gs, params[:gs]
+  = hidden_field_tag :r, params[:r]
+  = hidden_field_tag :year, params[:year]

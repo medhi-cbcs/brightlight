@@ -49,13 +49,14 @@ javascript:
             field.val(barcode);
             $.getJSON("/book_copies/"+barcode+".json?empl="+#{@teacher.id}, null, function (data) {
               insert_values(data);
+              pressed = false;
             }).fail(function(){
               $("[name$='[barcode]']:last").val('');
               Materialize.toast("Invalid barcode.", 4000, 'red');
+              pressed = false;
             });            
           }
           chars = [];
-          pressed = false;
         },500);
       }
       pressed = true;

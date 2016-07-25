@@ -59,7 +59,15 @@ class BookReceiptsController < ApplicationController
 
   # GET /book_receipts/new
   def new
-    @book_receipt = BookReceipt.new
+    @grade_section = GradeSection.find params[:gs] if params[:gs]
+    @roster_no = params[:r].to_i if params[:r]
+    academic_year_id = params[:year] || AcademicYear.current_id
+    @academic_year = AcademicYear.find academic_year_id
+    if @grade_section.blank? or @roster_no.blank?
+      redirect_to book_receipts_url, alert: 'Error: No Class or Number was selected.'
+    else
+      @book_receipt = BookReceipt.new
+    end
   end
 
   # GET /book_receipts/1/edit
@@ -87,7 +95,7 @@ class BookReceiptsController < ApplicationController
   def update
     respond_to do |format|
       if @book_receipt.update(book_receipt_params)
-        format.html { redirect_to @book_receipt, notice: 'Book receipt was successfully updated.' }
+        format.html { redirect_to book_receipts_path(gs:params[:gs],r:params[:r],year:params[:year]), notice: 'Book receipt was successfully updated.' }
         format.json { render :show, status: :ok, location: @book_receipt }
       else
         format.html { render :edit }

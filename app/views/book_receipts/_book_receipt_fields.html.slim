@@ -1,18 +1,24 @@
 tr.nested-fields
   td
     .input-field
+      = f.label :barcode, class: 'active'
       = f.text_field :barcode
   td
     .input-field
+      = label_tag :title, '', class: 'active'
       .titles &nbsp;
-
+  td
+    .input-field
+      = f.label :notes
+      = f.text_field :notes
+      
     = f.hidden_field :book_copy_id, class:'book_copy_ids'
-    = f.hidden_field :academic_year_id, class:'academic_year_ids'
+    = f.hidden_field :academic_year_id, value: @academic_year.id, class:'academic_year_ids'
     = f.hidden_field :copy_no, class:'copy_nos'
-    = f.hidden_field :grade_level_id, class:'grade_level_ids'
-    = f.hidden_field :grade_section_id, class:'grade_section_ids'
-    = f.hidden_field :issue_date, class:'issue_dates'
-    = f.hidden_field :initial_condition_id, class:'initial_copy_condition_ids'
+    = f.hidden_field :grade_level_id, value: @grade_section.grade_level_id, class:'grade_level_ids'
+    = f.hidden_field :grade_section_id, value: @grade_section.id, class:'grade_section_ids'
+    = f.hidden_field :issue_date, value: Date.today, class:'issue_dates'
+    = f.hidden_field :initial_condition_id, class:'initial_condition_ids'
     = f.hidden_field :roster_no, value: @roster_no, class:'roster_nos'
     = f.hidden_field :book_edition_id, class:'book_edition_ids'
     
