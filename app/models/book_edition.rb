@@ -193,4 +193,8 @@ class BookEdition < ActiveRecord::Base
   def isbn_or_title_for_slug
     "#{isbn || refno}-#{title}".truncate(40)
   end
+
+  def title_for_autocomplete
+    "#{title} #{'by '+authors if authors}, ISBN #{isbn13} #{' / ' if isbn13 and isbn10} #{isbn10}"
+  end
 end
