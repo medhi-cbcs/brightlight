@@ -77,13 +77,14 @@ javascript:
             $.getJSON("/book_copies/"+barcode+"/check_barcode.json", null, function (data) {
               /* Barcode already exists in database */
               Materialize.toast("Error: barcode already exists.", 4000, 'red');
+              pressed = false;
             }).fail(function(){
               /* Entered barcode doesn't exist in the database */
               insert_values(barcode);
+              pressed = false;
             });            
           }
           chars = [];
-          pressed = false;
         },500);
       }
       pressed = true;

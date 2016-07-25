@@ -1,5 +1,91 @@
-h1 New book_receipt
+h4 Add Book to Receipt Form
 
-== render 'form'
+= form_for @grade_section do |f|
+  nav
+    .nav-wrapper
+      ul
+        li 
+          = link_to book_receipts_path(gs:params[:gs],r:params[:r],year:params[:year])
+            i.material-icons.left chevron_left
+        li.right
+          = link_to_add_association f, :book_receipts, 'data-association-insertion-method' => 'append', 'data-association-insertion-node' => 'tbody#book_receipts'
+            ' Add Row
+            i.material-icons.left playlist_add
 
-= link_to 'Back', book_receipts_path
+  .card-panel
+    .row
+      table.compact
+        thead
+          th Barcode
+          th Title 
+          th
+        tbody#book_receipts
+          = f.fields_for :book_receipts, @grade_section.book_receipts.build do |book_receipt|
+            = render partial: 'book_receipts/book_receipt_fields', locals: { f: book_receipt }
+  
+  // Pass these parameters to GradeSection#update
+  = hidden_field_tag :gs, @grade_section.id 
+  = hidden_field_tag :year, @academic_year.id 
+  = hidden_field_tag :r, @roster_no
+
+  .toolbar.z-depth-1
+    button.btn.waves-effect.waves-light type="submit" Save
+    = link_to 'Cancel', book_receipts_path(gs:params[:gs],r:params[:r],year:params[:year]), class: "waves-effect waves-light btn btn-flat"
+
+
+/ The following javascript callback function will turn select elements in the dynamically created row 
+/ into MaterializeCSS style selects.
+javascript:
+  $(document).ready(function() {
+    var pressed = false;
+    var chars = [];
+    $(window).keypress(function(e) {
+      if (e.which >= 45 && e.which <= 112) {
+          chars.push(String.fromCharCode(e.which));
+      }
+      if (pressed == false) {
+        setTimeout(function(){
+          if (chars.length >= 11) {
+            var barcode = chars.join("");
+            var field = $("[name$='[barcode]']:last");
+            field.val(barcode);
+            $.getJSON("/book_copies/"+barcode+".json", null, function (data) {
+              insert_values(data);
+              pressed = false;
+            }).fail(function(){
+              $("[name$='[barcode]']:last").val('');
+              Materialize.toast("Invalid barcode.", 4000, 'red');
+              pressed = false;
+            });            
+          }
+          chars = [];
+        },500);
+      }
+      pressed = true;
+    });
+    $(document).on("keypress","[name$='[barcode]']", (function(e){  
+      var c = String.fromCharCode(e.which);
+      if ( $.trim($(e.target).val()).length >= 10 ) {
+        var barcode = $.trim($(e.target).val()+c);
+        e.preventDefault();
+        $.getJSON("/book_copies/"+barcode+".json", null, function (data) {
+          insert_values(data);
+          $("[name$='[barcode]']:last").focus();
+        }).fail(function(){
+          $(e.target).val('');
+          Materialize.toast("Invalid barcode.", 5000, 'red');
+        });
+      }
+    }));
+    var insert_values = function (data) {
+      book = data.book_copy;
+      $(".titles:last").html(book.book_edition.title);
+      $(".book_copy_ids:last").val(book.id);
+      $(".book_edition_ids:last").val(book.book_edition.id);
+      $(".copy_nos:last").val(book.copy_no);
+      $(".barcodes:last").val(book.barcode);
+      $(".initial_condition_ids:last").val(book.book_condition_id);
+      $(".add_fields").trigger('click');      
+    };
+  });
+  

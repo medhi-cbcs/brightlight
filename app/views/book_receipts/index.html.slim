@@ -20,13 +20,27 @@ ul#roster-options.dropdown-content
     - section.number_of_students_for_current_academic_year.times do |number|
       li 
         = link_to number+1, book_receipts_path(gs:"#{section.id}",r:"#{number+1}", year:params[:year]), class:"section-#{section.id}", style:"display:#{section==@grade_section ? 'block' : 'none'}"
+ul#year-options.dropdown-content
+  li  
+  - AcademicYear.list_for_menu.each do |year|
+    li 
+      = link_to year.name, book_receipts_path(year:year.id)
 
 nav
   .nav-wrapper
     ul
+      li 
+        a.dropdown-button href="#!" data-activates="year-options"
+          span#year = params[:year].present? ? "#{@academic_year.name}" : 'Academic Year'
+          i.material-icons.right arrow_drop_down
       - if @book_copies.present?
         li 
           = link_to 'PDF Format', book_receipts_path(gs:params[:gs], g:params[:g], r:params[:r], year:params[:year], format: :pdf), target: '_blank'
+      - if @grade_section.present? and @roster_no.present? and @academic_year.present?
+        li 
+          = link_to new_book_receipt_path(gs:params[:gs], g:params[:g], r:params[:r], year:params[:year])
+            | Add book 
+            i.material-icons.left add
       li.right
         a#roster-menu.dropdown-button href="#!" data-activates="roster-options"
           span#roster = params[:r].present? ? "#{@roster_no}" : 'Choose a number'
@@ -42,7 +56,7 @@ nav
 
 - if @roster_no.present?
   .template
-    = render 'receipt_form_table'
+    = render partial: 'receipt_form_table', locals: {book_copies: @book_copies.where(roster_no: @roster_no)}
 - elsif @grade_section.present?
   - @grade_section.number_of_students_for_current_academic_year.times do |number|
     .template
