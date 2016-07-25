@@ -1,6 +1,10 @@
 class StandardBooksController < ApplicationController
   before_action :set_standard_book, only: [:show, :edit, :update, :destroy]
-  autocomplete :book_edition, :title, full: true, extra_data: [:book_title_id]
+  autocomplete :book_edition, :title,
+    full: true,
+    extra_data: [:book_title_id, :isbn10, :isbn13, :authors],
+    display_value: :title_for_autocomplete,
+    limit:50
 
   # GET /standard_books
   # GET /standard_books.json
