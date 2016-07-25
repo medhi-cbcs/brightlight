@@ -116,10 +116,22 @@ class GradeSectionsController < ApplicationController
     authorize! :update, @grade_section
     respond_to do |format|
       if @grade_section.update(grade_section_params)
-        format.html { redirect_to @grade_section, notice: 'Grade section was successfully updated.' }
+        format.html {
+          if grade_section_params[:book_receipts_attributes].present?
+            redirect_to book_receipts_path(gs:params[:gs],r:params[:r],year:params[:year]), notice: 'Books were successfully added to book receipt.'
+          else
+            redirect_to @grade_section, notice: 'Grade section was successfully updated.'
+          end
+        }
         format.json { render :show, status: :ok, location: @grade_section }
       else
-        format.html { render :edit }
+        format.html {
+          if grade_section_params[:book_receipts_attributes].present?
+            redirect_to new_book_receipt_path(gs:params[:gs],r:params[:r],year:params[:year]), alert: 'Errors in adding books to book receipt'
+          else
+            render :edit
+          end
+        }
         format.json { render json: @grade_section.errors, status: :unprocessable_entity }
       end
     end
@@ -150,6 +162,12 @@ class GradeSectionsController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def grade_section_params
       params.require(:grade_section).permit(:name, :homeroom_id,
-                                           {:grade_sections_students_attributes => [:id, :student_id, :order_no, :_destroy]})
+                                           {:grade_sections_students_attributes => [:id, :student_id, :order_no, :_destroy]},
+                                           {:book_receipts_attributes => [:id, :book_copy_id, :academic_year_id, :student_id,
+                                                :book_edition_id, :grade_section_id, :grade_level_id, :roster_no, :copy_no,
+                                                :issue_date, :initial_condition_id, :return_condition_id, :barcode, :notes,
+                                                :grade_section_code, :grade_subject_code, :course_id, :course_text_id, :active,
+                                                :_destroy]}
+                                           )
     end
 end
