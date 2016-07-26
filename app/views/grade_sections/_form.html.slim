@@ -30,3 +30,5 @@
   .toolbar.z-depth-1
     button.btn.waves-effect.waves-light type="submit" Save
     = link_to 'Cancel', @grade_section, class: "waves-effect waves-light btn-flat"
+  
+  = hidden_field_tag :year, params[:year]

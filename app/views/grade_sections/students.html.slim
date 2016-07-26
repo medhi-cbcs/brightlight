@@ -9,7 +9,7 @@
         .item = @grade_section.homeroom.present? ? link_to(@grade_section.homeroom, @grade_section.homeroom) : '--'
       dd.col.s4
         .label Academic Year
-        .item = @grade_section.academic_year.present? ? @grade_section.academic_year.name : "--"
+        .item = @academic_year.name || "--"
 
 .card-panel
   = form_for_filterrific @filterrific do |f|

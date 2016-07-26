@@ -1,9 +1,9 @@
 ul#grade-options.dropdown-content
-  - GradeLevel.all.each do |grade|
+  - GradeLevel.all.order(:id).each do |grade|
     li 
       = link_to grade.name, "#!", onclick:"filterSectionOptions(#{grade.id}, '#{grade.name}');"
 ul#section-options.dropdown-content
-  - GradeSection.all.each do |section|
+  - @grade_sections.each do |section|
     li
       = link_to section.name, grade_section_path(params.merge(id:section.id).symbolize_keys), class:"grade-#{section.grade_level_id}"
 ul#year-options.dropdown-content
@@ -27,7 +27,7 @@ nav
           span#year = @academic_year.present? ? "#{@academic_year.name}" : "Academic Year" 
           i.material-icons.right arrow_drop_down      
       li.right
-        = link_to edit_grade_section_path(@grade_section)
+        = link_to edit_grade_section_path(@grade_section, year:params[:year])
           | Edit
           i.material-icons.left edit
 
