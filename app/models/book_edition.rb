@@ -197,4 +197,18 @@ class BookEdition < ActiveRecord::Base
   def title_for_autocomplete
     "#{title} #{'by '+authors if authors}, ISBN #{isbn13} #{' / ' if isbn13 and isbn10} #{isbn10}"
   end
+
+  def self.find_duplicates(column)
+    unless column.class != Symbol
+      column_name = column.to_s
+      self.find_by_sql "select e.*, be.dupeCount as duplicate_count
+                        from book_editions e
+                        inner join (
+                            SELECT #{column_name}, COUNT(*) AS dupeCount
+                            FROM book_editions
+                            GROUP BY #{column_name}
+                            HAVING COUNT(*) > 1
+                        ) be on e.#{column_name} = be.#{column_name}"
+    end
+  end
 end

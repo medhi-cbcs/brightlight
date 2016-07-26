@@ -1,14 +1,33 @@
+ul#grade-options.dropdown-content
+  - GradeLevel.all.order(:id).each do |grade|
+    li 
+      = link_to grade.name, "#!", onclick:"filterSectionOptions(#{grade.id}, '#{grade.name}');"
+ul#section-options.dropdown-content
+  - @grade_sections.each do |section|
+    li
+      = link_to section.name, grade_section_path(params.merge(id:section.id).symbolize_keys), class:"grade-#{section.grade_level_id}"
+ul#year-options.dropdown-content
+  li  
+  - AcademicYear.list_for_menu.each do |year|
+    li 
+      = link_to year.name, grade_section_path(params.merge(id:@grade_section.id, year:year.id).symbolize_keys)
 nav
   .nav-wrapper
-    .brand-logo style="margin: 0 20px; font-size:2.5em"
-      = @grade_section.name
-    ul.right
-      / li 
-      /   = link_to assign_grade_section_path(@grade_section)
-      /     | Assign book
-      /     i.material-icons.left book 
+    ul
       li
-        = link_to edit_grade_section_path(@grade_section)
+        a.dropdown-button href="#!" data-activates="grade-options"
+          span#grade = @grade_section.present? ? "#{@grade_section.grade_level.name}" : 'Choose a grade'
+          i.material-icons.right arrow_drop_down
+      li
+        a.dropdown-button href="#!" data-activates="section-options"
+          span#section = @grade_section.present? ? "#{@grade_section.name}" : 'Choose a class'
+          i.material-icons.right arrow_drop_down
+      li
+        a.dropdown-button href="#!" data-activates="year-options"
+          span#year = @academic_year.present? ? "#{@academic_year.name}" : "Academic Year" 
+          i.material-icons.right arrow_drop_down      
+      li.right
+        = link_to edit_grade_section_path(@grade_section, year:params[:year])
           | Edit
           i.material-icons.left edit
 
@@ -20,10 +39,10 @@ nav
         .item = link_to @grade_section.grade_level.name, @grade_section.grade_level
       dd.col.s4
         .label Homeroom teacher
-        .item = @grade_section.homeroom.present? ? link_to(@grade_section.homeroom, @grade_section.homeroom) : '--'
+        .item = @homeroom.present? ? link_to(@homeroom) : '--'
       dd.col.s4
         .label Academic Year
-        h5 style="margin:0px" = @grade_section.academic_year.present? ? @grade_section.academic_year.name : "--"
+        .item = @academic_year.present? ? @academic_year.name : "--"
 
 .card
   .col.s12 style="margin-bottom: 15px; padding: 0px;"
@@ -85,3 +104,16 @@ nav
         h6 No textbooks
 
 #show-modal.modal.modal-fixed-footer
+
+javascript:
+  function filterSectionOptions(id, name) {
+    var grade_ids = #{raw @grade_level_ids};
+    $("#grade").html(name);
+    grade_ids.forEach(function(g){
+      if(id!=g) {
+        $(".grade-"+g).hide();
+      } else {
+        $(".grade-"+id).show();
+      }
+    })
+  }

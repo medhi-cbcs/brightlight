@@ -57,7 +57,7 @@ nav
           th Book title
           th Category
           th Quantity
-          th Grade name
+          th Track
           th Academic year
           th
 
@@ -68,9 +68,11 @@ nav
             td = link_to standard_book.book_edition.title.truncate(50), standard_book.book_edition
             td = standard_book.book_category.try(:code)
             td = standard_book.quantity
-            td = standard_book.grade_name
+            td = standard_book.track || "--"
             td = standard_book.academic_year.try(:name)
             td 
+              = link_to edit_standard_book_path(standard_book) 
+                i.material-icons edit
               = link_to standard_book, data: {id: standard_book.id, confirm: 'Are you sure?'}, :method => :delete, class:"red-text delete-link", remote: true
                 i.material-icons delete
 

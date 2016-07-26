@@ -3,10 +3,10 @@ h4 Editing Grade Section #{@grade_section.name}
 nav
   .nav-wrapper
     .brand-logo style="margin: 0 20px; font-size:2.5em"
-      = "#{@grade_section.name} (#{AcademicYear.find(@grade_section.academic_year_id).name})"
+      = "#{@grade_section.name} (#{@academic_year.name})"
     ul
       li.right
-        = link_to students_grade_section_path(@grade_section), class: 'waves-effect waves-light'
+        = link_to students_grade_section_path(@grade_section, year:params[:year]), class: 'waves-effect waves-light'
           i.material-icons.left add 
           | Add students
           
