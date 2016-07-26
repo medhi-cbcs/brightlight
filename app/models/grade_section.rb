@@ -61,4 +61,12 @@ class GradeSection < ActiveRecord::Base
     GradeSectionsStudent.create(grade_section: self, student:student, academic_year_id: academic_year_id || current_academic_year_id)
   end
 
+  def homeroom_for_academic_year(academic_year_id)
+    if academic_year_id < AcademicYear.current_id
+      GradeSectionHistory.where(grade_section:self,academic_year:academic_year_id).take.try(:homeroom)
+    else
+      homeroom
+    end
+  end
+
 end

@@ -17,14 +17,13 @@ class GradeSectionsController < ApplicationController
     @grade_sections = GradeSection.all.order(:id)
 
     if params[:year]
-      @homeroom = GradeSection.where(id:params[:id],academic_year_id:params[:year]).take.try(:homeroom)
       @gss = @grade_section.students_for_academic_year(params[:year])
       @academic_year = AcademicYear.find params[:year]
     else
-      @homeroom = @grade_section.homeroom
       @gss = @grade_section.current_year_students
       @academic_year = AcademicYear.current
     end
+    @homeroom = @grade_section.homeroom_for_academic_year(@academic_year.id)
     @textbooks = @grade_section.standard_books(@academic_year)
   end
 
