@@ -1,22 +1,30 @@
 class GradeSectionsController < ApplicationController
   before_action :set_grade_section, only: [:edit, :update, :destroy, :students, :courses, :assign, :add_students, :edit_labels]
-  before_action :set_year, only: [:index, :show, :new, :edit]
+  before_action :set_year, only: [:index, :show, :new, :edit, :students, :add_students]
 
   # GET /grade_sections
   # GET /grade_sections.json
   def index
     @grade_level = GradeLevel.find(params[:grade_level_id])
-    @year_id = params[:year] || current_academic_year_id
     @grade_sections = @grade_level.grade_sections.includes([:academic_year, :homeroom])
   end
 
   # GET /grade_sections/1
   # GET /grade_sections/1.json
   def show
-    @grade_section = GradeSection.find_by_slug(params[:id])
+    @grade_section = GradeSection.find(params[:id])
     @grade_level = @grade_section.grade_level
-    @textbooks = @grade_section.standard_books
-    @gss = @grade_section.current_year_students
+    @grade_sections = GradeSection.all.order(:id)
+
+    if params[:year]
+      @gss = @grade_section.students_for_academic_year(params[:year])
+      @academic_year = AcademicYear.find params[:year]
+    else
+      @gss = @grade_section.current_year_students
+      @academic_year = AcademicYear.current
+    end
+    @homeroom = @grade_section.homeroom_for_academic_year(@academic_year.id)
+    @textbooks = @grade_section.standard_books(@academic_year)
   end
 
   # GET /grade_sections/new
@@ -30,8 +38,8 @@ class GradeSectionsController < ApplicationController
   def edit
     authorize! :update, @grade_section
     @grade_level =  @grade_section.grade_level
-    @total_students = GradeSectionsStudent.number_of_students(@grade_section, current_academic_year_id)
-    @students = GradeSectionsStudent.where(academic_year:AcademicYear.current).where(grade_section:@grade_section)
+    @total_students = GradeSectionsStudent.number_of_students(@grade_section, @academic_year)
+    @students = GradeSectionsStudent.where(academic_year:@academic_year,grade_section:@grade_section)
   end
 
   def edit_labels
@@ -68,7 +76,7 @@ class GradeSectionsController < ApplicationController
 
   def add_students
     authorize! :update, @grade_section
-    academic_year_id = current_academic_year_id
+    academic_year_id = params[:year]
     params[:add].map {|id,on| Student.find(id)}.each do |student|
       @gss = GradeSectionsStudent.new(grade_section: @grade_section, student:student, academic_year_id: academic_year_id || current_academic_year_id)
       if @gss.save
@@ -78,7 +86,7 @@ class GradeSectionsController < ApplicationController
         redirect_to students_grade_section_path, alert: 'Students already added' and return
       end
     end
-    redirect_to @grade_section, notice: 'Students successfully added'
+    redirect_to grade_section_path(@grade_section, year:params[:year]), notice: 'Students successfully added'
   end
 
   # GET /grade_sections/1/courses
@@ -120,7 +128,7 @@ class GradeSectionsController < ApplicationController
           if grade_section_params[:book_receipts_attributes].present?
             redirect_to book_receipts_path(gs:params[:gs],r:params[:r],year:params[:year]), notice: 'Books were successfully added to book receipt.'
           else
-            redirect_to @grade_section, notice: 'Grade section was successfully updated.'
+            redirect_to grade_section_path(@grade_section, year:params[:year]), notice: 'Grade section was successfully updated.'
           end
         }
         format.json { render :show, status: :ok, location: @grade_section }
@@ -151,11 +159,11 @@ class GradeSectionsController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_grade_section
-      @grade_section = GradeSection.find_by_slug(params[:id])
+      @grade_section = GradeSection.find(params[:id])
     end
 
     def set_year
-      @year_id = params[:year] || current_academic_year_id
+      @year_id = params[:year] || AcademicYear.current_id
       @academic_year = AcademicYear.find(@year_id)
     end
 

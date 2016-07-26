@@ -100,7 +100,7 @@ javascript:
           Materialize.toast("Invalid barcode.", 5000, 'red');
         }).fail(function(){
           /* Entered barcode doesn't exist in the database */
-          insert_values();
+          insert_values(barcode);
           $("[name$='[barcode]']:first").focus();
         });
       }
