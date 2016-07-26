@@ -54,6 +54,8 @@ class StandardBooksController < ApplicationController
   # GET /standard_books/1/edit
   def edit
     authorize! :update, StandardBook
+    @grade_level = @standard_book.grade_level
+    @academic_year = @standard_book.academic_year
   end
 
   # POST /standard_books
@@ -84,7 +86,7 @@ class StandardBooksController < ApplicationController
     authorize! :update, StandardBook
     respond_to do |format|
       if @standard_book.update(standard_book_params)
-        format.html { redirect_to @standard_book, notice: 'Standard book was successfully updated.' }
+        format.html { redirect_to grade_level_standard_books_path(grade_level_id:@standard_book.grade_level_id,year:@standard_book.academic_year.slug, track:@standard_book.track), notice: 'Standard book was successfully updated.' }
         format.json { render :show, status: :ok, location: @standard_book }
       else
         format.html { render :edit }
