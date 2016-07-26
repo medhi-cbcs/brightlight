@@ -1,7 +1,7 @@
 class GradeSection < ActiveRecord::Base
   validates :name, presence: true
 
-  slug :name
+  # slug :name
   belongs_to :grade_level
   belongs_to :homeroom, class_name: "Employee"
   belongs_to :assistant, class_name: 'Employee'
@@ -25,6 +25,10 @@ class GradeSection < ActiveRecord::Base
     grade_sections_students.where(academic_year:academic_year).includes([:student])
   end
 
+  def students_for_academic_year(academic_year_id)
+    grade_sections_students.where(academic_year:academic_year_id).includes([:student])
+  end
+
   def current_students
     grade_sections_students.where(academic_year:academic_year).order(:order_no).map &:student
   end
@@ -41,13 +45,14 @@ class GradeSection < ActiveRecord::Base
     course_sections.map { |cs| cs.textbooks } unless course_sections.blank?
   end
 
-  def standard_books
-    grade_section_books = StandardBook.where(academic_year_id:AcademicYear.current_id,grade_section_id:self.id)
+  # TODO: Fix StandardBook where clause to include Track
+  def standard_books(year)
+    grade_section_books = StandardBook.where(academic_year:year,grade_section_id:self.id)
     if grade_section_books.count > 1
       grade_section_books.includes(:book_edition)
       #BookTitle.joins(:standard_books).where(standard_books: {grade_section_id:self.id, academic_year_id:AcademicYear.current_id})
     else
-      StandardBook.where(academic_year_id:AcademicYear.current_id,grade_level_id:self.grade_level_id).includes(:book_edition)
+      StandardBook.where(academic_year:year,grade_level_id:self.grade_level_id).includes(:book_edition)
       #BookTitle.joins(:standard_books).where(standard_books: {grade_level_id:self.grade_level_id, academic_year_id:AcademicYear.current_id})
     end
   end

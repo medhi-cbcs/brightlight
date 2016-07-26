@@ -13,10 +13,19 @@ class GradeSectionsController < ApplicationController
   # GET /grade_sections/1
   # GET /grade_sections/1.json
   def show
-    @grade_section = GradeSection.find_by_slug(params[:id])
+    @grade_section = GradeSection.find(params[:id])
     @grade_level = @grade_section.grade_level
-    @textbooks = @grade_section.standard_books
-    @gss = @grade_section.current_year_students
+
+    if params[:year]
+      @homeroom = GradeSection.where(id:params[:id],academic_year_id:params[:year]).take.try(:homeroom)
+      @gss = @grade_section.students_for_academic_year(params[:year])
+      @academic_year = AcademicYear.find params[:year]
+    else
+      @homeroom = @grade_section.homeroom
+      @gss = @grade_section.current_year_students
+      @academic_year = AcademicYear.current
+    end
+    @textbooks = @grade_section.standard_books(@academic_year)
   end
 
   # GET /grade_sections/new
@@ -151,7 +160,7 @@ class GradeSectionsController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_grade_section
-      @grade_section = GradeSection.find_by_slug(params[:id])
+      @grade_section = GradeSection.find(params[:id])
     end
 
     def set_year
