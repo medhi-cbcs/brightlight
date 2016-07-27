@@ -12,6 +12,20 @@ h4 Add Book to Receipt Form
             ' Add Row
             i.material-icons.left playlist_add
 
+  ul.collapsible data-collapsible="expandable"
+    li
+      .collapsible-header        
+        | Options
+        i.material-icons.left settings
+      .collapsible-body
+        .container style="margin-top:16px"
+          .row
+            .input-field.col.s4
+              = f.label :grade_section, class:'active'
+              = f.collection_select :grade_section_id, @grade_sections, :id, :name, selected: @grade_section.id 
+            .input-field.col.s1 
+              = label_tag :roster_no, 'Number', class:'active'
+              = select_tag :roster_no, options_for_select((1..20).map{|x| [x.to_s,x]}, @roster_no)
   .card-panel
     .row
       table.compact
@@ -87,5 +101,13 @@ javascript:
       $(".initial_condition_ids:last").val(book.book_condition_id);
       $(".add_fields").trigger('click');      
     };
+    $("#roster_no").change(function() {
+      $(".roster_nos,[name='r']").val($("[name='roster_no']").val());
+    });
+    $("#grade_section_grade_section_id").change(function() {
+      $("[name='gs']").val($("#grade_section_grade_section_id").val());
+    });
   });
+  
+
   

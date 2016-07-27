@@ -15,6 +15,7 @@ class BookReceiptsController < ApplicationController
       @book_labels = BookLabel.where(grade_section:@grade_section).order(:book_no)
       @book_copies = BookReceipt.where(academic_year:@academic_year,grade_section:@grade_section)
                       .includes([:book_edition])
+      @number_of_students = @book_copies.maximum(:roster_no)
     end
     if params[:r].present?
       @roster_no = params[:r].to_i
@@ -61,6 +62,7 @@ class BookReceiptsController < ApplicationController
   def new
     @grade_section = GradeSection.find params[:gs] if params[:gs]
     @roster_no = params[:r].to_i if params[:r]
+    @grade_sections = @grade_section.grade_level.grade_sections.order(:id)
     academic_year_id = params[:year] || AcademicYear.current_id
     @academic_year = AcademicYear.find academic_year_id
     if @grade_section.blank? or @roster_no.blank?
@@ -185,6 +187,6 @@ class BookReceiptsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def book_receipt_params
-      params.require(:book_receipt).permit(:book_copy_id, :academic_year_id, :student_id, :book_edition_id, :grade_section_id, :grade_level_id, :roster_no, :copy_no, :issue_date, :initial_condition_id, :return_condition_id, :barcode, :notes, :grade_section_code, :grade_subject_code, :course_id, :course_text_id, :active)
+      params.require(:book_receipt).permit(:book_copy_id, :grade_section_id, :academic_year_id, :student_id, :book_edition_id, :grade_section_id, :grade_level_id, :roster_no, :copy_no, :issue_date, :initial_condition_id, :return_condition_id, :barcode, :notes, :grade_section_code, :grade_subject_code, :course_id, :course_text_id, :active)
     end
 end
