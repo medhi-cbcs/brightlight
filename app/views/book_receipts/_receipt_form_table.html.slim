@@ -16,7 +16,7 @@
       - book_copies.each_with_index do |book, i|
         tr id="row-#{book.id}"
           td.wd5 = i+1
-          td.wd15 = link_to book.barcode, book
+          td.wd15 = link_to book.barcode, book.book_copy
           td.wd40.ellipsis
             span = book.book_edition.try(:title)
           td.wd10 
