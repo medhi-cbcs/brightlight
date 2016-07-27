@@ -52,11 +52,11 @@ class BookReceipt < ActiveRecord::Base
     values = []
     grade_section = GradeSection.find grade_section_id
     grade_level_id = grade_section.grade_level_id
+    # Books with 'Poor' condition will not be included
     poor_condition = BookCondition.find_by_slug 'poor'
-    student_books = StudentBook.where(grade_section:grade_section)
-                      .where(academic_year_id:previous_year_id)
-                      .where('end_copy_condition_id <> ?', poor_condition.id)
+    student_books = StudentBook.where(grade_section:grade_section,academic_year_id:previous_year_id)
                       .standard_books(grade_section.grade_level.id, grade_section.id, new_year_id, textbook_category.id)
+                      .joins(:book_copy).where('book_copies.book_condition_id != ?', poor_condition.id)
 
     student_books.each_with_index do |sb,i|
       data = [sb.book_copy_id, sb.barcode, sb.book_edition_id, new_year_id, sb.initial_copy_condition_id,
