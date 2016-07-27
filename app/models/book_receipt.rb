@@ -15,6 +15,7 @@ class BookReceipt < ActiveRecord::Base
   validates :grade_section, presence:true
   validates :grade_level, presence:true
   validates :roster_no, presence:true
+  validates :book_copy, uniqueness: {scope: [:academic_year_id]}
   # validates :initial_condition, presence:true
 
   def self.initialize_with_student_books(previous_year_id, new_year_id)
