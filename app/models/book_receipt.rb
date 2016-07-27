@@ -59,7 +59,7 @@ class BookReceipt < ActiveRecord::Base
                       .joins(:book_copy).where('book_copies.book_condition_id != ?', poor_condition.id)
 
     student_books.each_with_index do |sb,i|
-      data = [sb.book_copy_id, sb.barcode, sb.book_edition_id, new_year_id, sb.initial_copy_condition_id,
+      data = [sb.book_copy_id, sb.barcode, sb.book_edition_id, new_year_id, sb.book_copy.book_condition_id,
               sb.grade_section_id, sb.grade_level_id, sb.roster_no.to_i, sb.course_id]
       values << data
       if i % 120 == 0
