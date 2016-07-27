@@ -6,7 +6,7 @@
   h5 Student Textbooks 
 
 ul#grade-options.dropdown-content
-  - GradeLevel.all.each do |grade|
+  - GradeLevel.all.order(:id).each do |grade|
     li 
       = link_to grade.name, "#!", onclick:"filterSectionOptions(#{grade.id}, '#{grade.name}');"
       /= link_to grade.name, "#!", "data-grade-id":"#{grade.id}", "data-grade-name":"#{grade.name}"
