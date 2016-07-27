@@ -39,7 +39,7 @@ class BookReceiptsController < ApplicationController
     respond_to do |format|
       format.html do
         @grade_level_ids = GradeLevel.all.collect(&:id)
-        @grade_sections = GradeSection.all
+        @grade_sections = GradeSection.all.order(:id)
         @grade_sections_ids = @grade_sections.collect(&:id)
       end
       format.pdf do
