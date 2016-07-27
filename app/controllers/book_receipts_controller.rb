@@ -14,7 +14,10 @@ class BookReceiptsController < ApplicationController
       @grade_section_name = @grade_section.name
       @book_labels = BookLabel.where(grade_section:@grade_section).order(:book_no)
       @book_copies = BookReceipt.where(academic_year:@academic_year,grade_section:@grade_section)
+                      .joins(:book_edition)
+                      .order('book_editions.title')
                       .includes([:book_edition])
+
       @number_of_students = @book_copies.maximum(:roster_no)
     end
     if params[:r].present?
