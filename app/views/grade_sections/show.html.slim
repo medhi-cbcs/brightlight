@@ -60,6 +60,7 @@ nav
         thead
           th No
           th Name
+          th Track
         tbody
           - @gss.each do |gss|
             tr
@@ -67,6 +68,8 @@ nav
                 = "#{gss.order_no}. "
               td
                 = link_to gss.student.name, gss.student, remote: true
+              td 
+                = gss.track
 
     #tab2.tab-content
       .label Course Sections

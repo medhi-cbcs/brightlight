@@ -14,6 +14,7 @@ class CopyCondition < ActiveRecord::Base
   }
 
   around_save :update_book_copy_condition
+  after_create :synchronize_book_copy_condition
 
   def update_book_copy_condition
     old_condition_id = book_condition_id
@@ -21,9 +22,12 @@ class CopyCondition < ActiveRecord::Base
     yield
 
     if old_condition_id != book_condition_id
-      book_copy.book_condition_id = book_condition_id
-      book_copy.save
+      synchronize_book_copy_condition
     end
+  end
+
+  def synchronize_book_copy_condition
+    book_copy.update_attribute :book_condition_id, book_condition_id
   end
 
 end
