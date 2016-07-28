@@ -12,7 +12,7 @@ class BookCopiesController < ApplicationController
     # TODO: Optimize!
     if params[:book_edition_id].present?
       @book_edition = BookEdition.find_by_slug(params[:book_edition_id])
-      @book_copies = @book_edition.book_copies.order(:copy_no).includes([:book_condition, :status]).paginate(page: params[:page], per_page: items_per_page)
+      @book_copies = @book_edition.book_copies.order(:book_label_id).includes([:book_condition, :status]).paginate(page: params[:page], per_page: items_per_page)
       @by_condition = BookCondition.all.sorted.map {|bc| [bc, @book_edition.book_copies.select {|c| c.latest_condition == bc}.count ]}
       @by_status = Status.all.map {|bc| [bc, @book_edition.book_copies.select {|c| c.status_id == bc.id}.count ]}
     else
@@ -81,8 +81,8 @@ class BookCopiesController < ApplicationController
   # GET /book_copies/1/edit
   def edit_labels
     authorize! :update, BookCopy
-    @book_edition = BookEdition.find_by_slug(params[:book_edition_id])
-    @book_copies = @book_edition.book_copies
+    @book_edition = BookEdition.where(slug:params[:book_edition_id]).take
+    @book_copies = @book_edition.book_copies.order(:book_label_id)
     @grade_level_ids = GradeLevel.all.collect(&:id)
     @grade_sections = GradeSection.all
 

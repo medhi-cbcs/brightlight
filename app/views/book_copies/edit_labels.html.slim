@@ -45,7 +45,7 @@ nav
           th Label
 
         tbody
-          = f.fields_for :book_copies do |ff|
+          = f.fields_for :book_copies, @book_copies do |ff|
             tr
               td
                 .input-field
