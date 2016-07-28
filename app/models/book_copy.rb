@@ -10,6 +10,7 @@ class BookCopy < ActiveRecord::Base
   has_many :book_loans
 
   after_create :create_initial_condition
+  after_update :update_book_label
 
   scope :standard_books, lambda { |grade_level_id, grade_section_id, year_id|
     if grade_level_id <= 10
@@ -106,5 +107,11 @@ class BookCopy < ActiveRecord::Base
         start_date: Date.today,
         post: 0
       )
+    end
+
+    def update_book_label
+      if book_label.present?
+        book_label.update_attribute :name, copy_no
+      end
     end
 end

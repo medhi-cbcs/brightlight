@@ -18,6 +18,8 @@ class BookReceipt < ActiveRecord::Base
   validates :book_copy, uniqueness: {scope: [:academic_year_id]}
   # validates :initial_condition, presence:true
 
+  after_save :update_book_copy_condition
+
   def self.initialize_with_student_books(previous_year_id, new_year_id)
     columns = [:book_copy_id, :barcode, :book_edition_id, :academic_year_id, :initial_condition_id,
                :grade_section_id, :grade_level_id, :roster_no, :course_id]
@@ -73,5 +75,21 @@ class BookReceipt < ActiveRecord::Base
       BookReceipt.import columns, values
     end
   end
+
+  private
+
+    def update_book_copy_condition
+      if initial_condition_id != book_copy.book_condition_id
+        book_copy.copy_conditions.create([
+                academic_year_id: academic_year_id,
+                book_condition_id: initial_condition_id,
+                barcode: barcode,
+                notes: 'Updated through Receipt Form',
+                start_date: Date.today,
+                deleted_flag: false,
+                post: 0
+            ])
+      end
+    end
 
 end
