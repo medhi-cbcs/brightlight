@@ -82,6 +82,7 @@ javascript:
       if ( $.trim($(e.target).val()).length >= 10 ) {
         var barcode = $.trim($(e.target).val()+c);
         e.preventDefault();
+        $(e.target).val(barcode);
         $.getJSON("/book_copies/"+barcode+".json", null, function (data) {
           insert_values(data);
           $("[name$='[barcode]']:last").focus();
