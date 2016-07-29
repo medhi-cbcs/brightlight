@@ -23,7 +23,7 @@
               td = i+1
               td = book.barcode
               td = truncate(book.book_edition.try(:title), length: 65)
-              td = book.try(:book_copy).try(:latest_condition).try(:code)
+              td = book.initial_condition.try(:code)
               td
       
       = @template.substituted :closing, pdf: true
