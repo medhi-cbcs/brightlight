@@ -16,11 +16,6 @@ class Employee < ActiveRecord::Base
 	scope :all_teachers, lambda { where(job_title:'Teacher') }
   scope :active, lambda { where(is_active:true).order(:name) }
 
-  def name
-  	original = self[:name]
-  	original.titleize
-  end
-
 	def to_s
 		name
 	end
