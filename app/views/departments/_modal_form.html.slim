@@ -1,0 +1,31 @@
+= form_for @department, remote:true do |f|
+  .modal-content
+    - if @department.persisted?
+      h4 Editing #{@department.name} #{'('+@department.code+')' if @department.code.present?}
+    - else 
+      h4 New Department
+    - if @department.errors.any?
+      #error_explanation
+        h6 = "#{pluralize(@department.errors.count, "error")} prohibited this department from being saved:"
+        ul
+          - @department.errors.full_messages.each do |message|
+            li = message
+
+    .row
+      .input-field.col.s4
+        = f.label 'Department Name', class: 'active'
+        = f.text_field :name
+
+      .col.s2
+
+      .input-field.col.s4
+        = f.label :manager_id, class: 'active'
+        = f.collection_select :manager_id, Employee.all.order(:name), :id, :name, prompt: true
+    .row
+      .input-field.col.s4
+        = f.label 'Department Code', class: 'active'
+        = f.text_field :code
+
+  .modal-footer
+    button.btn.btn-flat.waves-effect.waves-light.modal-action.modal-close type="submit" Save
+    a.modal-action.modal-close.waves-effect.waves-light.btn-flat href="#!" Close

@@ -17,7 +17,7 @@
 
         .input-field.col.s4
           = f.label :manager_id, class: 'active'
-          = f.collection_select :manager_id, Employee.all, :id, :name, prompt: true
+          = f.collection_select :manager_id, Employee.all.order(:name), :id, :name, prompt: true
       .row
         .input-field.col.s4
           = f.label 'Department Code', class: 'active'
