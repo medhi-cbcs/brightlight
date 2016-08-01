@@ -22,7 +22,7 @@ class GradeSection < ActiveRecord::Base
     reject_if: proc { |attributes| attributes['book_copy_id'].blank? }
 
   def current_year_students
-    grade_sections_students.where(academic_year:academic_year).includes([:student])
+    grade_sections_students.where(academic_year:AcademicYear.current_id).includes([:student])
   end
 
   def students_for_academic_year(academic_year_id)
@@ -30,7 +30,7 @@ class GradeSection < ActiveRecord::Base
   end
 
   def current_students
-    grade_sections_students.where(academic_year:academic_year).order(:order_no).map &:student
+    grade_sections_students.where(academic_year:AcademicYear.current_id).order(:order_no).map &:student
   end
 
   def number_of_students_for_academic_year_id(year_id)
