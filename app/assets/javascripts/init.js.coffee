@@ -9,3 +9,7 @@ $ initApp
 $(document).on "submit", "form[method=get]", ->
   Turbolinks.visit(this.action+(if this.action.indexOf('?') == -1 then '?' else '&')+$(this).serialize())
   false
+
+$(document).on 'ajax:complete', '.delete-link', ->
+  $("tr#row-"+ $(this).data("id")).remove()
+  Materialize.toast($(this).data("message"), 4000, "green")

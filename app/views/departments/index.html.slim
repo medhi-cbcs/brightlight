@@ -4,7 +4,7 @@ nav
   .nav-wrapper
     ul.right
       li
-        = link_to new_department_path
+        = link_to new_department_path, remote: true
           | New Department
           i.material-icons.left add
 
@@ -19,10 +19,21 @@ nav
 
     tbody
       - @departments.each do |department|
-        tr
-          td = link_to department.name, department
-          td = department.code
-          td = department.manager || "--"
-
-          td = link_to 'Edit', edit_department_path(department), class: "btn waves-effect waves-teal btn-flat btn-small"
-
+        tr id="row-#{department.id}"
+          = render partial: 'index_row', locals: {department: department}
+            
+#show-modal.modal.modal-fixed-footer
+  .modal-content
+    #modal-content
+  .modal-footer
+    a.modal-action.modal-close.waves-effect.waves-light.btn-flat href="#!" Close
+    
+#edit-modal.modal.modal-fixed-footer
+  #edit-modal-content
+  
+/ javascript:
+/   $('.delete-link').bind( 'ajax:complete', function() {
+/     $("tr#row-"+ $(this).data("id")).remove();
+/     Materialize.toast($(this).data("message"), 4000, "green");
+/     console.log('Delete completed successfully');
+/   });
