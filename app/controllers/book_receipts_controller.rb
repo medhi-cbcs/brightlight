@@ -43,7 +43,11 @@ class BookReceiptsController < ApplicationController
     respond_to do |format|
       format.html do
         @grade_level_ids = GradeLevel.all.collect(&:id)
-        @grade_sections = GradeSection.all.order(:id)
+        # We need the maximum roster_no in the book_receipts table for each grade section
+        subquery = BookReceipt.select(['max(roster_no) as max_num', :grade_section_id]).group(:grade_section_id).where(academic_year:@academic_year).to_sql
+        @grade_sections = GradeSection.joins("INNER JOIN (#{subquery}) AS s ON grade_sections.id = s.grade_section_id")
+                            .select("grade_sections.*, s.max_num")
+                            .order(:id)
         @grade_sections_ids = @grade_sections.collect(&:id)
       end
       format.pdf do

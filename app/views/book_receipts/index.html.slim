@@ -17,7 +17,8 @@ ul#section-options.dropdown-content
 ul#roster-options.dropdown-content
   - @grade_sections.each do |section|
     li = link_to 'All', book_receipts_path(gs:"#{section.id}",year:params[:year]), class:"section-#{section.id}", style:"display:#{section==@grade_section ? 'block' : 'none'}"
-    - section.number_of_students_for_academic_year_id(params[:year].to_i).times do |number|
+    // section.max_num is the maximum :roster_no in the section
+    - section.max_num.times do |number|
       li 
         = link_to number+1, book_receipts_path(gs:"#{section.id}",r:"#{number+1}", year:params[:year]), class:"section-#{section.id}", style:"display:#{section==@grade_section ? 'block' : 'none'}"
 ul#year-options.dropdown-content
