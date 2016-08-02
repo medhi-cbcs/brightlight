@@ -15,7 +15,7 @@ class GradeSectionsController < ApplicationController
     @grade_section = GradeSection.find(params[:id])
     @grade_level = @grade_section.grade_level
     @grade_sections = GradeSection.all.order(:id)
-
+    @grade_level_ids = GradeLevel.all.pluck :id
     if params[:year]
       @gss = @grade_section.students_for_academic_year(params[:year])
       @academic_year = AcademicYear.find params[:year]
