@@ -18,7 +18,7 @@ class StudentBooksController < ApplicationController
       @grade_level = @grade_section.grade_level
     end
 
-    @year_id = AcademicYear.find_by_slug(params[:year]).try(:id) || AcademicYear.current_id
+    @year_id = params[:year] || AcademicYear.current_id
     @academic_year = AcademicYear.find @year_id
     textbook_category_id = BookCategory.find_by_code('TB').id
 
@@ -428,7 +428,7 @@ class StudentBooksController < ApplicationController
     authorize! :manage, StudentBook
     academic_year_id = params[:prepare_student_book_year].to_i
     GradeSection.all.each do |section|
-      section.students_for_academic_year(academic_year_id).each do |student|        
+      section.students_for_academic_year(academic_year_id).each do |student|
         StudentBook.initialize_from_book_receipts student:student, year:AcademicYear.find(academic_year_id)
       end
     end

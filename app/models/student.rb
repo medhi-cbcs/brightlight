@@ -16,12 +16,20 @@ class Student < ActiveRecord::Base
 	accepts_nested_attributes_for :book_loans, allow_destroy: true, reject_if: :all_blank
 
 	scope :current, lambda { joins(:grade_sections_students).where(grade_sections_students: {academic_year: AcademicYear.current}) }
-  scope :with_academic_year, lambda {|academic_year| joins(:grade_sections_students).where(grade_sections_students: {academic_year: academic_year}) }
-	scope :for_section, lambda {|section|
+  scope :with_academic_year, lambda {|academic_year|
 		joins(:grade_sections_students)
-		.where(grade_sections_students: {grade_section: section,academic_year: AcademicYear.current})
-		.select('students.id,students.name,grade_sections_students.grade_section_id,grade_sections_students.order_no')
-		.order('grade_sections_students.order_no')
+			.where(grade_sections_students: {academic_year: academic_year}) }
+	# scope :for_section, lambda {|section|
+	# 	joins(:grade_sections_students)
+	# 		.where(grade_sections_students: {grade_section: section, academic_year: AcademicYear.current})
+	# 		.select('students.id,students.name,grade_sections_students.grade_section_id,grade_sections_students.order_no')
+	# 		.order('grade_sections_students.order_no')
+	# }
+	scope :for_section, lambda {|section, year:AcademicYear.current|
+		joins(:grade_sections_students)
+			.where(grade_sections_students: {grade_section: section, academic_year: year})
+			.select('students.id,students.name,grade_sections_students.grade_section_id,grade_sections_students.order_no')
+			.order('grade_sections_students.order_no')
 	}
 
   filterrific(
