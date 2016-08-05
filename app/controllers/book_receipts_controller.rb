@@ -136,7 +136,7 @@ class BookReceiptsController < ApplicationController
         if BookReceipt.where(academic_year_id:academic_year_id).count > 0
           @error = "Error: records are not empty for the academic year #{AcademicYear.find(academic_year_id).name}"
         else
-          BookReceipt.initialize_with_student_books academic_year_id-1, academic_year_id
+          BookReceipt.initialize_book_receipts academic_year_id-1, academic_year_id
           @message = "Initialization completed."
         end
       end
