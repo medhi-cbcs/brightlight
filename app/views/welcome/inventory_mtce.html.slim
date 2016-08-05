@@ -2,67 +2,108 @@ h4 Maintenance
 .card-panel.red.lighten-3
   | These actions should only be run once per academic year. Please make sure you set the correct academic year.
     
-.card-panel
-  // TODO: sections should be collapsible
+ul class="collapsible" data-collapsible="expandable"
+  li 
+    .collapsible-header.waves-effect.waves-light.large-letter.active        
+      | Standard Books
+      i.material-icons.right chevron_right
+    .collapsible-body
+      .container-padding
+        = form_tag prepare_standard_books_path, remote:true do 
+          .row
+            .col.s2
+              .label New Academic Year
+              = select_tag :standard_book_year, options_from_collection_for_select(@academic_years,'id','name', @current_year_id), include_blank: 'None'
+            .col.s2
+              button.btn.waves-effect.waves-light type="submit" Create
+            .col.s7 
+              h6 Create Standard Books
+              .label Description        
+              | This will create new Standard Books records based on previous academic year's Standard Books.
   
-  h5 Student Books
-  hr
-  = form_tag finalize_student_books_path, remote:true do 
-    .row
-      .col.s2
-        .label Academic Year 
-        = select_tag :finalize_year, options_from_collection_for_select(@academic_years,'id','name', @current_year_id), include_blank: 'None'
-      .col.s2
-        .label 
-        button.btn.waves-effect.waves-light type="submit" Finalize 
-      .col.s7
-        .label Description
-        | This will finalize student books condition checking and prepare starting conditions for each student book copy for the next academic year.
-  hr
-  = form_tag prepare_book_receipts_path, remote:true do 
-    .row
-      .col.s2
-        .label New Academic Year 
-        = select_tag :book_receipt_year, options_from_collection_for_select(@academic_years,'id','name', @current_year_id), include_blank: 'None'
-      .col.s2
-        button.btn.waves-effect.waves-light type="submit" Initialize 
-      .col.s7
-        .label Description
-        | This will prepare book receipt forms for each student based on the finalized Student Book conditions.
-  / hr
-  / = form_tag prepare_student_books_path, remote:true do 
-  /   .row
-  /     .col.s2
-  /       .label Academic Year 
-  /       = select_tag :student_loan_year, options_from_collection_for_select(@academic_years,'id','name', @current_year_id), include_blank: 'None'
-  /     .col.s2
-  /       button.btn.waves-effect.waves-light type="submit" Create
-  /     .col.s7
-  /       .label Description
-  /       | This will create new Student Book Loan records based on Student Book Receipt Form.
-  
-  h5 Standard Books
-  hr
-  = form_tag prepare_standard_books_path, remote:true do 
-    .row
-      .col.s2
-        .label New Academic Year
-        = select_tag :standard_book_year, options_from_collection_for_select(@academic_years,'id','name', @current_year_id), include_blank: 'None'
-      .col.s2
-        button.btn.waves-effect.waves-light type="submit" Create
-      .col.s7 
-        .label Description
-        | This will create new Standard Books records based on previous academic year's Standard Books.
-    
-  h5 Teacher's Books
-  hr
-  = form_tag initialize_teachers_book_loans_path, remote:true do 
-    .row
-      .col.s2
-        .label New Academic Year
-        = select_tag :teacher_loan_year, options_from_collection_for_select(@academic_years,'id','name', @current_year_id), include_blank: 'None'
-      .col.s2
-        button.btn.waves-effect.waves-light type="submit" Create
-      .col.s7 
-        .label Description
-        | This will create new Teacher Book Loan records based on returned books from previous academic year loan records.
+  li 
+    .collapsible-header.waves-effect.waves-light.large-letter.active
+      | Student Books
+      i.material-icons.right chevron_right
+    .collapsible-body
+      .container-padding
+        = form_tag finalize_student_books_path, remote:true do 
+          .row
+            .col.s2
+              .label Academic Year 
+              = select_tag :finalize_year, options_from_collection_for_select(@academic_years,'id','name', @current_year_id), include_blank: 'None'
+            .col.s2
+              .label 
+              button.btn.waves-effect.waves-light type="submit" Finalize 
+            .col.s7
+              h6 Finalize Book Conditions
+              .label Description
+              | This will finalize student books condition checking and prepare starting conditions for each student book copy for the next academic year.
+        hr
+        = form_tag prepare_book_receipts_path, remote:true do 
+          .row
+            .col.s2
+              .label New Academic Year 
+              = select_tag :book_receipt_year, options_from_collection_for_select(@academic_years,'id','name', @current_year_id), include_blank: 'None'
+            .col.s2
+              button.btn.waves-effect.waves-light type="submit" Initialize 
+            .col.s7
+              h6 Prepare Book Receipts
+              .label Description
+              | This will prepare book receipt forms for each student based on the finalized Student Book conditions.
+        hr
+        = form_tag prepare_student_books_path, remote:true do 
+          .row
+            .col.s2
+              .label Academic Year 
+              = select_tag :prepare_student_book_year, options_from_collection_for_select(@academic_years,'id','name', @current_year_id), include_blank: 'None'
+            .col.s2
+              button.btn.waves-effect.waves-light type="submit" Create
+            .col.s7
+              h6 Create Student Book Loans from Receipts
+              .label Description
+              | This will create new Student Book Loan records based on Student Book Receipt Form.
+  li 
+    .collapsible-header.waves-effect.waves-light.large-letter.active
+      | Teacher's Books
+      i.material-icons.right chevron_right
+    .collapsible-body
+      .container-padding
+        = form_tag initialize_teachers_book_loans_path, remote:true do 
+          .row
+            .col.s2
+              .label New Academic Year
+              = select_tag :teacher_loan_year, options_from_collection_for_select(@academic_years,'id','name', @current_year_id), include_blank: 'None'
+            .col.s2
+              button.btn.waves-effect.waves-light type="submit" Create
+            .col.s7 
+              h6 Initialize Teacher Book Loans
+              .label Description
+              | This will create new Teacher Book Loan records based on returned books from previous academic year loan records.
+        hr
+        = form_tag move_teachers_books_book_loans_path, remote:true do 
+          .row
+            .col.s4
+              .row
+                .col.s6
+                  .label From
+                  = select_tag :from_teacher, options_from_collection_for_select(@employees,'id','name'), include_blank: 'None' 
+                .col.s6
+                  .label From Year
+                  = select_tag :from_year, options_from_collection_for_select(@academic_years,'id','name'), include_blank: 'None'
+              .row
+                .col.s6
+                  .label To
+                  = select_tag :to_teacher, options_from_collection_for_select(@employees,'id','name'), include_blank: 'None' 
+                .col.s6
+                  .label To Year
+                  = select_tag :to_year, options_from_collection_for_select(@academic_years,'id','name'), include_blank: 'None'
+            .col.s7
+              .row
+                .col.s12
+                  h6 Move book loans
+                  .label Description
+                  | This will move book loans from one teacher to another.
+                .col.s12
+                  button.btn.waves-effect.waves-light type="submit" Move
+      

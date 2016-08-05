@@ -16,7 +16,7 @@ class StudentsController < ApplicationController
       }
       format.json {
         if params[:section].present?
-          @students = Student.for_section(params[:section])
+          @students = Student.for_section(params[:section],year:params[:year])
                         .select('students.id,students.name,grade_sections_students.grade_section_id,grade_sections_students.order_no')
         end
       }

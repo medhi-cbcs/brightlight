@@ -39,7 +39,7 @@ nav
         .item = link_to @grade_section.grade_level.name, @grade_section.grade_level
       dd.col.s4
         .label Homeroom teacher
-        .item = @homeroom.present? ? link_to(@homeroom) : '--'
+        .item = @homeroom.present? ? link_to(@homeroom.name, employee_path(@homeroom)) : '--'
       dd.col.s4
         .label Academic Year
         .item = @academic_year.present? ? @academic_year.name : "--"
