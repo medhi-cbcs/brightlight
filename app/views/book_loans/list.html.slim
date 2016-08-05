@@ -5,11 +5,11 @@ ul#teacher-options.dropdown-content
   li  
   - @teachers.all.each do |teacher|
     li 
-      = link_to teacher.name, employee_book_loans_path(teacher)    
+      = link_to teacher.name, employee_book_loans_path(teacher,year:@academic_year.id)
 ul#year-options.dropdown-content
   li  
     = link_to 'All', employee_book_loans_path(params.merge(year:'all').symbolize_keys)
-  - AcademicYear.all.each do |year|
+  - AcademicYear.list_for_menu.each do |year|
     li 
       = link_to year.name, employee_book_loans_path(params.merge(year:year.id).symbolize_keys)
 // NOTE: for these wierd .symbolize_keys, refer to this article https://github.com/rails/rails/issues/21645
@@ -56,9 +56,10 @@ nav
 
 .card-panel
   - unless @error.present?
-    table
+    table.compact.striped
       thead
         tr
+          th No
           th Barcode
           th Book title
           th Out date
@@ -70,8 +71,9 @@ nav
           th Actions
             
       tbody
-        - @book_loans.each do |book_loan|
+        - @book_loans.each_with_index do |book_loan, i|
           tr id="row-#{book_loan.id}"
+            td = @book_loans.offset + i + 1
             td = link_to book_loan.barcode, book_loan.book_copy
             td 
               - if book_loan.book_edition.present?
@@ -95,5 +97,5 @@ javascript:
   $('.delete-link').bind('ajax:complete', function() {
     var id = $(this).data("id");
     $("tr#row-"+id).remove();
-    Materialize.toast("Book Fine record deleted", 4000, "green");
+    Materialize.toast("Book Loan record deleted", 4000, "green");
   });

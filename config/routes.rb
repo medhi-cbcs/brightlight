@@ -117,6 +117,7 @@ Rails.application.routes.draw do
     collection do
       get 'teachers'
       post 'initialize_teachers'
+      post 'move_teachers_books'
     end
   end
 

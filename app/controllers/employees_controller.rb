@@ -68,7 +68,14 @@ class EmployeesController < ApplicationController
         end
         format.json { render :show, status: :ok, location: @employee }
       else
-        format.html { render :edit }
+        format.html do
+          if employee_params[:book_loans_attributes].present?
+            error_messages = @employee.errors.full_messages.flatten.first
+            redirect_to new_employee_book_loans_path(@employee), alert: "Error:#{error_messages}"
+          else
+            render :edit
+          end
+        end
         format.json { render json: @employee.errors, status: :unprocessable_entity }
       end
     end

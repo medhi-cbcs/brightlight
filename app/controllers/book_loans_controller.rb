@@ -137,7 +137,6 @@ class BookLoansController < ApplicationController
   def list
     authorize! :read, BookLoan
     @teacher = Employee.find params[:employee_id]
-    @teachers = Employee.joins(:book_loans).where(book_loans: {academic_year_id: AcademicYear.current_id}).order(:name).uniq
     if @teacher.present?
       @book_loans = BookLoan.includes([:employee]).includes([:book_copy,:book_edition])
                       .where(employee: @teacher)
@@ -155,6 +154,9 @@ class BookLoansController < ApplicationController
     elsif params[:year].present? && params[:year].downcase == 'all'
       @book_loans = @book_loans.order('academic_year_id DESC')
     end
+
+    # For Menu
+    @teachers = Employee.joins(:book_loans).where(book_loans: {academic_year_id: @academic_year.id}).order(:name).uniq
 
     # Checked filter
     if params[:checked] == 't'
@@ -246,6 +248,20 @@ class BookLoansController < ApplicationController
           @message = "Initialization completed."
         end
       end
+    end
+  end
+
+  # POST /book_loans/move_teachers_books.js
+  def move_teachers_books
+    authorize! :manage, BookLoan
+    from = Employee.find params[:from_teacher]
+    to = Employee.find params[:to_teacher].to_i
+    from_year = params[:from_year].to_i
+    to_year = params[:to_year].to_i
+    BookLoan.move_teachers_books(from:from,to:to, from_year:from_year, to_year:to_year)
+
+    respond_to do |format|
+      format.js
     end
   end
 

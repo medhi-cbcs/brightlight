@@ -169,9 +169,3 @@ li
 				li
 					- if current_user
 						= link_to 'Sign out', destroy_user_session_path, method: :delete
-				
-/ javascript:
-/ 	$("#barcode").scannerDetection();
-/ 	$("#barcode").bind('scannerDetectionComplete',function(e,data){$("#barcode").html(data.string)})
-/     .bind('scannerDetectionError',function(e,data){$("#barcode").html(data.string);console.log("Error")})
-/ 		.bind('scannerDetectionReceive',function(e,data){console.log(data)});

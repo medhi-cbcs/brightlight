@@ -44,6 +44,10 @@ $kuning-podang:	  #e7580b;
 	font-weight: bold;
 }
 
+.container-padding {
+	padding: 18px;
+}
+
 // ============================================ Table ===============================================
 table {
 		td.wd3  { width:  3%; }
@@ -296,6 +300,15 @@ span.box {
   color: whitesmoke;
   min-width: 3rem;
   padding: 3px 15px;
+}
+
+h6 {
+	font-size: 1.4rem;
+  font-style: italic;
+}
+
+.large-letter {
+	font-size: 1.6rem;
 }
 
 // ============================================ Buttons =============================================

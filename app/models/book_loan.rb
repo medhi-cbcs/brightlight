@@ -53,7 +53,7 @@ class BookLoan < ActiveRecord::Base
 
   def move_teachers_book(to:, to_year:nil)
     if to_year == nil or academic_year_id == (to_year.respond_to?(:id) ? to_year.id : to_year)
-      update_attribute :employee, to
+      update_attributes :employee, to
     else
       BookLoan.create attributes.except('created_at','updated_at','id').merge('employee_id'=>to.id,'academic_year_id'=>to_year)
     end

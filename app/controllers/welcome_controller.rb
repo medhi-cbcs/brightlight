@@ -10,13 +10,14 @@ class WelcomeController < ApplicationController
 
 	def inventory_mtce
 		authorize! :manage, BookLoan
-		@academic_years = AcademicYear.where('id>10 and id<20')
+		@academic_years = AcademicYear.list_for_menu
 		@current_year_id = AcademicYear.current_id
+		@employees = Employee.all.order(:name)
 	end
 
 	def admin_mtce
 		authorize! :manage, User
-		@academic_years = AcademicYear.where('id>10 and id<20')
+		@academic_years = AcademicYear.list_for_menu
 		@current_year_id = AcademicYear.current_id
 	end
 end
