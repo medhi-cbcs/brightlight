@@ -2,8 +2,8 @@ class BookLoan < ActiveRecord::Base
 
   validates :book_copy, presence: true
   validates :academic_year, presence: true
-  validates :book_copy_id, uniqueness: {scope: [:academic_year_id, :employee_id]}, unless: Proc.new { |b| b.employee_id.blank? }
-  validates :book_copy_id, uniqueness: {scope: [:academic_year_id, :student_id]}, unless: Proc.new { |b| b.student_id.blank? }
+  validates :book_copy_id, uniqueness: {scope: [:academic_year_id]}
+  validates :book_copy_id, uniqueness: {scope: [:academic_year_id]}
 
   belongs_to :book_copy
   belongs_to :book_edition
@@ -34,5 +34,28 @@ class BookLoan < ActiveRecord::Base
       values << data
     end
     BookLoan.import columns, values
+  end
+
+  # BookLoan.move_book_loans(from:Employee.find(3),to:Employee.find(4),from_year:AcademicYear.current_id-1,to_year:AcademicYear.current)
+  def self.move_teachers_books(from:,to:, from_year:, to_year:)
+    source = Employee.find(from.id)
+    destination = Employee.find(to.id)
+
+    # This would be efficient, but it doesn't update the updated_at field
+    # BookLoan.where(employee:source,academic_year:from_year).update_all(employee_id:to.id, academic_year_id:to_year.id)
+
+    tmp = source.book_loans.where(academic_year:from_year).map { |x|
+            x.attributes.except('created_at','updated_at','id').merge('academic_year_id'=>to_year)
+          }
+    source.book_loans.where(academic_year:from_year).delete_all if from_year == to_year
+    destination.book_loans.create(tmp)
+  end
+
+  def move_teachers_book(to:, to_year:nil)
+    if to_year == nil or academic_year_id == (to_year.respond_to?(:id) ? to_year.id : to_year)
+      update_attributes :employee, to
+    else
+      BookLoan.create attributes.except('created_at','updated_at','id').merge('employee_id'=>to.id,'academic_year_id'=>to_year)
+    end
   end
 end
