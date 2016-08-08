@@ -36,8 +36,8 @@ class BookLoan < ActiveRecord::Base
     BookLoan.import columns, values
   end
 
-  # BookLoan.move_book_loans(from:Employee.find(3),to:Employee.find(4),from_year:AcademicYear.current_id-1,to_year:AcademicYear.current)
-  def self.move_teachers_books(from:,to:, from_year:, to_year:)
+  # BookLoan.move_all_books(from:Employee.find(3),to:Employee.find(4),from_year:AcademicYear.current_id-1,to_year:AcademicYear.current)
+  def self.move_all_books(from:,to:, from_year:, to_year:)
     source = Employee.find(from.id)
     destination = Employee.find(to.id)
 
@@ -51,11 +51,14 @@ class BookLoan < ActiveRecord::Base
     destination.book_loans.create(tmp)
   end
 
-  def move_teachers_book(to:, to_year:nil)
-    if to_year == nil or academic_year_id == (to_year.respond_to?(:id) ? to_year.id : to_year)
-      update_attributes :employee, to
+  def move_book(to:, to_year:nil)
+    if to_year == nil or academic_year_id == to_year.id
+      # puts "Moving book"
+      r = update_attribute :employee, to
     else
-      BookLoan.create attributes.except('created_at','updated_at','id').merge('employee_id'=>to.id,'academic_year_id'=>to_year)
+      # puts "Creating new"
+      r = BookLoan.create attributes.except('created_at','updated_at','id').merge('employee_id'=>to.id,'academic_year_id'=>to_year.id)
     end
+    return r.valid?
   end
 end

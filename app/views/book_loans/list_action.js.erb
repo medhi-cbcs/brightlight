@@ -1,0 +1,6 @@
+$("<%=j @completed.map{|id| '#row-'+id.to_s}.join(', ') %>").remove();
+<% if @failed.count > 0 %>
+  Materialize.toast("Error moving: <%= @failed_barcodes %>", 5000, "red");
+<% else %>
+  Materialize.toast("Completed moving book loans", 5000, "green");
+<% end %>

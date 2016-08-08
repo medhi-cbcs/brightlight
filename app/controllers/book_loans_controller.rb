@@ -251,19 +251,45 @@ class BookLoansController < ApplicationController
     end
   end
 
-  # POST /book_loans/move_teachers_books.js
-  def move_teachers_books
+  # POST /employees/1/book_loans/move_all.js
+  def move_all
     authorize! :manage, BookLoan
     from = Employee.find params[:from_teacher]
     to = Employee.find params[:to_teacher].to_i
     from_year = params[:from_year].to_i
     to_year = params[:to_year].to_i
-    BookLoan.move_teachers_books(from:from,to:to, from_year:from_year, to_year:to_year)
+    BookLoan.move_all_books(from:from,to:to, from_year:from_year, to_year:to_year)
 
     respond_to do |format|
       format.js
     end
   end
+
+  # POST /employees/1/book_loans/list_action.js
+  def list_action
+    authorize! :manage, BookLoan
+    employee = Employee.find params[:employee_id]
+    target = Employee.find params[:to_teacher]
+    year = AcademicYear.find params[:to_year]
+    @loan_ids = params[:add].map &:first
+    @completed = []
+    if params[:move]
+      puts "Moving books #{@loan_ids} from #{params[:employee_id]} to #{params[:to_teacher]}"
+      BookLoan.where(id:@loan_ids).each do |loan|
+        success = loan.move_book to:target, to_year:year
+        @completed << loan.id.to_s if success
+        puts "Loan #{loan.barcode} #{success ? 'OK' : 'Fail'}"
+        puts "Completed: #{@completed}"
+      end
+      @failed = @loan_ids - @completed
+      @failed_barcodes = @failed.map {|x| BookLoan.where(id:x).take.try(:barcode)}
+      puts "Failed: #{@failed_barcodes}"
+    elsif params[:delete]
+      puts "Deleting selected books: #{@loan_ids}"
+    end
+    respond_to :js
+  end
+
 
   ####
 
