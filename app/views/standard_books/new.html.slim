@@ -22,7 +22,7 @@ h4 New Standard Book
     .row
       .input-field.col.s3
         = f.label :grade_level, class:'active'
-        = f.collection_select :grade_level_id, GradeLevel.all, :id, :name, selected:params[:grade_level_id]
+        = f.collection_select :grade_level_id, GradeLevel.all, :id, :name, selected:params[:grade]
       .input-field.col.s3
         = f.label :track, class:'active'
         = f.select :track, options_for_select([['None', nil],['NS','NS'],['SS','SS']])

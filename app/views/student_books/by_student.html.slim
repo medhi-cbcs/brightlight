@@ -1,7 +1,7 @@
 h5 Check Book Condition and Return #{'( '+@grade_section.name+' )' if @grade_section.present?}
 
 ul#grade-options.dropdown-content
-  - GradeLevel.all.each do |grade|
+  - GradeLevel.all.order(:id).each do |grade|
     li 
       = link_to grade.name, "#!", onclick:"filterSectionOptions(#{grade.id}, '#{grade.name}');"
 
@@ -12,62 +12,50 @@ ul#section-options.dropdown-content
 
 ul#student-options.dropdown-content
   - if @grade_section.present?
-    li = link_to 'All', by_student_student_books_path(s:@grade_section.id, g:@grade_level.id)
-    - Student.for_section(@grade_section.id).each do |student| 
-      li = link_to "#{student.order_no}. #{student.name}", by_student_student_books_path(st:student.id,s:@grade_section.id) 
-      
-javascript:
-  function filterSectionOptions(id, name) {
-    var grade_ids = #{raw @grade_level_ids};
-    $("#grade").html(name);
-    grade_ids.forEach(function(g){
-      if(id!=g) {
-        $(".grade-"+g).hide();
-      } else {
-        $(".grade-"+id).show();
-      }
-    })
-  }
-  function filterStudentOptions(grade_section_id, section_name) {
-    $("#section").html(section_name);
-    $.getJSON("/students.json?section="+grade_section_id, null, function (data) {
-      var list = "<li><a href='/student_books/by_student?s="+grade_section_id+"'>All</a></li>";
-      $.each(data, function(i,student){
-        list += "<li><a href='/student_books/by_student?s="+grade_section_id+"&st="+student.student.id+"'>"+student.student.roster_no+". "+student.student.name+"</a></li>";
-      });
-      $("#student-options").html(list);
-      $("#student-menu").dropdown();
-    });
-  }
+    li = link_to 'All', by_student_student_books_path(params.merge(year:@year_id,s:@grade_section.id, g:@grade_level.id).symbolize_keys)
+    - Student.for_section(@grade_section.id,year:@year_id).each do |student| 
+      li = link_to "#{student.order_no}. #{student.name}", by_student_student_books_path(params.merge(year:@year_id,st:student.id,s:@grade_section.id).symbolize_keys)
 
+ul#year-options.dropdown-content
+  li  
+    = link_to 'All', by_student_student_books_path(params.merge(year:'all').symbolize_keys)
+  - AcademicYear.list_for_menu.each do |year|
+    li 
+      = link_to year.name, by_student_student_books_path(params.merge(year:year.id).symbolize_keys)
+      
 = form_tag update_multiple_student_books_path, method: :put do
   nav
     .nav-wrapper
       ul
         li 
-          = link_to 'PDF Format', by_student_student_books_path(s:params[:s],st:params[:st], format: :pdf), target: '_blank'
-        - if @student_books.present?
+          = link_to 'PDF Format', by_student_student_books_path(year:params[:year],s:params[:s],st:params[:st], format: :pdf), target: '_blank'
+        - if @student_books.present? and @disable_status
           li  
             button.btn.waves-effect.waves-light type="submit" Save 
-        li.right
-          a#student-menu.dropdown-button href="#!" data-activates="student-options"
-            span#student = 'Choose student'
+      ul.right
+        li 
+          a.dropdown-button href="#!" data-activates="year-options"
+            span#year = @academic_year.name
             i.material-icons.right arrow_drop_down
-        li.right
-          a.dropdown-button href="#!" data-activates="section-options"
-            span#section = params[:l].present? ? "Section #{@grade_section_name}" : 'Choose class'
-            i.material-icons.right arrow_drop_down
-        li.right
+        li
           a.dropdown-button href="#!" data-activates="grade-options"
             span#grade = params[:l].present? ? "Grade #{@grade_level_name}" : 'Choose grade'
             i.material-icons.right arrow_drop_down
+        li
+          a.dropdown-button href="#!" data-activates="section-options"
+            span#section = params[:l].present? ? "Section #{@grade_section_name}" : 'Choose class'
+            i.material-icons.right arrow_drop_down
+        li
+          a#student-menu.dropdown-button href="#!" data-activates="student-options"
+            span#student = 'Choose student'
+            i.material-icons.right arrow_drop_down
 
   = hidden_field_tag :student_form, 1
-  - if @students.present?
-    - @students.each_with_index do |student,count|
-      - gss = student.grade_sections_students.where(academic_year_id: @year_id).try(:first)
-      - grade_section = gss.try(:grade_section)
-      - roster_no = gss.order_no
+  - if @student_list.present?
+    - @student_list.each_with_index do |record,count|
+      - student = record.student
+      - grade_section = record.grade_section
+      - roster_no = record.order_no
       - student_books = @student_books.where(roster_no:roster_no.to_s)
       
       - if student.present?
@@ -117,37 +105,35 @@ javascript:
                 = f.hidden_field :prev_academic_year_id, value: AcademicYear.current_id-1 
                 = f.hidden_field :user_id, value: current_user.id if current_user
               = fields_for "student_books[]", book do |f|
+                - initial_condition = book.book_copy.start_condition_in_year(@year_id) if book.book_copy.present?
                 tr
                   td.wd3 = i+1                  
                   td.wd20 = book.try(:book_edition).try(:title).truncate(45)
                   td.wd5 style='text-align:center;' 
                     span = link_to book.barcode, book.try(:book_copy)
                   td.wd5 style='text-align:center;' 
-                    span.box class="#{book.book_copy.try(:current_start_condition).try(:color) || 'white'}"
-                      = book.book_copy.try(:current_start_condition).try(:code) || '?'
+                    span.box class="#{initial_condition.try(:color) || 'white'}"
+                      = initial_condition.try(:code) || '?'
                   td.wd3 style='text-align:center;' 
-                    = f.radio_button :end_copy_condition_id, 1
+                    = f.radio_button :end_copy_condition_id, 1, disabled:@disable_status.to_s
                     = f.label :end_copy_condition_id_1, "New", class:'small-radio-label'
                   td.wd3 style='text-align:center;' 
-                    = f.radio_button :end_copy_condition_id, 2
+                    = f.radio_button :end_copy_condition_id, 2, disabled:@disable_status.to_s
                     = f.label :end_copy_condition_id_2, "Good", class:'small-radio-label'
                   td.wd3 style='text-align:center;' 
-                    = f.radio_button :end_copy_condition_id, 3
+                    = f.radio_button :end_copy_condition_id, 3, disabled:@disable_status.to_s
                     = f.label :end_copy_condition_id_3, "Fair", class:'small-radio-label'
                   td.wd3 style='text-align:center;' 
-                    = f.radio_button :end_copy_condition_id, 4
+                    = f.radio_button :end_copy_condition_id, 4, disabled:@disable_status.to_s
                     = f.label :end_copy_condition_id_4, "Poor", class:'small-radio-label'
                   td.wd3 style='text-align:center;' 
-                    = f.radio_button :end_copy_condition_id, 5
+                    = f.radio_button :end_copy_condition_id, 5, disabled:@disable_status.to_s
                     = f.label :end_copy_condition_id_5, "Missing", class:'small-radio-label'
                   td.wd5 style='text-align:center;' 
-                    /= check_box_tag "status#{book.id}", "repair[#{book.id}]"
-                    /= label_tag "status#{book.id}_repair[#{book.id}]", 'NR', class:'small-radio-label'
-                    = f.check_box :needs_rebinding
+                    = f.check_box :needs_rebinding, disabled:@disable_status.to_s
                     = f.label :needs_rebinding, 'NR', class:'small-radio-label;font-size:2px'
                   td.wd20
-                    /= f.text_field_tag "notes#{book.id}"
-                    = f.text_field :notes
+                    = f.text_field :notes, disabled:@disable_status.to_s
 
       .page-break    
     .toolbar.z-depth-1
@@ -155,3 +141,28 @@ javascript:
   - else
     #message.card-panel.grey.lighten-1
       .center.white-text Please choose Grade Level, Class and Student
+
+      
+javascript:
+  function filterSectionOptions(id, name) {
+    var grade_ids = #{raw @grade_level_ids};
+    $("#grade").html(name);
+    grade_ids.forEach(function(g){
+      if(id!=g) {
+        $(".grade-"+g).hide();
+      } else {
+        $(".grade-"+id).show();
+      }
+    })
+  }
+  function filterStudentOptions(grade_section_id, section_name) {
+    $("#section").html(section_name);
+    $.getJSON("/students.json?section="+grade_section_id+"&year=#{@year_id}", null, function (data) {
+      var list = "<li><a href='/student_books/by_student?s="+grade_section_id+"&year=#{@year_id}"+"'>All</a></li>";
+      $.each(data, function(i,student){
+        list += "<li><a href='/student_books/by_student?s="+grade_section_id+"&st="+student.student.id+"&year=#{@year_id}"+"'>"+student.student.roster_no+". "+student.student.name+"</a></li>";
+      });
+      $("#student-options").html(list);
+      $("#student-menu").dropdown();
+    });
+  }

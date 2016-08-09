@@ -54,7 +54,7 @@ class BookLoansController < ApplicationController
 
     if @book_loans.present?
       if params[:year].present?
-        @academic_year = AcademicYear.find_by_slug params[:year]
+        @academic_year = AcademicYear.find params[:year]
         @book_loans = @book_loans.where(academic_year:@academic_year) if params[:year].upcase != 'ALL'
       else
         @book_loans = @book_loans.where(academic_year:AcademicYear.current_id)
@@ -122,6 +122,12 @@ class BookLoansController < ApplicationController
       format.json { head :no_content }
       format.js { head :no_content }
     end
+  end
+
+  def borrowers
+    authorize! :read, BookLoan
+    @borrowers = Employee.joins(:book_loans).where(book_loans: {academic_year: params[:year]}).order(:name).uniq
+    respond_to :json
   end
 
   #### This section deals with teacher's loan
@@ -251,19 +257,47 @@ class BookLoansController < ApplicationController
     end
   end
 
-  # POST /book_loans/move_teachers_books.js
-  def move_teachers_books
+  # POST /employees/1/book_loans/move_all.js
+  def move_all
     authorize! :manage, BookLoan
     from = Employee.find params[:from_teacher]
     to = Employee.find params[:to_teacher].to_i
     from_year = params[:from_year].to_i
     to_year = params[:to_year].to_i
-    BookLoan.move_teachers_books(from:from,to:to, from_year:from_year, to_year:to_year)
+    BookLoan.move_all_books(from:from,to:to, from_year:from_year, to_year:to_year)
 
     respond_to do |format|
       format.js
     end
   end
+
+  # POST /employees/1/book_loans/list_action.js
+  def list_action
+    authorize! :manage, BookLoan
+    employee = Employee.find params[:employee_id]
+    target = Employee.find params[:to_teacher]
+    year = AcademicYear.find params[:to_year]
+    loan_ids = params[:add].map &:first
+    completed = []
+    ids_to_remove = []
+    if params[:move]
+      BookLoan.where(id:loan_ids).each do |loan|
+        success = loan.move_book to:target, to_year:year
+        completed << loan.id.to_s if success
+        ids_to_remove << loan.id.to_s if success and year == loan.academic_year
+      end
+      failed = loan_ids - completed
+    elsif params[:delete]
+      BookLoan.where(id:loan_ids).delete_all
+      ids_to_remove = loan_ids
+    end
+    ids_to_uncheck = completed - ids_to_remove
+    @rows_to_remove = ids_to_remove.present? ? ids_to_remove.map{|id| '#row-'+id.to_s}.join(', ') : ""
+    @failed_barcodes = failed.present? ? failed.map {|x| BookLoan.where(id:x).take.try(:barcode)} : ""
+    @rows_to_uncheck = ids_to_uncheck.present? ? ids_to_uncheck.map{|id| '#add_'+id.to_s}.join(', ') : ""
+    respond_to :js
+  end
+
 
   ####
 

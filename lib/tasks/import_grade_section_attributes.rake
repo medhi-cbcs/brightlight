@@ -42,10 +42,10 @@ namespace :data do
 			  grade_section.parallel_code = row[header[:parallel_code]]
 			  grade_section.homeroom = Employee.find_by_employee_number(row[header[:employee_no]]) if row[header[:position]] == '001'
 			  grade_section.assistant = Employee.find_by_employee_number(row[header[:employee_no]]) if row[header[:position]] == '003'
-				grade_section.academic_year = AcademicYear.find_by_slug(row[header[:academic_year]])
+				grade_section.academic_year = AcademicYear.find_by_name(row[header[:academic_year]])
 			  grade_section.save
 			else
-				year = AcademicYear.find_by_slug(row[header[:academic_year]])
+				year = AcademicYear.find_by_name(row[header[:academic_year]])
 				grade_section_history = grade_section.grade_section_histories.find_by_academic_year_id(year.id)
 			  grade_section_history.subject_code = row[header[:subject_code]]
 			  grade_section_history.parallel_code = row[header[:parallel_code]]

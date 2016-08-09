@@ -31,6 +31,7 @@
       tbody
         - if book_title.present?
           - book_title[:student_books].each_with_index do |book, i|
+            - initial_condition = book.book_copy.start_condition_in_year(@year_id) if book.book_copy.present?
             tr.nobreak style='border-bottom:1px solid gainsboro'
               td.wd5 = i+1
               td.wd20 style='text-align:center'
@@ -43,7 +44,7 @@
               td.wd10 style='text-align:center;'
                 span = book.book_copy.try(:copy_no) || 'N/A'
               td.wd10 style='text-align:center;' 
-                = book.book_copy.try(:current_start_condition).try(:code)
+                = initial_condition.try(:code)
               td.wd5 style='text-align:center;' 
                 = book.end_copy_condition_id == 1 ? '&#9745;'.html_safe : '&#9744;'.html_safe
               td.wd5 style='text-align:center;' 

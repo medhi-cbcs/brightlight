@@ -17,7 +17,7 @@ ul#grade-options.dropdown-content
       = link_to 'All', grade_level_standard_books_path(grade_level_id:params[:grade_level_id],track:params[:track],category:params[:category],year:'all')
     - AcademicYear.list_for_menu.each do |year|
       li 
-        = link_to year.name, grade_level_standard_books_path(grade_level_id:params[:grade_level_id],track:params[:track],year:year.slug,category:params[:category])
+        = link_to year.name, grade_level_standard_books_path(grade_level_id:params[:grade_level_id],track:params[:track],year:year.id,category:params[:category])
   ul#track-options.dropdown-content
     li = link_to 'All', grade_level_standard_books_path(grade_level_id:params[:grade_level_id],track:'all',category:params[:category],year:params[:year])
     li = link_to 'NS', grade_level_standard_books_path(grade_level_id:params[:grade_level_id],track:'NS',year:params[:year],category:params[:category])

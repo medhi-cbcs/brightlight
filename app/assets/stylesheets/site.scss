@@ -362,6 +362,17 @@ nav {
       }
 		}
 	}
+
+	.select-wrapper {
+		span.caret {
+			color: white;
+			top: 0px;
+		}
+		input.select-dropdown {
+			border-bottom: none;
+			margin-top: 16px;
+		}
+	}
 }
 
 nav ul a.btn, nav ul a.btn-large, nav ul a.btn-large, nav ul a.btn-flat,
