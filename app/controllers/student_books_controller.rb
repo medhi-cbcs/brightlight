@@ -341,18 +341,19 @@ class StudentBooksController < ApplicationController
   def by_student
     authorize! :manage, StudentBook
     @book_titles = []
+    @year_id = params[:year] || AcademicYear.current_id
+    @academic_year = AcademicYear.find @year_id
     if params[:s].present?
       @grade_section = GradeSection.find(params[:s])
       @grade_level = @grade_section.grade_level
-      authorize! :update, StudentBook.where(grade_section:@grade_section).where(academic_year:AcademicYear.current).first
+      # authorize! :update, StudentBook.where(grade_section:@grade_section, academic_year_id:@year_id).first
     end
 
-    @year_id = AcademicYear.current_id
     @textbook_category_id = BookCategory.find_by_code('TB').id
     @standard_books = StandardBook
                         .where(grade_level: @grade_level)
                         .where(book_category_id: @textbook_category_id)
-                        .where(academic_year_id: AcademicYear.current_id)
+                        .where(academic_year_id: @year_id)
                         .includes([:book_edition])
     if @grade_level.present? && [11,12].include?(@grade_level.id)
       @standard_books = @standard_books.where(grade_section:@grade_section)
@@ -361,8 +362,8 @@ class StudentBooksController < ApplicationController
     if params[:st].present?
       # A student is selected, here we load only the specified student
       @student = Student.find params[:st]
-      @students = [@student]
-      gss = @student.grade_sections_students.where(academic_year_id: @year_id).try(:first)
+      gss = @student.grade_sections_students.where(academic_year_id: @year_id).take
+      @student_list = [gss]
       @grade_section = gss.try(:grade_section)
       @roster_no = gss.order_no
       # Notes: Because of data errors in database, we search StudentBook without student_id
@@ -375,7 +376,7 @@ class StudentBooksController < ApplicationController
                         .includes([:book_copy, book_copy: [:book_edition]])
     elsif params[:s].present?
       # No student is selected, here we load ALL for the grade_section
-      @students = @grade_section.current_students
+      @student_list = @grade_section.students_for_academic_year(@year_id)
       @student_books = StudentBook.where(grade_section:@grade_section)
                         .where(academic_year_id:@year_id)
                         .standard_books(@grade_section.grade_level.id, @grade_section.id, @year_id, @textbook_category_id)
@@ -385,8 +386,8 @@ class StudentBooksController < ApplicationController
 
     respond_to do |format|
       format.html do
-        @grade_level_ids = GradeLevel.all.collect(&:id)
-        @grade_sections = GradeSection.where(academic_year_id: @year_id)
+        @grade_level_ids = GradeLevel.all.order(:id).collect(&:id)
+        @grade_sections = GradeSection.all.order(:id)
         @grade_sections_ids = @grade_sections.collect(&:id)
       end
       format.pdf do

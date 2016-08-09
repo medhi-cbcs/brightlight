@@ -13,6 +13,7 @@ class StudentsController < ApplicationController
         else
           @students = Student.paginate(page: params[:page], per_page: items_per_page)
         end
+        @disable_status = @year_id == AcademicYear.current_id
       }
       format.json {
         if params[:section].present?
