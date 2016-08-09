@@ -1,10 +1,10 @@
 h5 Check Book Condition and Return #{'( '+@grade_section.name+' )' if @grade_section.present?}
 
-- if @students.present?
-  - @students.each_with_index do |student,count|
-    - gss = student.grade_sections_students.where(academic_year_id: @year_id).try(:first)
-    - grade_section = gss.try(:grade_section)
-    - roster_no = gss.order_no
+- if @student_list.present?
+  - @student_list.each_with_index do |record,count|
+    - student = record.student
+    - grade_section = record.grade_section
+    - roster_no = record.order_no
     - student_books = @student_books.where(roster_no:roster_no.to_s)
     
     - if student.present?
@@ -33,6 +33,7 @@ h5 Check Book Condition and Return #{'( '+@grade_section.name+' )' if @grade_sec
           th style='text-align:center;' Notes
       tbody                          
         - student_books.each_with_index do |book, i|
+          - initial_condition = book.book_copy.start_condition_in_year(@year_id) if book.book_copy.present?
           tr style='border-bottom:1px solid gainsboro;height:60px'
             td.wd3 = i+1
             td.wd20
@@ -46,7 +47,7 @@ h5 Check Book Condition and Return #{'( '+@grade_section.name+' )' if @grade_sec
               = book.barcode
             
             td.wd10 style='text-align:center;' 
-              = book.book_copy.try(:current_start_condition).try(:code)
+              = initial_condition.try(:code)
             td.wd5 style='text-align:center;' 
               = book.end_copy_condition_id == 1 ? '&#9745;'.html_safe : '&#9744;'.html_safe
             td.wd5 style='text-align:center;' 
@@ -61,6 +62,6 @@ h5 Check Book Condition and Return #{'( '+@grade_section.name+' )' if @grade_sec
               = book.needs_rebinding == 1 ? '&#9745;'.html_safe : '&#9744;'.html_safe
             td.wd25
               = book.notes
-    - if count < @students.count-1
+    - if count < @student_list.count-1
       .page-break    
     
