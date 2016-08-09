@@ -118,6 +118,7 @@ Rails.application.routes.draw do
       get 'teachers'
       post 'initialize_teachers'
       post 'move_all'
+      get 'borrowers'
     end
   end
 

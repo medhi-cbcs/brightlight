@@ -1,11 +1,10 @@
 .label Teacher Books
 h4 = @teacher.name
 
-ul#teacher-options.dropdown-content
-  li  
-  - @teachers.all.each do |teacher|
-    li 
-      = link_to teacher.name, employee_book_loans_path(teacher,year:@academic_year.id)
+ul#borrowers-options.dropdown-content
+  / - @teachers.all.each do |teacher|
+  /   li 
+  /     = link_to teacher.name, employee_book_loans_path(teacher,year:@academic_year.id)
 ul#year-options.dropdown-content
   li  
     = link_to 'All', employee_book_loans_path(params.merge(year:'all').symbolize_keys)
@@ -24,27 +23,28 @@ ul#checked-options.dropdown-content
 = form_tag list_action_book_loans_path(employee_id:params[:employee_id]), remote:true do 
   nav
     .nav-wrapper
+      ul
+        li
+          a#borrowers-menu.dropdown-button href="#!" data-activates="borrowers-options" data-year="#{@academic_year.id}"
+            span#teacher = @teacher.present? ? "#{@teacher.name}" : "Teacher name" 
+            i.material-icons.right arrow_drop_down
+        li
+          a.dropdown-button href="#!" data-activates="year-options"
+            span#year = @academic_year.present? ? "#{@academic_year.name}" : "Academic Year" 
+            i.material-icons.right arrow_drop_down
       #context-buttons style="display:none;"
-        ul        
+        ul.right     
           li  
             button.btn type='submit' name='move' Move to:
           li
             = select_tag :to_teacher, options_from_collection_for_select(Employee.all.order(:name),:id,:name)
           li style="width:110px" class="text-align:center"
             = select_tag :to_year, options_from_collection_for_select(AcademicYear.list_for_menu,:id,:name,AcademicYear.current_id)
-          li.right
-            button.btn.red type='submit' name='delete'
-              i.material-icons delete
+          - if can? :delete, BookLoan
+            li
+              button.btn.red type='submit' name='delete' data-confirm="Are you sure?"
+                i.material-icons delete
       #default-buttons
-        ul
-          li
-            a.dropdown-button href="#!" data-activates="teacher-options"
-              span#teacher = @teacher.present? ? "#{@teacher.name}" : "Teacher name" 
-              i.material-icons.right arrow_drop_down
-          li
-            a.dropdown-button href="#!" data-activates="year-options"
-              span#year = @academic_year.present? ? "#{@academic_year.name}" : "Academic Year" 
-              i.material-icons.right arrow_drop_down
         ul.right
           li 
             -if @academic_year.present?
@@ -113,6 +113,26 @@ ul#checked-options.dropdown-content
   = will_paginate @book_titles
   
 javascript:
+  var update_borrowers_menu = function () {
+    var year = $("#borrowers-menu").data("year");
+    $.getJSON("/book_loans/borrowers.json?year="+year, null, function (data) {
+      var list = [];
+      $.each(data, function(i,rec){
+        list += "<li><a href='/employees/"+rec.id+"/book_loans?year="+year+"'>"+rec.name+"</a></li>";
+      });
+      $("#borrowers-options").html(list);
+      $("#borrowers-menu").dropdown();
+    });
+  };
+  var toggle_menu = function() {
+    if ($('input.checkbox:checked').length > 0) {
+      $('#context-buttons').show();
+      $('#default-buttons').hide();
+    } else {
+      $('#context-buttons').hide(); 
+      $('#default-buttons').show();
+    }
+  };
   $(document).ready(function(){
     $('input.checkbox').change( function() {
       toggle_menu();
@@ -122,14 +142,6 @@ javascript:
       $('input.checkbox').prop('checked', $("#checkbox-toggle").is(":checked"));
       toggle_menu();
     });
-    var toggle_menu = function() {
-      if ($('input.checkbox:checked').length > 0) {
-        $('#context-buttons').show();
-        $('#default-buttons').hide();
-      } else {
-        $('#context-buttons').hide(); 
-        $('#default-buttons').show();
-      }
-    };
+    update_borrowers_menu();
   });
   

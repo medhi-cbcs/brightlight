@@ -53,12 +53,11 @@ class BookLoan < ActiveRecord::Base
 
   def move_book(to:, to_year:nil)
     if to_year == nil or academic_year_id == to_year.id
-      # puts "Moving book"
       r = update_attribute :employee, to
+      return !!r
     else
-      # puts "Creating new"
       r = BookLoan.create attributes.except('created_at','updated_at','id').merge('employee_id'=>to.id,'academic_year_id'=>to_year.id)
+      return r.valid?
     end
-    return r.valid?
   end
 end

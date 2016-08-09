@@ -124,6 +124,12 @@ class BookLoansController < ApplicationController
     end
   end
 
+  def borrowers
+    authorize! :read, BookLoan
+    @borrowers = Employee.joins(:book_loans).where(book_loans: {academic_year: params[:year]}).order(:name).uniq
+    respond_to :json
+  end
+
   #### This section deals with teacher's loan
 
   # GET book_loans/teachers
@@ -271,22 +277,24 @@ class BookLoansController < ApplicationController
     employee = Employee.find params[:employee_id]
     target = Employee.find params[:to_teacher]
     year = AcademicYear.find params[:to_year]
-    @loan_ids = params[:add].map &:first
-    @completed = []
+    loan_ids = params[:add].map &:first
+    completed = []
+    ids_to_remove = []
     if params[:move]
-      puts "Moving books #{@loan_ids} from #{params[:employee_id]} to #{params[:to_teacher]}"
-      BookLoan.where(id:@loan_ids).each do |loan|
+      BookLoan.where(id:loan_ids).each do |loan|
         success = loan.move_book to:target, to_year:year
-        @completed << loan.id.to_s if success
-        puts "Loan #{loan.barcode} #{success ? 'OK' : 'Fail'}"
-        puts "Completed: #{@completed}"
+        completed << loan.id.to_s if success
+        ids_to_remove << loan.id.to_s if success and year == loan.academic_year
       end
-      @failed = @loan_ids - @completed
-      @failed_barcodes = @failed.map {|x| BookLoan.where(id:x).take.try(:barcode)}
-      puts "Failed: #{@failed_barcodes}"
+      failed = loan_ids - completed
     elsif params[:delete]
-      puts "Deleting selected books: #{@loan_ids}"
+      BookLoan.where(id:loan_ids).delete_all
+      ids_to_remove = loan_ids
     end
+    ids_to_uncheck = completed - ids_to_remove
+    @rows_to_remove = ids_to_remove.present? ? ids_to_remove.map{|id| '#row-'+id.to_s}.join(', ') : ""
+    @failed_barcodes = failed.present? ? failed.map {|x| BookLoan.where(id:x).take.try(:barcode)} : ""
+    @rows_to_uncheck = ids_to_uncheck.present? ? ids_to_uncheck.map{|id| '#add_'+id.to_s}.join(', ') : ""
     respond_to :js
   end
 
