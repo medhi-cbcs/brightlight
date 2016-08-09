@@ -1,0 +1,13 @@
+$("<%=j @rows_to_remove %>").remove();
+$("<%=j @rows_to_uncheck %>").prop("checked",false);
+<% if params[:move] %>
+  <% if @failed_barcodes.length > 0 %>
+    Materialize.toast("Error moving: <%= @failed_barcodes %>", 5000, "red");
+  <% else %>
+    Materialize.toast("Completed moving book loans", 5000, "green");
+  <% end %>
+<% elsif params[:delete] %>
+  Materialize.toast("Book loans deleted", 5000, "green");
+<% end %>
+update_borrowers_menu();
+toggle_menu();

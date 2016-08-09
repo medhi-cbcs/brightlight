@@ -65,7 +65,7 @@ class AcademicYearsController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_academic_year
-      @academic_year = AcademicYear.find_by_slug(params[:id])
+      @academic_year = AcademicYear.find params[:id]
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.

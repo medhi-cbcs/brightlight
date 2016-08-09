@@ -9,13 +9,20 @@ ul#grade-options.dropdown-content
 ul#section-options.dropdown-content
   - @grade_sections.each do |section|
     li
-      = link_to section.name, "#!", class:"grade-#{section.grade_level_id}", onclick:"filterTitleOptions(#{section.grade_level_id}, #{section.id}, '#{section.name}');"
+      = link_to section.name, "#!", class:"grade-#{section.grade_level_id}", onclick:"filterTitleOptions(#{section.grade_level_id}, #{section.id}, '#{section.name}', #{@year_id});"
 ul#title-options.dropdown-content
   - if @standard_books.present?
-    li = link_to 'All', by_title_student_books_path(s:@grade_section.id, g:@grade_level.id)
+    li = link_to 'All', by_title_student_books_path(year:@year_id, s:@grade_section.id, g:@grade_level.id)
     - @standard_books.each do |standard_book|
-      li = link_to standard_book.book_title.title, by_title_student_books_path(s:@grade_section.id, g:@grade_level.id, t:standard_book.book_title_id)
+      li = link_to standard_book.book_title.title, by_title_student_books_path(year:@year_id, s:@grade_section.id, g:@grade_level.id, t:standard_book.book_title_id)
 
+ul#year-options.dropdown-content
+  li  
+    = link_to 'All', by_title_student_books_path(params.merge(year:'all').symbolize_keys)
+  - AcademicYear.list_for_menu.each do |year|
+    li 
+      = link_to year.name, by_title_student_books_path(params.merge(year:year.id).symbolize_keys)
+      
 javascript:
   function filterSectionOptions(id, name) {
     var grade_ids = #{raw @grade_level_ids};
@@ -28,12 +35,12 @@ javascript:
       }
     })
   }
-  function filterTitleOptions(grade_level_id, grade_section_id, section_name) {
+  function filterTitleOptions(grade_level_id, grade_section_id, section_name, year) {
     $("#section").html(section_name);
-    $.getJSON("/standard_books.json?grade="+grade_level_id+"&section="+grade_section_id+"&category="+"TB", null, function (data) {
-      var list = "<li><a href='/student_books/by_title?s="+grade_section_id+"&"+"g="+grade_level_id+"'>All</a></li>";
+    $.getJSON("/standard_books.json?grade_level_id="+grade_level_id+"&section="+grade_section_id+"&category="+"TB"+"&year="+year, null, function (data) {
+      var list = "<li><a href='/student_books/by_title?s="+grade_section_id+"&g="+grade_level_id+"&year="+year+"'>All</a></li>";
       $.each(data, function(i,item){
-          list += "<li><a href='/student_books/by_title?s="+grade_section_id+"&g="+item.grade_level_id+"&t="+item.id+"'>"+item.title+"</a></li>";
+          list += "<li><a href='/student_books/by_title?s="+grade_section_id+"&g="+item.grade_level_id+"&t="+item.id+"&year="+year+"'>"+item.title+"</a></li>";
       });
       $("#title-options").html(list);
     });
@@ -45,23 +52,28 @@ javascript:
     .nav-wrapper
       ul
         li 
-          = link_to 'PDF Format', by_title_student_books_path(s:params[:s],t:params[:t], format: :pdf), target: '_blank'
-        - if @book_titles.present?
+          = link_to 'PDF Format', by_title_student_books_path(year:params[:year],s:params[:s],t:params[:t], format: :pdf), target: '_blank'
+        - if @book_titles.present? and @disable_status
           li  
             button.btn.waves-effect.waves-light type="submit" Save 
-        li.right
-          a#student-menu.dropdown-button href="#!" data-activates="title-options"
-            span#title = params[:t].present? ? "#{@book_titles.first[:title].title.truncate(30)}" : 'Choose book'
+      ul.right
+        li 
+          a.dropdown-button href="#!" data-activates="year-options"
+            span#year = @academic_year.name
             i.material-icons.right arrow_drop_down
-        li.right
-          a.dropdown-button href="#!" data-activates="section-options"
-            span#section = params[:l].present? ? "Section #{@grade_section_name}" : 'Choose class'
-            i.material-icons.right arrow_drop_down
-        li.right
+        li
           a.dropdown-button href="#!" data-activates="grade-options"
-            span#grade = params[:l].present? ? "Grade #{@grade_level_name}" : 'Choose grade'
+            span#grade = params[:l].present? ? "#{@grade_level_name}" : 'Grade'
             i.material-icons.right arrow_drop_down
-
+        li
+          a.dropdown-button href="#!" data-activates="section-options"
+            span#section = params[:l].present? ? "#{@grade_section_name}" : 'Class'
+            i.material-icons.right arrow_drop_down
+        li
+          a#student-menu.dropdown-button href="#!" data-activates="title-options"
+            span#title = params[:t].present? ? "#{@book_titles.first[:title].title.truncate(25)}" : 'Book'
+            i.material-icons.right arrow_drop_down
+            
   - if @book_titles.present?
     - @book_titles.each do |book_title|
       h4 = book_title[:title].title

@@ -33,7 +33,7 @@ ul#year-options.dropdown-content
     = link_to 'All', book_loans_path(params.merge(year:'all').symbolize_keys)
   - AcademicYear.all.each do |year|
     li 
-      = link_to year.name, book_loans_path(params.merge(year:year.slug).symbolize_keys)
+      = link_to year.name, book_loans_path(params.merge(year:year.id).symbolize_keys)
 // NOTE: for these wierd .symbolize_keys, refer to this article https://github.com/rails/rails/issues/21645
 
 nav

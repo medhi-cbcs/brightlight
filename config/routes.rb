@@ -117,7 +117,8 @@ Rails.application.routes.draw do
     collection do
       get 'teachers'
       post 'initialize_teachers'
-      post 'move_teachers_books'
+      post 'move_all'
+      get 'borrowers'
     end
   end
 
@@ -135,6 +136,7 @@ Rails.application.routes.draw do
   get  'employees/:employee_id/book_loans/new' => 'book_loans#new_tm', as: :new_employee_book_loans
   get  'employees/:employee_id/book_loans/scan' => 'book_loans#scan', as: :scan_employee_book_loans
   get  'employees/:employee_id/book_loans/:id' => 'book_loans#show_tm', as: :employee_book_loan
+  post 'employees/:employee_id/book_loans/list_action' => 'book_loans#list_action', as: :list_action_book_loans
   patch  'employees/:employee_id/book_loans/:id' => 'book_loans#update_tm'
   put  'employees/:employee_id/book_loans/:id' => 'book_loans#update_tm'
   delete  'employees/:employee_id/book_loans/:id' => 'book_loans#destroy_tm'

@@ -19,7 +19,7 @@ namespace :data do
     sheet.each_with_index(header) do |row,i|
 			next if i < 1
 			# break if i > 50
-			
+
       gender = ['MALE','FEMALE'].include? row[:gender] ? row[:gender].titleize : '0 '
       student = Student.new(
         student_no:row[:student_no], family_no:row[:family_no], name:row[:name].titleize, nick_name:row[:nick_name].titleize, gender:gender,
@@ -37,7 +37,7 @@ namespace :data do
         prev_sch_name:row[:prev_sch_name].titleize, prev_sch_grade:row[:prev_sch_grade],
 				prev_sch_address:row[:prev_sch_address].split.map {|s| !s.match(/\A[^AUIEO]+\z/) ? s.capitalize : s}.join(' '), skhun:row[:skhun], skhun_date:row[:skhun_date],
         diploma:row[:diploma], diploma_date:row[:diploma_date], nisn:row[:nisn], duration:row[:duration], acceptance_date_1:row[:acceptance_date_1],
-				acceptance_date_2:row[:acceptance_date_2], reason:row[:reason], status:row[:status], notes:row[:notes], academic_year:AcademicYear.find_by_slug(row[:academic_year])
+				acceptance_date_2:row[:acceptance_date_2], reason:row[:reason], status:row[:status], notes:row[:notes], academic_year:AcademicYear.find_by_name(row[:academic_year])
       )
 			puts "#{i}. #{student.name} (No:#{student.student_no}/Fam:#{student.family_no}) - #{student.student_admission_info.academic_year.try(:name)} - Valid: #{student.valid?}"
       student.save
