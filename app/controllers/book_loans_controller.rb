@@ -54,7 +54,7 @@ class BookLoansController < ApplicationController
 
     if @book_loans.present?
       if params[:year].present?
-        @academic_year = AcademicYear.find_by_slug params[:year]
+        @academic_year = AcademicYear.find params[:year]
         @book_loans = @book_loans.where(academic_year:@academic_year) if params[:year].upcase != 'ALL'
       else
         @book_loans = @book_loans.where(academic_year:AcademicYear.current_id)

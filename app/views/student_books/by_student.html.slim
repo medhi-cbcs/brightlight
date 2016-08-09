@@ -130,12 +130,9 @@ ul#year-options.dropdown-content
                     = f.radio_button :end_copy_condition_id, 5, disabled:@disable_status.to_s
                     = f.label :end_copy_condition_id_5, "Missing", class:'small-radio-label'
                   td.wd5 style='text-align:center;' 
-                    /= check_box_tag "status#{book.id}", "repair[#{book.id}]"
-                    /= label_tag "status#{book.id}_repair[#{book.id}]", 'NR', class:'small-radio-label'
                     = f.check_box :needs_rebinding, disabled:@disable_status.to_s
                     = f.label :needs_rebinding, 'NR', class:'small-radio-label;font-size:2px'
                   td.wd20
-                    /= f.text_field_tag "notes#{book.id}"
                     = f.text_field :notes, disabled:@disable_status.to_s
 
       .page-break    

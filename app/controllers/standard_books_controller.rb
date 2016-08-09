@@ -23,7 +23,7 @@ class StandardBooksController < ApplicationController
       end
 
       if params[:year].present?
-        @academic_year = AcademicYear.find_by_slug params[:year]
+        @academic_year = AcademicYear.find_by_id params[:year]
         @standard_books = @standard_books.where(academic_year:@academic_year) if params[:year].upcase != 'ALL'
       else
         @standard_books = @standard_books.where(academic_year:current_academic_year_id)
@@ -48,7 +48,7 @@ class StandardBooksController < ApplicationController
     authorize! :manage, StandardBook
     @standard_book = StandardBook.new
     @grade_level = GradeLevel.find params[:grade_level_id]
-    @academic_year = AcademicYear.find_by_slug(params[:year]) || AcademicYear.current
+    @academic_year = AcademicYear.find(params[:year]) || AcademicYear.current
   end
 
   # GET /standard_books/1/edit
@@ -71,7 +71,7 @@ class StandardBooksController < ApplicationController
         format.js
       else
         format.html {
-          @academic_year = AcademicYear.find_by_slug(params[:year]) || AcademicYear.current
+          @academic_year = AcademicYear.find(params[:year]) || AcademicYear.current
           render :new
         }
         format.json { render json: @standard_book.errors, status: :unprocessable_entity }
@@ -86,7 +86,7 @@ class StandardBooksController < ApplicationController
     authorize! :update, StandardBook
     respond_to do |format|
       if @standard_book.update(standard_book_params)
-        format.html { redirect_to grade_level_standard_books_path(grade_level_id:@standard_book.grade_level_id,year:@standard_book.academic_year.slug, track:@standard_book.track), notice: 'Standard book was successfully updated.' }
+        format.html { redirect_to grade_level_standard_books_path(grade_level_id:@standard_book.grade_level_id,year:@standard_book.academic_year.id, track:@standard_book.track), notice: 'Standard book was successfully updated.' }
         format.json { render :show, status: :ok, location: @standard_book }
       else
         format.html { render :edit }
