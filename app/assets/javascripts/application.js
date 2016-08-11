@@ -13,7 +13,6 @@
 //= require jquery2
 //= require jquery.turbolinks
 //= require jquery_ujs
-//= require turbolinks
 //= require jquery-ui
 //= require jquery-ui/autocomplete
 //= require autocomplete-rails
@@ -28,3 +27,4 @@
 //= require nprogress-ajax
 //= require jquery-code-scanner.js
 //= require init.js
+//= require turbolinks

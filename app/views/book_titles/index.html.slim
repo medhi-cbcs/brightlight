@@ -5,22 +5,22 @@
     = form_tag({controller:'book_titles', action:'index'}, {method:'get'}) do 
       .input-field
         input type="hidden" name="v" value=@view_style
-        - if params[:search].present?
+        - if params[:term].present?
           i.material-icons.prefix onclick='reset_form()' style='cursor:pointer'
             | highlight_off
         - else
           i.material-icons.prefix search
-        input.icon-prefix type="text" name="search" placeholder="Search" value=params[:search]    
+        input.icon-prefix type="text" name="term" placeholder="Search" value=params[:term]    
   .col.s3
     = form_tag({controller:'book_titles', action:'index'}, {method:'get'}) do 
       .input-field
         input type="hidden" name="v" value=@view_style
-        - if params[:barcode].present?
+        - if params[:copy].present?
           i.material-icons.prefix onclick='reset_form()' style='cursor:pointer'
             | highlight_off
         - else
           i.material-icons.prefix search
-        input.icon-prefix type="text" name="barcode" placeholder="Barcode" value=params[:barcode]
+        input.icon-prefix type="text" name="copy" placeholder="Barcode" value=params[:copy]
           
 = form_tag do
   nav

@@ -47,30 +47,17 @@ nav
       tbody#conditions
         
 javascript:
-  $(document).ready(function() {
-    var pressed = false;
-    var chars = [];    
-    $(window).keypress(function(e) {
-      if (e.which >= 45 && e.which <= 112) {
-          chars.push(String.fromCharCode(e.which));
+  (function() {
+    $("[name='barcode']").codeScanner({
+      minEntryChars: 11,
+      onScan: function($element, barcode) {
+        $.getJSON("/book_copies/"+barcode+".json", null, function (data) {
+          update_book_condition(data);
+        }).fail(function(xhr){
+          $($element).val('');
+          Materialize.toast($.parseJSON(xhr.responseText).errors, 5000, 'red');
+        });            
       }
-      if (pressed == false) {
-        setTimeout(function(){
-          if (chars.length >= 11) {
-            var barcode = chars.join("");
-            $("[name='barcode']").val(barcode);
-            $.getJSON("/book_copies/"+barcode+".json", null, function (data) {
-              update_book_condition(data);
-            }).fail(function(){
-              $(e.target).val('');
-              Materialize.toast("Invalid barcode.", 5000, 'red');
-            });            
-          }
-          chars = [];
-          pressed = false;
-        },500);
-      }
-      pressed = true;
     });
     $(document).on("keypress","[name='barcode']", (function(e){  
       var c = String.fromCharCode(e.which);
@@ -80,9 +67,9 @@ javascript:
         e.preventDefault();
         $.getJSON("/book_copies/"+barcode+".json", null, function (data) {
           update_book_condition(data);
-        }).fail(function(){
+        }).fail(function(xhr){
           $(e.target).val('');
-          Materialize.toast("Invalid barcode.", 5000, 'red');
+          Materialize.toast($.parseJSON(xhr.responseText).errors, 5000, 'red');
         });
       }
     }));
@@ -106,14 +93,15 @@ javascript:
         contentType: "application/json; charset=utf-8",
         url: url,
         data: jsonData,
-        dataType: 'json',
-        success: function(m) {
-          Materialize.toast('Book checked', 5000, 'green');
-          $("tbody#conditions").prepend("<tr><td>"+book.barcode+"</td><td>"+book.book_edition.title+"</td><td>"+$("#book_condition_id option:selected").text()+"</td><td>"+($("[name=post]:checked").val() === "0" ? "Initial" : "Return")+"</td><td>"+$("[name=notes]").val()+"</td></tr>");
-        },
-        error: function(e) {
-          Materialize.toast('Book check error', 5000, 'red');
-        }
+        dataType: 'json'
+      })
+      .done(function(m) {
+        Materialize.toast('Book checked', 5000, 'green');
+        var action = '<a data-confirm="Are you sure?" rel="nofollow" data-message="Condition deleted." data-id="'+m.id+'" data-method="delete" data-remote="true" href="/copy_conditions/'+m.id+'" class="delete-link"><i class="material-icons red-text">delete</i></a>'
+        $("tbody#conditions").prepend("<tr id='row-"+m.id+"'><td>"+book.barcode+"</td><td>"+book.book_edition.title+"</td><td>"+$("#book_condition_id option:selected").text()+"</td><td>"+($("[name=post]:checked").val() === "0" ? "Initial" : "Return")+"</td><td>"+m.notes+"</td><td>"+action+"</td></tr>");
+      })
+      .fail(function(e) {        
+        Materialize.toast('Book check error', 5000, 'red');
       });      
     }
-  });
+  })(jQuery);

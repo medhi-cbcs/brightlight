@@ -9,22 +9,14 @@ li
 				= form_tag book_titles_path, method:'get' do 
 					.input-field
 						input type="hidden" name="v" value=@view_style
-						- if params[:search].present?
-							i.material-icons.prefix onclick='reset_form()' style='cursor:pointer'
-								| highlight_off
-						- else
-							i.material-icons.prefix search
-						input.icon-prefix type="text" name="search" placeholder="Title/ISBN" value=params[:search]
+						i.material-icons.prefix search
+						input.icon-prefix type="text" name="term" placeholder="Title/ISBN"
 			li
 				= form_tag book_titles_path, method:'get' do 
 					.input-field
 						input type="hidden" name="v" value=@view_style
-						- if params[:barcode].present?
-							i.material-icons.prefix onclick='reset_form()' style='cursor:pointer'
-								| highlight_off
-						- else
-							i.material-icons.prefix search
-						input.icon-prefix type="text" name="barcode" placeholder="Barcode" value=params[:barcode]
+						i.material-icons.prefix search
+						input.icon-prefix type="text" name="copy" placeholder="Barcode"
 						
 li
 	.collapsible-header.waves-effect.waves-cyan
