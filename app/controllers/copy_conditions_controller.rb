@@ -25,7 +25,7 @@ class CopyConditionsController < ApplicationController
 
   # GET /copy_conditions/new
   def new
-    @copy_condition = CopyCondition.new
+    @copy_condition = CopyCondition.new    
     @academic_year = AcademicYear.current
   end
 
@@ -98,11 +98,14 @@ class CopyConditionsController < ApplicationController
   # DELETE /copy_conditions/1
   # DELETE /copy_conditions/1.json
   def destroy
-    @book_copy = @copy_condition.book_copy
     @copy_condition.destroy
     respond_to do |format|
-      format.html { redirect_to book_copy_conditions_url(@book_copy.id), notice: 'Copy condition was successfully destroyed.' }
+      format.html {
+        @book_copy = @copy_condition.book_copy
+        redirect_to book_copy_conditions_url(@book_copy.id), notice: 'Copy condition was successfully destroyed.'
+      }
       format.json { head :no_content }
+      format.js { head :no_content }
     end
   end
 
