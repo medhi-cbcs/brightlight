@@ -1,2 +1,2 @@
-$("tr#row-<%= @department.id%>").html("<%=j render partial:'index_row', locals: {department: @department}%>");
+$("tr#row-<%= @department.id%>").replaceWith("<%=j render partial:'index_row', locals: {department: @department}%>");
 Materialize.toast("Deparment <%= @department.try(:name)%> updated.", 4000, "green")
