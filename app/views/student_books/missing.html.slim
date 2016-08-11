@@ -8,33 +8,32 @@ ul#grade-options.dropdown-content
 ul#section-options.dropdown-content
   - @grade_sections.each do |section|
     li
-      = link_to section.name, missing_student_books_path(l:section.grade_level_id,s:section.id), class:"grade-#{section.grade_level_id}"
-      
-javascript:
-  function filterSectionOptions(id, name) {
-    var grade_ids = #{raw @grade_level_ids};
-    $("#grade").html(name);
-    grade_ids.forEach(function(g){
-      if(id!=g) {
-        $(".grade-"+g).hide();
-      } else {
-        $(".grade-"+id).show();
-      }
-    })
-  }
+      = link_to section.name, missing_student_books_path(params.merge(l:section.grade_level_id,s:section.id)), class:"grade-#{section.grade_level_id}"
 
+ul#year-options.dropdown-content
+  li  
+    = link_to 'All', missing_student_books_path(params.merge(year:'all').symbolize_keys)
+  - AcademicYear.list_for_menu.each do |year|
+    li 
+      = link_to year.name, missing_student_books_path(params.merge(year:year.id).symbolize_keys)
+      
 nav
   .nav-wrapper
     ul
       li 
-        = link_to 'Acknowledgement (PDF)', missing_student_books_path(s:params[:s],l:params[:l], format: :pdf), target: '_blank'
-      li.right
-        a.dropdown-button href="#!" data-activates="section-options"
-          span#section = params[:s].present? ? "#{@grade_section.name}" : 'Choose class'
-          i.material-icons.right arrow_drop_down
-      li.right
+        = link_to 'Acknowledgement (PDF)', missing_student_books_path(year:params[:year],s:params[:s],l:params[:l], format: :pdf), target: '_blank'
+    ul.right
+      li 
+        a.dropdown-button href="#!" data-activates="year-options"
+          span#year = @academic_year.name
+          i.material-icons.right arrow_drop_down  
+      li
         a.dropdown-button href="#!" data-activates="grade-options"
           span#grade = params[:l].present? ? "#{@grade_level.name}" : 'Choose grade'
+          i.material-icons.right arrow_drop_down
+      li
+        a.dropdown-button href="#!" data-activates="section-options"
+          span#section = params[:s].present? ? "#{@grade_section.name}" : 'Choose class'
           i.material-icons.right arrow_drop_down
 
 - @students.each do |student|
@@ -72,17 +71,7 @@ nav
                 - currency = book.try(:book_copy).try(:book_edition).try(:currency).try(:upcase)
                 - total_usd += fine if currency == 'USD'
                 - total_idr += fine if currency == 'IDR'
-                = "#{currency} #{fine}"
-          / -if total_usd > 0.0
-          /   tr
-          /     td colspan=4  
-          /     td.wd5 style='text-align:right;' Total USD 
-          /     td.wd5 style='text-align:right;' =  total_usd 
-          / -if total_idr > 0.0
-          /   tr 
-          /     td colspan=4 
-          /     td.wd5 style='text-align:right;' Total IDR 
-          /     td.wd5 style='text-align:right;' =  total_idr           
+                = "#{currency} #{fine}"        
           tr 
             td colspan=2
               -if total_usd > 0.0
@@ -91,3 +80,16 @@ nav
             td.wd5 style='text-align:right;' Total IDR 
             td.wd5 style='text-align:right;' =  total_idr +  total_usd * Currency.dollar_rate
       
+      
+javascript:
+  function filterSectionOptions(id, name) {
+    var grade_ids = #{raw @grade_level_ids};
+    $("#grade").html(name);
+    grade_ids.forEach(function(g){
+      if(id!=g) {
+        $(".grade-"+g).hide();
+      } else {
+        $(".grade-"+id).show();
+      }
+    })
+  }

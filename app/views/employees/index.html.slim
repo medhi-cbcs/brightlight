@@ -39,7 +39,7 @@ nav
         tr
           td = link_to employee.name, employee
           td = employee.job_title
-          td = employee.department || "--"
+          td = link_to employee.department || "--", employee.department 
           - if can? :edit, Employee
             td = link_to 'Edit', edit_employee_path(employee), class: "btn waves-effect waves-teal btn-flat btn-small"
 

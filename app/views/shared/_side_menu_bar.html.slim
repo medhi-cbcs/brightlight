@@ -99,11 +99,9 @@ li
 			li
 				= link_to 'Grade Levels', grade_levels_path
 			li
-				= link_to 'Standard Books', standard_books_path
-			li
 				= link_to 'Departments', departments_path
-			li
-				= link_to 'Courses', courses_path
+			/ li
+			/ 	= link_to 'Courses', courses_path
 li
 	.collapsible-header.waves-effect.waves-cyan
 		i.material-icons people
@@ -116,9 +114,9 @@ li
 			li
 				a href="/guardians" Guardians
 			li
-				a href="/employees?q=teacher" Teachers
-			li
-				a href="/employees?q=staff" Staff
+				a href="/employees" Employees
+			/ li
+			/ 	a href="/employees?q=staff" Staff
 - if signed_in? and current_user.admin?
 	li
 		.collapsible-header.waves-effect.waves-cyan
