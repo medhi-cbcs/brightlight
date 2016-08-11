@@ -6,7 +6,7 @@ class BookCopy < ActiveRecord::Base
   # validates :book_edition, :book_condition, :copy_no, presence: true
   validates :book_edition, presence: true
   validates :barcode, presence: true, uniqueness: true
-  has_many :copy_conditions
+  has_many :copy_conditions, dependent: :destroy
   has_many :book_loans
 
   after_create :create_initial_condition

@@ -15,6 +15,7 @@ class CopyCondition < ActiveRecord::Base
 
   around_save :update_book_copy_condition
   after_create :synchronize_book_copy_condition
+  after_destroy :revert_book_copy_condition
 
   def update_book_copy_condition
     old_condition_id = book_condition_id
@@ -28,6 +29,10 @@ class CopyCondition < ActiveRecord::Base
 
   def synchronize_book_copy_condition
     book_copy.update_attribute :book_condition_id, book_condition_id
+  end
+
+  def revert_book_copy_condition
+    book_copy.update_attribute :book_condition_id, book_copy.copy_conditions.order(:updated_at).take.try(:book_condition_id)
   end
 
 end

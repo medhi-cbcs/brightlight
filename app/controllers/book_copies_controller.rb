@@ -28,7 +28,7 @@ class BookCopiesController < ApplicationController
   # GET /book_copies/1.json
   def show
     respond_to do |format|
-      format.html {
+      format.html do
         set_book_copy
         if @book_copy.present?
           @barcode = Barby::Code128B.new(@book_copy.barcode)
@@ -38,17 +38,18 @@ class BookCopiesController < ApplicationController
           end unless File.exist?(filepath)
           @barcode_for_html = Barby::HtmlOutputter.new(@barcode)
         end
-      }
-      format.json {
+      end
+      format.json do
         @book_copy = BookCopy.where('UPPER(barcode) = ?', params[:id].upcase).includes(:book_edition => :book_title).take
-        @book_edition = @book_copy.book_edition
-        @book_title = @book_edition.try(:book_title)
-        @student = Student.find params[:st] if params[:st].present?
-        @employee = Employee.find params[:empl] if params[:empl].present?
-        if @book_copy.blank?
-          render json: {}, status: :unprocessable_entity
+        if @book_copy.present?
+          @book_edition = @book_copy.book_edition
+          @book_title = @book_edition.try(:book_title)
+          @student = Student.find params[:st] if params[:st].present?
+          @employee = Employee.find params[:empl] if params[:empl].present?
+        else
+          render json: {errors:"Invalid barcode"}, status: :unprocessable_entity
         end
-      }
+      end
     end
   end
 
@@ -56,13 +57,13 @@ class BookCopiesController < ApplicationController
   def check_barcode
     set_book_copy
     respond_to do |format|
-      format.json {
+      format.json do
         if @book_copy.present?
           render json: { barcode: @book_copy.barcode }
         else
           render json: {}, status: :unprocessable_entity
         end
-      }
+      end
     end
   end
 

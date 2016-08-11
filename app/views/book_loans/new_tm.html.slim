@@ -39,7 +39,7 @@ javascript:
     onScan: function($element, barcode) {
       $.getJSON("/book_copies/"+barcode+".json?empl="+#{@teacher.id}, null, function (data) {
         insert_values(data);
-      }).fail(function(){
+      }).fail(function(data){
         $($element).val('');
         Materialize.toast("Invalid barcode.", 4000, 'red');
       });            

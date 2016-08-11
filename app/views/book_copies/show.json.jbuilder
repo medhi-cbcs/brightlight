@@ -37,8 +37,8 @@ json.book_copy do
     json.return_date    loan.try(:return_date)
   end
 
-  json.book_edition do
-    if @book_edition.present?
+  if @book_edition.present?
+    json.book_edition do
       json.id @book_edition.id
       json.title @book_edition.title
       json.isbn10 @book_edition.isbn10
@@ -50,9 +50,9 @@ json.book_copy do
       json.small_thumbnail @book_edition.small_thumbnail
     end
   end
-
-  json.book_title do
-    if @book_title.present?
+  
+  if @book_title.present?
+    json.book_title do
       json.id @book_title.id
       json.title @book_title.title
       json.bkudid @book_title.bkudid
