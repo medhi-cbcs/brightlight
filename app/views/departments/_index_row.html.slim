@@ -1,9 +1,10 @@
-td = link_to department.name, department, remote: true
-td = department.code
-td = department.manager || "--"
+tr id="row-#{department.id}"
+  td = link_to department.name, department, remote: true
+  td = department.code
+  td = department.manager || "--"
 
-td 
-  = link_to edit_department_path(department), remote: true, class: "waves-effect waves-teal"
-    i.material-icons edit
-  = remote_link_to_delete department, message: "Department deleted", class: "left waves-effect waves-light red-text"
-    i.material-icons delete
+  td 
+    = link_to edit_department_path(department), remote: true, class: "waves-effect waves-teal"
+      i.material-icons edit
+    = remote_link_to_delete department, message: "Department deleted", class: "left waves-effect waves-light red-text"
+      i.material-icons delete

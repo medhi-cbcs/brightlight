@@ -9,7 +9,7 @@ nav
           i.material-icons.left add
 
 .card-panel
-  table.striped
+  table.compact.striped
     thead
       tr
         th Name
@@ -17,7 +17,7 @@ nav
         th Manager
         th Actions
 
-    tbody
+    tbody#departments
       - @departments.each do |department|
         tr id="row-#{department.id}"
           = render partial: 'index_row', locals: {department: department}

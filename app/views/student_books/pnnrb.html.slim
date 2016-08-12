@@ -8,20 +8,15 @@ ul#grade-options.dropdown-content
 ul#section-options.dropdown-content
   - @grade_sections.each do |section|
     li
-      = link_to section.name, pnnrb_student_books_path(l:section.grade_level_id,s:section.id), class:"grade-#{section.grade_level_id}"
-      
-javascript:
-  function filterSectionOptions(id, name) {
-    var grade_ids = #{raw @grade_level_ids};
-    $("#grade").html(name);
-    grade_ids.forEach(function(g){
-      if(id!=g) {
-        $(".grade-"+g).hide();
-      } else {
-        $(".grade-"+id).show();
-      }
-    })
-  }
+      = link_to section.name, pnnrb_student_books_path(year:@year_id,l:section.grade_level_id,s:section.id), class:"grade-#{section.grade_level_id}"
+
+ul#year-options.dropdown-content
+  li  
+    = link_to 'All', pnnrb_student_books_path(params.merge(year:'all').symbolize_keys)
+  - AcademicYear.list_for_menu.each do |year|
+    li 
+      = link_to year.name, pnnrb_student_books_path(params.merge(year:year.id).symbolize_keys)
+
 
 nav
   .nav-wrapper
@@ -30,15 +25,19 @@ nav
         = link_to '#', onclick: 'window.print();return false;' 
           | Print
           i.material-icons.left print
-      li.right
-        a.dropdown-button href="#!" data-activates="section-options"
-          span#section = params[:s].present? ? "#{@grade_section.name}" : 'Choose class'
-          i.material-icons.right arrow_drop_down
-      li.right
+    ul.right
+      li 
+        a.dropdown-button href="#!" data-activates="year-options"
+          span#year = @academic_year.name
+          i.material-icons.right arrow_drop_down  
+      li
         a.dropdown-button href="#!" data-activates="grade-options"
           span#grade = params[:l].present? ? "#{@grade_level.name}" : 'Choose grade'
           i.material-icons.right arrow_drop_down
-
+      li
+        a.dropdown-button href="#!" data-activates="section-options"
+          span#section = params[:s].present? ? "#{@grade_section.name}" : 'Choose class'
+          i.material-icons.right arrow_drop_down
 
 .card-panel    
   table.compact.striped
@@ -64,6 +63,17 @@ nav
           td.wd10 style='text-align:center;' 
             = book.try(:end_copy_condition).try(:code)
           td.wd20 style='text-align:right;'
-            = book.needs_rebinding ? '&#9745;'.html_safe : '&#9744;'.html_safe
-        
-      
+            = book.needs_rebinding ? '&#9745;'.html_safe : '&#9744;'.html_safe        
+              
+javascript:
+  function filterSectionOptions(id, name) {
+    var grade_ids = #{raw @grade_level_ids};
+    $("#grade").html(name);
+    grade_ids.forEach(function(g){
+      if(id!=g) {
+        $(".grade-"+g).hide();
+      } else {
+        $(".grade-"+id).show();
+      }
+    })
+  }    

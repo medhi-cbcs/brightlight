@@ -183,9 +183,10 @@ class StudentBooksController < ApplicationController
   # GET /student_books/missing
   def missing
     authorize! :manage, StudentBook
-    @year_id = AcademicYear.current_id
-    @grade_level_ids = GradeLevel.all.collect(&:id)
-    @grade_sections = GradeSection.where(academic_year_id: @year_id)
+    @year_id = params[:year] || AcademicYear.current_id
+    @academic_year = AcademicYear.find @year_id
+    @grade_level_ids = GradeLevel.all.order(:id).collect(&:id)
+    @grade_sections = GradeSection.all.order(:id)
     @grade_sections_ids = @grade_sections.collect(&:id)
 
     @grade_section = GradeSection.where(id:params[:s]).take if params[:s].present?
@@ -225,9 +226,10 @@ class StudentBooksController < ApplicationController
   # GET /student_books/pnnrb
   def pnnrb
     authorize! :read, @student_book
-    @year_id = AcademicYear.current_id
-    @grade_level_ids = GradeLevel.all.collect(&:id)
-    @grade_sections = GradeSection.where(academic_year_id: @year_id)
+    @year_id = params[:year] || AcademicYear.current_id
+    @academic_year = AcademicYear.find @year_id
+    @grade_level_ids = GradeLevel.all.order(:id).collect(&:id)
+    @grade_sections = GradeSection.all.order(:id)
     @grade_sections_ids = @grade_sections.collect(&:id)
 
     @grade_section = GradeSection.where(id:params[:s]).take if params[:s].present?

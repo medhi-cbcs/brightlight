@@ -12,14 +12,15 @@
 
 - if @members.present?
   .card-panel
-    .row
-      .col.s10
-        .list_description
-          - @members.each do |member|
-            dl.row
-              dd.col.s4
-                .label Name:
-                .item = link_to member.name, member
-              dd.col.s4
-                .label Phone:
-                .item = member.mobile_phone
+    h5 Members
+    table.compact.striped
+      thead
+        tr 
+          th No
+          th Name  
+          th Phone
+      - @members.each_with_index do |member,i|
+        tr
+          td.wd5 = i+1
+          td = link_to member.name, member
+          td = member.mobile_phone

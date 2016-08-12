@@ -10,7 +10,7 @@ class AcademicYear < ActiveRecord::Base
 	default_scope { order(:id) }
 
 	class << self
-    attr_accessor :current_id
+    attr_accessor :current_id, :current_name
 	end
 
 	def self.current

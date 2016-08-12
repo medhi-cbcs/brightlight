@@ -8,9 +8,9 @@ class EmployeesController < ApplicationController
       format.html {
         items_per_page = 20
         if params[:search]
-          @employees = Employee.where('UPPER(name) LIKE ?', "%#{params[:search].upcase}%").paginate(page: params[:page], per_page: items_per_page)
+          @employees = Employee.where('UPPER(name) LIKE ?', "%#{params[:search].upcase}%").order(:name).paginate(page: params[:page], per_page: items_per_page)
         else
-          @employees = Employee.paginate(page: params[:page], per_page: items_per_page)
+          @employees = Employee.order(:name).paginate(page: params[:page], per_page: items_per_page)
         end
       }
       format.csv {
