@@ -1,7 +1,3 @@
-require 'barby/barcode/code_128'
-require 'barby/outputter/png_outputter'
-require 'barby/outputter/html_outputter'
-
 class StudentBooksController < ApplicationController
   before_action :set_student_book, only: [:show, :edit, :update, :destroy]
 
