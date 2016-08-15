@@ -34,7 +34,6 @@ h4 Book Copy
               dl.row
                 dd.col.s3
                   .label Barcode
-                  /=raw @barcode_for_html.to_html
                   = image_tag("/assets/images/#{@book_copy.barcode.upcase}.PNG")
                   h6#barcode = @book_copy.barcode
                 dd.col.s3 &nbsp;

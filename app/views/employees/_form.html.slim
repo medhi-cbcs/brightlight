@@ -47,7 +47,7 @@
       .section-header.col.s12 Employment
       .input-field.col.s4
         = f.label :department_id, class: 'active'
-        = f.collection_select :department_id, Department.all, :id, :name, prompt: true
+        = f.collection_select :department_id, Department.all.order(:name), :id, :name, prompt: true
       .input-field.col.s4
         = f.label :joining_date, class: 'active'
         = f.date_field :joining_date
@@ -68,7 +68,7 @@
         = f.select :employment_status, [['Probation','probation'],['Contract','contract'],['Permanent','permanent']]
       .input-field.col.s4
         = f.label :supervisor_id, class: 'active'
-        = f.collection_select :supervisor_id, Employee.all, :id, :name, prompt: true
+        = f.collection_select :supervisor_id, Employee.all.order(:name), :id, :name, prompt: true
 
     .row
       .section-header.col.s12 Contacts
@@ -136,7 +136,7 @@
 
   .toolbar.z-depth-1
     button.btn.waves-effect.waves-light type="submit" Save
-    = link_to 'Upload photo', "#", class: "waves-effect waves-teal btn btn-default"
+    /= link_to 'Upload photo', "#", class: "waves-effect waves-teal btn btn-default"
     = link_to 'Cancel', employees_path, class: "waves-effect waves-teal btn-flat"
     - if params[:action] =~ /edit/
       = link_to 'Delete', @employee, data: {confirm: 'Are you sure?'}, method: :delete, class: "right btn waves-effect waves-teal red" 
