@@ -39,11 +39,8 @@ h5 Check Book Condition and Return #{'( '+@grade_section.name+' )' if @grade_sec
             td.wd20
               span = book.try(:book_edition).try(:title).truncate(40)
             td.wd17 style='text-align:center'
-              - barcode = Barby::Code128B.new(book.barcode)
-              - filepath = "public/assets/images/#{book.barcode.upcase}.PNG"
-              - File.open(filepath,'wb'){|file| file.write barcode.to_png(height:20,margin:0)} unless File.exist?(filepath)
+              - Barcode.new(book.barcode).write_image
               = wicked_pdf_image_tag  "/assets/images/#{book.barcode.upcase}.PNG"
-              /=raw Barby::HtmlOutputter.new(Barby::Code128B.new(book.barcode)).to_html 
               = book.barcode
             
             td.wd10 style='text-align:center;' 

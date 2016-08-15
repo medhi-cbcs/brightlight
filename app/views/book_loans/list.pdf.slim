@@ -15,10 +15,7 @@ table style="width:100%"
     - @book_loans.each_with_index do |book_loan, i|
       tr style='border-bottom:1px solid gainsboro'
         td = "#{i+1}."
-        - filepath = "public/assets/images/#{book_loan.barcode.upcase}.PNG"
-        - unless File.exist?(filepath)
-          - barcode = Barby::Code128B.new(book_loan.barcode)
-          - File.open(filepath,'wb'){|file| file.write barcode.to_png(height:20,margin:0)} 
+        - Barcode.new(book_loan.barcode).write_image
         td = wicked_pdf_image_tag "/assets/images/#{book_loan.barcode.upcase}.PNG"
         td = book_loan.barcode.upcase
         td = book_loan.book_edition.try(:title).truncate(60)

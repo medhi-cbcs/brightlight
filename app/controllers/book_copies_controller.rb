@@ -1,7 +1,3 @@
-require 'barby/barcode/code_128'
-require 'barby/outputter/png_outputter'
-require 'barby/outputter/html_outputter'
-
 class BookCopiesController < ApplicationController
   before_action :set_book_copy, only: [:edit, :destroy]
 
@@ -30,14 +26,7 @@ class BookCopiesController < ApplicationController
     respond_to do |format|
       format.html do
         set_book_copy
-        if @book_copy.present?
-          @barcode = Barby::Code128B.new(@book_copy.barcode)
-          filepath = "public/assets/images/#{@book_copy.barcode.upcase}.PNG"
-          File.open(filepath, 'wb') do |file|
-            file.write @barcode.to_png(height:20,margin:0)
-          end unless File.exist?(filepath)
-          @barcode_for_html = Barby::HtmlOutputter.new(@barcode)
-        end
+        Barcode.new(@book_copy.barcode).write_image if @book_copy.present?
       end
       format.json do
         @book_copy = BookCopy.where('UPPER(barcode) = ?', params[:id].upcase).includes(:book_edition => :book_title).take
