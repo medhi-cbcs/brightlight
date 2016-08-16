@@ -1,5 +1,7 @@
 Rails.application.routes.draw do
 
+  resources :carpools
+  resources :transports
   resources :template_targets
   resources :templates
   resources :currencies

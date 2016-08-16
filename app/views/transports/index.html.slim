@@ -1,0 +1,37 @@
+h1 Listing transports
+
+table
+  thead
+    tr
+      th Type
+      th Name
+      th Status
+      th Active
+      th Notes
+      th Contact
+      th Contact name
+      th Contact phone
+      th Contact email
+      th
+      th
+      th
+
+  tbody
+    - @transports.each do |transport|
+      tr
+        td = transport.type
+        td = transport.name
+        td = transport.status
+        td = transport.active
+        td = transport.notes
+        td = transport.contact_id
+        td = transport.contact_name
+        td = transport.contact_phone
+        td = transport.contact_email
+        td = link_to 'Show', transport
+        td = link_to 'Edit', edit_transport_path(transport)
+        td = link_to 'Destroy', transport, data: {:confirm => 'Are you sure?'}, :method => :delete
+
+br
+
+= link_to 'New Transport', new_transport_path
