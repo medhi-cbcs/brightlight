@@ -4,12 +4,14 @@ class TransportsController < ApplicationController
   # GET /transports
   # GET /transports.json
   def index
-    @transports = Transport.all
+    type = params[:type]
+    @transports = type ? Transport.where('lower(category) = ?', type.downcase) : Transport.all
   end
 
   # GET /transports/1
   # GET /transports/1.json
   def show
+    @passengers = @transport.passengers
   end
 
   # GET /transports/new
@@ -69,6 +71,6 @@ class TransportsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def transport_params
-      params.require(:transport).permit(:type, :name, :status, :active, :notes, :contact_id, :contact_name, :contact_phone, :contact_email)
+      params.require(:transport).permit(:category, :name, :status, :active, :notes, :contact_id, :contact_name, :contact_phone, :contact_email)
     end
 end

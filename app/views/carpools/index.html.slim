@@ -1,41 +1,8 @@
-h1 Listing carpools
+h4 Carpool (#{Date.today})
 
-table
-  thead
-    tr
-      th Type
-      th Transport
-      th Barcode
-      th Transport name
-      th Period
-      th Sort order
-      th Active
-      th Status
-      th Arrival
-      th Departure
-      th Notes
-      th
-      th
-      th
-
-  tbody
+.card-panel
+  .row.carpool
     - @carpools.each do |carpool|
-      tr
-        td = carpool.type
-        td = carpool.transport
-        td = carpool.barcode
-        td = carpool.transport_name
-        td = carpool.period
-        td = carpool.sort_order
-        td = carpool.active
-        td = carpool.status
-        td = carpool.arrival
-        td = carpool.departure
-        td = carpool.notes
-        td = link_to 'Show', carpool
-        td = link_to 'Edit', edit_carpool_path(carpool)
-        td = link_to 'Destroy', carpool, data: {:confirm => 'Are you sure?'}, :method => :delete
-
-br
-
-= link_to 'New Carpool', new_carpool_path
+      .col.s12.m3
+        .entry class="#{carpool.status}"
+          = carpool.transport.try(:name) || "???"

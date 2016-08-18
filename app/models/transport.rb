@@ -1,5 +1,6 @@
 class Transport < ActiveRecord::Base
-  validates :type, :name, presence: true
+  validates :category, :name, presence: true
+  validates :name, uniqueness: true
 
   has_many :passengers
   has_many :students, through: :passengers

@@ -9,6 +9,8 @@ class Student < ActiveRecord::Base
 	has_many :student_books
 	has_many :book_loans
 	has_many :book_fines
+	has_one  :passenger
+	has_one  :transport, through: :passenger
  	belongs_to :person
   validates :name, :student_no, presence: true
 

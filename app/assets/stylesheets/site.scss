@@ -708,6 +708,29 @@ ul {
 	}
 }
 
+// =========================================== Carpool =========================================
+.carpool {
+	.entry {
+		background-color: #6069ec;
+		font-size: 2rem;
+		padding: 20px;
+		line-height: 30px;
+		border-radius: 4px;
+		margin: 10px 0px;
+		text-align: center;
+	}
+	.ready {
+		background-color: #e4bd18;
+	}
+	.loading {
+		background-color: #43d218;
+	}
+	.waiting {
+		background-color: #e6312c
+	}
+}
+
+
 // ============================================ Tabs ===========================================
 
 .tabbed {

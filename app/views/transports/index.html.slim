@@ -3,7 +3,7 @@ h1 Listing transports
 table
   thead
     tr
-      th Type
+      th Category
       th Name
       th Status
       th Active
@@ -19,7 +19,7 @@ table
   tbody
     - @transports.each do |transport|
       tr
-        td = transport.type
+        td = transport.category
         td = transport.name
         td = transport.status
         td = transport.active

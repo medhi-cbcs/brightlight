@@ -4,7 +4,13 @@ class CarpoolsController < ApplicationController
   # GET /carpools
   # GET /carpools.json
   def index
-    @carpools = Carpool.all
+    if params[:since]
+      since = CGI.unescape params[:since]
+      since_time = DateTime.parse since
+      @carpools = Carpool.where('updated_at > ?', since_time).order(:updated_at)
+    else
+      @carpools = Carpool.where('created_at > ?', Date.today).order(:updated_at)
+    end
   end
 
   # GET /carpools/1
@@ -69,6 +75,6 @@ class CarpoolsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def carpool_params
-      params.require(:carpool).permit(:type, :transport_id, :barcode, :transport_name, :period, :sort_order, :active, :status, :arrival, :departure, :notes)
+      params.require(:carpool).permit(:category, :transport_id, :barcode, :transport_name, :period, :sort_order, :active, :status, :arrival, :departure, :notes)
     end
 end

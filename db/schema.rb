@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160721061306) do
+ActiveRecord::Schema.define(version: 20160816093355) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -305,6 +305,26 @@ ActiveRecord::Schema.define(version: 20160721061306) do
 
   add_index "book_titles", ["slug"], name: "index_book_titles_on_slug", unique: true, using: :btree
   add_index "book_titles", ["subject_id"], name: "index_book_titles_on_subject_id", using: :btree
+
+  create_table "carpools", force: :cascade do |t|
+    t.string   "category"
+    t.integer  "transport_id"
+    t.string   "barcode"
+    t.string   "transport_name"
+    t.string   "period"
+    t.float    "sort_order"
+    t.boolean  "active"
+    t.string   "status"
+    t.datetime "arrival"
+    t.datetime "departure"
+    t.string   "notes"
+    t.datetime "created_at",     null: false
+    t.datetime "updated_at",     null: false
+  end
+
+  add_index "carpools", ["barcode"], name: "index_carpools_on_barcode", using: :btree
+  add_index "carpools", ["sort_order"], name: "index_carpools_on_sort_order", using: :btree
+  add_index "carpools", ["transport_id"], name: "index_carpools_on_transport_id", using: :btree
 
   create_table "copy_conditions", force: :cascade do |t|
     t.integer  "book_copy_id"
@@ -616,6 +636,25 @@ ActiveRecord::Schema.define(version: 20160721061306) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "passengers", force: :cascade do |t|
+    t.integer  "transport_id"
+    t.integer  "student_id"
+    t.string   "name"
+    t.string   "family_no"
+    t.integer  "family_id"
+    t.integer  "grade_section_id"
+    t.string   "class_name"
+    t.boolean  "active"
+    t.string   "notes"
+    t.datetime "created_at",       null: false
+    t.datetime "updated_at",       null: false
+  end
+
+  add_index "passengers", ["family_no"], name: "index_passengers_on_family_no", using: :btree
+  add_index "passengers", ["grade_section_id"], name: "index_passengers_on_grade_section_id", using: :btree
+  add_index "passengers", ["student_id"], name: "index_passengers_on_student_id", using: :btree
+  add_index "passengers", ["transport_id"], name: "index_passengers_on_transport_id", using: :btree
+
   create_table "people", force: :cascade do |t|
     t.string   "full_name"
     t.string   "first_name"
@@ -854,6 +893,7 @@ ActiveRecord::Schema.define(version: 20160721061306) do
     t.string   "language"
   end
 
+  add_index "students", ["family_no"], name: "index_students_on_family_no", using: :btree
   add_index "students", ["person_id"], name: "index_students_on_person_id", using: :btree
   add_index "students", ["slug"], name: "index_students_on_slug", unique: true, using: :btree
 
@@ -905,6 +945,23 @@ ActiveRecord::Schema.define(version: 20160721061306) do
   add_index "templates", ["academic_year_id"], name: "index_templates_on_academic_year_id", using: :btree
   add_index "templates", ["user_id"], name: "index_templates_on_user_id", using: :btree
 
+  create_table "transports", force: :cascade do |t|
+    t.string   "category"
+    t.string   "name"
+    t.string   "status"
+    t.boolean  "active"
+    t.string   "notes"
+    t.integer  "contact_id"
+    t.string   "contact_name"
+    t.string   "contact_phone"
+    t.string   "contact_email"
+    t.string   "family_no"
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
+  end
+
+  add_index "transports", ["family_no"], name: "index_transports_on_family_no", using: :btree
+
   create_table "users", force: :cascade do |t|
     t.string   "provider"
     t.string   "uid"
@@ -933,11 +990,15 @@ ActiveRecord::Schema.define(version: 20160721061306) do
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
 
+  add_foreign_key "carpools", "transports"
   add_foreign_key "course_section_histories", "employees", column: "instructor_id"
   add_foreign_key "currencies", "users"
   add_foreign_key "invoices", "students"
   add_foreign_key "invoices", "users"
   add_foreign_key "line_items", "invoices"
+  add_foreign_key "passengers", "grade_sections"
+  add_foreign_key "passengers", "students"
+  add_foreign_key "passengers", "transports"
   add_foreign_key "templates", "academic_years"
   add_foreign_key "templates", "users"
 end

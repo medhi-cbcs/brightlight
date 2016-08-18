@@ -1,7 +1,7 @@
 class CreateCarpools < ActiveRecord::Migration
   def change
     create_table :carpools do |t|
-      t.string :type
+      t.string :category
       t.references :transport, index: true, foreign_key: true
       t.string :barcode, index: true
       t.string :transport_name

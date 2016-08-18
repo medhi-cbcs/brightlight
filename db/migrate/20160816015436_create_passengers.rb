@@ -1,6 +1,7 @@
 class CreatePassengers < ActiveRecord::Migration
   def change
     create_table :passengers do |t|
+      t.references :transport, index: true, foreign_key: true
       t.references :student, index:true, foreign_key: true
       t.string :name
       t.string :family_no, index: true
