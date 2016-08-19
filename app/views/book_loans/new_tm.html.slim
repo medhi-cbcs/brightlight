@@ -39,9 +39,9 @@ javascript:
     onScan: function($element, barcode) {
       $.getJSON("/book_copies/"+barcode+".json?empl="+#{@teacher.id}, null, function (data) {
         insert_values(data);
-      }).fail(function(data){
+      }).fail(function(xhr){
         $($element).val('');
-        Materialize.toast("Invalid barcode.", 4000, 'red');
+        Materialize.toast($.parseJSON(xhr.responseText).errors, 4000, 'red');
       });            
     }
   });
@@ -53,9 +53,9 @@ javascript:
       $.getJSON("/book_copies/"+barcode+".json", null, function (data) {
         insert_values(data);
         $("[name$='[barcode]']:last").focus();
-      }).fail(function(){
+      }).fail(function(xhr){
         $(e.target).val('');
-        Materialize.toast("Invalid barcode.", 5000, 'red');
+        Materialize.toast($.parseJSON(xhr.responseText).errors, 5000, 'red');
       });
     }
   }));
