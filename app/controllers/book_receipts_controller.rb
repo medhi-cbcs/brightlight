@@ -70,7 +70,6 @@ class BookReceiptsController < ApplicationController
 
   # GET /book_receipts/check.json?barcode=####&year=##
   def check
-    puts "Checking #{params[:barcode]}"
     respond_to do |format|
       format.json do
         @book_copy = BookCopy.where('UPPER(barcode) = ?', params[:barcode].upcase).includes(:book_edition => :book_title).take
