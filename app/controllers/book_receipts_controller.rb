@@ -68,6 +68,26 @@ class BookReceiptsController < ApplicationController
   def show
   end
 
+  # GET /book_receipts/check.json?barcode=####&year=##
+  def check
+    puts "Checking #{params[:barcode]}"
+    respond_to do |format|
+      format.json do
+        @book_copy = BookCopy.where('UPPER(barcode) = ?', params[:barcode].upcase).includes(:book_edition => :book_title).take
+        if @book_copy.present?
+          year = params[:year].present? ? AcademicYear.find(params[:year]) : AcademicYear.current
+          receipt = BookReceipt.where(academic_year_id: year.id, book_copy:@book_copy).take
+          if receipt.present?
+            error_message = "#{@book_copy.barcode} was already added to #{receipt.grade_section.name} ##{receipt.roster_no}"
+            render json: {errors:error_message}, status: :unprocessable_entity
+          end
+        else
+          render json: {errors:"Invalid barcode"}, status: :unprocessable_entity
+        end
+      end
+    end
+  end
+
   # GET /book_receipts/new
   def new
     @grade_section = GradeSection.find params[:gs] if params[:gs]

@@ -8,6 +8,8 @@
             var $input = $(this);
 
             $(window).keypress(function (e) {
+                // console.log("Scan press event on "+e.target);
+                if ($(":focus").is("input")) return;
                 var keycode = (e.which) ? e.which : e.keyCode;
                 if ((keycode >= 65 && keycode <= 90) ||
                     (keycode >= 97 && keycode <= 122) ||
