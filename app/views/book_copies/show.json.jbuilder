@@ -7,16 +7,11 @@ json.book_copy do
   json.barcode @book_copy.barcode
   json.copy_no @book_copy.try(:book_label).try(:name)
 
-  year = if params[:year].present?
-           AcademicYear.find(params[:year])
-         else
-           AcademicYear.current
-         end
-  year_id = year.id
+  year_id = @year.id
   json.academic_year do
     json.academic_year_id year_id
-    json.start_date year.start_date
-    json.end_date year.end_date
+    json.start_date @year.start_date
+    json.end_date @year.end_date
     json.prev_academic_year_id year_id-1
   end
 
@@ -26,15 +21,17 @@ json.book_copy do
     loan = @book_copy.book_loans.where(academic_year_id:year_id).order('created_at DESC').take
   end
 
-  json.loans do
-    json.id             loan.try(:id)
-    json.student_id     loan.try(:student_id)
-    json.student_name   loan.try(:student).try(:name)
-    json.employee_id    loan.try(:employee_id)
-    json.employee_name  loan.try(:employee).try(:name)
-    json.academic_year_id loan.try(:academic_year_id)
-    json.return_status  loan.try(:return_status)
-    json.return_date    loan.try(:return_date)
+  if loan.present?
+    json.loans do
+      json.id             loan.try(:id)
+      json.student_id     loan.try(:student_id)
+      json.student_name   loan.try(:student).try(:name)
+      json.employee_id    loan.try(:employee_id)
+      json.employee_name  loan.try(:employee).try(:name)
+      json.academic_year_id loan.try(:academic_year_id)
+      json.return_status  loan.try(:return_status)
+      json.return_date    loan.try(:return_date)
+    end
   end
 
   if @book_edition.present?
@@ -50,7 +47,7 @@ json.book_copy do
       json.small_thumbnail @book_edition.small_thumbnail
     end
   end
-  
+
   if @book_title.present?
     json.book_title do
       json.id @book_title.id
@@ -84,4 +81,5 @@ json.book_copy do
       json.employee_number @employee.employee_number
     end
   end
+
 end

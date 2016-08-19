@@ -154,6 +154,7 @@ Rails.application.routes.draw do
   resources :book_receipts do
     collection do
       post 'prepare'
+      get  'check'
     end
   end
 

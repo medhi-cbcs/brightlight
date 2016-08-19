@@ -35,6 +35,7 @@ class BookCopiesController < ApplicationController
           @book_title = @book_edition.try(:book_title)
           @student = Student.find params[:st] if params[:st].present?
           @employee = Employee.find params[:empl] if params[:empl].present?
+          @year = params[:year].present? ? AcademicYear.find(params[:year]) : AcademicYear.current
         else
           render json: {errors:"Invalid barcode"}, status: :unprocessable_entity
         end
