@@ -7,7 +7,7 @@ h4 Add Book to Receipt Form
         li 
           = link_to book_receipts_path(gs:params[:gs],r:params[:r],year:params[:year])
             i.material-icons.left chevron_left
-        li.right style="display:none"
+        li.right#add-row
           = link_to_add_association f, :book_receipts, 'data-association-insertion-method' => 'append', 'data-association-insertion-node' => 'tbody#book_receipts'
             ' Add Row
             i.material-icons.left playlist_add
@@ -82,8 +82,8 @@ javascript:
       var element = $(this);
       $.getJSON("/book_receipts/check.json?barcode="+barcode, null, function (data) {
         insert_values(data,element);
-        $(".add_fields").trigger('click');
-        $("[name$='[barcode]']:last").focus();
+        //$(".add_fields").trigger('click');
+        //$("[name$='[barcode]']:last").focus();
       }).fail(function(xhr){
         $(e.target).val('');
         Materialize.toast($.parseJSON(xhr.responseText).errors, 5000, 'red');
@@ -124,7 +124,11 @@ javascript:
       if ($("tr:last").find("[name$='[barcode]']").val() != "") {
         $(".add_fields").trigger('click');
       }
+      $("#add-row").show();
+    } else {
+      $("#add-row").hide();
     }
+    
   });
   
 
