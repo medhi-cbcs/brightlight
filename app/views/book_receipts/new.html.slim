@@ -82,8 +82,6 @@ javascript:
       var element = $(this);
       $.getJSON("/book_receipts/check.json?barcode="+barcode, null, function (data) {
         insert_values(data,element);
-        //$(".add_fields").trigger('click');
-        //$("[name$='[barcode]']:last").focus();
       }).fail(function(xhr){
         $(e.target).val('');
         Materialize.toast($.parseJSON(xhr.responseText).errors, 5000, 'red');
@@ -95,7 +93,7 @@ javascript:
   var insert_values = function (data, el) {
     var book = data.book_copy;
     el.find("[name$='[barcode]']").val(book.barcode);
-    el.find(".titles").html(book.title);
+    el.find(".titles").html("<a href='/book_copies/"+book.id+"'>"+book.title+"</a>");
     el.find(".book_copy_ids").val(book.id);
     el.find(".book_edition_ids").val(book.book_edition_id);
     el.find(".copy_nos").val(book.copy_no);
@@ -128,7 +126,6 @@ javascript:
     } else {
       $("#add-row").hide();
     }
-    
   });
   
 
