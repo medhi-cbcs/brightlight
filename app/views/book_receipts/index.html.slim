@@ -59,10 +59,10 @@ nav
   .template
     = render partial: 'receipt_form_table', locals: {book_copies: @book_copies.where(roster_no: @roster_no)}
 - elsif @grade_section.present?
-  - @grade_section.number_of_students_for_current_academic_year.times do |number|
+  - @book_copies.order(:roster_no).pluck(:roster_no).uniq.each do |roster_no|
     .template
-      h5 = number+1
-      = render partial: 'receipt_form_table', locals: {book_copies: @book_copies.where(roster_no: number+1)}
+      h5 = roster_no
+      = render partial: 'receipt_form_table', locals: {book_copies: @book_copies.where(roster_no: roster_no)}
 
     .page-break
 
