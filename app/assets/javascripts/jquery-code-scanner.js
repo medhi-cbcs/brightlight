@@ -7,7 +7,7 @@
             var chars = [];
             var $input = $(this);
 
-            $(window).keypress(function (e) {
+            $(window).off("keypress").on("keypress", function (e) {
                 // console.log("Scan press event on "+e.target);
                 if ($(":focus").is("input")) return;
                 var keycode = (e.which) ? e.which : e.keyCode;
