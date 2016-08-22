@@ -28,10 +28,3 @@
               i.material-icons edit
             = link_to book, data: {id: book.id, confirm: 'Are you sure?'}, :method => :delete, class:"red-text delete-link", remote: true
               i.material-icons delete
-
-javascript:              
-  $('.delete-link').bind('ajax:complete', function() {
-    var id = $(this).data("id");
-    $("tr#row-"+id).remove();
-    Materialize.toast("Book deleted", 4000, "green");
-  });
