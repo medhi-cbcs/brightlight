@@ -747,6 +747,15 @@ ActiveRecord::Schema.define(version: 20160816093355) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "shuttles", force: :cascade do |t|
+    t.string   "name"
+    t.string   "notes"
+    t.integer  "pic_id"
+    t.boolean  "active"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "standard_books", force: :cascade do |t|
     t.integer  "book_title_id"
     t.integer  "book_edition_id"

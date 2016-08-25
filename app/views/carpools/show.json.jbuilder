@@ -1,7 +1,7 @@
 json.carpool do
   json.id @carpool.id
   json.category @carpool.category
-  json.name @carpool.transport_name
+  json.transport_name @carpool.transport_name
   json.transport_id @carpool.transport_id
   json.barcode @carpool.barcode
   json.sort_order @carpool.sort_order
@@ -14,6 +14,7 @@ json.carpool do
 
   json.passengers do
     json.array!(@carpool.passengers) do |passenger|
+      json.id         passenger.id
       json.student_id passenger.student_id
       json.name       passenger.name
       json.class      passenger.class_name

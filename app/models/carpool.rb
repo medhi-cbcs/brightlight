@@ -1,6 +1,8 @@
 class Carpool < ActiveRecord::Base
   belongs_to :transport
-  after_create :fill_in_details
+  before_create :fill_in_details
+
+  scope :since, lambda { |time| where('updated_at > ?', Time.at(time.to_r)).order(:created_at) }
 
   def passengers
     transport.passengers
@@ -17,13 +19,13 @@ class Carpool < ActiveRecord::Base
       elsif barcode && match = barcode.match(/#{SHUTTLE_CAR_PREFIX}([A-Z]{,2})/)
         self.category = "Shuttle"
         self.transport = Transport.where(category:category,name:match[1]).take
+      else
+        return false
       end
-      self.transport_name = transport.name
+      self.transport_name = transport.try(:name)
       self.arrival = created_at
       self.period = arrival < Time.now.noon ? 0 : 1
       self.active = true
-      self.save
-      puts "Filled in details "
     end
 
 end

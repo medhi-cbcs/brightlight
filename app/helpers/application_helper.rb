@@ -16,4 +16,5 @@ module ApplicationHelper
     css_class = 'delete-link '+options[:class]
     link_to model, data: data_options, method: :delete, remote: true, class: css_class, &block
   end
+
 end

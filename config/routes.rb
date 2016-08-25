@@ -1,6 +1,5 @@
 Rails.application.routes.draw do
 
-  resources :carpools
   resources :transports
   resources :template_targets
   resources :templates
@@ -156,6 +155,12 @@ Rails.application.routes.draw do
   resources :book_receipts do
     collection do
       post 'prepare'
+    end
+  end
+
+  resources :carpools do
+    collection do
+      get 'poll'
     end
   end
 

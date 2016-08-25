@@ -1,8 +1,65 @@
-h4 Carpool (#{Date.today})
-
+nav
+  .nav-wrapper
+    .brand-logo style="margin-left: 20px; font-size:1.5em"
+      = "Carpool (#{Date.today})"
+    ul.right  
+      li
+        .input-field
+          = check_box_tag :auto_update
+          = label_tag :auto_update 
 .card-panel
   .row.carpool
     - @carpools.each do |carpool|
-      .col.s12.m3
-        .entry class="#{carpool.status}"
+      .col.s12.m6.l3
+        .entry id="car-#{carpool.id}" class="cars #{carpool.status}"
+          .input-field.left style="margin-top:-10px"
+            .cb-label Done
+            = check_box_tag "car-done-#{carpool.id}", 1, false, data: {id: carpool.id}
+            = label_tag "car-done-#{carpool.id}", ""
           = carpool.transport.try(:name) || "???"
+          .input-field.right style="margin-top:-10px"
+            .cb-label Wait
+            = check_box_tag "car-wait-#{carpool.id}", 1, false, data: {id: carpool.id}
+            = label_tag "car-wait-#{carpool.id}", ""
+                
+= text_field_tag :carpool_scanner, "", disabled:true
+
+#show-modal.modal.bottom-sheet
+
+script#carpool-template type="text/x-custom-template"
+  .col.s12.m6.l3
+    .entry id="car-__carpool.id_" class="cars __carpool.status_"
+      .input-field.left style="margin-top:-10px"
+        .cb-label Done
+        = check_box_tag "car-done-__carpool.id_", 1, false, data: {id: "__carpool.id_"}
+        = label_tag "car-done-__carpool.id_", ""
+      = "__carpool.transport_name_"
+      .input-field.right style="margin-top:-10px"
+        .cb-label Wait
+        = check_box_tag "car-wait-__carpool.id_", 1, false, data: {id: "__carpool.id_"}
+        = label_tag "car-wait-__carpool.id_", ""
+
+script#carpool-passenger-template type="text/x-custom-template"
+  .modal-content
+    h4 Passengers 
+    = "__passengers.list_"
+  .modal-footer
+    = link_to "Close", "#!", class:"modal-action modal-close waves-effect waves-light btn-flat"
+
+script#pax-list-template type="text/x-custom-template"
+  .row
+    .col.s1
+      = check_box_tag "pax-list-__pax.id_", 1, false, data: {id: "__pax.id_"}
+      = label_tag "pax-list-__pax.id_", ""
+    .col.s7
+      = "__pax.name_"
+    .col.s4 
+      = "__pax.class_"
+    
+javascript:
+  $(document).on("page:load", function() {
+    carpool_document_ready();
+  });
+  $(document).ready(function() {
+    carpool_document_ready();
+  });

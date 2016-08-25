@@ -4,12 +4,33 @@ class CarpoolsController < ApplicationController
   # GET /carpools
   # GET /carpools.json
   def index
+    authorize! :manage, Carpool
     if params[:since]
-      since = CGI.unescape params[:since]
-      since_time = DateTime.parse since
-      @carpools = Carpool.where('updated_at > ?', since_time).order(:updated_at)
+      @carpools = Carpool.includes(:transport).since params[:since]
     else
-      @carpools = Carpool.where('created_at > ?', Date.today).order(:updated_at)
+      @carpools = Carpool.includes(:transport).since Date.today.beginning_of_day.to_i
+    end
+    respond_to do |format|
+      format.html
+      format.json
+      format.pdf do
+        render pdf:         "Carpool.pdf",
+               disposition: 'inline',
+               template:    'carpools/index.pdf.slim',
+               layout:      'pdf.html',
+               show_as_html: params.key?('debug')
+      end
+    end
+  end
+
+  # GET /carpools/poll
+  def poll
+    authorize! :manage, Carpool
+    respond_to :json
+    if params[:since]
+      @carpools = Carpool.includes(:transport).since params[:since]
+    else
+      @carpools = Carpool.includes(:transport).since Date.today.beginning_of_day.to_i
     end
   end
 
@@ -20,16 +41,19 @@ class CarpoolsController < ApplicationController
 
   # GET /carpools/new
   def new
+    authorize! :manage, Carpool
     @carpool = Carpool.new
   end
 
   # GET /carpools/1/edit
   def edit
+    authorize! :manage, Carpool
   end
 
   # POST /carpools
   # POST /carpools.json
   def create
+    authorize! :manage, Carpool
     @carpool = Carpool.new(carpool_params)
 
     respond_to do |format|
@@ -46,6 +70,7 @@ class CarpoolsController < ApplicationController
   # PATCH/PUT /carpools/1
   # PATCH/PUT /carpools/1.json
   def update
+    authorize! :manage, Carpool
     respond_to do |format|
       if @carpool.update(carpool_params)
         format.html { redirect_to @carpool, notice: 'Carpool was successfully updated.' }
@@ -60,6 +85,7 @@ class CarpoolsController < ApplicationController
   # DELETE /carpools/1
   # DELETE /carpools/1.json
   def destroy
+    authorize! :manage, Carpool
     @carpool.destroy
     respond_to do |format|
       format.html { redirect_to carpools_url, notice: 'Carpool was successfully destroyed.' }
@@ -77,4 +103,5 @@ class CarpoolsController < ApplicationController
     def carpool_params
       params.require(:carpool).permit(:category, :transport_id, :barcode, :transport_name, :period, :sort_order, :active, :status, :arrival, :departure, :notes)
     end
+
 end
