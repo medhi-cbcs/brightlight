@@ -8,40 +8,71 @@ nav
           = check_box_tag :auto_update
           = label_tag :auto_update
 
-.card          
-  ul.tabs.z-depth-1
-    li.tab.col.s2
-      a href='#tab1' Shuttle Cars
-    li.tab.col.s2
-      a href='#tab2' Car Riders
-    li.tab.col.s2
-      a href='#tab3' Waiting
+.card.carpool
+  .row
+    ul.tabs.z-depth-1
+      li.tab.col.s2
+        a href='#tab1' Shuttle Cars
+      li.tab.col.s2
+        a href='#tab2' Car Riders
+      li.tab.col.s2
+        a href='#tab3' Waiting
+      li.tab.col.s2
+        a href='#tab4' Done 
+        
+    #tab1.tab-content
+      #shuttle-cars
+        - @carpools.active.shuttle_cars.each do |carpool|
+          .col.s12.m6.l3
+            .entry id="car-#{carpool.id}" class="cars #{carpool.status}"
+              .input-field.left style="margin-top:-10px"
+                .cb-label Done
+                = check_box_tag "car-done-#{carpool.id}", 1, false, data: {id: carpool.id}
+                = label_tag "car-done-#{carpool.id}", ""
+              = carpool.transport.try(:name) || "???"
+              .input-field.right style="margin-top:-10px"
+                .cb-label Wait
+                = link_to edit_carpool_path(carpool), remote: true
+                  i.material-icons style="padding-top:9px; color:salmon" pause_circle_outline
+                      
+    #tab2.tab-content
+      #private-cars
+        - @carpools.active.private_cars.each do |carpool|
+          .col.s12.m6.l3
+            .entry id="car-#{carpool.id}" class="cars #{carpool.status}"
+              .input-field.left style="margin-top:-10px"
+                .cb-label Done
+                = check_box_tag "car-done-#{carpool.id}", 1, false, data: {id: carpool.id}
+                = label_tag "car-done-#{carpool.id}", ""
+              = carpool.transport.try(:name) || "???"
+              .input-field.right style="margin-top:-10px"
+                .cb-label Wait
+                = link_to edit_carpool_path(carpool), remote: true
+                  i.material-icons style="padding-top:9px; color:salmon" pause_circle_outline
 
-  #tab1.tab-content
-    
-  #tab2.tab-content
-    .row.carpool
-      - @carpools.each do |carpool|
-        .col.s12.m6.l3
-          .entry id="car-#{carpool.id}" class="cars #{carpool.status}"
-            .input-field.left style="margin-top:-10px"
-              .cb-label Done
-              = check_box_tag "car-done-#{carpool.id}", 1, false, data: {id: carpool.id}
-              = label_tag "car-done-#{carpool.id}", ""
-            = carpool.transport.try(:name) || "???"
-            .input-field.right style="margin-top:-10px"
-              .cb-label Wait
-              = link_to edit_carpool_path(carpool), remote: true
-                i.material-icons style="padding-top:9px; color:salmon" pause_circle_outline
+    #tab3.tab-content
+      .container
+        #waiting-list
+          - @carpools.active.each do |carpool|
+            - if carpool.late_passengers.active.present?
+              - carpool.late_passengers.active.each do |pax|
+                 .wait-pax id="wait-pax-#{pax.id}" #{carpool.transport_name} #{pax.name} (#{pax.class_name})
 
-  #tab3.tab-content
-    .container
-      .row.waiting-list
-        - @carpools.each do |carpool|
-          - if carpool.late_passengers.active.present?
-            - carpool.late_passengers.active.each do |pax|
-               .wait-pax id="wait-pax-#{pax.id}" #{carpool.transport_name} #{pax.name} (#{pax.class_name})
-                  
+    #tab4.tab-content
+      #exit-carpool
+        - @carpools.inactive.each do |carpool|
+          .col.s12.m6.l3
+            .entry id="car-#{carpool.id}" class="cars #{carpool.status}"
+              .input-field.left style="margin-top:-10px"
+                .cb-label Done
+                = check_box_tag "car-done-#{carpool.id}", 1, true, data: {id: carpool.id}
+                = label_tag "car-done-#{carpool.id}", ""
+              = carpool.transport.try(:name) || "???"
+              .input-field.right style="margin-top:-10px"
+                .cb-label Wait
+                = link_to edit_carpool_path(carpool), remote: true
+                  i.material-icons style="padding-top:9px; color:salmon" pause_circle_outline 
+                                    
 = text_field_tag :carpool_scanner, "", disabled:true
 
 #show-modal.modal.bottom-sheet
@@ -51,15 +82,13 @@ script#carpool-template type="text/x-custom-template"
     .entry id="car-__carpool.id_" class="cars __carpool.status_"
       .input-field.left style="margin-top:-10px"
         .cb-label Done
-        = check_box_tag "car-done-__carpool.id_", 1, false, data: {id: "__carpool.id_"}
+        = check_box_tag "car-done-__carpool.id_", 1, "__done.status_", data: {id: "__carpool.id_"}
         = label_tag "car-done-__carpool.id_", ""
       = "__carpool.transport_name_"
       .input-field.right style="margin-top:-10px"
         .cb-label Wait
         = link_to edit_carpool_path("__carpool.id_"), remote: true
           i.material-icons style="padding-top:9px; color:salmon" pause_circle_outline
-        / = check_box_tag "car-wait-__carpool.id_", 1, false, data: {id: "__carpool.id_"}
-        / = label_tag "car-wait-__carpool.id_", ""
 
 / script#carpool-passenger-template type="text/x-custom-template"
 /   .modal-content

@@ -60,7 +60,8 @@ function poll() {
 }
 
 function car_leaving() {
-  update_car_status($(this).data('id'), "done");
+  console.log("Car "+$(this).prop("checked") ? "leaving" : "returning");
+  update_car_status($(this).data('id'), $(this).prop("checked") ? "done" : "ready");
 }
 
 // function car_waiting() {
@@ -117,18 +118,24 @@ function update_car_status(id, status) {
 
 function update_carpool_info(car) {
   var target = $("#car-"+car.id);
+  var html_str = $("#carpool-template").html()
+    .replace(/__carpool.id_/g, car.id)
+    .replace(/__carpool.transport_name_/g, car.transport_name)
+    .replace(/__done.status_/g, car.status=='done')
+    .replace(/__carpool.status_/g, car.status);
   if (target.length == 0) {
-    var html_str = $("#carpool-template").html()
-      .replace(/__carpool.id_/g, car.id)
-      .replace(/__carpool.transport_name_/g, car.transport_name)
-      .replace(/__carpool.status_/g, car.status);
-    $(".carpool").append(html_str);
+    if(car.category=='PrivateCar') {
+      $("#private-cars").append(html_str);
+    } else if (car.category=='Shuttle') {
+      $("#shuttle-cars").append(html_str);
+    }
   } else {
     target.removeClass('ready loading waiting');
     target.addClass(car.status);
   }
   if (car.status == "done") {
     target.fadeOut('slow', function(){ target.remove(); });
+    $("#exit-carpool").append(html_str);
   }
   update_waiting_list(car.late_passengers);
 }
@@ -140,8 +147,8 @@ function update_waiting_list(late_passengers) {
       var target = $("#wait-pax-" + pax.id);
       if (target.length == 0 && pax.active) {
         console.log("Waiting list: adding "+pax.name);
-        var html_str = "<div class='wait-pax' id='wait-pax-"+pax.id+"'>"pax.name+" ("+pax.class+")</div>";
-        $(".waiting-list").append(html_str);
+        var html_str = "<div class='wait-pax' id='wait-pax-" + pax.id + "'>" + pax.name + " (" + pax.class + ")</div>";
+        $("#waiting-list").append(html_str);
       } else if (!pax.active) {
         console.log("Waiting list: removing "+pax.name);
         target.fadeOut('slow', function(){ target.remove(); });

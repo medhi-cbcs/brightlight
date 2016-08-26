@@ -5,6 +5,10 @@ class Carpool < ActiveRecord::Base
   accepts_nested_attributes_for :late_passengers
 
   scope :since, lambda { |time| where('updated_at > ?', Time.at(time.to_r)).order(:created_at) }
+  scope :private_cars, lambda { where(category:'PrivateCar') }
+  scope :shuttle_cars, lambda { where(category:'Shuttle') }
+  scope :active, lambda { where.not(status:'done') }
+  scope :inactive, lambda { where(status:'done') }
 
   before_create :fill_in_details
   after_update  :sync_late_passengers

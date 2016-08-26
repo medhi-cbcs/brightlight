@@ -4,4 +4,7 @@ class Transport < ActiveRecord::Base
 
   has_many :passengers
   has_many :students, through: :passengers
+
+  scope :private_cars, lambda { where(category:'PrivateCar') }
+  scope :shuttle_cars, lambda { where(category:'Shuttle') }  
 end

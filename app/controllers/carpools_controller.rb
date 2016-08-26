@@ -6,9 +6,9 @@ class CarpoolsController < ApplicationController
   def index
     authorize! :manage, Carpool
     if params[:since]
-      @carpools = Carpool.where.not(status:'done').includes(:transport, :passengers).since params[:since]
+      @carpools = Carpool.includes(:transport, :passengers).since params[:since]
     else
-      @carpools = Carpool.where.not(status:'done').includes(:transport, :passengers).since Date.today.beginning_of_day.to_i
+      @carpools = Carpool.includes(:transport, :passengers).since Date.today.beginning_of_day.to_i
     end
     respond_to do |format|
       format.html
@@ -83,6 +83,7 @@ class CarpoolsController < ApplicationController
     authorize! :manage, Carpool
     respond_to do |format|
       if @carpool.update(carpool_params)
+        @carpool.touch
         format.html { redirect_to @carpool, notice: 'Carpool was successfully updated.' }
         format.json { render :show, status: :ok, location: @carpool }
         format.js
