@@ -1,12 +1,13 @@
 class Carpool < ActiveRecord::Base
   belongs_to :transport
-  before_create :fill_in_details
+  has_many :passengers, through: :transport
+  has_many :late_passengers
+  accepts_nested_attributes_for :late_passengers
 
   scope :since, lambda { |time| where('updated_at > ?', Time.at(time.to_r)).order(:created_at) }
 
-  def passengers
-    transport.passengers
-  end
+  before_create :fill_in_details
+  after_update  :sync_late_passengers
 
   private
     PRIVATE_CAR_PREFIX = "CBCS-"
@@ -26,6 +27,13 @@ class Carpool < ActiveRecord::Base
       self.arrival = created_at
       self.period = arrival < Time.now.noon ? 0 : 1
       self.active = true
+      self.status = 'ready'
+    end
+
+    def sync_late_passengers
+      if status == 'done'
+        self.late_passengers.update_all active:false
+      end
     end
 
 end

@@ -1,12 +1,4 @@
                                         Prefix Verb     URI Pattern                                                       Controller#Action
-                                      carpools GET      /carpools(.:format)                                               carpools#index
-                                               POST     /carpools(.:format)                                               carpools#create
-                                   new_carpool GET      /carpools/new(.:format)                                           carpools#new
-                                  edit_carpool GET      /carpools/:id/edit(.:format)                                      carpools#edit
-                                       carpool GET      /carpools/:id(.:format)                                           carpools#show
-                                               PATCH    /carpools/:id(.:format)                                           carpools#update
-                                               PUT      /carpools/:id(.:format)                                           carpools#update
-                                               DELETE   /carpools/:id(.:format)                                           carpools#destroy
                                     transports GET      /transports(.:format)                                             transports#index
                                                POST     /transports(.:format)                                             transports#create
                                  new_transport GET      /transports/new(.:format)                                         transports#new
@@ -345,6 +337,15 @@ autocomplete_book_edition_title_standard_books GET      /standard_books/autocomp
                                                PATCH    /book_receipts/:id(.:format)                                      book_receipts#update
                                                PUT      /book_receipts/:id(.:format)                                      book_receipts#update
                                                DELETE   /book_receipts/:id(.:format)                                      book_receipts#destroy
+                                 poll_carpools GET      /carpools/poll(.:format)                                          carpools#poll
+                                      carpools GET      /carpools(.:format)                                               carpools#index
+                                               POST     /carpools(.:format)                                               carpools#create
+                                   new_carpool GET      /carpools/new(.:format)                                           carpools#new
+                                  edit_carpool GET      /carpools/:id/edit(.:format)                                      carpools#edit
+                                       carpool GET      /carpools/:id(.:format)                                           carpools#show
+                                               PATCH    /carpools/:id(.:format)                                           carpools#update
+                                               PUT      /carpools/:id(.:format)                                           carpools#update
+                                               DELETE   /carpools/:id(.:format)                                           carpools#destroy
                               new_user_session GET      /users/sign_in(.:format)                                          users/sessions#new
                                   user_session POST     /users/sign_in(.:format)                                          users/sessions#create
                           destroy_user_session DELETE   /users/sign_out(.:format)                                         users/sessions#destroy

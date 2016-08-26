@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160816093355) do
+ActiveRecord::Schema.define(version: 20160826013343) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -613,6 +613,27 @@ ActiveRecord::Schema.define(version: 20160816093355) do
   add_index "invoices", ["student_id"], name: "index_invoices_on_student_id", using: :btree
   add_index "invoices", ["user_id"], name: "index_invoices_on_user_id", using: :btree
 
+  create_table "late_passengers", force: :cascade do |t|
+    t.integer  "carpool_id"
+    t.integer  "transport_id"
+    t.integer  "student_id"
+    t.integer  "grade_section_id"
+    t.string   "name"
+    t.string   "family_no"
+    t.integer  "family_id"
+    t.string   "class_name"
+    t.boolean  "active"
+    t.string   "notes"
+    t.datetime "since_time"
+    t.datetime "created_at",       null: false
+    t.datetime "updated_at",       null: false
+  end
+
+  add_index "late_passengers", ["carpool_id"], name: "index_late_passengers_on_carpool_id", using: :btree
+  add_index "late_passengers", ["grade_section_id"], name: "index_late_passengers_on_grade_section_id", using: :btree
+  add_index "late_passengers", ["student_id"], name: "index_late_passengers_on_student_id", using: :btree
+  add_index "late_passengers", ["transport_id"], name: "index_late_passengers_on_transport_id", using: :btree
+
   create_table "line_items", force: :cascade do |t|
     t.string   "description"
     t.string   "quantity"
@@ -1004,6 +1025,10 @@ ActiveRecord::Schema.define(version: 20160816093355) do
   add_foreign_key "currencies", "users"
   add_foreign_key "invoices", "students"
   add_foreign_key "invoices", "users"
+  add_foreign_key "late_passengers", "carpools"
+  add_foreign_key "late_passengers", "grade_sections"
+  add_foreign_key "late_passengers", "students"
+  add_foreign_key "late_passengers", "transports"
   add_foreign_key "line_items", "invoices"
   add_foreign_key "passengers", "grade_sections"
   add_foreign_key "passengers", "students"

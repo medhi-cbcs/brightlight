@@ -6,9 +6,9 @@ class CarpoolsController < ApplicationController
   def index
     authorize! :manage, Carpool
     if params[:since]
-      @carpools = Carpool.includes(:transport).since params[:since]
+      @carpools = Carpool.where.not(status:'done').includes(:transport, :passengers).since params[:since]
     else
-      @carpools = Carpool.includes(:transport).since Date.today.beginning_of_day.to_i
+      @carpools = Carpool.where.not(status:'done').includes(:transport, :passengers).since Date.today.beginning_of_day.to_i
     end
     respond_to do |format|
       format.html
@@ -26,12 +26,12 @@ class CarpoolsController < ApplicationController
   # GET /carpools/poll
   def poll
     authorize! :manage, Carpool
-    respond_to :json
     if params[:since]
-      @carpools = Carpool.includes(:transport).since params[:since]
+      @carpools = Carpool.includes(:transport, :passengers).since params[:since]
     else
-      @carpools = Carpool.includes(:transport).since Date.today.beginning_of_day.to_i
+      @carpools = Carpool.includes(:transport, :passengers).since Date.today.beginning_of_day.to_i
     end
+    respond_to :json
   end
 
   # GET /carpools/1
@@ -48,6 +48,16 @@ class CarpoolsController < ApplicationController
   # GET /carpools/1/edit
   def edit
     authorize! :manage, Carpool
+    @carpool = Carpool.includes(:passengers).find(params[:id])
+    @carpool.passengers.each do |pax|
+      @carpool.late_passengers.build transport:pax.transport, student:pax.student,
+              grade_section:pax.grade_section, name:pax.name, class_name:pax.class_name,
+              family_no:pax.family_no, family_id:pax.family_id, active:false
+    end if @carpool.late_passengers.empty?
+    respond_to do |format|
+      format.html
+      format.js
+    end
   end
 
   # POST /carpools
@@ -75,6 +85,7 @@ class CarpoolsController < ApplicationController
       if @carpool.update(carpool_params)
         format.html { redirect_to @carpool, notice: 'Carpool was successfully updated.' }
         format.json { render :show, status: :ok, location: @carpool }
+        format.js
       else
         format.html { render :edit }
         format.json { render json: @carpool.errors, status: :unprocessable_entity }
@@ -101,7 +112,10 @@ class CarpoolsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def carpool_params
-      params.require(:carpool).permit(:category, :transport_id, :barcode, :transport_name, :period, :sort_order, :active, :status, :arrival, :departure, :notes)
+      params.require(:carpool).permit(:category, :transport_id, :barcode, :transport_name, :period, :sort_order,
+                                      :active, :status, :arrival, :departure, :notes,
+                                      late_passengers_attributes: [:id, :name, :student_id, :transport_id, :family_no,
+                                        :family_id, :active, :grade_section_id, :class_name])
     end
 
 end

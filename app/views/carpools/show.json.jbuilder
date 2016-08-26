@@ -20,4 +20,14 @@ json.carpool do
       json.class      passenger.class_name
     end
   end
+
+  json.late_passengers do
+    json.array!(@carpool.late_passengers) do |passenger|
+      json.id         passenger.id
+      json.student_id passenger.student_id
+      json.name       passenger.name
+      json.class      passenger.class_name
+      json.active     passenger.active
+    end
+  end
 end

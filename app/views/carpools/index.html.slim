@@ -6,22 +6,42 @@ nav
       li
         .input-field
           = check_box_tag :auto_update
-          = label_tag :auto_update 
-.card-panel
-  .row.carpool
-    - @carpools.each do |carpool|
-      .col.s12.m6.l3
-        .entry id="car-#{carpool.id}" class="cars #{carpool.status}"
-          .input-field.left style="margin-top:-10px"
-            .cb-label Done
-            = check_box_tag "car-done-#{carpool.id}", 1, false, data: {id: carpool.id}
-            = label_tag "car-done-#{carpool.id}", ""
-          = carpool.transport.try(:name) || "???"
-          .input-field.right style="margin-top:-10px"
-            .cb-label Wait
-            = check_box_tag "car-wait-#{carpool.id}", 1, false, data: {id: carpool.id}
-            = label_tag "car-wait-#{carpool.id}", ""
-                
+          = label_tag :auto_update
+
+.card          
+  ul.tabs.z-depth-1
+    li.tab.col.s2
+      a href='#tab1' Shuttle Cars
+    li.tab.col.s2
+      a href='#tab2' Car Riders
+    li.tab.col.s2
+      a href='#tab3' Waiting
+
+  #tab1.tab-content
+    
+  #tab2.tab-content
+    .row.carpool
+      - @carpools.each do |carpool|
+        .col.s12.m6.l3
+          .entry id="car-#{carpool.id}" class="cars #{carpool.status}"
+            .input-field.left style="margin-top:-10px"
+              .cb-label Done
+              = check_box_tag "car-done-#{carpool.id}", 1, false, data: {id: carpool.id}
+              = label_tag "car-done-#{carpool.id}", ""
+            = carpool.transport.try(:name) || "???"
+            .input-field.right style="margin-top:-10px"
+              .cb-label Wait
+              = link_to edit_carpool_path(carpool), remote: true
+                i.material-icons style="padding-top:9px; color:salmon" pause_circle_outline
+
+  #tab3.tab-content
+    .container
+      .row.waiting-list
+        - @carpools.each do |carpool|
+          - if carpool.late_passengers.active.present?
+            - carpool.late_passengers.active.each do |pax|
+               .wait-pax id="wait-pax-#{pax.id}" #{carpool.transport_name} #{pax.name} (#{pax.class_name})
+                  
 = text_field_tag :carpool_scanner, "", disabled:true
 
 #show-modal.modal.bottom-sheet
@@ -36,25 +56,28 @@ script#carpool-template type="text/x-custom-template"
       = "__carpool.transport_name_"
       .input-field.right style="margin-top:-10px"
         .cb-label Wait
-        = check_box_tag "car-wait-__carpool.id_", 1, false, data: {id: "__carpool.id_"}
-        = label_tag "car-wait-__carpool.id_", ""
+        = link_to edit_carpool_path("__carpool.id_"), remote: true
+          i.material-icons style="padding-top:9px; color:salmon" pause_circle_outline
+        / = check_box_tag "car-wait-__carpool.id_", 1, false, data: {id: "__carpool.id_"}
+        / = label_tag "car-wait-__carpool.id_", ""
 
-script#carpool-passenger-template type="text/x-custom-template"
-  .modal-content
-    h4 Passengers 
-    = "__passengers.list_"
-  .modal-footer
-    = link_to "Close", "#!", class:"modal-action modal-close waves-effect waves-light btn-flat"
-
-script#pax-list-template type="text/x-custom-template"
-  .row
-    .col.s1
-      = check_box_tag "pax-list-__pax.id_", 1, false, data: {id: "__pax.id_"}
-      = label_tag "pax-list-__pax.id_", ""
-    .col.s7
-      = "__pax.name_"
-    .col.s4 
-      = "__pax.class_"
+/ script#carpool-passenger-template type="text/x-custom-template"
+/   .modal-content
+/     h4 Passengers
+/     = "__passengers.list_"
+/   .modal-footer
+/     button.btn.waves-effect.waves-light type="submit" OK
+/     = link_to "Cancel", "#!", class:"modal-action modal-close waves-effect waves-light btn-flat"
+/ 
+/ script#pax-list-template type="text/x-custom-template"
+/   .row
+/     .col.s1
+/       = check_box_tag "pax-list-__pax.id_", 1, false, data: {id: "__pax.id_"}
+/       = label_tag "pax-list-__pax.id_", ""
+/     .col.s7
+/       = "__pax.name_"
+/     .col.s4 
+/       = "__pax.class_"
     
 javascript:
   $(document).on("page:load", function() {
