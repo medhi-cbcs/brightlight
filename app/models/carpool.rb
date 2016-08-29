@@ -9,6 +9,9 @@ class Carpool < ActiveRecord::Base
   scope :shuttle_cars, lambda { where(category:'Shuttle') }
   scope :active, lambda { where.not(status:'done') }
   scope :inactive, lambda { where(status:'done') }
+  scope :today_am, lambda { where('created_at > ? and created_at < ?', Date.today.beginning_of_day, Date.today.noon) }
+  scope :today_pm, lambda { where('created_at > ?', Date.today.noon) }
+  scope :today, lambda { where('created_at > ?', Date.today.beginning_of_day) }
 
   before_create :fill_in_details
   after_update  :sync_late_passengers

@@ -5,10 +5,18 @@ class CarpoolsController < ApplicationController
   # GET /carpools.json
   def index
     authorize! :manage, Carpool
-    if params[:since]
-      @carpools = Carpool.includes(:transport, :passengers).since params[:since]
+    @carpools = Carpool.includes(:transport, :passengers)
+    if params[:am]
+      @carpools = @carpools.today_am
+    elsif params[:pm]
+      @carpools = @carpools.today_pm
     else
-      @carpools = Carpool.includes(:transport, :passengers).since Date.today.beginning_of_day.to_i
+      @carpools = @carpools.today
+    end
+    if params[:since]
+      @carpools = @carpools.since params[:since]
+    else
+      @carpools = @carpools.since Date.today.beginning_of_day.to_i
     end
     respond_to do |format|
       format.html
@@ -26,10 +34,18 @@ class CarpoolsController < ApplicationController
   # GET /carpools/poll
   def poll
     authorize! :manage, Carpool
-    if params[:since]
-      @carpools = Carpool.includes(:transport, :passengers).since params[:since]
+    @carpools = Carpool.includes(:transport, :passengers)
+    if params[:am]
+      @carpools = @carpools.today_am
+    elsif params[:pm]
+      @carpools = @carpools.today_pm
     else
-      @carpools = Carpool.includes(:transport, :passengers).since Date.today.beginning_of_day.to_i
+      @carpools = @carpools.today
+    end
+    if params[:since]
+      @carpools = @carpools.since params[:since]
+    else
+      @carpools = @carpools.since Date.today.beginning_of_day.to_i
     end
     respond_to :json
   end

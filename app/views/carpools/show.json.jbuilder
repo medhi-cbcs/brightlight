@@ -12,22 +12,26 @@ json.carpool do
   json.created_at @carpool.created_at
   json.updated_at @carpool.updated_at
 
-  json.passengers do
-    json.array!(@carpool.passengers) do |passenger|
-      json.id         passenger.id
-      json.student_id passenger.student_id
-      json.name       passenger.name
-      json.class      passenger.class_name
+  if params[:pax]
+    json.passengers do
+      json.array!(@carpool.passengers) do |passenger|
+        json.id         passenger.id
+        json.student_id passenger.student_id
+        json.name       passenger.name
+        json.class      passenger.class_name
+      end
     end
   end
 
-  json.late_passengers do
-    json.array!(@carpool.late_passengers) do |passenger|
-      json.id         passenger.id
-      json.student_id passenger.student_id
-      json.name       passenger.name
-      json.class      passenger.class_name
-      json.active     passenger.active
+  if params[:lpax]
+    json.late_passengers do
+      json.array!(@carpool.late_passengers) do |passenger|
+        json.id         passenger.id
+        json.student_id passenger.student_id
+        json.name       passenger.name
+        json.class      passenger.class_name
+        json.active     passenger.active
+      end
     end
   end
 end

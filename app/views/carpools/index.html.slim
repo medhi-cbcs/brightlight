@@ -82,7 +82,7 @@ script#carpool-template type="text/x-custom-template"
     .entry id="car-__carpool.id_" class="cars __carpool.status_"
       .input-field.left style="margin-top:-10px"
         .cb-label Done
-        = check_box_tag "car-done-__carpool.id_", 1, "__done.status_", data: {id: "__carpool.id_"}
+        = check_box_tag "car-done-__carpool.id_", 1, false, data: {id: "__carpool.id_"}
         = label_tag "car-done-__carpool.id_", ""
       = "__carpool.transport_name_"
       .input-field.right style="margin-top:-10px"
