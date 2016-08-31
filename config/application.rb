@@ -34,5 +34,8 @@ module Brightlight
         ENV[key.to_s] = value
       end if File.exists?(env_file)
     end
+
+    # Enable React Addons (from react-rails gem)
+    config.react.addons = true
   end
 end

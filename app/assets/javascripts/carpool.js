@@ -144,7 +144,7 @@ function carpool_document_ready(){
     }
   });
   $("#auto_update").on("change", check_poll);
-  $("[name^='car-done']").on("change", car_leaving);
+  $("[name^='car-done']").on("click", car_leaving);
   // $("[name^='car-wait']").on("change", car_to_wait_list);
   localStorage.carpool_mark = (new Date().getTime()/1000) >> 0;
   poll();

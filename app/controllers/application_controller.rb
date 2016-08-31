@@ -21,6 +21,8 @@ class ApplicationController < ActionController::Base
       'user'
     elsif params[:controller] == 'welcome'
       'home'
+    elsif params[:controller] == 'carpools'
+      'sans_sidebar'
     else
       "application"
     end

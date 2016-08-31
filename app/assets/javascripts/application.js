@@ -21,7 +21,6 @@
 //= require cocoon
 //= require filterrific/filterrific-jquery
 //= require dynamic_selectable
-//= require material-init
 //= require nprogress
 //= require nprogress-turbolinks
 //= require nprogress-ajax
@@ -29,3 +28,7 @@
 //= require init
 //= require carpool
 //= require turbolinks
+//= require react
+//= require react_ujs
+//= require components
+//= require material-init
