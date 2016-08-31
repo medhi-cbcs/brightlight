@@ -59,7 +59,7 @@ nav
   .template
     = render partial: 'receipt_form_table', locals: {book_copies: @book_copies.where(roster_no: @roster_no)}
 - elsif @grade_section.present?
-  - @book_copies.order(:roster_no).pluck(:roster_no).uniq.each do |roster_no|
+  - @book_copies.pluck(:roster_no).uniq.sort.each do |roster_no|
     .template
       h5 = roster_no
       = render partial: 'receipt_form_table', locals: {book_copies: @book_copies.where(roster_no: roster_no)}
