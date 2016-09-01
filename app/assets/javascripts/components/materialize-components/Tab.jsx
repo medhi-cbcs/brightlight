@@ -1,33 +1,21 @@
 // This is just a holder for the props and children for tab, thus
 // there is no logic here.
 var Tab = React.createClass({
+  propTypes: {
+    title: React.PropTypes.node.isRequired,
+    tabWidth: React.PropTypes.number,
+    active: React.PropTypes.bool,
+    disabled: React.PropTypes.bool
+  },
+  getDefaultProps: function(){
+    return {
+      active: false,
+      disabled: false
+    }
+  },
   render: function(){
     return React.createElement(null);
   }
 });
 
-Tab.propTypes = {
-  /**
-  * The title shown in the tabs list
-  */
-  title: React.PropTypes.node.isRequired,
-  /**
-  * The width of the Tab
-  */
-  tabWidth: React.PropTypes.number,
-  /**
-  * Pre-select the tab
-  * @default false
-  */
-  active: React.PropTypes.bool,
-  /**
-  * Disable the tab
-  * @default false
-  */
-  disabled: React.PropTypes.bool
-};
 
-Tab.defaultProps = {
-  active: false,
-  disabled: false
-};

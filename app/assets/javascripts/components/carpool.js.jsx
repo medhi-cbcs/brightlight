@@ -14,14 +14,14 @@ var Carpool = React.createClass({
             </ul>
           </div>
         </nav>
-
+        
         <div className='card carpool'>
           <Tabs className='tabs z-depth-1'>
             <Tab title="Shuttle Cars">Shuttle Cars</Tab>
             <Tab title="Car Riders">Car Riders</Tab>
             <Tab title="Waiting">Waiting</Tab>
             <Tab title="Done">Done</Tab>
-          </Tabs>;
+          </Tabs>
           // <div className='row'>
           //   <ul className='tabs z-depth-1'>
           //     <li className='tab col s2'>
@@ -51,6 +51,7 @@ var Carpool = React.createClass({
           //   </div>
           // </div>
         </div>
+        
       </div>
     )
   }
