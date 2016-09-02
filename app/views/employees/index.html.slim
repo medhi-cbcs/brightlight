@@ -1,8 +1,8 @@
-.row 
+.row
   .col.s6
     h4 Employees
   .col.s5
-    = form_tag({controller:'employees', action:'index'}, {method:'get'}) do 
+    = form_tag({controller:'employees', action:'index'}, {method:'get'}) do
       .input-field
         input type="hidden" name="v" value=@view_style
         - if params[:search].present?
@@ -10,7 +10,7 @@
             | highlight_off
         - else
           i.material-icons.prefix search
-        input.icon-prefix type="text" name="search" placeholder="Search" value=params[:search]    
+        input.icon-prefix type="text" name="search" placeholder="Search" value=params[:search]
     javascript:
       function reset_form() {
         window.location="#{employees_path(v:'list')}"
@@ -29,10 +29,11 @@ nav
   table
     thead
       tr
-        th Name
-        th Job title
-        th Department
-        th 
+        th = sort_link "name"
+        th = sort_link "job_title", "Job Title"
+        th = sort_link "department"
+        th = sort_link "is_active", "Status"
+        th
 
     tbody
       - @employees.each do |employee|
@@ -40,6 +41,10 @@ nav
           td = link_to employee.name, employee
           td = employee.job_title
           td = employee.department || "--"
+          - if employee.is_active == true
+            td = "Active"
+          - else
+            td = "Resign"
           - if can? :edit, Employee
             td = link_to 'Edit', edit_employee_path(employee), class: "btn waves-effect waves-teal btn-flat btn-small"
 
