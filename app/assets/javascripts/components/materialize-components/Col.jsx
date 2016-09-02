@@ -12,9 +12,16 @@ var Col = React.createClass({
      */
     offset: React.PropTypes.string
   },
+  getDefaultProps: function() {
+      return {
+          s: 12,
+          m: 12,
+          l: 12
+      };
+  },
   render: function() {
     return(
-      <div {...this.props} 
+      <div id={this.props.id}
         className={'col'+' s'+this.props.s+' m'+this.props.m+' l'+this.props.l+' offset'+this.props.offset}>
         {this.props.children}
       </div>

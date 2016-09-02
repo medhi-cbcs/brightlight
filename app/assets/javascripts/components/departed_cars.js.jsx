@@ -1,9 +1,9 @@
-var PrivateCars = React.createClass({
+var DepartedCars = React.createClass({
   render: function() {
     return(
     	<div className='container'>
-    		<h4>Car Riders</h4>
-    	</div>
+        	<h4>Done...</h4>
+        </div>
     );
   }
 });

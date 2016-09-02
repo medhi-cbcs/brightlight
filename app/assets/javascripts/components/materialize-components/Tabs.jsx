@@ -2,7 +2,7 @@
 var Tabs = React.createClass({
   componentDidMount: function() {
     if (typeof $ !== 'undefined') {
-      $(this.tabsEl).tabs()
+      $("ul.tabs").tabs();
     }
   },
   _onSelect: function(idx, e) {
@@ -14,7 +14,7 @@ var Tabs = React.createClass({
     return (
       <Row>
         <Col s={12}>
-          <ul className='tabs'>
+          <ul className='tabs z-depth-1'>
             {
               React.Children.map(this.props.children, function (child, idx) {
                 var _child$props = child.props;
@@ -33,7 +33,7 @@ var Tabs = React.createClass({
                   col: true
                 };
                 if (tabWidth) classes['s' + tabWidth] = true;
-                var target = '#tab_' + idx;
+                var target = '#tab' + idx;
                 return (
                   <li className={classNames(classes)} key={idx}>
                     <a href={target} className={active || defaultValue === idx ? 'active' : ''}>
@@ -47,7 +47,7 @@ var Tabs = React.createClass({
         </Col>
         {
           React.Children.map(this.props.children, function (child, idx) {
-            return <div id={'tab_' + idx} s={12} key={'tab' + idx}>{child.props.children}</div>;
+            return <Col id={'tab' + idx} s={12} key={'tab' + idx}>{child.props.children}</Col>;
           })
         }
       </Row>
