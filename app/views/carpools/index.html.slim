@@ -1,1 +1,1 @@
-= react_component 'Carpool', { data: @carpools }
+= react_component 'Carpool', { shuttles: @carpools.active.shuttle_cars, privateCars: @carpools.active.private_cars, waitingList: @carpools, departedCars: @carpools.inactive }

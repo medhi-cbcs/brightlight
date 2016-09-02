@@ -1,5 +1,4 @@
 'use strict';
-'use strict';
 
 var Col = React.createClass({
   propTypes: {
