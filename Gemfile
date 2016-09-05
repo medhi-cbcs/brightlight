@@ -103,15 +103,15 @@ gem 'tinymce-rails'
 # For importing data from Excel
 gem 'roo', '~> 2.3.2'
 
+# For connecting to SQL server
+gem 'tiny_tds'
+  
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug'
   gem 'forgery'
   gem 'populator'
   gem 'letter_opener'
-
-  # For connecting to SQL server
-  gem 'tiny_tds'
 end
 
 group :development do
