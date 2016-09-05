@@ -57,6 +57,9 @@ h4 Book Copy
                 dd.col.s6
                   .label Status
                   .item = @book_copy.status.present? ? @book_copy.status.name : 'N/A'
-
+              dl.row
+                dd.col.s12
+                  .label Notes
+                  .item = @book_copy.notes
 -else
   h5 Book not found.

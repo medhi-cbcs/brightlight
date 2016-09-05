@@ -33,6 +33,10 @@
               .input-field.col.s4
                 = f.label 'Label', class: 'active'
                 = f.text_field :copy_no
+            .row
+              .input-field.col.s12
+                = f.label :notes, class: 'active'
+                = f.text_field :notes
 
     .card-action
       button.btn.waves-effect.waves-light type="submit" Save
