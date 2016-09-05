@@ -71,6 +71,7 @@ ul#condition-options.dropdown-content
         th Label
         th Condition
         th Status
+        th Notes
         th Actions
 
     tbody
@@ -83,7 +84,7 @@ ul#condition-options.dropdown-content
             span.box class="#{badge_color}"
               = book_copy.latest_condition.present? ? book_copy.latest_condition.code.capitalize : 'N/A'
           td = book_copy.status.present? ? book_copy.status.name : 'N/A'
-    
+          td = book_copy.notes
           td.actions
             = link_to book_copy
               i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="View" visibility
