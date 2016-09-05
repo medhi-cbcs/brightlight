@@ -40,7 +40,7 @@ nav
         tr
           td = link_to employee.name, employee
           td = employee.job_title
-          td = employee.department || "--"
+          td = link_to employee.department || "--"
           - if employee.is_active == true
             td = "Active"
           - else
