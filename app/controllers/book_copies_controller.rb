@@ -161,7 +161,7 @@ class BookCopiesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def book_copy_params
-      params.require(:book_copy).permit(:book_edition_id, :book_condition_id, :status_id, :barcode, :copy_no,
+      params.require(:book_copy).permit(:book_edition_id, :book_condition_id, :status_id, :barcode, :copy_no, :notes,
                                         {:book_copies => [:barcode, :grade_section_id, :no]})
     end
 end
