@@ -16,9 +16,9 @@ ul#checked-options.dropdown-content
   li 
     = link_to 'All', employee_book_loans_path
   li
-    = link_to 'Yes', employee_book_loans_path(checked:'t')
+    = link_to 'Checked', employee_book_loans_path(checked:'t', year:params[:year])
   li
-    = link_to 'No', employee_book_loans_path(checked:'f')
+    = link_to 'Not checked', employee_book_loans_path(checked:'f', year:params[:year])
 
 = form_tag list_action_book_loans_path(employee_id:params[:employee_id]), remote:true do 
   nav
@@ -56,8 +56,8 @@ ul#checked-options.dropdown-content
                 | PDF
                 i.material-icons.left description
           li
-            = link_to scan_employee_book_loans_path(@teacher)
-              | Scan
+            = link_to scan_employee_book_loans_path(@teacher, year: @academic_year.id)
+              | Return Book
               i.material-icons.left import_contacts
           - if can? :manage, BookLoan
             li
@@ -82,8 +82,8 @@ ul#checked-options.dropdown-content
             th Return date
             th
               a.dropdown-button href="#!" data-activates="checked-options" data-beloworigin="true" 
-                | Checked?
-                i.material-icons.left arrow_drop_down          
+                = params[:checked]=='t' ? "Checked" : params[:checked]=='f' ? 'Not Checked' : 'Checked?'
+                i.material-icons.right arrow_drop_down          
             th Actions
               
         tbody
