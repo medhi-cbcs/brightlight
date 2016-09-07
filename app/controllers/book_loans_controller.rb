@@ -145,7 +145,7 @@ class BookLoansController < ApplicationController
     @teacher = Employee.find params[:employee_id]
     if @teacher.present?
       @book_loans = BookLoan.includes([:employee]).includes([:book_copy,:book_edition])
-                      .where(employee: @teacher)
+                      .where(employee: @teacher).order('book_editions.title')
     else
       @error = "Teacher with name like #{params[:teacher]} was not found."
     end
@@ -200,6 +200,7 @@ class BookLoansController < ApplicationController
 
   def scan
     authorize! :scan, BookLoan
+    @academic_year_id = params[:year] || AcademicYear.current_id
     @teacher = Employee.find params[:employee_id]
   end
 
@@ -215,10 +216,10 @@ class BookLoansController < ApplicationController
         format.html { redirect_to employee_book_loan_path(employee_id:@teacher.id, id:@book_loan.id) }
         format.json { render :show, status: :ok, location: @book_loan }
       else
+        puts "Match? #{borrower_matched}"
         format.html { render :edit_tm }
         format.json { render json: @book_loan.errors, status: :unprocessable_entity }
-      end
-
+      end      
     end
   end
 
@@ -274,7 +275,7 @@ class BookLoansController < ApplicationController
   # POST /employees/1/book_loans/list_action.js
   def list_action
     authorize! :manage, BookLoan
-    employee = Employee.find params[:employee_id]
+    # employee = Employee.find params[:employee_id]
     target = Employee.find params[:to_teacher]
     year = AcademicYear.find params[:to_year]
     loan_ids = params[:add].map &:first
