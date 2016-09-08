@@ -49,7 +49,7 @@ class BookTitlesController < ApplicationController
     @book_title = BookTitle.new
 
     unless params[:edition].blank?
-      @edition = BookEdition.find_by_slug params[:edition]
+      @edition = BookEdition.find params[:edition]
       @book_title.title = @edition.title
       @book_title.authors = @edition.authors
       @book_title.publisher = @edition.publisher
@@ -99,7 +99,7 @@ class BookTitlesController < ApplicationController
     respond_to do |format|
       if @book_title.save
         # if params[:edition].present?
-        #   @book_edition = BookEdition.find_by_slug(params[:edition])
+        #   @book_edition = BookEdition.find(params[:edition])
         #   @book_edition.book_title_id = @book_title.id
         #   @book_edition.save
         # end
