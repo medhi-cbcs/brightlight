@@ -1,6 +1,6 @@
 class EmployeesController < ApplicationController
   before_action :set_employee, only: [:show, :edit, :update, :destroy]
-  helper_method :sort_column, :sort_direction
+  sortable_columns :name, :job_title, :department, :is_active
 
   # GET /employees
   # GET /employees.json
@@ -11,7 +11,11 @@ class EmployeesController < ApplicationController
         if params[:search]
           @employees = Employee.where('UPPER(name) LIKE ?', "%#{params[:search].upcase}%").order("#{sort_column} #{sort_direction}").paginate(page: params[:page], per_page: items_per_page)
         else
-          @employees = Employee.order("#{sort_column} #{sort_direction}").paginate(page: params[:page], per_page: items_per_page)
+          @employees = Employee
+            .joins('LEFT JOIN departments ON departments.id = employees.department_id')
+            .select('employees.*, departments.name as department')
+            .order("#{sort_column} #{sort_direction}")
+            .paginate(page: params[:page], per_page: items_per_page)
         end
       }
       format.csv {
@@ -114,16 +118,5 @@ class EmployeesController < ApplicationController
             :refno, :bkudid, :person_id, :_destroy]})
 
     end
-    private
-    def sortable_columns
-      ["name", "job_title", "department", "is_active"]
-    end
 
-    def sort_column
-      sortable_columns.include?(params[:column]) ? params[:column] : "name"
-    end
-
-    def sort_direction
-      %w[asc desc].include?(params[:direction]) ? params[:direction] : "asc"
-    end
 end
