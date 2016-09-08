@@ -3,8 +3,6 @@ class BookEdition < ActiveRecord::Base
   validates :isbn10, uniqueness: true, allow_blank: true, allow_nil: true
   validates :isbn13, uniqueness: true, allow_blank: true, allow_nil: true
 
-  slug :isbn_or_title_for_slug
-
   belongs_to :book_title
   has_many :book_copies
   accepts_nested_attributes_for :book_copies, allow_destroy: true, reject_if: proc { |attributes| attributes['barcode'].blank? }
