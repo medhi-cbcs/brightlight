@@ -1,5 +1,7 @@
 class EmployeesController < ApplicationController
   before_action :set_employee, only: [:show, :edit, :update, :destroy]
+  
+  include SortableColumns
   sortable_columns :name, :job_title, :department, :is_active
 
   # GET /employees

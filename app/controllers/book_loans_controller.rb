@@ -1,6 +1,8 @@
 class BookLoansController < ApplicationController
   before_action :set_book_loan, only: [:show, :edit, :update, :destroy]
   skip_before_filter :verify_authenticity_token, only: [:update]
+  
+  include SortableColumns
   sortable_columns :title, :barcode, :return_status, :subject, :out_date, :return_date, :academic_year_id
 
   # GET /book_loans
