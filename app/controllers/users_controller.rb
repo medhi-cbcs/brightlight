@@ -1,5 +1,7 @@
 class UsersController < ApplicationController
   before_action :set_user, only: [:show, :edit, :update]
+  
+  include SortableColumns
   sortable_columns :name, :email, :roles_mask
 
   def index
