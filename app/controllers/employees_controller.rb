@@ -1,5 +1,6 @@
 class EmployeesController < ApplicationController
   before_action :set_employee, only: [:show, :edit, :update, :destroy]
+  sortable_columns :name, :job_title, :department, :is_active
 
   # GET /employees
   # GET /employees.json
@@ -8,9 +9,13 @@ class EmployeesController < ApplicationController
       format.html {
         items_per_page = 20
         if params[:search]
-          @employees = Employee.where('UPPER(name) LIKE ?', "%#{params[:search].upcase}%").order(:name).paginate(page: params[:page], per_page: items_per_page)
+          @employees = Employee.where('UPPER(name) LIKE ?', "%#{params[:search].upcase}%").order("#{sort_column} #{sort_direction}").paginate(page: params[:page], per_page: items_per_page)
         else
-          @employees = Employee.order(:name).paginate(page: params[:page], per_page: items_per_page)
+          @employees = Employee
+            .joins('LEFT JOIN departments ON departments.id = employees.department_id')
+            .select('employees.*, departments.name as department')
+            .order("#{sort_column} #{sort_direction}")
+            .paginate(page: params[:page], per_page: items_per_page)
         end
       }
       format.csv {
@@ -113,4 +118,5 @@ class EmployeesController < ApplicationController
             :refno, :bkudid, :person_id, :_destroy]})
 
     end
+
 end

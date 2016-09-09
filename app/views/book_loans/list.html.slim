@@ -16,9 +16,9 @@ ul#checked-options.dropdown-content
   li 
     = link_to 'All', employee_book_loans_path
   li
-    = link_to 'Yes', employee_book_loans_path(checked:'t')
+    = link_to 'Checked', employee_book_loans_path(checked:'t', year:params[:year])
   li
-    = link_to 'No', employee_book_loans_path(checked:'f')
+    = link_to 'Not checked', employee_book_loans_path(checked:'f', year:params[:year])
 
 = form_tag list_action_book_loans_path(employee_id:params[:employee_id]), remote:true do 
   nav
@@ -56,8 +56,8 @@ ul#checked-options.dropdown-content
                 | PDF
                 i.material-icons.left description
           li
-            = link_to scan_employee_book_loans_path(@teacher)
-              | Scan
+            = link_to scan_employee_book_loans_path(@teacher, year: @academic_year.id)
+              | Return Book
               i.material-icons.left import_contacts
           - if can? :manage, BookLoan
             li
@@ -76,14 +76,15 @@ ul#checked-options.dropdown-content
               input.checkbox-toggle type="checkbox" id="checkbox-toggle"
               = label_tag "checkbox-toggle", ""
             th No
-            th Barcode
-            th Book title
-            th Out date
-            th Return date
-            th
-              a.dropdown-button href="#!" data-activates="checked-options" data-beloworigin="true" 
-                | Checked?
-                i.material-icons.left arrow_drop_down          
+            th = sort_link :barcode
+            th = sort_link :title, 'Book title'
+            //th = sort_link :out_date
+            th = sort_link :return_date 
+            th = sort_link :subject
+            th = sort_link :return_status, "Checked?"
+              / a.dropdown-button href="#!" data-activates="checked-options" data-beloworigin="true" 
+              /   = params[:checked]=='t' ? "Checked" : params[:checked]=='f' ? 'Not Checked' : 'Checked?'
+              /   i.material-icons.right arrow_drop_down          
             th Actions
               
         tbody
@@ -97,8 +98,9 @@ ul#checked-options.dropdown-content
               td 
                 - if book_loan.book_edition.present?
                   = link_to book_loan.book_edition.try(:title).truncate(50), book_loan.book_edition, remote: true
-              td = book_loan.out_date
-              td = book_loan.return_date
+              //td = book_loan.out_date
+              td = book_loan.return_date 
+              td = book_loan.subject
               td style='text-align:center' = book_loan.return_status == 'R' ? '&#9745;'.html_safe : ''
               td 
                 = link_to employee_book_loan_path(employee_id: @teacher.id, id:book_loan.id), remote:true

@@ -47,7 +47,7 @@
           th Barcode
           th Label
           th Condition
-          / th Status
+          th Notes
         tbody#book_copy
           = f.fields_for :book_copies, @book_edition.book_copies.build do |book_copy|
             = render 'book_copy_fields', f: book_copy

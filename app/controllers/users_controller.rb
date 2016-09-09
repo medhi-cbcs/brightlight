@@ -1,12 +1,16 @@
 class UsersController < ApplicationController
   before_action :set_user, only: [:show, :edit, :update]
+  sortable_columns :name, :email, :roles_mask
 
   def index
     authorize! :manage, User
 
     respond_to do |format|
       format.html do
-        @users = User.all.paginate(page: params[:page], per_page: 20)
+        @users = User.joins('LEFT JOIN employees ON employees.user_id = users.id')
+          .where(:employees => { is_active: 't' } )
+          .order("#{sort_column} #{sort_direction}")
+          .paginate(page: params[:page], per_page: 20)
       end
       format.csv do
         @users = User.all
@@ -46,5 +50,5 @@ class UsersController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def user_params
       params.require(:user).permit(:name, :first_name, :last_name, :roles => [])
-    end
+    end 
 end

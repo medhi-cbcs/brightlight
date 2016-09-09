@@ -3,7 +3,7 @@ html
 	head
 		title Brightlight
 		/[if lt IE 9]
-			script src="http://html5shiv.googlecode.com/svn/trunk/html5.js" type="text/javascript"
+
 		= stylesheet_link_tag "application", media: "all", 'data-turbolinks-track' => true
 		= csrf_meta_tags
 		link href='/assets/favicon.png' rel='icon' type='image/png'
@@ -12,7 +12,7 @@ html
 		= javascript_include_tag "application", 'data-turbolinks-track' => true
 
 		meta name="viewport" content="width=device-width, initial-scale=1.0"
-	
+
 	body class="#{controller.controller_name} blue-grey lighten-5"
 		header
 			= render 'shared/layout/header'
@@ -25,9 +25,9 @@ html
 
 		footer.page-footer style="padding-top:0"
 			//= render 'shared/layout/footer'
-			
+
 			= yield :javascript
-						
+
 			.container
 				ul.collapsible data-collapsible="expandable" style="padding-bottom:0px; box-shadow:none; border:none"
 					li style="color: white;"

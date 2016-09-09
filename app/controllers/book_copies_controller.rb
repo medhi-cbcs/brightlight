@@ -7,7 +7,7 @@ class BookCopiesController < ApplicationController
     items_per_page = 25
     # TODO: Optimize!
     if params[:book_edition_id].present?
-      @book_edition = BookEdition.find_by_slug(params[:book_edition_id])
+      @book_edition = BookEdition.find(params[:book_edition_id])
       @book_copies = @book_edition.book_copies.order(:book_label_id).includes([:book_condition, :status]).paginate(page: params[:page], per_page: items_per_page)
       @by_condition = BookCondition.all.sorted.map {|bc| [bc, @book_edition.book_copies.select {|c| c.latest_condition == bc}.count ]}
       @by_status = Status.all.map {|bc| [bc, @book_edition.book_copies.select {|c| c.status_id == bc.id}.count ]}
@@ -60,7 +60,7 @@ class BookCopiesController < ApplicationController
   # GET /book_copies/new
   def new
     authorize! :manage, BookCopy
-    @book_edition = BookEdition.find_by_slug(params[:book_edition_id])
+    @book_edition = BookEdition.find(params[:book_edition_id])
     @book_copy = @book_edition.book_copies.new
   end
 
@@ -72,7 +72,7 @@ class BookCopiesController < ApplicationController
   # GET /book_copies/1/edit
   def edit_labels
     authorize! :update, BookCopy
-    @book_edition = BookEdition.where(slug:params[:book_edition_id]).take
+    @book_edition = BookEdition.find(params[:book_edition_id])
     @book_copies = @book_edition.book_copies.order(:book_label_id)
     @grade_level_ids = GradeLevel.all.collect(&:id)
     @grade_sections = GradeSection.all
@@ -103,7 +103,7 @@ class BookCopiesController < ApplicationController
   # PATCH/PUT /book_copies/1.json
   def update
     authorize! :update, BookCopy
-    @book_edition = BookEdition.find_by_slug(params[:book_edition_id])
+    @book_edition = BookEdition.find(params[:book_edition_id])
     respond_to do |format|
       if @book_edition.update(book_edition_params)
         format.html { redirect_to book_edition_book_copies_path(@book_edition), notice: 'Book copy was successfully updated.' }
@@ -161,7 +161,7 @@ class BookCopiesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def book_copy_params
-      params.require(:book_copy).permit(:book_edition_id, :book_condition_id, :status_id, :barcode, :copy_no,
+      params.require(:book_copy).permit(:book_edition_id, :book_condition_id, :status_id, :barcode, :copy_no, :notes,
                                         {:book_copies => [:barcode, :grade_section_id, :no]})
     end
 end
