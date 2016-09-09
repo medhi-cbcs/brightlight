@@ -80,7 +80,7 @@ ul#checked-options.dropdown-content
             th = sort_link :title, 'Book title'
             //th = sort_link :out_date
             th = sort_link :return_date 
-            th = sort_link :subject, 'Subject', [:title]
+            th = sort_link :subject
             th = sort_link :return_status, "Checked?"
               / a.dropdown-button href="#!" data-activates="checked-options" data-beloworigin="true" 
               /   = params[:checked]=='t' ? "Checked" : params[:checked]=='f' ? 'Not Checked' : 'Checked?'
