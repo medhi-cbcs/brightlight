@@ -1,50 +1,58 @@
 class BookLoansController < ApplicationController
   before_action :set_book_loan, only: [:show, :edit, :update, :destroy]
   skip_before_filter :verify_authenticity_token, only: [:update]
+  sortable_columns :title, :barcode, :return_status, :subject, :out_date, :return_date, :academic_year_id
 
   # GET /book_loans
   # GET /book_loans.json
   def index
-    items_per_page = 30
+    @items_per_page = 30    
+    @book_loans = BookLoan.joins('LEFT JOIN book_titles ON book_titles.id = book_loans.book_title_id')                          
+                          .select('book_loans.*, book_titles.title as title, book_titles.subject as subject')
+    
+    unless params[:year].try(:downcase) == 'all'
+      @academic_year = AcademicYear.find params[:year] || AcademicYear.current
+      @book_loans = @book_loans.where(academic_year: @academic_year)
+    end
+
     if params[:student].present?
       @student = Student.where("lower(name) LIKE ?", "%#{params[:student].downcase}%").first
       if @student.present?
-        @book_loans = BookLoan.includes([:student])
-                        .where(academic_year_id:AcademicYear.current_id)
+        @book_loans = @book_loans.includes([:student])
                         .where(student: @student)
       else
         @error = "Student with name like #{params[:student]} was not found."
       end
+
     elsif params[:teacher].present?
       @teacher = Employee.where("lower(name) LIKE ?", "%#{params[:teacher].downcase}%").first
       if @teacher.present?
-        @book_loans = BookLoan.includes([:employee])
-                        .where(academic_year_id:AcademicYear.current_id)
+        @book_loans = @book_loans.includes([:employee])
                         .where(employee: @teacher)
       else
         @error = "Teacher with name like #{params[:teacher]} was not found."
       end
+
     elsif params[:student_id].present?
       @student = Student.find(params[:student_id])
       if @student.present?
-        @book_loans = BookLoan.includes([:student])
-                        .where(academic_year_id:AcademicYear.current_id)
+        @book_loans = @book_loans.includes([:student])
                         .where(student: @student)
       else
         @error = "Something went awry... I'm confused."
       end
+
     elsif params[:employee_id].present?
       @teacher = Employee.find(params[:employee_id])
       if @teacher.present?
-        @book_loans = BookLoan.includes([:employee])
-                        .where(academic_year_id:AcademicYear.current_id)
+        @book_loans = @book_loans.includes([:employee])              
                         .where(employee: @teacher)
       else
         @error = "Something went awry... I'm confused."
       end
+
     else
-      @book_loans = BookLoan.includes([:employee,:student])
-                      .where(academic_year_id:AcademicYear.current_id)
+      @book_loans = @book_loans.includes([:employee,:student])
     end
 
     # if params[:grade].present? and params[:grade].upcase != 'ALL'
@@ -53,19 +61,21 @@ class BookLoansController < ApplicationController
     # end
 
     if @book_loans.present?
-      if params[:year].present?
-        @academic_year = AcademicYear.find params[:year]
-        @book_loans = @book_loans.where(academic_year:@academic_year) if params[:year].upcase != 'ALL'
-      else
-        @book_loans = @book_loans.where(academic_year:AcademicYear.current_id)
-      end
+      # if params[:year].present?
+      #   @academic_year = AcademicYear.find params[:year]
+      #   @book_loans = @book_loans.where(academic_year:@academic_year) if params[:year].upcase != 'ALL'
+      # else
+      #   @book_loans = @book_loans.where(academic_year:AcademicYear.current_id)
+      # end
 
       if params[:category].present? and params[:category].upcase != 'ALL'
         @category = BookCategory.find_by_code params[:category]
         @book_loans = @book_loans.where(book_category:@category)
       end
 
-      @book_loans = @book_loans.paginate(page: params[:page], per_page: @items_per_page)
+      @book_loans = @book_loans
+                      .order("#{sort_column} #{sort_direction}")
+                      .paginate(page: params[:page], per_page: @items_per_page)
     end
   end
 
@@ -144,8 +154,11 @@ class BookLoansController < ApplicationController
     authorize! :read, BookLoan
     @teacher = Employee.find params[:employee_id]
     if @teacher.present?
-      @book_loans = BookLoan.includes([:employee]).includes([:book_copy,:book_edition])
-                      .where(employee: @teacher).order('book_editions.title')
+      @book_loans = BookLoan.includes([:employee])
+                      .joins('LEFT JOIN book_titles ON book_titles.id = book_loans.book_title_id')
+                      .select('book_loans.*, book_titles.subject as subject, book_titles.title as title')
+                      .includes([:book_copy,:book_edition])
+                      .where(employee: @teacher)
     else
       @error = "Teacher with name like #{params[:teacher]} was not found."
     end
@@ -174,7 +187,9 @@ class BookLoansController < ApplicationController
     respond_to do |format|
       format.html do
         @items_per_page = 30
-        @book_loans = @book_loans.paginate(page: params[:page], per_page: @items_per_page)
+        @book_loans = @book_loans
+                        .order("#{sort_column} #{sort_direction}")
+                        .paginate(page: params[:page], per_page: @items_per_page)
       end
       format.pdf do
         render pdf:         "Teacher's Books -#{@teacher.name}.pdf",
