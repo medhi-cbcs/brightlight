@@ -19,10 +19,13 @@ module ApplicationHelper
 
   def sort_link(column, title = nil)
     column = column.to_s
+    sc = sort_column
     title ||= column.titleize
-    direction = column == sort_column && sort_direction == "asc" ? "desc" : "asc"
+    direction = column == sc && sort_direction == "asc" ? "desc" : "asc"
     icon = sort_direction == "asc" ? "keyboard_arrow_up" : "keyboard_arrow_down"
-    icon = column == sort_column ? icon : ""
+    icon = column == sc ? icon : ""
+    puts "Link column: #{column} == #{sc}?"
+    puts "sort_direction: #{sort_direction} == #{params[:direction]}"
     link_to "#{title} <i class='material-icons vmiddle'>#{icon}</i>".html_safe, 
       params.merge({column: column, direction: direction})
   end

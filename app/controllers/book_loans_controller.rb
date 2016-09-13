@@ -1,16 +1,14 @@
 class BookLoansController < ApplicationController
   before_action :set_book_loan, only: [:show, :edit, :update, :destroy]
   skip_before_filter :verify_authenticity_token, only: [:update]
-  
-  include SortableColumns
-  sortable_columns :title, :barcode, :return_status, :subject, :out_date, :return_date, :academic_year_id
+  before_action :sortable_columns, only: [:index, :list]
 
   # GET /book_loans
   # GET /book_loans.json
   def index
     @items_per_page = 30    
     @book_loans = BookLoan.joins('LEFT JOIN book_titles ON book_titles.id = book_loans.book_title_id')                          
-                          .select('book_loans.*, book_titles.title as title, book_titles.subject as subject')
+                          .select('book_loans.*, book_titles.title as title, book_titles.subject as subject')                          
     
     unless params[:year].try(:downcase) == 'all'
       @academic_year = AcademicYear.find params[:year] || AcademicYear.current
@@ -78,6 +76,7 @@ class BookLoansController < ApplicationController
       @book_loans = @book_loans
                       .order("#{sort_column} #{sort_direction}")
                       .paginate(page: params[:page], per_page: @items_per_page)
+                      .includes([:book_copy,:book_edition,:academic_year])
     end
   end
 
@@ -155,12 +154,11 @@ class BookLoansController < ApplicationController
   def list
     authorize! :read, BookLoan
     @teacher = Employee.find params[:employee_id]
+    @book_loans = BookLoan.includes([:employee])
+                .joins('LEFT JOIN book_titles ON book_titles.id = book_loans.book_title_id')
+                .select('book_loans.*, book_titles.subject as subject, book_titles.title as title')
     if @teacher.present?
-      @book_loans = BookLoan.includes([:employee])
-                      .joins('LEFT JOIN book_titles ON book_titles.id = book_loans.book_title_id')
-                      .select('book_loans.*, book_titles.subject as subject, book_titles.title as title')
-                      .includes([:book_copy,:book_edition])
-                      .where(employee: @teacher)
+      @book_loans =  @book_loans.where(employee: @teacher)
     else
       @error = "Teacher with name like #{params[:teacher]} was not found."
     end
@@ -192,6 +190,7 @@ class BookLoansController < ApplicationController
         @book_loans = @book_loans
                         .order("#{sort_column} #{sort_direction}")
                         .paginate(page: params[:page], per_page: @items_per_page)
+                        .includes([:book_copy,:book_edition,:academic_year])
       end
       format.pdf do
         render pdf:         "Teacher's Books -#{@teacher.name}.pdf",
@@ -330,4 +329,8 @@ class BookLoansController < ApplicationController
       params.require(:book_loan).permit(:book_copy_id, :book_edition_id, :book_title_id, :user_id, :book_category_id,
         :loan_type_id, :out_date, :due_date, :academic_year_id, :barcode, :return_date, :return_status, :notes)
     end
+
+    def sortable_columns 
+      [:title, :barcode, :return_status, :subject, :out_date, :return_date, :academic_year_id]
+    end    
 end
