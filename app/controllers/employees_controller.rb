@@ -12,6 +12,7 @@ class EmployeesController < ApplicationController
             .joins('LEFT JOIN departments ON departments.id = employees.department_id')
             .select('employees.*, departments.name as department')
             .order("#{sort_column} #{sort_direction}")
+            .order('name')
             .includes(:department)
             .paginate(page: params[:page], per_page: items_per_page)
         if params[:search]
