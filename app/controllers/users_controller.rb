@@ -1,6 +1,6 @@
 class UsersController < ApplicationController
   before_action :set_user, only: [:show, :edit, :update]
-  sortable_columns :name, :email, :roles_mask
+  before_action :sortable_columns, only: [:index]
 
   def index
     authorize! :manage, User
@@ -51,4 +51,8 @@ class UsersController < ApplicationController
     def user_params
       params.require(:user).permit(:name, :first_name, :last_name, :roles => [])
     end 
+
+    def sortable_columns 
+      [:name, :email, :roles_mask]
+    end
 end

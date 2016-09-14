@@ -42,20 +42,16 @@ class ApplicationController < ActionController::Base
 
   # rescue_from (ActiveRecord::RecordNotFound) { |exception| handle_exception(exception, 404) }
   
-  # For sorting list in a table
+  def sort_column    
+    puts "Sort column: columns_to_sort: #{sortable_columns} include? #{params[:column]}"
+    columns_to_sort = sortable_columns.map &:to_s
+    columns_to_sort.include?(params[:column]) ? params[:column] : columns_to_sort.first
+  end
 
-  def self.sortable_columns(*columns)
-    @@sortable_columns = columns.map { |column| column.to_s }
+  def sort_direction    
+    %w[asc desc].include?(params[:direction]) ? params[:direction] : "asc"
   end 
 
-  def sort_column
-    @@sortable_columns.include?(params[:column]) ? params[:column] : @@sortable_columns.first
-  end
-
-  def sort_direction
-    %w[asc desc].include?(params[:direction]) ? params[:direction] : "asc"
-  end
-  
   protected
 
     def configure_permitted_parameters
