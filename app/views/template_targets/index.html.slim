@@ -1,25 +1,43 @@
-h1 Listing template_targets
+.row
+  .col.s6
+    h4 Template Target
 
-table
-  thead
-    tr
-      th Name
-      th Code
-      th Description
-      th
-      th
-      th
 
-  tbody
-    - @template_targets.each do |template_target|
+nav
+  .nav-wrapper
+    ul.right
+     li
+       - if can? :manage, Template
+          = link_to new_template_target_path
+            | New Template Target
+            i.material-icons.left add
+.card-panel
+  table
+    thead
       tr
-        td = template_target.name
-        td = template_target.code
-        td = template_target.description
-        td = link_to 'Show', template_target
-        td = link_to 'Edit', edit_template_target_path(template_target)
-        td = link_to 'Destroy', template_target, data: {:confirm => 'Are you sure?'}, :method => :delete
+        th Name
+        th Code
+        th Description
+        th
+        th
+        th
 
-br
+    tbody
+      - @template_targets.each do |template_target|
+        tr
+          td = template_target.name
+          td = template_target.code
+          td = template_target.description
+          td 
+             = link_to 'Show'
+               i.material-icons visibility
+             - if can? :edit, template_target
+               = link_to edit_template_target_path(template_target)
+                i.material-icons edit
+             - if can? :destroy,template_target
+               = link_to template_target, data: {:confirm => 'Are you sure?'}, :method => :delete
+                i.material-icons delete
 
-= link_to 'New Template target', new_template_target_path
+
+
+

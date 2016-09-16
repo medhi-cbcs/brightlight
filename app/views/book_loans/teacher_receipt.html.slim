@@ -1,0 +1,38 @@
+.row
+ .s12.card
+   - if @template
+      = @template.substituted :header
+
+
+      .container
+        table.t_receipt_border
+          thead 
+            tr.grey.lighten-2.t_receipt_border
+              th.t_receipt_border #
+              th.t_receipt_border Subject
+              th.t_receipt_border style = 'text-align:center' Textbook Title 
+              th.t_receipt_border style = 'text-align:center' Author
+              th.t_receipt_border style = 'text-align:center' Publisher
+              th.t_receipt_border style = 'text-align:center' ISBN
+              th.t_receipt_border = @year_prev
+              th.t_receipt_border = @year_next
+              th.t_receipt_border style = 'text-align:center' Diff Qty
+              th.t_receipt_border style = 'text-align:center' NOTES
+          tbody
+            - @book_loans.each.with_index(1) do |loan,ln|
+              tr
+                td.t_receipt_border = ln
+                td.t_receipt_border = loan.try(:book_title).try(:subject)
+                td.t_receipt_border = loan.try(:book_title).try(:title)
+                td.t_receipt_border = loan.try(:book_edition).try(:author)
+                td.t_receipt_border 
+                td.t_receipt_border
+                td.t_receipt_border
+                td.t_receipt_border
+                td.t_receipt_border
+                td.t_receipt_border
+
+      = @template.substituted :closing
+      = @template.substituted :footer
+
+  

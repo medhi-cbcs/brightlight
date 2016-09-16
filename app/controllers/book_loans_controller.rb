@@ -298,7 +298,34 @@ class BookLoansController < ApplicationController
     respond_to :js
   end
 
+ # GET /book_loans/teacher_receipt?tid=1&year=1
+  def teacher_receipt
+    @academic_year = AcademicYear.find params[:year]
+    @year_prev = @academic_year.name.slice!(0..3)
+    @year_next = @academic_year.name.slice!(1..4)  
+    # Use the specified template or the default one if none given
+    if params[:template].present?
+      @template = Template.find params[:template]
+    else
+      @template = Template.where(target:'teacher_book_receipt').where(active:'true').take
+    end
 
+    if params[:employee_id].present?
+      @teacher = Employee.find params[:employee_id]
+      @book_loans = BookLoan.select([BookTitle.arel_table[:title], BookTitle.arel_table[:subject], BookEdition.arel_table[:authors],BookEdition.arel_table[:publisher], BookEdition.arel_table[:isbn13], BookEdition.arel_table[:isbn10], BookLoan.arel_table[:notes]])
+      .where(BookLoan.arel_table[:academic_year_id].eq(16).and(BookLoan.arel_table[:employee_id].eq(6)))      .joins(BookLoan.arel_table.join(BookEdition.arel_table).on(BookEdition.arel_table[:id].eq(BookLoan.arel_table[:book_edition_id])).join_sources)
+      .joins(BookLoan.arel_table.join(BookTitle.arel_table).on(BookTitle.arel_table[:id].eq(BookLoan.arel_table[:book_title_id])).join_sources)
+      .group(BookTitle.arel_table[:title], BookTitle.arel_table[:subject], BookEdition.arel_table[:authors],BookEdition.arel_table[:publisher], BookEdition.arel_table[:isbn13], BookEdition.arel_table[:isbn10],BookLoan.arel_table[:notes])
+        
+        if @template
+        @template.placeholders = {
+          teacher_name: @teacher.name,
+          year_prev: @year_prev,
+          year_next: @year_next
+            }
+        end
+    end
+  end
   ####
 
   private
@@ -312,4 +339,7 @@ class BookLoansController < ApplicationController
       params.require(:book_loan).permit(:book_copy_id, :book_edition_id, :book_title_id, :user_id, :book_category_id,
         :loan_type_id, :out_date, :due_date, :academic_year_id, :barcode, :return_date, :return_status, :notes)
     end
+    
+    
+   
 end
