@@ -312,10 +312,13 @@ class BookLoansController < ApplicationController
 
     if params[:employee_id].present?
       @teacher = Employee.find params[:employee_id]
-      @book_loans = BookLoan.select([BookTitle.arel_table[:title], BookTitle.arel_table[:subject], BookEdition.arel_table[:authors],BookEdition.arel_table[:publisher], BookEdition.arel_table[:isbn13], BookEdition.arel_table[:isbn10], BookLoan.arel_table[:notes]])
-      .where(BookLoan.arel_table[:academic_year_id].eq(16).and(BookLoan.arel_table[:employee_id].eq(6)))      .joins(BookLoan.arel_table.join(BookEdition.arel_table).on(BookEdition.arel_table[:id].eq(BookLoan.arel_table[:book_edition_id])).join_sources)
-      .joins(BookLoan.arel_table.join(BookTitle.arel_table).on(BookTitle.arel_table[:id].eq(BookLoan.arel_table[:book_title_id])).join_sources)
-      .group(BookTitle.arel_table[:title], BookTitle.arel_table[:subject], BookEdition.arel_table[:authors],BookEdition.arel_table[:publisher], BookEdition.arel_table[:isbn13], BookEdition.arel_table[:isbn10],BookLoan.arel_table[:notes])
+      @book_loans = BookLoan.select(['COUNT (book_loans.loan_status) AS loan_qty','COUNT (book_loans.return_status) AS return_qty','book_titles.title', 'book_titles.subject','book_editions.authors','book_editions.publisher', 'book_editions.isbn13','book_editions.isbn10', 'book_loans.notes'])
+      .where('book_loans.academic_year_id = ? AND book_loans.employee_id = ?', params[:year],params[:employee_id])      .joins("LEFT JOIN book_editions ON book_editions.id = book_loans.book_edition_id")
+      .joins("LEFT JOIN book_titles ON book_titles.id = book_loans.book_title_id")
+      .group('book_titles.title', 'book_titles.subject', 'book_editions.authors','book_editions.publisher', 'book_editions.isbn13', 'book_editions.isbn10','book_loans.notes')
+      .order('subject','title')
+       
+      
         
         if @template
         @template.placeholders = {
