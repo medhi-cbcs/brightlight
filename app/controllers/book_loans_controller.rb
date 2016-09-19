@@ -359,14 +359,14 @@ class BookLoansController < ApplicationController
       params.require(:book_loan).permit(:book_copy_id, :book_edition_id, :book_title_id, :user_id, :book_category_id,
         :loan_type_id, :out_date, :due_date, :academic_year_id, :barcode, :return_date, :return_status, :notes)
     end
-<<<<<<< HEAD
+
     
     
    
-=======
+
 
     def sortable_columns 
       [:title, :barcode, :return_status, :subject, :out_date, :return_date, :academic_year_id]
     end    
->>>>>>> remotes/origin/master
+
 end
