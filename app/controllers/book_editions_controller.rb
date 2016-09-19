@@ -13,14 +13,24 @@ class BookEditionsController < ApplicationController
       @view_style = :block
       session[:view_style] = ''
     end
-
-    if params[:search]
-      @book_editions = BookEdition.search_query(params[:search]).paginate(page: params[:page], per_page: items_per_page)
-    else
-      @book_editions = BookEdition.paginate(page: params[:page], per_page: items_per_page)
-    end
+    
+    @book_editions = BookEdition.paginate(page: params[:page], per_page: items_per_page)
+    @book_editions = @book_editions.search_query(params[:search]) if params[:search]
   end
 
+  # GET /book_editions/summary
+  # GET /book_editions/summary.json
+  def summary
+    @book_editions = BookEdition.all.order(:title)    
+    if params[:condition] && params[:condition] != 'all' 
+      @condition = BookCondition.find_by_code(params[:condition])
+    end 
+    respond_to do |format|
+      format.html { @book_editions = @book_editions.paginate(page: params[:page], per_page: 100) }
+      format.xls 
+    end
+  end 
+  
   # GET /book_editions/1
   # GET /book_editions/1.json
   def show
