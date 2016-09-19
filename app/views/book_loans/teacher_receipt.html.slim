@@ -1,0 +1,45 @@
+.row
+ .s12.card
+   - if @template
+      = @template.substituted :header
+
+
+      .container
+        table.t_receipt_border
+          thead 
+            tr.grey.lighten-2.t_receipt_border
+              th.t_receipt_border.text-align.center #
+              th.t_receipt_border.text-align.center Subject
+              th.t_receipt_border.text-align.center Textbook Title 
+              th.t_receipt_border.text-align.center Author
+              th.t_receipt_border.text-align.center Publisher
+              th.t_receipt_border.text-align.center ISBN
+              th.t_receipt_border.text-align.center = @year_prev
+              th.t_receipt_border.text-align.center = @year_next
+              th.t_receipt_border.text-align.center Diff Qty
+              th.t_receipt_border.text-align.center NOTES
+          tbody
+            - @book_loans.each.with_index(1) do |loan,ln|
+              tr
+                td.t_receipt_border = ln.to_s
+                td.t_receipt_border = loan.subject
+                td.t_receipt_border = loan.title
+                td.t_receipt_border = loan.authors
+                td.t_receipt_border = loan.publisher
+                - if loan.isbn13.present?
+                  td.t_receipt_border = loan.isbn13
+                - else
+                  td.t_receipt_border = loan.isbn10
+                td.t_receipt_border.text-align.center = loan.loan_qty
+                - if loan.return_qty == 0
+                  td.t_receipt_border = " "
+                  td.t_receipt_border = " "
+                - else  
+                  td.t_receipt_border.text-align.center = loan.return_qty
+                  td.t_receipt_border.text-align.center = loan.loan_qty - loan.return_qty
+                td.t_receipt_border = loan.notes
+
+      = @template.substituted :closing
+      = @template.substituted :footer
+
+  
