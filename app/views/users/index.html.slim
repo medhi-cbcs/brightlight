@@ -1,8 +1,8 @@
-.row 
+.row
   .col.s6
     h4 Users
   .col.s5
-    = form_tag({controller:'users', action:'index'}, {method:'get'}) do 
+    = form_tag({controller:'users', action:'index'}, {method:'get'}) do
       .input-field
         input type="hidden" name="v" value=@view_style
         - if params[:search].present?
@@ -10,7 +10,7 @@
             | highlight_off
         - else
           i.material-icons.prefix search
-        input.icon-prefix type="text" name="search" placeholder="Search" value=params[:search]    
+        input.icon-prefix type="text" name="search" placeholder="Search" value=params[:search]
     javascript:
       function reset_form() {
         window.location="#{users_path(v:'list')}"
@@ -26,9 +26,9 @@ nav
   table.striped.compact
     thead
       tr
-        th Name
-        th Email
-        th Roles
+        th = sort_link "name"
+        th = sort_link "email"
+        th = sort_link "roles_mask", "Roles"
         th Employee Record
 
     tbody
@@ -37,11 +37,11 @@ nav
           td = user.name
           td = user.email
           td = user.roles.map(&:to_s).map(&:capitalize).join(', ')
-          td 
-            = link_to user.employee 
+          td
+            = link_to user.employee
               i.material-icons account_circle
-          td 
-            = link_to user 
+          td
+            = link_to user
               i.material-icons visibility
             - if can? :edit, user
               = link_to edit_user_path(user)

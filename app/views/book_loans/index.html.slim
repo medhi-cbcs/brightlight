@@ -31,7 +31,7 @@ ul#category-options.dropdown-content
 ul#year-options.dropdown-content
   li  
     = link_to 'All', book_loans_path(params.merge(year:'all').symbolize_keys)
-  - AcademicYear.all.each do |year|
+  - AcademicYear.list_for_menu.each do |year|
     li 
       = link_to year.name, book_loans_path(params.merge(year:year.id).symbolize_keys)
 // NOTE: for these wierd .symbolize_keys, refer to this article https://github.com/rails/rails/issues/21645
@@ -51,14 +51,14 @@ nav
 - if @book_loans.present?          
   .card-panel
     - unless @error.present?
-      table
+      table.compact.striped
         thead
           tr
-            th Barcode
-            th Book title
-            th Out date
-            th Due date
-            th Academic year
+            th = sort_link :barcode
+            th = sort_link :title
+            th = sort_link :out_date
+            /th Due date
+            th = sort_link :academic_year_id, 'Year'
             th Name
             th Actions
 
@@ -70,12 +70,14 @@ nav
                 - if book_loan.book_edition.present?
                   = link_to book_loan.book_edition.try(:title).truncate(50), book_loan.book_edition, remote:true 
               td = book_loan.out_date
-              td = book_loan.due_date
+              /td = book_loan.due_date
               td = book_loan.academic_year.try(:name)
               - if book_loan.student.present?
                 td = book_loan.student.name
-              - if book_loan.employee.present?
+              - elsif book_loan.employee.present?
                 td = book_loan.employee.name
+              - else
+                td 
               td 
                 = link_to book_loan, remote: true
                   i.material-icons visibility

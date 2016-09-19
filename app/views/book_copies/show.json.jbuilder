@@ -6,6 +6,7 @@ json.book_copy do
   json.book_condition @book_copy.latest_condition.try(:code)
   json.barcode @book_copy.barcode
   json.copy_no @book_copy.try(:book_label).try(:name)
+  json.notes @book_copy.notes
 
   year_id = @year.id
   json.academic_year do

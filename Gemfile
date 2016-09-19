@@ -55,7 +55,7 @@ gem 'materialize-sass', '0.97.1'
 gem 'jquery-ui-rails'
 
 # Wrapper for Google Books API
-gem 'google_books' #, git: 'https://github.com/medhiwidjaja/google_books.git'
+gem 'google_books', git: 'https://github.com/medhiwidjaja/google_books.git'
 
 gem 'hashie'
 
@@ -75,7 +75,7 @@ gem 'wicked_pdf'
 gem 'wkhtmltopdf-binary', '~> 0.9.9.3'
 
 # Slug for friendly URLs. Using specific fork for Rails 4.0 compatibility
-gem 'slug' #, git:'https://github.com/subimage/slug.git'
+gem 'slug', git:'https://github.com/subimage/slug.git'
 
 # For creating and importing database
 gem 'activerecord-import'
@@ -103,15 +103,15 @@ gem 'tinymce-rails'
 # For importing data from Excel
 gem 'roo', '~> 2.3.2'
 
+# For connecting to SQL server
+gem 'tiny_tds'
+  
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug'
   gem 'forgery'
   gem 'populator'
   gem 'letter_opener'
-
-  # For connecting to SQL server
-  gem 'tiny_tds'
 end
 
 group :development do

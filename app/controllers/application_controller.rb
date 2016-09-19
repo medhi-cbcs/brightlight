@@ -3,6 +3,7 @@ class ApplicationController < ActionController::Base
   # For APIs, you may want to use :null_session instead.
   protect_from_forgery
   helper_method :current_user
+  helper_method :sort_column, :sort_direction
   layout :layout_by_controller
   before_action :set_current_academic_year
 
@@ -40,6 +41,15 @@ class ApplicationController < ActionController::Base
   end
 
   # rescue_from (ActiveRecord::RecordNotFound) { |exception| handle_exception(exception, 404) }
+  
+  def sort_column    
+    columns_to_sort = sortable_columns.map &:to_s
+    columns_to_sort.include?(params[:column]) ? params[:column] : columns_to_sort.first
+  end
+
+  def sort_direction    
+    %w[asc desc].include?(params[:direction]) ? params[:direction] : "asc"
+  end 
 
   protected
 

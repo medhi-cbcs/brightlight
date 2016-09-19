@@ -16,4 +16,16 @@ module ApplicationHelper
     css_class = 'delete-link '+options[:class]
     link_to model, data: data_options, method: :delete, remote: true, class: css_class, &block
   end
+
+  def sort_link(column, title = nil)
+    column = column.to_s
+    sc = sort_column
+    title ||= column.titleize
+    direction = column == sc && sort_direction == "asc" ? "desc" : "asc"
+    icon = sort_direction == "asc" ? "keyboard_arrow_up" : "keyboard_arrow_down"
+    icon = column == sc ? icon : ""
+    link_to "#{title} <i class='material-icons vmiddle'>#{icon}</i>".html_safe, 
+      params.merge({column: column, direction: direction})
+  end
+
 end

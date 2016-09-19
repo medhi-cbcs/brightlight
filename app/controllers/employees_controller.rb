@@ -1,5 +1,6 @@
 class EmployeesController < ApplicationController
   before_action :set_employee, only: [:show, :edit, :update, :destroy]
+  before_action :sortable_columns, only: [:index]
 
   # GET /employees
   # GET /employees.json
@@ -7,10 +8,15 @@ class EmployeesController < ApplicationController
     respond_to do |format|
       format.html {
         items_per_page = 20
+        @employees = Employee
+            .joins('LEFT JOIN departments ON departments.id = employees.department_id')
+            .select('employees.*, departments.name as department')
+            .order("#{sort_column} #{sort_direction}")
+            .order('name')
+            .includes(:department)
+            .paginate(page: params[:page], per_page: items_per_page)
         if params[:search]
-          @employees = Employee.where('UPPER(name) LIKE ?', "%#{params[:search].upcase}%").order(:name).paginate(page: params[:page], per_page: items_per_page)
-        else
-          @employees = Employee.order(:name).paginate(page: params[:page], per_page: items_per_page)
+          @employees = @employees.where('UPPER(employees.name) LIKE ?', "%#{params[:search].upcase}%")       
         end
       }
       format.csv {
@@ -112,6 +118,13 @@ class EmployeesController < ApplicationController
             :employee_id, :employee_no, :loan_status, :return_status, :notes, :grade_section_code, :grade_subject_code,
             :refno, :bkudid, :person_id, :_destroy]})
     end
+<<<<<<< HEAD
     
+=======
+
+    def sortable_columns 
+      [:name, :job_title, :department, :is_active]
+    end
+>>>>>>> remotes/origin/master
 
 end

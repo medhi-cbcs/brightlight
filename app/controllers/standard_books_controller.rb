@@ -48,7 +48,7 @@ class StandardBooksController < ApplicationController
     authorize! :manage, StandardBook
     @standard_book = StandardBook.new
     @grade_level = GradeLevel.find params[:grade_level_id]
-    @academic_year = AcademicYear.find(params[:year]) || AcademicYear.current
+    @academic_year = AcademicYear.where(id:params[:year]).take || AcademicYear.current
   end
 
   # GET /standard_books/1/edit
