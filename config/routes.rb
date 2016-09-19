@@ -24,9 +24,12 @@ Rails.application.routes.draw do
   end
 
   resources :book_editions do
+    collection do
+      get 'summary'
+    end
     resources :book_copies, shallow: true do
       collection do
-        get 'edit_labels'
+        get 'edit_labels'        
       end
     end
     member do

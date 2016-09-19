@@ -18,6 +18,9 @@
 
 nav
   .nav-wrapper
+    ul 
+      li
+        = link_to 'Condition Summary', summary_book_editions_path
     ul
       li.right
         = link_to book_editions_path(search:params[:search])

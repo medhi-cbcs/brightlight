@@ -23,3 +23,6 @@ Gemfile.lock
 # Ignore barcode images
 /public/assets/images/INV-*.PNG
 /public/assets/images/F*.PNG
+
+# Ignore vscode stuff
+/.vscode
