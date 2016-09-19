@@ -1,6 +1,6 @@
 /* Carpool */
 
-
+var carpoolList = [];
 function carpool_scanner(el,barcode) {
   url = "/carpools";
   var dataToSend = new Object();
@@ -15,7 +15,7 @@ function carpool_scanner(el,barcode) {
     success: function(data) {
       var car = data.carpool;
       Materialize.toast('Welcome! '+car.id+'-'+car.transport_name, 5000, 'green');
-      update_carpool_info(car);
+      updateCarpoolInfo(car);
       localStorage.carpool_mark = (Date.parse(car.created_at)/1000) >> 0;
     },
     error: function() {
@@ -24,7 +24,7 @@ function carpool_scanner(el,barcode) {
   });
 }
 
-function check_poll(){
+function checkPoll(){
   if ($("#auto_update").prop("checked")) {
     poll();
   } else {
@@ -38,12 +38,12 @@ function poll() {
   var timeout = 3600; // 1 hour
   var timedelay = 5000;
   var now = new Date().getTime() / 1000 >> 0;
-  var check = ($("#auto_update").prop("checked"));
+  var autoCheck = ($("#auto_update").prop("checked"));
   $.getJSON('/carpools/poll?lpax&since='+localStorage.carpool_mark, null, function(data) {
     if (data.length > 0) {
       $.each(data, function(i,car){
-        update_carpool_info(car);
-        update_waiting_list(car.late_passengers);
+        updateCarpoolInfo(car);
+        updateWaitingList(car.late_passengers);
       });
       localStorage.carpool_ts = now;
     }
@@ -52,19 +52,19 @@ function poll() {
       localStorage.carpool_ts = now;
     }
     ts = parseInt(localStorage.carpool_ts);
-    if (now-ts < timeout && check) {
+    if (now-ts < timeout && autoCheck) {
       setTimeout(poll, timedelay)
     //} else {
     };
   });
 }
 
-function car_leaving() {
+function carMoves() {
   console.log("Car "+ $(this).prop("checked") ? "leaving" : "returning");
-  update_car_status($(this).data('id'), $(this).prop("checked") ? "done" : "ready");
+  updateCarStatus($(this).data('id'), $(this).prop("checked") ? "done" : "ready");
 }
 
-function update_car_status(id, status) {
+function updateCarStatus(id, status) {
   url = "/carpools/" + id + "?lpax";
   var dataToSend = new Object();
   dataToSend = { carpool: { status: status }};
@@ -76,7 +76,8 @@ function update_car_status(id, status) {
     data: jsonData,
     dataType: 'json',
     success: function(data) {
-      update_carpool_info(data.carpool);
+      updateCarpoolInfo(data.carpool);
+      console.log('Updated');
     },
     error: function() {
       Materialize.toast("Sorry...I'm confused", 5000, 'red');
@@ -84,17 +85,28 @@ function update_car_status(id, status) {
   });
 }
 
-function update_carpool_info(car) {
+function updateCarpoolInfo(car) {  
+  var idx = $.inArray(car,carpoolList);
+  if (idx >= 0) {
+    carpoolList[idx].status = car.status;
+  } else {
+    Object.defineProperties(car, {
+      "status": { set: function(s) {
+        
+      }}
+    });
+    carpoolList.push(car);
+  }
   var target = $("#car-"+car.id);
-  var html_str = $("#carpool-template").html()
+  var htmlStr = $("#carpool-template").html()
     .replace(/__carpool.id_/g, car.id)
     .replace(/__carpool.transport_name_/g, car.transport_name)
     .replace(/__carpool.status_/g, car.status);
   if (target.length == 0) {
     if(car.category=='PrivateCar') {
-      $("#private-cars").append(html_str);
+      $("#private-cars").append(htmlStr);
     } else if (car.category=='Shuttle') {
-      $("#shuttle-cars").append(html_str);
+      $("#shuttle-cars").append(htmlStr);
     }
   } else {
     target.removeClass('ready leaving loading waiting done');
@@ -102,27 +114,27 @@ function update_carpool_info(car) {
   }
   if (car.status == "done") {
     target.fadeOut('slow', function(){ target.remove(); });
-    $("#exit-carpool").append(html_str);
+    $("#exit-carpool").append(htmlStr);
   }
   if (car.status == "ready" && $("#exit-carpool").has(target).length > 0) {
     target.fadeOut('slow', function(){ target.remove(); });
     if(car.category=='PrivateCar') {
-      $("#private-cars").append(html_str);
+      $("#private-cars").append(htmlStr);
     } else if (car.category=='Shuttle') {
-      $("#shuttle-cars").append(html_str);
+      $("#shuttle-cars").append(htmlStr);
     }
   }
   console.log("Car "+car.transport_name+" Done? "+$("#car-done-"+car.id).prop("checked"));
   console.log("Status? "+car.status);
   $("#car-done-"+car.id).prop("checked", car.status == 'done');
   console.log("Now, "+car.id+" check: "+$("#car-done-"+car.id).prop("checked"));
-  update_waiting_list(car.late_passengers);
+  updateWaitingList(car.late_passengers);
 }
 
-function update_waiting_list(late_passengers) {
+function updateWaitingList(latePassengers) {
   //console.log("Update waiting list: "+late_passengers);
-  if (late_passengers && late_passengers.length > 0) {
-    $.each(late_passengers, function(i,pax) {
+  if (latePassengers && latePassengers.length > 0) {
+    $.each(latePassengers, function(i,pax) {
       var target = $("#wait-pax-" + pax.id);
       if (target.length == 0 && pax.active) {
         //console.log("Waiting list: adding "+pax.name);
@@ -136,17 +148,17 @@ function update_waiting_list(late_passengers) {
   }
 }
 
-function carpool_document_ready(){
+function carpoolDocumentReady(){
   $("#carpool_scanner").codeScanner({
     minEntryChars: 10,
     onScan: function($element, barcode){
       carpool_scanner($element, barcode);
     }
   });
-  $("#auto_update").on("change", check_poll);
-  $("[name^='car-done']").on("change", car_leaving);
+  $("#auto_update").on("change", checkPoll);
+  $(".carpool").on("change", "[name^='car-done']", carMoves);
   // $("[name^='car-wait']").on("change", car_to_wait_list);
-  localStorage.carpool_mark = (new Date().getTime()/1000) >> 0;
+  localStorage.carpoolMark = (new Date().setHours(0,0,0,0)/1000) >> 0;
   poll();
 }
 
