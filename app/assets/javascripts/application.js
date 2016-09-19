@@ -27,5 +27,5 @@
 //= require nprogress-ajax
 //= require jquery-code-scanner
 //= require init
-//= require carpool
+//= require carpools
 //= require turbolinks
