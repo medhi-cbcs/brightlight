@@ -185,7 +185,7 @@ class BookEdition < ActiveRecord::Base
   end
 
   def isbn
-    isbn13 || isbn10
+    isbn13 || isbn10 || refno
   end
 
   def isbn_or_title_for_slug
