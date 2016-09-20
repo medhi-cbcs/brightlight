@@ -10,6 +10,7 @@ class UsersController < ApplicationController
         @users = User.joins('LEFT JOIN employees ON employees.user_id = users.id')
           .where(:employees => { is_active: 't' } )
           .order("#{sort_column} #{sort_direction}")
+          .order('name')
           .paginate(page: params[:page], per_page: 20)
       end
       format.csv do
