@@ -118,13 +118,9 @@ class EmployeesController < ApplicationController
             :employee_id, :employee_no, :loan_status, :return_status, :notes, :grade_section_code, :grade_subject_code,
             :refno, :bkudid, :person_id, :_destroy]})
     end
-<<<<<<< HEAD
     
-=======
-
     def sortable_columns 
       [:name, :job_title, :department, :is_active]
     end
->>>>>>> remotes/origin/master
 
 end
