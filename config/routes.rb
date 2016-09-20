@@ -122,6 +122,7 @@ Rails.application.routes.draw do
       post 'initialize_teachers'
       post 'move_all'
       get 'borrowers'
+      get 'teacher_receipt'
     end
   end
 
@@ -135,6 +136,7 @@ Rails.application.routes.draw do
   delete  'students/:student_id/book_loans/:id' => 'book_loans#destroy'
 
   get  'employees/:employee_id/book_loans' => 'book_loans#list', as: :employee_book_loans
+  get  'employees/:employee_id/teacher_receipt' => 'book_loans#teacher_receipt', as: :employee_book_loans_receipt
   post 'employees/:employee_id/book_loans' => 'book_loans#create_tm'
   get  'employees/:employee_id/book_loans/new' => 'book_loans#new_tm', as: :new_employee_book_loans
   get  'employees/:employee_id/book_loans/scan' => 'book_loans#scan', as: :scan_employee_book_loans

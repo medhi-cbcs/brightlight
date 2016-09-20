@@ -47,6 +47,10 @@ ul#checked-options.dropdown-content
       #default-buttons
         ul.right
           li 
+              = link_to employee_book_loans_receipt_path(@teacher, year: @academic_year.id)
+                | Receipt
+                i.material-icons.left book
+          li 
             -if @academic_year.present?
               = link_to employee_book_loans_path(@teacher, year: @academic_year.id, format: :pdf), target: '_blank'
                 | PDF

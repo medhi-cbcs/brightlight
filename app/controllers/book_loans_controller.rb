@@ -315,7 +315,37 @@ class BookLoansController < ApplicationController
     respond_to :js
   end
 
+ # GET /book_loans/teacher_receipt?tid=1&year=1
+  def teacher_receipt
+    @academic_year = AcademicYear.find params[:year]
+    @year_prev = @academic_year.name.slice!(0..3)
+    @year_next = @academic_year.name.slice!(1..4)  
+    # Use the specified template or the default one if none given
+    if params[:template].present?
+      @template = Template.find params[:template]
+    else
+      @template = Template.where(target:'teacher_book_receipt').where(active:'true').take
+    end
 
+    if params[:employee_id].present?
+      @teacher = Employee.find params[:employee_id]
+      @book_loans = BookLoan.select(['COUNT (book_loans.loan_status) AS loan_qty','COUNT (book_loans.return_status) AS return_qty','book_titles.title', 'book_titles.subject','book_editions.authors','book_editions.publisher', 'book_editions.isbn13','book_editions.isbn10', 'book_loans.notes'])
+      .where('book_loans.academic_year_id = ? AND book_loans.employee_id = ?', params[:year],params[:employee_id])      .joins("LEFT JOIN book_editions ON book_editions.id = book_loans.book_edition_id")
+      .joins("LEFT JOIN book_titles ON book_titles.id = book_loans.book_title_id")
+      .group('book_titles.title', 'book_titles.subject', 'book_editions.authors','book_editions.publisher', 'book_editions.isbn13', 'book_editions.isbn10','book_loans.notes')
+      .order('subject','title')
+       
+      
+        
+        if @template
+        @template.placeholders = {
+          teacher_name: @teacher.name,
+          year_prev: @year_prev,
+          year_next: @year_next
+            }
+        end
+    end
+  end
   ####
 
   private
@@ -330,7 +360,13 @@ class BookLoansController < ApplicationController
         :loan_type_id, :out_date, :due_date, :academic_year_id, :barcode, :return_date, :return_status, :notes)
     end
 
+    
+    
+   
+
+
     def sortable_columns 
       [:title, :barcode, :return_status, :subject, :out_date, :return_date, :academic_year_id]
     end    
+
 end

@@ -12,6 +12,7 @@ class EmployeesController < ApplicationController
             .joins('LEFT JOIN departments ON departments.id = employees.department_id')
             .select('employees.*, departments.name as department')
             .order("#{sort_column} #{sort_direction}")
+            .order('name')
             .includes(:department)
             .paginate(page: params[:page], per_page: items_per_page)
         if params[:search]
@@ -116,9 +117,8 @@ class EmployeesController < ApplicationController
             :out_date, :due_date, :return_date, :loan_type_id, :user_id, :created_at, :updated_at, :barcode,
             :employee_id, :employee_no, :loan_status, :return_status, :notes, :grade_section_code, :grade_subject_code,
             :refno, :bkudid, :person_id, :_destroy]})
-
     end
-
+    
     def sortable_columns 
       [:name, :job_title, :department, :is_active]
     end
