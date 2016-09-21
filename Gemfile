@@ -75,7 +75,7 @@ gem 'wicked_pdf'
 gem 'wkhtmltopdf-binary', '~> 0.9.9.3'
 
 # Slug for friendly URLs. Using specific fork for Rails 4.0 compatibility
-gem 'slug' #, git:'https://github.com/subimage/slug.git'
+gem 'slug' , git:'https://github.com/subimage/slug.git'
 
 # For creating and importing database
 gem 'activerecord-import'
