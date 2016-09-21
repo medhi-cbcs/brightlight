@@ -31,14 +31,14 @@ var Transport = {
       .addClass(this._status);
     // this.doneCheckBox().prop("checked", this.status == 'done');
     console.log("Now, "+this._status+" check: "+$("#car-done-"+this.id).prop("checked"));
-    // if (s == 'done') {
-    //   var transport = this;
-    //   this.node().fadeOut('slow', function(){ 
-    //     this.remove(); 
-    //     transport.render(); 
-    //     console.log("Element removed! status: "+transport.status); 
-    //   });      
-    // }
+    if (s == 'done') {
+      var transport = this;
+      this.node().fadeOut('slow', function(){ 
+        this.remove(); 
+        transport.render(); 
+        console.log("Element removed! status: "+transport.status); 
+      });      
+    }
   },
   get status() {
     return this._status;
