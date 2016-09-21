@@ -17,24 +17,19 @@ class Carpool < ActiveRecord::Base
   after_update  :sync_late_passengers
 
   private
-    PRIVATE_CAR_PREFIX = "CBCS-"
-    SHUTTLE_CAR_PREFIX = "SHUTTLE-"
+
     def fill_in_details
-      if barcode && match = barcode.match(/#{PRIVATE_CAR_PREFIX}(\d{5})/)
-        family_no = match[1]
-        self.category = "PrivateCar"
-        self.transport = Transport.where(category:category,family_no:family_no).take
-      elsif barcode && match = barcode.match(/#{SHUTTLE_CAR_PREFIX}([A-Z]{,2})/)
-        self.category = "Shuttle"
-        self.transport = Transport.where(category:category,name:match[1]).take
-      else
+      transport = SmartCard.find_by_code(barcode).try(:transport)
+      unless transport.present?
         return false
       end
-      self.transport_name = transport.try(:name)
+      self.transport_id = transport.id
+      self.transport_name = transport.name
       self.arrival = created_at
       self.period = arrival < Time.now.noon ? 0 : 1
       self.active = true
       self.status = 'ready'
+      self.category = transport.category      
     end
 
     def sync_late_passengers

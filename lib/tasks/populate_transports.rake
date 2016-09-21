@@ -9,10 +9,10 @@ namespace :data do
     current_families = Student.current.pluck(:family_no).uniq
     current_families.each do |family_no|
       puts "Family no #{family_no}"
-      private_car = Transport.create(category: "PrivateCar", name: "%03d" % family_no.to_i, family_no: family_no, active: true)
+      Transport.create(category: "private", name: "%03d" % family_no.to_i, family_no: family_no, active: true)
     end
     GradeSectionsStudent.where(academic_year_id:AcademicYear.current_id).each do |g|
-      transport = Transport.where(category:"PrivateCar", family_no: g.student.family_no).take
+      transport = Transport.where(category:"private", family_no: g.student.family_no).take
       Passenger.create(transport: transport,
                         name: g.student.name,
                         student_id: g.student.id,
@@ -23,11 +23,11 @@ namespace :data do
     end
 
 
-		name = "AA"
+		name = "N"
 		number_of_students = Student.count
 		30.times do
 			shuttle = Transport.new
-      shuttle.category = "Shuttle"
+      shuttle.category = "shuttle"
 			shuttle.name = name
 			shuttle.active = true
 			shuttle.save
@@ -35,7 +35,7 @@ namespace :data do
 			name = name.next
 		end
 
-    Transport.where(category:"Shuttle").each do |shuttle|
+    Transport.where(category:"shuttle").each do |shuttle|
 			8.times do
 				gss = GradeSectionsStudent.where(academic_year:16).where(student_id:rand(number_of_students)).includes([:student]).take
         student = gss.try(:student)
@@ -51,7 +51,6 @@ namespace :data do
 				end
       end
     end
-
 
   end
 end
