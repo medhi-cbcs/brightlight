@@ -1,0 +1,41 @@
+h4 Book Edition Summary of Conditions
+
+nav
+  .nav-wrapper
+    ul 
+      li
+        = link_to book_editions_path
+          | Book Editions
+          i.material-icons.left chevron_left
+    ul.right
+      li
+        = link_to 'Export to Excel', summary_book_editions_path(format: :xls)
+
+
+.card-panel
+  table.striped
+    thead
+      tr
+        td Title 
+        td N/A
+        td New
+        td Good
+        td Fair
+        td Poor
+        td Missing
+        td Total
+    tbody
+      - @book_editions.each do |book| 
+        - totals = book.book_copies.group(:book_condition_id).count(:book_condition_id)                
+        tr
+          td = link_to book.title, book
+          td = totals[nil] || '-'
+          td = totals[1] || '-'
+          td = totals[2] || '-'
+          td = totals[3] || '-'
+          td = totals[4] || '-'
+          td = totals[5] || '-'
+          td = link_to book.number_of_copies, book_edition_book_copies_path(book_edition_id:book.id)
+  
+.toolbar.z-depth-1
+  = will_paginate @book_editions
