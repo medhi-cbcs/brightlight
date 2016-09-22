@@ -329,10 +329,11 @@ class BookLoansController < ApplicationController
 
     if params[:employee_id].present?
       @teacher = Employee.find params[:employee_id]
-      @book_loans = BookLoan.select(['COUNT (book_loans.loan_status) AS loan_qty','COUNT (book_loans.return_status) AS return_qty','book_titles.title', 'book_titles.subject','book_editions.authors','book_editions.publisher', 'book_editions.isbn13','book_editions.isbn10', 'book_loans.notes'])
+      @book_loans = BookLoan.select(['COUNT (book_loans.loan_status) AS loan_qty','COUNT (book_loans.return_status) AS return_qty','subjects.name','book_titles.title', 'book_titles.subject','book_editions.authors','book_editions.publisher', 'book_editions.isbn13','book_editions.isbn10', 'book_loans.notes'])
       .where('book_loans.academic_year_id = ? AND book_loans.employee_id = ?', params[:year],params[:employee_id])      .joins("LEFT JOIN book_editions ON book_editions.id = book_loans.book_edition_id")
       .joins("LEFT JOIN book_titles ON book_titles.id = book_loans.book_title_id")
-      .group('book_titles.title', 'book_titles.subject', 'book_editions.authors','book_editions.publisher', 'book_editions.isbn13', 'book_editions.isbn10','book_loans.notes')
+      .joins("LEFT JOIN subjects ON subjects.id = book_titles.subject_id")
+      .group('subjects.name','book_titles.title', 'book_titles.subject', 'book_editions.authors','book_editions.publisher', 'book_editions.isbn13', 'book_editions.isbn10','book_loans.notes')
       .order('subject','title')
        
       

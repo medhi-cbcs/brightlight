@@ -22,7 +22,7 @@
             - @book_loans.each.with_index(1) do |loan,ln|
               tr
                 td.t_receipt_border = ln.to_s
-                td.t_receipt_border = loan.subject
+                td.small-text.t_receipt_border = loan.name
                 td.t_receipt_border = loan.title
                 td.t_receipt_border = loan.authors
                 td.t_receipt_border = loan.publisher
