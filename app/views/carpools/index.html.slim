@@ -22,33 +22,9 @@ nav
         
     #tab1.tab-content
       #shuttle-cars
-        / - @carpools.active.shuttle_cars.each do |carpool|
-        /   .col.s12.m6.l3
-        /     .entry id="car-#{carpool.id}" class="cars #{carpool.status}"
-        /       .input-field.left style="margin-top:-10px"
-        /         .cb-label Done
-        /         = check_box_tag "car-done-#{carpool.id}", 1, false, data: {id: carpool.id}
-        /         = label_tag "car-done-#{carpool.id}", ""
-        /       = carpool.transport.try(:name) || "???"
-        /       .input-field.right style="margin-top:-10px"
-        /         .cb-label Wait
-        /         = link_to edit_carpool_path(carpool), remote: true
-        /           i.material-icons style="padding-top:9px; color:salmon" pause_circle_outline
                       
     #tab2.tab-content
       #private-cars
-        / - @carpools.active.private_cars.each do |carpool|
-        /   .col.s12.m6.l3
-        /     .entry id="car-#{carpool.id}" class="cars #{carpool.status}"
-        /       .input-field.left style="margin-top:-10px"
-        /         .cb-label Done
-        /         = check_box_tag "car-done-#{carpool.id}", 1, false, data: {id: carpool.id}
-        /         = label_tag "car-done-#{carpool.id}", ""
-        /       = carpool.transport.try(:name) || "???"
-        /       .input-field.right style="margin-top:-10px"
-        /         .cb-label Wait
-        /         = link_to edit_carpool_path(carpool), remote: true
-        /           i.material-icons style="padding-top:9px; color:salmon" pause_circle_outline
 
     #tab3.tab-content
       .container
@@ -60,18 +36,6 @@ nav
 
     #tab4.tab-content
       #exit-carpool
-        - @carpools.inactive.each do |carpool|
-          .col.s12.m6.l3
-            .entry id="car-#{carpool.id}" class="cars #{carpool.status}"
-              .input-field.left style="margin-top:-10px"
-                .cb-label Done
-                = check_box_tag "car-done-#{carpool.id}", 1, true, data: {id: carpool.id}
-                = label_tag "car-done-#{carpool.id}", ""
-              = carpool.transport.try(:name) || "???"
-              .input-field.right style="margin-top:-10px"
-                .cb-label Wait
-                = link_to edit_carpool_path(carpool), remote: true
-                  i.material-icons style="padding-top:9px; color:salmon" pause_circle_outline 
                                     
 = text_field_tag :carpool_scanner, "", disabled:true
 

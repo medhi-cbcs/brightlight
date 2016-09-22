@@ -20,18 +20,16 @@ var Transport = {
       container = $("#shuttle-cars");
     }
     container.append(this.htmlStr());
+    this.doneCheckBox().prop("checked", this.status == 'done');
     console.log("Rendered transport "+this.transportName+" with status "+this.status+" in "+container.selector);
   },
   set status(s) {
     console.log("Changing status from "+this.status+" to "+s); 
     this._status = s;
-    console.log ("s: "+s+"this_status: "+this._status+" this.status:"+this.status);
-    console.log(this.node());
     this.node().removeClass('ready leaving loading waiting done')
       .addClass(this._status);
-    // this.doneCheckBox().prop("checked", this.status == 'done');
     console.log("Now, "+this._status+" check: "+$("#car-done-"+this.id).prop("checked"));
-    if (s == 'done') {
+    if (s == 'done' || (this._status == "ready" && $("#exit-carpool").has(this.node()).length > 0)) {
       var transport = this;
       this.node().fadeOut('slow', function(){ 
         this.remove(); 
@@ -125,29 +123,8 @@ var CarpoolApp = {
     transport._status = car.status;
     transport.id = car.id;
     transport.transportName = car.transport_name;
-   
-    // Object.defineProperties(car, {
-    //   "status": { set: function(s) { 
-    //     console.log("Car status changed to "+s);
-    //   }},
-    // });
-    // car.htmlStr = CarpoolApp.carpoolTemplate.html()
-    //               .replace(/__carpool.id_/g, car.id)
-    //               .replace(/__carpool.transport_name_/g, car.transport_name)
-    //               .replace(/__carpool.status_/g, car.status);
-    // car.target = $("#car-"+car.id);     
     CarpoolApp.carpoolList.push(transport);
     transport.render();
-    // if (car.status == 'done') {
-    //   console.log("Appending html in done category for "+car.transport_name);
-    //   $("#exit-carpool").append(car.htmlStr);
-    // } else if (car.category == 'shuttle') {
-    //   console.log("Appending html in shuttle category for "+car.transport_name);
-    //   $("#shuttle-cars").append(car.htmlStr);
-    // } else if (car.category == 'private') {
-    //   console.log("Appending html in private category for "+car.transport_name);
-    //   $("#private-cars").append(car.htmlStr);
-    // }
   },
 
   update: function(car) {
@@ -155,33 +132,15 @@ var CarpoolApp = {
     var transport = CarpoolApp.carpoolList.find(function(c){ return c.id == car.id; });
     console.log("Car "+transport.transportName+" Done? " + transport.doneCheckBox().prop("checked"));
     transport.status = car.status;
-
-    // var target = transport.target;
-    // target.removeClass('ready leaving loading waiting done');
-    // target.addClass(car.status);
-    // if (transport.status == 'done') {
-    //   console.log("Status is DONE");
-    //   target.fadeOut('slow', function(){ target.remove(); console.log("Target Removed!"); });
-    //   $("#exit-carpool").append(transport.htmlStr);
-    // } 
-    // if (transport.status == 'ready' && $("#exit-carpool").has(target).length > 0) {
-    //   target.fadeOut('slow', function(){ target.remove(); });
-    //   if(transport.category=='private') {
-    //     $("#private-cars").append(transport.htmlStr);
-    //   } else if (car.category=='shuttle') {
-    //     $("#shuttle-cars").append(transport.htmlStr);
-    //   }
-    // } 
-    // console.log("Car "+car.transport_name+" Done? "+$("#car-done-"+car.id).prop("checked"));
-    // $("#car-done-"+car.id).prop("checked", car.status == 'done');
-    // console.log("Now, "+car.id+" check: "+$("#car-done-"+car.id).prop("checked"));
     CarpoolApp.updateWaitingList(car.late_passengers);
   },
 
   createOrUpdate: function(car) {
     if (CarpoolApp.carpoolList.find(function(transport) {return transport.id == car.id })) {
+      console.log("Updating "+car.transport_name);
       CarpoolApp.update(car);
     } else {
+      console.log("Creating "+car.transport_name);
       CarpoolApp.create(car);
     }
   },
