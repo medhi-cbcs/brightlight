@@ -4,6 +4,7 @@ class BookTitle < ActiveRecord::Base
   has_many :courses, through: :course_texts
   has_many :book_editions
   has_many :standard_books
+  belongs_to :subjects
 
   accepts_nested_attributes_for :book_editions, reject_if: :all_blank, allow_destroy: true
 
