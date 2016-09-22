@@ -17,5 +17,9 @@ namespace :data do
       subject.save
       puts "#{i}. #{subject.code} #{subject.name} #{subject.description}"
     end
+
+    BookTitle.all.each do |b|
+      b.update_attribute :subject_id, Subject.find_by_code(b.subject).try(:id)
+    end
   end
 end
