@@ -242,7 +242,7 @@ GEM
       mini_portile (= 0.6.2)
     tiny_tds (0.7.0-x86-mingw32)
       mini_portile (= 0.6.2)
-    tinymce-rails (4.4.3)
+    tinymce-rails (4.3.12)
       railties (>= 3.1.1)
     turbolinks (2.5.3)
       coffee-rails
@@ -315,4 +315,5 @@ DEPENDENCIES
   wkhtmltopdf-binary (~> 0.9.9.3)
 
 BUNDLED WITH
-   1.12.3
+   1.12.4
+
