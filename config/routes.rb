@@ -164,6 +164,8 @@ Rails.application.routes.draw do
     end
   end
 
+  patch 'pax/:id' => 'late_passengers#update'
+
   devise_for :users, controllers: {
     omniauth_callbacks: "users/omniauth_callbacks",
     sessions: "users/sessions",

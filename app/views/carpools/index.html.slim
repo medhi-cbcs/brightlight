@@ -65,7 +65,7 @@ script#carpool-template type="text/x-custom-template"
 script#expected-pax-template type="text/x-custom-template"
   .row.pax-entry id="pax-__pax.id_"
     .col.s1
-      = check_box_tag "pax-status-__pax.id_", 1, false, data: {id: "__pax.id_"}
+      = check_box_tag "pax-status-__pax.id_", 1, false, data: {id: "__pax.id_", transport: "__transport.id_"}
       = label_tag "pax-status-__pax.id_", ""
     .col.s5
       = "__pax.name_"

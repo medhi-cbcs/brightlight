@@ -101,6 +101,9 @@ class CarpoolsController < ApplicationController
     respond_to do |format|
       if @carpool.update(carpool_params)
         @carpool.touch
+        # if @carpool.status == 'done'
+        #   @carpool.late_passengers.update_all :active, false
+        # end 
         format.html { redirect_to @carpool, notice: 'Carpool was successfully updated.' }
         format.json { render :show, status: :ok, location: @carpool }
         format.js
