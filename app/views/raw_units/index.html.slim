@@ -1,0 +1,23 @@
+h1 Listing raw_units
+
+table
+  thead
+    tr
+      th Name
+      th Notes
+      th
+      th
+      th
+
+  tbody
+    - @raw_units.each do |raw_unit|
+      tr
+        td = raw_unit.name
+        td = raw_unit.notes
+        td = link_to 'Show', raw_unit
+        td = link_to 'Edit', edit_raw_unit_path(raw_unit)
+        td = link_to 'Destroy', raw_unit, data: {:confirm => 'Are you sure?'}, :method => :delete
+
+br
+
+= link_to 'New Raw unit', new_raw_unit_path

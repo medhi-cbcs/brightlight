@@ -95,7 +95,7 @@ class BookTitlesController < ApplicationController
   def create
     authorize! :manage, BookTitle
     @book_title = BookTitle.new(book_title_params)
-
+    
     respond_to do |format|
       if @book_title.save
         # if params[:edition].present?
@@ -103,8 +103,11 @@ class BookTitlesController < ApplicationController
         #   @book_edition.book_title_id = @book_title.id
         #   @book_edition.save
         # end
+        @book_edition = BookEdition.find_by_book_title_id @book_title.id
+        @book_title.update_attribute :subject_id,@book_edition.try(:subjects)  
         format.html { redirect_to @book_title, notice: 'Book title was successfully created.' }
         format.json { render :show, status: :created, location: @book_title }
+          
       else
         format.html { render :new }
         format.json { render json: @book_title.errors, status: :unprocessable_entity }
@@ -117,8 +120,13 @@ class BookTitlesController < ApplicationController
   # PATCH/PUT /book_titles/1.json
   def update
     authorize! :update, @book_title
+    @book_edition = BookEdition.find_by_book_title_id @book_title.id
+    if @book_edition.subjects.present?
+      @book_edition.book_title.update_attribute :subject_id,@book_edition.subjects
+    end
     respond_to do |format|
       if @book_title.update(book_title_params)
+        @book_title.update_attribute :subject_id,@book_edition.try(:subjects)
         format.html { redirect_to @book_title, notice: 'Book title was successfully updated.' }
         format.json { render :show, status: :ok, location: @book_title }
       else
@@ -247,6 +255,7 @@ class BookTitlesController < ApplicationController
       @book_titles.each do |title|
         title.book_editions.each do |edition|
           edition.book_title_id = @book_title.id
+          edition.subjects = @book_title.subject_code
           edition.save
         end
         title.destroy

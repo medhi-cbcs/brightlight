@@ -56,6 +56,8 @@ li
 				= link_to 'Editions', book_editions_path
 			li
 				= link_to 'Standard Books', standard_books_path
+            li
+				= link_to 'Book Subjects', subjects_path
 
 - if signed_in? and current_user.has_role? :inventory
 	li 

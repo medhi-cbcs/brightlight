@@ -1,5 +1,8 @@
 Rails.application.routes.draw do
 
+  resources :food_lists
+  resources :raw_units
+  resources :raw_foods
   resources :template_targets
   resources :templates
   resources :currencies

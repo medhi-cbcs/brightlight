@@ -4,12 +4,29 @@ class SubjectsController < ApplicationController
   # GET /subjects
   # GET /subjects.json
   def index
-    @subjects = Subject.all
+    respond_to do |format|
+      format.html {
+        items_per_page = 20
+        if params[:search]
+          @subjects = Subject.where('UPPER(name) LIKE ?', "%#{params[:search].upcase}%").paginate(page: params[:page], per_page: items_per_page).order(:name)
+        else
+          @subjects = Subject.paginate(page: params[:page], per_page: items_per_page).order(:name)
+        end
+      }
+      
+      format.csv {
+        @subjects = Subject.all.order(:name)
+        render text: @subjects.to_csv
+      }
+    end
+    
   end
 
   # GET /subjects/1
   # GET /subjects/1.json
   def show
+    @subject = Subject.where(id: params[:id]).first
+    @books = BookTitle.where(subject_id: @subject).all.order(:title)
   end
 
   # GET /subjects/new
@@ -28,8 +45,9 @@ class SubjectsController < ApplicationController
 
     respond_to do |format|
       if @subject.save
-        format.html { redirect_to @subject, notice: 'Subject was successfully created.' }
+        format.html { redirect_to subjects_url, notice: 'Subject was successfully created.' }
         format.json { render :show, status: :created, location: @subject }
+        format.js
       else
         format.html { render :new }
         format.json { render json: @subject.errors, status: :unprocessable_entity }
@@ -42,8 +60,9 @@ class SubjectsController < ApplicationController
   def update
     respond_to do |format|
       if @subject.update(subject_params)
-        format.html { redirect_to @subject, notice: 'Subject was successfully updated.' }
+        format.html { redirect_to subjects_url, notice: 'Subject was successfully updated.' }
         format.json { render :show, status: :ok, location: @subject }
+        format.js
       else
         format.html { render :edit }
         format.json { render json: @subject.errors, status: :unprocessable_entity }

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160721061306) do
+ActiveRecord::Schema.define(version: 20160922040736) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -105,6 +105,7 @@ ActiveRecord::Schema.define(version: 20160721061306) do
     t.integer  "book_label_id"
     t.string   "slug"
     t.boolean  "needs_repair"
+    t.string   "notes"
   end
 
   add_index "book_copies", ["barcode"], name: "index_book_copies_on_barcode", unique: true, using: :btree
@@ -297,7 +298,7 @@ ActiveRecord::Schema.define(version: 20160721061306) do
     t.datetime "updated_at",    null: false
     t.integer  "bkudid"
     t.integer  "subject_id"
-    t.string   "subject"
+    t.string   "subject_code"
     t.string   "slug"
     t.string   "subject_level"
     t.string   "grade_code"
@@ -472,6 +473,14 @@ ActiveRecord::Schema.define(version: 20160721061306) do
 
   add_index "fine_scales", ["new_condition_id"], name: "index_fine_scales_on_new_condition_id", using: :btree
   add_index "fine_scales", ["old_condition_id"], name: "index_fine_scales_on_old_condition_id", using: :btree
+
+  create_table "food_lists", force: :cascade do |t|
+    t.string   "name"
+    t.string   "notes"
+    t.string   "picture_url"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+  end
 
   create_table "grade_levels", force: :cascade do |t|
     t.string   "name"
@@ -667,6 +676,23 @@ ActiveRecord::Schema.define(version: 20160721061306) do
     t.datetime "updated_at",    null: false
     t.string   "expiry_date"
     t.date     "received_date"
+  end
+
+  create_table "raw_foods", force: :cascade do |t|
+    t.string   "name"
+    t.string   "brand"
+    t.string   "kind"
+    t.float    "min_stock"
+    t.integer  "raw_unit_id"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+  end
+
+  create_table "raw_units", force: :cascade do |t|
+    t.string   "name"
+    t.string   "notes"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "rosters", force: :cascade do |t|
