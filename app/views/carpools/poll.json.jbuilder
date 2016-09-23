@@ -6,18 +6,18 @@ json.array!(@carpools) do |carpool|
         json.id         passenger.id
         json.student_id passenger.student_id
         json.name       passenger.name
-        json.class      passenger.class_name
+        json.grade      passenger.class_name
       end
     end
   end
   if params[:lpax]
     json.late_passengers do
-      json.array!(carpool.late_passengers) do |passenger|
+      json.array!(carpool.late_passengers.active) do |passenger|
         json.id         passenger.id
         json.student_id passenger.student_id
         json.name       passenger.name
-        json.class      passenger.class_name
-        json.active     passenger.active
+        json.grade      passenger.class_name
+        json.status     passenger.active
       end
     end
   end
