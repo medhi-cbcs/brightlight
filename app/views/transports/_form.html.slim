@@ -1,0 +1,36 @@
+= form_for @transport do |f|
+  - if @transport.errors.any?
+    #error_explanation
+      h2 = "#{pluralize(@transport.errors.count, "error")} prohibited this transport from being saved:"
+      ul
+        - @transport.errors.full_messages.each do |message|
+          li = message
+
+  .field
+    = f.label :category
+    = f.text_field :category
+  .field
+    = f.label :name
+    = f.text_field :name
+  .field
+    = f.label :status
+    = f.text_field :status
+  .field
+    = f.label :active
+    = f.check_box :active
+  .field
+    = f.label :notes
+    = f.text_field :notes
+  .field
+    = f.label :contact_id
+    = f.number_field :contact_id
+  .field
+    = f.label :contact_name
+    = f.text_field :contact_name
+  .field
+    = f.label :contact_phone
+    = f.text_field :contact_phone
+  .field
+    = f.label :contact_email
+    = f.text_field :contact_email
+  .actions = f.submit

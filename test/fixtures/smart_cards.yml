@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  code: MyString
+  transport_id: 
+  detail: MyString
+  ref: MyString
+
+two:
+  code: MyString
+  transport_id: 
+  detail: MyString
+  ref: MyString

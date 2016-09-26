@@ -1,0 +1,33 @@
+p#notice = notice
+
+p
+  strong Category:
+  = @transport.category
+p
+  strong Name:
+  = @transport.name
+p
+  strong Status:
+  = @transport.status
+p
+  strong Active:
+  = @transport.active
+p
+  strong Notes:
+  = @transport.notes
+p
+  strong Contact:
+  = @transport.contact_id
+p
+  strong Contact name:
+  = @transport.contact_name
+p
+  strong Contact phone:
+  = @transport.contact_phone
+p
+  strong Contact email:
+  = @transport.contact_email
+
+= link_to 'Edit', edit_transport_path(@transport)
+'|
+= link_to 'Back', transports_path

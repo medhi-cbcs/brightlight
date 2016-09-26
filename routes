@@ -1,4 +1,12 @@
                                         Prefix Verb     URI Pattern                                                       Controller#Action
+                                    transports GET      /transports(.:format)                                             transports#index
+                                               POST     /transports(.:format)                                             transports#create
+                                 new_transport GET      /transports/new(.:format)                                         transports#new
+                                edit_transport GET      /transports/:id/edit(.:format)                                    transports#edit
+                                     transport GET      /transports/:id(.:format)                                         transports#show
+                                               PATCH    /transports/:id(.:format)                                         transports#update
+                                               PUT      /transports/:id(.:format)                                         transports#update
+                                               DELETE   /transports/:id(.:format)                                         transports#destroy
                               template_targets GET      /template_targets(.:format)                                       template_targets#index
                                                POST     /template_targets(.:format)                                       template_targets#create
                            new_template_target GET      /template_targets/new(.:format)                                   template_targets#new
@@ -181,6 +189,7 @@
                     create_book_copy_condition PUT      /book_copies/:id/copy_conditions/create(.:format)                 copy_conditions#create
                           book_copy_conditions GET      /book_copies/:id/conditions(.:format)                             book_copies#conditions
                                book_copy_loans GET      /book_copies/:id/loans(.:format)                                  book_copies#loans
+                       book_copy_check_barcode GET      /book_copies/:id/check_barcode(.:format)                          book_copies#check_barcode
                         edit_merge_book_titles POST     /book_titles/edit_merge(.:format)                                 book_titles#edit_merge
                              merge_book_titles POST     /book_titles/merge(.:format)                                      book_titles#merge
                             delete_book_titles POST     /book_titles/delete(.:format)                                     book_titles#delete
@@ -279,6 +288,8 @@ autocomplete_book_edition_title_standard_books GET      /standard_books/autocomp
                                                DELETE   /students/:id(.:format)                                           students#destroy
                            teachers_book_loans GET      /book_loans/teachers(.:format)                                    book_loans#teachers
                 initialize_teachers_book_loans POST     /book_loans/initialize_teachers(.:format)                         book_loans#initialize_teachers
+                           move_all_book_loans POST     /book_loans/move_all(.:format)                                    book_loans#move_all
+                          borrowers_book_loans GET      /book_loans/borrowers(.:format)                                   book_loans#borrowers
                                     book_loans GET      /book_loans(.:format)                                             book_loans#index
                                                POST     /book_loans(.:format)                                             book_loans#create
                                  new_book_loan GET      /book_loans/new(.:format)                                         book_loans#new
@@ -301,6 +312,7 @@ autocomplete_book_edition_title_standard_books GET      /standard_books/autocomp
                        new_employee_book_loans GET      /employees/:employee_id/book_loans/new(.:format)                  book_loans#new_tm
                       scan_employee_book_loans GET      /employees/:employee_id/book_loans/scan(.:format)                 book_loans#scan
                             employee_book_loan GET      /employees/:employee_id/book_loans/:id(.:format)                  book_loans#show_tm
+                        list_action_book_loans POST     /employees/:employee_id/book_loans/list_action(.:format)          book_loans#list_action
                                                PATCH    /employees/:employee_id/book_loans/:id(.:format)                  book_loans#update_tm
                                                PUT      /employees/:employee_id/book_loans/:id(.:format)                  book_loans#update_tm
                                                DELETE   /employees/:employee_id/book_loans/:id(.:format)                  book_loans#destroy_tm
@@ -326,6 +338,15 @@ autocomplete_book_edition_title_standard_books GET      /standard_books/autocomp
                                                PATCH    /book_receipts/:id(.:format)                                      book_receipts#update
                                                PUT      /book_receipts/:id(.:format)                                      book_receipts#update
                                                DELETE   /book_receipts/:id(.:format)                                      book_receipts#destroy
+                                 poll_carpools GET      /carpools/poll(.:format)                                          carpools#poll
+                                      carpools GET      /carpools(.:format)                                               carpools#index
+                                               POST     /carpools(.:format)                                               carpools#create
+                                   new_carpool GET      /carpools/new(.:format)                                           carpools#new
+                                  edit_carpool GET      /carpools/:id/edit(.:format)                                      carpools#edit
+                                       carpool GET      /carpools/:id(.:format)                                           carpools#show
+                                               PATCH    /carpools/:id(.:format)                                           carpools#update
+                                               PUT      /carpools/:id(.:format)                                           carpools#update
+                                               DELETE   /carpools/:id(.:format)                                           carpools#destroy
                               new_user_session GET      /users/sign_in(.:format)                                          users/sessions#new
                                   user_session POST     /users/sign_in(.:format)                                          users/sessions#create
                           destroy_user_session DELETE   /users/sign_out(.:format)                                         users/sessions#destroy
