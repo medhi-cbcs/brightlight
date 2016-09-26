@@ -6,6 +6,15 @@ var CarpoolApp = (function(){
     _status: 'ready',
     expectedPassengers: [],
     
+    init: function(car) {
+      var transport = Object.create(Transport);
+      transport.category = car.category;
+      transport._status = car.status;
+      transport.id = car.id;
+      transport.transportName = car.transport_name;
+      return transport;
+    },
+
     template: function() { return $("#carpool-template") },
     
     htmlStr: function() { return this.template().html()
@@ -33,8 +42,9 @@ var CarpoolApp = (function(){
     },
 
     set status(s) {
+      var prevStatus = this._status;
       if (this._status != s) {
-        console.log("Changing status from "+this.status+" to "+s); 
+        // console.log("Changing status from "+this.status+" to "+s); 
         this._status = s;
         this.node().removeClass('ready leaving loading waiting done')
           .addClass(this._status);
@@ -44,10 +54,12 @@ var CarpoolApp = (function(){
           this.node().fadeOut('slow', function(){ 
             this.remove(); 
             transport.render(); 
-            console.log("Element removed! status: "+transport.status); 
+            // console.log("Element removed! status: "+transport.status); 
           });      
         }
-        this.uploadStatus();
+        if (prevStatus != s) {
+          this.uploadStatus();
+        }
       }      
     },
 
@@ -75,7 +87,7 @@ var CarpoolApp = (function(){
         data: jsonData,
         dataType: 'json',
         success: function(data) {
-          console.log("Car status uploaded: "+status);
+          // console.log("Car status uploaded: "+status);
           // Carpool.update(data.carpool);        
         },
         error: function() {
@@ -84,47 +96,49 @@ var CarpoolApp = (function(){
       });
     },
 
-    updateExpectedPassengers: function(passengers){
-      console.log("Updating list of expected passengers");
-      console.log(passengers);
+    updateExpectedPassengers: function(passengers){      
       var transport = this;
       if (passengers) {
         $.each(passengers, function(idx, pax){
           var passenger = transport.getPax(pax.id);
           if (passenger) {
-            console.log("Found passenger " + passenger.name);
-            passenger.status = pax.status;
-            if (pax.status == false) {
-              console.log("Removing pax "+pax.name+" from "+this.transportName);
-              transport.removeExpectedPax(pax.id);
-            }      
+            // console.log("Found passenger " + passenger.name);
+            passenger.status = pax.status;    
+            if (transport.expectedPassengers.filter(function(p){return p.status}).length == 0) {
+              this.status = 'done';
+            }; 
           } else {
-            console.log("Adding passenger " + pax.name);
+            // console.log("Adding passenger " + pax.name);
             var listEntry = ExpectedPax.init(transport, pax);
             transport.expectedPassengers.push(listEntry);
             listEntry.render();
           }
         });
-      }      
+      } 
     },
 
     updateExpectedPassengerStatus: function(id, status){
       var pax = this.getPax(id);
+      // console.log("Updating pax "+pax.name+', status: '+status);
       if (pax) pax.status = status;
-      if (!status) this.removeExpectedPax(pax.id);
+      // if (!status) this.removeExpectedPax(pax.id);
+      if (this.expectedPassengers.filter(function(p){return p.status}).length == 0) {
+        this.status = 'done';
+      };
     },
 
-    removeExpectedPax: function(paxId) {
-      var pax = this.getPax(paxId);
-      var index = this.expectedPassengers.indexOf(pax);
-      if (index > -1) {
-        this.expectedPassengers.splice(index,1);
-      }
-      if (this.expectedPassengers.length == 0) {
-        console.log('No more waiting for passengers: '+this.transportName);
-        this.status = 'done';
-      }
-    }
+    // removeExpectedPax: function(paxId) {
+    //   var pax = this.getPax(paxId);
+    //   var index = this.expectedPassengers.indexOf(pax);
+    //   if (index > -1) {
+    //     console.log("Removed pax "+pax.name);
+    //     this.expectedPassengers.splice(index,1);
+    //   }
+    //   if (this.expectedPassengers.length == 0) {
+    //     console.log('No more waiting for passengers: '+this.transportName);
+    //     this.status = 'done';
+    //   }
+    // }
   };
 
   var ExpectedPax = {
@@ -136,14 +150,15 @@ var CarpoolApp = (function(){
     _active: false,
 
     init: function(transport, passenger) {      
-      var listEntry = Object.create(ExpectedPax);
-      listEntry.id = passenger.id;    
-      listEntry._active = passenger.status;
-      listEntry.name = passenger.name;
-      listEntry.grade = passenger.grade;
-      listEntry.transportId = transport.id;
-      listEntry.transportName = transport.transportName; 
-      return listEntry;
+      var expectedPax = Object.create(ExpectedPax);
+      expectedPax.id = passenger.id;    
+      expectedPax._active = passenger.status;
+      expectedPax.name = passenger.name;
+      expectedPax.grade = passenger.grade;
+      expectedPax.transportId = transport.id;
+      expectedPax.transportName = transport.transportName; 
+      expectedPax.status = passenger.status;
+      return expectedPax;
     },
     
     template: function() { return $("#expected-pax-template") },
@@ -162,20 +177,26 @@ var CarpoolApp = (function(){
     
     render: function() {
       // console.log("Rendered pax " + this.name);
-      var container = $("#expected-pax-list");
-      container.append(this.htmlStr());
-      this.statusCheckBox().prop("checked", this.status);
+      if (this.status) {
+        var container = $("#expected-pax-list");
+        container.append(this.htmlStr());
+        this.statusCheckBox().prop("checked", this.status);
+      }
     },
     
     set status(s) { 
+      var prevStatus = this._active;
       if (this._active != s) {
+        // console.log('Setting pax status for '+this.name+" to "+s);
         this._active = s;
         if (s == false) {          
           this.node().fadeOut('slow', function(){ 
             this.remove();        
           });      
         }
-        this.uploadStatus();
+        if (prevStatus != s) {
+          this.uploadStatus();
+        }
       }      
     },
     
@@ -184,9 +205,10 @@ var CarpoolApp = (function(){
     },
 
     uploadStatus: function () {
+      // console.log('Uploading pax'+this.name+ ' status: '+this.status);
       url = "/pax/" + this.id;
       var dataToSend = new Object();
-      dataToSend = { late_passenger: { active: this.status } };
+      dataToSend = { late_passenger: { active: this.status, transport_id: this.transportId } };
       var jsonData = JSON.stringify(dataToSend);
       $.ajax({
         type: 'PATCH',
@@ -195,7 +217,7 @@ var CarpoolApp = (function(){
         data: jsonData,
         dataType: 'json',
         success: function(data) {
-          console.log("Pax status uploaded.");     
+          // console.log("Pax status uploaded.");     
         },
         error: function() {
           Materialize.toast("Sorry...I'm confused", 5000, 'red');
@@ -219,13 +241,13 @@ var CarpoolApp = (function(){
         minEntryChars: 9, 
         maxEntryTime: 500,
         onScan: function($element, barcode){
-          console.log("Scanned "+barcode);
+          // console.log("Scanned "+barcode);
           Carpool.handleScan($element, barcode);
         }
       });
       $("#auto_update").on("change", Carpool.togglePolling.bind(this));
-      $(".carpool").on("change", "[name^='car-done']", Carpool.carMoves.bind(this));
-      $(".carpool").on("change", "[name^='pax-status']", Carpool.paxMoves.bind(this));
+      $(".carpool").on("change", "[name^='car-done']", Carpool.handleCarMoves.bind(this));
+      $(".carpool").on("change", "[name^='pax-status']", Carpool.handlePaxMoves.bind(this));
     },
 
     handleScan: function (el, barcode) {
@@ -251,28 +273,6 @@ var CarpoolApp = (function(){
       });
     },
 
-    getShuttleCars: function() {
-      Carpool.carpoolList.filter(function(carpool){
-        return carpool.category == "shuttle";
-      })
-    },
-
-    getPrivateCars: function() {
-      Carpool.carpoolList.filter(function(carpool){
-        return carpool.category == "private";
-      })
-    },
-
-    getDoneCars: function() {
-      Carpool.carpoolList.filter(function(carpool){
-        return carpool.status == "done";
-      })
-    },
-
-    getWaitingList: function() {
-
-    },
-
     getTransport: function(transportId) {
       return Carpool.carpoolList.find(function(transport) {
         return transport.id == transportId;
@@ -280,11 +280,7 @@ var CarpoolApp = (function(){
     },
 
     create: function(car) {
-      var transport = Object.create(Transport);
-      transport.category = car.category;
-      transport._status = car.status;
-      transport.id = car.id;
-      transport.transportName = car.transport_name;
+      var transport = Transport.init(car);
       Carpool.carpoolList.push(transport);
       transport.render();
       if (car.late_passengers) {
@@ -298,7 +294,7 @@ var CarpoolApp = (function(){
 
     update: function(car) {      
       var transport = Carpool.getTransport(car.id);
-      console.log('Updating '+transport.transportName);
+      // console.log('Updating '+transport.transportName);
       transport.updateExpectedPassengers(car.late_passengers);
       transport.status = car.status;      
     },
@@ -311,14 +307,24 @@ var CarpoolApp = (function(){
       }
     },
 
-    carMoves: function(e) {
+    handleCarMoves: function(e) {
       var $el = $(e.target);       
       var carId = $el.data('id');
       var transport = Carpool.getTransport(carId);
       transport.status = $el.prop("checked") ? "done" : "ready";
     },
 
-    poll: function() {
+    handlePaxMoves: function(e) {
+      var el = e.target;
+      var $el = $(el);       
+      var paxId = $el.data('id');
+      var paxStatus = $el.prop("checked");
+      var transportId = $el.data('transport');      
+      var transport = Carpool.getTransport(transportId);
+      transport.updateExpectedPassengerStatus(paxId, paxStatus);
+    },
+
+    poll: function() {      
       var timeout = 3600; // 1 hour
       var timedelay = 5000;
       var now = new Date().getTime() / 1000 >> 0;
@@ -348,17 +354,29 @@ var CarpoolApp = (function(){
         localStorage.carpool_ts = new Date().getTime() / 1000 >> 0;
         Carpool.autoPolling = false;
       }
-    },
-
-    paxMoves: function(e) {
-      var el = e.target;
-      var $el = $(el);       
-      var paxId = $el.data('id');
-      var paxStatus = $el.prop("checked");
-      var transportId = $el.data('transport');      
-      var transport = Carpool.getTransport(transportId);
-      transport.updateExpectedPassengerStatus(paxId, paxStatus);
     }
+    
+    // getShuttleCars: function() {
+    //   Carpool.carpoolList.filter(function(carpool){
+    //     return carpool.category == "shuttle";
+    //   })
+    // },
+
+    // getPrivateCars: function() {
+    //   Carpool.carpoolList.filter(function(carpool){
+    //     return carpool.category == "private";
+    //   })
+    // },
+
+    // getDoneCars: function() {
+    //   Carpool.carpoolList.filter(function(carpool){
+    //     return carpool.status == "done";
+    //   })
+    // },
+
+    // getWaitingList: function() {
+
+    // },
 
   };
 

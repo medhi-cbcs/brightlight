@@ -3,6 +3,7 @@ class LatePassengersController < ApplicationController
   def update
     @pax = LatePassenger.find params[:id]
     if @pax.update(late_passenger_params)
+      @pax.carpool.touch
       render json: @pax
     else
       render json: @pax.errors, status: :unprocessable_entity

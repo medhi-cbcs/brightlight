@@ -1,5 +1,6 @@
 class CarpoolsController < ApplicationController
   before_action :set_carpool, only: [:show, :edit, :update, :destroy]
+  layout 'sans_sidebar'
 
   # GET /carpools
   # GET /carpools.json
