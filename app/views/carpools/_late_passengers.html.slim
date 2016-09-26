@@ -1,0 +1,23 @@
+= form_for @carpool, remote: true do |f|
+  .modal-content
+    h4 = @carpool.transport_name
+    = f.hidden_field :status, value: 'waiting'
+    = f.fields_for :late_passengers, @late_passengers do |pax_form|
+      .row
+        .input-field.col.s1
+          = pax_form.check_box :active 
+          = pax_form.label :active, ' '
+        .input-field.col.s7
+          = pax_form.object.name
+        .input-field.col.s4
+          = pax_form.object.class_name 
+          = pax_form.hidden_field :grade_section_id
+          = pax_form.hidden_field :transport_id
+          = pax_form.hidden_field :student_id
+          = pax_form.hidden_field :family_no
+          = pax_form.hidden_field :family_id
+          = pax_form.hidden_field :class_name
+          = pax_form.hidden_field :name
+  .modal-footer
+    button.btn.modal-action.modal-close.waves-effect.waves-light type="submit" OK
+    = link_to "Cancel", "#!", class:"modal-action modal-close waves-effect waves-light btn-flat"

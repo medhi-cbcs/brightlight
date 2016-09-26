@@ -311,6 +311,12 @@ h6 {
 	font-size: 1.6rem;
 }
 
+.cb-label {
+	font-size: 1rem;
+	line-height: 0.7rem;
+	color: #bdbdbd;
+}
+
 // ============================================ Buttons =============================================
 
 .btn-small {
@@ -353,6 +359,7 @@ nav {
 		}
 	}
 	.input-field {
+		padding: 0 15px;
 		input {
 			border-bottom: 2px dotted gray;
 			width: 85%;
@@ -360,6 +367,9 @@ nav {
       &[type=email]:valid, &[type=url]:valid, &[type=date]:valid {
         border-bottom: 2px dotted gray;
       }
+		}
+		label {
+			color: white;
 		}
 	}
 
@@ -707,6 +717,39 @@ ul {
 	    border-radius: 2px;
 	}
 }
+
+// =========================================== Carpool =========================================
+.carpool {
+	.entry {
+		background-color: #6069ec;
+		font-size: 2.2rem;
+		padding: 20px;
+		line-height: 30px;
+		border-radius: 4px;
+		margin: 10px 0px;
+		text-align: center;
+	}
+	.ready {
+		background-color: #6069ec;
+	}
+	.leaving {
+		background-color: #e4bd18;
+	}
+	.loading {
+		background-color: #43d218;
+	}
+	.waiting {
+		background-color: #e6312c
+	}
+	.done {
+		background-color: grey;
+	}
+}
+
+.wait-pax {
+	font-size: 1.5rem;
+}
+
 
 // ============================================ Tabs ===========================================
 

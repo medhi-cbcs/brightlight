@@ -1,0 +1,42 @@
+= form_for @carpool do |f|
+  - if @carpool.errors.any?
+    #error_explanation
+      h2 = "#{pluralize(@carpool.errors.count, "error")} prohibited this carpool from being saved:"
+      ul
+        - @carpool.errors.full_messages.each do |message|
+          li = message
+
+  .field
+    = f.label :category
+    = f.text_field :category
+  .field
+    = f.label :transport
+    = f.text_field :transport
+  .field
+    = f.label :barcode
+    = f.text_field :barcode
+  .field
+    = f.label :transport_name
+    = f.text_field :transport_name
+  .field
+    = f.label :period
+    = f.text_field :period
+  .field
+    = f.label :sort_order
+    = f.text_field :sort_order
+  .field
+    = f.label :active
+    = f.check_box :active
+  .field
+    = f.label :status
+    = f.text_field :status
+  .field
+    = f.label :arrival
+    = f.datetime_select :arrival
+  .field
+    = f.label :departure
+    = f.datetime_select :departure
+  .field
+    = f.label :notes
+    = f.text_field :notes
+  .actions = f.submit

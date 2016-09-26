@@ -1,0 +1,23 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  type: 
+  name: MyString
+  status: MyString
+  active: false
+  notes: MyString
+  contact_id: 1
+  contact_name: MyString
+  contact_phone: MyString
+  contact_email: MyString
+
+two:
+  type: 
+  name: MyString
+  status: MyString
+  active: false
+  notes: MyString
+  contact_id: 1
+  contact_name: MyString
+  contact_phone: MyString
+  contact_email: MyString

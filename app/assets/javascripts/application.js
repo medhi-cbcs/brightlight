@@ -21,10 +21,11 @@
 //= require cocoon
 //= require filterrific/filterrific-jquery
 //= require dynamic_selectable
-//= require material-init.js
+//= require material-init
 //= require nprogress
 //= require nprogress-turbolinks
 //= require nprogress-ajax
-//= require jquery-code-scanner.js
-//= require init.js
+//= require jquery-code-scanner
+//= require init
+//= require carpools
 //= require turbolinks

@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
 
+  resources :transports
   resources :template_targets
   resources :templates
   resources :currencies
@@ -162,6 +163,14 @@ Rails.application.routes.draw do
       get  'check'
     end
   end
+
+  resources :carpools do
+    collection do
+      get 'poll'
+    end
+  end
+
+  patch 'pax/:id' => 'late_passengers#update'
 
   devise_for :users, controllers: {
     omniauth_callbacks: "users/omniauth_callbacks",

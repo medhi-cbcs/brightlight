@@ -1,0 +1,27 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  type: 
+  transport_id: 
+  barcode: MyString
+  transport_name: MyString
+  period: MyString
+  sort_order: 1.5
+  active: false
+  status: MyString
+  arrival: 2016-08-16 08:57:14
+  departure: 2016-08-16 08:57:14
+  notes: MyString
+
+two:
+  type: 
+  transport_id: 
+  barcode: MyString
+  transport_name: MyString
+  period: MyString
+  sort_order: 1.5
+  active: false
+  status: MyString
+  arrival: 2016-08-16 08:57:14
+  departure: 2016-08-16 08:57:14
+  notes: MyString
