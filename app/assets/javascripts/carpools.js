@@ -297,7 +297,10 @@ var CarpoolApp = (function(){
       Carpool.carpoolList = [];
       Carpool.autoPolling = false;
       Carpool.bindEvents();
-      localStorage.carpool_mark = (new Date().setHours(0,0,0,0)/1000) >> 0;
+      var time = new Date();
+      // if AM start is midnight, otherwise start is noon:
+      localStorage.carpool_start = (time.setHours(time.getHours() < 12 ? 0 : 12, 0, 0, 0) / 1000) >> 0;
+      localStorage.carpool_mark = localStorage.carpool_start;
       Carpool.poll();
     },
 
@@ -411,7 +414,7 @@ var CarpoolApp = (function(){
       var timeout = 3600; // 1 hour
       var timedelay = 5000;
       var now = new Date().getTime() / 1000 >> 0;
-      $.getJSON('/carpools/poll?since='+localStorage.carpool_mark, null, function(data) {
+      $.getJSON('/carpools/poll?since='+localStorage.carpool_start, null, function(data) {
         if (data.length > 0) {
           $.each(data, function(i,car){
             Carpool.createOrUpdate(car);
