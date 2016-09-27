@@ -11,10 +11,11 @@ json.transport do
   json.contact_phone @transport.contact_phone
   json.contact_email @transport.contact_email
   json.members(@passengers) do |passenger|
+    json.id   passenger.id
     json.name passenger.name
     json.family_no passenger.family_no
     json.grade_section_id passenger.grade_section_id
-    json.class passenger.class_name
+    json.grade passenger.class_name
     json.active passenger.active
   end
 end

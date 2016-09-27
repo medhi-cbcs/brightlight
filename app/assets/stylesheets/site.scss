@@ -314,7 +314,7 @@ h6 {
 .cb-label {
 	font-size: 1rem;
 	line-height: 0.7rem;
-	color: #bdbdbd;
+	color: #eee;
 }
 
 // ============================================ Buttons =============================================
@@ -339,6 +339,14 @@ nav {
 				}
 			}
 		}
+	}
+	.nav-heading {
+		position: absolute;
+    color: #fff;
+    display: inline-block;
+    font-size: 1.5rem;
+    padding: 0 0 0 10px;
+    white-space: nowrap;
 	}
 	.nav-wrapper {
 		ul {
@@ -733,13 +741,13 @@ ul {
 		background-color: #6069ec;
 	}
 	.leaving {
-		background-color: #e4bd18;
+		background-color: #e6312c;
 	}
 	.loading {
 		background-color: #43d218;
 	}
 	.waiting {
-		background-color: #e6312c
+		background-color: #f8af2a;
 	}
 	.done {
 		background-color: grey;
@@ -772,6 +780,10 @@ body {
 #main,
 footer {
   padding-left: 240px;
+	.copyright {
+		line-height: 1em;
+		padding: 1rem 1rem;
+	}
 }
 
 @media only screen and (max-width: 993px) {

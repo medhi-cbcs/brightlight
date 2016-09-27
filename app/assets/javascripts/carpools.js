@@ -4,7 +4,8 @@ var CarpoolApp = (function(){
     id:'',
     transportName: '',
     _status: 'ready',
-    expectedPassengers: [],
+    passengers: [],
+    //expectedPassengers: [],
     
     init: function(car) {
       var transport = Object.create(Transport);
@@ -21,16 +22,19 @@ var CarpoolApp = (function(){
               .replace(/__carpool.id_/g, this.id)
               .replace(/__carpool.transport_name_/g, this.transportName)
               .replace(/__carpool.status_/g, this.status);
-    },  
+    },
     
     node: function() { return $("#car-" + this.id) },
     
     doneCheckBox: function() { return $("#car-done-" + this.id) },
+    waitCheckBox: function() { return $("#car-wait-" + this.id) },
     
     render: function() {
       var container;
       if (this.status == 'done') {
         container = $("#exit-carpool");
+      } else if (this.status == 'waiting') {
+        container = $("#waiting-cars");
       } else if (this.category == 'private') {
         container = $("#private-cars");
       } else if (this.category == 'shuttle') {
@@ -38,7 +42,8 @@ var CarpoolApp = (function(){
       }
       container.append(this.htmlStr());
       this.doneCheckBox().prop("checked", this.status == 'done');
-      // console.log("Rendered transport "+this.transportName+" with status "+this.status+" in "+container.selector);
+      this.waitCheckBox().prop("checked", this.status == 'waiting');
+      console.log("Rendered transport "+this.transportName+" with status "+this.status+" in "+container.selector);
     },
 
     set status(s) {
@@ -49,14 +54,20 @@ var CarpoolApp = (function(){
         this.node().removeClass('ready leaving loading waiting done')
           .addClass(this._status);
         // console.log("Now, "+this._status+" check: "+$("#car-done-"+this.id).prop("checked"));
-        if (s == 'done' || (this._status == "ready" && $("#exit-carpool").has(this.node()).length > 0)) {
-          var transport = this;
-          this.node().fadeOut('slow', function(){ 
-            this.remove(); 
-            transport.render(); 
-            // console.log("Element removed! status: "+transport.status); 
-          });      
-        }
+        var transport = this;
+        this.node().fadeOut('slow', function(){ 
+          this.remove(); 
+          // console.log("Element removed! status: "+transport.status);
+          transport.render();
+        });
+        // if (s == 'done' || (this._status == "ready" && $("#exit-carpool").has(this.node()).length > 0)) {
+        //   var transport = this;
+        //   this.node().fadeOut('slow', function(){ 
+        //     this.remove(); 
+        //     transport.render(); 
+        //     // console.log("Element removed! status: "+transport.status); 
+        //   });      
+        // }
         if (prevStatus != s) {
           this.uploadStatus();
         }
@@ -71,6 +82,22 @@ var CarpoolApp = (function(){
       return this.expectedPassengers.find(function(pax) {
         return pax.id == paxId;
       })
+    },
+
+    getPassengers: function() {
+      console.log('Getting passengers list for ', this.transportName);
+      $.getJSON('/transports/'+this.id, null, function(data) {
+        var list = [];
+        var transport = this;
+        var passengerList = data.transport.members;
+        if (passengerList.length > 0) {
+          $.each(passengerList, function(i,passenger){
+            console.log('Got pax '+passenger.name);
+            var pax = Passenger.init(transport, passenger);
+            pax.render();
+          });   
+        }
+      });
     },
 
     uploadStatus: function () {
@@ -139,6 +166,44 @@ var CarpoolApp = (function(){
     //     this.status = 'done';
     //   }
     // }
+  };
+
+  var Passenger = {
+    id:'',
+    name: '',
+    grade: '',
+    transportName: '',
+    transportId: '',
+    _active: false,
+
+    init: function(transport, passenger) {      
+      var pax = Object.create(Passenger);
+      pax.id = passenger.id;    
+      pax._active = passenger.status;
+      pax.name = passenger.name;
+      pax.grade = passenger.grade;
+      pax.transportId = transport.id;
+      pax.transportName = transport.transportName; 
+      pax.status = passenger.status;
+      return pax;
+    },
+    
+    template: function() { return $("#passenger-template") },
+    
+    htmlStr: function() { return this.template().html()
+              .replace(/__transport.name_/g, this.transportName)
+              .replace(/__transport.id_/g, this.transportId)
+              .replace(/__pax.id_/g, this.id)
+              .replace(/__pax.name_/g, this.name)
+              .replace(/__pax.grade_/g, this.grade);
+    },  
+    
+    node: function() { return $("#passenger-" + this.id) },
+    
+    render: function() {          
+      var container = $("#passenger-list");
+      container.append(this.htmlStr());        
+    }
   };
 
   var ExpectedPax = {
@@ -247,7 +312,9 @@ var CarpoolApp = (function(){
       });
       $("#auto_update").on("change", Carpool.togglePolling.bind(this));
       $(".carpool").on("change", "[name^='car-done']", Carpool.handleCarMoves.bind(this));
+      $(".carpool").on("change", "[name^='car-wait']", Carpool.handleCarWaiting.bind(this));
       $(".carpool").on("change", "[name^='pax-status']", Carpool.handlePaxMoves.bind(this));
+      $(".carpool").on("dblclick", ".entry", Carpool.handleEntryDoubleClick.bind(this));
     },
 
     handleScan: function (el, barcode) {
@@ -314,6 +381,13 @@ var CarpoolApp = (function(){
       transport.status = $el.prop("checked") ? "done" : "ready";
     },
 
+    handleCarWaiting: function(e) {
+      var $el = $(e.target);       
+      var carId = $el.data('id');
+      var transport = Carpool.getTransport(carId);
+      transport.status = $el.prop("checked") ? "waiting" : "ready";
+    },
+
     handlePaxMoves: function(e) {
       var el = e.target;
       var $el = $(el);       
@@ -324,11 +398,20 @@ var CarpoolApp = (function(){
       transport.updateExpectedPassengerStatus(paxId, paxStatus);
     },
 
+    handleEntryDoubleClick: function(e) {
+      var el = e.target;
+      var $el = $(el);
+      var transportId = $el.data('id');
+      var transport = Carpool.getTransport(transportId);
+      transport.getPassengers();
+      $('#show-modal').openModal();
+    },
+
     poll: function() {      
       var timeout = 3600; // 1 hour
       var timedelay = 5000;
       var now = new Date().getTime() / 1000 >> 0;
-      $.getJSON('/carpools/poll?lpax=1&since='+localStorage.carpool_mark, null, function(data) {
+      $.getJSON('/carpools/poll?since='+localStorage.carpool_mark, null, function(data) {
         if (data.length > 0) {
           $.each(data, function(i,car){
             Carpool.createOrUpdate(car);
