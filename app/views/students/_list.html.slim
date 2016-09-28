@@ -1,33 +1,30 @@
-= form_tag({controller: "grade_sections", action: "add_students"}) do 
-  .card#filterrific_results
-    .card-content
-      div
-        = page_entries_info students 
-        = render_filterrific_spinner 
+.card#filterrific_results
+  .card-content
+    div
+      = page_entries_info students 
+      = render_filterrific_spinner 
 
-      table.striped
+    table.striped
+      tr
+        th 
+        th Name
+        th Grade 
+        th Family number
+
+      - students.each do |student|
         tr
-          th 
-          th Name
-          th Admission No 
-          th Family number
-          th Mobile phone
+          td
+            /input.checkbox type="checkbox" id="cb-#{student.id}"
+            = check_box_tag "add[#{student.id}]"
+            = label_tag "add[#{student.id}]", ""
+          td = student.name
+          td = student.current_grade_section.try(:name)
+          td = student.family_no
 
-        - students.each do |student|
-          tr
-            td
-              /input.checkbox type="checkbox" id="cb-#{student.id}"
-              = check_box_tag "add[#{student.id}]"
-              = label_tag "add[#{student.id}]", ""
-            td = student.name
-            td = student.admission_no
-            td = student.family_id
-            td = student.mobile_phone
+    = will_paginate students 
 
-      = will_paginate students 
+  .card-action
+    button.btn.waves-effect.waves-light type="submit" Add
+    = link_to "Cancel", :back, class: "waves-effect waves-teal btn-flat"
 
-    .card-action
-      button.btn.waves-effect.waves-light type="submit" Add
-      = link_to "Cancel", :back, class: "waves-effect waves-teal btn-flat"
-  
-  = hidden_field_tag :year, @year_id
+= hidden_field_tag :year, year_id

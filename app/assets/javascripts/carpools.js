@@ -81,14 +81,14 @@ var CarpoolApp = (function(){
     },
 
     getPassengers: function() {
-      console.log('Getting passengers list for ', this.transportName);
+      // console.log('Getting passengers list for ', this.transportName);
       $.getJSON('/transports/'+this.id, null, function(data) {
         var list = [];
         var transport = this;
         var passengerList = data.transport.members;
         if (passengerList.length > 0) {
           $.each(passengerList, function(i,passenger){
-            console.log('Got pax '+passenger.name);
+            // console.log('Got pax '+passenger.name);
             var pax = Passenger.init(transport, passenger);
             pax.render();
           });   
@@ -404,6 +404,7 @@ var CarpoolApp = (function(){
       var $el = $(el);
       var transportId = $el.data('id');
       var transport = Carpool.getTransport(transportId);
+      $("#passenger-list").html('');
       transport.getPassengers();
       $('#show-modal').openModal();
     },
