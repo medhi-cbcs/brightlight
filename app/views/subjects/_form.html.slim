@@ -1,18 +1,26 @@
 = form_for @subject do |f|
-  - if @subject.errors.any?
-    #error_explanation
-      h2 = "#{pluralize(@subject.errors.count, "error")} prohibited this subject from being saved:"
-      ul
-        - @subject.errors.full_messages.each do |message|
-          li = message
+ .card
+    .card-content
+      - if @subject.errors.any?
+        #error_explanation
+          h2 = "#{pluralize(@subject.errors.count, "error")} prohibited this subject from being saved:"
+          ul
+            - @subject.errors.full_messages.each do |message|
+              li = message
 
-  .field
-    = f.label :code
-    = f.text_field :code
-  .field
-    = f.label :name
-    = f.text_field :name
-  .field
-    = f.label :description
-    = f.text_field :description
-  .actions = f.submit
+      .row
+        .input-field.col.s4
+            = f.label :code
+            = f.text_field :code
+        .input-field.col.s4
+            = f.label :name
+            = f.text_field :name
+      .row
+        .input-field.col.s4
+            = f.label :description
+            = f.text_field :description
+    .card-action
+      button.btn.waves-effect.waves-light type="submit" Save
+      = link_to 'Cancel', subjects_path, class: "waves-effect waves-teal btn-flat"
+      - if params[:action] =~ /edit/
+        = link_to 'Delete', @subject, data: {confirm: 'Are you sure?'}, method: :delete, class: "right btn waves-effect waves-teal red"

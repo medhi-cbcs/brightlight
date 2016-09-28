@@ -14,10 +14,16 @@
                   .label Author
                   .item = @book_title.authors
 
+
 nav
-  .nav-wrapper
+ .nav-wrapper
     .brand-logo style="margin-left: 20px; font-size:1.5em"
-      | Editions
+      ul.left
+        li
+          = link_to book_titles_path
+            i.material-icons.center home
+        li
+          | Editions
     ul.right
       li
         = form_tag({controller:'book_titles', action:'add_isbn'}, {method: "post", class: "col s6"}) do
@@ -57,3 +63,5 @@ nav
         td.tooltipped data-position="bottom" data-delay="50" data-tooltip="View copies of this edition"
           = link_to book_edition_book_copies_path(edition)
             span.box = edition.number_of_copies
+
+  

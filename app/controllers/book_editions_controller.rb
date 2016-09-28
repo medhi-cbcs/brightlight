@@ -1,5 +1,7 @@
 class BookEditionsController < ApplicationController
   before_action :set_book_edition, only: [:show, :edit, :update, :destroy]
+ 
+
 
   # GET /book_editions
   # GET /book_editions.json
@@ -80,9 +82,13 @@ class BookEditionsController < ApplicationController
           else
             # This part handles the regular request from GET /book_editions/1/edit
             redirect_to @book_edition, notice: 'Book edition was successfully updated.'
+            
           end
         }
         format.json { render :show, status: :ok, location: @book_edition }
+        if @book_edition.subjects.present?
+          @book_edition.book_title.update_attribute :subject_id,@book_edition.subjects
+        end
       else
         format.html { render :edit }
         format.json { render json: @book_edition.errors, status: :unprocessable_entity }
@@ -136,4 +142,6 @@ class BookEditionsController < ApplicationController
         {:book_copies_attributes => [:id, :book_edition_id, :book_condition_id, :status_id, :barcode, :copy_no, :book_label_id, :_destroy]}
       )
     end
+    
+    
 end
