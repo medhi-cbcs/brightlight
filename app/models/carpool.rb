@@ -22,7 +22,11 @@ class Carpool < ActiveRecord::Base
   private
 
     def fill_in_details
-      transport = SmartCard.find_by_code(barcode).try(:transport)
+      if barcode.present?
+        transport = SmartCard.find_by_code(barcode).try(:transport)
+      elsif transport_name.present?
+        transport = Transport.find_by_name transport_name.upcase
+      end 
       unless transport.present?
         return false
       end
