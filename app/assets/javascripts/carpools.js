@@ -30,20 +30,24 @@ var CarpoolApp = (function(){
     waitCheckBox: function() { return $("#car-wait-" + this.id) },
     
     render: function() {
-      var container;
-      if (this.status == 'done') {
-        container = $("#exit-carpool");
-      } else if (this.status == 'waiting') {
-        container = $("#waiting-cars");
-      } else if (this.category == 'private') {
-        container = $("#private-cars");
-      } else if (this.category == 'shuttle') {
-        container = $("#shuttle-cars");
+      if ($(".carpool").has(this.node()).length == 0) {
+        var container;
+        if (this.status == 'done') {
+          container = $("#exit-carpool");
+        } else if (this.status == 'waiting') {
+          container = $("#waiting-cars");
+        } else if (this.category == 'private') {
+          container = $("#private-cars");
+        } else if (this.category == 'shuttle') {
+          container = $("#shuttle-cars");
+        }
+        container.append(this.htmlStr());
+        this.doneCheckBox().prop("checked", this.status == 'done');
+        this.waitCheckBox().prop("checked", this.status == 'waiting');
+        console.log("Rendered transport "+this.transportName+" with status "+this.status+" in "+container.selector);
+      } else {
+        console.log("Node present. Nothing to render "+this.transportName);
       }
-      container.append(this.htmlStr());
-      this.doneCheckBox().prop("checked", this.status == 'done');
-      this.waitCheckBox().prop("checked", this.status == 'waiting');
-      console.log("Rendered transport "+this.transportName+" with status "+this.status+" in "+container.selector);
     },
 
     set status(s) {
@@ -60,14 +64,6 @@ var CarpoolApp = (function(){
           // console.log("Element removed! status: "+transport.status);
           transport.render();
         });
-        // if (s == 'done' || (this._status == "ready" && $("#exit-carpool").has(this.node()).length > 0)) {
-        //   var transport = this;
-        //   this.node().fadeOut('slow', function(){ 
-        //     this.remove(); 
-        //     transport.render(); 
-        //     // console.log("Element removed! status: "+transport.status); 
-        //   });      
-        // }
         if (prevStatus != s) {
           this.uploadStatus();
         }
@@ -317,7 +313,9 @@ var CarpoolApp = (function(){
       $(".carpool").on("change", "[name^='car-done']", Carpool.handleCarMoves.bind(this));
       $(".carpool").on("change", "[name^='car-wait']", Carpool.handleCarWaiting.bind(this));
       $(".carpool").on("change", "[name^='pax-status']", Carpool.handlePaxMoves.bind(this));
-      $(".carpool").on("dblclick", ".entry", Carpool.handleEntryDoubleClick.bind(this));
+      $(".carpool").on("click", ".modal-trigger", Carpool.handleShowPassengers.bind(this));
+      $("#submit-carpool").on("click", Carpool.handleCarpoolEntry.bind(this));
+      $(".carpool").on("click", ".submit-carpool", Carpool.handleCarpoolEntry.bind(this));
     },
 
     handleScan: function (el, barcode) {
@@ -401,13 +399,37 @@ var CarpoolApp = (function(){
       transport.updateExpectedPassengerStatus(paxId, paxStatus);
     },
 
-    handleEntryDoubleClick: function(e) {
+    handleShowPassengers: function(e) {
       var el = e.target;
       var $el = $(el);
       var transportId = $el.data('id');
       var transport = Carpool.getTransport(transportId);
       transport.getPassengers();
       $('#show-modal').openModal();
+    },
+
+    handleCarpoolEntry: function() {
+      url = "/carpools/";
+      var dataToSend = new Object();
+      dataToSend = { carpool: {
+                      transport_name: $("#transport_name").val().toUpperCase()
+                   } };
+      var jsonData = JSON.stringify(dataToSend);
+      $.ajax({
+        type: 'POST',
+        contentType: "application/json; charset=utf-8",
+        url: url,
+        data: jsonData,
+        dataType: 'json',
+        success: function(data) {
+          var car = data.carpool;
+          $("#transport_name").val("");
+          Carpool.createOrUpdate(car);
+        },
+        error: function() {
+          Materialize.toast("Invalid shuttle/family number", 5000, 'red'); 
+        }
+     });
     },
 
     poll: function() {      

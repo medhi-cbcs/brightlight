@@ -1,15 +1,14 @@
-p#notice = notice
+h4 = @subject.name 
+  
+nav
+  .nav-wrapper
+    ul
+      li
+        = link_to subjects_path
+          i.material-icons chevron_left
+      li.right
+        = link_to edit_subject_path(@subject)
+          | Edit
+          i.material-icons.left edit
 
-p
-  strong Code:
-  = @subject.code
-p
-  strong Name:
-  = @subject.name
-p
-  strong Description:
-  = @subject.description
-
-= link_to 'Edit', edit_subject_path(@subject)
-'|
-= link_to 'Back', subjects_path
+== render 'show'

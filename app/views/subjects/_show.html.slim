@@ -1,0 +1,31 @@
+.card-panel
+  .row
+    .col.s10
+      .list_description
+        dl.row
+          dd.col.s4
+            .label Code:
+            .item =@subject.code
+          dd.col.s4
+            .label Subject:
+            .item = @subject.name
+          dd.col.s4
+            .label Descriptions:
+            .item = @subject.description
+
+
+
+- if @books.present?
+  .card-panel
+    h5 Books Member
+    table.compact.striped
+      thead
+        tr 
+          th No
+          th Title
+          th Authors
+      - @books.each_with_index do |book,i|
+        tr
+          td.wd5 = i+1
+          td = link_to book.title, book
+          td = book.authors

@@ -6,30 +6,7 @@ class CarpoolsController < ApplicationController
   # GET /carpools.json
   def index
     authorize! :manage, Carpool
-    # @carpools = Carpool.includes(:transport, :passengers)
-    # if params[:am]
-    #   @carpools = @carpools.today_am
-    # elsif params[:pm]
-    #   @carpools = @carpools.today_pm
-    # else
-    #   @carpools = @carpools.today
-    # end
-    # if params[:since]
-    #   @carpools = @carpools.since params[:since]
-    # else
-    #   @carpools = @carpools.since Date.today.beginning_of_day.to_i
-    # end
-    # respond_to do |format|
-    #   format.html
-    #   format.json
-    #   format.pdf do
-    #     render pdf:         "Carpool.pdf",
-    #            disposition: 'inline',
-    #            template:    'carpools/index.pdf.slim',
-    #            layout:      'pdf.html',
-    #            show_as_html: params.key?('debug')
-    #   end
-    # end
+    @carpool = Carpool.new
   end
 
   # GET /carpools/poll
@@ -53,8 +30,8 @@ class CarpoolsController < ApplicationController
 
   # GET /carpools/1
   # GET /carpools/1.json
-  def show
-    @expected_passengers = @carpool.late_passengers.active
+  def show    
+    @expected_passengers = @carpool.late_passengers.active if params[:lpax]
   end
 
   # GET /carpools/new
