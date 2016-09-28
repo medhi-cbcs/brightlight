@@ -1,0 +1,28 @@
+= form_for @subject, remote:true do |f|
+  .modal-content
+    - if @subject.persisted?
+      h4 Editing Subject #{@subject.name} #{'('+@subject.code+')' if @subject.code.present?}
+    - else 
+      h4 New Subject
+    - if @subject.errors.any?
+      #error_explanation
+        h6 = "#{pluralize(@subject.errors.count, "error")} prohibited this subject from being saved:"
+        ul
+          - @subject.errors.full_messages.each do |message|
+            li = message
+
+    .row
+        .input-field.col.s4
+            = f.label :code, class:'active'
+            = f.text_field :code
+        .input-field.col.s4
+            = f.label :name , class:'active'
+            = f.text_field :name
+    .row
+        .input-field.col.s4
+            = f.label :description, class:'active'
+            = f.text_field :description
+
+  .modal-footer
+    button.btn.btn-flat.waves-effect.waves-light.modal-action.modal-close type="submit" Save
+    a.modal-action.modal-close.waves-effect.waves-light.btn-flat href="#!" Close

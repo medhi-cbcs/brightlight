@@ -1,0 +1,2 @@
+$("tbody#subjects").append("<%=j render partial:'index_row', locals: {subject: @subject}%>");
+Materialize.toast("Subject <%= @subject.try(:name)%> created.", 4000, "green")

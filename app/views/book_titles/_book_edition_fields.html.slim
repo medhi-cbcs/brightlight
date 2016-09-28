@@ -41,7 +41,7 @@
       = f.text_field :tags
     .input-field.col.s3
       = f.label :subjects, class: 'active'
-      = f.text_field :subjects
+      = f.collection_select :subjects, Subject.all.order(:name),  :id, :name, prompt: true
     = f.hidden_field :small_thumbnail
     
 
