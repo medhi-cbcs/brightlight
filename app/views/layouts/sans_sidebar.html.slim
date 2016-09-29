@@ -18,9 +18,8 @@ html
     header
     
     main
-      .container
-        = render 'shared/flash_messages'
-        = yield :layout
+      = render 'shared/flash_messages'
+      = yield :layout
 
     footer.page-footer style="padding:0"
       //= render 'shared/layout/footer'

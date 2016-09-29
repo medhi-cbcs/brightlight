@@ -1,33 +1,66 @@
-p#notice = notice
+h4 Carpool Transport 
 
-p
-  strong Category:
-  = @transport.category
-p
-  strong Name:
-  = @transport.name
-p
-  strong Status:
-  = @transport.status
-p
-  strong Active:
-  = @transport.active
-p
-  strong Notes:
-  = @transport.notes
-p
-  strong Contact:
-  = @transport.contact_id
-p
-  strong Contact name:
-  = @transport.contact_name
-p
-  strong Contact phone:
-  = @transport.contact_phone
-p
-  strong Contact email:
-  = @transport.contact_email
+nav
+  .nav-wrapper
+    ul
+      li
+        = link_to transports_path(type:params[:type])
+          | Transports
+          i.material-icons.left chevron_left
+    ul.right
+      li
+        = link_to new_transport_path(type:params[:type])
+          i.material-icons +
+      li 
+        = link_to edit_transport_path(@transport)
+          i.material-icons edit
+      li
+        = link_to 'Add members', members_transport_path(@transport)
 
-= link_to 'Edit', edit_transport_path(@transport)
-'|
-= link_to 'Back', transports_path
+.card-panel
+  .row
+    .col.s3
+      h5 = @transport.name
+    .col.s3
+      .label Category:
+      .item = @transport.category == 'shuttle' ? 'Shuttle' : 'Car rider'
+    / .col.s3
+    /   .label Status:
+    /   .item = @transport.status
+    .col.s3
+      .label Active:
+      - if @transport.active
+        input type="checkbox" class="filled-in" id="active-transport" checked="checked" disabled="disabled"
+      - else
+        input type="checkbox" class="filled-in" id="active-transport" disabled="disabled"
+      label for="active-transport" 
+    .col.s12
+      .label Notes:
+      .item = @transport.notes || '--'
+    .col.s3
+      .label Contact:
+      .item = @transport.contact_id || '--'
+    .col.s3
+      .label Contact name:
+      .item = @transport.contact_name || '--'
+    .col.s3
+      .label Contact phone:
+      .item = @transport.contact_phone || '--'
+    .col.s3
+      .label Contact email:
+      .item = @transport.contact_email || '--'
+
+.card-panel
+  table.compact.striped
+    thead
+      tr 
+        th Name
+        th Grade
+        th Family No 
+    tbody
+      - @transport.passengers.each do |member|
+        tr 
+          td = member.name
+          td = member.try(:student).try(:current_grade_section).try(:name) 
+          td = member.family_no
+

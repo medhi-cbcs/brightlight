@@ -1,36 +1,41 @@
 = form_for @transport do |f|
   - if @transport.errors.any?
     #error_explanation
-      h2 = "#{pluralize(@transport.errors.count, "error")} prohibited this transport from being saved:"
+      h5 = "#{pluralize(@transport.errors.count, "error")} prohibited this transport from being saved:"
       ul
         - @transport.errors.full_messages.each do |message|
           li = message
 
-  .field
-    = f.label :category
-    = f.text_field :category
-  .field
-    = f.label :name
-    = f.text_field :name
-  .field
-    = f.label :status
-    = f.text_field :status
-  .field
-    = f.label :active
-    = f.check_box :active
-  .field
-    = f.label :notes
-    = f.text_field :notes
-  .field
-    = f.label :contact_id
-    = f.number_field :contact_id
-  .field
-    = f.label :contact_name
-    = f.text_field :contact_name
-  .field
-    = f.label :contact_phone
-    = f.text_field :contact_phone
-  .field
-    = f.label :contact_email
-    = f.text_field :contact_email
-  .actions = f.submit
+  .card-panel
+    .row      
+      .input-field.col.s3
+        = f.label :category, class:'active'
+        = f.select :category, [['Shuttle Cars','shuttle'],['Car riders','private']], {selected:params[:type]}
+      .input-field.col.s3
+        = f.label :name
+        = f.text_field :name
+      / .input-field.col.s3
+      /   = f.label :status
+      /   = f.text_field :status
+      .input-field.col.s3
+        = f.check_box :active
+        = f.label :active
+      .input-field.col.s12
+        = f.label :notes
+        = f.text_field :notes
+      / .input-field.col.s3
+      /   = f.label :contact_id
+      /   = f.number_field :contact_id
+      .input-field.col.s4
+        = f.label :contact_name
+        = f.text_field :contact_name
+      .input-field.col.s4
+        = f.label :contact_phone
+        = f.text_field :contact_phone
+      .input-field.col.s4
+        = f.label :contact_email
+        = f.text_field :contact_email
+
+  .toolbar.z-depth-1
+    button.btn.waves-effect.waves-light type="submit" Save
+    = link_to 'Cancel', transports_path, class: "waves-effect waves-light btn-flat"

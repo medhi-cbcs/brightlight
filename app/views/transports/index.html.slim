@@ -1,37 +1,55 @@
-h1 Listing transports
+h4 Carpool transports
 
-table
-  thead
-    tr
-      th Category
-      th Name
-      th Status
-      th Active
-      th Notes
-      th Contact
-      th Contact name
-      th Contact phone
-      th Contact email
-      th
-      th
-      th
+nav
+  .nav-wrapper
+    ul
+      li
+        a.dropdown-button href="#!" data-activates="category-options"
+          span#year = @category.present? ? @category : 'All Category' 
+          i.material-icons.right arrow_drop_down
+    ul.right
+      li
+        - if can? :manage, Carpool
+          = link_to new_transport_path(type:params[:type])
+            | New Transport
+            i.material-icons.left add
+ul#category-options.dropdown-content
+  li = link_to "Shuttle cars", transports_path(type:'shuttle')
+  li = link_to "Car riders", transports_path(type:'private')
 
-  tbody
-    - @transports.each do |transport|
+.card
+  table.compact.striper
+    thead
       tr
-        td = transport.category
-        td = transport.name
-        td = transport.status
-        td = transport.active
-        td = transport.notes
-        td = transport.contact_id
-        td = transport.contact_name
-        td = transport.contact_phone
-        td = transport.contact_email
-        td = link_to 'Show', transport
-        td = link_to 'Edit', edit_transport_path(transport)
-        td = link_to 'Destroy', transport, data: {:confirm => 'Are you sure?'}, :method => :delete
+        / th Category
+        th Name
+        / th Status
+        / th Active
+        / th Notes
+        / th Contact
+        th Contact name
+        / th Contact phone
+        / th Contact email
+        th
 
-br
+    tbody
+      - @transports.each do |transport|
+        tr
+          / td = transport.category
+          td = transport.name
+          / td = transport.status
+          / td = transport.active
+          / td = transport.notes
+          / td = transport.contact_id
+          td = transport.contact_name
+          / td = transport.contact_phone
+          / td = transport.contact_email
+          td 
+            = link_to transport
+              i.material-icons visibility
+            = link_to edit_transport_path(transport)
+              i.material-icons edit
+            = remote_link_to_delete transport, message: "Transport deleted", class: "left waves-effect waves-light red-text"
+              i.material-icons delete
 
-= link_to 'New Transport', new_transport_path
+
