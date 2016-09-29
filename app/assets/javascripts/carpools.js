@@ -281,7 +281,7 @@ var CarpoolApp = (function(){
   var Carpool = {
     init: function () {
       Carpool.carpoolList = [];
-      Carpool.autoPolling = false;
+      Carpool.autoPolling = true;
       Carpool.bindEvents();
       var time = new Date();
       // if AM, start at midnight, otherwise start at noon:
@@ -304,8 +304,13 @@ var CarpoolApp = (function(){
       $(".carpool").on("change", "[name^='car-wait']", Carpool.handleCarWaiting.bind(this));
       $(".carpool").on("change", "[name^='pax-status']", Carpool.handlePaxMoves.bind(this));
       $(".carpool").on("click", ".modal-trigger", Carpool.handleShowPassengers.bind(this));
-      $("#submit-carpool").on("click", Carpool.handleCarpoolEntry.bind(this));
+      // $("#submit-carpool").on("click", Carpool.handleCarpoolEntry.bind(this));
       $(".carpool").on("click", ".submit-carpool", Carpool.handleCarpoolEntry.bind(this));
+      $("#car-entry").on('keypress' , '#transport_name', function(e) {
+        if(e && e.keyCode == 13) {
+          Carpool.handleCarpoolEntry();
+        }
+      });
     },
 
     handleScan: function (el, barcode) {

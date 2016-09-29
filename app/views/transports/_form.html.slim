@@ -35,6 +35,17 @@
       .input-field.col.s4
         = f.label :contact_email
         = f.text_field :contact_email
+    .row
+      .col.s12
+        .label Smart Cards
+      .col.s12#card-list
+        = f.fields_for :smart_cards, @transport.smart_cards.build do |form|
+          = form.text_field :code, value:'5678'
+          
+        / - @transport.smart_cards.each do |card|
+        /   .chip 
+        /     = card.code
+        /     i.material-icons close
 
   .toolbar.z-depth-1
     button.btn.waves-effect.waves-light type="submit" Save
