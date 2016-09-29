@@ -73,10 +73,8 @@ class Student < ActiveRecord::Base
       order("students.created_at #{ direction }")
     when /^name/
       order("LOWER(students.name) #{ direction }")
-    when /^admission_no/
-      order("LOWER(students.admission_no) #{ direction }")
-    when /^family_id/
-      order("LOWER(students.family_id) #{ direction }")
+    when /^family_no/
+      order("LOWER(students.family_no) #{ direction }")
     else
       raise(ArgumentError, "Invalid sort option: #{ sort_option.inspect }")
     end
@@ -86,7 +84,7 @@ class Student < ActiveRecord::Base
     [
       ['Name (a-z)', 'name_asc'],
       ['Admission No', 'admission_no_asc'],
-      ['Family No', 'famimly_id_asc']
+      ['Family No', 'family_id_asc']
     ]
   end
 

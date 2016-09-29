@@ -1,42 +1,18 @@
 nav
   .nav-wrapper
-    / ul 
-    /   li 
-    /     a.dropdown-button href="#!" data-activates="input-options"
-    /       | Carpool 
-    /       i.material-icons.right arrow_drop_down
     ul style='height:100%'
-      li style='height:100%'
-        /form style='height:100%'
+      li style='height:100%;width:203px'
         .input-field style='height:100%; margin:0'
           /style='font-size:1.5rem; padding-left:30px'
           = text_field_tag :transport_name, nil, type:'search', placeholder:'Shuttle/Family No', style:'border:none;height:100%'
           = label_tag :transport_name 
             i.material-icons add
           i.material-icons#submit-carpool send
-      / li
-      /   span
-      /     /.col.s2.m1.l1 style='padding-top:12px'
-      /     button.btn.waves-effect.waves-light#submit-carpool OK
-      / <div class="input-field">
-      /     <input id="search" type="search" required>
-      /     <label for="search"><i class="material-icons">search</i></label>
-      /     <i class="material-icons">close</i>
-      /   </div>
-      / </form>
      
       li.right
         .input-field
           = check_box_tag :auto_update
-          = label_tag :auto_update
-
-/ ul#input-options.dropdown-content
-/   li  
-/     .input-form style='margin-top:16px'
-/       .input-field.col.s10.m4.l2 style='font-size:1.5rem; padding-left:30px'
-/         = text_field_tag :transport_name, nil, placeholder:'Shuttle/Family No'
-/       .col.s2.m1.l1 style='padding-top:12px'
-/         button.btn.waves-effect.waves-light.submit-carpool OK
+          = label_tag :auto_update, '', style:'top:9px; left:9px'
 
 .card.carpool
   .row
@@ -52,38 +28,16 @@ nav
         
     #tab1.tab-content
       #shuttle-cars
-      / .input-form style='margin-top:16px'
-      /   .input-field.col.s10.m4.l2 style='font-size:1.5rem; padding-left:30px'
-      /     = text_field_tag :transport_name, nil, placeholder:'Shuttle/Family No'
-      /   .col.s2.m1.l1 style='padding-top:12px'
-      /     button.btn.waves-effect.waves-light.submit-carpool OK
 
     #tab2.tab-content
       #private-cars
-      / .input-form style='margin-top:16px'
-      /   .input-field.col.s10.m4.l2 style='font-size:1.5rem; padding-left:30px'
-      /     = text_field_tag :transport_name, nil, placeholder:'Shuttle/Family No'
-      /   .col.s2.m1.l1 style='padding-top:12px'
-      /     button.btn.waves-effect.waves-light.submit-carpool OK
 
     #tab3.tab-content
       #waiting-cars
-      /.container
-        /#expected-pax-list
-          / - @carpools.active.each do |carpool|
-          /   - if carpool.late_passengers.active.present?
-          /     - carpool.late_passengers.active.each do |pax|
-          /        .wait-pax id="wait-pax-#{pax.id}" #{carpool.transport_name} #{pax.name} (#{pax.class_name})
 
     #tab4.tab-content
       #exit-carpool
 
-.row    
-  / .input-form style='margin-top:16px'
-  /   .input-field.col.s10.m4.l2 style='font-size:1.5rem; padding-left:30px'
-  /     = text_field_tag :transport_name, nil, placeholder:'Shuttle/Family No'
-  /   .col.s2.m1.l1 style='padding-top:12px'
-  /     button.btn.waves-effect.waves-light.submit-carpool OK
 = text_field_tag :carpool_scanner, "", disabled:true
 
 #show-modal.modal.bottom-sheet
@@ -95,16 +49,16 @@ nav
 
 script#carpool-template type="text/x-custom-template"
   .col.s12.m6.l3
-    .entry id="car-__carpool.id_" data-id="__carpool.id_" class="cars __carpool.status_"
+    .entry id="car-__carpool.id_" data-id="__carpool.id_" class="cars __transport.status_"
       .input-field.left style="margin-top:-10px"
         .cb-label Done
-        = check_box_tag "car-done-__carpool.id_", 1, false, data: {id: "__carpool.id_"}
+        = check_box_tag "car-done-__carpool.id_", 1, false, data: {id: "__transport.id_"}
         = label_tag "car-done-__carpool.id_", ""
-      a.modal-trigger.black-text href="#show-modal" data-id="__carpool.id_" 
-        = "__carpool.transport_name_"
+      a.modal-trigger.black-text href="#show-modal" data-id="__transport.id_" 
+        = "__transport.name_"
       .input-field.right style="margin-top:-10px"
         .cb-label Wait
-        = check_box_tag "car-wait-__carpool.id_", 1, false, data: {id: "__carpool.id_"}
+        = check_box_tag "car-wait-__carpool.id_", 1, false, data: {id: "__transport.id_"}
         = label_tag "car-wait-__carpool.id_", ""
         / = link_to edit_carpool_path("__carpool.id_"), remote: true
         /   i.material-icons style="padding-top:9px; color:salmon" pause_circle_outline

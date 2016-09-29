@@ -1,6 +1,5 @@
 Rails.application.routes.draw do
 
-  resources :transports
   resources :template_targets
   resources :templates
   resources :currencies
@@ -167,6 +166,13 @@ Rails.application.routes.draw do
   resources :carpools do
     collection do
       get 'poll'
+    end
+  end
+
+  resources :transports do
+    member do
+      get 'members'
+      post 'add_members'
     end
   end
 
