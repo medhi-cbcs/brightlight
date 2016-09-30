@@ -1,7 +1,25 @@
+class TransportUniquenessValidator < ActiveModel::Validator
+  def validate(record)
+    now = Time.now
+    range_start = now < now.noon ? now.beginning_of_day : now.noon
+    range_end   = now < now.noon ? now.noon : now.end_of_day
+    records = Carpool.where(transport_name: record.transport_name)
+                     .where('created_at > ?', range_start)
+                     .where('created_at < ?', range_end)
+    if records.present?
+      record.errors[:messages] << 'Duplicate car'
+    end
+  end
+end
+  
 class Carpool < ActiveRecord::Base
+  include ActiveModel::Validations
+  validates_with TransportUniquenessValidator, on: :create
+  
   belongs_to :transport
   has_many :passengers, through: :transport
   has_many :late_passengers
+  
   accepts_nested_attributes_for :late_passengers
 
   scope :since, lambda { |time| 

@@ -49,6 +49,10 @@ nav
     .col.s3
       .label Contact email:
       .item = @transport.contact_email || '--'
+    .col.s12
+      .label Smart Cards 
+      - @transport.smart_cards.each do |card|
+        .chip = card.code
 
 .card-panel
   table.compact.striped

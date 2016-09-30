@@ -759,16 +759,16 @@ ul {
 // =========================================== Carpool =========================================
 .carpool {
 	.entry {
-		background-color: #6069ec;
-		font-size: 2.2rem;
+		background-color: $blue;
+		font-size: 2.5rem;
 		padding: 20px;
 		line-height: 30px;
 		border-radius: 4px;
 		margin: 10px 0px;
-		text-align: center;
+		text-align: center;		
 	}
 	.ready {
-		background-color: #6069ec;
+		background-color: $blue;
 	}
 	.leaving {
 		background-color: #e6312c;
@@ -786,6 +786,10 @@ ul {
 
 .wait-pax {
 	font-size: 1.5rem;
+}
+
+.pax-entry {
+	margin-bottom: 5px;
 }
 
 
