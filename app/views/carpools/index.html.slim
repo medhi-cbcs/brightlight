@@ -2,7 +2,7 @@
   nav
     .nav-wrapper
       ul style='height:100%'
-        li style='height:100%;width:203px'
+        li style='height:100%;width:230px'
           .input-field#car-entry style='height:100%; margin:0'
             /style='font-size:1.5rem; padding-left:30px'
             = text_field_tag :transport_name, nil, type:'search', placeholder:'Shuttle/Family No', style:'border:none;height:100%'
@@ -42,8 +42,8 @@
 = text_field_tag :carpool_scanner, "", disabled:true
 
 #show-modal.modal.bottom-sheet
-  .modal-content
-    h4 Passengers 
+  .modal-content style="padding:14px"
+    h5 Passengers 
     #passenger-list
   .modal-footer
     = link_to "Close", "#!", class:"modal-action modal-close waves-effect waves-light btn-flat"
@@ -69,7 +69,7 @@ script#passenger-template type="text/x-custom-template"
     .col.s1
       = check_box_tag "pax-status-__pax.id_", 1, false, data: {id: "__pax.id_", transport: "__transport.id_"}
       = label_tag "pax-status-__pax.id_", ""
-    .col.s5
+    .col.s8
       = "__pax.name_"
     .col.s3 
       = "__pax.grade_"
