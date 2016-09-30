@@ -758,15 +758,45 @@ ul {
 
 // =========================================== Carpool =========================================
 .carpool {
-	.entry {
-		background-color: $blue;
-		font-size: 2.5rem;
-		padding: 20px;
-		line-height: 30px;
-		border-radius: 4px;
+	.entry-wrapper {
+		overflow:hidden;
+    display: table;
+    border-collapse: collapse;
+    text-align: center;
+		width: 100%;
 		margin: 10px 0px;
-		text-align: center;		
+
+		.entry {
+			display:table-row;
+			background-color: $blue;
+			font-size: 2.5rem;
+			// padding: 20px;
+			// line-height: 30px;
+			border-radius: 4px;
+			// margin: 10px 0px;
+			text-align: center;		
+		
+			.left-wrapper {
+				display:table-cell;
+				width: 60px;
+				border-radius: 4px 0 0 4px;
+			}
+			.middle-wrapper {
+				display:table-cell;
+				vertical-align: middle;
+			}
+			.right-wrapper {
+				display:table-cell;
+				width: 60px;
+				border-radius: 0 4px 4px 0;
+			}
+
+			.input-field label {
+				top: 0px;
+			}
+		}		
 	}
+	
 	.ready {
 		background-color: $blue;
 	}

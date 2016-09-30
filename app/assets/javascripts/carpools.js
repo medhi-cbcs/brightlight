@@ -188,6 +188,7 @@ var CarpoolApp = (function(){
           Carpool.handleCarpoolEntry();
         }
       });
+      $(".carpool").on("click", ".left-wrapper", Carpool.handleDone.bind(this));
     },
 
     handleScan: function (el, barcode) {
@@ -253,6 +254,13 @@ var CarpoolApp = (function(){
       var transportId = $el.data('id');
       var transport = Carpool.getTransport(transportId);
       transport.status = $el.prop("checked") ? "done" : "ready";
+    },
+    
+    handleDone: function(e) {
+      var $el = $(e.target);       
+      var transportId = $el.data('id');
+      var transport = Carpool.getTransport(transportId);
+      transport.status = transport.status == 'done' ? "ready" : "done";
     },
 
     handleCarWaiting: function(e) {
