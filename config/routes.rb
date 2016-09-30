@@ -176,6 +176,8 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :smart_cards, only: [:show, :create, :destroy]
+
   patch 'pax/:id' => 'late_passengers#update'
 
   devise_for :users, controllers: {
