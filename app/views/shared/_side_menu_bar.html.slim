@@ -59,7 +59,7 @@ li
             li
 				= link_to 'Book Subjects', subjects_path
 
-- if can? :manage, :inventory
+- if can? :manage, BookLoan
 	li 
 		.collapsible-header.waves-effect.waves-cyan
 			i.material-icons view_quilt
@@ -79,7 +79,7 @@ li
 					= link_to 'Book Loan Status', book_loans_path 
 				li
 					= link_to 'Textbook Fines', book_fines_path
-- if can? :manage, :inventory
+- if can? :manage, BookFine
 	li 
 		.collapsible-header.waves-effect.waves-cyan
 			i.material-icons settings
@@ -123,7 +123,7 @@ li
 				a href="/employees" Employees
 			/ li
 			/ 	a href="/employees?q=staff" Staff
-- if can? :manage, :carpool
+- if can? :manage, Carpool
 	li 
 		.collapsible-header.waves-effect.waves-cyan
 			i.material-icons directions_car
