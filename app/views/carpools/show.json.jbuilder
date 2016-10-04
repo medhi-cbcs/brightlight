@@ -35,3 +35,4 @@ json.carpool do
     end
   end
 end
+json.timestamp (@carpool.updated_at.to_f * 1000).to_i

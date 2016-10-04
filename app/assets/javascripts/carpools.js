@@ -43,11 +43,14 @@ var CarpoolApp = (function(){
           container = $("#private-cars");
         } else if (this.category == 'shuttle') {
           container = $("#shuttle-cars");
+        } else {
+          container = $("#data-error");
         }
+        console.log("Rendering transport "+this.transportName+" with status "+this.status);
+        // console.log("Rendering transport "+this.transportName+" with status "+this.status+" in "+container.selector);
         container.append(this.htmlStr());
         this.doneCheckBox().prop("checked", this.status == 'done');
-        this.waitCheckBox().prop("checked", this.status == 'waiting');
-        // console.log("Rendered transport "+this.transportName+" with status "+this.status+" in "+container.selector);
+        this.waitCheckBox().prop("checked", this.status == 'waiting');        
       } else {
         // console.log("Node present. Nothing to render "+this.transportName);
       }
@@ -113,8 +116,8 @@ var CarpoolApp = (function(){
         data: jsonData,
         dataType: 'json',
         success: function(data) {
-          // console.log("Car status uploaded: "+status);
-          // Carpool.update(data.carpool);     
+          // console.log("Car status uploaded: "+status);          
+          console.log("Updated at: "+data.timestamp);
         },
         error: function() {
           Materialize.toast("Sorry...I'm confused", 5000, 'red');
@@ -162,7 +165,7 @@ var CarpoolApp = (function(){
       Carpool.debug = Object.new;
       var time = new Date();
       // if AM, start at midnight, otherwise start at noon:
-      localStorage.carpool_start = (time.setHours(time.getHours() < 12 ? 0 : 12, 0, 0, 0) / 1000) >> 0;
+      localStorage.carpool_start = time.setHours(time.getHours() < 12 ? 0 : 12, 0, 0, 0);
       localStorage.carpool_mark = localStorage.carpool_start;
       Carpool.poll();
     },
@@ -177,8 +180,8 @@ var CarpoolApp = (function(){
         }
       });
       $("#auto_update").on("change", Carpool.togglePolling.bind(this));
-      $(".carpool").on("change", "[name^='car-done']", Carpool.handleCarMoves.bind(this));
-      $(".carpool").on("change", "[name^='car-wait']", Carpool.handleCarWaiting.bind(this));
+      // $(".carpool").on("change", "[name^='car-done']", Carpool.handleCarMoves.bind(this));
+      // $(".carpool").on("change", "[name^='car-wait']", Carpool.handleCarWaiting.bind(this));
       $(".carpool").on("change", "[name^='pax-status']", Carpool.handlePaxMoves.bind(this));
       $(".carpool").on("click", ".modal-trigger", Carpool.handleShowPassengers.bind(this));
       $("#submit-carpool").on("click", Carpool.handleCarpoolEntry.bind(this));
@@ -188,6 +191,8 @@ var CarpoolApp = (function(){
           Carpool.handleCarpoolEntry();
         }
       });
+      $(".carpool").on("click", ".done-wrapper", Carpool.handleDone.bind(this));
+      $(".carpool").on("click", ".wait-wrapper", Carpool.handleWait.bind(this));
     },
 
     handleScan: function (el, barcode) {
@@ -205,16 +210,15 @@ var CarpoolApp = (function(){
           var car = data.carpool;
           Materialize.toast('Welcome! ' + car.id + '-' + car.transport_name, 5000, 'green');        
           Carpool.create(car);
-          localStorage.carpool_mark = (Date.parse(car.created_at) / 1000) >> 0;
+          localStorage.carpool_mark = data.timestamp;
         },
         error: function() {
-          Materialize.toast('Error: invalid barcode', 5000, 'red');
+          Materialize.toast('Error: invalid card', 5000, 'red');
         }
       });
     },
 
     getTransport: function(transportId) {
-      // console.log("Getting transport "+transportId);
       return Carpool.carpoolList.find(function(transport) {
         return transport.id == transportId;
       })
@@ -234,32 +238,49 @@ var CarpoolApp = (function(){
     },
 
     update: function(car) {      
-      var transport = Carpool.getTransport(car.id);
-      // console.log('Updating '+transport.transportName);
+      var transport = Carpool.getTransport(car.transport_id);
       // transport.updateExpectedPassengers(car.late_passengers);
-      transport.status = car.status;      
+      transport.status = car.status;
     },
 
     createOrUpdate: function(car) {
-      if (Carpool.getTransport(car.id)) {
+      if (Carpool.getTransport(car.transport_id)) {
         Carpool.update(car);
       } else {
         Carpool.create(car);
       }
     },
 
-    handleCarMoves: function(e) {
-      var $el = $(e.target);       
-      var transportId = $el.data('id');
+    // handleCarMoves: function(e) {
+    //   var $el = $(e.target);       
+    //   var transportId = $el.data('id');
+    //   var transport = Carpool.getTransport(transportId);
+    //   transport.status = $el.prop("checked") ? "done" : "ready";
+    // },
+    
+    handleDone: function(e) {
+      var $el = $(e.target);
+      if ($el.prop('tagName') == 'LABEL') return;  
+      var transportId = $el.closest(".done-wrapper").data('id');
       var transport = Carpool.getTransport(transportId);
-      transport.status = $el.prop("checked") ? "done" : "ready";
+      if (transport) transport.status = transport.status != 'done' ? "done" : "ready";
     },
 
-    handleCarWaiting: function(e) {
-      var $el = $(e.target);       
-      var transportId = $el.data('id');
+    // handleCarWaiting: function(e) {
+    //   var $el = $(e.target);       
+    //   var transportId = $el.data('id');
+    //   var transport = Carpool.getTransport(transportId);
+    //   transport.status = $el.prop("checked") ? "waiting" : "ready";
+    // },
+
+    handleWait: function(e) {
+      var $el = $(e.target);
+      if ($el.prop('tagName') == 'LABEL') return;  
+      var transportId = $el.closest(".wait-wrapper").data('id');
       var transport = Carpool.getTransport(transportId);
-      transport.status = $el.prop("checked") ? "waiting" : "ready";
+      // console.log("Click on "+e.target.nodeName+": "+$el.attr('class')+" with transport id: "+transportId);
+      // console.log("Handle wait for transport "+transportId+" ("+transport.transportName+")");
+      if (transport) transport.status = transport.status != 'waiting' ? "waiting" : "ready";
     },
 
     handlePaxMoves: function(e) {
@@ -302,28 +323,30 @@ var CarpoolApp = (function(){
         },
         error: function(data) {
           var messages = JSON.parse(data.responseText).messages;
-          Materialize.toast(messages ? messages[0] : "Invalid shuttle/family number", 5000, 'red'); 
+          Materialize.toast(messages ? messages[0] : "Invalid shuttle/family number "+$("#transport_name").val(), 5000, 'red');
+          $("#transport_name").val("");
         }
      });
     },
 
     poll: function() {      
-      var timeout = 3600; // 1 hour
+      var timeout = 3600000; // 1 hour
       var timedelay = 5000;
-      var now = new Date().getTime() / 1000 >> 0;
-      $.getJSON('/carpools/poll?since='+localStorage.carpool_start, null, function(data) {
-        if (data.length > 0) {
-          $.each(data, function(i,car){
+      var now = new Date().getTime();
+      $.getJSON('/carpools/poll?since='+localStorage.carpool_mark, null, function(data) {        
+        var carpool = data.carpool;
+        if (carpool.length > 0) {
+          $.each(carpool, function(i,car){
             Carpool.createOrUpdate(car);
           });
-          localStorage.carpool_ts = now;
+          localStorage.carpool_ts = now;  // Mark last polling having  data
         }
-        localStorage.carpool_mark = now;
+        localStorage.carpool_mark = data.timestamp;
         if (localStorage.carpool_ts == null || localStorage.carpool_ts == "null"){
           localStorage.carpool_ts = now;
         }
-        ts = parseInt(localStorage.carpool_ts);
-        if (now-ts < timeout && Carpool.autoPolling) {
+        var ts = parseInt(localStorage.carpool_ts);
+        if (now - ts < timeout && Carpool.autoPolling) {
           setTimeout(Carpool.poll, timedelay)
         };
       });
@@ -335,7 +358,7 @@ var CarpoolApp = (function(){
         Carpool.autoPolling = true;
         Materialize.toast("Auto-update ON", 5000, 'green');
       } else {
-        localStorage.carpool_ts = new Date().getTime() / 1000 >> 0;
+        localStorage.carpool_ts = new Date().getTime();
         Carpool.autoPolling = false;
         Materialize.toast("Auto-update OFF", 5000, 'green');
       }
