@@ -219,7 +219,6 @@ var CarpoolApp = (function(){
     },
 
     getTransport: function(transportId) {
-      // console.log("Getting transport "+transportId);
       return Carpool.carpoolList.find(function(transport) {
         return transport.id == transportId;
       })
@@ -240,7 +239,6 @@ var CarpoolApp = (function(){
 
     update: function(car) {      
       var transport = Carpool.getTransport(car.transport_id);
-      console.log('Updating '+transport.transportName);
       // transport.updateExpectedPassengers(car.late_passengers);
       transport.status = car.status;
     },
@@ -253,30 +251,27 @@ var CarpoolApp = (function(){
       }
     },
 
-    handleCarMoves: function(e) {
-      var $el = $(e.target);       
-      var transportId = $el.data('id');
-      var transport = Carpool.getTransport(transportId);
-      transport.status = $el.prop("checked") ? "done" : "ready";
-    },
+    // handleCarMoves: function(e) {
+    //   var $el = $(e.target);       
+    //   var transportId = $el.data('id');
+    //   var transport = Carpool.getTransport(transportId);
+    //   transport.status = $el.prop("checked") ? "done" : "ready";
+    // },
     
     handleDone: function(e) {
       var $el = $(e.target);
       if ($el.prop('tagName') == 'LABEL') return;  
       var transportId = $el.closest(".done-wrapper").data('id');
       var transport = Carpool.getTransport(transportId);
-      // console.log("Click on "+e.target.nodeName+": "+$el.attr('class')+" with transport id: "+transportId);
-      // console.log("Handle done for transport "+transportId+" ("+transport.transportName+")");
-      // console.log(transport);
       if (transport) transport.status = transport.status != 'done' ? "done" : "ready";
     },
 
-    handleCarWaiting: function(e) {
-      var $el = $(e.target);       
-      var transportId = $el.data('id');
-      var transport = Carpool.getTransport(transportId);
-      transport.status = $el.prop("checked") ? "waiting" : "ready";
-    },
+    // handleCarWaiting: function(e) {
+    //   var $el = $(e.target);       
+    //   var transportId = $el.data('id');
+    //   var transport = Carpool.getTransport(transportId);
+    //   transport.status = $el.prop("checked") ? "waiting" : "ready";
+    // },
 
     handleWait: function(e) {
       var $el = $(e.target);
@@ -338,13 +333,8 @@ var CarpoolApp = (function(){
       var timeout = 3600000; // 1 hour
       var timedelay = 5000;
       var now = new Date().getTime();
-      console.log("Polling at "+localStorage.carpool_mark);
       $.getJSON('/carpools/poll?since='+localStorage.carpool_mark, null, function(data) {        
         var carpool = data.carpool;
-        console.log(carpool);
-        // console.log("Timestamp: "+data.timestamp);
-        Carpool.debug = carpool;
-        // console.log("Polled carpool id "+carpool.id+" catg:"+carpool.category+" code:"+carpool.barcode+" named:"+carpool.transport_name);
         if (carpool.length > 0) {
           $.each(carpool, function(i,car){
             Carpool.createOrUpdate(car);
