@@ -432,8 +432,8 @@ nav ul a.btn-floating {
 
 @media only screen and (min-width: 601px) {
 	nav, nav .nav-wrapper i, nav a.button-collapse, nav a.button-collapse i {
-    height: 64px;
-    line-height: 64px;
+    height: 54px;
+    line-height: 54px;
 	}
 }
 
@@ -767,28 +767,24 @@ ul {
 		margin: 10px 0px;
 
 		.entry {
-			display:table-row;
-			background-color: $blue;
+			display:table-row;			
 			font-size: 2.5rem;
-			// padding: 20px;
-			// line-height: 30px;
 			border-radius: 4px;
-			// margin: 10px 0px;
 			text-align: center;		
 		
-			.left-wrapper {
+			.done-wrapper {
 				display:table-cell;
-				width: 60px;
-				border-radius: 4px 0 0 4px;
+				width: 70px;
+				border-radius: 5px 0 0 5px;
 			}
 			.middle-wrapper {
 				display:table-cell;
 				vertical-align: middle;
 			}
-			.right-wrapper {
+			.wait-wrapper {
 				display:table-cell;
-				width: 60px;
-				border-radius: 0 4px 4px 0;
+				width: 70px;
+				border-radius: 0 5px 5px 0;
 			}
 
 			.input-field label {
@@ -812,6 +808,17 @@ ul {
 	.done {
 		background-color: grey;
 	}
+
+	// --- Tab bar for Carpool 
+	.tabs {
+		position: fixed;
+    top: 64px;
+    z-index: 997;
+	}
+
+	.tab-content {
+		margin-top: 30px;
+	}
 }
 
 .wait-pax {
@@ -822,6 +829,18 @@ ul {
 	margin-bottom: 5px;
 }
 
+@media only screen and (min-width: 0px) {
+	.carpool {
+		nav, nav .nav-wrapper i, nav a.button-collapse, nav a.button-collapse i {
+			height: 54px;
+			line-height: 54px;
+		}
+		.tabs {
+			height: 40px;
+			top: 54px;
+		}
+	}
+}
 
 // ============================================ Tabs ===========================================
 

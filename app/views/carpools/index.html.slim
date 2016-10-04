@@ -39,6 +39,8 @@
     #tab4.tab-content
       #exit-carpool
 
+#data-error style="display:none"
+
 = text_field_tag :carpool_scanner, "", disabled:true
 
 #show-modal.modal.bottom-sheet
@@ -52,18 +54,18 @@ script#carpool-template type="text/x-custom-template"
   .col.s12.m12.l3
     .entry-wrapper id="car-__carpool.id_" data-id="__carpool.id_" 
       .entry class="cars __transport.status_"      
-        .left-wrapper data-id="__transport.id_"
+        .done-wrapper data-id="__transport.id_"
           .input-field
-            .cb-label data-id="__transport.id_" Done 
-            = check_box_tag "car-done-__carpool.id_", 1, false, data: {id: "__transport.id_"}
+            .cb-label Done 
+            = check_box_tag "car-done-__carpool.id_", 1, false
             = label_tag "car-done-__carpool.id_", ""
         .middle-wrapper
           a.modal-trigger.black-text href="#show-modal" data-id="__transport.id_" 
             = "__transport.name_"
-        .right-wrapper data-id="__transport.id_"
+        .wait-wrapper data-id="__transport.id_"
           .input-field
-            .cb-label data-id="__transport.id_" Wait 
-            = check_box_tag "car-wait-__carpool.id_", 1, false, data: {id: "__transport.id_"}
+            .cb-label Wait 
+            = check_box_tag "car-wait-__carpool.id_", 1, false
             = label_tag "car-wait-__carpool.id_", ""
             / = link_to edit_carpool_path("__carpool.id_"), remote: true
           /   i.material-icons style="padding-top:9px; color:salmon" pause_circle_outline
