@@ -12,7 +12,7 @@ class CarpoolsController < ApplicationController
   # GET /carpools/poll
   def poll
     authorize! :manage, Carpool
-    @carpools = Carpool.includes(:transport, :passengers, :late_passengers)
+    @carpools = Carpool.all.order(:updated_at)
     if params[:am]
       @carpools = @carpools.today_am
     elsif params[:pm]
@@ -24,7 +24,8 @@ class CarpoolsController < ApplicationController
       @carpools = @carpools.since params[:since]
     else
       @carpools = @carpools.since Date.today.beginning_of_day.to_i
-    end
+    end    
+    @timestamp = @carpools.present? ? (@carpools.last.updated_at.to_f*1000).to_i : nil
     respond_to :json
   end
 
@@ -77,11 +78,7 @@ class CarpoolsController < ApplicationController
   def update
     authorize! :manage, Carpool
     respond_to do |format|
-      if @carpool.update(carpool_params)
-        @carpool.touch
-        # if @carpool.status == 'done'
-        #   @carpool.late_passengers.update_all :active, false
-        # end 
+      if @carpool.update(carpool_params) 
         format.html { redirect_to @carpool, notice: 'Carpool was successfully updated.' }
         format.json { render :show, status: :ok, location: @carpool }
         format.js
