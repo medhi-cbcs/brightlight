@@ -39,6 +39,8 @@
     #tab4.tab-content
       #exit-carpool
 
+#data-error style="display:none"
+
 = text_field_tag :carpool_scanner, "", disabled:true
 
 #show-modal.modal.bottom-sheet
@@ -50,19 +52,23 @@
 
 script#carpool-template type="text/x-custom-template"
   .col.s12.m12.l3
-    .entry id="car-__carpool.id_" data-id="__carpool.id_" class="cars __transport.status_"
-      .input-field.left style="margin-top:-10px"
-        .cb-label Done
-        = check_box_tag "car-done-__carpool.id_", 1, false, data: {id: "__transport.id_"}
-        = label_tag "car-done-__carpool.id_", ""
-      a.modal-trigger.black-text href="#show-modal" data-id="__transport.id_" 
-        = "__transport.name_"
-      .input-field.right style="margin-top:-10px"
-        .cb-label Wait
-        = check_box_tag "car-wait-__carpool.id_", 1, false, data: {id: "__transport.id_"}
-        = label_tag "car-wait-__carpool.id_", ""
-        / = link_to edit_carpool_path("__carpool.id_"), remote: true
-        /   i.material-icons style="padding-top:9px; color:salmon" pause_circle_outline
+    .entry-wrapper id="car-__carpool.id_" data-id="__carpool.id_" 
+      .entry class="cars __transport.status_"      
+        .done-wrapper data-id="__transport.id_"
+          .input-field
+            .cb-label Done 
+            = check_box_tag "car-done-__carpool.id_", 1, false
+            = label_tag "car-done-__carpool.id_", ""
+        .middle-wrapper
+          a.modal-trigger.black-text href="#show-modal" data-id="__transport.id_" 
+            = "__transport.name_"
+        .wait-wrapper data-id="__transport.id_"
+          .input-field
+            .cb-label Wait 
+            = check_box_tag "car-wait-__carpool.id_", 1, false
+            = label_tag "car-wait-__carpool.id_", ""
+            / = link_to edit_carpool_path("__carpool.id_"), remote: true
+          /   i.material-icons style="padding-top:9px; color:salmon" pause_circle_outline
 
 script#passenger-template type="text/x-custom-template"
   .row.pax-entry id="passenger-__pax.id_"
