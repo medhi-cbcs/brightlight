@@ -17,7 +17,9 @@ class Student < ActiveRecord::Base
 	accepts_nested_attributes_for :student_books, allow_destroy: true, reject_if: :all_blank
 	accepts_nested_attributes_for :book_loans, allow_destroy: true, reject_if: :all_blank
 
-	scope :current, lambda { joins(:grade_sections).joins(:grade_sections_students).where(grade_sections_students: {academic_year: AcademicYear.current}) }
+	scope :current, lambda { joins('INNER JOIN grade_sections_students ON grade_sections_students.student_id = students.id
+											INNER JOIN grade_sections ON grade_sections.id = grade_sections_students.grade_section_id')
+		.where(grade_sections_students: {academic_year: AcademicYear.current}) }
   scope :with_academic_year, lambda {|academic_year|
 		joins(:grade_sections_students)
 			.where(grade_sections_students: {academic_year: academic_year}) }
@@ -34,6 +36,8 @@ class Student < ActiveRecord::Base
 			.select('students.id,students.name,grade_sections_students.grade_section_id,grade_sections_students.order_no,grade_sections.name as grade')
 			.order('grade_sections_students.order_no')
 	}
+
+	scope :search_name, lambda { |name| where('UPPER(students.name) LIKE ?', "%#{name.upcase}%") }
 
   filterrific(
     default_filter_params: { sorted_by: 'created_at_desc' },

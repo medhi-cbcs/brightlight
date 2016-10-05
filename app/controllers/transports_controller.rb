@@ -120,6 +120,8 @@ class TransportsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def transport_params
-      params.require(:transport).permit(:category, :name, :status, :active, :notes, :contact_id, :contact_name, :contact_phone, :contact_email)
+      params.require(:transport).permit(:category, :name, :status, :active, :notes, :contact_id, :contact_name, :contact_phone, :contact_email,
+                    {smart_cards_attributes: [:code, :detail, :ref]},
+                    {passengers_attributes: [:id, :name, :student_id, :family_no, :grade_section_id, :class_name, :active, :_destroy]})
     end
 end

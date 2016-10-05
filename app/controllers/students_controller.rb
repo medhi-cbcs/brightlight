@@ -19,7 +19,10 @@ class StudentsController < ApplicationController
           @students = Student.for_section(params[:section], year: params[:year] || AcademicYear.current_id)                        
         else
           @students = Student.current
-                      .select('students.id,students.name,grade_sections_students.grade_section_id,grade_sections_students.order_no,grade_sections.name as grade')
+                      .select('students.id,students.name,students.family_no,grade_sections_students.grade_section_id,grade_sections_students.order_no,grade_sections.name as grade')
+        end
+        if params[:term].present?
+          @students = @students.search_name(params[:term])
         end
       }
       format.csv {

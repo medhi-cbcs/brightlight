@@ -14,9 +14,7 @@
 //= require jquery.turbolinks
 //= require jquery_ujs
 //= require jquery-ui
-//= require jquery-ui/autocomplete
-//= require jquery.touchSwipe.min
-//= require autocomplete-rails
+//= require jquery.easy-autocomplete
 //= require materialize-sprockets
 //= require materialize/extras/nouislider
 //= require cocoon

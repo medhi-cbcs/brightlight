@@ -14,22 +14,22 @@ nav
 
 == render 'form'
 
-.card-panel
-  table.compact.striped
-    thead
-      tr 
-        th Name
-        th Grade
-        th Family No 
-    tbody
-      - @transport.passengers.each do |member|
-        tr 
-          td = member.name
-          td = member.try(:student).try(:current_grade_section).try(:name) 
-          td = member.family_no 
+/ .card-panel
+/   table.compact.striped
+/     thead
+/       tr 
+/         th Name
+/         th Grade
+/         th Family No 
+/     tbody
+/       - @transport.passengers.each do |member|
+/         tr 
+/           td = member.name
+/           td = member.try(:student).try(:current_grade_section).try(:name) 
+/           td = member.family_no 
 
-script#smart-card-template type="text/x-custom-template"
-  input type="text" name="transport[smart_cards_attributes][_id_][code]" id="transport_smart_cards_attributes__id__code" value='_value_'
+/ script#smart-card-template type="text/x-custom-template"
+/   input type="text" name="transport[smart_cards_attributes][_id_][code]" id="transport_smart_cards_attributes__id__code" value='_value_'
 
 
 javascript:
