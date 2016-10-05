@@ -17,7 +17,7 @@ class Student < ActiveRecord::Base
 	accepts_nested_attributes_for :student_books, allow_destroy: true, reject_if: :all_blank
 	accepts_nested_attributes_for :book_loans, allow_destroy: true, reject_if: :all_blank
 
-	scope :current, lambda { joins(:grade_sections_students).where(grade_sections_students: {academic_year: AcademicYear.current}) }
+	scope :current, lambda { joins(:grade_sections).joins(:grade_sections_students).where(grade_sections_students: {academic_year: AcademicYear.current}) }
   scope :with_academic_year, lambda {|academic_year|
 		joins(:grade_sections_students)
 			.where(grade_sections_students: {academic_year: academic_year}) }
