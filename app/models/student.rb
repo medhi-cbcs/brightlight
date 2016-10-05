@@ -30,7 +30,8 @@ class Student < ActiveRecord::Base
 	scope :for_section, lambda {|section, year:AcademicYear.current|
 		joins(:grade_sections_students)
 			.where(grade_sections_students: {grade_section: section, academic_year: year})
-			.select('students.id,students.name,grade_sections_students.grade_section_id,grade_sections_students.order_no')
+			.joins(:grade_sections).where('grade_sections.id = ?',section)
+			.select('students.id,students.name,grade_sections_students.grade_section_id,grade_sections_students.order_no,grade_sections.name as grade')
 			.order('grade_sections_students.order_no')
 	}
 
