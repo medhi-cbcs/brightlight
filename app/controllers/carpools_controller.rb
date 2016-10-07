@@ -1,5 +1,7 @@
 class CarpoolsController < ApplicationController
   before_action :set_carpool, only: [:show, :edit, :update, :destroy]
+  before_action :check_format, except: [:index]
+
   layout 'sans_sidebar'
 
   # GET /carpools
@@ -112,6 +114,10 @@ class CarpoolsController < ApplicationController
                                       :active, :status, :arrival, :departure, :notes,
                                       late_passengers_attributes: [:id, :name, :student_id, :transport_id, :family_no,
                                         :family_id, :active, :grade_section_id, :class_name])
+    end
+
+    def check_format
+      redirect_to carpools_path unless params[:format] == 'json' || request.headers["Accept"] =~ /json/
     end
 
 end
