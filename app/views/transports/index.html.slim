@@ -29,7 +29,7 @@ ul#category-options.dropdown-content
   li = link_to "Car riders", transports_path(type:'private')
 
 .card-panel
-  table.compact.striper
+  table.compact.striped
     thead
       tr
         th Name
@@ -42,22 +42,23 @@ ul#category-options.dropdown-content
     tbody
       - @transports.each do |transport|
         tr
-          td = transport.name
-          td 
-            - if transport.active
-              input type="checkbox" class="filled-in" id="active-transport" checked="checked" disabled="disabled"
-            - else
-              input type="checkbox" class="filled-in" id="active-transport" disabled="disabled"
-            label for="active-transport" 
-          td = transport.contact_name
-          td = transport.contact_phone
+          td.wd10 = transport.name
+          td.wd10
+            div style="padding-top:10px"
+              - if transport.active
+                input type="checkbox" class="filled-in" id="active-transport" checked="checked" disabled="disabled"
+              - else
+                input type="checkbox" class="filled-in" id="active-transport" disabled="disabled"
+              label for="active-transport" 
+          td.wd30 = transport.contact_name
+          td.wd30 = transport.contact_phone
           / td = transport.contact_email
-          td.actions
-            = link_to transport
+          td.actions.wd20
+            = link_to transport_path(id:transport.id, page:params[:page], type:params[:type])
               i.material-icons visibility
             = link_to edit_transport_path(id:transport.id, page:params[:page], type:params[:type])
               i.material-icons edit
-            = remote_link_to_delete transport, message: "Transport deleted", class: "left waves-effect waves-light red-text"
+            = remote_link_to_delete transport, message: "Transport deleted", class: "right waves-effect waves-light red-text"
               i.material-icons delete
 
 .toolbar.z-depth-1
