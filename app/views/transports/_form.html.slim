@@ -36,11 +36,15 @@
         = f.label :contact_email
         = f.text_field :contact_email
     .row
-      .col.s12
+      .col.s2
         .label Smart Cards
-      .col.s12#card-list
-        = f.fields_for :smart_cards, @transport.smart_cards.build do |card_form|
-          = card_form.text_field :code
+      .col.s10
+        = link_to_add_association f, :smart_cards, class: "waves-effect waves-teal", 'data-association-insertion-method' => 'append', 'data-association-insertion-node' => '#smart-card'
+          ' Add Smart Card
+          i.material-icons.left playlist_add
+      .col.s12#smart-card
+        = f.fields_for :smart_cards  do |smart_card|
+          = render 'smart_card_fields', f:smart_card
           
         / - @transport.smart_cards.each do |card|
         /   .chip 
@@ -48,9 +52,9 @@
         /     i.material-icons close
     .row
       .col.s12
-        .label Members
+        .label Add Members
       .col.s4 
-        = text_field_tag :passenger, "", id: "pax_autocomplete"        
+        = text_field_tag :passenger, "", id: "pax_autocomplete", placeholder: "Student's name"   
       .col.s12
         table.compact.striped
           thead

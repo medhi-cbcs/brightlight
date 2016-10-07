@@ -8,7 +8,9 @@ class TransportsController < ApplicationController
     if type.present?
       @category = type == 'private' ? "Car Riders" : type == 'shuttle' ? "Shuttle Cars" : "???"
     end
-    @transports = type ? Transport.where('lower(category) = ?', type.downcase) : Transport.all
+    @transports = type ? Transport.where('lower(category) = ?', type.downcase) : Transport.all    
+    @transports = @transports.where('name LIKE ?', "%#{params[:term]}%") if params[:term]
+    @transports = @transports.paginate(page: params[:page], per_page: 30)
   end
 
   # GET /transports/1
@@ -121,7 +123,7 @@ class TransportsController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def transport_params
       params.require(:transport).permit(:category, :name, :status, :active, :notes, :contact_id, :contact_name, :contact_phone, :contact_email,
-                    {smart_cards_attributes: [:code, :detail, :ref]},
+                    {smart_cards_attributes: [:id, :code, :detail, :ref, :_destroy]},
                     {passengers_attributes: [:id, :name, :student_id, :family_no, :grade_section_id, :class_name, :active, :_destroy]})
     end
 end

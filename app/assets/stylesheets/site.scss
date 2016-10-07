@@ -842,6 +842,40 @@ ul {
 	}
 }
 
+.big-chip {
+	background-color: $kuning-podang;
+	height: 40px;
+	border-radius: 20px;
+	padding: 2px 5px;
+	text-align: center;
+	width: 150px;
+	font-size: 28px;
+	color: white;
+	line-height: 37px;
+}
+
+.smart-card-entry {
+	height: 50px;
+	width: 200px;
+	border: 1px black;
+	border-radius: 4px;
+	background-color: lightgrey;
+	padding: 4px 10px;
+	float: left;
+	margin-right: 20px;
+  margin-top: 10px;
+
+	.code {
+		width: 140px;
+		float: left;
+	}
+
+	.trash {
+		width: 40px;
+		float: left;
+	}
+}
+
 // ============================================ Tabs ===========================================
 
 .tabbed {

@@ -1,12 +1,4 @@
 GIT
-  remote: https://github.com/medhiwidjaja/google_books.git
-  revision: 9eb8634b7a5d8f6bb4d8533a7e3f22d85f53ab0d
-  specs:
-    google_books (0.2.2)
-      hashie (>= 1.1.0)
-      httparty (>= 0.8.1)
-
-GIT
   remote: https://github.com/subimage/slug.git
   revision: b87459597136858e3c5069e97664f3367a7bf3e2
   specs:
@@ -14,6 +6,14 @@ GIT
       activerecord (> 3.0.0)
       activesupport (> 3.0.0)
       rake
+
+GIT
+  remote: https://medhiwidjaja@github.com/medhiwidjaja/google_books.git
+  revision: 9eb8634b7a5d8f6bb4d8533a7e3f22d85f53ab0d
+  specs:
+    google_books (0.2.2)
+      hashie (>= 1.1.0)
+      httparty (>= 0.8.1)
 
 GEM
   remote: https://rubygems.org/
@@ -93,8 +93,7 @@ GEM
     globalid (0.3.6)
       activesupport (>= 4.1.0)
     hashie (3.4.2)
-    httparty (0.13.7)
-      json (~> 1.8)
+    httparty (0.14.0)
       multi_xml (>= 0.5.2)
     i18n (0.7.0)
     jbuilder (2.3.1)
@@ -286,7 +285,7 @@ DEPENDENCIES
   jquery-turbolinks
   jquery-ui-rails
   letter_opener
-  materialize-sass (= 0.97.1)
+  materialize-sass
   nprogress-rails
   numbers_and_words
   omniauth
@@ -315,4 +314,4 @@ DEPENDENCIES
   wkhtmltopdf-binary (~> 0.9.9.3)
 
 BUNDLED WITH
-   1.12.3
+   1.13.2

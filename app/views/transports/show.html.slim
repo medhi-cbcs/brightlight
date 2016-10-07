@@ -1,4 +1,15 @@
-h4 Carpool Transport 
+.row 
+  .col.s12.m8
+    h4 Carpool transports
+  .col.s12.m4
+    = form_tag({controller:'transports', action:'index'}, {method:'get'}) do 
+      .input-field
+        - if params[:term].present?
+          i.material-icons.prefix#reset-search style='cursor:pointer'
+            | highlight_off
+        - else
+          i.material-icons.prefix search
+        input.icon-prefix type="text" name="term" placeholder="Search" value=params[:term]   
 
 nav
   .nav-wrapper
@@ -10,22 +21,22 @@ nav
     ul.right
       li
         = link_to new_transport_path(type:params[:type])
-          i.material-icons +
+          i.material-icons add
       li 
         = link_to edit_transport_path(@transport)
           i.material-icons edit
 
 .card-panel
   .row
-    .col.s3
-      h5 = @transport.name
-    .col.s3
+    .col.s4
+      .big-chip = @transport.name
+    .col.s4
       .label Category:
       .item = @transport.category == 'shuttle' ? 'Shuttle' : 'Car rider'
     / .col.s3
     /   .label Status:
     /   .item = @transport.status
-    .col.s3
+    .col.s4
       .label Active:
       - if @transport.active
         input type="checkbox" class="filled-in" id="active-transport" checked="checked" disabled="disabled"
@@ -35,16 +46,13 @@ nav
     .col.s12
       .label Notes:
       .item = @transport.notes || '--'
-    .col.s3
-      .label Contact:
-      .item = @transport.contact_id || '--'
-    .col.s3
+    .col.s4
       .label Contact name:
       .item = @transport.contact_name || '--'
-    .col.s3
+    .col.s4
       .label Contact phone:
       .item = @transport.contact_phone || '--'
-    .col.s3
+    .col.s4
       .label Contact email:
       .item = @transport.contact_email || '--'
     .col.s12
@@ -53,6 +61,7 @@ nav
         .chip = card.code
 
 .card-panel
+  .label Members
   table.compact.striped
     thead
       tr 
@@ -66,3 +75,9 @@ nav
           td = member.try(:student).try(:current_grade_section).try(:name) 
           td = member.family_no
 
+javascript:
+  $(document).ready(function() {
+    $(document).on("click", "#reset-search", function() {
+      window.location = [location.protocol, '//', location.host, location.pathname].join('');
+    })
+  });
