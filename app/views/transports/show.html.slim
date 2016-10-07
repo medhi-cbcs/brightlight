@@ -15,7 +15,7 @@ nav
   .nav-wrapper
     ul
       li
-        = link_to transports_path(type:params[:type])
+        = link_to transports_path(type:params[:type], page:params[:page])
           | Transports
           i.material-icons.left chevron_left
     ul.right

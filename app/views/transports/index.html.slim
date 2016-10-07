@@ -28,7 +28,7 @@ ul#category-options.dropdown-content
   li = link_to "Shuttle cars", transports_path(type:'shuttle')
   li = link_to "Car riders", transports_path(type:'private')
 
-.card
+.card-panel
   table.compact.striper
     thead
       tr
@@ -55,7 +55,7 @@ ul#category-options.dropdown-content
           td.actions
             = link_to transport
               i.material-icons visibility
-            = link_to edit_transport_path(transport)
+            = link_to edit_transport_path(id:transport.id, page:params[:page], type:params[:type])
               i.material-icons edit
             = remote_link_to_delete transport, message: "Transport deleted", class: "left waves-effect waves-light red-text"
               i.material-icons delete
