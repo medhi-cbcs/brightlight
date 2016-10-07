@@ -5,6 +5,9 @@
       ul
         - @transport.errors.full_messages.each do |message|
           li = message
+  
+  = hidden_field_tag :page, params[:page]
+  = hidden_field_tag :type, params[:type]
 
   .card-panel
     .row      
@@ -14,18 +17,12 @@
       .input-field.col.s3
         = f.label :name
         = f.text_field :name
-      / .input-field.col.s3
-      /   = f.label :status
-      /   = f.text_field :status
       .input-field.col.s3
         = f.check_box :active
         = f.label :active
       .input-field.col.s12
         = f.label :notes
         = f.text_field :notes
-      / .input-field.col.s3
-      /   = f.label :contact_id
-      /   = f.number_field :contact_id
       .input-field.col.s4
         = f.label :contact_name
         = f.text_field :contact_name
@@ -46,10 +43,6 @@
         = f.fields_for :smart_cards  do |smart_card|
           = render 'smart_card_fields', f:smart_card
           
-        / - @transport.smart_cards.each do |card|
-        /   .chip 
-        /     = card.code
-        /     i.material-icons close
     .row
       .col.s12
         .label Add Members
@@ -71,8 +64,7 @@
                   = passenger_form.hidden_field :_destroy
                   = link_to "#!", class: 'waves-effect waves-teal red-text delete-record' , id:passenger_form.object.id                   
                     i.material-icons delete
-        
-
+      
   .toolbar.z-depth-1
     button.btn.waves-effect.waves-light type="submit" Save
     = link_to 'Cancel', transports_path, class: "waves-effect waves-light btn-flat"
