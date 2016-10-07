@@ -60,6 +60,9 @@ ul#category-options.dropdown-content
             = remote_link_to_delete transport, message: "Transport deleted", class: "left waves-effect waves-light red-text"
               i.material-icons delete
 
+.toolbar.z-depth-1
+  = will_paginate @transports
+
 javascript:
   $(document).ready(function() {
     $(document).on("click", "#reset-search", function() {
