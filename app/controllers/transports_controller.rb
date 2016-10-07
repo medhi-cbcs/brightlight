@@ -10,7 +10,7 @@ class TransportsController < ApplicationController
     end
     @transports = type ? Transport.where('lower(category) = ?', type.downcase) : Transport.all    
     @transports = @transports.where('name LIKE ?', "%#{params[:term]}%") if params[:term]
-    @transports = @transports.paginate(page: params[:page], per_page: 30)
+    @transports = @transports.order(:name).paginate(page: params[:page], per_page: 30)
   end
 
   # GET /transports/1
