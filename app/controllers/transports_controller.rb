@@ -50,11 +50,7 @@ class TransportsController < ApplicationController
     respond_to do |format|
       if @transport.update(transport_params)
         format.html { 
-          if params[:add_members]
-            redirect_to members_transport_path(@transport)
-          else
-            redirect_to @transport, notice: 'Transport was successfully updated.'
-          end 
+          redirect_to transport_path(id:@transport.id, page:params[:page], type:params[:type]), notice: 'Transport was successfully updated.'
         }
         format.json { render :show, status: :ok, location: @transport }
       else
