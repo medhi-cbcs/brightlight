@@ -1,4 +1,15 @@
-h4 Carpool transports
+.row 
+  .col.s12.m8
+    h4 Carpool transports
+  .col.s12.m4
+    = form_tag({controller:'transports', action:'index'}, {method:'get'}) do 
+      .input-field
+        - if params[:term].present?
+          i.material-icons.prefix#reset-search style='cursor:pointer'
+            | highlight_off
+        - else
+          i.material-icons.prefix search
+        input.icon-prefix type="text" name="term" placeholder="Search" value=params[:term]   
 
 nav
   .nav-wrapper
@@ -21,30 +32,27 @@ ul#category-options.dropdown-content
   table.compact.striper
     thead
       tr
-        / th Category
         th Name
-        / th Status
-        / th Active
-        / th Notes
-        / th Contact
-        th Contact name
-        / th Contact phone
+        th Active
+        th Contact
+        th Contact phone
         / th Contact email
-        th
+        th Actions
 
     tbody
       - @transports.each do |transport|
         tr
-          / td = transport.category
           td = transport.name
-          / td = transport.status
-          / td = transport.active
-          / td = transport.notes
-          / td = transport.contact_id
-          td = transport.contact_name
-          / td = transport.contact_phone
-          / td = transport.contact_email
           td 
+            - if transport.active
+              input type="checkbox" class="filled-in" id="active-transport" checked="checked" disabled="disabled"
+            - else
+              input type="checkbox" class="filled-in" id="active-transport" disabled="disabled"
+            label for="active-transport" 
+          td = transport.contact_name
+          td = transport.contact_phone
+          / td = transport.contact_email
+          td.actions
             = link_to transport
               i.material-icons visibility
             = link_to edit_transport_path(transport)
@@ -52,4 +60,10 @@ ul#category-options.dropdown-content
             = remote_link_to_delete transport, message: "Transport deleted", class: "left waves-effect waves-light red-text"
               i.material-icons delete
 
+javascript:
+  $(document).ready(function() {
+    $(document).on("click", "#reset-search", function() {
+      window.location = [location.protocol, '//', location.host, location.pathname].join('');
+    })
+  });
 

@@ -10,4 +10,5 @@ class Transport < ActiveRecord::Base
   scope :shuttle_cars, lambda { where(category:'shuttle') }  
 
   accepts_nested_attributes_for :smart_cards, allow_destroy: true, reject_if: proc { |attributes| attributes['code'].blank? }
+  accepts_nested_attributes_for :passengers, allow_destroy: true, reject_if: :all_blank
 end

@@ -11,5 +11,11 @@ $(document).on "submit", "form[method=get]", ->
   false
 
 $(document).on 'ajax:complete', '.delete-link', ->
-  $("tr#row-"+ $(this).data("id")).remove()
+  $(this).closest("tr").remove()
   Materialize.toast($(this).data("message"), 4000, "green")
+
+$(document).on 'click', '.delete-record', ->
+  $(this).closest("tr").hide()
+    .find("[name$='[_destroy]']").val(true)
+
+  
