@@ -1,0 +1,7 @@
+.nested-fields
+  .smart-card-entry
+    .code
+      = f.text_field :code
+    .trash
+      = link_to_remove_association f, class: "waves-effect waves-teal red-text left"
+        i.material-icons.small.tooltipped data-position="bottom" data-delay="50" data-tooltip="Remove" delete

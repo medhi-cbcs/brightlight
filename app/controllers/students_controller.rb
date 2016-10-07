@@ -16,8 +16,13 @@ class StudentsController < ApplicationController
       }
       format.json {
         if params[:section].present?
-          @students = Student.for_section(params[:section],year:params[:year])
-                        .select('students.id,students.name,grade_sections_students.grade_section_id,grade_sections_students.order_no')
+          @students = Student.for_section(params[:section], year: params[:year] || AcademicYear.current_id)                        
+        else
+          @students = Student.current
+                      .select('students.id,students.name,students.family_no,grade_sections_students.grade_section_id,grade_sections_students.order_no,grade_sections.name as grade')
+        end
+        if params[:term].present?
+          @students = @students.search_name(params[:term])
         end
       }
       format.csv {
@@ -30,8 +35,11 @@ class StudentsController < ApplicationController
   # GET /students/1
   # GET /students/1.json
   def show
-    @student = Student.where(id: params[:id]).includes([:student_admission_info,:grade_sections_students]).first
-    @current_grade = @student.current_grade_section
+    @student = Student.where(id: params[:id])
+      .current
+      .select('students.*, grade_sections.name as grade')
+      .take
+    @current_grade = @student.grade
   end
 
   # GET /students/new
