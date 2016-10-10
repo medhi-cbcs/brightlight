@@ -103,14 +103,16 @@ class BookCopiesController < ApplicationController
   # PATCH/PUT /book_copies/1.json
   def update
     authorize! :update, BookCopy
-    @book_edition = BookEdition.find(params[:book_edition_id])
+    @book_copy = BookCopy.find(params[:id])
     respond_to do |format|
-      if @book_edition.update(book_edition_params)
-        format.html { redirect_to book_edition_book_copies_path(@book_edition), notice: 'Book copy was successfully updated.' }
+      if @book_copy.update(book_copy_params)
+        format.html { redirect_to book_edition_book_copies_path(@book_copy.book_edition), notice: 'Book copy was successfully updated.' }
         format.json { render :show, status: :ok, location: @book_edition }
+        format.js
       else
         format.html { render :edit }
-        format.json { render json: @book_edition.errors, status: :unprocessable_entity }
+        format.json { render json: @book_copy.errors, status: :unprocessable_entity }
+        format.js
       end
     end
   end

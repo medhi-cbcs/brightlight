@@ -139,7 +139,7 @@ class BookEditionsController < ApplicationController
         :google_book_id, :isbndb_id, :title, :subtitle, :authors, :publisher, :published_date,
         :description, :isbn10, :isbn13, :page_count, :small_thumbnail, :thumbnail,
         :language, :edition_info, :tags, :subjects, :book_title_id, :refno, :price, :currency, :legacy_code,
-        {:book_copies_attributes => [:id, :book_edition_id, :book_condition_id, :status_id, :barcode, :copy_no, :book_label_id, :_destroy]}
+        {:book_copies_attributes => [:id, :book_edition_id, :book_condition_id, :status_id, :barcode, :copy_no, :book_label_id, :notes, :_destroy]}
       )
     end
     

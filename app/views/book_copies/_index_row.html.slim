@@ -1,0 +1,18 @@
+tr id="row-#{book_copy.id}"
+  td = link_to book_copy.barcode, book_copy
+  td = book_copy.book_label.try(:name)
+  td 
+    - badge_color = book_copy.latest_condition.try(:color)
+    span.box class="#{badge_color}"
+      = book_copy.latest_condition.present? ? book_copy.latest_condition.code.capitalize : 'N/A'
+  td = book_copy.status.present? ? book_copy.status.name : 'N/A'
+  td = book_copy.notes
+  td.actions
+    = link_to book_copy
+      i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="View" visibility
+    - if can? :edit, book_copy
+      = link_to edit_book_copy_path(book_copy), remote: true
+        i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="Edit" edit
+    - if can? :destroy, book_copy
+      = remote_link_to_delete book_copy, message: "Book copy deleted", class: "right waves-effect waves-light red-text"
+        i.material-icons delete

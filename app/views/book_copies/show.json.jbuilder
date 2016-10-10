@@ -54,7 +54,8 @@ json.book_copy do
       json.id @book_title.id
       json.title @book_title.title
       json.bkudid @book_title.bkudid
-      json.subject @book_title.subject
+      json.subject_code @book_title.subject_code
+      json.subject_name @book_title.subject.try(:name)
       json.subject_level @book_title.subject_level
       json.grade_code @book_title.grade_code
     end

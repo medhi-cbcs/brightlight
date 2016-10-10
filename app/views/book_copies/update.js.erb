@@ -1,0 +1,2 @@
+$("tr#row-<%= @book_copy.id%>").replaceWith("<%=j render partial:'index_row', locals: {book_copy: @book_copy}%>");
+Materialize.toast("Book copy <%= @book_copy.try(:barcode)%> updated.", 4000, "green")
