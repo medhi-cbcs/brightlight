@@ -34,41 +34,45 @@ javascript:
   $('#book_copy').on('cocoon:after-insert', function() {
     $('select').material_select();
   });
-  $("[name$='[barcode]']:last").codeScanner({
+  $("[name$='[barcode]']").codeScanner({
     minEntryChars: 11,
     onScan: function($element, barcode) {
       $.getJSON("/book_copies/"+barcode+".json?empl="+#{@teacher.id}, null, function (data) {
-        insert_values(data);
+        if ($("tr:last").find("[name$='[barcode]']").val() != "") {
+          $(".add_fields").trigger('click');
+        } else if (!$("tr:last").is(":visible")) {
+          $("tr:last").show();
+        }
+        insert_values(data, $("tr:last"));
       }).fail(function(xhr){
-        $($element).val('');
         Materialize.toast($.parseJSON(xhr.responseText).errors, 4000, 'red');
       });            
     }
   });
-  $(document).on("keypress","[name$='[barcode]']", (function(e){  
-    var c = String.fromCharCode(e.which);
-    if ( $.trim($(e.target).val()).length >= 10 ) {
-      var barcode = $.trim($(e.target).val()+c);
+  $("tbody#book_loans").on("keypress", "tr", function (e) {
+    if (e.keyCode == 13) {
       e.preventDefault();
+      e.stopPropagation();
+      var barcode = $(this).find("[name$='[barcode]']").val().trim();
+      var element = $(this);
       $.getJSON("/book_copies/"+barcode+".json", null, function (data) {
-        insert_values(data);
-        $("[name$='[barcode]']:last").focus();
+        insert_values(data, element);
       }).fail(function(xhr){
         $(e.target).val('');
         Materialize.toast($.parseJSON(xhr.responseText).errors, 5000, 'red');
       });
     }
-  }));
-  var insert_values = function (data) {
+  });
+  
+  var insert_values = function (data, el) {
     book = data.book_copy;
-    $(".titles:last").html(book.book_edition.title);
-    $(".book_copy_ids:last").val(book.id);
-    $(".academic_year_ids:last").val(book.academic_year.academic_year_id);
-    $(".book_edition_ids:last").val(book.book_edition.id);
-    $(".book_title_ids:last").val(book.book_title.id);
-    $(".barcodes:last").val(book.barcode);
-    $(".bkudids:last").val(book.book_title.bkudid);
-    $(".add_fields").trigger('click');      
+    el.find(".titles").html(book.book_edition.title);
+    el.find(".book_copy_ids").val(book.id);
+    el.find(".academic_year_ids").val(book.academic_year.academic_year_id);
+    el.find(".book_edition_ids").val(book.book_edition.id);
+    el.find(".book_title_ids").val(book.book_title.id);
+    el.find(".barcodes").val(book.barcode);
+    el.find(".bkudids").val(book.book_title.bkudid);     
   };
 
   
