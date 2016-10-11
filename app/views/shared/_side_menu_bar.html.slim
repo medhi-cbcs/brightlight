@@ -123,7 +123,7 @@ li
 				a href="/employees" Employees
 			/ li
 			/ 	a href="/employees?q=staff" Staff
-- if can? :manage, Carpool
+- if can? :read, Carpool
 	li 
 		.collapsible-header.waves-effect.waves-cyan
 			i.material-icons directions_car
@@ -132,7 +132,10 @@ li
 		.collapsible-body
 			ul
 				li
-					= link_to 'Transports', transports_path(type:'shuttle')
+					= link_to 'Carpool', carpools_path
+				- if can? :manage, Carpool
+					li
+						= link_to 'Transports', transports_path(type:'shuttle')
 
 - if signed_in? and current_user.admin?
 	li
