@@ -9,8 +9,12 @@ class TransportsController < ApplicationController
       @category = type == 'private' ? "Car Riders" : type == 'shuttle' ? "Shuttle Cars" : "???"
     end
     @transports = type ? Transport.where('lower(category) = ?', type.downcase) : Transport.all    
-    @transports = @transports.where('name LIKE ?', "%#{params[:term]}%") if params[:term]
-    @transports = @transports.order(:name).paginate(page: params[:page], per_page: 30)
+    if params[:term] =~ /\A\d{10}\Z/    # 10 digits
+      @transports = @transports.joins(:smart_cards).where(smart_cards: {code: params[:term]})
+    elsif params[:term]
+      @transports = @transports.where('name LIKE ?', "%#{params[:term]}%")
+    end 
+    @transports = @transports.order(:name).paginate(page: params[:page], per_page: 30) 
   end
 
   # GET /transports/1
