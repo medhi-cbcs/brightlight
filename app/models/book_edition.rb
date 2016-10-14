@@ -209,4 +209,15 @@ class BookEdition < ActiveRecord::Base
                         ) be on e.#{column_name} = be.#{column_name}"
     end
   end
+
+  # Strip leading and trailing spaces when assigning values to isbn10 and isbn13
+  
+  def isbn10=(num)
+    write_attribute(:isbn10, num.try(:strip))
+  end
+
+  def isbn13=(num)
+    write_attribute(:isbn13, num.try(:strip))
+  end
+
 end
