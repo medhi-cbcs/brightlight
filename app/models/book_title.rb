@@ -11,6 +11,8 @@ class BookTitle < ActiveRecord::Base
   scope :search_query, lambda { |query|
     return nil  if query.blank?
 
+    query = query.strip     # trim leading and ending spaces from query
+
     # check if search query looks like an isbn number
     if /^(?:\d[\ |-]?){9}[\d|X]$/i =~ query
       joins(:book_editions).where(book_editions:{isbn10:query.delete(' -')})
