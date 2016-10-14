@@ -1,0 +1,34 @@
+h4 Editing transport
+
+nav
+  .nav-wrapper
+    ul
+      li
+        = link_to transports_path(type: params[:type], page: params[:page])
+          | Transports
+          i.material-icons.left chevron_left
+
+== render 'form'
+
+javascript:
+  $(window).codeScanner({
+    minEntryChars: 10,
+    maxEntryTime: 500,
+    onScan: function($element, input) {
+      var barcode = input.trim();
+      $.getJSON("/smart_cards/"+barcode+".json", null, function (data) {
+        var card = data.smart_card
+        Materialize.toast("Smart card already registered to "+card.transport_name+" ("+card.category+")", 5000, 'red');              
+      }).fail(function(data){
+        create_entry(data.smart_card);
+      });           
+    }
+  });
+  var id = 1;
+  function create_entry(card) {
+    var template = $("#smart-card-template");
+    var htmlStr = function() { return template.html().replace(/_id_/g, ++id).replace(/_value_/g, card.code); };
+    $("#card-list").append(htmlStr);
+  }
+
+

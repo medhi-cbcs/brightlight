@@ -1,0 +1,42 @@
+= form_for @book_copy, remote:true do |f|
+  .modal-content
+    table
+        tr
+          td style="vertical-align:top"
+            - thumbnail = @book_copy.book_edition.present? ? @book_copy.book_edition.small_thumbnail : 'book-icon.png' 
+            = image_tag(thumbnail, class: 'list_image')
+          td
+            .list_description
+              dl.row
+                h4 = @book_copy.book_edition.title
+                dd = @book_copy.book_edition.subtitle
+              dl.row
+                dd.col.s4
+                  .label ISBN 10
+                  .item = @book_copy.book_edition.isbn10
+                dd.col.s4
+                  .label ISBN
+                  .item = @book_copy.book_edition.isbn13
+            br
+            - if @book_copy.errors.any?
+              #error_explanation
+                h2 = "#{pluralize(@book_copy.errors.count, "error")} prohibited this book_copy from being saved:"
+                ul
+                  - @book_copy.errors.full_messages.each do |message|
+                    li = message
+            input type="hidden" name="book_copy[book_edition_id]" value=@book_copy.book_edition_id
+            .row
+              .input-field.col.s4
+                = f.label :barcode, class: 'active'
+                = f.text_field :barcode
+              .input-field.col.s4
+                = f.label 'Label', class: 'active'
+                = f.text_field :copy_no
+            .row
+              .input-field.col.s12
+                = f.label :notes, class: 'active'
+                = f.text_field :notes
+
+  .modal-footer
+    button.btn.btn-flat.waves-effect.waves-light.modal-action.modal-close type="submit" Save
+    a.modal-action.modal-close.waves-effect.waves-light.btn-flat href="#!" Close

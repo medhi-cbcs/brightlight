@@ -76,24 +76,10 @@ ul#condition-options.dropdown-content
 
     tbody
       - @book_copies.each do |book_copy|
-        tr
-          td = link_to book_copy.barcode, book_copy
-          td = book_copy.book_label.try(:name)
-          td 
-            - badge_color = book_copy.latest_condition.try(:color)
-            span.box class="#{badge_color}"
-              = book_copy.latest_condition.present? ? book_copy.latest_condition.code.capitalize : 'N/A'
-          td = book_copy.status.present? ? book_copy.status.name : 'N/A'
-          td = book_copy.notes
-          td.actions
-            = link_to book_copy
-              i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="View" visibility
-            / - if can? :edit, book_copy
-            /   = link_to edit_book_copy_path(book_copy)
-            /     i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="Edit" edit
-            - if can? :destroy, book_copy
-              = link_to book_copy, data: {:confirm => 'Are you sure?'}, :method => :delete, class:'red-text'
-                i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="Delete" delete
+        = render partial: 'index_row', locals: {book_copy: book_copy}        
 
 .toolbar.z-depth-1
   = will_paginate @book_copies
+
+#edit-modal.modal.modal-fixed-footer
+  #edit-modal-content

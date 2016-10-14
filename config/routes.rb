@@ -163,6 +163,23 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :carpools do
+    collection do
+      get 'poll'
+    end
+  end
+
+  resources :transports do
+    member do
+      get 'members'
+      post 'add_members'
+    end
+  end
+
+  resources :smart_cards, only: [:show, :create, :destroy]
+
+  patch 'pax/:id' => 'late_passengers#update'
+
   devise_for :users, controllers: {
     omniauth_callbacks: "users/omniauth_callbacks",
     sessions: "users/sessions",

@@ -56,8 +56,10 @@ li
 				= link_to 'Editions', book_editions_path
 			li
 				= link_to 'Standard Books', standard_books_path
+            li
+				= link_to 'Book Subjects', subjects_path
 
-- if signed_in? and current_user.has_role? :inventory
+- if can? :manage, BookLoan
 	li 
 		.collapsible-header.waves-effect.waves-cyan
 			i.material-icons view_quilt
@@ -77,7 +79,7 @@ li
 					= link_to 'Book Loan Status', book_loans_path 
 				li
 					= link_to 'Textbook Fines', book_fines_path
-- if signed_in? and current_user.has_role? :inventory
+- if can? :manage, BookFine
 	li 
 		.collapsible-header.waves-effect.waves-cyan
 			i.material-icons settings
@@ -121,6 +123,20 @@ li
 				a href="/employees" Employees
 			/ li
 			/ 	a href="/employees?q=staff" Staff
+- if can? :read, Carpool
+	li 
+		.collapsible-header.waves-effect.waves-cyan
+			i.material-icons directions_car
+			i.mdi-navigation-chevron-right.right
+			| Carpool
+		.collapsible-body
+			ul
+				li
+					= link_to 'Carpool', carpools_path
+				- if can? :manage, Carpool
+					li
+						= link_to 'Transports', transports_path(type:'shuttle')
+
 - if signed_in? and current_user.admin?
 	li
 		.collapsible-header.waves-effect.waves-cyan

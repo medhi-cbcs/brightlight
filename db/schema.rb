@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160905054139) do
+ActiveRecord::Schema.define(version: 20160922040736) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -298,7 +298,7 @@ ActiveRecord::Schema.define(version: 20160905054139) do
     t.datetime "updated_at",    null: false
     t.integer  "bkudid"
     t.integer  "subject_id"
-    t.string   "subject"
+    t.string   "subject_code"
     t.string   "slug"
     t.string   "subject_level"
     t.string   "grade_code"
@@ -769,14 +769,16 @@ ActiveRecord::Schema.define(version: 20160905054139) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "shuttles", force: :cascade do |t|
-    t.string   "name"
-    t.string   "notes"
-    t.integer  "pic_id"
-    t.boolean  "active"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+  create_table "smart_cards", force: :cascade do |t|
+    t.string   "code"
+    t.integer  "transport_id"
+    t.string   "detail"
+    t.string   "ref"
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
   end
+
+  add_index "smart_cards", ["transport_id"], name: "index_smart_cards_on_transport_id", using: :btree
 
   create_table "standard_books", force: :cascade do |t|
     t.integer  "book_title_id"
@@ -1034,6 +1036,7 @@ ActiveRecord::Schema.define(version: 20160905054139) do
   add_foreign_key "passengers", "grade_sections"
   add_foreign_key "passengers", "students"
   add_foreign_key "passengers", "transports"
+  add_foreign_key "smart_cards", "transports"
   add_foreign_key "templates", "academic_years"
   add_foreign_key "templates", "users"
 end

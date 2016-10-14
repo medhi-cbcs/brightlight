@@ -1,0 +1,101 @@
+.navbar-fixed
+  nav
+    .nav-wrapper
+      ul style='height:100%'
+        li style='height:100%;width:230px'
+          .input-field#car-entry style='height:100%; margin:0'
+            /style='font-size:1.5rem; padding-left:30px'
+            = text_field_tag :transport_name, nil, type:'search', placeholder:'Shuttle/Family No', style:'border:none;height:100%'
+            = label_tag :transport_name 
+              i.material-icons add
+            i.material-icons#submit-carpool send
+      
+        li.right
+          .input-field
+            = check_box_tag :auto_update, value = "1", checked = true
+            = label_tag :auto_update, '', style:'top:9px; left:9px'
+
+.card.carpool
+  .row
+    ul.tabs.z-depth-1
+      li.tab.col.s2
+        a href='#tab1' Shuttle
+      li.tab.col.s2
+        a href='#tab2' Private
+      li.tab.col.s2
+        a href='#tab3' Waiting
+      li.tab.col.s2
+        a href='#tab4' Done 
+        
+    #tab1.tab-content
+      #shuttle-cars
+
+    #tab2.tab-content
+      #private-cars
+
+    #tab3.tab-content
+      #waiting-cars
+
+    #tab4.tab-content
+      #exit-carpool
+
+#data-error style="display:none"
+
+= text_field_tag :carpool_scanner, "", disabled:true
+
+#show-modal.modal.bottom-sheet
+  .modal-content style="padding:14px"
+    h5 Passengers 
+    #passenger-list
+  .modal-footer
+    = link_to "Close", "#!", class:"modal-action modal-close waves-effect waves-light btn-flat"
+
+script#carpool-template type="text/x-custom-template"
+  .col.s12.m12.l3
+    .entry-wrapper id="car-__carpool.id_" data-id="__carpool.id_" 
+      .entry class="cars __transport.status_"      
+        .done-wrapper data-id="__transport.id_"
+          .input-field
+            .cb-label Done 
+            = check_box_tag "car-done-__carpool.id_", 1, false
+            = label_tag "car-done-__carpool.id_", ""
+        .middle-wrapper
+          a.modal-trigger.black-text href="#show-modal" data-id="__transport.id_" 
+            = "__transport.name_"
+        .wait-wrapper data-id="__transport.id_"
+          .input-field
+            .cb-label Wait 
+            = check_box_tag "car-wait-__carpool.id_", 1, false
+            = label_tag "car-wait-__carpool.id_", ""
+            / = link_to edit_carpool_path("__carpool.id_"), remote: true
+          /   i.material-icons style="padding-top:9px; color:salmon" pause_circle_outline
+
+script#passenger-template type="text/x-custom-template"
+  .row.pax-entry id="passenger-__pax.id_"
+    .col.s1
+      = check_box_tag "pax-status-__pax.id_", 1, false, data: {id: "__pax.id_", transport: "__transport.id_"}
+      = label_tag "pax-status-__pax.id_", ""
+    .col.s8
+      = "__pax.name_"
+    .col.s3 
+      = "__pax.grade_"
+
+script#expected-pax-template type="text/x-custom-template"
+  .row.pax-entry id="pax-__pax.id_"
+    .col.s1
+      = check_box_tag "pax-status-__pax.id_", 1, false, data: {id: "__pax.id_", transport: "__transport.id_"}
+      = label_tag "pax-status-__pax.id_", ""
+    .col.s5
+      = "__pax.name_"
+    .col.s3 
+      = "__pax.grade_"
+    .col.s3
+      = "(__transport.name_)"
+    
+javascript:
+  $(document).on("page:load", function() {
+    CarpoolApp.init();
+  });
+  $(document).ready(function() {
+    CarpoolApp.init();
+  });

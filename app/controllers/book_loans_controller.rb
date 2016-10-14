@@ -156,7 +156,9 @@ class BookLoansController < ApplicationController
     @teacher = Employee.find params[:employee_id]
     @book_loans = BookLoan.includes([:employee])
                 .joins('LEFT JOIN book_titles ON book_titles.id = book_loans.book_title_id')
-                .select('book_loans.*, book_titles.subject as subject, book_titles.title as title')
+                .joins("LEFT JOIN subjects ON subjects.id = book_titles.subject_id")
+                .select('book_loans.*, subjects.name as subject, book_titles.title as title')
+                .order('subject, title')
     if @teacher.present?
       @book_loans =  @book_loans.where(employee: @teacher)
     else
@@ -329,11 +331,12 @@ class BookLoansController < ApplicationController
 
     if params[:employee_id].present?
       @teacher = Employee.find params[:employee_id]
-      @book_loans = BookLoan.select(['COUNT (book_loans.loan_status) AS loan_qty','COUNT (book_loans.return_status) AS return_qty','book_titles.title', 'book_titles.subject','book_editions.authors','book_editions.publisher', 'book_editions.isbn13','book_editions.isbn10', 'book_loans.notes'])
+      @book_loans = BookLoan.select(['COUNT (book_loans.loan_status) AS loan_qty','COUNT (book_loans.return_status) AS return_qty','subjects.name','book_titles.title','book_editions.authors','book_editions.publisher', 'book_editions.isbn13','book_editions.isbn10', 'book_loans.notes'])
       .where('book_loans.academic_year_id = ? AND book_loans.employee_id = ?', params[:year],params[:employee_id])      .joins("LEFT JOIN book_editions ON book_editions.id = book_loans.book_edition_id")
       .joins("LEFT JOIN book_titles ON book_titles.id = book_loans.book_title_id")
-      .group('book_titles.title', 'book_titles.subject', 'book_editions.authors','book_editions.publisher', 'book_editions.isbn13', 'book_editions.isbn10','book_loans.notes')
-      .order('subject','title')
+      .joins("LEFT JOIN subjects ON subjects.id = book_titles.subject_id")
+      .group('subjects.name','book_titles.title', 'book_editions.authors','book_editions.publisher', 'book_editions.isbn13', 'book_editions.isbn10','book_loans.notes')
+      .order('name','title')
        
       
         

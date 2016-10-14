@@ -1,0 +1,10 @@
+tr id="row-#{subject.id}"
+  td = subject.code
+  td = link_to subject.name, subject, remote: true
+  td = subject.description
+  td 
+     = link_to edit_subject_path(subject), remote: true, class: "waves-effect waves-teal"
+       i.material-icons edit
+
+
+            

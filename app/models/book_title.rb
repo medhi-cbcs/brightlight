@@ -4,11 +4,14 @@ class BookTitle < ActiveRecord::Base
   has_many :courses, through: :course_texts
   has_many :book_editions
   has_many :standard_books
+  belongs_to :subject
 
   accepts_nested_attributes_for :book_editions, reject_if: :all_blank, allow_destroy: true
 
   scope :search_query, lambda { |query|
     return nil  if query.blank?
+
+    query = query.strip     # trim leading and ending spaces from query
 
     # check if search query looks like an isbn number
     if /^(?:\d[\ |-]?){9}[\d|X]$/i =~ query

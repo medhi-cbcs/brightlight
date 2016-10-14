@@ -1,0 +1,109 @@
+= form_for @transport do |f|
+  - if @transport.errors.any?
+    #error_explanation
+      h5 = "#{pluralize(@transport.errors.count, "error")} prohibited this transport from being saved:"
+      ul
+        - @transport.errors.full_messages.each do |message|
+          li = message
+  
+  = hidden_field_tag :page, params[:page]
+  = hidden_field_tag :type, params[:type]
+
+  .card-panel
+    .row      
+      .input-field.col.s3
+        = f.label :category, class:'active'
+        = f.select :category, [['Shuttle Cars','shuttle'],['Car riders','private']], {selected:params[:type]}
+      .input-field.col.s3
+        = f.label :name
+        = f.text_field :name
+      .input-field.col.s3
+        = f.check_box :active
+        = f.label :active
+      .input-field.col.s12
+        = f.label :notes
+        = f.text_field :notes
+      .input-field.col.s4
+        = f.label :contact_name
+        = f.text_field :contact_name
+      .input-field.col.s4
+        = f.label :contact_phone
+        = f.text_field :contact_phone
+      .input-field.col.s4
+        = f.label :contact_email
+        = f.text_field :contact_email
+    .row
+      .col.s2
+        .label Smart Cards
+      .col.s10
+        = link_to_add_association f, :smart_cards, class: "waves-effect waves-teal", 'data-association-insertion-method' => 'append', 'data-association-insertion-node' => '#smart-card'
+          ' Add Smart Card
+          i.material-icons.left playlist_add
+      .col.s12#smart-card
+        = f.fields_for :smart_cards  do |smart_card|
+          = render 'smart_card_fields', f:smart_card
+          
+    .row
+      .col.s12
+        .label Add Members
+      .col.s4 
+        = text_field_tag :passenger, "", id: "pax_autocomplete", placeholder: "Student's name"   
+      .col.s12
+        table.compact.striped
+          thead
+            tr 
+              th Name
+              th Class
+              th Action
+          tbody#members
+            = f.fields_for :passengers do |passenger_form|
+              tr id="row-#{passenger_form.object.id}"
+                td = passenger_form.object.name
+                td = passenger_form.object.class_name
+                td 
+                  = passenger_form.hidden_field :_destroy
+                  = link_to "#!", class: 'waves-effect waves-teal red-text delete-record' , id:passenger_form.object.id                   
+                    i.material-icons delete
+      
+  .toolbar.z-depth-1
+    button.btn.waves-effect.waves-light type="submit" Save
+    = link_to 'Cancel', transports_path, class: "waves-effect waves-light btn-flat"
+
+javascript:
+  $(document).ready(function() {
+
+    $("#pax_autocomplete").easyAutocomplete({
+      url: function(name) {
+        return "/students?term=" + name + "&format=json";
+      },
+      getValue: 'name',
+      list: {
+        maxNumberOfElements: 10,
+        onClickEvent: function() {
+          var student = $("#pax_autocomplete").getSelectedItemData();
+          insert_row(student);
+        },
+        onChooseEvent: function() {
+          $("#pax_autocomplete").val();
+        }
+      }
+    });
+
+    function insert_row(student) {      
+      $("#members")
+        .prepend("<tr class='entry nested-fields'><td>"+student.name+"</td><td>"+student.grade 
+        +"<input name='transport[passengers_attributes]["+student.id+"][name]' type='hidden' value='"+student.name
+        +"'</input><input name='transport[passengers_attributes]["+student.id+"][family_no]' type='hidden' value='"+student.family_no
+        +"'</input><input name='transport[passengers_attributes]["+student.id+"][student_id]' type='hidden' value='"+student.id
+        +"'</input><input name='transport[passengers_attributes]["+student.id+"][grade_section_id]' type='hidden' value='"+student.grade_section
+        +"'</input><input name='transport[passengers_attributes]["+student.id+"][class_name]' type='hidden' value='"+student.grade
+        +"'</input><input name='transport[passengers_attributes]["+student.id+"][active]' type='hidden' value='"+true
+        +"'</input></td>"
+        +"<td><a class='waves-effect waves-teal red-text remove_fields dynamic' href='#'><i class='material-icons'>delete</i></a>");
+    };
+
+    function log(item) {
+      console.log(item);
+    }
+  });
+      

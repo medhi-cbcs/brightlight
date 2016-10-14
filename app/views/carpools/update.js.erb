@@ -1,0 +1,4 @@
+console.log("Updated late passengers");
+console.log(<%=j @carpool.to_json %>);
+update_carpool_info(<%=j @carpool.to_json %>);
+update_waiting_list(<%=j @carpool.late_passengers.to_json %>);

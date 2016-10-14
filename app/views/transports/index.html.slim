@@ -1,0 +1,73 @@
+.row 
+  .col.s12.m8
+    h4 Carpool transports
+  .col.s12.m4
+    = form_tag({controller:'transports', action:'index'}, {method:'get'}) do 
+      .input-field
+        - if params[:term].present?
+          i.material-icons.prefix#reset-search style='cursor:pointer'
+            | highlight_off
+        - else
+          i.material-icons.prefix search
+        input.icon-prefix type="text" name="term" placeholder="Search or scan card" value=params[:term]   
+
+nav
+  .nav-wrapper
+    ul
+      li
+        a.dropdown-button href="#!" data-activates="category-options"
+          span#year = @category.present? ? @category : 'All Category' 
+          i.material-icons.right arrow_drop_down
+    ul.right
+      li
+        - if can? :manage, Carpool
+          = link_to new_transport_path(type:params[:type])
+            | New Transport
+            i.material-icons.left add
+ul#category-options.dropdown-content
+  li = link_to "Shuttle cars", transports_path(type:'shuttle')
+  li = link_to "Car riders", transports_path(type:'private')
+
+.card-panel
+  table.compact.striped
+    thead
+      tr
+        th Name
+        th Active
+        th Contact
+        th Contact phone
+        / th Contact email
+        th Actions
+
+    tbody
+      - @transports.each do |transport|
+        tr
+          td.wd10 = transport.name
+          td.wd10
+            div style="padding-top:10px"
+              - if transport.active
+                input type="checkbox" class="filled-in" id="active-transport" checked="checked" disabled="disabled"
+              - else
+                input type="checkbox" class="filled-in" id="active-transport" disabled="disabled"
+              label for="active-transport" 
+          td.wd30 = transport.contact_name
+          td.wd30 = transport.contact_phone
+          / td = transport.contact_email
+          td.actions.wd20
+            = link_to transport_path(id:transport.id, page:params[:page], type:params[:type])
+              i.material-icons visibility
+            = link_to edit_transport_path(id:transport.id, page:params[:page], type:params[:type])
+              i.material-icons edit
+            = remote_link_to_delete transport, message: "Transport deleted", class: "right waves-effect waves-light red-text"
+              i.material-icons delete
+
+.toolbar.z-depth-1
+  = will_paginate @transports
+
+javascript:
+  $(document).ready(function() {
+    $(document).on("click", "#reset-search", function() {
+      window.location = [location.protocol, '//', location.host, location.pathname].join('');
+    })
+  });
+

@@ -1,0 +1,13 @@
+h4 New transport
+
+nav
+  .nav-wrapper
+    ul
+      li
+        = link_to transports_path(type:params[:type])
+          | Transports
+          i.material-icons.left chevron_left
+
+== render 'form'
+
+

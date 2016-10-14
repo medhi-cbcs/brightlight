@@ -1,25 +1,57 @@
-h1 Listing subjects
+.row 
+  .col.s6
+    h4 Book Subjects
+  .col.s5
+    = form_tag({controller:'subjects', action:'index'}, {method:'get'}) do 
+      .input-field
+        input type="hidden" name="v" value=@view_style
+        - if params[:search].present?
+          i.material-icons.prefix onclick='reset_form()' style='cursor:pointer'
+            | highlight_off
+        - else
+          i.material-icons.prefix search
+        input.icon-prefix type="text" name="search" placeholder="Search" value=params[:search]    
+    javascript:
+      function reset_form() {
+        window.location="#{subjects_path(v:'list')}"
+      }
 
-table
-  thead
-    tr
-      th Code
-      th Name
-      th Description
-      th
-      th
-      th
 
-  tbody
-    - @subjects.each do |subject|
-      tr
-        td = subject.code
-        td = subject.name
-        td = subject.description
-        td = link_to 'Show', subject
-        td = link_to 'Edit', edit_subject_path(subject)
-        td = link_to 'Destroy', subject, data: {:confirm => 'Are you sure?'}, :method => :delete
+nav
+  .nav-wrapper
+    ul.right
+      li
+        - if can? :manage, Subject
+          = link_to new_subject_path, remote: true
+            | Add Subject
+            i.material-icons.left add
 
-br
 
-= link_to 'New Subject', new_subject_path
+.card-panel
+    table.compact.striped
+      thead
+        tr
+          th Code
+          th Name
+          th Description
+          th
+          th
+          th
+
+      tbody#subjects
+        - @subjects.each do |subject|
+          tr id="row-#{subject.id}"
+            = render partial: 'index_row', locals: {subject: subject}
+            
+    br
+.toolbar.z-index-1
+  = will_paginate @subjects
+
+#show-modal.modal.modal-fixed-footer
+  .modal-content
+    #modal-content
+  .modal-footer
+    a.modal-action.modal-close.waves-effect.waves-light.btn-flat href="#!" Close
+    
+#edit-modal.modal.modal-fixed-footer
+  #edit-modal-content
