@@ -158,7 +158,7 @@ class BookLoansController < ApplicationController
                 .joins('LEFT JOIN book_titles ON book_titles.id = book_loans.book_title_id')
                 .joins("LEFT JOIN subjects ON subjects.id = book_titles.subject_id")
                 .select('book_loans.*, subjects.name as subject, book_titles.title as title')
-                .order('subject, title')
+
     if @teacher.present?
       @book_loans =  @book_loans.where(employee: @teacher)
     else
@@ -369,7 +369,7 @@ class BookLoansController < ApplicationController
 
 
     def sortable_columns 
-      [:title, :barcode, :return_status, :subject, :out_date, :return_date, :academic_year_id]
+      [:subject, :title, :barcode, :return_status, :out_date, :return_date, :academic_year_id]
     end    
 
 end
