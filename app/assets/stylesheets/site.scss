@@ -387,10 +387,13 @@ nav {
 		span.caret {
 			color: white;
 			top: 0px;
+			font-size: 1rem;
 		}
 		input.select-dropdown {
 			border-bottom: none;
-			margin-top: 10px;
+			margin: 0px;
+			text-align: center;
+			height: 54px;
 		}
 	}
 

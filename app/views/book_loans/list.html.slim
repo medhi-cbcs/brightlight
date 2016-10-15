@@ -139,7 +139,7 @@ javascript:
       $('#default-buttons').show();
     }
   };
-  $(document).on('page:load', function(){
+  function prepare_menu() {
     $('input.checkbox').change( function() {
       toggle_menu();
     });
@@ -149,5 +149,10 @@ javascript:
       toggle_menu();
     });
     update_borrowers_menu();
+  }
+  $(document).on('page:load', function(){
+    prepare_menu();
   });
-  
+  $(document).on('ready', function(){
+    prepare_menu();
+  });
