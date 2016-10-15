@@ -3,7 +3,6 @@ class BookLoan < ActiveRecord::Base
   validates :book_copy, presence: true
   validates :academic_year, presence: true
   validates :book_copy_id, uniqueness: {scope: [:academic_year_id]}
-  validates :book_copy_id, uniqueness: {scope: [:academic_year_id]}
 
   belongs_to :book_copy
   belongs_to :book_edition
