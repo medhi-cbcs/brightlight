@@ -49,13 +49,13 @@ gem 'will_paginate', '~> 3.0.6'
 gem 'filterrific'
 
 # The Materialize UI framework
-gem 'materialize-sass', '0.97.1'
+gem 'materialize-sass'
 
 # jQuery UI
 gem 'jquery-ui-rails'
 
 # Wrapper for Google Books API
-gem 'google_books', git: 'https://github.com/medhiwidjaja/google_books.git'
+gem 'google_books', git: 'https://medhiwidjaja@github.com/medhiwidjaja/google_books.git'
 
 gem 'hashie'
 
@@ -112,6 +112,10 @@ group :development, :test do
   gem 'forgery'
   gem 'populator'
   gem 'letter_opener'
+  gem 'rspec-rails', '~> 3.5'
+  gem 'capybara'
+  gem 'factory_girl_rails'
+  gem 'database_cleaner'
 end
 
 group :development do
