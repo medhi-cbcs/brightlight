@@ -112,6 +112,10 @@ group :development, :test do
   gem 'forgery'
   gem 'populator'
   gem 'letter_opener'
+  gem 'rspec-rails', '~> 3.5'
+  gem 'capybara'
+  gem 'factory_girl_rails'
+  gem 'database_cleaner'
 end
 
 group :development do

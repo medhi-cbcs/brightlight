@@ -44,10 +44,10 @@ class User < ActiveRecord::Base
             uid: access_token.uid,
             image_url: access_token.extra.raw_info["picture"],
             password: Devise.friendly_token[0,20],
-            roles: roles_from_job_title(employee.job_title)
+            roles: User.roles_from_job_title(employee.job_title)
           )
           employee.user_id = user.id
-          employee.save
+          employee.save 
         end
         return user
       end
@@ -82,11 +82,13 @@ class User < ActiveRecord::Base
     self.has_role? :admin
   end
 
-  def valid_role(string)
+  # Class Methods
+  
+  def self.valid_role?(string)
     ROLES.include? string.downcase.to_sym
   end
 
-  def roles_from_job_title(job_title)
+  def self.roles_from_job_title(job_title)
     job_title.split(',').map(&:strip).map(&:downcase).map(&:to_sym) & ROLES
   end
 end
