@@ -213,6 +213,7 @@ class BookLoansController < ApplicationController
   def new_tm
     authorize! :manage, BookLoan
     @teacher = Employee.find params[:employee_id]
+    @academic_year_id = params[:year] || AcademicYear.current_id
     @book_loan = BookLoan.new
   end
 
