@@ -5,14 +5,17 @@ h4 New Book Loan
     .nav-wrapper
       .brand-logo style="margin-left: 20px; font-size:1.5em"
         = @teacher.name
-      ul
-        li.right
+      ul.right
+        li
+          .input-field
+            = select_tag :acad_year, options_from_collection_for_select(AcademicYear.list_for_menu,:id,:name, @academic_year_id)
+        li
           / Note: 'Append' new row at the end of the 'tbody#book_loans' node
           / Do not forget to put local variables below (the same as in render partial:'book_loan_fields')
           = link_to_add_association f, :book_loans, 'data-association-insertion-method' => 'append', 'data-association-insertion-node' => 'tbody#book_loans', render_options: { locals: {employee: @teacher, user: current_user} }
             ' Add Row
             i.material-icons.left playlist_add
-
+        
   .card-panel
     .row
       table.compact
@@ -66,9 +69,10 @@ javascript:
   
   var insert_values = function (data, el) {
     book = data.book_copy;
+    var acad_year = $("#acad_year option:selected").val();
     el.find(".titles").html(book.book_edition.title);
     el.find(".book_copy_ids").val(book.id);
-    el.find(".academic_year_ids").val(book.academic_year.academic_year_id);
+    el.find(".academic_year_ids").val(acad_year);
     el.find(".book_edition_ids").val(book.book_edition.id);
     el.find(".book_title_ids").val(book.book_title.id);
     el.find(".barcodes").val(book.barcode);
