@@ -40,24 +40,32 @@ javascript:
     var employeeId = book.employee.id;
     var currentUserId = #{raw current_user.try(:id) || 0};
     var acad_year = $("#acad_year option:selected").val();
-    url = "/employees/"+ employeeId + "/book_loans/" + book.loans.id;
-    var dataToSend = new Object();
-    var today = new Date();
-    dataToSend = { book_loan: { barcode: book.barcode, return_status:'R', academic_year_id: acad_year,
-                                return_date: today.toISOString(), user_id: currentUserId }};
-    var jsonData = JSON.stringify(dataToSend);
-    $.ajax({
-      type: 'PUT',
-      contentType: "application/json; charset=utf-8",
-      url: url,
-      data: jsonData,
-      dataType: 'json',
-      success: function(m) {
-        Materialize.toast('Book checked', 5000, 'green');
-        $("tbody#book_loans").prepend("<tr><td>"+book.barcode+"</td><td>"+book.book_edition.title+"</td><td>Returned</td><td>"+today.toUTCString()+"</td></tr>");
-      },
-      error: function(e) {
-        Materialize.toast('Book check error', 5000, 'red');
+    if (book.loans) {
+      if (book.loans.employee_id == employeeId) {
+        url = "/employees/"+ employeeId + "/book_loans/" + book.loans.id;
+        var dataToSend = new Object();
+        var today = new Date();
+        dataToSend = { book_loan: { barcode: book.barcode, return_status:'R', academic_year_id: acad_year,
+                                    return_date: today.toISOString(), user_id: currentUserId }};
+        var jsonData = JSON.stringify(dataToSend);
+        $.ajax({
+          type: 'PUT',
+          contentType: "application/json; charset=utf-8",
+          url: url,
+          data: jsonData,
+          dataType: 'json',
+          success: function(m) {
+            Materialize.toast('Book checked', 5000, 'green');
+            $("tbody#book_loans").prepend("<tr><td>"+book.barcode+"</td><td>"+book.book_edition.title+"</td><td>Returned</td><td>"+today.toUTCString()+"</td></tr>");
+          },
+          error: function(e) {
+            Materialize.toast('Book check error', 5000, 'red');
+          }
+        });
+      } else {
+        Materialize.toast(book.barcode+' is borrowed by '+book.loans.employee_name, 5000, 'red');
       }
-    });      
+    } else {
+      Materialize.toast('Book '+book.barcode+' is not borrowed for the selected year', 5000, 'red');
+    }
   }
