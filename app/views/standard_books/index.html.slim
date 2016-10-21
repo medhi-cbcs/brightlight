@@ -73,17 +73,9 @@ nav
             td 
               = link_to edit_standard_book_path(standard_book) 
                 i.material-icons edit
-              = link_to standard_book, data: {id: standard_book.id, confirm: 'Are you sure?'}, :method => :delete, class:"red-text delete-link", remote: true
+              = remote_link_to_delete standard_book, message: "Standard book removed", class: "right waves-effect waves-light red-text"
                 i.material-icons delete
 
   - if @standard_books.total_pages > 1
     .toolbar.z-depth-1
       = will_paginate @standard_books
-
-
-javascript:              
-  $('.delete-link').bind('ajax:complete', function() {
-    var id = $(this).data("id");
-    $("tr#row-"+id).remove();
-    Materialize.toast("Book deleted", 4000, "green");
-  });
