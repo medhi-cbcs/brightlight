@@ -4,11 +4,8 @@ h4 New Standard Book
   nav
     .nav-wrapper
       ul
-        li 
-          = link_to grade_level_standard_books_path(@grade_level)
-            i.material-icons.left chevron_left
         li.right
-          button.btn.waves-effect.waves-light type="submit" Save
+          = link_to 'Done', grade_level_standard_books_path(@grade_level), class:'btn waves-effect waves-light'
 
   - if @standard_book.errors.any?
     .card-panel
@@ -22,7 +19,7 @@ h4 New Standard Book
     .row
       .input-field.col.s3
         = f.label :grade_level, class:'active'
-        = f.collection_select :grade_level_id, GradeLevel.all, :id, :name, selected:params[:grade]
+        = f.collection_select :grade_level_id, GradeLevel.all, :id, :name, selected:params[:grade_level_id]
       .input-field.col.s3
         = f.label :track, class:'active'
         = f.select :track, options_for_select([['None', nil],['NS','NS'],['SS','SS']])
@@ -38,11 +35,38 @@ h4 New Standard Book
       .input-field.col.s9
         = f.label :notes
         = f.text_field :notes
-      .input-field.col.s12 
+      .input-field.col.s11
         = f.hidden_field :book_edition_id
         = f.hidden_field :book_title_id
         = label_tag :book_edition_title, "Book Title", class: 'active'
-        = autocomplete_field_tag :book_edition_title, '', autocomplete_book_edition_title_standard_books_path, update_elements: {:id => '#standard_book_book_edition_id', :book_title_id => '#standard_book_book_title_id'}, limit:100
+        = text_field_tag :book_edition_title, "", id: "title_autocomplete", placeholder: "Search book title" 
     
   .card-panel
     table#book_list
+
+javascript:
+  $(document).ready(function() {
+
+    $("#title_autocomplete").easyAutocomplete({
+      url: function(title) {
+        return "/book_editions?search=" + title + "&format=json";
+      },
+      getValue: 'title',
+      list: {
+        maxNumberOfElements: 15,
+        onClickEvent: function() {
+          var edition = $("#title_autocomplete").getSelectedItemData();
+          insert_row(edition);
+        },
+        onChooseEvent: function() {
+          $("#title_autocomplete").val("");
+          $("#new_standard_book").submit();
+        }
+      }
+    });
+  });
+
+  function insert_row(edition) {
+    $("#standard_book_book_edition_id").val(edition.id);
+    $("#standard_book_book_title_id").val(edition.book_title_id);
+  }
