@@ -67,7 +67,7 @@ class EmployeesController < ApplicationController
       if @employee.update(employee_params)
         format.html do
           if employee_params[:book_loans_attributes].present?
-            redirect_to employee_book_loans_path(@employee), notice: 'Book loan was successfully added.'
+            redirect_to employee_book_loans_path(@employee, year:params[:acad_year]), notice: 'Book loan was successfully added.'
           else
             redirect_to @employee, notice: 'Employee was successfully updated.'
           end
