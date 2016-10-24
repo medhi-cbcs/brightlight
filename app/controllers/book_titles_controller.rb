@@ -19,16 +19,23 @@ class BookTitlesController < ApplicationController
     respond_to do |format|
       format.html {
         if params[:term]
-          @book_titles = BookTitle.search_query(params[:term]).paginate(page: params[:page], per_page: items_per_page)
+          @book_titles = BookTitle
+            .search_query(params[:term])
+            .includes(:book_editions)
+            .paginate(page: params[:page], per_page: items_per_page)
         elsif params[:copy]
           redirect_to book_copy_path(params[:copy].upcase)
         else
-          @book_titles = BookTitle.paginate(page: params[:page], per_page: items_per_page)
+          @book_titles = BookTitle
+            .includes(:book_editions)
+            .paginate(page: params[:page], per_page: items_per_page)
         end
       }
       format.json {
         search = params[:term] || ""
-        @book_titles = BookTitle.where('title LIKE ?', "%#{search}%").paginate(page: params[:page], per_page:40)
+        @book_titles = BookTitle.where('title LIKE ?', "%#{search}%")
+          .includes(:book_editions)
+          .paginate(page: params[:page], per_page:40)
         # if params[:callback]
         #   render json: @book_titles, callback: params[:callback]
         # else
@@ -121,12 +128,9 @@ class BookTitlesController < ApplicationController
   def update
     authorize! :update, @book_title
     @book_edition = BookEdition.find_by_book_title_id @book_title.id
-    if @book_edition.subjects.present?
-      @book_edition.book_title.update_attribute :subject_id,@book_edition.subjects
-    end
     respond_to do |format|
       if @book_title.update(book_title_params)
-        @book_title.update_attribute :subject_id,@book_edition.try(:subjects)
+        @book_title.update_attribute :subject_id, @book_edition.try(:subjects)
         format.html { redirect_to @book_title, notice: 'Book title was successfully updated.' }
         format.json { render :show, status: :ok, location: @book_title }
       else
