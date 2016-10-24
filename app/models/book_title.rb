@@ -15,13 +15,10 @@ class BookTitle < ActiveRecord::Base
 
     # check if search query looks like an isbn number
     if /^(?:\d[\ |-]?){9}[\d|X]$/i =~ query
-      joins(:book_editions).where(book_editions:{isbn10:query.delete(' -')})
+      joins(:book_editions).where("book_editions.isbn10 = ? OR book_editions.refno = ?", query.delete(' -'), query.delete(' -'))
 
     elsif /^(?:\d[\ |-]?){13}$/i =~ query
-      joins(:book_editions).where(book_editions:{isbn13:query.delete(' -')})
-
-    elsif /^(?:\d[A-Z\ |-]?){13}$/i =~ query
-      joins(:book_editions).where(book_editions:{refno:query.delete(' -')})
+      joins(:book_editions).where("book_editions.isbn13 = ? OR book_editions.refno = ?", query.delete(' -'), query.delete(' -'))
 
     elsif /^(?:[A-Z\ |-]+\d+)$/i =~ query   # checking if it's a barcode
       joins(book_editions: :book_copies).where(book_copies: {barcode: query.upcase})
