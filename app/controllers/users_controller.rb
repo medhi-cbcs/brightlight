@@ -12,6 +12,7 @@ class UsersController < ApplicationController
           .order("#{sort_column} #{sort_direction}")
           .order('name')
           .paginate(page: params[:page], per_page: 20)
+        @users = @users.search_query(params[:search]) if params[:search]
       end
       format.csv do
         @users = User.all
