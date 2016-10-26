@@ -34,7 +34,7 @@ class Ability
     can :manage, BookReceipt
     can :update, Student  # for nested form in StudentBook
     can :update, Employee # for nested form in BookLoan
-    can :scan, BookLoan
+    can :manage, BookLoan
     can :read, :all
 	end
 
