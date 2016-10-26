@@ -50,11 +50,7 @@ h4 Add Book to Receipt Form
     button.btn.waves-effect.waves-light type="submit" Save
     = link_to 'Cancel', book_receipts_path(gs:params[:gs],r:params[:r],year:params[:year]), class: "waves-effect waves-light btn btn-flat"
 
-
-/ The following javascript callback function will turn select elements in the dynamically created row 
-/ into MaterializeCSS style selects.
 javascript:
-
   $("[name$='[barcode]']").codeScanner({
     minEntryChars: 11,
     onScan: function($element, input) {

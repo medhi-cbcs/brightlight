@@ -9,13 +9,18 @@ h4 New Book Loan
         li
           .input-field
             = select_tag :acad_year, options_from_collection_for_select(AcademicYear.list_for_menu,:id,:name, @academic_year_id)
-        li
+        li#add-row
           / Note: 'Append' new row at the end of the 'tbody#book_loans' node
           / Do not forget to put local variables below (the same as in render partial:'book_loan_fields')
           = link_to_add_association f, :book_loans, 'data-association-insertion-method' => 'append', 'data-association-insertion-node' => 'tbody#book_loans', render_options: { locals: {employee: @teacher, user: current_user} }
             ' Add Row
             i.material-icons.left playlist_add
-        
+  
+  .toolbar
+    div.right style="margin-top: 5px;"
+      input.checkbox-toggle type="checkbox" id="use-scanner"
+      = label_tag "use-scanner", "Use scanner"
+
   .card-panel
     .row
       table.compact
@@ -31,8 +36,6 @@ h4 New Book Loan
     button.btn.waves-effect.waves-light type="submit" Save
     = link_to 'Cancel', employee_book_loans_path(@teacher), class: "waves-effect waves-light btn btn-flat"
 
-/ The following javascript callback function will turn select elements in the dynamically created row 
-/ into MaterializeCSS style selects.
 javascript:
   $('#book_copy').on('cocoon:after-insert', function() {
     $('select').material_select();
@@ -79,4 +82,23 @@ javascript:
     el.find(".bkudids").val(book.book_title.bkudid);     
   };
 
-  
+  $("#use-scanner").change(function() {
+    $("tr.nested-fields").each(function(){
+      v = $(this).find(".book_copy_ids").attr('value');
+      if (v == undefined) {
+        if ($("#use-scanner").is(":checked")) {
+          $(this).hide();
+        } else {
+          $(this).show();
+        }
+      } 
+    });
+    if (!$("#use-scanner").is(":checked")) {
+      if ($("tr:last").find("[name$='[barcode]']").val() != "") {
+        $(".add_fields").trigger('click');
+      }
+      $("#add-row").show();
+    } else {
+      $("#add-row").hide();
+    }
+  });

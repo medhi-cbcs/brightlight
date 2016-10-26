@@ -11,6 +11,26 @@ nav
       li 
         = link_to 'Done', employee_book_loans_path(@teacher, year: params[:year])
 
+- unless can? :manage, BookLoan
+  .toolbar
+    .notes Scan barcode
+    = hidden_field_tag :barcode
+- else
+  ul.collapsible data-collapsible="expandable"
+    li
+      .collapsible-header        
+        | Manual input
+        i.material-icons.left keyboard
+
+      .collapsible-body
+        .container style="margin-top:1px"
+          .row
+            .input-field.col.s4
+              = label_tag :barcode, nil, class:'active'
+              = text_field_tag :barcode, nil 
+            .col.s6 style="margin-top:26px;"
+              | Enter barcode and press enter     
+            
 .card-panel
   .row
     table.compact
@@ -22,7 +42,7 @@ nav
       tbody#book_loans
 
 javascript:
-  $(window).codeScanner({
+  $("#barcode").codeScanner({
     minEntryChars: 11,
     onScan: function($element, input) {
       var barcode = input.trim();
@@ -33,7 +53,17 @@ javascript:
       });           
     }
   });
-
+  $(".input-field").on("keypress", $("#barcode"), function (e) {
+    if (e.keyCode == 13) {
+      e.stopPropagation();
+      var barcode = $("#barcode").val().trim();
+      $.getJSON("/book_copies/"+barcode+".json?empl="+#{@teacher.id}+"&year="+#{@academic_year_id}, null, function (data) {
+        update_book_loan(data);
+      }).fail(function(xhr){
+        Materialize.toast($.parseJSON(xhr.responseText).errors, 5000, 'red');
+      });
+    }
+  });
   var update_book_loan = function (data) {
     var book = data.book_copy;
     var employeeId = book.employee.id;
