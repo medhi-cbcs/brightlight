@@ -92,6 +92,11 @@ class BookLoansController < ApplicationController
 
   # GET /book_loans/1/edit
   def edit
+    @teacher = @book_loan.employee
+    respond_to do |format|
+      format.html
+      format.js
+    end
   end
 
   # POST /book_loans
@@ -223,6 +228,12 @@ class BookLoansController < ApplicationController
     @teacher = Employee.find params[:employee_id]
   end
 
+  def edit_tm
+    authorize! :edit, BookLoan
+    @teacher = Employee.find params[:employee_id]
+    @book_loan = BookLoan.find params[:id]
+  end
+
   # PUT /employees/:employee_id/book_loans/:id
   def update_tm
     authorize! :manage, BookLoan
@@ -232,10 +243,9 @@ class BookLoansController < ApplicationController
 
     respond_to do |format|
       if borrower_matched and @book_loan.update(book_loan_params)
-        format.html { redirect_to employee_book_loan_path(employee_id:@teacher.id, id:@book_loan.id) }
+        format.html { redirect_to employee_book_loans_path(employee_id:@teacher.id) }
         format.json { render :show, status: :ok, location: @book_loan }
       else
-        puts "Match? #{borrower_matched}"
         format.html { render :edit_tm }
         format.json { render json: @book_loan.errors, status: :unprocessable_entity }
       end      
@@ -361,7 +371,7 @@ class BookLoansController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def book_loan_params
       params.require(:book_loan).permit(:book_copy_id, :book_edition_id, :book_title_id, :user_id, :book_category_id,
-        :loan_type_id, :out_date, :due_date, :academic_year_id, :barcode, :return_date, :return_status, :notes)
+        :loan_type_id, :out_date, :due_date, :academic_year_id, :barcode, :return_date, :loan_status, :return_status, :notes)
     end
 
     
