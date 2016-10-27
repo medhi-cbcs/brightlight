@@ -1,13 +1,13 @@
 doctype html
 html
   head
-    title Brightlight
+    title = content_for?(:title) ? yield(:title) : t(:site_name)
     /[if lt IE 9]
       script src="http://html5shiv.googlecode.com/svn/trunk/html5.js" type="text/javascript"
     = stylesheet_link_tag "application", media: "all", 'data-turbolinks-track' => true
 
     = csrf_meta_tags
-    /= favicon_link_tag
+    = favicon_link_tag 'favicon.ico'
     link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"
 
     = javascript_include_tag "application", 'data-turbolinks-track' => true
