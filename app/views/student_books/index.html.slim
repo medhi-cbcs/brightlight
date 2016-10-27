@@ -1,6 +1,8 @@
 - if @student.present?
-  h4 Textbook Loan
+  - title "Textbook Loan for #{@student.name}"
+  h4 Textbook Loan for #{@student.name}
 - else
+  - title "Listing Student's Books"
   h4 Listing Student's Books
 
 ul#grade-options.dropdown-content
