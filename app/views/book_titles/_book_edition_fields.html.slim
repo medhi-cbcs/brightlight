@@ -1,5 +1,5 @@
-.card.nested-fields
-  .card-content
+.card-panel.nested-fields
+  .row
     .input-field.col.s11
       = f.label :title, class: 'active'
       = f.text_field :title
@@ -19,17 +19,17 @@
       = f.label :publisher, class: 'active'
       = f.text_field :publisher
     .input-field.col.s3
-      = f.label 'ISBN 10', class: 'active'
+      = f.label :isbn10, 'ISBN 10', class: 'active'
       = f.text_field :isbn10
     .input-field.col.s3
-      = f.label 'ISBN 13', class: 'active'
+      = f.label :isbn13, 'ISBN 13', class: 'active'
       = f.text_field :isbn13
+    .input-field.col.s3
+      = f.label :refno, 'Reference No', class: 'active'
+      = f.text_field :refno
     .input-field.col.s3
       = f.label :published_date, class: 'active'
       = f.text_field :published_date
-    .input-field.col.s3
-      = f.label :page_count, class: 'active'
-      = f.number_field :page_count
     .input-field.col.s3
       = f.label :language, class: 'active'
       = f.text_field :language
@@ -40,8 +40,9 @@
       = f.label :tags, class: 'active'
       = f.text_field :tags
     .input-field.col.s3
-      = f.label :subjects, class: 'active'
-      = f.collection_select :subjects, Subject.all.order(:name),  :id, :name, prompt: true
+      = f.label :page_count, class: 'active'
+      = f.number_field :page_count
+
     = f.hidden_field :small_thumbnail
     
 

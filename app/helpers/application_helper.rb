@@ -3,6 +3,11 @@ module ApplicationHelper
     image_tag("logo.png", alt: "Brightlight")
   end
 
+  def title(*parts)
+    ## Don't forget to set site_name in locales/en.yml, etc.
+    content_for(:title) { (parts << t(:site_name)).join(' - ') } unless parts.empty?    
+  end
+
   # For wicked_pdf gem
   def self.asset_data_base64(path)
     asset = Rails.application.assets.find_asset(path)
