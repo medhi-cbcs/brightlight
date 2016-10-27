@@ -13,11 +13,13 @@
           .input-field.col.s8
             = f.label :title, class: 'active'
             = f.text_field :title
+          .input-field.col.s4
+            = f.label :subject, class: 'active'
+            = f.collection_select :subject, Subject.all.order(:name),  :id, :name, prompt: true
           .input-field.col.s8
             = f.label :authors, class: 'active'
             = f.text_field :authors
-          
-        .row
+
           - if @book_title.has_cover?
             h6.grey-text Select cover image:
             - @book_title.book_editions.each do |book|
@@ -46,13 +48,13 @@
                 i.material-icons.left playlist_add
 
       #book_title
-        = f.fields_for :book_editions do |book_edition|
-          = render 'book_edition_fields', f: book_edition
+      = f.fields_for :book_editions do |book_edition|
+        = render 'book_edition_fields', f: book_edition
 
       #placemark
-      .card-panel
+      .toolbar
         button.btn.waves-effect.waves-light type="submit" Save
-        /= link_to 'Cancel', book_titles_path, class: "waves-effect waves-teal btn-flat"
+        = link_to 'Cancel', book_titles_path, class: "waves-effect waves-teal btn-flat"
         - if params[:action] =~ /edit/
           = link_to 'Delete', @book_title, data: {confirm: 'Are you sure?'}, method: :delete, class: "right btn waves-effect waves-teal red"
 
