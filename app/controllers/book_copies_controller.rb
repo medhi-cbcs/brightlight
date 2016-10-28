@@ -9,7 +9,8 @@ class BookCopiesController < ApplicationController
     if params[:book_edition_id].present?
       @book_edition = BookEdition.find(params[:book_edition_id])
       @book_copies = @book_edition.book_copies.order(:book_label_id).includes([:book_condition, :book_label, :status]).paginate(page: params[:page], per_page: items_per_page)
-      @by_condition = BookCondition.all.sorted.map {|bc| [bc, @book_edition.book_copies.select {|c| c.latest_condition == bc}.count ]}
+      #@by_condition = BookCondition.all.sorted.map {|bc| [bc, @book_edition.book_copies.select {|c| c.latest_condition == bc}.count ]}
+      @by_condition = @book_edition.summary_by_conditions
       #@by_status = Status.all.map {|bc| [bc, @book_edition.book_copies.select {|c| c.status_id == bc.id}.count ]}
     else
       @book_copies = BookCopy.all.order(:copy_no)

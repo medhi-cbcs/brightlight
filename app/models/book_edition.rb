@@ -210,6 +210,20 @@ class BookEdition < ActiveRecord::Base
     end
   end
 
+  def summary_by_conditions
+    summary = BookEdition.find_by_sql "select c.id, c.code, count(bc.*) total
+                      from book_copies bc
+                      left join copy_conditions cc on cc.book_copy_id = bc.id
+                        and cc.id = (select id from copy_conditions 
+                            where book_copy_id = bc.id order by academic_year_id desc, created_at desc
+                            limit 1) 
+                      left join book_conditions c on cc.book_condition_id = c.id			
+                      where bc.book_edition_id = #{id}
+                      group by c.id, c.code
+                      order by c.id"
+    summary.map { |x| { :code => x.code || "N/A", :total => x.total } }
+  end
+
   # Strip leading and trailing spaces when assigning values to isbn10 and isbn13
   
   def isbn10=(num)

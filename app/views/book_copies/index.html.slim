@@ -34,8 +34,8 @@ h4 = @book_edition.title
           dl.row
             - @by_condition.each do |c|
               dd.col.s2
-                .label = c.first.code
-                .item = c.last
+                .label = c[:code]
+                .item = c[:total]
           / dl.row
           /   - @by_status.each do |c|
           /     dd.col.s2
