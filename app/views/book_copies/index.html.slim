@@ -11,18 +11,21 @@ h4 = @book_edition.title
       td
         .list_description
           dl.row
-            dd.col.s6
+            dd.col.s8
               .label Author
               .item = @book_edition.authors || "--"
-            dd.col.s6
-              .label ISBN 10
-              .item = @book_edition.isbn10 || "--"
-            dd.col.s6 
+            dd.col.s4
               .label Publisher
               .item = @book_edition.publisher || "--"
-            dd.col.s6
+            dd.col.s4
               .label ISBN 13
               .item = @book_edition.isbn13 || "--"
+            dd.col.s4
+              .label ISBN 10
+              .item = @book_edition.isbn10 || "--"
+            dd.col.s4
+              .label Reference No
+              .item = @book_edition.refno || "--"
           
           .row style="margin-top: 20px; margin-bottom: 0"
             .col.s10
@@ -33,11 +36,11 @@ h4 = @book_edition.title
               dd.col.s2
                 .label = c.first.code
                 .item = c.last
-          dl.row
-            - @by_status.each do |c|
-              dd.col.s2
-                .label = c.first.name
-                .item = c.last
+          / dl.row
+          /   - @by_status.each do |c|
+          /     dd.col.s2
+          /       .label = c.first.name
+          /       .item = c.last
 
 nav
   .nav-wrapper
@@ -58,12 +61,12 @@ nav
             | Create new
             i.material-icons.left add
 
-ul#condition-options.dropdown-content
-  li  
-    = link_to 'All', book_edition_book_copies_path(params.merge(condition:'all').symbolize_keys)
-  - BookCondition.all.each do |condition|
-    li 
-      = link_to condition.code, book_edition_book_copies_path(params.merge(condition:condition.slug).symbolize_keys)  
+/ ul#condition-options.dropdown-content
+/   li  
+/     = link_to 'All', book_edition_book_copies_path(params.merge(condition:'all').symbolize_keys)
+/   - BookCondition.all.each do |condition|
+/     li 
+/       = link_to condition.code, book_edition_book_copies_path(params.merge(condition:condition.slug).symbolize_keys)  
 
 .card-panel
   table.striped
