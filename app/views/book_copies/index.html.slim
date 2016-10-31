@@ -28,14 +28,16 @@ h4 = @book_edition.title
               .item = @book_edition.refno || "--"
           
           .row style="margin-top: 20px; margin-bottom: 0"
-            .col.s10
-              .label Number of copies (#{@book_edition.number_of_copies})
-              hr
+            .col.s7 style="text-align: center; border-bottom: 1px solid grey"
+              .label Summary By Condition
           dl.row
             - @by_condition.each do |c|
-              dd.col.s2
-                .label = c[:code]
-                .item = c[:total]
+              dd.col.s1 style="text-align: right"
+                .label = link_to c[:code], book_edition_book_copies_path(@book_edition, condition: c[:id] || 'blank')
+                .item = c[:total] || 0
+            dd.col.s1 style="text-align: right; font-weight:bold"
+              .label Total
+              .item = @book_edition.number_of_copies || 0
           / dl.row
           /   - @by_status.each do |c|
           /     dd.col.s2
@@ -47,10 +49,11 @@ nav
     .brand-logo style="margin-left: 20px; font-size:1.5em"
       | Book Copies
     ul.right
-      / li 
-      /   a.dropdown-button href="#!" data-activates="condition-options"
-      /     span#grade = @condition.present? ? "#{@condition.code}" : "Condition" 
-      /     i.material-icons.right arrow_drop_down
+      li 
+        a.dropdown-button href="#!" data-activates="condition-options"
+          / span#grade = @condition.present? ? "#{@condition.id}" : "Condition" 
+          span#grade =  "Condition"
+          i.material-icons.right arrow_drop_down
       - if can? :manage, BookCopy
         li
           = link_to edit_labels_book_edition_book_copies_path(@book_edition)
@@ -61,30 +64,30 @@ nav
             | Create new
             i.material-icons.left add
 
-/ ul#condition-options.dropdown-content
-/   li  
-/     = link_to 'All', book_edition_book_copies_path(params.merge(condition:'all').symbolize_keys)
-/   - BookCondition.all.each do |condition|
-/     li 
-/       = link_to condition.code, book_edition_book_copies_path(params.merge(condition:condition.slug).symbolize_keys)  
+ul#condition-options.dropdown-content
+  li  
+    = link_to 'All', book_edition_book_copies_path(params.merge(condition:'all').symbolize_keys)
+  - BookCondition.all.each do |condition|
+    li 
+      = link_to condition.code, book_edition_book_copies_path(params.merge(condition:condition.id).symbolize_keys)  
+  li  
+    = link_to 'Blank', book_edition_book_copies_path(params.merge(condition:'blank').symbolize_keys)
 
 .card-panel
-  table.striped
+  table.compact.striped
     thead
       tr
-        th Barcode
-        th Label
-        th Condition
+        th No
+        th = sort_link :barcode
+        th = sort_link :label
+        th style="text-align: center" = sort_link :condition_id, 'Condition'
         th Status
         th Notes
         th Actions
 
     tbody
-      - @book_copies.each do |book_copy|
-        = render partial: 'index_row', locals: {book_copy: book_copy}        
-
-.toolbar.z-depth-1
-  = will_paginate @book_copies
+      - @book_copies.each.with_index(1) do |book_copy, idx|
+        = render partial: 'index_row', locals: {book_copy: book_copy, nr: idx}        
 
 #edit-modal.modal.modal-fixed-footer
   #edit-modal-content
