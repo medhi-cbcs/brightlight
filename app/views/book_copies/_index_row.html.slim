@@ -1,8 +1,9 @@
 tr id="row-#{book_copy.id}"
+  td = nr
   td = link_to book_copy.barcode, book_copy
-  td = book_copy.book_label.try(:name)
-  td 
-    - badge_color = book_copy.latest_condition.try(:color)
+  td = book_copy.label
+  td style="text-align: center" 
+    - badge_color = book_copy.latest_condition.try(:color) || 'black'
     span.box class="#{badge_color}"
       = book_copy.latest_condition.present? ? book_copy.latest_condition.code.capitalize : 'N/A'
   td = book_copy.status.present? ? book_copy.status.name : 'N/A'
