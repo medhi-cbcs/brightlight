@@ -18,7 +18,7 @@
         <Cell><Data ss:Type="String">Total</Data></Cell>
       </Row>
     <% @book_editions.each do |book| %>
-      <%- totals = book.book_copies.group(:book_condition_id).count(:book_condition_id) %> 
+      <%- totals = book.book_copies.group(:book_condition_id).count(:id) %> 
         <Row>
           <Cell><Data ss:Type="String"><%= book.isbn %></Data></Cell>
           <Cell><Data ss:Type="String"><%= book.title %></Data></Cell>
