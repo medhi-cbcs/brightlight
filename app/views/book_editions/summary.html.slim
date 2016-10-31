@@ -28,15 +28,15 @@ nav
         td Total
     tbody
       - @book_editions.each do |book| 
-        - totals = book.book_copies.group(:book_condition_id).count(:book_condition_id)                
+        - totals = book.book_copies.group(:book_condition_id).count(:id)                
         tr
-          td = link_to book.title, book
-          td = totals[nil] || '-'
+          td = link_to book.title, book          
           td = totals[1] || '-'
           td = totals[2] || '-'
           td = totals[3] || '-'
           td = totals[4] || '-'
           td = totals[5] || '-'
+          td = totals[nil] || '-'
           td = link_to totals.values.sum, book_edition_book_copies_path(book_edition_id:book.id)
   
 .toolbar.z-depth-1
