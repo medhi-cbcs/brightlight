@@ -13,11 +13,14 @@
                 dd = @book_copy.book_edition.subtitle
               dl.row
                 dd.col.s4
+                  .label ISBN 13
+                  .item = @book_copy.book_edition.isbn13
+                dd.col.s4
                   .label ISBN 10
                   .item = @book_copy.book_edition.isbn10
                 dd.col.s4
-                  .label ISBN
-                  .item = @book_copy.book_edition.isbn13
+                  .label Reference No
+                  .item = @book_copy.book_edition.refno
             br
             - if @book_copy.errors.any?
               #error_explanation

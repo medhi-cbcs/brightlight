@@ -24,8 +24,20 @@ class BookCopy < ActiveRecord::Base
     end
   }
 
+  
   scope :with_condition, lambda { |condition_id|
-    joins(:copy_conditions).where(copy_conditions: {book_condition_id: condition_id})
+    query = self.joins('left join copy_conditions c on c.book_copy_id = book_copies.id and c.id = (select id from copy_conditions 
+	                  where book_copy_id = book_copies.id order by academic_year_id desc, created_at desc limit 1)')   
+                .joins('left join book_labels on book_copies.book_label_id = book_labels.id')
+                .select('book_copies.barcode, book_copies.id, book_copies.status_id, book_copies.notes, book_copies.book_label_id, book_copies.book_condition_id, book_labels.name as label, c.book_condition_id as condition_id')
+    case condition_id 
+    when 'na'
+      query.where('c.id is null')
+    when '1'..'5'
+      query.where('c.book_condition_id = ?', condition_id)
+    else
+      query
+    end
   }
 
   def cover_image
@@ -41,10 +53,11 @@ class BookCopy < ActiveRecord::Base
   end
 
   def latest_copy_condition
-    copy_conditions.active.order('academic_year_id DESC,created_at DESC').first
+    book_condition || copy_conditions.active.order('academic_year_id DESC,created_at DESC').first
   end
 
   def latest_condition
+    book_condition || 
     copy_conditions.active.order('copy_conditions.academic_year_id DESC,copy_conditions.created_at DESC')
       .select('book_conditions.*')
       .joins(:book_condition).take

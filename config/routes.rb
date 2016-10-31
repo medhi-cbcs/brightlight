@@ -139,6 +139,7 @@ Rails.application.routes.draw do
   get  'employees/:employee_id/teacher_receipt' => 'book_loans#teacher_receipt', as: :employee_book_loans_receipt
   post 'employees/:employee_id/book_loans' => 'book_loans#create_tm'
   get  'employees/:employee_id/book_loans/new' => 'book_loans#new_tm', as: :new_employee_book_loans
+  get  'employees/:employee_id/book_loans/:id/edit' => 'book_loans#edit_tm', as: :edit_employee_book_loans
   get  'employees/:employee_id/book_loans/scan' => 'book_loans#scan', as: :scan_employee_book_loans
   get  'employees/:employee_id/book_loans/:id' => 'book_loans#show_tm', as: :employee_book_loan
   post 'employees/:employee_id/book_loans/list_action' => 'book_loans#list_action', as: :list_action_book_loans

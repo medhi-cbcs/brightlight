@@ -1,3 +1,5 @@
+- title "Book Copy #{@book_copy.barcode}"
+
 h4 Book Copy
 
 -if @book_copy.present?
@@ -32,29 +34,32 @@ h4 Book Copy
                 h4 = @book_copy.book_edition.title
                 dd = @book_copy.book_edition.subtitle
               dl.row
-                dd.col.s3
+                dd.col.s4
                   .label Barcode
                   = image_tag("/assets/images/#{@book_copy.barcode.upcase}.PNG")
                   h6#barcode = @book_copy.barcode
-                dd.col.s3 &nbsp;
-                dd.col.s6
+                dd.col.s4
                   .label Label
                   h5 = @book_copy.book_label.present? ? @book_copy.book_label.name : "--"
               dl.row
-                dd.col.s6
-                  .label ISBN 10
-                  .item = link_to @book_copy.book_edition
-                    = @book_copy.book_edition.isbn10.blank? ? '--' : @book_copy.book_edition.isbn10
-                dd.col.s6
+                dd.col.s4
                   .label ISBN
                   .item = link_to @book_copy.book_edition
                     = @book_copy.book_edition.isbn13.blank? ? '--' : @book_copy.book_edition.isbn13
+                dd.col.s4
+                  .label ISBN 10
+                  .item = link_to @book_copy.book_edition
+                    = @book_copy.book_edition.isbn10.blank? ? '--' : @book_copy.book_edition.isbn10
+                dd.col.s4
+                  .label Reference No
+                  .item = link_to @book_copy.book_edition
+                    = @book_copy.book_edition.refno.blank? ? '--' : @book_copy.book_edition.refno
               dl.row
-                dd.col.s6
+                dd.col.s4
                   .label Condition
                   span.box class="#{@book_copy.latest_condition.try(:color)}"
                     = @book_copy.latest_condition.present? ? @book_copy.latest_condition.code.capitalize : 'N/A'
-                dd.col.s6
+                dd.col.s4
                   .label Status
                   .item = @book_copy.status.present? ? @book_copy.status.name : 'N/A'
               dl.row

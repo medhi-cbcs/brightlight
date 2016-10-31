@@ -13,6 +13,10 @@ class CopyCondition < ActiveRecord::Base
     joins(:book_copy).where(book_copies: {book_label_id: label})
   }
 
+  # Callbacks to ensure BookCopy.book_condition_id is the same as the one we're updating
+  # NOTE: This assumes that we are NOT going to update old records, and we are NOT going 
+  #       to create back date condition. Otherwise, the book_conditoin_id in BookCopy
+  #       will be wrong 
   around_save :update_book_copy_condition
   after_create :synchronize_book_copy_condition
   after_destroy :revert_book_copy_condition
