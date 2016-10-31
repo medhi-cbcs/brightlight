@@ -1,23 +1,22 @@
 class BookCopiesController < ApplicationController
   before_action :set_book_copy, only: [:edit, :destroy]
+  before_action :sortable_columns, only: [:index]
 
   # GET /book_copies
   # GET /book_copies.json
   def index
-    items_per_page = 25
-    # TODO: Optimize!
     if params[:book_edition_id].present?
-      @book_edition = BookEdition.find(params[:book_edition_id])
-      @book_copies = @book_edition.book_copies.order(:book_label_id).includes([:book_condition, :status]).paginate(page: params[:page], per_page: items_per_page)
-      @by_condition = BookCondition.all.sorted.map {|bc| [bc, @book_edition.book_copies.select {|c| c.latest_condition == bc}.count ]}
-      @by_status = Status.all.map {|bc| [bc, @book_edition.book_copies.select {|c| c.status_id == bc.id}.count ]}
+      @book_edition = BookEdition.find(params[:book_edition_id])    
+      @by_condition = @book_edition.summary_by_conditions
+      #@by_status = Status.all.map {|bc| [bc, @book_edition.book_copies.select {|c| c.status_id == bc.id}.count ]}
+      if params[:condition].present? and params[:condition] != 'all' and params[:condition] != 'na'
+        @condition = BookCondition.where(id:params[:condition]).take
+      end
+      @book_copies = @book_edition.book_copies.with_condition(params[:condition]).includes(:book_label)
     else
       @book_copies = BookCopy.all.order(:copy_no)
     end
-    if params[:condition].present? and params[:condition] != 'all'
-      @condition = BookCondition.find_by_slug params[:condition]
-      @book_copies = @book_copies.with_condition(@condition.id)
-    end
+    @book_copies = @book_copies.order("#{sort_column} #{sort_direction}")
   end
 
   # GET /book_copies/1
@@ -166,4 +165,8 @@ class BookCopiesController < ApplicationController
       params.require(:book_copy).permit(:book_edition_id, :book_condition_id, :status_id, :barcode, :copy_no, :notes,
                                         {:book_copies => [:barcode, :grade_section_id, :no]})
     end
+
+    def sortable_columns 
+      [:label, :barcode, :condition_id]
+    end 
 end
