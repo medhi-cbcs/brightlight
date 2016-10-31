@@ -31,12 +31,12 @@ class BookCopy < ActiveRecord::Base
                 .joins('left join book_labels on book_copies.book_label_id = book_labels.id')
                 .select('book_copies.barcode, book_copies.id, book_copies.status_id, book_copies.notes, book_copies.book_label_id, book_copies.book_condition_id, book_labels.name as label, c.book_condition_id as condition_id')
     case condition_id 
-    when 'blank'
+    when 'na'
       query.where('c.id is null')
-    when 'all'
-      query
-    else
+    when '0'..'5'
       query.where('c.book_condition_id = ?', condition_id)
+    else
+      query
     end
   }
 

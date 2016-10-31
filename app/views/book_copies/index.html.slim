@@ -33,7 +33,7 @@ h4 = @book_edition.title
           dl.row
             - @by_condition.each do |c|
               dd.col.s1 style="text-align: right"
-                .label = link_to c[:code], book_edition_book_copies_path(@book_edition, condition: c[:id] || 'blank')
+                .label = link_to c[:code], book_edition_book_copies_path(@book_edition, condition: c[:id] || 'na')
                 .item = c[:total] || 0
             dd.col.s1 style="text-align: right; font-weight:bold"
               .label Total
@@ -51,8 +51,7 @@ nav
     ul.right
       li 
         a.dropdown-button href="#!" data-activates="condition-options"
-          / span#grade = @condition.present? ? "#{@condition.id}" : "Condition" 
-          span#grade =  "Condition"
+          span#grade = @condition.present? ? "#{@condition.code}" : "Condition" 
           i.material-icons.right arrow_drop_down
       - if can? :manage, BookCopy
         li
@@ -71,7 +70,7 @@ ul#condition-options.dropdown-content
     li 
       = link_to condition.code, book_edition_book_copies_path(params.merge(condition:condition.id).symbolize_keys)  
   li  
-    = link_to 'Blank', book_edition_book_copies_path(params.merge(condition:'blank').symbolize_keys)
+    = link_to 'N/A', book_edition_book_copies_path(params.merge(condition:'na').symbolize_keys)
 
 .card-panel
   table.compact.striped

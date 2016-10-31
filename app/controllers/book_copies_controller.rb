@@ -6,13 +6,11 @@ class BookCopiesController < ApplicationController
   # GET /book_copies.json
   def index
     if params[:book_edition_id].present?
-      @book_edition = BookEdition.find(params[:book_edition_id])
-      # @book_copies = @book_edition.book_copies.includes([:book_condition, :book_label, :status])    
+      @book_edition = BookEdition.find(params[:book_edition_id])    
       @by_condition = @book_edition.summary_by_conditions
       #@by_status = Status.all.map {|bc| [bc, @book_edition.book_copies.select {|c| c.status_id == bc.id}.count ]}
-      if params[:condition].present? and params[:condition] != 'all'
-        @condition = BookCondition.find_by_slug params[:condition]
-        
+      if params[:condition].present? and params[:condition] != 'all' and params[:condition] != 'na'
+        @condition = BookCondition.where(id:params[:condition]).take
       end
       @book_copies = @book_edition.book_copies.with_condition(params[:condition]).includes(:book_label)
     else

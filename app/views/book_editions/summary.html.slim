@@ -37,7 +37,7 @@ nav
           td = totals[3] || '-'
           td = totals[4] || '-'
           td = totals[5] || '-'
-          td = link_to book.number_of_copies, book_edition_book_copies_path(book_edition_id:book.id)
+          td = link_to totals.values.sum, book_edition_book_copies_path(book_edition_id:book.id)
   
 .toolbar.z-depth-1
   = will_paginate @book_editions
