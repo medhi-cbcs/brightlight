@@ -1,6 +1,11 @@
 class User < ActiveRecord::Base
   has_one :employee, autosave: true
 
+  scope :search_query, lambda {|query|
+    term = "%#{query.try(:downcase)}%"    
+    where('LOWER(users.name) LIKE ? OR LOWER(users.email) LIKE ? OR LOWER(users.first_name) LIKE ? OR LOWER(users.last_name) LIKE ?', term, term, term, term)
+  }
+
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, :registerable,

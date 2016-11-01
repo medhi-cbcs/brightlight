@@ -10,8 +10,10 @@ class UsersController < ApplicationController
         @users = User.joins('LEFT JOIN employees ON employees.user_id = users.id')
           .where(:employees => { is_active: 't' } )
           .order("#{sort_column} #{sort_direction}")
+          .select('users.*, employees.id as employee_id')
           .order('name')
           .paginate(page: params[:page], per_page: 20)
+        @users = @users.search_query(params[:search]) if params[:search]
       end
       format.csv do
         @users = User.all

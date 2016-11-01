@@ -14,10 +14,11 @@
         <Cell><Data ss:Type="String">Fair</Data></Cell>
         <Cell><Data ss:Type="String">Poor</Data></Cell>
         <Cell><Data ss:Type="String">Missing</Data></Cell>
+        <Cell><Data ss:Type="String">N/A</Data></Cell>
         <Cell><Data ss:Type="String">Total</Data></Cell>
       </Row>
     <% @book_editions.each do |book| %>
-      <%- totals = book.book_copies.group(:book_condition_id).count(:book_condition_id) %> 
+      <%- totals = book.book_copies.group(:book_condition_id).count(:id) %> 
         <Row>
           <Cell><Data ss:Type="String"><%= book.isbn %></Data></Cell>
           <Cell><Data ss:Type="String"><%= book.title %></Data></Cell>
@@ -26,7 +27,8 @@
           <Cell><Data ss:Type="Number"><%= totals[3] %></Data></Cell>
           <Cell><Data ss:Type="Number"><%= totals[4] %></Data></Cell>
           <Cell><Data ss:Type="Number"><%= totals[5] %></Data></Cell>
-          <Cell><Data ss:Type="Number"><%= book.number_of_copies %></Data></Cell>
+          <Cell><Data ss:Type="Number"><%= totals[nil] %></Data></Cell>
+          <Cell><Data ss:Type="Number"><%= totals.values.sum %></Data></Cell>
         </Row>
     <% end %>
     </Table>

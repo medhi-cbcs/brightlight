@@ -1,3 +1,5 @@
+- title 'Users'
+
 .row
   .col.s6
     h4 Users
@@ -20,7 +22,7 @@ nav
   .nav-wrapper
     ul.right
       li
-        = link_to 'Export as CSV', users_path + '.csv'
+        = link_to 'Export as CSV', users_path(format: :csv)
 
 .card-panel
   table.striped.compact
@@ -29,7 +31,7 @@ nav
         th = sort_link "name"
         th = sort_link "email"
         th = sort_link "roles_mask", "Roles"
-        th Employee Record
+        th Employee
 
     tbody
       - @users.each do |user|
@@ -38,7 +40,7 @@ nav
           td = user.email
           td = user.roles.map(&:to_s).map(&:capitalize).join(', ')
           td
-            = link_to user.employee
+            = link_to employee_path(user.employee_id)
               i.material-icons account_circle
           td
             = link_to user
