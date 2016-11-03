@@ -60,6 +60,10 @@ ul#checked-options.dropdown-content
                 | PDF
                 i.material-icons.left description
           li
+            = link_to employee_book_loans_path(@teacher, year: @academic_year.id, format: :xls), target: '_blank'
+              | XLS
+              i.material-icons.left border_all
+          li
             = link_to scan_employee_book_loans_path(@teacher, year: @academic_year.id)
               | Return Book
               i.material-icons.left import_contacts
