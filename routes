@@ -1,12 +1,4 @@
                                         Prefix Verb     URI Pattern                                                       Controller#Action
-                                    transports GET      /transports(.:format)                                             transports#index
-                                               POST     /transports(.:format)                                             transports#create
-                                 new_transport GET      /transports/new(.:format)                                         transports#new
-                                edit_transport GET      /transports/:id/edit(.:format)                                    transports#edit
-                                     transport GET      /transports/:id(.:format)                                         transports#show
-                                               PATCH    /transports/:id(.:format)                                         transports#update
-                                               PUT      /transports/:id(.:format)                                         transports#update
-                                               DELETE   /transports/:id(.:format)                                         transports#destroy
                               template_targets GET      /template_targets(.:format)                                       template_targets#index
                                                POST     /template_targets(.:format)                                       template_targets#create
                            new_template_target GET      /template_targets/new(.:format)                                   template_targets#new
@@ -166,6 +158,7 @@
                                                PATCH    /courses/:id(.:format)                                            courses#update
                                                PUT      /courses/:id(.:format)                                            courses#update
                                                DELETE   /courses/:id(.:format)                                            courses#destroy
+                         summary_book_editions GET      /book_editions/summary(.:format)                                  book_editions#summary
           edit_labels_book_edition_book_copies GET      /book_editions/:book_edition_id/book_copies/edit_labels(.:format) book_copies#edit_labels
                       book_edition_book_copies GET      /book_editions/:book_edition_id/book_copies(.:format)             book_copies#index
                                                POST     /book_editions/:book_edition_id/book_copies(.:format)             book_copies#create
@@ -290,6 +283,7 @@ autocomplete_book_edition_title_standard_books GET      /standard_books/autocomp
                 initialize_teachers_book_loans POST     /book_loans/initialize_teachers(.:format)                         book_loans#initialize_teachers
                            move_all_book_loans POST     /book_loans/move_all(.:format)                                    book_loans#move_all
                           borrowers_book_loans GET      /book_loans/borrowers(.:format)                                   book_loans#borrowers
+                    teacher_receipt_book_loans GET      /book_loans/teacher_receipt(.:format)                             book_loans#teacher_receipt
                                     book_loans GET      /book_loans(.:format)                                             book_loans#index
                                                POST     /book_loans(.:format)                                             book_loans#create
                                  new_book_loan GET      /book_loans/new(.:format)                                         book_loans#new
@@ -307,9 +301,10 @@ autocomplete_book_edition_title_standard_books GET      /standard_books/autocomp
                                                PUT      /students/:student_id/book_loans/:id(.:format)                    book_loans#update
                                                DELETE   /students/:student_id/book_loans/:id(.:format)                    book_loans#destroy
                            employee_book_loans GET      /employees/:employee_id/book_loans(.:format)                      book_loans#list
-                           employee_book_loans GET      /employees/:employee_id/teacher_receipt(.:format)                 book_loans#teacher_receipt
+                   employee_book_loans_receipt GET      /employees/:employee_id/teacher_receipt(.:format)                 book_loans#teacher_receipt
                                                POST     /employees/:employee_id/book_loans(.:format)                      book_loans#create_tm
                        new_employee_book_loans GET      /employees/:employee_id/book_loans/new(.:format)                  book_loans#new_tm
+                      edit_employee_book_loans GET      /employees/:employee_id/book_loans/:id/edit(.:format)             book_loans#edit_tm
                       scan_employee_book_loans GET      /employees/:employee_id/book_loans/scan(.:format)                 book_loans#scan
                             employee_book_loan GET      /employees/:employee_id/book_loans/:id(.:format)                  book_loans#show_tm
                         list_action_book_loans POST     /employees/:employee_id/book_loans/list_action(.:format)          book_loans#list_action
@@ -330,6 +325,8 @@ autocomplete_book_edition_title_standard_books GET      /standard_books/autocomp
                                                PUT      /book_fines/:id(.:format)                                         book_fines#update
                                                DELETE   /book_fines/:id(.:format)                                         book_fines#destroy
                          prepare_book_receipts POST     /book_receipts/prepare(.:format)                                  book_receipts#prepare
+                           check_book_receipts GET      /book_receipts/check(.:format)                                    book_receipts#check
+              finalize_condition_book_receipts POST     /book_receipts/finalize_condition(.:format)                       book_receipts#finalize_condition
                                  book_receipts GET      /book_receipts(.:format)                                          book_receipts#index
                                                POST     /book_receipts(.:format)                                          book_receipts#create
                               new_book_receipt GET      /book_receipts/new(.:format)                                      book_receipts#new
@@ -347,6 +344,20 @@ autocomplete_book_edition_title_standard_books GET      /standard_books/autocomp
                                                PATCH    /carpools/:id(.:format)                                           carpools#update
                                                PUT      /carpools/:id(.:format)                                           carpools#update
                                                DELETE   /carpools/:id(.:format)                                           carpools#destroy
+                             members_transport GET      /transports/:id/members(.:format)                                 transports#members
+                         add_members_transport POST     /transports/:id/add_members(.:format)                             transports#add_members
+                                    transports GET      /transports(.:format)                                             transports#index
+                                               POST     /transports(.:format)                                             transports#create
+                                 new_transport GET      /transports/new(.:format)                                         transports#new
+                                edit_transport GET      /transports/:id/edit(.:format)                                    transports#edit
+                                     transport GET      /transports/:id(.:format)                                         transports#show
+                                               PATCH    /transports/:id(.:format)                                         transports#update
+                                               PUT      /transports/:id(.:format)                                         transports#update
+                                               DELETE   /transports/:id(.:format)                                         transports#destroy
+                                   smart_cards POST     /smart_cards(.:format)                                            smart_cards#create
+                                    smart_card GET      /smart_cards/:id(.:format)                                        smart_cards#show
+                                               DELETE   /smart_cards/:id(.:format)                                        smart_cards#destroy
+                                               PATCH    /pax/:id(.:format)                                                late_passengers#update
                               new_user_session GET      /users/sign_in(.:format)                                          users/sessions#new
                                   user_session POST     /users/sign_in(.:format)                                          users/sessions#create
                           destroy_user_session DELETE   /users/sign_out(.:format)                                         users/sessions#destroy
@@ -369,8 +380,6 @@ autocomplete_book_edition_title_standard_books GET      /standard_books/autocomp
                                           user GET      /users/:id(.:format)                                              users#show
                                                PATCH    /users/:id(.:format)                                              users#update
                                                PUT      /users/:id(.:format)                                              users#update
-                 dynamic_select_grade_sections GET      /dynamic_select/:grade_level_id/grade_sections(.:format)          dynamic_select/options#grade_sections
-                    dynamic_select_book_labels GET      /dynamic_select/:section/book_labels(.:format)                    dynamic_select/options#book_labels
                                           root GET      /                                                                 welcome#index
                                      dashboard GET      /dashboard(.:format)                                              welcome#dashboard
                                 inventory_mtce GET      /inventory_mtce(.:format)                                         welcome#inventory_mtce
