@@ -181,23 +181,24 @@ class BookLoansController < ApplicationController
       @book_loans = @book_loans.order('academic_year_id DESC')
     end
 
-    # For Menu
-    @teachers = Employee.joins(:book_loans).where(book_loans: {academic_year_id: @academic_year.id}).order(:name).uniq
-
-    # Checked filter
-    if params[:checked] == 't'
-      @book_loans = @book_loans.where(return_status:'R')
-    elsif params[:checked] == 'f'
-      @book_loans = @book_loans.where(return_status:nil)
-    end
+    @book_loans = @book_loans.includes([:book_copy,:book_edition,:academic_year]) 
+    @count = @book_loans.length
 
     respond_to do |format|
       format.html do
         @items_per_page = 30
         @book_loans = @book_loans
                         .order("#{sort_column} #{sort_direction}")
-                        .paginate(page: params[:page], per_page: @items_per_page)
-                        .includes([:book_copy,:book_edition,:academic_year])
+                        .paginate(page: params[:page], per_page: @items_per_page)                               
+        # For Menu
+        @teachers = Employee.joins(:book_loans).where(book_loans: {academic_year_id: @academic_year.id}).order(:name).uniq
+
+        # Checked filter
+        if params[:checked] == 't'
+          @book_loans = @book_loans.where(return_status:'R')
+        elsif params[:checked] == 'f'
+          @book_loans = @book_loans.where(return_status:nil)
+        end
       end
       format.pdf do
         render pdf:         "Teacher's Books -#{@teacher.name}.pdf",
@@ -207,6 +208,10 @@ class BookLoansController < ApplicationController
                header:      { left: "Teacher's Books", right: '[page] of [topage]' },
                show_as_html: params.key?('debug')
       end
+      format.xls { 
+        filename = "#{@teacher.name} #{@academic_year.name}".parameterize
+        response.headers["Content-Disposition"] = "attachment; filename=\"#{filename}.xls\"" 
+      }
     end
   end
 
