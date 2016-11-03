@@ -1,0 +1,79 @@
+<?xml version="1.0"?>
+<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet"
+  xmlns:o="urn:schemas-microsoft-com:office:office"
+  xmlns:x="urn:schemas-microsoft-com:office:excel"
+  xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet"
+  xmlns:html="http://www.w3.org/TR/REC-html40">
+  <Styles>
+    <Style ss:ID="Default" ss:Name="Normal">
+    <Alignment ss:Vertical="Bottom"/>
+    <Borders/>
+    <Font ss:FontName="Calibri" x:Family="Swiss" ss:Size="11" ss:Color="#000000"/>
+    <Interior/>
+    <NumberFormat/>
+    <Protection/>
+    </Style>
+    <Style ss:ID="s62">
+    <Font ss:FontName="Calibri" x:Family="Swiss" ss:Size="16" ss:Color="#000000"
+      ss:Bold="1"/>
+    </Style>
+    <Style ss:ID="s63">
+    <Font ss:FontName="Calibri" x:Family="Swiss" ss:Size="11" ss:Color="#000000"
+      ss:Bold="1"/>
+    </Style>
+    <Style ss:ID="s64">
+    <Borders>
+      <Border ss:Position="Bottom" ss:LineStyle="Continuous" ss:Weight="1"/>
+    </Borders>
+    <Font ss:FontName="Calibri" x:Family="Swiss" ss:Size="11" ss:Color="#000000"
+      ss:Bold="1"/>
+    </Style>
+  </Styles>
+  <Worksheet ss:Name="Sheet1">
+    <Table ss:ExpandedColumnCount="11" ss:ExpandedRowCount="<%= @count+3 %>" x:FullColumns="1"
+    x:FullRows="1" ss:DefaultRowHeight="15">
+    <Column ss:AutoFitWidth="0" ss:Width="35.25"/>
+    <Column ss:AutoFitWidth="0" ss:Width="82.5"/>
+    <Column ss:Width="312.75"/>
+    <Column ss:AutoFitWidth="0" ss:Width="75"/>
+    <Column ss:AutoFitWidth="0" ss:Width="71.25"/>
+    <Column ss:AutoFitWidth="0" ss:Width="59.25"/>
+    <Column ss:AutoFitWidth="0" ss:Width="87" ss:Span="2"/>
+    <Column ss:Index="10" ss:Width="246"/>
+    <Column ss:Width="166.5"/>
+    <Row ss:AutoFitHeight="0" ss:Height="21">
+      <Cell ss:StyleID="s62"><Data ss:Type="String"><%= @teacher.name %></Data></Cell>
+      <Cell ss:Index="4" ss:StyleID="s63"><Data ss:Type="String"><%= @academic_year.name %></Data></Cell>
+      </Row>
+      <Row ss:Index="3">
+        <Cell ss:StyleID="s64"><Data ss:Type="String">No</Data></Cell>
+        <Cell ss:StyleID="s64"><Data ss:Type="String">Barcode</Data></Cell>
+        <Cell ss:StyleID="s64"><Data ss:Type="String">Title</Data></Cell>
+        <Cell ss:StyleID="s64"><Data ss:Type="String">Subject</Data></Cell>
+        <Cell ss:StyleID="s64"><Data ss:Type="String">Return Date</Data></Cell>
+        <Cell ss:StyleID="s64"><Data ss:Type="String">Checked?</Data></Cell>
+        <Cell ss:StyleID="s64"><Data ss:Type="String">ISBN 13</Data></Cell>
+        <Cell ss:StyleID="s64"><Data ss:Type="String">ISBN 10</Data></Cell>
+        <Cell ss:StyleID="s64"><Data ss:Type="String">Ref. No.</Data></Cell>
+        <Cell ss:StyleID="s64"><Data ss:Type="String">Author</Data></Cell>
+        <Cell ss:StyleID="s64"><Data ss:Type="String">Publisher</Data></Cell>
+      </Row>
+    <% @book_loans.each.with_index(1) do |book_loan, i| %>
+      <%- book_edition = book_loan.book_edition %>
+      <Row>
+        <Cell><Data ss:Type="Number"><%= i %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= book_loan.barcode %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= book_loan.title %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= book_loan.subject %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= book_loan.return_date %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= book_loan.return_status ? 'Yes' : 'No' %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= book_edition.isbn13 %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= book_edition.isbn10 %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= book_edition.refno %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= book_edition.authors %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= book_edition.publisher %></Data></Cell>
+      </Row>
+    <% end %>
+    </Table>
+  </Worksheet>
+</Workbook>
