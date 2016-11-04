@@ -15,7 +15,8 @@ class BookReceiptsController < ApplicationController
       @book_labels = BookLabel.where(grade_section:@grade_section).order(:book_no)
       @book_copies = BookReceipt.where(academic_year:@academic_year,grade_section:@grade_section)
                       .joins(:book_edition)
-                      .order('book_editions.title')
+                      .select('book_receipts.*, book_editions.title as title')
+                      .order("#{sort_column} #{sort_direction}")
                       .includes([:book_edition])
 
       @number_of_students = @book_copies.maximum(:roster_no)
@@ -208,6 +209,16 @@ class BookReceiptsController < ApplicationController
       end
     end
   end
+
+  # POST /book_receipts/finalize_receipt_condition.js
+  def finalize_condition
+    authorize! :manage, BookReceipt
+    academic_year_id = params[:receipt_condition_year].to_i
+    BookReceipt.finalize_receipts_conditions(academic_year_id, current_user.id)
+    respond_to :js
+  end
+
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_book_receipt
@@ -218,4 +229,8 @@ class BookReceiptsController < ApplicationController
     def book_receipt_params
       params.require(:book_receipt).permit(:book_copy_id, :grade_section_id, :academic_year_id, :student_id, :book_edition_id, :grade_section_id, :grade_level_id, :roster_no, :copy_no, :issue_date, :initial_condition_id, :return_condition_id, :barcode, :notes, :grade_section_code, :grade_subject_code, :course_id, :course_text_id, :active)
     end
+
+    def sortable_columns 
+      [:title, :barcode, :initial_condition_id]
+    end 
 end

@@ -56,20 +56,64 @@ class BookReceipt < ActiveRecord::Base
 
   def self.initialize_with_student_books(grade_section:, roster_no:, previous_year:, new_year:)
     textbook_category = BookCategory.find_by_code 'TB'
-    grade_level_id = grade_section.grade_level_id
+
     # Books with 'Poor' condition will not be included
     poor_condition = BookCondition.find_by_slug 'poor'
-    student_books = StudentBook.where(grade_section:grade_section,academic_year_id:previous_year,roster_no:roster_no.to_s)
+    student_books = StudentBook.where(grade_section: grade_section, academic_year_id: previous_year, roster_no: roster_no.to_s)
                       .standard_books(grade_section.grade_level.id, grade_section.id, new_year, textbook_category.id)
                       .joins(:book_copy).where('book_copies.book_condition_id != ?', poor_condition.id)
     BookReceipt.create(student_books.map { |sb|
-      { book_copy_id: sb.book_copy_id, barcode:sb.barcode, book_edition_id:sb.book_edition_id,
-        academic_year_id:new_year, initial_condition_id:sb.book_copy.book_condition_id,
-        grade_section_id:sb.grade_section_id, grade_level_id:sb.grade_level_id, roster_no:sb.roster_no.to_i, course_id:sb.course_id
+      { book_copy_id: sb.book_copy_id, barcode: sb.barcode, book_edition_id: sb.book_edition_id,
+        academic_year_id: new_year, initial_condition_id: sb.book_copy.book_condition_id,
+        grade_section_id: sb.grade_section_id, grade_level_id: sb.grade_level_id, roster_no: sb.roster_no.to_i, course_id: sb.course_id
       }
     })
   end
 
+  # Create book_copy's condition based on the condition in book_receipt
+  def self.finalize_receipts_conditions(year_id, current_user_id)
+    receipts = BookReceipt.joins(:book_copy,:academic_year)
+                .where(academic_year_id:year_id)
+                .select('book_receipts.*, academic_years.start_date as start_date')
+    receipts.each do |receipt|
+      latest_condition = CopyCondition.where(book_copy_id: receipt.book_copy_id, academic_year_id: year_id, post: 0)
+                          .order('created_at desc').take
+      condition_id = receipt.initial_condition_id
+      if latest_condition.blank? || latest_condition.try(:book_condition_id) != condition_id
+        CopyCondition.create({
+          book_copy_id: receipt.book_copy_id,
+          book_condition_id: condition_id,
+          academic_year_id: year_id,
+          start_date: receipt.issue_date || receipt.start_date,
+          barcode: receipt.barcode || receipt.book_copy.barcode,
+          notes: 'Initial condition from Book Receipt',
+          user_id: current_user_id,
+          post: 0,                  # (inital condition)
+          deleted_flag: false
+        })
+      end
+    end
+  end 
+  
+  def finalize_receipts_conditions(year_id, current_user_id)
+    latest_condition = CopyCondition.where(book_copy_id: book_copy_id, academic_year_id: year_id, post: 0)
+                        .order('created_at desc').take
+    condition_id = initial_condition_id
+    if latest_condition.blank? || latest_condition.try(:book_condition_id) != condition_id
+      CopyCondition.create({
+        book_copy_id: book_copy_id,
+        book_condition_id: condition_id,
+        academic_year_id: year_id,
+        start_date: issue_date || academic_year.start_date,
+        barcode: barcode || book_copy.try(:barcode),
+        notes: 'Initial condition from Book Receipt',
+        user_id: current_user_id,
+        post: 0,                  # (inital condition)
+        deleted_flag: false
+      })
+    end
+  end
+  
   private
 
     def update_book_copy_condition
