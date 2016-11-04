@@ -7,8 +7,9 @@ class BookLoansController < ApplicationController
   # GET /book_loans.json
   def index
     @items_per_page = 30    
-    @book_loans = BookLoan.joins('LEFT JOIN book_titles ON book_titles.id = book_loans.book_title_id')                          
-                          .select('book_loans.*, book_titles.title as title, book_titles.subject as subject')                          
+    @book_loans = BookLoan.joins('LEFT JOIN book_titles ON book_titles.id = book_loans.book_title_id')   
+                          .joins('LEFT JOIN subjects ON book_titles.subject_id = subjects.id')                       
+                          .select('book_loans.*, book_titles.title as title, subjects.name as subject')                          
     
     unless params[:year].try(:downcase) == 'all'
       @academic_year = AcademicYear.find params[:year] || AcademicYear.current

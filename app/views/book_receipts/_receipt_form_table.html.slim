@@ -5,9 +5,9 @@
     thead
       tr
         th No
-        th Barcode
-        th Title
-        th Conditions
+        th = sort_link :barcode
+        th = sort_link :title
+        th = sort_link :initial_condition_id, 'Conditions'
         th Notes
         th Action
 
@@ -16,10 +16,10 @@
       - book_copies.each_with_index do |book, i|
         tr id="row-#{book.id}"
           td.wd5 = i+1
-          td.wd15 = link_to book.barcode, book.book_copy
+          td.wd10 = link_to book.barcode, book.book_copy
           td.wd40.ellipsis
             span = book.book_edition.try(:title)
-          td.wd10 
+          td.wd15 
             span.box class="#{book.initial_condition.try(:color)}"
               = book.initial_condition.try(:code)
           td.wd20 = book.notes

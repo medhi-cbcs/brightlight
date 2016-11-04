@@ -59,6 +59,7 @@ nav
             th = sort_link :out_date
             /th Due date
             th = sort_link :academic_year_id, 'Year'
+            th = sort_link :subject
             th Name
             th Actions
 
@@ -72,6 +73,7 @@ nav
               td = book_loan.out_date
               /td = book_loan.due_date
               td = book_loan.academic_year.try(:name)
+              td = book_loan.subject
               - if book_loan.student.present?
                 td = book_loan.student.name
               - elsif book_loan.employee.present?
