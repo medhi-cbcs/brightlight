@@ -71,19 +71,23 @@ class BookReceipt < ActiveRecord::Base
   end
 
   # Create book_copy's condition based on the condition in book_receipt
-  def self.finalize_receipts_conditions(year, user_id)
-    BookReceipt.joins(:book_edition).where(academic_year_id:year).each do |receipt|
-      book_copy = receipt.book_copy
-      latest_condition = book_copy.copy_conditions.where(academic_year_id: year, post: 0).order('created_at desc').take
+  def self.finalize_receipts_conditions(year_id, current_user_id)
+    receipts = BookReceipt.joins(:book_copy,:academic_year)
+                .where(academic_year_id:year_id)
+                .select('book_receipts.*, academic_years.start_date as start_date')
+    receipts.each do |receipt|
+      latest_condition = CopyCondition.where(book_copy_id: receipt.book_copy_id, academic_year_id: year_id, post: 0)
+                          .order('created_at desc').take
       condition_id = receipt.initial_condition_id
       if latest_condition.blank? || latest_condition.try(:book_condition_id) != condition_id
         CopyCondition.create({
-          book_copy_id: book_copy.id,
+          book_copy_id: receipt.book_copy_id,
           book_condition_id: condition_id,
-          academic_year_id: year,
-          barcode: book_copy.barcode,
+          academic_year_id: year_id,
+          start_date: receipt.issue_date || receipt.start_date,
+          barcode: receipt.barcode || receipt.book_copy.barcode,
           notes: 'Initial condition from Book Receipt',
-          user_id: user_id,
+          user_id: current_user_id,
           post: 0,                  # (inital condition)
           deleted_flag: false
         })
@@ -91,6 +95,24 @@ class BookReceipt < ActiveRecord::Base
     end
   end 
   
+  def finalize_receipts_conditions(year_id, current_user_id)
+    latest_condition = CopyCondition.where(book_copy_id: book_copy_id, academic_year_id: year_id, post: 0)
+                        .order('created_at desc').take
+    condition_id = initial_condition_id
+    if latest_condition.blank? || latest_condition.try(:book_condition_id) != condition_id
+      CopyCondition.create({
+        book_copy_id: book_copy_id,
+        book_condition_id: condition_id,
+        academic_year_id: year_id,
+        start_date: issue_date || academic_year.start_date,
+        barcode: barcode || book_copy.try(:barcode),
+        notes: 'Initial condition from Book Receipt',
+        user_id: current_user_id,
+        post: 0,                  # (inital condition)
+        deleted_flag: false
+      })
+    end
+  end
   
   private
 
