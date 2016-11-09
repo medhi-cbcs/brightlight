@@ -64,7 +64,7 @@ nav
               .label Address
               .item = @student.address_line1
               .item = @student.address_line2        
-              .item = @student.city + ' ' + @student.postal_code
+              .item = "#{@student.city} #{@student.postal_code}"
               .item = @student.state
               .item = @student.country
             dd
@@ -77,7 +77,7 @@ nav
               .label Email: 
               .item = @student.email
             
-      - @student.students_guardians.each do |g|
+      - @student.guardians.try(:each) do |g|
         .col.s4
           .list_description
             dl
@@ -89,7 +89,7 @@ nav
                 .label Address
                 .item = g.guardian.address_line1
                 .item = g.guardian.address_line2        
-                .item = g.guardian.try(:city) + ' ' + g.guardian.try(:postal_code)
+                .item = "#{g.guardian.try(:city)} #{g.guardian.try(:postal_code)}"
                 .item = g.guardian.state
                 .item = g.guardian.country
               dd
