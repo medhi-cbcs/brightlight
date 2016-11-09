@@ -1,5 +1,6 @@
 class GuardiansController < ApplicationController
   before_action :set_guardian, only: [:show, :edit, :update, :destroy]
+  before_action :sortable_columns, only: [:index]
 
   # GET /guardians
   # GET /guardians.json
@@ -7,11 +8,12 @@ class GuardiansController < ApplicationController
     authorize! :read, Guardian
     items_per_page = 30
     if params[:search]
-      @guardians = Guardian.where('UPPER(name) LIKE ?', "%#{params[:search].upcase}%").includes(:family)
+      @guardians = Guardian.where('UPPER(name) LIKE ?', "%#{params[:search].upcase}%")
     else
-      @guardians = Guardian.includes(:family)
+      @guardians = Guardian.all
     end
-    @guardians = @guardians.paginate(page: params[:page], per_page: items_per_page)
+    @guardians = @guardians.including_family_no.order("#{sort_column} #{sort_direction}")
+                  .paginate(page: params[:page], per_page: items_per_page)
   end
 
   # GET /guardians/1
@@ -84,4 +86,8 @@ class GuardiansController < ApplicationController
     def guardian_params
       params.require(:guardian).permit(:name, :first_name, :last_name, :mobile_phone, :home_phone, :office_phone, :other_phone, :address_line1, :address_line2, :city, :state, :postal_code, :country, :family_no)
     end
+
+    def sortable_columns 
+      [:fn, :name]
+    end 
 end

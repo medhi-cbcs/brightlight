@@ -153,4 +153,7 @@ class Student < ActiveRecord::Base
 		FamilyMember.where(family_id:self.family_id, relation:'child').where.not(student_id:self.id).includes(:student).map &:student
 	end
 
+	def guardians
+		FamilyMember.where(family_id:self.family_id).guardians.includes(:guardian)
+	end
 end

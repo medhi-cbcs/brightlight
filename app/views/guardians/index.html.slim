@@ -28,20 +28,22 @@ nav
   table.compact.striped
     thead
       tr
-        th Name
+        th = sort_link :fn, "Family No"
+        th = sort_link :name
         th Mobile phone
         th Home phone
-        th Family no
         th
 
     tbody
       - @guardians.each do |guardian|
         tr
+          td = guardian.fn        
           td = link_to guardian.name, guardian
           td = guardian.mobile_phone
           td = guardian.home_phone
-          td = guardian.family.try(:family_no)
-          td = link_to 'Edit', edit_guardian_path(guardian), class: "btn waves-effect waves-teal btn-flat btn-small"
+          - if can? :update, Guardian
+            td = link_to edit_guardian_path(guardian), class: "btn waves-effect waves-teal btn-flat btn-small"
+              i.material-icons edit
 
 .toolbar.z-index-1
   = will_paginate @guardians
