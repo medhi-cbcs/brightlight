@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161107035801) do
+ActiveRecord::Schema.define(version: 20161109035807) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -483,6 +483,30 @@ ActiveRecord::Schema.define(version: 20161107035801) do
   add_index "employees", ["supervisor_id"], name: "index_employees_on_supervisor_id", using: :btree
   add_index "employees", ["user_id"], name: "index_employees_on_user_id", using: :btree
 
+  create_table "families", force: :cascade do |t|
+    t.string   "family_no"
+    t.integer  "family_number"
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
+  end
+
+  add_index "families", ["family_no"], name: "index_families_on_family_no", using: :btree
+  add_index "families", ["family_number"], name: "index_families_on_family_number", using: :btree
+
+  create_table "family_members", force: :cascade do |t|
+    t.integer  "family_id"
+    t.integer  "guardian_id"
+    t.integer  "student_id"
+    t.string   "relation"
+    t.string   "notes"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+  end
+
+  add_index "family_members", ["family_id"], name: "index_family_members_on_family_id", using: :btree
+  add_index "family_members", ["guardian_id"], name: "index_family_members_on_guardian_id", using: :btree
+  add_index "family_members", ["student_id"], name: "index_family_members_on_student_id", using: :btree
+
   create_table "fine_scales", force: :cascade do |t|
     t.integer  "old_condition_id"
     t.integer  "new_condition_id"
@@ -580,7 +604,7 @@ ActiveRecord::Schema.define(version: 20161107035801) do
     t.string   "state"
     t.string   "postal_code"
     t.string   "country"
-    t.integer  "family_no"
+    t.integer  "family_id"
     t.datetime "created_at",    null: false
     t.datetime "updated_at",    null: false
     t.integer  "person_id"
@@ -1028,6 +1052,9 @@ ActiveRecord::Schema.define(version: 20161107035801) do
   add_foreign_key "carpools", "transports"
   add_foreign_key "course_section_histories", "employees", column: "instructor_id"
   add_foreign_key "currencies", "users"
+  add_foreign_key "family_members", "families"
+  add_foreign_key "family_members", "guardians"
+  add_foreign_key "family_members", "students"
   add_foreign_key "invoices", "students"
   add_foreign_key "invoices", "users"
   add_foreign_key "late_passengers", "carpools"

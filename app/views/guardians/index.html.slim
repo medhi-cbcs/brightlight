@@ -25,13 +25,12 @@ nav
           i.material-icons.left add
 
 .card-panel
-  table.striped
+  table.compact.striped
     thead
       tr
         th Name
         th Mobile phone
         th Home phone
-        th Office phone
         th Family no
         th
 
@@ -41,8 +40,7 @@ nav
           td = link_to guardian.name, guardian
           td = guardian.mobile_phone
           td = guardian.home_phone
-          td = guardian.office_phone
-          td = guardian.family_no
+          td = guardian.family.try(:family_no)
           td = link_to 'Edit', edit_guardian_path(guardian), class: "btn waves-effect waves-teal btn-flat btn-small"
 
 .toolbar.z-index-1

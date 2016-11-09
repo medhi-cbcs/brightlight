@@ -4,12 +4,20 @@ class GuardiansController < ApplicationController
   # GET /guardians
   # GET /guardians.json
   def index
-    @guardians = Guardian.paginate(page: params[:page], per_page: 20)
+    authorize! :read, Guardian
+    items_per_page = 30
+    if params[:search]
+      @guardians = Guardian.where('UPPER(name) LIKE ?', "%#{params[:search].upcase}%").includes(:family)
+    else
+      @guardians = Guardian.includes(:family)
+    end
+    @guardians = @guardians.paginate(page: params[:page], per_page: items_per_page)
   end
 
   # GET /guardians/1
   # GET /guardians/1.json
   def show
+    authorize! :read, Guardian
   end
 
   # GET /guardians/new

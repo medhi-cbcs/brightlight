@@ -5,6 +5,7 @@ class EmployeesController < ApplicationController
   # GET /employees
   # GET /employees.json
   def index
+    authorize :read, Employee
     respond_to do |format|
       format.html {
         items_per_page = 20
@@ -29,6 +30,7 @@ class EmployeesController < ApplicationController
   # GET /employees/1
   # GET /employees/1.json
   def show
+    authorize :read, Employee
   end
 
   # GET /employees/new
