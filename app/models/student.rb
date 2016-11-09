@@ -156,5 +156,4 @@ class Student < ActiveRecord::Base
 	def guardians
 		FamilyMember.where(family_id:self.family_id).guardians.includes(:guardian)
 	end
-
 end
