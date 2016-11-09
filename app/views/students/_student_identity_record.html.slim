@@ -2,8 +2,9 @@
   .col.s2
     .card
       .card-image
-        - avatar = student.gender[0].upcase == 'F' ? 'female-child-avatar.png' : 'male-child-avatar.png'
-        = image_tag (student.photo_uri.present? ? student.photo_uri : avatar), class: 'media-object show-image'
+        - if student.gender.present?
+          - avatar = student.gender[0].upcase == 'F' ? 'female-child-avatar.png' : 'male-child-avatar.png'
+          = image_tag (student.photo_uri.present? ? student.photo_uri : avatar), class: 'media-object show-image'
       .card-content
         p.small-text = student.name
   .col.s10

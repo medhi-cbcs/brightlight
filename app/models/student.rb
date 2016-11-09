@@ -1,6 +1,4 @@
 class Student < ActiveRecord::Base
-	has_many :students_guardians
-	has_many :guardians, through: :students_guardians
   has_many :grade_sections_students
 	has_many :grade_sections, through: :grade_sections_students
 	has_many :course_sections, through: :rosters
@@ -12,6 +10,8 @@ class Student < ActiveRecord::Base
 	has_one  :passenger
 	has_one  :transport, through: :passenger
  	belongs_to :person
+	belongs_to :family
+
   validates :name, :student_no, presence: true
 
 	accepts_nested_attributes_for :student_books, allow_destroy: true, reject_if: :all_blank
@@ -149,4 +149,11 @@ class Student < ActiveRecord::Base
 		]
 	end
 
+	def sibs
+		FamilyMember.where(family_id:self.family_id, relation:'child').where.not(student_id:self.id).includes(:student).map &:student
+	end
+
+	def guardians
+		FamilyMember.where(family_id:self.family_id).guardians.includes(:guardian)
+	end
 end
