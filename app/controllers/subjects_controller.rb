@@ -4,6 +4,7 @@ class SubjectsController < ApplicationController
   # GET /subjects
   # GET /subjects.json
   def index
+    authorize! :read, Subject
     respond_to do |format|
       format.html {
         items_per_page = 20
@@ -25,17 +26,20 @@ class SubjectsController < ApplicationController
   # GET /subjects/1
   # GET /subjects/1.json
   def show
+    authorize! :read, Subject
     @subject = Subject.where(id: params[:id]).first
     @books = BookTitle.where(subject_id: @subject).all.order(:title)
   end
 
   # GET /subjects/new
   def new
+    authorize! :create, Subject
     @subject = Subject.new
   end
 
   # GET /subjects/1/edit
   def edit
+    authorize! :update, Subject
   end
 
   # POST /subjects

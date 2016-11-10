@@ -5,6 +5,7 @@ class BookCopiesController < ApplicationController
   # GET /book_copies
   # GET /book_copies.json
   def index
+    authorize! :read, BookCopy
     if params[:book_edition_id].present?
       @book_edition = BookEdition.find(params[:book_edition_id])    
       @by_condition = @book_edition.summary_by_conditions
@@ -22,6 +23,7 @@ class BookCopiesController < ApplicationController
   # GET /book_copies/1
   # GET /book_copies/1.json
   def show
+    authorize! :read, BookCopy
     respond_to do |format|
       format.html do
         set_book_copy
@@ -44,6 +46,7 @@ class BookCopiesController < ApplicationController
 
   # GET /book_copies/1/check_barcode.json
   def check_barcode
+    authorize! :read, BookCopy
     set_book_copy
     respond_to do |format|
       format.json do
@@ -130,6 +133,7 @@ class BookCopiesController < ApplicationController
 
   # GET /book_copies/1/conditions
   def conditions
+    authorize! :read, BookCopy
     if params[:all].present?
       @copy_conditions = CopyCondition.where(book_copy_id:params[:id]).order('academic_year_id DESC, updated_at DESC')
     else
@@ -142,6 +146,7 @@ class BookCopiesController < ApplicationController
 
   # GET /book_copies/1/conditions
   def loans
+    authorize! :read, BookCopy
     @copy_loans = BookLoan.where(book_copy_id:params[:id])
                           .includes([:academic_year, :student])
                           .order('academic_year_id DESC, out_date DESC')
