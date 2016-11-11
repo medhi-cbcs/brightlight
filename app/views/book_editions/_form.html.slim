@@ -45,13 +45,13 @@
           = f.select :currency, [['USD', 'USD'], ['IDR', 'IDR']]          
         .input-field.col.s2
           = f.label :price, class: 'active'
-          = f.text_field :price
+          = f.number_field :price, step: 0.01
+        .input-field.col.s2
+          = f.label :language, class: 'active'
+          = f.select :language, [["English", "en"], ["Indonesian", "id"], ["Latin", "la"], ["Dutch", "nl"], ["French", "fr"], ["German", "de"], ["Arabic", "ar"], ["Spanish", "es"], ["Chinese", "zh"], ["Italian", "it"]]    
         .input-field.col.s2
           = f.label :page_count, class: 'active'
           = f.number_field :page_count
-        .input-field.col.s2
-          = f.label :language, class: 'active'
-          = f.text_field :language
       .row
         .input-field.col.s4
           = f.label :edition_info, class: 'active'

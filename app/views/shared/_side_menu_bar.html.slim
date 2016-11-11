@@ -56,8 +56,6 @@ li
 				= link_to 'Editions', book_editions_path
 			li
 				= link_to 'Standard Books', standard_books_path
-            li
-				= link_to 'Book Subjects', subjects_path
 
 - if can? :manage, BookLoan
 	li 
@@ -79,6 +77,8 @@ li
 					= link_to 'Book Loan Status', book_loans_path 
 				li
 					= link_to 'Textbook Fines', book_fines_path
+				li
+					= link_to 'Book Subjects', subjects_path
 - if can? :manage, BookFine
 	li 
 		.collapsible-header.waves-effect.waves-cyan
