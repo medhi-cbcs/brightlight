@@ -4,7 +4,7 @@ class BookReceiptsController < ApplicationController
   # GET /book_receipts
   # GET /book_receipts.json
   def index
-    authorize! :manage, BookReceipt
+    authorize! :read, BookReceipt
     @academic_year = AcademicYear.where(id:params[:year]).take || AcademicYear.current
 
     if params[:gs].present?
@@ -67,10 +67,12 @@ class BookReceiptsController < ApplicationController
   # GET /book_receipts/1
   # GET /book_receipts/1.json
   def show
+    authorize! :read, BookReceipt
   end
 
   # GET /book_receipts/check.json?barcode=####&year=##
   def check
+    authorize! :read, BookReceipt
     respond_to do |format|
       format.json do
         @book_copy = BookCopy.where('UPPER(barcode) = ?', params[:barcode].upcase).includes(:book_edition => :book_title).take
@@ -90,6 +92,7 @@ class BookReceiptsController < ApplicationController
 
   # GET /book_receipts/new
   def new
+    authorize! :create, BookReceipt
     @grade_section = GradeSection.find params[:gs] if params[:gs]
     @roster_no = params[:r].to_i if params[:r]
     @grade_sections = @grade_section.grade_level.grade_sections.order(:id)
@@ -104,11 +107,13 @@ class BookReceiptsController < ApplicationController
 
   # GET /book_receipts/1/edit
   def edit
+    authorize! :update, @bookReceipt
   end
 
   # POST /book_receipts
   # POST /book_receipts.json
   def create
+    authorize! :create, BookReceipt
     @book_receipt = BookReceipt.new(book_receipt_params)
 
     respond_to do |format|
@@ -125,6 +130,7 @@ class BookReceiptsController < ApplicationController
   # PATCH/PUT /book_receipts/1
   # PATCH/PUT /book_receipts/1.json
   def update
+    authorize! :update, @bookReceipt
     respond_to do |format|
       if @book_receipt.update(book_receipt_params)
         format.html { redirect_to book_receipts_path(gs:params[:gs],r:params[:r],year:params[:year]), notice: 'Book receipt was successfully updated.' }
@@ -139,6 +145,7 @@ class BookReceiptsController < ApplicationController
   # DELETE /book_receipts/1
   # DELETE /book_receipts/1.json
   def destroy
+    authorize! :destroy, @bookReceipt
     @book_receipt.destroy
     respond_to do |format|
       format.html { redirect_to book_receipts_url, notice: 'Book receipt was successfully destroyed.' }

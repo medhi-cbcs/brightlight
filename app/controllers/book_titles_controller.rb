@@ -6,6 +6,7 @@ class BookTitlesController < ApplicationController
   # GET /book_titles
   # GET /book_titles.json
   def index
+    authorize! :read, BookTitle
     if params[:v] == 'list'
       items_per_page = 20
       @view_style = :list
@@ -48,6 +49,7 @@ class BookTitlesController < ApplicationController
   # GET /book_titles/1
   # GET /book_titles/1.json
   def show
+    authorize! :read, BookTitle
   end
 
   # GET /book_titles/new
@@ -152,6 +154,7 @@ class BookTitlesController < ApplicationController
   end
 
   def add_existing_editions
+    authorize! :update, @book_title
     if params[:add]
       params[:add].map {|id,on| BookEdition.find(id)}.each do |edition|
         @book_title.book_editions << edition
@@ -190,6 +193,7 @@ class BookTitlesController < ApplicationController
   end
 
   def search_isbn
+    authorize! :update, @book_title
     isbn = params[:isbn]
 
     begin

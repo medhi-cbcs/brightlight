@@ -4,6 +4,7 @@ class StudentBooksController < ApplicationController
   # GET /student_books
   # GET /student_books.json
   def index
+    authorize! :read, StudentBook
     items_per_page = 25
     @grade_levels = GradeLevel.all.order(:id)
     @grade_level_ids = @grade_levels.collect(&:id)
@@ -60,6 +61,7 @@ class StudentBooksController < ApplicationController
   # GET /student_books/1
   # GET /student_books/1.json
   def show
+    authorize! :read, @student_book
     @student = @student_book.student
   end
 

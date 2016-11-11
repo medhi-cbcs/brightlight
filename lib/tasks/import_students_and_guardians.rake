@@ -19,12 +19,12 @@ namespace :data do
       student = Student.find_by_student_no row[:student_no]
       if student.blank?
         student = Student.where('name LIKE ?', "%#{row[:name]}%").take
-        student.admission_no = row[:student_no]
       end   
       if student.present?
         if row[:email].present?
           student.email = row[:email]
         end
+        student.admission_no = row[:student_no]
         student.family_id = family.id
         student.save
         create_guardians family, student, row
@@ -80,6 +80,6 @@ end
 
 def add_to_grade_section(student, data)
   grade_level = GradeLevel.find data[:grade][0..1].to_i
-  grade_section = grade_level.grade_sections.where('name LIKE ?', "%#{g.last}" ).take
+  grade_section = grade_level.grade_sections.where('name LIKE ?', "%#{data[:grade].last}" ).take
   grade_section.grade_sections_students.create student: student, academic_year:AcademicYear.current, notes: data[:student_no]
 end

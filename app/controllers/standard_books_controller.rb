@@ -9,6 +9,7 @@ class StandardBooksController < ApplicationController
   # GET /standard_books
   # GET /standard_books.json
   def index
+    authorize! :read, StandardBook
     @items_per_page = 25
 
     if params[:grade_level_id].present?
@@ -41,6 +42,7 @@ class StandardBooksController < ApplicationController
   # GET /standard_books/1
   # GET /standard_books/1.json
   def show
+    authorize! :read, StandardBook
   end
 
   # GET /standard_books/new
