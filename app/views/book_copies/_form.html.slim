@@ -6,21 +6,26 @@
           td style="vertical-align:top"
             - thumbnail = @book_copy.book_edition.present? ? @book_copy.book_edition.small_thumbnail : 'book-icon.png' 
             = image_tag(thumbnail, class: 'list_image')
+            .row
+              .input-field.col.s12
+                = f.label 'Change book Edition'
+                = f.hidden_field :book_edition_id
+                = text_field_tag :book_edition_title, "", id: "title_autocomplete", placeholder: "Search book title"
           td
             .list_description
               dl.row
-                h4 = @book_copy.book_edition.title
-                dd = @book_copy.book_edition.subtitle
+                h4#title = @book_copy.book_edition.title
+                dd#subtitle = @book_copy.book_edition.subtitle
               dl.row
                 dd.col.s4
                   .label ISBN 13
-                  .item = @book_copy.book_edition.isbn13
+                  .item#isbn13 = @book_copy.book_edition.isbn13
                 dd.col.s4
                   .label ISBN 10
-                  .item = @book_copy.book_edition.isbn10
+                  .item#isbn13 = @book_copy.book_edition.isbn10
                 dd.col.s4
                   .label Reference No
-                  .item = @book_copy.book_edition.refno
+                  .item#refno = @book_copy.book_edition.refno
             br
             - if @book_copy.errors.any?
               #error_explanation
@@ -28,7 +33,6 @@
                 ul
                   - @book_copy.errors.full_messages.each do |message|
                     li = message
-            input type="hidden" name="book_copy[book_edition_id]" value=@book_copy.book_edition_id
             .row
               .input-field.col.s4
                 = f.label :barcode, class: 'active'
@@ -45,5 +49,36 @@
       button.btn.waves-effect.waves-light type="submit" Save
       = link_to 'Cancel', book_edition_book_copies_path(@book_copy.book_edition), class: "waves-effect waves-teal btn-flat"
 
+javascript:
+  $(document).ready(function() {
 
+    $("#title_autocomplete").easyAutocomplete({
+      url: function(title) {
+        return "/book_editions?search=" + title + "&format=json";
+      },
+      getValue: 'title',
+      list: {
+        maxNumberOfElements: 30,
+        onClickEvent: function() {
+          var edition = $("#title_autocomplete").getSelectedItemData();
+          insert_row(edition);
+        },
+        onChooseEvent: function() {
+          $("#title_autocomplete").val("");
+        }
+      }
+    });
+  });
+
+  function insert_row(edition) {
+    $("#book_copy_book_edition_id").val(edition.id);
+    $("#title").html(edition.title);
+    $("#subtitle").html(edition.subtitle);
+    $("#isbn13").html(edition.isbn13);
+    $("#isbn10").html(edition.isbn10);
+    $("#refno").html(edition.refno);
+    if (edition.small_thumbnail != "") {
+      $("img.list_image").attr("src",edition.small_thumbnail);
+    }
+  }
       

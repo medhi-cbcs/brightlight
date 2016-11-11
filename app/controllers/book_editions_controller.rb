@@ -1,11 +1,12 @@
 class BookEditionsController < ApplicationController
-  before_action :set_book_edition, only: [:show, :edit, :update, :destroy]
+  before_action :set_book_edition, only: [:show, :edit, :update, :destroy, :update_metadata]
  
 
 
   # GET /book_editions
   # GET /book_editions.json
   def index
+    authorize! :read, BookEdition
     if params[:v] == 'list'
       items_per_page = 20
       @view_style = :list
@@ -16,13 +17,14 @@ class BookEditionsController < ApplicationController
       session[:view_style] = ''
     end
     
-    @book_editions = BookEdition.paginate(page: params[:page], per_page: items_per_page)
+    @book_editions = BookEdition.with_number_of_copies.paginate(page: params[:page], per_page: items_per_page)
     @book_editions = @book_editions.search_query(params[:search]) if params[:search]
   end
 
   # GET /book_editions/summary
   # GET /book_editions/summary.json
   def summary
+    authorize! :read, BookEdition
     @book_editions = BookEdition.all.order(:title)    
     if params[:condition] && params[:condition] != 'all' 
       @condition = BookCondition.find_by_code(params[:condition])
@@ -36,6 +38,7 @@ class BookEditionsController < ApplicationController
   # GET /book_editions/1
   # GET /book_editions/1.json
   def show
+    authorize! :read, @book_edition
   end
 
   # GET /book_editions/new
@@ -109,7 +112,6 @@ class BookEditionsController < ApplicationController
 
   # POST /book_editions/1/update_metadata
   def update_metadata
-    @book_edition = BookEdition.find(params[:id])
     authorize! :update, @book_edition
     begin
       @book_edition = @book_edition.update_metadata

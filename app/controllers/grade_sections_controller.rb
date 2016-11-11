@@ -5,6 +5,7 @@ class GradeSectionsController < ApplicationController
   # GET /grade_sections
   # GET /grade_sections.json
   def index
+    authorize! :read, GradeSection
     @grade_level = GradeLevel.find(params[:grade_level_id])
     @grade_sections = @grade_level.grade_sections.includes([:academic_year, :homeroom])
   end
@@ -12,6 +13,7 @@ class GradeSectionsController < ApplicationController
   # GET /grade_sections/1
   # GET /grade_sections/1.json
   def show
+    authorize! :read, GradeSection
     @grade_section = GradeSection.find(params[:id])
     @grade_level = @grade_section.grade_level
     @grade_sections = GradeSection.all.order(:id)
@@ -49,6 +51,7 @@ class GradeSectionsController < ApplicationController
   end
 
   def students
+    authorize! :update, GradeSection
     @grade_level = @grade_section.grade_level
     @filterrific = initialize_filterrific(
       Student,
@@ -91,6 +94,7 @@ class GradeSectionsController < ApplicationController
 
   # GET /grade_sections/1/courses
   def courses
+    authorize! :read, GradeSection
     @course_sections = @grade_section.course_sections
   end
 

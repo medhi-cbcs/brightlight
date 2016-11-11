@@ -4,6 +4,7 @@ class TransportsController < ApplicationController
   # GET /transports
   # GET /transports.json
   def index
+    authorize! :read, Transport
     type = params[:type]
     if type.present?
       @category = type == 'private' ? "Car Riders" : type == 'shuttle' ? "Shuttle Cars" : "???"
@@ -20,21 +21,25 @@ class TransportsController < ApplicationController
   # GET /transports/1
   # GET /transports/1.json
   def show
+    authorize! :read, Transport
     @passengers = @transport.passengers
   end
 
   # GET /transports/new
   def new
+    authorize! :manage, Transport
     @transport = Transport.new
   end
 
   # GET /transports/1/edit
   def edit
+    authorize! :update, @transport
   end
 
   # POST /transports
   # POST /transports.json
   def create
+    authorize! :manage, Transport
     @transport = Transport.new(transport_params)
 
     respond_to do |format|
@@ -51,6 +56,7 @@ class TransportsController < ApplicationController
   # PATCH/PUT /transports/1
   # PATCH/PUT /transports/1.json
   def update
+    authorize! :update, @transport
     respond_to do |format|
       if @transport.update(transport_params)
         format.html { 
@@ -66,6 +72,7 @@ class TransportsController < ApplicationController
 
   # GET /transports/1/members
   def members
+    authorize! :read, Transport
     @filterrific = initialize_filterrific(
       Student,
       params[:filterrific],
@@ -107,6 +114,7 @@ class TransportsController < ApplicationController
   # DELETE /transports/1
   # DELETE /transports/1.json
   def destroy
+    authorize! :destroy, @transport
     @transport.destroy
     respond_to do |format|
       format.html { redirect_to transports_url, notice: 'Transport was successfully destroyed.' }
