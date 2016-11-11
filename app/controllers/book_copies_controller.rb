@@ -107,8 +107,10 @@ class BookCopiesController < ApplicationController
     authorize! :update, BookCopy
     @book_copy = BookCopy.find(params[:id])
     respond_to do |format|
+      ed = @book_copy.book_edition_id
       if @book_copy.update(book_copy_params)
-        format.html { redirect_to book_edition_book_copies_path(@book_copy.book_edition), notice: 'Book copy was successfully updated.' }
+        puts "Before #{ed}, Now: #{@book_copy.book_edition_id}"
+        format.html { redirect_to @book_copy, notice: 'Book copy was successfully updated.' }
         format.json { render :show, status: :ok, location: @book_edition }
         format.js
       else

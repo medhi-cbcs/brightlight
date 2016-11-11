@@ -110,6 +110,10 @@ class BookCopy < ActiveRecord::Base
     end
   end
 
+  def active_loan
+    BookLoan.where(book_copy_id: self.id, return_status: nil).take
+  end
+
   protected
     def create_initial_condition
       self.copy_conditions << CopyCondition.new(

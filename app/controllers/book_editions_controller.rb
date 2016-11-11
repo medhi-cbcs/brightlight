@@ -17,7 +17,7 @@ class BookEditionsController < ApplicationController
       session[:view_style] = ''
     end
     
-    @book_editions = BookEdition.paginate(page: params[:page], per_page: items_per_page)
+    @book_editions = BookEdition.with_number_of_copies.paginate(page: params[:page], per_page: items_per_page)
     @book_editions = @book_editions.search_query(params[:search]) if params[:search]
   end
 

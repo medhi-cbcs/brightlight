@@ -35,6 +35,9 @@ table
           dd.col.s6
             .label Price
             .item = book_edition.price.present? ? "#{book_edition.currency} #{book_edition.price.to_digits}" : 'N/A'
+          dd.col.s6
+            .label Language
+            .item = book_edition.show_language || 'N/A'
           dd.col.s12
             .label Description
             .item = strip_tags(book_edition.description) || 'N/A'

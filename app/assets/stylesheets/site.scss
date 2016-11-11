@@ -89,6 +89,7 @@ table.compact {
 		padding-top: 4px;
 		padding-bottom: 4px;
 	}
+	
 	.ellipsis {
 	    position: relative;
 	}
@@ -112,8 +113,7 @@ table.compact {
 				padding-bottom: 2px;
 			}
 		}
-	}
-
+	}	
 	// td {
 	// 	.compact-cell {
 	// 		position: relative;
@@ -154,7 +154,9 @@ td.actions {
 		padding-right: 0 15px;
 	}
 }
-
+table.medium {
+	font-size: 0.9rem;
+}
 .table-title {
 	text-align: center;
 	font-weight: bold;
@@ -688,7 +690,18 @@ ul {
 
 .list_description {
 	dl {
-		margin: 0;
+		margin: 0;		
+	}
+	dl.compact {
+		dd {
+			margin: 2px 0;
+			.item {
+				font-size: 12px;
+			}
+			.label {
+				font-size: 12px;
+			}
+		}
 	}
 
 	dt {
@@ -757,6 +770,20 @@ ul {
 	    line-height: 30px;
 	    border-radius: 2px;
 	}
+}
+
+.copies {
+	min-width: 1rem;
+	max-width: 3rem;
+	padding: 0 6px;
+	text-align: center;
+	line-height: inherit;
+	color: white;
+	border-radius: 4px;
+	background-color: $blue;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
 }
 
 // =========================================== Carpool =========================================

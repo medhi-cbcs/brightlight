@@ -230,4 +230,15 @@ group by c.id, c.code order by c.id) x full outer join book_conditions b on b.id
     write_attribute(:isbn13, num.try(:strip))
   end
 
+  def show_language
+    iso = {"en"=>"English", "id"=>"Bahasa Indonesia", "la"=>"Latin", "nl"=>"Dutch", "fr"=>"French", 
+           "de"=>"German", "ar"=>"Arabic", "es"=>"Spanish", "zh"=>"Chinese", "it"=>"Italian"}
+    iso[language] || language
+  end
+
+  scope :with_number_of_copies, lambda { 
+    joins(:book_copies)
+    .select('book_editions.id,title,subtitle,description,isbn10,isbn13,refno,currency,price,authors,publisher,published_date,page_count,small_thumbnail, count(book_copies.id) as copies')
+    .group('book_editions.id,title,subtitle,description,isbn10,isbn13,refno,currency,price,authors,publisher,published_date,page_count,small_thumbnail')
+  }
 end
