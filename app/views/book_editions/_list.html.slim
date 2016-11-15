@@ -13,7 +13,7 @@
           th Title
           th Authors
           th Publisher
-          th Published
+          th ISBN
 
         - editions.each do |edition|
           tr
@@ -23,7 +23,7 @@
             td = edition.title
             td = edition.authors
             td = edition.publisher 
-            td = edition.published_date 
+            td = edition.isbn13 || edition.isbn10 || edition.refno
 
       = will_paginate editions 
 
