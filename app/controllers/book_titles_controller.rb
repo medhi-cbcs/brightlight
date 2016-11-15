@@ -69,6 +69,7 @@ class BookTitlesController < ApplicationController
   end
 
   def editions
+    authorize! :update, @book_title
     @filterrific = initialize_filterrific(
       BookEdition,
       params[:filterrific],

@@ -30,7 +30,7 @@ ul#checked-options.dropdown-content
             i.material-icons.right arrow_drop_down
         li
           a.dropdown-button href="#!" data-activates="year-options"
-            span#year = @academic_year.present? ? "#{@academic_year.name}" : "Academic Year" 
+            span#year = params[:year].present? && params[:year].downcase == 'all' ? 'All' : (@academic_year.present? ? "#{@academic_year.name}" : "Academic Year") 
             i.material-icons.right arrow_drop_down
       #context-buttons style="display:none;"
         ul.right     
