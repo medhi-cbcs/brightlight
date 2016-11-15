@@ -14,8 +14,8 @@
             = f.label :title, class: 'active'
             = f.text_field :title
           .input-field.col.s4
-            = f.label :subject, class: 'active'
-            = f.collection_select :subject, Subject.all.order(:name),  :id, :name, prompt: true
+            = f.label :subject_id, class: 'active'
+            = f.collection_select :subject_id, Subject.all.order(:name), :id, :name, prompt: true
           .input-field.col.s8
             = f.label :authors, class: 'active'
             = f.text_field :authors

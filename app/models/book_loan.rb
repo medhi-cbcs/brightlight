@@ -17,10 +17,18 @@ class BookLoan < ActiveRecord::Base
   belongs_to :user
 
   scope :current, lambda { where(academic_year: AcademicYear.current) }
+  scope :returned, lambda { where(return_status:'R') }
+  scope :not_returned, lambda { where(return_status: nil) }
 
-  def grade_section_name
-    student.grade_section_with_academic_year_id(self.academic_year_id).try(:name) if student.present?
-  end
+  def self.list_for_teacher(teacher_id, year)
+    loans = BookLoan.includes([:employee,:book_copy,:book_edition,:academic_year])
+                .joins('LEFT JOIN book_titles ON book_titles.id = book_loans.book_title_id')
+                .joins("LEFT JOIN subjects ON subjects.id = book_titles.subject_id")
+                .select('book_loans.*, subjects.name as subject, book_titles.title as title')
+    
+    loans = loans.where(academic_year_id:year) if year.present? && year.downcase != 'all' 
+    loans = loans.where(employee_id:teacher_id) if teacher_id.present?
+  end 
 
   def self.initialize_teacher_loans_from_previous_year(previous_year_id, new_year_id)
     columns = [:book_copy_id, :book_edition_id, :book_title_id, :person_id, :book_category_id, :loan_type_id,
@@ -59,5 +67,9 @@ class BookLoan < ActiveRecord::Base
       r = BookLoan.create attributes.except('created_at','updated_at','id').merge('employee_id'=>to.id,'academic_year_id'=>to_year.id)
       return r.valid?
     end
+  end
+  
+  def grade_section_name
+    student.grade_section_with_academic_year_id(self.academic_year_id).try(:name) if student.present?
   end
 end
