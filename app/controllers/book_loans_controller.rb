@@ -159,50 +159,35 @@ class BookLoansController < ApplicationController
   # GET employees/:employee_id/book_loans
   def list
     authorize! :read, BookLoan
-    @teacher = Employee.find params[:employee_id]
-    @book_loans = BookLoan.includes([:employee])
-                .joins('LEFT JOIN book_titles ON book_titles.id = book_loans.book_title_id')
-                .joins("LEFT JOIN subjects ON subjects.id = book_titles.subject_id")
-                .select('book_loans.*, subjects.name as subject, book_titles.title as title')
-
-    if @teacher.present?
-      @book_loans =  @book_loans.where(employee: @teacher)
-    else
-      @error = "Teacher with name like #{params[:teacher]} was not found."
-    end
+    @teacher = Employee.find params[:employee_id]    
+    @error = "Teacher with name like #{params[:teacher]} was not found." if @teacher.blank?    
 
     # academic_year
     if params[:year].present? && params[:year].downcase != 'all'
-      @academic_year = AcademicYear.find params[:year]
-      @book_loans = @book_loans.where(academic_year:@academic_year)
-    elsif params[:year].blank?
-      @academic_year = AcademicYear.current
-      @book_loans = @book_loans.where(academic_year:@academic_year)
-    elsif params[:year].present? && params[:year].downcase == 'all'
-      @book_loans = @book_loans.order('academic_year_id DESC')
-    end
-
-    @book_loans = @book_loans.includes([:book_copy,:book_edition,:academic_year]) 
+      @academic_year = AcademicYear.find params[:year]    
+    else #if params[:year].blank?
+      @academic_year = AcademicYear.current      
+    end 
+    @book_loans = BookLoan.list_for_teacher params[:employee_id], params[:year]
     @count = @book_loans.length
 
     respond_to do |format|
       format.html do
         @items_per_page = 30
-        @book_loans = @book_loans
-                        .order("#{sort_column} #{sort_direction}")
+        @book_loans = @book_loans.order("#{sort_column} #{sort_direction}")
                         .paginate(page: params[:page], per_page: @items_per_page)                               
         # For Menu
-        @teachers = Employee.joins(:book_loans).where(book_loans: {academic_year_id: @academic_year.id}).order(:name).uniq
-
+        @teachers = Employee.with_book_loans @academic_year.id 
         # Checked filter
         if params[:checked] == 't'
-          @book_loans = @book_loans.where(return_status:'R')
+          @book_loans = @book_loans.returned
         elsif params[:checked] == 'f'
-          @book_loans = @book_loans.where(return_status:nil)
+          @book_loans = @book_loans.not_returned
         end
       end
       format.pdf do
-        render pdf:         "Teacher's Books -#{@teacher.name}.pdf",
+        @book_loans = @book_loans.order('subject asc, barcode')
+        render pdf:         "Teacher's Books -#{@teacher.name}",
                disposition: 'inline',
                template:    'book_loans/list.pdf.slim',
                layout:      'pdf.html',
@@ -349,7 +334,8 @@ class BookLoansController < ApplicationController
     if params[:employee_id].present?
       @teacher = Employee.find params[:employee_id]
       @book_loans = BookLoan.select(['COUNT (book_loans.loan_status) AS loan_qty','COUNT (book_loans.return_status) AS return_qty','subjects.name','book_titles.title','book_editions.authors','book_editions.publisher', 'book_editions.isbn13','book_editions.isbn10', 'book_loans.notes'])
-      .where('book_loans.academic_year_id = ? AND book_loans.employee_id = ?', params[:year],params[:employee_id])      .joins("LEFT JOIN book_editions ON book_editions.id = book_loans.book_edition_id")
+      .where('book_loans.academic_year_id = ? AND book_loans.employee_id = ?', params[:year],params[:employee_id])      
+      .joins("LEFT JOIN book_editions ON book_editions.id = book_loans.book_edition_id")
       .joins("LEFT JOIN book_titles ON book_titles.id = book_loans.book_title_id")
       .joins("LEFT JOIN subjects ON subjects.id = book_titles.subject_id")
       .group('subjects.name','book_titles.title', 'book_editions.authors','book_editions.publisher', 'book_editions.isbn13', 'book_editions.isbn10','book_loans.notes')

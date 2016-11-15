@@ -14,7 +14,9 @@
                 dd.col.s6
                   .label Author
                   .item = @book_title.authors
-
+                dd.col.s6
+                  .label Subject
+                  .item = @book_title.subject.try(:name) || "---"
 
 nav
  .nav-wrapper

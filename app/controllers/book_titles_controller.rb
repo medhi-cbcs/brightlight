@@ -37,11 +37,6 @@ class BookTitlesController < ApplicationController
         @book_titles = BookTitle.where('title LIKE ?', "%#{search}%")
           .includes(:book_editions)
           .paginate(page: params[:page], per_page:40)
-        # if params[:callback]
-        #   render json: @book_titles, callback: params[:callback]
-        # else
-        #   render json: @book_titles
-        # end
       }
     end
   end
@@ -74,6 +69,7 @@ class BookTitlesController < ApplicationController
   end
 
   def editions
+    authorize! :update, @book_title
     @filterrific = initialize_filterrific(
       BookEdition,
       params[:filterrific],
@@ -132,7 +128,6 @@ class BookTitlesController < ApplicationController
     @book_edition = BookEdition.find_by_book_title_id @book_title.id
     respond_to do |format|
       if @book_title.update(book_title_params)
-        @book_title.update_attribute :subject_id, @book_edition.try(:subjects)
         format.html { redirect_to @book_title, notice: 'Book title was successfully updated.' }
         format.json { render :show, status: :ok, location: @book_title }
       else
@@ -193,7 +188,7 @@ class BookTitlesController < ApplicationController
   end
 
   def search_isbn
-    authorize! :update, @book_title
+    authorize! :manage, BookTitle
     isbn = params[:isbn]
 
     begin
@@ -292,10 +287,10 @@ class BookTitlesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def book_title_params
-      params.require(:book_title).permit(:title, :authors, :publisher, :image_url,
+      params.require(:book_title).permit(:title, :authors, :publisher, :image_url, :subject_id,
                                           {book_editions_attributes: [:id, :google_book_id, :isbndb_id, :title, :subtitle, :authors, :publisher, :published_date,
-                                                                      :description, :isbn10, :isbn13, :page_count, :small_thumbnail, :thumbnail,
-                                                                      :language, :edition_info, :tags, :subjects, :book_title_id, :_destroy]
+                                                                      :description, :isbn10, :isbn13, :refno, :legacy_code, :page_count, :small_thumbnail, :thumbnail, 
+                                                                      :language, :edition_info, :tags, :subjects, :currency, :price, :book_title_id, :_destroy]
                                           }
                                         )
     end
