@@ -59,7 +59,7 @@ javascript:
       url: function(title) {
         return "/book_editions?search=" + title + "&format=json";
       },
-      getValue: 'title',
+      getValue: function(book) { return book.title+' : ' + (book.isbn13 ? book.isbn13 : (book.isbn10 ? book.isbn10 : (book.refno ? book.refno : '--'))); },
       list: {
         maxNumberOfElements: 30,
         onClickEvent: function() {
