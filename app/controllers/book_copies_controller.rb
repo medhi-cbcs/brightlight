@@ -9,11 +9,10 @@ class BookCopiesController < ApplicationController
     if params[:book_edition_id].present?
       @book_edition = BookEdition.find(params[:book_edition_id])    
       @by_condition = @book_edition.summary_by_conditions
-      #@by_status = Status.all.map {|bc| [bc, @book_edition.book_copies.select {|c| c.status_id == bc.id}.count ]}
-      if params[:condition].present? and params[:condition] != 'all' and params[:condition] != 'na'
-        @condition = BookCondition.where(id:params[:condition]).take
-      end
-      @book_copies = @book_edition.book_copies.with_condition(params[:condition]).includes(:book_label)
+      @by_status = @book_edition.summary_by_status
+      @condition = BookCondition.where(id:params[:condition]).take if params[:condition].present? and params[:condition] != 'all' and params[:condition] != 'na'
+      @status = Status.where(id:params[:status]).take if params[:status].present? and params[:status] != 'all' and params[:status] != 'na'
+      @book_copies = @book_edition.book_copies.with_condition(params[:condition]).with_status(params[:status]).includes(:book_label)
     else
       @book_copies = BookCopy.all.order(:copy_no)
     end
@@ -174,6 +173,6 @@ class BookCopiesController < ApplicationController
     end
 
     def sortable_columns 
-      [:label, :barcode, :condition_id]
+      [:label, :barcode, :condition_id, :status_id]
     end 
 end

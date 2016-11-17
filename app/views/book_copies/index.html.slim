@@ -26,23 +26,28 @@ h4 = @book_edition.title
             dd.col.s4
               .label Reference No
               .item = @book_edition.refno || "--"
-          
-          .row style="margin-top: 20px; margin-bottom: 0"
-            .col.s7 style="text-align: center; border-bottom: 1px solid grey"
-              .label Summary By Condition
-          dl.row
-            - @by_condition.each do |c|
-              dd.col.s1 style="text-align: right"
-                .label = link_to c[:code], book_edition_book_copies_path(@book_edition, condition: c[:id] || 'na')
-                .item = c[:total] || 0
-            dd.col.s1 style="text-align: right; font-weight:bold"
-              .label Total
-              .item = @book_edition.number_of_copies || 0
-          / dl.row
-          /   - @by_status.each do |c|
-          /     dd.col.s2
-          /       .label = c.first.name
-          /       .item = c.last
+      
+  table.compact
+    tr.header-shade
+      td.wd12-5
+        p Condition
+      - @by_condition.each do |c| 
+        td.wd12-5 = c[:code]
+      td.wd12-5 Total
+    tr
+      td
+      - @by_condition.each do |c|
+        td = link_to c[:total] || 0, book_edition_book_copies_path(@book_edition, condition: c[:id] || 'na')
+      td = link_to @book_edition.number_of_copies || 0, book_edition_book_copies_path(@book_edition, condition: 'all')
+    tr.header-shade
+      td.wd12-5
+        p Status
+      - @by_status.each do |s| 
+        td.wd12-5 = s[:name]
+    tr
+      td
+      - @by_status.each do |s|
+        td = link_to s[:total] || 0, book_edition_book_copies_path(@book_edition, status: s[:id] || 'na')
 
 nav
   .nav-wrapper
@@ -52,6 +57,10 @@ nav
       li 
         a.dropdown-button href="#!" data-activates="condition-options"
           span#grade = @condition.present? ? "#{@condition.code}" : "Condition" 
+          i.material-icons.right arrow_drop_down
+      li 
+        a.dropdown-button href="#!" data-activates="status-options"
+          span#grade = @status.present? ? "#{@status.name}" : "Status" 
           i.material-icons.right arrow_drop_down
       - if can? :manage, BookCopy
         li
@@ -71,6 +80,14 @@ ul#condition-options.dropdown-content
       = link_to condition.code, book_edition_book_copies_path(params.merge(condition:condition.id).symbolize_keys)  
   li  
     = link_to 'N/A', book_edition_book_copies_path(params.merge(condition:'na').symbolize_keys)
+ul#status-options.dropdown-content
+  li  
+    = link_to 'All', book_edition_book_copies_path(params.merge(status:'all').symbolize_keys)
+  - Status.all.each do |status|
+    li 
+      = link_to status.name, book_edition_book_copies_path(params.merge(status:status.id).symbolize_keys)  
+  li  
+    = link_to 'N/A', book_edition_book_copies_path(params.merge(status:'na').symbolize_keys)
 
 .card-panel
   table.compact.striped
@@ -81,7 +98,7 @@ ul#condition-options.dropdown-content
         th = sort_link :label
         th style="text-align: center" = sort_link :condition_id, 'Condition'
         th Current loan
-        th Status
+        th = sort_link :status_id, 'Status'
         th Notes        
         th Actions
 
