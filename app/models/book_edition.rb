@@ -211,13 +211,21 @@ class BookEdition < ActiveRecord::Base
   end
 
   def summary_by_conditions
-    summary = BookEdition.find_by_sql "select b.id, b.code, x.total from
+    summary = BookEdition.find_by_sql ["select b.id, b.code, x.total from
 (select c.id, c.code, count(bc.*) total from book_copies bc
 left join copy_conditions cc on cc.book_copy_id = bc.id and cc.id = (select id from copy_conditions 
       where book_copy_id = bc.id order by academic_year_id desc, created_at desc limit 1) 
-left join book_conditions c on cc.book_condition_id = c.id where bc.book_edition_id = #{id}
-group by c.id, c.code order by c.id) x full outer join book_conditions b on b.id = x.id"                      
+left join book_conditions c on cc.book_condition_id = c.id where bc.book_edition_id = ?
+group by c.id, c.code order by c.id) x full outer join book_conditions b on b.id = x.id", id]                      
     summary.map { |x| { :id => x.id, :code => x.code || "N/A", :total => x.total } }
+  end
+
+  def summary_by_status
+    summary = BookEdition.find_by_sql [
+"select ss.id, ss.name, f.total from (select s.id, s.name, count(bc.*) total from book_copies bc 
+left join statuses s on s.id = bc.status_id where bc.book_edition_id = ?
+group by s.id, s.name order by s.id) f full outer join statuses ss on ss.id = f.id", id]                  
+    summary.map { |x| { :id => x.id, :name => x.name || "N/A", :total => x.total } }
   end
 
   # Strip leading and trailing spaces when assigning values to isbn10 and isbn13

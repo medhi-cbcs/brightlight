@@ -40,6 +40,9 @@
               .input-field.col.s4
                 = f.label 'Label', class: 'active'
                 = f.text_field :copy_no
+              .input-field.col.s4
+                = f.label 'Status', class: 'active'
+                = f.collection_select :status_id, Status.all, :id, :name, prompt:true
             .row
               .input-field.col.s12
                 = f.label :notes, class: 'active'

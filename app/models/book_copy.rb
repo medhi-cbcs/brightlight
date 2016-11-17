@@ -40,6 +40,16 @@ class BookCopy < ActiveRecord::Base
     end
   }
 
+  scope :with_status, lambda { |status_id|
+    case status_id 
+    when 'na'
+      where('status_id is null')
+    when 'all', nil
+    else
+      where(status_id: status_id)
+    end
+  }
+
   def cover_image
     book_edition.try(:small_thumbnail) || 'book-icon.png'
   end

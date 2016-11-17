@@ -17,9 +17,13 @@ namespace :data do
 			
 			barcode = row[header[:barcode]]
       book_copy = BookCopy.find_by_barcode barcode
-      book_copy.status = 6
-			book_copy.save
-		  puts "#{i}. #{barcode} #{book_copy.book_edition.try(:title)}" if i % 100 == 0
+      if book_copy.present?
+        book_copy.status_id = 6
+			  book_copy.save
+        puts "#{i}. #{barcode} #{book_copy.book_edition.try(:title)}"
+      else
+        puts "#{i}. #{barcode} is non existent"
+      end
 		end
   end
 end
