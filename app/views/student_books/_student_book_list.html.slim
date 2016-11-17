@@ -22,7 +22,7 @@
             td = i+1
           td = student_book.book_copy.book_edition.try(:title).truncate(50)
           td = link_to student_book.barcode, student_book.book_copy
-          td = student_book.book_copy.copy_no
+          td = student_book.book_copy.try(:book_label).try(:name) || '--'
           td = student_book.issue_date
           /td = student_book.return_date
           td 

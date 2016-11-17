@@ -39,7 +39,10 @@
                 = f.text_field :barcode
               .input-field.col.s4
                 = f.label 'Label', class: 'active'
-                = f.text_field :copy_no
+                = f.grouped_collection_select :book_label_id, GradeSection.all.order(:id), :book_labels, :name, :id, :name, {prompt:true}, {class:'browser-default materialish'}
+              .input-field.col.s4
+                = f.label 'Status', class: 'active'
+                = f.collection_select :status_id, Status.all, :id, :name, prompt:true
             .row
               .input-field.col.s12
                 = f.label :notes, class: 'active'
