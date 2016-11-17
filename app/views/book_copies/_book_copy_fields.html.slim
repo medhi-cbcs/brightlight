@@ -4,14 +4,14 @@ tr.nested-fields
       = f.text_field :barcode
   td.wd15
     .input-field
-      = f.text_field :copy_no, class:"book-label-fields"
+      = f.grouped_collection_select :book_label_id, GradeSection.all.order(:id), :book_labels, :name, :id, :name, {prompt:true}, {class:'browser-default materialish'}
       = f.hidden_field :book_label_id
   td.wd15
     .input-field
-      = f.collection_select :book_condition_id, BookCondition.all, :id, :code, prompt:true, class:'material-select'
+      = f.collection_select :book_condition_id, BookCondition.all, :id, :code, selected:1, class:'material-select'
   td.wd15
     .input-field
-      = f.collection_select :status_id, Status.all, :id, :name, prompt:true, class:'material-select'
+      = f.collection_select :status_id, Status.all, :id, :name, selected:1, class:'material-select'
   td.wd30
     .input-field
       = f.text_field :notes
@@ -19,18 +19,3 @@ tr.nested-fields
     = link_to_remove_association f, class: "waves-effect waves-teal red-text"
       i.material-icons delete
 
-javascript:
-  $(function() {
-    $(".book-label-fields").autocomplete({
-      source: "/book_labels.json",
-      minLength: 2,
-      select: function(event, ui) {
-        event.preventDefault();
-        $(this).val(ui.item.label);
-        console.log(this);
-        element_id = $(this).attr('id').replace('copy_no','book_label_id');
-        $("#"+element_id).val(ui.item.value);
-      }
-    });
-    $('select').material_select();
-  });

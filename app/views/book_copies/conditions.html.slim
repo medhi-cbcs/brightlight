@@ -12,7 +12,7 @@ h4 Book Condition History
       div = @book_copy.barcode
     .col.s3
       .label Book No.
-      div = @book_copy.copy_no
+      div = @book_copy.book_label.try(:name) || "--"
     .col.s6
       .label ISBN
       div 

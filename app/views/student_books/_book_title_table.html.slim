@@ -50,7 +50,7 @@
               td.wd5 = i+1
               td.wd10 = link_to book.barcode, book.try(:book_copy)
               td.wd5 style='text-align:center;' 
-                span = book.book_copy.try(:copy_no) || 'N/A'
+                span = book.book_copy.try(:book_label).try(:name) || 'N/A'
               td.wd10 style='text-align:center;' 
                 span.box class="#{initial_condition.try(:color) || 'white'}"
                   = initial_condition.try(:code) || '?'

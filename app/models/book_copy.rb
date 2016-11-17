@@ -3,7 +3,6 @@ class BookCopy < ActiveRecord::Base
   belongs_to :book_condition
   belongs_to :status
   belongs_to :book_label
-  # validates :book_edition, :book_condition, :copy_no, presence: true
   validates :book_edition, presence: true
   validates :barcode, presence: true, uniqueness: true
   has_many :copy_conditions, dependent: :destroy
@@ -134,6 +133,7 @@ class BookCopy < ActiveRecord::Base
         start_date: Date.today,
         post: 0
       )
+      update_book_label
     end
 
     def update_book_label
