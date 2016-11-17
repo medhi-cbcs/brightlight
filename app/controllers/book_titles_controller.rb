@@ -103,13 +103,6 @@ class BookTitlesController < ApplicationController
     
     respond_to do |format|
       if @book_title.save
-        # if params[:edition].present?
-        #   @book_edition = BookEdition.find(params[:edition])
-        #   @book_edition.book_title_id = @book_title.id
-        #   @book_edition.save
-        # end
-        @book_edition = BookEdition.find_by_book_title_id @book_title.id
-        @book_title.update_attribute :subject_id,@book_edition.try(:subjects)  
         format.html { redirect_to @book_title, notice: 'Book title was successfully created.' }
         format.json { render :show, status: :created, location: @book_title }
           
@@ -125,7 +118,6 @@ class BookTitlesController < ApplicationController
   # PATCH/PUT /book_titles/1.json
   def update
     authorize! :update, @book_title
-    @book_edition = BookEdition.find_by_book_title_id @book_title.id
     respond_to do |format|
       if @book_title.update(book_title_params)
         format.html { redirect_to @book_title, notice: 'Book title was successfully updated.' }
