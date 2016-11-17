@@ -10,8 +10,12 @@ class BookLabelsController < ApplicationController
         @acad_year = AcademicYear.current
       }
       format.json {
-        search = params[:section] || ""
-        @book_labels = BookLabel.where(grade_section_id: search)
+        if params[:section]
+          search = params[:section] || ""
+          @book_labels = BookLabel.where(grade_section_id: search)
+        elsif params[:term]
+          @book_labels = BookLabel.where('UPPER(name) LIKE ?', "#{params[:term].upcase}%")
+        end
       }
     end
 

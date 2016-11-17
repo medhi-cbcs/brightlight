@@ -3,7 +3,6 @@ class BookCopy < ActiveRecord::Base
   belongs_to :book_condition
   belongs_to :status
   belongs_to :book_label
-  # validates :book_edition, :book_condition, :copy_no, presence: true
   validates :book_edition, presence: true
   validates :barcode, presence: true, uniqueness: true
   has_many :copy_conditions, dependent: :destroy
@@ -37,6 +36,16 @@ class BookCopy < ActiveRecord::Base
       query.where('c.book_condition_id = ?', condition_id)
     else
       query
+    end
+  }
+
+  scope :with_status, lambda { |status_id|
+    case status_id 
+    when 'na'
+      where('status_id is null')
+    when 'all', nil
+    else
+      where(status_id: status_id)
     end
   }
 
@@ -124,6 +133,7 @@ class BookCopy < ActiveRecord::Base
         start_date: Date.today,
         post: 0
       )
+      update_book_label
     end
 
     def update_book_label

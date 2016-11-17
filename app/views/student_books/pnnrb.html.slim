@@ -57,7 +57,7 @@ nav
           td.wd40
             span = book.try(:book_edition).try(:title).truncate(40)
           td.wd17 style='text-align:center'          
-            = book.book_copy.try(:copy_no)
+            = book.book_copy.try(:book_label).try(:name) || '--'
           td.wd10 style='text-align:center;' 
             = book.try(:initial_copy_condition).try(:code)
           td.wd10 style='text-align:center;' 
