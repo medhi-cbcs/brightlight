@@ -45,7 +45,7 @@ nav
           td = student.family_no
           td = student.home_phone
           td 
-            - if can? :edit, User
+            - if can? :update, User
               = link_to 'Edit', edit_student_path(student), class: "btn waves-effect waves-teal btn-flat btn-small"
 
 .toolbar.z-index-1

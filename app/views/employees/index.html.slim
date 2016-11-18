@@ -45,7 +45,7 @@ nav
             td = "Active"
           - else
             td = "Resign"
-          - if can? :edit, Employee
+          - if can? :manage, Employee
             td = link_to 'Edit', edit_employee_path(employee), class: "btn waves-effect waves-teal btn-flat btn-small"
 
 .toolbar.z-depth-1

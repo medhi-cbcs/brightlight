@@ -113,7 +113,7 @@ ul#checked-options.dropdown-content
               td 
                 = link_to employee_book_loan_path(employee_id: @teacher.id, id:book_loan.id), remote:true
                   i.material-icons visibility
-                - if can? :edit, BookLoan
+                - if can? :update, BookLoan
                   = link_to edit_employee_book_loans_path(book_loan.employee,book_loan)
                     i.material-icons edit
                 - if can? :delete, BookLoan
