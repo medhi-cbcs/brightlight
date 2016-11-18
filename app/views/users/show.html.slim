@@ -9,7 +9,7 @@ nav
         = link_to :back
           i.material-icons chevron_left
       li.right
-        - if can? :edit, User
+        - if can? :update, User
           = link_to edit_user_path(@user)
             | Edit
             i.material-icons.left edit

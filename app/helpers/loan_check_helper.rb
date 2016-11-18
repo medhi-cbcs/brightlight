@@ -1,0 +1,2 @@
+module LoanCheckHelper
+end

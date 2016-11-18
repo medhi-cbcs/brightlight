@@ -31,7 +31,7 @@ nav
             // All of these form and url acrobats because we use slugs for BookCondition, and one of the value is 'new'. DUH....
             = link_to book_condition_path(id:book_condition.id)
               i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="View" visibility
-            - if can? :edit, book_condition
+            - if can? :update, book_condition
               = link_to edit_book_condition_path(id:book_condition.id)
                 i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="Edit" edit
             - if can? :destroy, book_condition_path(id:book_condition.id)

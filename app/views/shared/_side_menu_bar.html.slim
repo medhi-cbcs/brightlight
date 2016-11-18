@@ -91,8 +91,9 @@ li
 					= link_to 'Currency Rates', currencies_path			
 				li
 					= link_to 'Templates', templates_path
-                li
-					= link_to 'Templates Targets', template_targets_path
+				- if can? :manage, TemplateTarget
+					li
+						= link_to 'Templates Targets', template_targets_path
 				li
 					= link_to 'Maintenance', inventory_mtce_path	
 li

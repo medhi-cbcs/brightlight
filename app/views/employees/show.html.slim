@@ -7,7 +7,7 @@ nav
         = link_to employees_path
           i.material-icons chevron_left
       li.right
-        - if can? :edit, Employee
+        - if can? :update, Employee
           = link_to edit_employee_path(@employee)
             | Edit
             i.material-icons.left edit

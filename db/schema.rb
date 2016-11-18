@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161109070225) do
+ActiveRecord::Schema.define(version: 20161118043810) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -677,6 +677,25 @@ ActiveRecord::Schema.define(version: 20161109070225) do
 
   add_index "line_items", ["invoice_id"], name: "index_line_items_on_invoice_id", using: :btree
 
+  create_table "loan_checks", force: :cascade do |t|
+    t.integer  "book_loan_id"
+    t.integer  "book_copy_id"
+    t.integer  "user_id"
+    t.integer  "loaned_to"
+    t.integer  "scanned_for"
+    t.integer  "academic_year_id"
+    t.boolean  "emp_flag"
+    t.boolean  "matched"
+    t.string   "notes"
+    t.datetime "created_at",       null: false
+    t.datetime "updated_at",       null: false
+  end
+
+  add_index "loan_checks", ["academic_year_id"], name: "index_loan_checks_on_academic_year_id", using: :btree
+  add_index "loan_checks", ["book_copy_id"], name: "index_loan_checks_on_book_copy_id", using: :btree
+  add_index "loan_checks", ["book_loan_id"], name: "index_loan_checks_on_book_loan_id", using: :btree
+  add_index "loan_checks", ["user_id"], name: "index_loan_checks_on_user_id", using: :btree
+
   create_table "loan_types", force: :cascade do |t|
     t.string   "code"
     t.string   "name"
@@ -1051,6 +1070,10 @@ ActiveRecord::Schema.define(version: 20161109070225) do
   add_foreign_key "late_passengers", "students"
   add_foreign_key "late_passengers", "transports"
   add_foreign_key "line_items", "invoices"
+  add_foreign_key "loan_checks", "academic_years"
+  add_foreign_key "loan_checks", "book_copies"
+  add_foreign_key "loan_checks", "book_loans"
+  add_foreign_key "loan_checks", "users"
   add_foreign_key "passengers", "grade_sections"
   add_foreign_key "passengers", "students"
   add_foreign_key "passengers", "transports"

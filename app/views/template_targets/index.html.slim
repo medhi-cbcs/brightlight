@@ -31,7 +31,7 @@ nav
           td 
              = link_to template_target
                i.material-icons visibility
-             - if can? :edit, template_target
+             - if can? :update, template_target
                = link_to edit_template_target_path(template_target)
                 i.material-icons edit
              - if can? :destroy,template_target
