@@ -567,6 +567,12 @@ main {
 	margin-top: 6px;
 }
 
+.right-in-header {
+	float: right !important;
+	position: relative;
+  margin: -10px 10px 0px 0;
+}
+
 // ============================================ Side Menu ===========================================
 
 ul.side-nav.fixed {

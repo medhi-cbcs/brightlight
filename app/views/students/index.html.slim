@@ -18,14 +18,14 @@
 
 nav
   .nav-wrapper
-    ul.right
-      li
-        - if can? :manage, Student
+    - if can? :manage, Student
+      ul.right
+        li        
           = link_to new_student_path
             | Add New Student
             i.material-icons.left add
-      li
-        = link_to 'Export as CSV', students_path + '.csv'
+        li
+          = link_to 'Export as CSV', students_path + '.csv'
 
 .card-panel
   table.striped.compact

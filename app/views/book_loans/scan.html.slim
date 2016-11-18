@@ -23,6 +23,9 @@ nav
       .collapsible-header        
         | Manual input
         i.material-icons.left keyboard
+        .input-field.right-in-header
+          = check_box_tag :return 
+          = label_tag :return  
 
       .collapsible-body
         .container style="margin-top:1px"
@@ -31,9 +34,10 @@ nav
               = label_tag :barcode, nil, class:'active'
               = text_field_tag :barcode, nil 
             .col.s6 style="margin-top:26px;"
-              | Enter barcode and press enter     
-            
-.card-panel
+              | Enter barcode and press enter   
+
+        
+.card-panel#returns style="display:none"
   .row
     table.compact
       thead
@@ -43,13 +47,34 @@ nav
         th Return date
       tbody#book_loans
 
+.card-panel#checks
+  .row 
+    table.compact 
+      thead 
+        th Barcode 
+        th Title 
+        th Loaned to 
+        th Valid?
+      tbody#loan_checks 
+
 javascript:
+  $(document).ready(function(){
+    var toggleOutput = function() {
+      $("#returns").toggle($("#return").is(':checked'));
+      $("#checks").toggle(!$("#return").is(':checked'));
+    };
+    $("#return").on("change", toggleOutput.bind(this));
+  });
   $("#barcode").codeScanner({
     minEntryChars: 11,
     onScan: function($element, input) {
       var barcode = input.trim();
       $.getJSON("/book_copies/"+barcode+".json?empl="+#{@teacher.id}+"&year="+#{@academic_year_id}, null, function (data) {
-        update_book_loan(data);              
+        if ($("#return").is(':checked')) {
+          update_book_loan(data);
+        } else {
+          check_book_loan(data);
+        }              
       }).fail(function(xhr){
         Materialize.toast($.parseJSON(xhr.responseText).errors, 4000, 'red');
       });           
@@ -60,7 +85,11 @@ javascript:
       e.stopPropagation();
       var barcode = $("#barcode").val().trim();
       $.getJSON("/book_copies/"+barcode+".json?empl="+#{@teacher.id}+"&year="+#{@academic_year_id}, null, function (data) {
-        update_book_loan(data);
+        if ($("#return").is(':checked')) {
+          update_book_loan(data);
+        } else {
+          check_book_loan(data);
+        }
       }).fail(function(xhr){
         Materialize.toast($.parseJSON(xhr.responseText).errors, 5000, 'red');
       });
@@ -97,6 +126,43 @@ javascript:
       } else {
         Materialize.toast(book.barcode+' is borrowed by '+book.loans.employee_name, 5000, 'red');
       }
+    } else {
+      Materialize.toast('Book '+book.barcode+' is not borrowed for the selected year', 5000, 'red');
+    }
+  }
+
+  var check_book_loan = function (data) {
+    var book = data.book_copy;
+    var employeeId = book.employee.id;
+    var currentUserId = #{raw current_user.try(:id) || 0};
+    var acad_year = $("#acad_year option:selected").val();
+    if (book.loans) {
+      url = "/employees/"+ employeeId + "/loan_check";
+      var dataToSend = new Object();
+      var today = new Date();
+      var matched = book.loans.employee_id == employeeId;
+      dataToSend = { loan_check: { book_loan_id: book.loans.id, book_copy_id: book.id, academic_year_id: acad_year,
+                                   loaned_to: book.employee.id, scanned_for: employeeId, emp_flag: true, 
+                                   matched: matched, user_id: currentUserId }};
+      var jsonData = JSON.stringify(dataToSend);
+      $.ajax({
+        type: 'POST',
+        contentType: "application/json; charset=utf-8",
+        url: url,
+        data: jsonData,
+        dataType: 'json'
+      })
+      .done(function(m) {
+        if (matched) {
+          Materialize.toast('Book checked', 5000, 'green');
+        } else {
+          Materialize.toast(book.barcode+' is borrowed by '+book.loans.employee_name, 5000, 'red');
+        }
+        $("tbody#loan_checks").prepend("<tr><td>"+book.barcode+"</td><td>"+book.book_edition.title+"</td><td>"+book.loans.employee_name+"</td><td>"+(matched ? 'Yes' : 'No')+"</td></tr>");
+      })
+      .fail(function(xhr) {
+        Materialize.toast('Book check error', 5000, 'red');
+      });
     } else {
       Materialize.toast('Book '+book.barcode+' is not borrowed for the selected year', 5000, 'red');
     }
