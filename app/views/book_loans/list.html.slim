@@ -105,7 +105,7 @@ ul#year-options.dropdown-content
               td = book_loan.return_date 
               td = book_loan.subject
               td style='text-align:center' 
-                = book_loan.loan_checks.for_year(@academic_year.id).for_employee(@teacher.id).present? ? '&#9745;'.html_safe : ''
+                = book_loan.loan_checks.for_year(@academic_year.id).all_matched.for_employee(@teacher.id).present? ? '&#9745;'.html_safe : ''
               td 
                 = link_to employee_book_loan_path(employee_id: @teacher.id, id:book_loan.id), remote:true
                   i.material-icons visibility
