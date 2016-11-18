@@ -6,10 +6,14 @@ class BookCopy < ActiveRecord::Base
   validates :book_edition, presence: true
   validates :barcode, presence: true, uniqueness: true
   has_many :copy_conditions, dependent: :destroy
+  has_many :book_fines
   has_many :book_loans
+  has_many :book_loan_histories
+  has_many :book_receipts
+  has_many :student_books
 
   after_create :create_initial_condition
-  after_update :update_book_label
+  after_update :sync_changes
 
   scope :standard_books, lambda { |grade_level_id, grade_section_id, year_id|
     if grade_level_id <= 10
@@ -140,5 +144,13 @@ class BookCopy < ActiveRecord::Base
       if book_label.present?
         book_label.update_attribute :name, copy_no
       end
+    end
+
+    def sync_changes
+      update_book_label
+      book_loans.update_all book_edition_id: self.book_edition_id
+      book_loan_histories.update_all book_edition_id: self.book_edition_id
+      book_receipts.update_all book_edition_id: self.book_edition_id
+      student_books.update_all book_edition_id: self.book_edition_id
     end
 end

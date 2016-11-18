@@ -106,9 +106,7 @@ class BookCopiesController < ApplicationController
     authorize! :update, BookCopy
     @book_copy = BookCopy.find(params[:id])
     respond_to do |format|
-      ed = @book_copy.book_edition_id
-      if @book_copy.update(book_copy_params)
-        puts "Before #{ed}, Now: #{@book_copy.book_edition_id}"
+      if @book_copy.update(book_copy_params)        
         format.html { redirect_to @book_copy, notice: 'Book copy was successfully updated.' }
         format.json { render :show, status: :ok, location: @book_edition }
         format.js
@@ -168,7 +166,7 @@ class BookCopiesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def book_copy_params
-      params.require(:book_copy).permit(:book_edition_id, :book_condition_id, :status_id, :barcode, :copy_no, :notes,
+      params.require(:book_copy).permit(:book_edition_id, :book_condition_id, :book_label_id, :status_id, :barcode, :copy_no, :notes,
                                         {:book_copies => [:barcode, :grade_section_id, :no]})
     end
 
