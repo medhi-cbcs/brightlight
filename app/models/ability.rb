@@ -36,6 +36,7 @@ class Ability
     can :update, Employee # for nested form in BookLoan
     can :manage, BookLoan
     can :manage, Subject
+    can :manage, LoanCheck
     can :read, :all
 	end
 
@@ -57,6 +58,7 @@ class Ability
     can :manage, Carpool
     can :scan, BookLoan
     can :read, BookLoan
+    can [:read,:create], LoanCheck
     can :read, :all
   end
 

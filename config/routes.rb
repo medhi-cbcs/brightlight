@@ -147,6 +147,11 @@ Rails.application.routes.draw do
   put  'employees/:employee_id/book_loans/:id' => 'book_loans#update_tm'
   delete  'employees/:employee_id/book_loans/:id' => 'book_loans#destroy_tm'
 
+  get  'employees/:employee_id/loan_checks' => 'loan_checks#index', as: :employee_loan_checks
+  get  'employees/:employee_id/loan_check/new' => 'loan_checks#new', as: :new_employee_loan_check
+  post 'employees/:employee_id/loan_check' => 'loan_checks#create'
+  delete  'employees/:employee_id/loan_check' => 'loan_checks#delete'
+
   resources :book_fines do
     collection do
       get 'calculate'

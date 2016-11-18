@@ -45,7 +45,7 @@ nav
           td
             = link_to user
               i.material-icons visibility
-            - if can? :edit, user
+            - if can? :update, user
               = link_to edit_user_path(user)
                 i.material-icons edit
 

@@ -41,7 +41,7 @@ class EmployeesController < ApplicationController
 
   # GET /employees/1/edit
   def edit
-    authorize! :update, Employee
+    authorize! :manage, Employee
   end
 
   # POST /employees
@@ -64,7 +64,7 @@ class EmployeesController < ApplicationController
   # PATCH/PUT /employees/1
   # PATCH/PUT /employees/1.json
   def update
-    authorize! :update, Employee
+    authorize! :manage, Employee
     respond_to do |format|
       if @employee.update(employee_params)
         format.html do
