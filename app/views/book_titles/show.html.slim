@@ -34,7 +34,7 @@ nav
             = text_field_tag(:isbn, '', {placeholder:' Add ISBN'})
             label for="isbn"
               i.material-icons.left playlist_add
-      - if can? :edit, BookTitle
+      - if can? :update, BookTitle
         li
           = link_to editions_book_title_path(@book_title), class: 'waves-effect waves-light'
             i.material-icons.left add 

@@ -8,30 +8,26 @@ json.book_copy do
   json.copy_no @book_copy.try(:book_label).try(:name)
   json.notes @book_copy.notes
 
-  year_id = @year.id
-  json.academic_year do
-    json.academic_year_id year_id
-    json.start_date @year.start_date
-    json.end_date @year.end_date
-    json.prev_academic_year_id year_id-1
+  if @year.present?
+    year_id = @year.id
+    json.academic_year do
+      json.academic_year_id year_id
+      json.start_date @year.start_date
+      json.end_date @year.end_date
+      json.prev_academic_year_id year_id-1
+    end
   end
 
-  if params[:anyyear] == 't'
-    loan = @book_copy.book_loans.order('academic_year_id DESC','created_at DESC').take
-  else
-    loan = @book_copy.book_loans.where(academic_year_id:year_id).order('created_at DESC').take
-  end
-
-  if loan.present?
+  if @loan.present?
     json.loans do
-      json.id             loan.try(:id)
-      json.student_id     loan.try(:student_id)
-      json.student_name   loan.try(:student).try(:name)
-      json.employee_id    loan.try(:employee_id)
-      json.employee_name  loan.try(:employee).try(:name)
-      json.academic_year_id loan.try(:academic_year_id)
-      json.return_status  loan.try(:return_status)
-      json.return_date    loan.try(:return_date)
+      json.id             @loan.try(:id)
+      json.student_id     @loan.try(:student_id)
+      json.student_name   @loan.try(:student).try(:name)
+      json.employee_id    @loan.try(:employee_id)
+      json.employee_name  @loan.try(:employee).try(:name)
+      json.academic_year_id @loan.try(:academic_year_id)
+      json.return_status  @loan.try(:return_status)
+      json.return_date    @loan.try(:return_date)
     end
   end
 

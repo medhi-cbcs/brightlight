@@ -6,10 +6,9 @@ class BookLoansController < ApplicationController
   # GET /book_loans
   # GET /book_loans.json
   def index
+    authorize! :read, BookLoan
     @items_per_page = 30    
-    @book_loans = BookLoan.joins('LEFT JOIN book_titles ON book_titles.id = book_loans.book_title_id')   
-                          .joins('LEFT JOIN subjects ON book_titles.subject_id = subjects.id')                       
-                          .select('book_loans.*, book_titles.title as title, subjects.name as subject')                          
+    @book_loans = BookLoan.with_title_and_subject                          
     
     unless params[:year].try(:downcase) == 'all'
       @academic_year = AcademicYear.find params[:year] || AcademicYear.current
@@ -56,19 +55,7 @@ class BookLoansController < ApplicationController
       @book_loans = @book_loans.includes([:employee,:student])
     end
 
-    # if params[:grade].present? and params[:grade].upcase != 'ALL'
-    #   @grade_level = GradeLevel.find params[:grade]
-    #   @book_loans = @book_loans.where(grade_level:@grade_level).includes([:book_title])
-    # end
-
     if @book_loans.present?
-      # if params[:year].present?
-      #   @academic_year = AcademicYear.find params[:year]
-      #   @book_loans = @book_loans.where(academic_year:@academic_year) if params[:year].upcase != 'ALL'
-      # else
-      #   @book_loans = @book_loans.where(academic_year:AcademicYear.current_id)
-      # end
-
       if params[:category].present? and params[:category].upcase != 'ALL'
         @category = BookCategory.find_by_code params[:category]
         @book_loans = @book_loans.where(book_category:@category)
@@ -84,15 +71,18 @@ class BookLoansController < ApplicationController
   # GET /book_loans/1
   # GET /book_loans/1.json
   def show
+    authorize! :read, @book_loan
   end
 
   # GET /book_loans/new
   def new
+    authorize! :create, BookLoan
     @book_loan = BookLoan.new
   end
 
   # GET /book_loans/1/edit
   def edit
+    authorize! :update, @book_loan
     @teacher = @book_loan.employee
     respond_to do |format|
       format.html
@@ -103,6 +93,7 @@ class BookLoansController < ApplicationController
   # POST /book_loans
   # POST /book_loans.json
   def create
+    authorize! :create, BookLoan
     @book_loan = BookLoan.new(book_loan_params)
 
     respond_to do |format|
@@ -119,6 +110,7 @@ class BookLoansController < ApplicationController
   # PATCH/PUT /book_loans/1
   # PATCH/PUT /book_loans/1.json
   def update
+    authorize! :update, @book_loan
     respond_to do |format|
       if @book_loan.update(book_loan_params)
         format.html { redirect_to @book_loan, notice: 'Book loan was successfully updated.' }
@@ -133,6 +125,7 @@ class BookLoansController < ApplicationController
   # DELETE /book_loans/1
   # DELETE /book_loans/1.json
   def destroy
+    authorize! :destroy, @book_loan
     @book_loan.destroy
     respond_to do |format|
       format.html { redirect_to book_loans_path, notice: 'Book loan was successfully destroyed.' }
@@ -202,6 +195,7 @@ class BookLoansController < ApplicationController
   end
 
   def show_tm
+    authorize! :read, BookLoan
     @teacher = Employee.find params[:employee_id]
     @book_loan = BookLoan.find params[:id]
   end
@@ -321,6 +315,7 @@ class BookLoansController < ApplicationController
 
  # GET /book_loans/teacher_receipt?tid=1&year=1
   def teacher_receipt
+    authorize! :manage, BookLoan
     @academic_year = AcademicYear.find params[:year]
     @year_prev = @academic_year.name.slice!(0..3)
     @year_next = @academic_year.name.slice!(1..4)  
@@ -333,25 +328,18 @@ class BookLoansController < ApplicationController
 
     if params[:employee_id].present?
       @teacher = Employee.find params[:employee_id]
-      @book_loans = BookLoan.select(['COUNT (book_loans.loan_status) AS loan_qty','COUNT (book_loans.return_status) AS return_qty','subjects.name','book_titles.title','book_editions.authors','book_editions.publisher', 'book_editions.isbn13','book_editions.isbn10', 'book_loans.notes'])
-      .where('book_loans.academic_year_id = ? AND book_loans.employee_id = ?', params[:year],params[:employee_id])      
-      .joins("LEFT JOIN book_editions ON book_editions.id = book_loans.book_edition_id")
-      .joins("LEFT JOIN book_titles ON book_titles.id = book_loans.book_title_id")
-      .joins("LEFT JOIN subjects ON subjects.id = book_titles.subject_id")
-      .group('subjects.name','book_titles.title', 'book_editions.authors','book_editions.publisher', 'book_editions.isbn13', 'book_editions.isbn10','book_loans.notes')
-      .order('name','title')
-       
-      
-        
-        if @template
+      @book_loans = BookLoan.list_for_teachers_receipt params[:year], params[:employee_id]
+
+      if @template
         @template.placeholders = {
           teacher_name: @teacher.name,
           year_prev: @year_prev,
           year_next: @year_next
-            }
-        end
+        }
+      end
     end
   end
+
   ####
 
   private

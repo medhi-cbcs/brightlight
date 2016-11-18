@@ -18,7 +18,7 @@ tr id="row-#{book_copy.id}"
   td.actions
     = link_to book_copy
       i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="View" visibility
-    - if can? :edit, book_copy
+    - if can? :update, book_copy
       = link_to edit_book_copy_path(book_copy), remote: true
         i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="Edit" edit
     - if can? :destroy, book_copy

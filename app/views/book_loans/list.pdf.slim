@@ -17,7 +17,11 @@ table.loose style="width:100%"
     - @book_loans.each.with_index(1) do |book_loan, i|      
       tr style='border-bottom:1px solid gainsboro'
         td.wd5 = "#{i}."      
-        td.wd10 = book_loan.barcode.upcase
+        td.wd10
+          - if params[:barcode] == '1'
+            - Barcode.new(book_loan.barcode).write_image
+            = wicked_pdf_image_tag  "/assets/images/#{book_loan.barcode.upcase}.PNG"
+          = book_loan.barcode.upcase
         - edition = book_loan.book_edition
         - if edition.present?
           td.wd25 = edition.title ? edition.title.truncate(80) : '---'
