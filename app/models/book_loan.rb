@@ -25,8 +25,11 @@ class BookLoan < ActiveRecord::Base
                 .joins('LEFT JOIN book_titles ON book_titles.id = book_loans.book_title_id')
                 .joins("LEFT JOIN subjects ON subjects.id = book_titles.subject_id")
                 .select('book_loans.*, subjects.name as subject, book_titles.title as title')
-    
-    loans = loans.where(academic_year_id:year) if year.present? && year.downcase != 'all' 
+    if year.present? && year.downcase != 'all' 
+      loans = loans.where(academic_year_id:year)
+    elsif year.blank?
+      loans =  loans.current
+    end
     loans = loans.where(employee_id:teacher_id) if teacher_id.present?
   end 
 
