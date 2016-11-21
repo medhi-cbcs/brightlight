@@ -64,7 +64,11 @@ class EmployeesController < ApplicationController
   # PATCH/PUT /employees/1
   # PATCH/PUT /employees/1.json
   def update
-    authorize! :manage, Employee
+    if employee_params[:book_loans_attributes].present?
+      authorize! :update, Employee
+    else
+      authorize! :update, Employee
+    end
     respond_to do |format|
       if @employee.update(employee_params)
         format.html do
