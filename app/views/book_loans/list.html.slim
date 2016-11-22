@@ -110,7 +110,7 @@ ul#year-options.dropdown-content
                 = link_to employee_book_loan_path(employee_id: @teacher.id, id:book_loan.id), remote:true
                   i.material-icons visibility
                 - if can? :update, BookLoan
-                  = link_to edit_employee_book_loans_path(book_loan.employee,book_loan)
+                  = link_to edit_employee_book_loans_path(book_loan.employee,book_loan, year: @academic_year.id)
                     i.material-icons edit
                 - if can? :delete, BookLoan
                   = link_to book_loan, data: {id: book_loan.id, confirm: 'Are you sure?'}, :method => :delete, class:"red-text delete-link", remote: true
