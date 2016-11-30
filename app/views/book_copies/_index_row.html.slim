@@ -1,19 +1,20 @@
 tr id="row-#{book_copy.id}"
+  td
+    input.checkbox type="checkbox" id="book_copy-#{book_copy.id}" name="book_copy[#{book_copy.id}]"
+    = label_tag "book_copy-#{book_copy.id}", ""
   td = nr
   td = link_to book_copy.barcode, book_copy
   td = book_copy.label
   td style="text-align: center" 
-    - badge_color = book_copy.latest_condition.try(:color) || 'black'
+    - badge_color = book_copy.cond_color || 'black'
     span.box class="#{badge_color}"
-      = book_copy.latest_condition.present? ? book_copy.latest_condition.code.capitalize : 'N/A'  
+      = book_copy.cond_code.try(:capitalize) || 'N/A'  
   td
-    - loan = book_copy.active_loan
-    - if loan.present?
-      - if loan.employee_id.present? 
-        = link_to loan.employee.name, employee_book_loans_path(loan.employee)  
-      - elsif loan.student_id.present?
-        = link_to loan.student.name, student_student_books_path(loan.student) 
-  td = book_copy.status.present? ? book_copy.status.name : 'N/A'
+    - if book_copy.teacher_id.present? 
+      = link_to book_copy.teacher_name, employee_book_loans_path(book_copy.teacher_id)  
+    - elsif book_copy.student_id.present?
+      = link_to book_copy.student_name, student_student_books_path(book_copy.student_id)
+  td = book_copy.status_name || 'N/A'
   td = book_copy.notes
   td.actions
     = link_to book_copy
@@ -21,6 +22,3 @@ tr id="row-#{book_copy.id}"
     - if can? :update, book_copy
       = link_to edit_book_copy_path(book_copy), remote: true
         i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="Edit" edit
-    - if can? :destroy, book_copy
-      = remote_link_to_delete book_copy, message: "Book copy deleted", class: "right waves-effect waves-light red-text"
-        i.material-icons delete

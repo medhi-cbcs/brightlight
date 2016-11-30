@@ -48,7 +48,7 @@ nav
         tr
           td
             - if copy_loan.student.present?
-              = copy_loan.student.name
+              = link_to copy_loan.student.name, student_student_books_path(copy_loan.student,year:copy_loan.academic_year_id)
             - elsif copy_loan.employee.present?              
               = copy_loan.employee.name
           td = copy_loan.grade_section_name
@@ -56,7 +56,12 @@ nav
           td = copy_loan.due_date
           td = copy_loan.return_date
           td = copy_loan.try(:academic_year).try(:name)
-          td 
-            - if copy_loan.student.present? and copy_loan.try(:academic_year).try(:id) == AcademicYear.current_id
-              = link_to student_student_books_path(copy_loan.student)
-                i.material-icons visibility
+          td             
+            = link_to copy_loan, remote:true 
+              i.material-icons visibility
+            - if can? :update, copy_loan
+              = link_to edit_book_loan_path(copy_loan) 
+                i.material-icons edit
+
+#show-modal.modal.modal-fixed-footer
+  #show-modal-content

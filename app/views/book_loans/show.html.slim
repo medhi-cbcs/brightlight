@@ -1,22 +1,71 @@
-- title "Book Loan Records for #{@employee.try(:name)}
+- title "Book Loan Records for #{@borrower.try(:name)}"
 h4 Book Loan Record
 
 nav
   .nav-wrapper
     ul
       li
-        = link_to :back
-          i.material-icons chevron_left      
-      - if @employee.present?
-        li 
-          = link_to edit_employee_book_loan_path(employee_id:@employee.id, id:@book_loan.id)
-            i.material-icons edit
-      li 
-        = link_to @book_loan, data: {:confirm => 'Are you sure?'}, :method => :delete, class:'red-text'            
-          i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="Delete" delete
+        = link_to book_copy_loans_path(@book_loan.book_copy)
+          | Loan history
+          i.material-icons.left chevron_left      
           
-= render partial: 'book_loan_record', locals: {book_loan:@book_loan}
-        
-= link_to 'Edit', edit_book_loan_path(@book_loan)
-'|
-= link_to 'Back', book_loans_path
+.card-panel
+  .list_description
+    dl.row
+      dd.col.s12
+        .label Book Title:
+        .item = @book_loan.try(:book_edition).try(:title) || '--'
+      dd.col.s3
+        .label Barcode:
+        .item = @book_loan.barcode || '--'
+      dd.col.s3
+        .label BKUDID:
+        .item = @book_loan.bkudid || '--'
+      dd.col.s3
+        .label Book category:
+        .item = @book_loan.book_category.try(:name) || '--'
+      dd.col.s3
+        .label Loan type:
+        .item = @book_loan.loan_type.try(:name) || '--'
+    dl.row
+      - if @book_loan.employee.present?
+        dd.col.s6
+          .label Employee Name:
+          .item = @book_loan.employee.name  || '--'
+        dd.col.s3
+          .label Employee No:
+          .item = @book_loan.employee_no || '--'
+      - if @book_loan.student.present?
+        dd.col.s6
+          .label Student Name:
+          .item = @book_loan.student.name  || '--'
+        dd.col.s3
+          .label Student No:
+          .item = @book_loan.student_no || '--'
+    dl.row
+      dd.col.s3
+        .label Out date:
+        .item = @book_loan.out_date || '--'
+      dd.col.s3
+        .label Due date:
+        .item = @book_loan.due_date || '--'
+      dd.col.s3
+        .label Return date:
+        .item = @book_loan.return_date  || '--' 
+    dl.row
+      dd.col.s3
+        .label Loan status:
+        .item = @book_loan.loan_status || '--'
+      dd.col.s3
+        .label Return status:
+        .item = @book_loan.return_status || '--'
+    dl.row
+      dd.col.s3
+        .label Academic year:
+        .item = @book_loan.academic_year.try(:name) || '--'
+      dd.col.s3
+        .label Update by:
+        .item = @book_loan.user.try(:email) || '--'
+
+
+

@@ -7,16 +7,19 @@ class BookCopiesController < ApplicationController
   def index
     authorize! :read, BookCopy
     if params[:book_edition_id].present?
-      @book_edition = BookEdition.find(params[:book_edition_id])    
+      @book_edition = BookEdition.find(params[:book_edition_id])      
       @by_condition = @book_edition.summary_by_conditions
+      @nr_of_copies = @by_condition.reduce(0) {|r,x| r + (x[:total] || 0)}
       @by_status = @book_edition.summary_by_status
       @condition = BookCondition.where(id:params[:condition]).take if params[:condition].present? and params[:condition] != 'all' and params[:condition] != 'na'
       @status = Status.where(id:params[:status]).take if params[:status].present? and params[:status] != 'all' and params[:status] != 'na'
-      @book_copies = @book_edition.book_copies.with_condition(params[:condition]).with_status(params[:status]).includes(:book_label)
+      @book_copies = @book_edition.book_copies
+        .with_condition(params[:condition]).with_status(params[:status]).with_active_loans
     else
       @book_copies = BookCopy.all.order(:copy_no)
     end
     @book_copies = @book_copies.order("#{sort_column} #{sort_direction}")
+    @total_copies = @book_copies.to_a.count
   end
 
   # GET /book_copies/1
@@ -123,6 +126,26 @@ class BookCopiesController < ApplicationController
     end
   end
 
+  # POST /book_copies/update_multiple
+  # POST /book_copies/update_multiple
+  def update_multiple
+    authorize! :update, BookCopy
+    if params[:book_copy]
+      list = params[:book_copy].reject {|k,v| k == 'all'}
+      @book_copies = BookCopy.find list.keys
+      # @book_copies.update_all condition_id:params[:condition] if params[:condition]
+      # @book_copies.update_all status_id:params[:status] if params[:status]
+      # @book_copies.each do |book_copy|
+      #   # book_copy.update(book_copy_params)
+      #   puts "Updating #{book_copy.barcode} to conditon: #{params[:tocondition]}, status: #{params[:tostatus]}"    
+      # end
+      book_edition = @book_copies.last.book_edition
+      redirect_to book_edition_book_copies_path(book_edition), notice: 'Selected book copies were successfully updated.'
+    else
+      redirect_to book_edition_book_copies_path(book_edition)
+    end
+  end
+
   # DELETE /book_copies/1
   # DELETE /book_copies/1.json
   def destroy
@@ -132,6 +155,22 @@ class BookCopiesController < ApplicationController
     respond_to do |format|
       format.html { redirect_to book_edition_book_copies_path(book_edition), notice: 'Book copy was successfully destroyed.' }
       format.json { head :no_content }
+    end
+  end
+
+  # POST /book_copies/dispose
+  def dispose
+    authorize! :destroy, BookCopy
+    if params[:book_copy]
+      @book_copies = params[:book_copy].map {|id,on| BookCopy.find(id)}
+      @book_copies.each do |book_copy|
+        # book_copy.destroy
+        puts "Deleting #{book_copy.barcode}"    
+      end
+      book_edition = @book_copies.last.book_edition
+      redirect_to book_edition_book_copies_path(book_edition), notice: 'Selected book copies were successfully deleted.'
+    else
+      redirect_to book_edition_book_copies_path(book_edition)
     end
   end
 
@@ -176,6 +215,6 @@ class BookCopiesController < ApplicationController
     end
 
     def sortable_columns 
-      [:label, :barcode, :condition_id, :status_id]
+      [:book_label_id, :barcode, :condition_id, :status_id]
     end 
 end
