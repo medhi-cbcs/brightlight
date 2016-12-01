@@ -1,36 +1,42 @@
 = form_for @book_loan do |f|
-  - if @book_loan.errors.any?
-    #error_explanation
-      h2 = "#{pluralize(@book_loan.errors.count, "error")} prohibited this book_loan from being saved:"
-      ul
-        - @book_loan.errors.full_messages.each do |message|
-          li = message
-
-  .field
-    = f.label :book_copy
-    = f.text_field :book_copy
-  .field
-    = f.label :book_edition
-    = f.text_field :book_edition
-  .field
-    = f.label :book_title
-    = f.text_field :book_title
-  .field
-    = f.label :user
-    = f.text_field :user
-  .field
-    = f.label :book_category
-    = f.text_field :book_category
-  .field
-    = f.label :loan_type
-    = f.text_field :loan_type
-  .field
-    = f.label :out_date
-    = f.date_select :out_date
-  .field
-    = f.label :due_date
-    = f.date_select :due_date
-  .field
-    = f.label :academic_year
-    = f.text_field :academic_year
-  .actions = f.submit
+  .card-panel
+    .card-content
+      - if @book_loan.errors.any?
+        #error_explanation
+          h2 = "#{pluralize(@book_loan.errors.count, "error")} prohibited this book_loan from being saved:"
+          ul
+            - @book_loan.errors.full_messages.each do |message|
+              li = message
+      .list_description
+        dl.row
+          dd.col.s12
+            .label Book Title:
+            .item = @book_loan.try(:book_edition).try(:title) || '--'
+        dl.row  
+          dd.col.s3
+            .label Barcode:
+            .item = @book_loan.barcode || '--'
+          
+      .row
+        .input-field.col.s4
+          = f.label :out_date, class:'active'
+          = f.date_field :out_date
+        .input-field.col.s4
+          = f.label :due_date, class:'active'
+          = f.date_field :due_date
+        .input-field.col.s4
+          = f.label :return_date, class:'active'
+          = f.date_field :due_date
+        .input_field.col.s4
+          = f.label :loan_status
+          = f.select :loan_status, options_for_select([['None', nil],['Borrowed','B']], @book_loan.loan_status)
+        .input_field.col.s4
+          = f.label :return_status
+          = f.select :return_status, options_for_select([['None', nil],['Returned','R']], @book_loan.return_status)
+        .input-field.col.s4
+          = f.label :academic_year, class:'active'
+          = f.collection_select :academic_year, AcademicYear.list_for_menu, :id, :name
+          = f.hidden_field :user
+  .toolbar.actions
+    button.btn.waves-effect.waves-light type="submit" Save
+    = link_to 'Cancel', :back, class: "waves-effect waves-teal btn-flat"

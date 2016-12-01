@@ -1,80 +1,12 @@
-h4 Check and return book
+- title 'Editing Book Loan'
+h4 Edit book loan record
 
 nav
   .nav-wrapper
     .brand-logo style="margin-left: 20px; font-size:1.5em"
-      = @teacher.name
-    ul.right
-      li 
-        = link_to 'Done', employee_book_loans_path(@teacher)
+      = @borrower.name
+    / ul.right
+    /   li 
+    /     = link_to 'Done', employee_book_loans_path(@teacher)
 
-= form_for @book_loan do |f| 
-  = f.text_field :barcode 
-  = f.hidden_field :return_date, value: Date.today 
-  = f.hidden_field :return_status, value: 'R' 
-  = f.submit 
-  
-.card-panel
-  .row
-    table.compact
-      thead
-        th Barcode
-        th Title 
-        th Return status
-        th Return date
-      tbody#book_loans
-        
-
-javascript:
-  $(document).ready(function() {
-    var pressed = false;
-    var chars = [];
-    $(window).keypress(function(e) {
-      if (e.which >= 45 && e.which <= 112) {
-          chars.push(String.fromCharCode(e.which));
-      }
-      if (pressed == false) {
-        setTimeout(function(){
-          if (chars.length >= 11) {
-            var barcode = chars.join("");
-            // console.log("Barcode Scanned: " + barcode);
-            // assign value to some input (or do whatever you want)
-            var field = $("[name$='[barcode]']:last");
-            field.val(barcode);
-            $.getJSON("/book_copies/"+barcode+".json?empl="+#{@teacher.id}, null, function (data) {
-              insert_values(data);
-            }).fail(function(){
-              $("[name$='[barcode]']:last").val('');
-              Materialize.toast("Invalid barcode.", 4000, 'red');
-            });            
-          }
-          chars = [];
-          pressed = false;
-        },500);
-      }
-      pressed = true;
-    });
-    $(document).on("keypress","[name$='[barcode]']", (function(e){
-      if ( e.which === 13 ) {
-        e.preventDefault();
-        $.getJSON("/book_copies/"+$(e.target).val()+".json", null, function (data) {
-          insert_values(data);
-          $("[name$='[barcode]']:last").focus();
-        }).fail(function(){
-          $(e.target).val('');
-          Materialize.toast("Invalid barcode.", 5000, 'red');
-        });
-      }
-    }));
-    var insert_values = function (data) {
-      book = data.book_copy;
-      $(".titles:last").html(book.book_edition.title);
-      $(".book_copy_ids:last").val(book.id);
-      $(".academic_year_ids:last").val(book.academic_year.academic_year_id);
-      $(".book_edition_ids:last").val(book.book_edition.id);
-      $(".book_title_ids:last").val(book.book_title.id);
-      $(".barcodes:last").val(book.barcode);
-      $(".bkudids:last").val(book.book_title.bkudid);
-      $(".add_fields").trigger('click');      
-    }
-  });
+== render 'form'

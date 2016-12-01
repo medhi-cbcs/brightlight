@@ -16,7 +16,7 @@
     -if params[:action] =~ /check/
       .input-field.col.s2
         = label :present_condition, :present_condition
-        = text_field_tag :present_condition, BookCondition.find(@copy_condition.book_copy.latest_condition).code, disabled:true
+        = text_field_tag :present_condition, @copy_condition.book_copy.latest_condition.try(:code), disabled:true
     .input-field.col.s2
       = f.label 'New condition', class:'active'
       = f.collection_select :book_condition_id, BookCondition.all, :id, :code, {selected: @copy_condition.book_condition_id}

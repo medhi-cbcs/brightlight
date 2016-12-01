@@ -324,6 +324,25 @@ button.delete-button :hover {
   padding-top:20px !important;
 }
 
+.dropdown-content {
+	li {
+		input[type="submit"] {
+			background-color: transparent;
+			border: none;
+			padding: 0.2rem 1rem;
+			font-size: 1rem;
+			color: #e7580b;
+		}
+		button[type="submit"] {
+			background-color: transparent;
+			border: none;
+			padding: 0.2rem 1rem;
+			font-size: 1rem;
+			color: #e7580b;
+		}
+	}
+}
+
 // ========================================= Typography =============================================
 
 .giant-letter {

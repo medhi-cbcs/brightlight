@@ -38,7 +38,7 @@ h4 = @book_edition.title
       td
       - @by_condition.each do |c|
         td = link_to c[:total] || 0, book_edition_book_copies_path(@book_edition, condition: c[:id] || 'na')
-      td = link_to @book_edition.number_of_copies || 0, book_edition_book_copies_path(@book_edition, condition: 'all')
+      td = link_to @nr_of_copies || 0, book_edition_book_copies_path(@book_edition, condition: 'all')
     tr.header-shade
       td.wd12-5
         p Status
@@ -49,62 +49,93 @@ h4 = @book_edition.title
       - @by_status.each do |s|
         td = link_to s[:total] || 0, book_edition_book_copies_path(@book_edition, status: s[:id] || 'na')
 
-nav
-  .nav-wrapper
-    .brand-logo style="margin-left: 20px; font-size:1.5em"
-      | Book Copies
-    ul.right
+
+= form_tag do
+  ul#status-edit-menu.dropdown-content
+    - Status.all.each do |status|
       li 
-        a.dropdown-button href="#!" data-activates="condition-options"
-          span#grade = @condition.present? ? "#{@condition.code}" : "Condition" 
-          i.material-icons.right arrow_drop_down
+        button type="submit" formaction="#{update_multiple_book_copies_path}" name="status" value="#{status.id}" #{status.name}
+  ul#condition-edit-menu.dropdown-content
+    - BookCondition.all.each do |condition|
       li 
-        a.dropdown-button href="#!" data-activates="status-options"
-          span#grade = @status.present? ? "#{@status.name}" : "Status" 
-          i.material-icons.right arrow_drop_down
-      - if can? :manage, BookCopy
+        button type="submit" formaction="#{update_multiple_book_copies_path}" name="condition" value="#{condition.id}" #{condition.code}
+  ul#condition-options.dropdown-content
+    li  
+      = link_to 'All', book_edition_book_copies_path(params.merge(condition:'all').symbolize_keys)
+    - BookCondition.all.each do |condition|
+      li 
+        = link_to condition.code, book_edition_book_copies_path(params.merge(condition:condition.id).symbolize_keys)  
+    li  
+      = link_to 'N/A', book_edition_book_copies_path(params.merge(condition:'na').symbolize_keys)
+  ul#status-options.dropdown-content
+    li  
+      = link_to 'All', book_edition_book_copies_path(params.merge(status:'all').symbolize_keys)
+    - Status.all.each do |status|
+      li 
+        = link_to status.name, book_edition_book_copies_path(params.merge(status:status.id).symbolize_keys)  
+    li  
+      = link_to 'N/A', book_edition_book_copies_path(params.merge(status:'na').symbolize_keys)
+      
+  nav
+    .nav-wrapper
+      .brand-logo.nav-menu style="margin-left: 20px; font-size:1.5em"
+        | Book Copies    
+      ul.context-buttons style='display:none'
         li
-          = link_to edit_labels_book_edition_book_copies_path(@book_edition)
-            | Edit labels
-            i.material-icons.left edit
+          div style="margin-left: 20px; margin-right: 10px; font-size:1.5em" Edit:
         li
-          = link_to new_book_edition_book_copy_path(@book_edition)
-            | Create new
-            i.material-icons.left add
+          a.dropdown-button href="#!" data-activates="status-edit-menu"
+            span Status
+            i.material-icons.right arrow_drop_down 
+        li
+          a.dropdown-button href="#!" data-activates="condition-edit-menu"
+            span Condition
+            i.material-icons.right arrow_drop_down 
+        li
+          button.btn.red formaction="#{dispose_book_copies_path}"
+            i.material-icons delete
+      ul.right.nav-menu
+        li 
+          a.dropdown-button href="#!" data-activates="condition-options"
+            span#grade = @condition.present? ? "#{@condition.code}" : "Condition" 
+            i.material-icons.right arrow_drop_down
+        li 
+          a.dropdown-button href="#!" data-activates="status-options"
+            span#grade = @status.present? ? "#{@status.name}" : "Status" 
+            i.material-icons.right arrow_drop_down
+        - if can? :manage, BookCopy
+          li
+            = link_to edit_labels_book_edition_book_copies_path(@book_edition)
+              | Edit labels
+              i.material-icons.left edit
+          li
+            = link_to new_book_edition_book_copy_path(@book_edition)
+              | New
+              i.material-icons.left add
 
-ul#condition-options.dropdown-content
-  li  
-    = link_to 'All', book_edition_book_copies_path(params.merge(condition:'all').symbolize_keys)
-  - BookCondition.all.each do |condition|
-    li 
-      = link_to condition.code, book_edition_book_copies_path(params.merge(condition:condition.id).symbolize_keys)  
-  li  
-    = link_to 'N/A', book_edition_book_copies_path(params.merge(condition:'na').symbolize_keys)
-ul#status-options.dropdown-content
-  li  
-    = link_to 'All', book_edition_book_copies_path(params.merge(status:'all').symbolize_keys)
-  - Status.all.each do |status|
-    li 
-      = link_to status.name, book_edition_book_copies_path(params.merge(status:status.id).symbolize_keys)  
-  li  
-    = link_to 'N/A', book_edition_book_copies_path(params.merge(status:'na').symbolize_keys)
+  - if @total_copies != @nr_of_copies
+    .card-panel.red.lighten-3
+      | There are discrepancies in total number of book copies. There may be double entries due to incomplete data, such as incomplete return status  
 
-.card-panel
-  table.compact.striped
-    thead
-      tr
-        th No
-        th = sort_link :barcode
-        th = sort_link :label
-        th style="text-align: center" = sort_link :condition_id, 'Condition'
-        th Current loan
-        th = sort_link :status_id, 'Status'
-        th Notes        
-        th Actions
+  .card-panel  
+    table.compact.striped
+      thead
+        tr
+          th
+            input.allcheckboxes type="checkbox" id="book_copy-all" name="book_copy[all]" data-total="#{@total_copies}"
+            = label_tag "book_copy-all", ""
+          th No
+          th = sort_link :barcode
+          th = sort_link :book_label_id, 'Label'
+          th style="text-align: center" = sort_link :condition_id, 'Condition'
+          th Borrower
+          th = sort_link :status_id, 'Status'
+          th Notes        
+          th Actions
 
-    tbody
-      - @book_copies.each.with_index(1) do |book_copy, idx|
-        = render partial: 'index_row', locals: {book_copy: book_copy, nr: idx}        
+      tbody
+        - @book_copies.each.with_index(1) do |book_copy, idx|
+          = render partial: 'index_row', locals: {book_copy: book_copy, nr: idx}        
 
 #edit-modal.modal.modal-fixed-footer
   #edit-modal-content

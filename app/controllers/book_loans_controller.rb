@@ -72,6 +72,7 @@ class BookLoansController < ApplicationController
   # GET /book_loans/1.json
   def show
     authorize! :read, @book_loan
+    @borrower = @book_loan.employee || @book_loan.student
   end
 
   # GET /book_loans/new
@@ -83,7 +84,7 @@ class BookLoansController < ApplicationController
   # GET /book_loans/1/edit
   def edit
     authorize! :update, @book_loan
-    @teacher = @book_loan.employee
+    @borrower = @book_loan.employee || @book_loan.student
     respond_to do |format|
       format.html
       format.js

@@ -28,3 +28,4 @@
 //= require init
 //= require carpools
 //= require turbolinks
+//= require book_copies
