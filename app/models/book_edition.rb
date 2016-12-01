@@ -40,10 +40,10 @@ class BookEdition < ActiveRecord::Base
       # configure number of OR conditions for provision
       # of interpolation arguments. Adjust this if you
       # change the number of OR conditions.
-      num_or_conds = 1
+      num_or_conds = 2
       where(
         terms.map { |term|
-          "(LOWER(title) LIKE ?)"
+          "(LOWER(title) LIKE ? OR LOWER(refno) LIKE ?)"
         }.join(' AND '),
         *terms.map { |e| [e] * num_or_conds }.flatten
       )
@@ -211,13 +211,21 @@ class BookEdition < ActiveRecord::Base
   end
 
   def summary_by_conditions
-    summary = BookEdition.find_by_sql "select b.id, b.code, x.total from
+    summary = BookEdition.find_by_sql ["select b.id, b.code, x.total from
 (select c.id, c.code, count(bc.*) total from book_copies bc
 left join copy_conditions cc on cc.book_copy_id = bc.id and cc.id = (select id from copy_conditions 
       where book_copy_id = bc.id order by academic_year_id desc, created_at desc limit 1) 
-left join book_conditions c on cc.book_condition_id = c.id where bc.book_edition_id = #{id}
-group by c.id, c.code order by c.id) x full outer join book_conditions b on b.id = x.id"                      
+left join book_conditions c on cc.book_condition_id = c.id where bc.book_edition_id = ?
+group by c.id, c.code order by c.id) x full outer join book_conditions b on b.id = x.id", id]                      
     summary.map { |x| { :id => x.id, :code => x.code || "N/A", :total => x.total } }
+  end
+
+  def summary_by_status
+    summary = BookEdition.find_by_sql [
+"select ss.id, ss.name, f.total from (select s.id, s.name, count(bc.*) total from book_copies bc 
+left join statuses s on s.id = bc.status_id where bc.book_edition_id = ?
+group by s.id, s.name order by s.id) f full outer join statuses ss on ss.id = f.id", id]                  
+    summary.map { |x| { :id => x.id, :name => x.name || "N/A", :total => x.total } }
   end
 
   # Strip leading and trailing spaces when assigning values to isbn10 and isbn13
@@ -230,4 +238,15 @@ group by c.id, c.code order by c.id) x full outer join book_conditions b on b.id
     write_attribute(:isbn13, num.try(:strip))
   end
 
+  def show_language
+    iso = {"en"=>"English", "id"=>"Bahasa Indonesia", "la"=>"Latin", "nl"=>"Dutch", "fr"=>"French", 
+           "de"=>"German", "ar"=>"Arabic", "es"=>"Spanish", "zh"=>"Chinese", "it"=>"Italian"}
+    iso[language] || language
+  end
+
+  scope :with_number_of_copies, lambda { 
+    joins('LEFT JOIN book_copies ON book_copies.book_edition_id = book_editions.id')
+    .select('book_editions.id,title,subtitle,description,google_book_id,isbndb_id,isbn10,isbn13,refno,currency,price,authors,publisher,published_date,page_count,language,edition_info,tags,subjects,small_thumbnail,thumbnail,book_title_id, count(book_copies.id) as copies')
+    .group('book_editions.id,title,subtitle,description,google_book_id,isbndb_id,isbn10,isbn13,refno,currency,price,authors,publisher,published_date,page_count,language,edition_info,tags,subjects,small_thumbnail,thumbnail,book_title_id')
+  }
 end

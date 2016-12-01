@@ -18,7 +18,7 @@ nav
 				li.tab.col.s3
 					a href='#tab1' Name
 				li.tab.col.s3
-					a href='#tab2' Family
+					a href='#tab2' Children
 
 		#tab1.tab-content
 			.col.s10
@@ -47,19 +47,23 @@ nav
 							.label Address
 							.item = @guardian.address_line1
 							.item = @guardian.address_line2        
-							.item = @guardian.city + ' ' + @guardian.postal_code
+							.item = "#{@guardian.city} #{@guardian.postal_code}"
 							.item = @guardian.state
 							.item = @guardian.country
 						dd.col.s4
 							.label Family no:
-							.item = @guardian.family_no
+							.item = @guardian.family.family_no
 		#tab2.tab-content
 			.col.s10
-				.list_description
-					- @guardian.students_guardians.each do |g|
-						dl
-							dd
-								.label Name: 
-								.item = link_to g.student.name, g.student
+				table.compact.striped
+					thead
+						tr
+							th Name 
+							th Grade
+					tbody
+						- @guardian.family.children.each do |child|
+							tr
+								td = link_to child.name, child
+								td = child.current_grade_section.name
 
 

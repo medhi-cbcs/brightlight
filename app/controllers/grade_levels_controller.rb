@@ -5,6 +5,7 @@ class GradeLevelsController < ApplicationController
   # GET /grade_levels
   # GET /grade_levels.json
   def index
+    authorize! :read, GradeLevel
     # This preloading cuts down the number of database calls to just 4 calls regardless the numbers of grade sections we have
 
     if params[:year].blank? || params[:year].to_i >= AcademicYear.current_id
@@ -19,6 +20,7 @@ class GradeLevelsController < ApplicationController
   # GET /grade_levels/1
   # GET /grade_levels/1.json
   def show
+    authorize! :read, GradeLevel
     if params[:year].blank? || params[:year].to_i == AcademicYear.current_id
       @grade_sections = @grade_level.grade_sections.order(:id).includes([:homeroom])
     else
@@ -69,6 +71,7 @@ class GradeLevelsController < ApplicationController
   end
 
   def add_standard_books
+    authorize! :update, @grade_level
     if params[:add]
       params[:add].map {|id,on| BookEdition.find(id)}.each do |edition|
         @book_title.book_editions << edition

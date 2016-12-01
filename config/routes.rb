@@ -147,6 +147,11 @@ Rails.application.routes.draw do
   put  'employees/:employee_id/book_loans/:id' => 'book_loans#update_tm'
   delete  'employees/:employee_id/book_loans/:id' => 'book_loans#destroy_tm'
 
+  get  'employees/:employee_id/loan_checks' => 'loan_checks#index', as: :employee_loan_checks
+  get  'employees/:employee_id/loan_check/new' => 'loan_checks#new', as: :new_employee_loan_check
+  post 'employees/:employee_id/loan_check' => 'loan_checks#create'
+  delete  'employees/:employee_id/loan_check' => 'loan_checks#delete'
+
   resources :book_fines do
     collection do
       get 'calculate'
@@ -161,6 +166,7 @@ Rails.application.routes.draw do
     collection do
       post 'prepare'
       get  'check'
+      post 'finalize_condition'
     end
   end
 
@@ -187,11 +193,6 @@ Rails.application.routes.draw do
     registrations: "users/registrations"
   }
   resources :users, only: [:index, :show, :edit, :update]
-
-  namespace :dynamic_select do
-    get ':grade_level_id/grade_sections', to: 'options#grade_sections', as: 'grade_sections'
-    get ':section/book_labels', to: 'options#book_labels', as: 'book_labels'
-  end
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

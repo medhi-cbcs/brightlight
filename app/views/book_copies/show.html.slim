@@ -9,7 +9,7 @@ h4 Book Copy
         li
           = link_to book_edition_book_copies_path(@book_copy.book_edition)
             i.material-icons chevron_left
-        - if can? :edit, @book_copy
+        - if can? :update, @book_copy
           li.right
             = link_to edit_book_copy_path(@book_copy)
               i.material-icons.left edit

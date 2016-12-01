@@ -1,26 +1,34 @@
               
-table style="width:100%"
+table.loose style="width:100%"
   thead
     tr
       th colspan=4
-        p = "#{@teacher.name} (#{@academic_year.name})"
+        h4 style="margin:0" = "#{@teacher.name} (#{@academic_year.name})"
     tr
-      th No
-      th Barcode
-      th
-      th Book title
-      th style="text-align:right" Check
+      th.wd5 No
+      th.wd10 Barcode
+      th.wd25 Book title
+      th.wd20 Author
+      th.wd20 Publisher
+      th.wd10 ISBN
+      th.wd10 Subject
 
   tbody
-    - @book_loans.each_with_index do |book_loan, i|
+    - @book_loans.each.with_index(1) do |book_loan, i|      
       tr style='border-bottom:1px solid gainsboro'
-        td = "#{i+1}."
-        - Barcode.new(book_loan.barcode).write_image
-        td = wicked_pdf_image_tag "/assets/images/#{book_loan.barcode.upcase}.PNG"
-        td = book_loan.barcode.upcase
-        td = book_loan.book_edition.try(:title).truncate(60)
-        td style="text-align:right"
-          = book_loan.return_status == 'R' ? '&#9745;'.html_safe : '&#9744;'.html_safe
+        td.wd5 = "#{i}."      
+        td.wd10
+          - if params[:barcode] == '1'
+            - Barcode.new(book_loan.barcode).write_image
+            = wicked_pdf_image_tag  "/assets/images/#{book_loan.barcode.upcase}.PNG"
+          = book_loan.barcode.upcase
+        - edition = book_loan.book_edition
+        - if edition.present?
+          td.wd25 = edition.title ? edition.title.truncate(80) : '---'
+          td.wd20 = edition.authors ? edition.authors.truncate(45) : '---'
+          td.wd20 = edition.publisher ? edition.publisher.truncate(45) : '---'
+          td.wd10 = edition.isbn13 || edition.isbn10 || edition.refno
+          td.wd10 = edition.try(:book_title).try(:subject).try(:name) || '---'
     
 / Important to avoid overlapping text with repeated header 
 / See: https://github.com/wkhtmltopdf/wkhtmltopdf/issues/1524#issuecomment-85072480
@@ -28,3 +36,4 @@ css:
   tr {
       page-break-inside: avoid;
   }
+

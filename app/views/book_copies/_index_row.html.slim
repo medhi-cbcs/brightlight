@@ -5,13 +5,20 @@ tr id="row-#{book_copy.id}"
   td style="text-align: center" 
     - badge_color = book_copy.latest_condition.try(:color) || 'black'
     span.box class="#{badge_color}"
-      = book_copy.latest_condition.present? ? book_copy.latest_condition.code.capitalize : 'N/A'
+      = book_copy.latest_condition.present? ? book_copy.latest_condition.code.capitalize : 'N/A'  
+  td
+    - loan = book_copy.active_loan
+    - if loan.present?
+      - if loan.employee_id.present? 
+        = link_to loan.employee.name, employee_book_loans_path(loan.employee)  
+      - elsif loan.student_id.present?
+        = link_to loan.student.name, student_student_books_path(loan.student) 
   td = book_copy.status.present? ? book_copy.status.name : 'N/A'
   td = book_copy.notes
   td.actions
     = link_to book_copy
       i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="View" visibility
-    - if can? :edit, book_copy
+    - if can? :update, book_copy
       = link_to edit_book_copy_path(book_copy), remote: true
         i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="Edit" edit
     - if can? :destroy, book_copy

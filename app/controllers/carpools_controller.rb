@@ -33,7 +33,8 @@ class CarpoolsController < ApplicationController
 
   # GET /carpools/1
   # GET /carpools/1.json
-  def show    
+  def show 
+    authorize! :manage, Carpool 
     @expected_passengers = @carpool.late_passengers.active if params[:lpax]
   end
 

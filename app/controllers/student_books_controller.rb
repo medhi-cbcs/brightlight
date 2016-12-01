@@ -4,6 +4,7 @@ class StudentBooksController < ApplicationController
   # GET /student_books
   # GET /student_books.json
   def index
+    authorize! :read, StudentBook
     items_per_page = 25
     @grade_levels = GradeLevel.all.order(:id)
     @grade_level_ids = @grade_levels.collect(&:id)
@@ -60,6 +61,7 @@ class StudentBooksController < ApplicationController
   # GET /student_books/1
   # GET /student_books/1.json
   def show
+    authorize! :read, @student_book
     @student = @student_book.student
   end
 
@@ -431,8 +433,8 @@ class StudentBooksController < ApplicationController
     authorize! :manage, StudentBook
     academic_year_id = params[:prepare_student_book_year].to_i
     GradeSection.all.each do |section|
-      section.students_for_academic_year(academic_year_id).each do |student|
-        StudentBook.initialize_from_book_receipts student:student, year:AcademicYear.find(academic_year_id)
+      section.students_for_academic_year(academic_year_id).each do |gss|
+        StudentBook.initialize_from_book_receipts gss:gss, year:AcademicYear.find(academic_year_id)
       end
     end
     respond_to do |format|

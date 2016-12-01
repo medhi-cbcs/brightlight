@@ -49,4 +49,4 @@
 
   .toolbar.action
     button.btn.waves-effect.waves-light type='Submit' Save
-    = link_to "Close", "#!", class:"modal-action modal-close waves-effect waves-light btn-flat"
+    = link_to "Close", employee_book_loans_path(@teacher, year: params[:year]), class:"modal-action modal-close waves-effect waves-light btn-flat"
