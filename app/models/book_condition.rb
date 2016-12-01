@@ -1,6 +1,7 @@
 class BookCondition < ActiveRecord::Base
 	validates :code, presence: true, uniqueness: true
 	has_many :book_copies
+	has_many :copy_conditions
 	slug :code
 
 	COLORS = {"new"=>"blue", "good"=>"green", "fair"=>"orange", "poor"=>"red"}

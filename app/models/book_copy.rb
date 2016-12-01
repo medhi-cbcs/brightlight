@@ -76,14 +76,13 @@ class BookCopy < ActiveRecord::Base
   end
 
   def latest_copy_condition
-    book_condition || copy_conditions.active.order('academic_year_id DESC,created_at DESC').first
+    copy_conditions.active.order('academic_year_id DESC,created_at DESC').take
   end
 
   def latest_condition
     book_condition || 
     copy_conditions.active.order('copy_conditions.academic_year_id DESC,copy_conditions.created_at DESC')
-      .select('book_conditions.*')
-      .joins(:book_condition).take
+      .take.try(:book_condition)
   end
 
   def current_start_condition
