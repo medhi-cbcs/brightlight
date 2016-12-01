@@ -56,8 +56,6 @@ li
 				= link_to 'Editions', book_editions_path
 			li
 				= link_to 'Standard Books', standard_books_path
-            li
-				= link_to 'Book Subjects', subjects_path
 
 - if can? :manage, BookLoan
 	li 
@@ -79,6 +77,8 @@ li
 					= link_to 'Book Loan Status', book_loans_path 
 				li
 					= link_to 'Textbook Fines', book_fines_path
+				li
+					= link_to 'Book Subjects', subjects_path
 - if can? :manage, BookFine
 	li 
 		.collapsible-header.waves-effect.waves-cyan
@@ -91,8 +91,9 @@ li
 					= link_to 'Currency Rates', currencies_path			
 				li
 					= link_to 'Templates', templates_path
-                li
-					= link_to 'Templates Targets', template_targets_path
+				- if can? :manage, TemplateTarget
+					li
+						= link_to 'Templates Targets', template_targets_path
 				li
 					= link_to 'Maintenance', inventory_mtce_path	
 li

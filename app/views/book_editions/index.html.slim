@@ -32,76 +32,98 @@ nav
           i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="List view"  list
 
 .card-panel
-  table.striped
-    tbody
-      - @book_editions.each do |book_edition|
+  - if @view_style == :list
+    table.medium.compact.striped
+      thead
         tr
-          - if @view_style == :list
-            td 
-              .list_description
-                div = link_to book_edition.title, book_edition_path(book_edition, {listpage:params[:page]})
-                - if book_edition.authors.present?
-                  span.label Author:
-                  span.item = book_edition.authors
-                - if book_edition.publisher.present?
-                  span.label Publisher:
-                  span.item = book_edition.publisher
-                .isbn
-                  - if book_edition.isbn10.present?
-                    span.label ISBN 10:
-                    span.item = book_edition.isbn10
-                  - if book_edition.isbn13.present?
-                    span.label ISBN 13:
-                    span.item = book_edition.isbn13
+          th Title
+          th Author 
+          th Publisher 
+          th ISBN
+          th Reference
+          th Copies
+          - if can? :manage, BookEdition
+            th 
+      tbody
+        - @book_editions.each do |book_edition|
+          tr          
+            td = link_to book_edition.title, book_edition_path(book_edition, {listpage:params[:page]})
+            td = book_edition.authors
+            td = book_edition.publisher
+            td = "#{book_edition.isbn13} #{'/ '+book_edition.isbn10 if book_edition.isbn10}"
+            td = book_edition.refno
+            td
+              = link_to book_edition_book_copies_path(book_edition)                  
+                .copies = book_edition.copies
+            - if can? :manage, BookEdition
+              td 
+                = link_to edit_book_edition_path(book_edition)
+                  i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="Edit" edit
+                = link_to book_edition, data: {:confirm => 'Are you sure?'}, :method => :delete, class:'red-text'            
+                  i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="Delete" delete
 
-          - else    
+  - else
+    table.compact.striped
+      tbody
+        - @book_editions.each do |book_edition|
+          tr  
             td style="vertical-align:top"
               - thumbnail = book_edition.small_thumbnail.present? ? book_edition.small_thumbnail : 'book-icon.png' 
               = link_to book_edition_path(book_edition, {listpage:params[:page]})
                 = image_tag(thumbnail, class: 'list_image')
             td
               .list_description
-                dl.row
+                dl.compact.row
                   dt = link_to book_edition.title, book_edition_path(book_edition, {listpage:params[:page]})
                   dd = book_edition.subtitle
-                  - if book_edition.authors.present?
-                    dd.col.s6
-                      .label Author
-                      .item = book_edition.authors
-                  - if book_edition.isbn10.present?
-                    dd.col.s6
-                      .label ISBN 10
-                      .item = book_edition.isbn10
-                  - if book_edition.publisher.present?
-                    dd.col.s6 
-                      .label Publisher
-                      .item = book_edition.publisher
-                  - if book_edition.isbn13.present?
-                    dd.col.s6
-                      .label ISBN
-                      .item = book_edition.isbn13
-                  - if book_edition.published_date.present?
-                    dd.col.s6 
-                      .label Published Date
-                      .item = book_edition.published_date
-                  - if book_edition.page_count.present?
-                    dd.col.s6
-                      .label Page count
-                      .item = book_edition.page_count
-                  - if book_edition.price.present?
-                    dd.col.s6
-                      .label Price
-                      .item = "#{book_edition.currency} #{book_edition.price.to_digits}"
-                  - if book_edition.description.present?
-                    dd.col.s12
-                      .label Description
-                      .item = truncate(strip_tags(book_edition.description), length: 140)
-          - if can? :manage, BookEdition
+                dl.compact.row
+                  dd.col.s2
+                    .label Author
+                  dd.col.s4
+                    .item = book_edition.authors || '---'              
+                  dd.col.s2
+                    .label ISBN10                
+                  dd.col.s4
+                    .item = book_edition.isbn10 || '---'
+                dl.compact.row
+                  dd.col.s2 
+                    .label Publisher
+                  dd.col.s4
+                    .item = book_edition.publisher || '---'
+                  dd.col.s2
+                    .label ISBN13
+                  dd.col.s4
+                    .item = book_edition.isbn13 || '---'
+                dl.compact.row
+                  dd.col.s2 
+                    .label Published
+                  dd.col.s4
+                    .item = book_edition.published_date || '---'
+                  dd.col.s2
+                    .label Page count
+                  dd.col.s4
+                    .item = book_edition.page_count || '---'
+                dl.compact.row
+                  dd.col.s2
+                    .label Price
+                  dd.col.s4
+                    .item = "#{book_edition.currency} #{book_edition.price.try(:to_digits)}" || '---'
+                  dd.col.s2
+                    .label Reference
+                  dd.col.s4
+                    .item = book_edition.refno || '---'
+                dl.compact.row
+                  dd.col.s12
+                    .label Description
+                    .item = truncate(strip_tags(book_edition.description), length: 140)            
             td 
-              = link_to edit_book_edition_path(book_edition)
-                i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="Edit" edit
-              = link_to book_edition, data: {:confirm => 'Are you sure?'}, :method => :delete, class:'red-text'            
-                i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="Delete" delete
+              = link_to book_edition_book_copies_path(book_edition)                  
+                .copies.tooltipped data-position="bottom" data-delay="50" data-tooltip="See book copies" = book_edition.copies
+              - if can? :manage, BookEdition
+                = link_to edit_book_edition_path(book_edition)
+                  i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="Edit" edit
+                = link_to book_edition, data: {:confirm => 'Are you sure?'}, :method => :delete, class:'red-text'            
+                  i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="Delete" delete
 
                 
 .toolbar.z-depth-1

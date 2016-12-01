@@ -9,7 +9,7 @@ class Ability
 
 		# This one calls each method according to the roles
 		@user.roles.each { |role| send(role.downcase) }
-	end
+  end
 
   # Admin user can do anything
 	def admin
@@ -35,6 +35,8 @@ class Ability
     can :update, Student  # for nested form in StudentBook
     can :update, Employee # for nested form in BookLoan
     can :manage, BookLoan
+    can :manage, Subject
+    can :manage, LoanCheck
     can :read, :all
 	end
 
@@ -43,6 +45,7 @@ class Ability
     can :manage, GradeSection
     can :manage, StudentBook
     can :manage, StandardBook
+    can :manage, Carpool
     can :read, :all
 	end
 
@@ -55,11 +58,13 @@ class Ability
     can :manage, Carpool
     can :scan, BookLoan
     can :read, BookLoan
+    can [:read,:create], LoanCheck
     can :read, :all
   end
 
   def staff
     can :manage, Carpool
+    can :manage, Transport
     can :read, :all
   end
 

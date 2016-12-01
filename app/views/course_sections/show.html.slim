@@ -21,7 +21,7 @@ nav
         = link_to @course_section.course
           i.material-icons.left chevron_left
           = @course_section.course.name
-      - if can? :edit, @course_section
+      - if can? :update, @course_section
         li.right
           = link_to edit_course_section_path(@course_section)
             | Edit

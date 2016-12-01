@@ -39,7 +39,7 @@
                 = wicked_pdf_image_tag  "/assets/images/#{book.barcode.upcase}.PNG"
                 = book.barcode
               td.wd10 style='text-align:center;'
-                span = book.book_copy.try(:copy_no) || 'N/A'
+                span = book.book_copy.try(:book_label).try(:name) || 'N/A'
               td.wd10 style='text-align:center;' 
                 = initial_condition.try(:code)
               td.wd5 style='text-align:center;' 

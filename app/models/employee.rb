@@ -15,7 +15,12 @@ class Employee < ActiveRecord::Base
 
 	scope :all_teachers, lambda { where(job_title:'Teacher') }
   scope :active, lambda { where(is_active:true).order(:name) }
-
+	scope :with_book_loans, lambda { |year|
+		joins(:book_loans)
+    .where(book_loans: {academic_year_id: year || AcademicYear.current_id})
+		.order(:name).uniq
+	}
+	
 	def to_s
 		name
 	end

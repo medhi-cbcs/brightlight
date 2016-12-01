@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161012083950) do
+ActiveRecord::Schema.define(version: 20161118043810) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -515,6 +515,30 @@ ActiveRecord::Schema.define(version: 20161012083950) do
   add_index "employees", ["supervisor_id"], name: "index_employees_on_supervisor_id", using: :btree
   add_index "employees", ["user_id"], name: "index_employees_on_user_id", using: :btree
 
+  create_table "families", force: :cascade do |t|
+    t.string   "family_no"
+    t.integer  "family_number"
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
+  end
+
+  add_index "families", ["family_no"], name: "index_families_on_family_no", using: :btree
+  add_index "families", ["family_number"], name: "index_families_on_family_number", using: :btree
+
+  create_table "family_members", force: :cascade do |t|
+    t.integer  "family_id"
+    t.integer  "guardian_id"
+    t.integer  "student_id"
+    t.string   "relation"
+    t.string   "notes"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+  end
+
+  add_index "family_members", ["family_id"], name: "index_family_members_on_family_id", using: :btree
+  add_index "family_members", ["guardian_id"], name: "index_family_members_on_guardian_id", using: :btree
+  add_index "family_members", ["student_id"], name: "index_family_members_on_student_id", using: :btree
+
   create_table "fine_scales", force: :cascade do |t|
     t.integer  "old_condition_id"
     t.integer  "new_condition_id"
@@ -620,11 +644,13 @@ ActiveRecord::Schema.define(version: 20161012083950) do
     t.string   "state"
     t.string   "postal_code"
     t.string   "country"
-    t.integer  "family_no"
+    t.integer  "family_id"
     t.datetime "created_at",    null: false
     t.datetime "updated_at",    null: false
     t.integer  "person_id"
     t.string   "slug"
+    t.string   "email"
+    t.string   "email2"
   end
 
   add_index "guardians", ["person_id"], name: "index_guardians_on_person_id", using: :btree
@@ -690,6 +716,25 @@ ActiveRecord::Schema.define(version: 20161012083950) do
   end
 
   add_index "line_items", ["invoice_id"], name: "index_line_items_on_invoice_id", using: :btree
+
+  create_table "loan_checks", force: :cascade do |t|
+    t.integer  "book_loan_id"
+    t.integer  "book_copy_id"
+    t.integer  "user_id"
+    t.integer  "loaned_to"
+    t.integer  "scanned_for"
+    t.integer  "academic_year_id"
+    t.boolean  "emp_flag"
+    t.boolean  "matched"
+    t.string   "notes"
+    t.datetime "created_at",       null: false
+    t.datetime "updated_at",       null: false
+  end
+
+  add_index "loan_checks", ["academic_year_id"], name: "index_loan_checks_on_academic_year_id", using: :btree
+  add_index "loan_checks", ["book_copy_id"], name: "index_loan_checks_on_book_copy_id", using: :btree
+  add_index "loan_checks", ["book_loan_id"], name: "index_loan_checks_on_book_loan_id", using: :btree
+  add_index "loan_checks", ["user_id"], name: "index_loan_checks_on_user_id", using: :btree
 
   create_table "loan_types", force: :cascade do |t|
     t.string   "code"
@@ -998,17 +1043,6 @@ ActiveRecord::Schema.define(version: 20161012083950) do
   add_index "students", ["person_id"], name: "index_students_on_person_id", using: :btree
   add_index "students", ["slug"], name: "index_students_on_slug", unique: true, using: :btree
 
-  create_table "students_guardians", id: false, force: :cascade do |t|
-    t.integer  "student_id"
-    t.integer  "guardian_id"
-    t.string   "relation"
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
-  end
-
-  add_index "students_guardians", ["guardian_id"], name: "index_students_guardians_on_guardian_id", using: :btree
-  add_index "students_guardians", ["student_id"], name: "index_students_guardians_on_student_id", using: :btree
-
   create_table "subjects", force: :cascade do |t|
     t.string   "code"
     t.string   "name"
@@ -1094,6 +1128,9 @@ ActiveRecord::Schema.define(version: 20161012083950) do
   add_foreign_key "carpools", "transports"
   add_foreign_key "course_section_histories", "employees", column: "instructor_id"
   add_foreign_key "currencies", "users"
+  add_foreign_key "family_members", "families"
+  add_foreign_key "family_members", "guardians"
+  add_foreign_key "family_members", "students"
   add_foreign_key "invoices", "students"
   add_foreign_key "invoices", "users"
   add_foreign_key "late_passengers", "carpools"
@@ -1101,6 +1138,10 @@ ActiveRecord::Schema.define(version: 20161012083950) do
   add_foreign_key "late_passengers", "students"
   add_foreign_key "late_passengers", "transports"
   add_foreign_key "line_items", "invoices"
+  add_foreign_key "loan_checks", "academic_years"
+  add_foreign_key "loan_checks", "book_copies"
+  add_foreign_key "loan_checks", "book_loans"
+  add_foreign_key "loan_checks", "users"
   add_foreign_key "passengers", "grade_sections"
   add_foreign_key "passengers", "students"
   add_foreign_key "passengers", "transports"

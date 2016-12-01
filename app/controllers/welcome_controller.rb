@@ -6,6 +6,7 @@ class WelcomeController < ApplicationController
 	end
 
 	def dashboard
+ 
 	end
 
 	def inventory_mtce

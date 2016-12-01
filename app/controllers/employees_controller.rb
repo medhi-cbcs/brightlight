@@ -5,6 +5,7 @@ class EmployeesController < ApplicationController
   # GET /employees
   # GET /employees.json
   def index
+    authorize! :read, Employee
     respond_to do |format|
       format.html {
         items_per_page = 20
@@ -29,6 +30,7 @@ class EmployeesController < ApplicationController
   # GET /employees/1
   # GET /employees/1.json
   def show
+    authorize! :read, Employee
   end
 
   # GET /employees/new
@@ -39,7 +41,7 @@ class EmployeesController < ApplicationController
 
   # GET /employees/1/edit
   def edit
-    authorize! :update, Employee
+    authorize! :manage, Employee
   end
 
   # POST /employees
@@ -62,7 +64,11 @@ class EmployeesController < ApplicationController
   # PATCH/PUT /employees/1
   # PATCH/PUT /employees/1.json
   def update
-    authorize! :update, Employee
+    if employee_params[:book_loans_attributes].present?
+      authorize! :update, Employee
+    else
+      authorize! :update, Employee
+    end
     respond_to do |format|
       if @employee.update(employee_params)
         format.html do

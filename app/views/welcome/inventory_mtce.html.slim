@@ -43,14 +43,27 @@ ul class="collapsible" data-collapsible="expandable"
         = form_tag prepare_book_receipts_path, remote:true do 
           .row
             .col.s2
-              .label New Academic Year 
+              .label Academic Year 
               = select_tag :book_receipt_year, options_from_collection_for_select(@academic_years,'id','name', @current_year_id), include_blank: 'None'
             .col.s2
-              button.btn.waves-effect.waves-light type="submit" Initialize 
+              button.btn.waves-effect.waves-light type="submit" Prepare 
             .col.s7
               h6 Prepare Book Receipts
               .label Description
               | This will prepare book receipt forms for each student based on the finalized Student Book conditions.
+        hr
+        = form_tag finalize_condition_book_receipts_path, remote:true do 
+          .row
+            .col.s2
+              .label Academic Year 
+              = select_tag :receipt_condition_year, options_from_collection_for_select(@academic_years,'id','name', @current_year_id), include_blank: 'None'
+            .col.s2
+              button.btn.waves-effect.waves-light type="submit" data-confirm="Are you sure?" Finalize
+              /= submit_tag 'Finalize', data: { confirm: 'Are you sure?' }, class:'btn waves-effect waves-light'  
+            .col.s7
+              h6 Finalize Book Condition from Receipts
+              .label Description
+              | This will create this year's initial book conditions based on book conditions inputted in Book Receipt Form.
         hr
         = form_tag prepare_student_books_path, remote:true do 
           .row

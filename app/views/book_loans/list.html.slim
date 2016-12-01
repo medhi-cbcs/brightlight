@@ -11,14 +11,6 @@ ul#year-options.dropdown-content
   - AcademicYear.list_for_menu.each do |year|
     li 
       = link_to year.name, employee_book_loans_path(params.merge(year:year.id).symbolize_keys)
-// NOTE: for these wierd .symbolize_keys, refer to this article https://github.com/rails/rails/issues/21645
-ul#checked-options.dropdown-content
-  li 
-    = link_to 'All', employee_book_loans_path
-  li
-    = link_to 'Checked', employee_book_loans_path(checked:'t', year:params[:year])
-  li
-    = link_to 'Not checked', employee_book_loans_path(checked:'f', year:params[:year])
 
 = form_tag list_action_book_loans_path(employee_id:params[:employee_id]), remote:true do 
   nav
@@ -30,7 +22,7 @@ ul#checked-options.dropdown-content
             i.material-icons.right arrow_drop_down
         li
           a.dropdown-button href="#!" data-activates="year-options"
-            span#year = @academic_year.present? ? "#{@academic_year.name}" : "Academic Year" 
+            span#year = params[:year].present? && params[:year].downcase == 'all' ? 'All' : (@academic_year.present? ? "#{@academic_year.name}" : "Academic Year") 
             i.material-icons.right arrow_drop_down
       #context-buttons style="display:none;"
         ul.right     
@@ -60,8 +52,12 @@ ul#checked-options.dropdown-content
                 | PDF
                 i.material-icons.left description
           li
+            = link_to employee_book_loans_path(@teacher, year: @academic_year.id, format: :xls), target: '_blank'
+              | XLS
+              i.material-icons.left border_all
+          li
             = link_to scan_employee_book_loans_path(@teacher, year: @academic_year.id)
-              | Return Book
+              | Check
               i.material-icons.left import_contacts
           - if can? :manage, BookLoan
             li
@@ -83,9 +79,10 @@ ul#checked-options.dropdown-content
             th = sort_link :barcode
             th = sort_link :title, 'Book title'
             //th = sort_link :out_date
+            td = sort_link :return_status, "Returned?"
             th = sort_link :return_date 
             th = sort_link :subject
-            th = sort_link :return_status, "Checked?"
+            th = "Checked?"
               / a.dropdown-button href="#!" data-activates="checked-options" data-beloworigin="true" 
               /   = params[:checked]=='t' ? "Checked" : params[:checked]=='f' ? 'Not Checked' : 'Checked?'
               /   i.material-icons.right arrow_drop_down          
@@ -103,14 +100,17 @@ ul#checked-options.dropdown-content
                 - if book_loan.book_edition.present?
                   = link_to book_loan.book_edition.try(:title).truncate(50), book_loan.book_edition, remote: true
               //td = book_loan.out_date
+              td style='text-align:center' 
+                = book_loan.return_status == 'R' ? '&#9745;'.html_safe : ''
               td = book_loan.return_date 
               td = book_loan.subject
-              td style='text-align:center' = book_loan.return_status == 'R' ? '&#9745;'.html_safe : ''
+              td style='text-align:center' 
+                = book_loan.loan_checks.for_year(@academic_year.id).all_matched.for_employee(@teacher.id).present? ? '&#9745;'.html_safe : ''
               td 
                 = link_to employee_book_loan_path(employee_id: @teacher.id, id:book_loan.id), remote:true
                   i.material-icons visibility
-                - if can? :edit, BookLoan
-                  = link_to edit_employee_book_loans_path(book_loan.employee,book_loan)
+                - if can? :update, BookLoan
+                  = link_to edit_employee_book_loans_path(book_loan.employee,book_loan, year: @academic_year.id)
                     i.material-icons edit
                 - if can? :delete, BookLoan
                   = link_to book_loan, data: {id: book_loan.id, confirm: 'Are you sure?'}, :method => :delete, class:"red-text delete-link", remote: true

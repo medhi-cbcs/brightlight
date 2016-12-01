@@ -70,7 +70,7 @@ nav
     tbody
       - @book_fines.each do |book_fine|
         tr id="row-#{book_fine.id}"
-          td = link_to book_fine.book_copy.try(:copy_no), book_fine.book_copy
+          td = link_to book_fine.book_copy.try(:book_label).try(:name), book_fine.book_copy
           td = link_to book_fine.book_copy.try(:book_edition).try(:title), book_fine.book_copy.try(:book_edition)
           td = book_fine.old_condition.try(:code)
           td = book_fine.new_condition.try(:code)
