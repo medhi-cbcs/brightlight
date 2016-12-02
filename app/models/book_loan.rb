@@ -42,13 +42,13 @@ class BookLoan < ActiveRecord::Base
   def self.list_for_teachers_receipt(year_id, teacher_id)
     BookLoan.select(['COUNT (book_loans.loan_status) AS loan_qty',
         "COUNT (case when book_loans.return_status = 'R' then 1 else null end) AS return_qty",
-        'subjects.name','book_titles.title','book_editions.authors','book_editions.publisher', 
+        'subjects.name','book_editions.title','book_editions.authors','book_editions.publisher', 
         'book_editions.isbn13','book_editions.isbn10', 'book_loans.notes'])
       .where('book_loans.academic_year_id = ? AND book_loans.employee_id = ?', year_id, teacher_id)      
       .joins("LEFT JOIN book_editions ON book_editions.id = book_loans.book_edition_id")
       .joins("LEFT JOIN book_titles ON book_titles.id = book_loans.book_title_id")
       .joins("LEFT JOIN subjects ON subjects.id = book_titles.subject_id")
-      .group('subjects.name','book_titles.title', 'book_editions.authors','book_editions.publisher', 'book_editions.isbn13', 'book_editions.isbn10','book_loans.notes')
+      .group('subjects.name','book_editions.title', 'book_editions.authors','book_editions.publisher', 'book_editions.isbn13', 'book_editions.isbn10','book_loans.notes')
       .order('name','title')
   end
 
