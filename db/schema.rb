@@ -46,25 +46,6 @@ ActiveRecord::Schema.define(version: 20161118043810) do
 
   add_index "academic_years", ["slug"], name: "index_academic_years_on_slug", unique: true, using: :btree
 
-  create_table "allowance_records", force: :cascade do |t|
-    t.integer  "allowance_id"
-    t.datetime "date"
-    t.float    "amount"
-    t.string   "letter_no"
-    t.string   "description"
-    t.datetime "created_at",   null: false
-    t.datetime "updated_at",   null: false
-  end
-
-  create_table "allowances", force: :cascade do |t|
-    t.integer  "employee_id"
-    t.float    "amount"
-    t.integer  "year_academic_id"
-    t.datetime "created_at",       null: false
-    t.datetime "updated_at",       null: false
-    t.float    "expenses"
-  end
-
   create_table "attachment_types", force: :cascade do |t|
     t.string   "code"
     t.string   "name"
@@ -449,17 +430,6 @@ ActiveRecord::Schema.define(version: 20161118043810) do
   add_index "departments", ["manager_id"], name: "index_departments_on_manager_id", using: :btree
   add_index "departments", ["slug"], name: "index_departments_on_slug", unique: true, using: :btree
 
-  create_table "employee_logs", force: :cascade do |t|
-    t.string   "fingerprintid"
-    t.date     "datelog"
-    t.string   "timein"
-    t.string   "timeout"
-    t.string   "notes"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.integer  "employee_id"
-  end
-
   create_table "employees", force: :cascade do |t|
     t.string   "name"
     t.string   "first_name"
@@ -506,8 +476,6 @@ ActiveRecord::Schema.define(version: 20161118043810) do
     t.boolean  "is_active"
     t.integer  "family_no"
     t.integer  "user_id"
-    t.string   "fingerprintid"
-    t.integer  "shift_id"
   end
 
   add_index "employees", ["department_id"], name: "index_employees_on_department_id", using: :btree
@@ -549,14 +517,6 @@ ActiveRecord::Schema.define(version: 20161118043810) do
 
   add_index "fine_scales", ["new_condition_id"], name: "index_fine_scales_on_new_condition_id", using: :btree
   add_index "fine_scales", ["old_condition_id"], name: "index_fine_scales_on_old_condition_id", using: :btree
-
-  create_table "food_lists", force: :cascade do |t|
-    t.string   "name"
-    t.string   "notes"
-    t.string   "picture_url"
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
-  end
 
   create_table "grade_levels", force: :cascade do |t|
     t.string   "name"
@@ -815,23 +775,6 @@ ActiveRecord::Schema.define(version: 20161118043810) do
     t.date     "received_date"
   end
 
-  create_table "raw_foods", force: :cascade do |t|
-    t.string   "name"
-    t.string   "brand"
-    t.string   "kind"
-    t.float    "min_stock"
-    t.integer  "raw_unit_id"
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
-  end
-
-  create_table "raw_units", force: :cascade do |t|
-    t.string   "name"
-    t.string   "notes"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
   create_table "rosters", force: :cascade do |t|
     t.integer  "course_section_id"
     t.integer  "student_id"
@@ -869,17 +812,6 @@ ActiveRecord::Schema.define(version: 20161118043810) do
     t.date     "end_date"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-  end
-
-  create_table "shifts", force: :cascade do |t|
-    t.string   "shift_name"
-    t.string   "shift_begin"
-    t.string   "shift_end"
-    t.string   "day_name"
-    t.datetime "created_at",   null: false
-    t.datetime "updated_at",   null: false
-    t.string   "shift_begin2"
-    t.string   "shift_end2"
   end
 
   create_table "smart_cards", force: :cascade do |t|
