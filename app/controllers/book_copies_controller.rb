@@ -132,13 +132,9 @@ class BookCopiesController < ApplicationController
     authorize! :update, BookCopy
     if params[:book_copy]
       list = params[:book_copy].reject {|k,v| k == 'all'}
-      @book_copies = BookCopy.find list.keys
-      # @book_copies.update_all condition_id:params[:condition] if params[:condition]
-      # @book_copies.update_all status_id:params[:status] if params[:status]
-      # @book_copies.each do |book_copy|
-      #   # book_copy.update(book_copy_params)
-      #   puts "Updating #{book_copy.barcode} to conditon: #{params[:tocondition]}, status: #{params[:tostatus]}"    
-      # end
+      @book_copies = BookCopy.where id: list.keys
+      @book_copies.update_all condition_id:params[:condition] if params[:condition]
+      @book_copies.update_all status_id:params[:status] if params[:status]
       book_edition = @book_copies.last.book_edition
       redirect_to book_edition_book_copies_path(book_edition), notice: 'Selected book copies were successfully updated.'
     else
