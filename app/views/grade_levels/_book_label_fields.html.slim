@@ -1,9 +1,9 @@
 .row.compact
 	.input-field.col.s2
+
+		= f.text_field :id, disabled:true
+	.input-field.col.s2
 		= f.label :name, class: 'active'
 		= f.text_field :name
-	.input-field.col.s4
-		= f.label :student, class: 'active'
-		= f.collection_select :student_id, @students, :id, :name, {}, {class: 'browser-default'}
 	.input-field.col.s4 style="padding-top:8px"
 		= link_to_remove_association "Remove", f, class: "waves-effect waves-teal btn btn-flat red-text btn-small"

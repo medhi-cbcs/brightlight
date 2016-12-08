@@ -12,10 +12,9 @@ nav
     ul.collection
       - GradeLevel.all.each do |grade|
         li.collection-item
-          = "Grade #{grade.name}: "
-          // TODO: Fix this. We should not need to check academic_year.
+          = "#{grade.name}: "
           - grade.grade_sections.each do |section|                        
-              = link_to edit_labels_grade_level_path(id:grade.id,section:section.name)
+              = link_to edit_labels_grade_level_path(id:grade.id,section:section.id)
                 .chip
                   i.material-icons class
                   = section.name
