@@ -160,7 +160,6 @@ class BookCopy < ActiveRecord::Base
         start_date: Date.today,
         post: 0
       )
-      sync_book_label
     end
 
     def sync_book_label
