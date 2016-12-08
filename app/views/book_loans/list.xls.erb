@@ -63,7 +63,7 @@
       <Row>
         <Cell><Data ss:Type="Number"><%= i %></Data></Cell>
         <Cell><Data ss:Type="String"><%= book_loan.barcode %></Data></Cell>
-        <Cell><Data ss:Type="String"><%= book_loan.title %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= book_edition.try(:title) %></Data></Cell>
         <Cell><Data ss:Type="String"><%= book_loan.subject %></Data></Cell>
         <Cell><Data ss:Type="String"><%= book_loan.return_date %></Data></Cell>
         <Cell><Data ss:Type="String"><%= book_loan.return_status ? 'Yes' : 'No' %></Data></Cell>
