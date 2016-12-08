@@ -1,16 +1,11 @@
 = form_for @book_copy do |f| 
-  .card
+  .card-panel
     .card-content
       table
         tr
           td style="vertical-align:top"
             - thumbnail = @book_copy.book_edition.present? ? @book_copy.book_edition.small_thumbnail : 'book-icon.png' 
-            = image_tag(thumbnail, class: 'list_image')
-            .row
-              .input-field.col.s12
-                = f.label 'Change book Edition'
-                = f.hidden_field :book_edition_id
-                = text_field_tag :book_edition_title, "", id: "title_autocomplete", placeholder: "Search book title"
+            = image_tag(thumbnail, class: 'list_image')            
           td
             .list_description
               dl.row
@@ -34,6 +29,10 @@
                   - @book_copy.errors.full_messages.each do |message|
                     li = message
             .row
+              .input-field.col.s12
+                = f.hidden_field :book_edition_id
+                = f.label 'Change Book Edition'
+                = text_field_tag :book_edition_title, "", id: "title_autocomplete", placeholder: "Search book title"
               .input-field.col.s4
                 = f.label :barcode, class: 'active'
                 = f.text_field :barcode
@@ -43,7 +42,6 @@
               .input-field.col.s4
                 = f.label 'Status', class: 'active'
                 = f.collection_select :status_id, Status.all, :id, :name, prompt:true
-            .row
               .input-field.col.s12
                 = f.label :notes, class: 'active'
                 = f.text_field :notes

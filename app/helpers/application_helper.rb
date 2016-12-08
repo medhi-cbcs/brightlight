@@ -17,7 +17,7 @@ module ApplicationHelper
   end
 
   def remote_link_to_delete(model, options, &block)
-    data_options = {id: model.id, message: options[:message], confirm: 'Are you sure?'}
+    data_options = {id: model.id, message: options[:message], confirm: 'This will delete selected item. Continue?'}
     css_class = 'delete-link '+options[:class]
     link_to model, data: data_options, method: :delete, remote: true, class: css_class, &block
   end
