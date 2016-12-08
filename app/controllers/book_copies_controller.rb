@@ -85,6 +85,7 @@ class BookCopiesController < ApplicationController
     @book_copies = @book_edition.book_copies.order(:book_label_id)
     @grade_level_ids = GradeLevel.all.collect(&:id)
     @grade_sections = GradeSection.all
+    @book_labels_for_menu = GradeSection.all.includes(:book_labels).order(:id)
 
     if params[:s].present?
       @grade_section = @grade_sections.where(id:params[:s]).first
@@ -130,16 +131,18 @@ class BookCopiesController < ApplicationController
   # POST /book_copies/update_multiple
   def update_multiple
     authorize! :update, BookCopy
-    if params[:book_copy]
-      list = params[:book_copy].reject {|k,v| k == 'all'}
-      @book_copies = BookCopy.where id: list.keys
-      @book_copies.update_all condition_id:params[:condition] if params[:condition]
-      @book_copies.update_all status_id:params[:status] if params[:status]
-      book_edition = @book_copies.last.book_edition
-      redirect_to book_edition_book_copies_path(book_edition), notice: 'Selected book copies were successfully updated.'
-    else
-      redirect_to book_edition_book_copies_path(book_edition)
+    list = params[:book_copy].reject {|k,v| k.downcase == 'all'}
+    @book_copies = BookCopy.where id: list.keys
+    if params[:condition]
+      @book_copies.each do |copy|
+        copy.create_condition(params[:condition], AcademicYear.current_id, current_user.id)
+      end
     end
+    if params[:status]
+      @book_copies.update_all status_id:params[:status]
+    end
+    book_edition = @book_copies.last.book_edition      
+    redirect_to book_edition_book_copies_path(book_edition)
   end
 
   # DELETE /book_copies/1

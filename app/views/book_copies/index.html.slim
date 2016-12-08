@@ -54,11 +54,11 @@ h4 = @book_edition.title
   ul#status-edit-menu.dropdown-content
     - Status.all.each do |status|
       li 
-        button type="submit" formaction="#{update_multiple_book_copies_path}" name="status" value="#{status.id}" data-confirm="Update status of all selected books?" #{status.name}
+        button type="submit" formaction="#{update_multiple_book_copies_path}" name="status" value="#{status.id}" data-confirm="This will update the status of selected books. Continue?" #{status.name}
   ul#condition-edit-menu.dropdown-content
     - BookCondition.all.each do |condition|
       li 
-        button type="submit" formaction="#{update_multiple_book_copies_path}" name="condition" value="#{condition.id}" data-confirm="Update condition of all selected books?" #{condition.code}
+        button type="submit" formaction="#{update_multiple_book_copies_path}" name="condition" value="#{condition.id}" data-confirm="This will update the condition of selected books. Continue?" #{condition.code}
   ul#condition-options.dropdown-content
     li  
       = link_to 'All', book_edition_book_copies_path(params.merge(condition:'all').symbolize_keys)
