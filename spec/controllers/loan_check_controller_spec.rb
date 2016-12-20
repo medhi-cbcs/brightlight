@@ -1,5 +1,5 @@
-require 'rails_helper'
+# require 'rails_helper'
 
-RSpec.describe LoanCheckController, type: :controller do
+# RSpec.describe LoanCheckController, type: :controller do
 
-end
+# end

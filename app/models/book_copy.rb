@@ -38,10 +38,10 @@ class BookCopy < ActiveRecord::Base
     case condition_id 
     when 'na'
       query.where('c.id is null')
-    when '1'..'5'
-      query.where('c.book_condition_id = ?', condition_id)
-    else
+    when nil
       query
+    else 
+      query.where('c.book_condition_id = ?', condition_id)
     end
   }
 
