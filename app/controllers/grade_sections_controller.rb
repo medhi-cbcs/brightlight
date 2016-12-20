@@ -130,9 +130,13 @@ class GradeSectionsController < ApplicationController
       if @grade_section.update(grade_section_params)
         format.html {
           if grade_section_params[:book_receipts_attributes].present?
-            redirect_to book_receipts_path(gs:params[:gs],r:params[:r],year:params[:year]), notice: 'Books were successfully added to book receipt.'
+            redirect_to book_receipts_path(gs:params[:gs], r:params[:r], year:params[:year]), notice: 'Books were successfully added to book receipt.'
           else
-            redirect_to grade_section_path(@grade_section, year:params[:year]), notice: 'Grade section was successfully updated.'
+            if params[:year].present?
+              redirect_to grade_section_path(@grade_section, year:params[:year]), notice: 'Grade section was successfully updated.'
+            else
+              redirect_to grade_section_path(@grade_section), notice: 'Grade section was successfully updated.'
+            end
           end
         }
         format.json { render :show, status: :ok, location: @grade_section }
