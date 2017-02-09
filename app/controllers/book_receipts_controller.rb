@@ -17,7 +17,7 @@ class BookReceiptsController < ApplicationController
                       .joins(:book_edition)
                       .select('book_receipts.*, book_editions.title as title')
                       .order("#{sort_column} #{sort_direction}")
-                      .includes([:book_edition])
+                      .includes([:book_edition, :book_copy, :initial_condition])
 
       @number_of_students = @book_copies.maximum(:roster_no)
     end
@@ -145,11 +145,12 @@ class BookReceiptsController < ApplicationController
   # DELETE /book_receipts/1
   # DELETE /book_receipts/1.json
   def destroy
-    authorize! :destroy, @bookReceipt
+    authorize! :destroy, @book_receipt
     @book_receipt.destroy
     respond_to do |format|
       format.html { redirect_to book_receipts_url, notice: 'Book receipt was successfully destroyed.' }
       format.json { head :no_content }
+      format.js { head :no_content }
     end
   end
 
