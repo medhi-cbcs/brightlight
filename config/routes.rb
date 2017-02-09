@@ -14,7 +14,7 @@ Rails.application.routes.draw do
   resources :book_assignments
   resources :book_grades
   resources :academic_years
-  resources :employees
+
   resources :copy_conditions
   resources :book_conditions
 
@@ -137,6 +137,10 @@ Rails.application.routes.draw do
   put  'students/:student_id/book_loans/:id' => 'book_loans#update'
   delete  'students/:student_id/book_loans/:id' => 'book_loans#destroy'
 
+  get  'employees/reminder' => 'employees#reminder', as: :employees_reminder
+
+  resources :employees
+  
   get  'employees/:employee_id/book_loans' => 'book_loans#list', as: :employee_book_loans
   get  'employees/:employee_id/teacher_receipt' => 'book_loans#teacher_receipt', as: :employee_book_loans_receipt
   post 'employees/:employee_id/book_loans' => 'book_loans#create_tm'

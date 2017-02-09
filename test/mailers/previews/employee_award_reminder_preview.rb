@@ -1,6 +1,6 @@
 class EmployeeAwardReminderPreview < ActionMailer::Preview
 
-  def sample_mail_preview
+  def sample_email
     EmployeeAwardReminder.sample_email
   end
   

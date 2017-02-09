@@ -157,6 +157,10 @@ li
 				li
 					a href="/users" 
 						| Users
+				li
+					= link_to 'Send reminder', employees_reminder_path, remote: true  
+
+
 - if signed_in?
 	li
 		.collapsible-header.waves-effect.waves-cyan
