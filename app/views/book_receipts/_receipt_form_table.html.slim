@@ -26,5 +26,6 @@
           td.wd10
             = link_to edit_book_receipt_path(book, gs:params[:gs], r:params[:r], year:params[:year]) 
               i.material-icons edit
-            = link_to book, data: {id: book.id, confirm: 'Are you sure?'}, :method => :delete, class:"red-text delete-link", remote: true
+            /= link_to book, data: {id: book.id, confirm: 'Are you sure?'}, :method => :delete, class:"red-text delete-link", remote: true
+            = remote_link_to_delete book, message: "Book deleted", class: "left waves-effect waves-light red-text"
               i.material-icons delete
