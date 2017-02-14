@@ -117,6 +117,7 @@ class BookLoansController < ApplicationController
         format.html { redirect_to @book_loan, notice: 'Book loan was successfully updated.' }
         format.json { render :show, status: :ok, location: @book_loan }
       else
+        @borrower = @book_loan.employee || @book_loan.student
         format.html { render :edit }
         format.json { render json: @book_loan.errors, status: :unprocessable_entity }
       end
@@ -162,14 +163,15 @@ class BookLoansController < ApplicationController
     else #if params[:year].blank?
       @academic_year = AcademicYear.current      
     end 
-    @book_loans = BookLoan.list_for_teacher params[:employee_id], params[:year]
+    @book_loans = BookLoan.list_for_teacher(params[:employee_id], params[:year])
+                    .includes([:loan_checks])
     @count = @book_loans.length
 
     respond_to do |format|
       format.html do
         @items_per_page = 30
-        @book_loans = @book_loans.order("#{sort_column} #{sort_direction}")
-                        .paginate(page: params[:page], per_page: @items_per_page)                               
+        @book_loans = @book_loans.order("#{sort_column} #{sort_direction}")                        
+                        .paginate(page: params[:page], per_page: @items_per_page)                            
         # For Menu
         @teachers = Employee.with_book_loans @academic_year.id 
         # Checked filter

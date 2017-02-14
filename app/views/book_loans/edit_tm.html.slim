@@ -1,6 +1,12 @@
 = form_for [@teacher, @book_loan], url: "/employees/#{@teacher.id}/book_loans/#{@book_loan.id}" do |f|
   - book_loan = f.object  
   h5 Editing Teacher's Book Loan Record
+  - if @book_loan.errors.any?
+    #error_explanation
+      h2 = "#{pluralize(@book_loan.errors.count, "error")} prohibited this book loan from being saved:"
+      ul
+        - @book_loan.errors.full_messages.each do |message|
+          li = message
   .card-panel
     .list_description
       dl.row

@@ -3,7 +3,7 @@
     .card-content
       - if @book_loan.errors.any?
         #error_explanation
-          h2 = "#{pluralize(@book_loan.errors.count, "error")} prohibited this book_loan from being saved:"
+          h2 = "#{pluralize(@book_loan.errors.count, "error")} prohibited this book loan from being saved:"
           ul
             - @book_loan.errors.full_messages.each do |message|
               li = message
