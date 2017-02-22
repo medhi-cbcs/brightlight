@@ -19,8 +19,13 @@
       }
 
 nav
-  .nav-wrapper
+  .nav-wrapper    
     ul.right
+      li
+        - if params[:active] == 'f' or params[:active].blank?
+          = link_to 'Hide inactive', users_path(params.merge(active: 't'))
+        - else 
+          = link_to 'Show all', users_path(params.merge(active: 'f'))
       li
         = link_to 'Export as CSV', users_path(format: :csv)
 
@@ -40,8 +45,9 @@ nav
           td = user.email
           td = user.roles.map(&:to_s).map(&:capitalize).join(', ')
           td
-            = link_to employee_path(user.employee_id)
-              i.material-icons account_circle
+            - if user.employee.present?
+              = link_to employee_path(user.employee_id)
+                i.material-icons account_circle
           td
             = link_to user
               i.material-icons visibility
