@@ -1,16 +1,21 @@
 .navbar-fixed
   nav
     .nav-wrapper
-      ul style='height:100%'
+      ul.left style='height:100%'
         li style='height:100%;width:230px'
-          .input-field#car-entry style='height:100%; margin:0'
+          .input-field#car-entry data-gate="IN" style='height:100%; margin:0'
             /style='font-size:1.5rem; padding-left:30px'
             = text_field_tag :transport_name, nil, type:'search', placeholder:'Shuttle/Family No', style:'border:none;height:100%'
             = label_tag :transport_name 
               i.material-icons add
             i.material-icons#submit-carpool send
-      
-        li.right
+      ul.right
+        - if can? :manage, Carpool
+          li
+            .input-field.col.s2
+              = link_to "#settings-modal", class:"modal-trigger"
+                i.material-icons settings
+        li
           .input-field
             = check_box_tag :auto_update, value = "1", checked = true
             = label_tag :auto_update, '', style:'top:9px; left:9px'
@@ -91,7 +96,24 @@ script#expected-pax-template type="text/x-custom-template"
       = "__pax.grade_"
     .col.s3
       = "(__transport.name_)"
+
+#settings-modal.modal.modal-fixed-footer
+  form#settings action="#"
+    .modal-content
+      h4 Settings
+      p Use this setting for computers connected to a scanner at the gate
+      .input-field
+        input name="group1" type="radio" id="entry-gate"
+        label for="entry-gate" Entrance Gate (IN)
+      .input-field
+        input name="group1" type="radio" id="exit-gate"
+        label for="exit-gate" Exit Gate (OUT)
+      
+    .modal-footer
+      button.btn.waves-effect.waves-light type="submit" class="modal-action modal-close waves-effect" Save
+      = link_to "Close", "#!", id:"cancel-settings", class:"modal-action modal-close waves-effect btn-flat"
     
+
 javascript:
   $(document).on("page:load", function() {
     CarpoolApp.init();
