@@ -43,6 +43,15 @@ class Carpool < ActiveRecord::Base
   before_create :fill_in_details
   after_update  :sync_late_passengers
 
+  # if id is a string with a length greater of 10 digits, it's assumed to be a RFID UID
+  def self.find_uid(id)
+    if id.to_s.length >= 10
+      find_by_barcode id.to_s
+    else
+      find id
+    end
+  end
+
   private
 
     def fill_in_details
@@ -59,7 +68,6 @@ class Carpool < ActiveRecord::Base
       self.arrival = created_at
       self.period = arrival < Time.now.noon ? 0 : 1
       self.active = true
-      self.status = 'ready'
       self.category = transport.category      
     end
 

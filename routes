@@ -183,6 +183,8 @@
                           book_copy_conditions GET      /book_copies/:id/conditions(.:format)                             book_copies#conditions
                                book_copy_loans GET      /book_copies/:id/loans(.:format)                                  book_copies#loans
                        book_copy_check_barcode GET      /book_copies/:id/check_barcode(.:format)                          book_copies#check_barcode
+                           dispose_book_copies POST     /book_copies/dispose(.:format)                                    book_copies#dispose
+                   update_multiple_book_copies POST     /book_copies/update_multiple(.:format)                            book_copies#update_multiple
                         edit_merge_book_titles POST     /book_titles/edit_merge(.:format)                                 book_titles#edit_merge
                              merge_book_titles POST     /book_titles/merge(.:format)                                      book_titles#merge
                             delete_book_titles POST     /book_titles/delete(.:format)                                     book_titles#delete
@@ -311,6 +313,10 @@ autocomplete_book_edition_title_standard_books GET      /standard_books/autocomp
                                                PATCH    /employees/:employee_id/book_loans/:id(.:format)                  book_loans#update_tm
                                                PUT      /employees/:employee_id/book_loans/:id(.:format)                  book_loans#update_tm
                                                DELETE   /employees/:employee_id/book_loans/:id(.:format)                  book_loans#destroy_tm
+                          employee_loan_checks GET      /employees/:employee_id/loan_checks(.:format)                     loan_checks#index
+                       new_employee_loan_check GET      /employees/:employee_id/loan_check/new(.:format)                  loan_checks#new
+                                               POST     /employees/:employee_id/loan_check(.:format)                      loan_checks#create
+                                               DELETE   /employees/:employee_id/loan_check(.:format)                      loan_checks#delete
                           calculate_book_fines GET      /book_fines/calculate(.:format)                                   book_fines#calculate
                             current_book_fines GET      /book_fines/current(.:format)                                     book_fines#current
           autocomplete_student_name_book_fines GET      /book_fines/autocomplete_student_name(.:format)                   book_fines#autocomplete_student_name

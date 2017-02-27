@@ -63,7 +63,7 @@ class Ability
   end
 
   def staff
-    can :manage, Carpool
+    can [:create,:read,:update,:destroy], Carpool
     can :manage, Transport
     can :read, :all
   end
