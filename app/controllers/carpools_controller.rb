@@ -14,7 +14,7 @@ class CarpoolsController < ApplicationController
   # GET /carpools/poll
   def poll
     authorize! :read, Carpool
-    @carpools = Carpool..all.order(:updated_at)
+    @carpools = Carpool.all.order(:updated_at)
     if params[:am]
       @carpools = @carpools.today_am
     elsif params[:pm]
