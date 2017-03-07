@@ -9,7 +9,7 @@ class SubjectsController < ApplicationController
       format.html {
         items_per_page = 20
         if params[:search]
-          @subjects = Subject.where('UPPER(name) LIKE ?', "%#{params[:search].upcase}%").paginate(page: params[:page], per_page: items_per_page).order("#{sort_column} #{sort_direction}")
+          @subjects = Subject.joins('Left join book_titles on book_titles.subject_id = subjects.id').select('subjects.*, COUNT(book_titles.subject_id) as books').group('subjects.id').where('UPPER(name) LIKE ?', "%#{params[:search].upcase}%").paginate(page: params[:page], per_page: items_per_page).order("#{sort_column} #{sort_direction}")
         else
           @subjects = Subject.joins('Left join book_titles on book_titles.subject_id = subjects.id').select('subjects.*, COUNT(book_titles.subject_id) as books').group('subjects.id').paginate(page: params[:page], per_page: items_per_page).order("#{sort_column} #{sort_direction}")
         end
