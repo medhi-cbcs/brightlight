@@ -1,6 +1,6 @@
 class CarpoolsController < ApplicationController
   before_action :set_carpool, only: [:show, :update, :destroy]
-  before_action :check_format, except: [:index]
+  before_action :check_format, except: [:index, :reorder]
 
   layout 'sans_sidebar'
 
@@ -14,7 +14,7 @@ class CarpoolsController < ApplicationController
   # GET /carpools/poll
   def poll
     authorize! :read, Carpool
-    @carpools = Carpool.all.order(:updated_at)
+    @carpools = Carpool.all.order(:sort_order,:updated_at)
     if params[:am]
       @carpools = @carpools.today_am
     elsif params[:pm]
@@ -26,7 +26,7 @@ class CarpoolsController < ApplicationController
       @carpools = @carpools.since params[:since]
     else
       @carpools = @carpools.since Date.today.beginning_of_day.to_i
-    end    
+    end
     @timestamp = @carpools.present? ? (@carpools.last.updated_at.to_f*1000).to_i : nil
     respond_to :json
   end
@@ -101,6 +101,12 @@ class CarpoolsController < ApplicationController
       format.html { redirect_to carpools_url, notice: 'Carpool was successfully destroyed.' }
       format.json { head :no_content }
     end
+  end
+
+  def reorder
+    authorize! :update, Carpool
+    @carpools = Carpool.update(params[:carpools].keys, params[:carpools].values)
+    head :no_content
   end
 
   private

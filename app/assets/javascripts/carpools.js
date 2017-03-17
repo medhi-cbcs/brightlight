@@ -190,10 +190,12 @@ var CarpoolApp = (function(){
           Carpool.handleCarpoolEntry();
         }
       });
-      $(".carpool").on("click", ".done-wrapper", Carpool.handleDone.bind(this));
-      $(".carpool").on("click", ".wait-wrapper", Carpool.handleWait.bind(this));
+      $(".carpool").on("click", ".done-button", Carpool.handleDone.bind(this));
+      $(".carpool").on("click", ".wait-button", Carpool.handleWait.bind(this));
       $("#settings").on("submit", Carpool.saveSettings.bind(this));
       $("#cancel-settings").on("click", Carpool.resetSettings);
+      $(".carpool").on("click", ".reorder-button", Carpool.handleEdit.bind(this));
+      $(".carpool").on("click", ".reorder-done-button", Carpool.handleDoneEditing.bind(this));
     },
 
     handleScan: function (el, rfid_uid) {
@@ -365,6 +367,37 @@ var CarpoolApp = (function(){
       } else if (localStorage.scanGate == "OUT") {
         $("#exit-gate").prop("checked", true);
       }
+    },
+
+    handleDoneEditing: function() {
+      console.log("Submitting new order");
+      $(".reorder-done-button").hide();
+      $(".reorder-button").show();
+      $(".drag-handle").hide();
+      $('.done-button').show();
+      $('.wait-button').show();
+      $('.order-handle').hide();
+    },
+    
+    handleEdit: function() {
+      console.log("Editing order");
+      $('.reorder-button').hide();
+      $('.done-button').hide();
+      $('.wait-button').hide();
+      $('.order-handle').show();
+      $('.drag-handle').show();
+      $('.reorder-done-button').show();
+      $(".sortable").sortable({ 
+        handle: $('.drag-handle'),
+        // containment: '.sortable',
+        placeholder: "ui-state-highlight",
+        update: function(event, ui){            
+          $('ul li').each(function(){
+            console.log($(this));
+            $(this).find('input.position').attr('value', $(this).index());
+          });                 
+        }
+      });
     }
 
   };

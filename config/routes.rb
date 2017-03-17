@@ -175,6 +175,7 @@ Rails.application.routes.draw do
   resources :carpools do
     collection do
       get 'poll'
+      put 'reorder'
     end
   end
 
