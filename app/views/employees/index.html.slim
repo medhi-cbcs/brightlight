@@ -44,7 +44,7 @@ nav
           - if employee.is_active == true
             td = "Active"
           - else
-            td = "Resign"
+            td = "Inactive"
           - if can? :manage, Employee
             td = link_to 'Edit', edit_employee_path(employee), class: "btn waves-effect waves-teal btn-flat btn-small"
 

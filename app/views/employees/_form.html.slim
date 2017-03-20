@@ -19,11 +19,6 @@
         = f.label :last_name, class: 'active'
         = f.text_field :last_name
     .row
-      .section-header.col.s12 Email
-      .input-field.col.s8
-        = f.label :email, class: 'active'
-        = f.text_field :email
-    .row
       .section-header.col.s12 Personal Details
       .input-field.col.s4
         = f.label :gender, class: 'active'
@@ -33,56 +28,34 @@
         = f.date_field :date_of_birth
       .input-field.col.s4
         = f.label :place_of_birth, class: 'active'
-        = f.text_field :place_of_birth
+        = f.text_field :place_of_birth  
     .row
       .input-field.col.s4
         = f.label :marital_status, class: 'active'
-        = f.text_field :marital_status
-      .input-field.col.s4
+        = f.select :marital_status, ['Single', 'Married','Widowed','Divorced'], prompt: true
+      .input-field.col.s2
         = f.label 'No of children', class: 'active'
         = f.number_field :children_count
+      .input-field.col.s2
+        = f.label :blood_type, class: 'active'
+        = f.select :blood_type, ['A','B','O','AB'], prompt: true   
       .input-field.col.s4
         = f.label :nationality, class: 'active'
-        = f.text_field :nationality
-    .row
-      .input-field.col.s4
-        = f.label :blood_type, class: 'active'
-        = f.text_field :blood_type
-    .row
-      .section-header.col.s12 Employment
-      .input-field.col.s4
-        = f.label :department_id, class: 'active'
-        = f.collection_select :department_id, Department.all.order(:name), :id, :name, prompt: true
-      .input-field.col.s4
-        = f.label :joining_date, class: 'active'
-        = f.date_field :joining_date
-      .input-field.col.s4
-        = f.label :job_title, class: 'active'
-        = f.text_field :job_title
-      .input-field.col.s4
-        = f.label :employee_number, class: 'active'
-        = f.text_field :employee_number
-      .input-field.col.s4
-        = f.label :experience_year, class: 'active'
-        = f.number_field :experience_year
-      .input-field.col.s4
-        = f.label :experience_month, class: 'active'
-        = f.number_field :experience_month
-      .input-field.col.s4
-        = f.label :employment_status, class: 'active'
-        = f.select :employment_status, [['Probation','probation'],['Contract','contract'],['Permanent','permanent']]
-      .input-field.col.s4
-        = f.label :supervisor_id, class: 'active'
-        = f.collection_select :supervisor_id, Employee.all.order(:name), :id, :name, prompt: true
-
+        = f.text_field :nationality    
     .row
       .section-header.col.s12 Contacts
-      .input-field.col.s4
+      .input-field.col.s8
         = f.label :home_address_line1, class: 'active'
         = f.text_field :home_address_line1
       .input-field.col.s4
+        = f.label :mobile_phone, class: 'active'
+        = f.text_field :mobile_phone
+      .input-field.col.s8
         = f.label :home_address_line2, class: 'active'
         = f.text_field :home_address_line2
+      .input-field.col.s4
+        = f.label :home_phone, class: 'active'
+        = f.text_field :home_phone    
       .input-field.col.s4
         = f.label :home_city, class: 'active'
         = f.text_field :home_city
@@ -90,33 +63,58 @@
         = f.label :home_state, class: 'active'
         = f.text_field :home_state
       .input-field.col.s4
-        = f.label :home_country, class: 'active'
-        = f.text_field :home_country
+        = f.label :office_phone, class: 'active'
+        = f.text_field :office_phone
       .input-field.col.s4
         = f.label :home_postal_code, class: 'active'
         = f.text_field :home_postal_code
       .input-field.col.s4
-        = f.label :mobile_phone, class: 'active'
-        = f.text_field :mobile_phone
-      .input-field.col.s4
-        = f.label :home_phone, class: 'active'
-        = f.text_field :home_phone
-      .input-field.col.s4
-        = f.label :office_phone, class: 'active'
-        = f.text_field :office_phone
+        = f.label :home_country, class: 'active'
+        = f.text_field :home_country
       .input-field.col.s4
         = f.label :other_phone, class: 'active'
         = f.text_field :other_phone
-      .input-field.col.s4
-        = f.label :email, class: 'active'
-        = f.text_field :email
+      .input-field.col.s8
+        = f.label :emergency_contact_name, class: 'active'
+        = f.text_field :emergency_contact_name
       .input-field.col.s4
         = f.label :emergency_contact_number, class: 'active'
         = f.text_field :emergency_contact_number
+      .input-field.col.s8    
       .input-field.col.s4
-        = f.label :emergency_contact_name, class: 'active'
-        = f.text_field :emergency_contact_name
-
+        = f.label :email, class: 'active'
+        = f.text_field :email
+    .row
+      .section-header.col.s12 Employment
+      .input-field.col.s4
+        = f.label :joining_date, class: 'active'
+        = f.date_field :joining_date
+      .input-field.col.s4
+        = f.label :employee_number, class: 'active'
+        = f.text_field :employee_number
+      .input-field.col.s4
+        = f.label :Status, class: 'active'
+        = f.select :is_active, [['Active', true], ['Inactive', false]], prompt: true  
+    .row  
+      .input-field.col.s4
+        = f.label :department_id, class: 'active'
+        = f.collection_select :department_id, Department.all.order(:name), :id, :name, prompt: true
+      .input-field.col.s4
+        = f.label :supervisor_id, class: 'active'
+        = f.collection_select :supervisor_id, Employee.all.order(:name), :id, :name, prompt: true   
+      .input-field.col.s4
+        = f.label :job_title, class: 'active'
+        = f.text_field :job_title
+      .input-field.col.s4
+        = f.label :employment_status, class: 'active'
+        = f.select :employment_status, [['Probation','probation'],['Contract','contract'],['Permanent','permanent']], prompt: true
+      .input-field.col.s4
+        = f.label :experience_year, class: 'active'
+        = f.number_field :experience_year
+      .input-field.col.s4
+        = f.label :experience_month, class: 'active'
+        = f.number_field :experience_month
+      
     .row
       .section-header.col.s12 Education
       .input-field.col.s4
