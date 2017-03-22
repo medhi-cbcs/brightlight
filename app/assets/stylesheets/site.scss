@@ -881,6 +881,14 @@ ul {
 			}
 		}		
 	}
+
+	ul {
+		li {  
+			padding: 8px; 
+			float: left; 
+			height: 90px; 
+		}
+	}
 	
 	.ready {
 		background-color: $blue;
@@ -1233,12 +1241,6 @@ td.barby-cell.on { background: #000; }
 		width: 25%;
 		margin-left: 0;
 	}	
-}
-
-.sortable li {  
-	padding: 8px; 
-	float: left; 
-	height: 90px; 
 }
 
 .drag-handle i {
