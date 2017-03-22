@@ -15,10 +15,10 @@
             .input-field.col.s2
               = link_to "#settings-modal", class:"modal-trigger"
                 i.material-icons settings
-        li
-          .input-field
-            = check_box_tag :auto_update, value = "1", checked = true
-            = label_tag :auto_update, '', style:'top:9px; left:9px'
+        / li
+        /   .input-field
+        /     = check_box_tag :auto_update, value = "1", checked = true
+        /     = label_tag :auto_update, '', style:'top:9px; left:9px'
 
 .card.carpool
   .row
@@ -83,8 +83,7 @@ script#carpool-template type="text/x-custom-template"
         .order-handle data-id="__transport.id_" style="display:none"
           .drag-handle
             i.material-icons dehaze
-          / = link_to edit_carpool_path("__carpool.id_"), remote: true
-        /   i.material-icons style="padding-top:9px; color:salmon" pause_circle_outline
+
 
 script#passenger-template type="text/x-custom-template"
   .row.pax-entry id="passenger-__pax.id_"

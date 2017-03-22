@@ -3,6 +3,7 @@ class CarpoolsController < ApplicationController
   before_action :check_format, except: [:index, :reorder]
 
   layout 'sans_sidebar'
+  @@reorder = 0
 
   # GET /carpools
   # GET /carpools.json
@@ -22,12 +23,13 @@ class CarpoolsController < ApplicationController
     else
       @carpools = @carpools.today
     end
-    if params[:since]
-      @carpools = @carpools.since params[:since]
-    else
-      @carpools = @carpools.since Date.today.beginning_of_day.to_i
-    end
+
     @timestamp = @carpools.present? ? (@carpools.last.updated_at.to_f*1000).to_i : nil
+    @reorder = @@reorder
+    
+    if params[:since]      
+      @carpools = @carpools.since params[:since] unless params[:since].to_i < @reorder
+    end    
     respond_to :json
   end
 
@@ -106,6 +108,7 @@ class CarpoolsController < ApplicationController
   def reorder
     authorize! :update, Carpool
     @carpools = Carpool.update(params[:carpools].keys, params[:carpools].values)
+    @@reorder = (Time.now.to_f*1000).to_i
     head :no_content
   end
 
