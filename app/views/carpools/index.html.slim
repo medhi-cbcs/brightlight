@@ -33,11 +33,11 @@
         a href='#tab4' Done 
         
     #tab1.tab-content      
-      = form_for :carpool, url: reorder_carpools_path, html: { remote: true, method: :put } do |form|
-        = link_to "#", class:"reorder-button btn btn-primary"
-          i.material-icons compare_arrows
-        = form.submit "Done", class:"btn btn-primary reorder-done-button", style:"display:none"
-        ul#shuttle-cars.sortable
+      / = form_for :carpool, url: reorder_carpools_path, html: { remote: true, method: :put } do |form|
+      /   = link_to "#", class:"reorder-button btn btn-primary"
+      /     i.material-icons compare_arrows
+      /   = form.submit "Done", class:"btn btn-primary reorder-done-button", style:"display:none"
+      ul#shuttle-cars.sortable
 
     #tab2.tab-content      
       = form_for :carpool, url: reorder_carpools_path, html: { remote: true, method: :put } do |form|
