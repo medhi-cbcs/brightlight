@@ -200,7 +200,7 @@ class BookCopiesController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_book_copy
-      if params[:id][0..2] == 'INV'
+      if params[:id].strip[0..2] == 'INV'
         @book_copy = BookCopy.find_by_barcode(params[:id])
       else
         @book_copy = BookCopy.find(params[:id])
