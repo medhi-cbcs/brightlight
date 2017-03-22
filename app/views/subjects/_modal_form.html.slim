@@ -12,16 +12,15 @@
             li = message
 
     .row
-        .input-field.col.s4
-            = f.label :code, class:'active'
-            = f.text_field :code
-        .input-field.col.s4
+        .input-field.col.s6
             = f.label :name , class:'active'
             = f.text_field :name
     .row
-        .input-field.col.s4
+        .input-field.col.s12
             = f.label :description, class:'active'
             = f.text_field :description
+        .input-field.col.s12
+            = f.hidden_field :code, value: 'SC' + @subject_code.to_s
 
   .modal-footer
     button.btn.btn-flat.waves-effect.waves-light.modal-action.modal-close type="submit" Save

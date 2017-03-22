@@ -1,6 +1,6 @@
 class SubjectsController < ApplicationController
   before_action :set_subject, only: [:show, :edit, :update, :destroy]
-
+  before_action :sortable_columns, only: [:index]
   # GET /subjects
   # GET /subjects.json
   def index
@@ -9,9 +9,9 @@ class SubjectsController < ApplicationController
       format.html {
         items_per_page = 20
         if params[:search]
-          @subjects = Subject.where('UPPER(name) LIKE ?', "%#{params[:search].upcase}%").paginate(page: params[:page], per_page: items_per_page).order(:name)
+          @subjects = Subject.joins('Left join book_titles on book_titles.subject_id = subjects.id').select('subjects.*, COUNT(book_titles.subject_id) as books').group('subjects.id').where('UPPER(name) LIKE ?', "%#{params[:search].upcase}%").paginate(page: params[:page], per_page: items_per_page).order("#{sort_column} #{sort_direction}")
         else
-          @subjects = Subject.paginate(page: params[:page], per_page: items_per_page).order(:name)
+          @subjects = Subject.joins('Left join book_titles on book_titles.subject_id = subjects.id').select('subjects.*, COUNT(book_titles.subject_id) as books').group('subjects.id').paginate(page: params[:page], per_page: items_per_page).order("#{sort_column} #{sort_direction}")
         end
       }
       
@@ -34,6 +34,8 @@ class SubjectsController < ApplicationController
   # GET /subjects/new
   def new
     authorize! :create, Subject
+    @subject_last = Subject.last
+    @subject_code = @subject_last.id + 1
     @subject = Subject.new
   end
 
@@ -77,13 +79,18 @@ class SubjectsController < ApplicationController
   # DELETE /subjects/1
   # DELETE /subjects/1.json
   def destroy
-    @subject.destroy
-    respond_to do |format|
-      format.html { redirect_to subjects_url, notice: 'Subject was successfully destroyed.' }
-      format.json { head :no_content }
+    if @subject.destroy
+        respond_to do |format|
+          format.html { redirect_to subjects_url, notice: 'Subject was successfully destroyed.' }
+          format.json { head :no_content }
+        end
+    else
+        flash[:alert] = "cannot delete subject while books exist"
+        redirect_to subjects_url
     end
   end
-
+    
+      
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_subject
@@ -93,5 +100,9 @@ class SubjectsController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def subject_params
       params.require(:subject).permit(:code, :name, :description)
+    end
+    
+    def sortable_columns 
+      [:name, :books]
     end
 end
