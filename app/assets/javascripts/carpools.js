@@ -15,6 +15,7 @@ var CarpoolApp = (function(){
       transport.id = car.transport_id;
       transport.transportName = car.transport_name;
       transport.carpoolId = car.id;
+      transport.late = false;
       return transport;
     },
 
@@ -42,12 +43,16 @@ var CarpoolApp = (function(){
         } else if (this.category == 'private') {
           container = $("#private-cars");
         } else if (this.category == 'shuttle') {
-          container = $("#shuttle-cars");
+          if (this.late) {
+            container = $("#private-cars");
+          } else {
+            container = $("#shuttle-cars");
+          }          
         } else {
           container = $("#data-error");
         }
-        console.log("Rendering transport "+this.transportName+" with status "+this.status);
-        // console.log("Rendering transport "+this.transportName+" with status "+this.status+" in "+container.selector);
+        // console.log("Rendering transport "+this.transportName+" with status "+this.status);
+        console.log("Rendering transport "+this.transportName+" with status "+this.status+" in "+container.selector);
         container.append(this.htmlStr());
         this.doneCheckBox().prop("checked", this.status == 'done');
         this.waitCheckBox().prop("checked", this.status == 'waiting');        
@@ -163,8 +168,11 @@ var CarpoolApp = (function(){
       Carpool.autoPolling = true;
       Carpool.bindEvents();
       Carpool.debug = Object.new;
-      var time = new Date();
+      Carpool.shuttleTimeLimit = new Date();
+      Carpool.shuttleTimeLimit.setHours(14,30,0);  // Time limit for shuttle. After this time will be considered late.
+
       // if AM, start at midnight, otherwise start at noon:
+      var time = new Date();
       localStorage.carpool_start = time.setHours(time.getHours() < 12 ? 0 : 12, 0, 0, 0);
       localStorage.carpool_mark = localStorage.carpool_start;
       // Settings 
@@ -180,20 +188,22 @@ var CarpoolApp = (function(){
           Carpool.handleScan($element, rfid_uid);
         }
       });
-      $("#auto_update").on("change", Carpool.togglePolling.bind(this));
+      //$("#auto_update").on("change", Carpool.togglePolling.bind(this));
       $(".carpool").on("change", "[name^='pax-status']", Carpool.handlePaxMoves.bind(this));
       $(".carpool").on("click", ".modal-trigger", Carpool.handleShowPassengers.bind(this));
-      $("#submit-carpool").on("click", Carpool.handleCarpoolEntry.bind(this));
-      // $(".carpool").on("click", ".submit-carpool", Carpool.handleCarpoolEntry.bind(this));
-      $("#car-entry").on('keypress' , '#transport_name', function(e) {
+
+      $("nav").on("click", "#submit-carpool",  Carpool.handleCarpoolEntry.bind(this));
+      $("nav").on('keypress' , '#transport_name', function(e) {
         if(e && e.keyCode == 13) {
           Carpool.handleCarpoolEntry();
         }
       });
-      $(".carpool").on("click", ".done-wrapper", Carpool.handleDone.bind(this));
-      $(".carpool").on("click", ".wait-wrapper", Carpool.handleWait.bind(this));
+      $(".carpool").on("click", ".done-button", Carpool.handleDone.bind(this));
+      $(".carpool").on("click", ".wait-button", Carpool.handleWait.bind(this));
       $("#settings").on("submit", Carpool.saveSettings.bind(this));
       $("#cancel-settings").on("click", Carpool.resetSettings);
+      $(".carpool").on("click", ".reorder-button", Carpool.handleEdit.bind(this));
+      $(".carpool").on("click", ".reorder-done-button", Carpool.handleDoneEditing.bind(this));
     },
 
     handleScan: function (el, rfid_uid) {
@@ -232,6 +242,7 @@ var CarpoolApp = (function(){
     },
 
     handleCarpoolEntry: function() {
+      console.log("Keyboard entry " + $("#transport_name").val().toUpperCase());
       url = "/carpools/";
       var dataToSend = new Object();
       dataToSend = { carpool: {
@@ -266,6 +277,10 @@ var CarpoolApp = (function(){
 
     create: function(car) {
       var transport = Transport.init(car);
+      var now = new Date().getTime();
+      if (car.category == 'shuttle' && now > Carpool.shuttleTimeLimit) {
+        transport.late = true;
+      }
       Carpool.carpoolList.push(transport);
       transport.render();
     },
@@ -300,6 +315,12 @@ var CarpoolApp = (function(){
       if (transport) transport.status = transport.status != 'waiting' ? "waiting" : "ready";
     },
 
+    reset: function() {     
+      Carpool.carpoolList = []; 
+      $("#private-cars").html("");
+      $("#shuttle-cars").html("");
+    },
+
     handlePaxMoves: function(e) {
       var el = e.target;
       var $el = $(el);       
@@ -326,11 +347,21 @@ var CarpoolApp = (function(){
       var now = new Date().getTime();
       $.getJSON('/carpools/poll?since='+localStorage.carpool_mark, null, function(data) {        
         var carpool = data.carpool;
+        //if (data.reorder > data.timestamp) console.log("Reorder: " + data.reorder);
+        //console.log("Timestamp: " + data.timestamp);
         if (carpool.length > 0) {
+          if (data.reorder > localStorage.carpool_ts) {
+            console.log("Reorder: " + data.reorder);
+            console.log("This TS: " + localStorage.carpool_ts);
+            Carpool.reset();
+          }
           $.each(carpool, function(i,car){
             Carpool.createOrUpdate(car);
           });
           localStorage.carpool_ts = now;  // Mark last polling having  data
+        } else {
+          console.log("Empty: RESETTING");          
+          Carpool.reset();
         }
         localStorage.carpool_mark = data.timestamp;
         if (localStorage.carpool_ts == null || localStorage.carpool_ts == "null"){
@@ -338,7 +369,7 @@ var CarpoolApp = (function(){
         }
         var ts = parseInt(localStorage.carpool_ts);
         if (now - ts < timeout && Carpool.autoPolling) {
-          setTimeout(Carpool.poll, timedelay)
+          setTimeout(Carpool.poll, timedelay);
         };
       });
     },
@@ -365,6 +396,35 @@ var CarpoolApp = (function(){
       } else if (localStorage.scanGate == "OUT") {
         $("#exit-gate").prop("checked", true);
       }
+    },
+
+    handleDoneEditing: function() {
+      $(".reorder-done-button").hide();
+      $(".reorder-button").show();
+      $(".drag-handle").hide();
+      $('.done-button').show();
+      $('.wait-button').show();
+      $('.order-handle').hide();
+      Carpool.togglePolling();
+    },
+    
+    handleEdit: function() {
+      Carpool.togglePolling();
+      $('.reorder-button').hide();
+      $('.done-button').hide();
+      $('.wait-button').hide();
+      $('.order-handle').show();
+      $('.drag-handle').show();
+      $('.reorder-done-button').show();
+      $(".sortable").sortable({ 
+        handle: $('.drag-handle'),
+        placeholder: "ui-state-highlight",
+        update: function(event, ui){            
+          $('ul li').each(function(){
+            $(this).find('input.position').attr('value', $(this).index());
+          });                 
+        }
+      });
     }
 
   };

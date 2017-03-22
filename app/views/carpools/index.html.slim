@@ -15,10 +15,10 @@
             .input-field.col.s2
               = link_to "#settings-modal", class:"modal-trigger"
                 i.material-icons settings
-        li
-          .input-field
-            = check_box_tag :auto_update, value = "1", checked = true
-            = label_tag :auto_update, '', style:'top:9px; left:9px'
+        / li
+        /   .input-field
+        /     = check_box_tag :auto_update, value = "1", checked = true
+        /     = label_tag :auto_update, '', style:'top:9px; left:9px'
 
 .card.carpool
   .row
@@ -26,17 +26,25 @@
       li.tab.col.s2
         a href='#tab1' Shuttle
       li.tab.col.s2
-        a href='#tab2' Private
+        a href='#tab2' Car Riders
       li.tab.col.s2
         a href='#tab3' Waiting
       li.tab.col.s2
         a href='#tab4' Done 
         
-    #tab1.tab-content
-      #shuttle-cars
+    #tab1.tab-content      
+      = form_for :carpool, url: reorder_carpools_path, html: { remote: true, method: :put } do |form|
+        = link_to "#", class:"reorder-button btn btn-primary"
+          i.material-icons compare_arrows
+        = form.submit "Done", class:"btn btn-primary reorder-done-button", style:"display:none"
+        ul#shuttle-cars.sortable
 
-    #tab2.tab-content
-      #private-cars
+    #tab2.tab-content      
+      = form_for :carpool, url: reorder_carpools_path, html: { remote: true, method: :put } do |form|
+        = link_to "#", class:"reorder-button btn btn-primary"
+          i.material-icons compare_arrows
+        = form.submit "Done", class:"btn btn-primary reorder-done-button", style:"display:none"
+        ul#private-cars.sortable
 
     #tab3.tab-content
       #waiting-cars
@@ -55,25 +63,27 @@
   .modal-footer
     = link_to "Close", "#!", class:"modal-action modal-close waves-effect waves-light btn-flat"
 
-script#carpool-template type="text/x-custom-template"
-  .col.s12.m12.l3
-    .entry-wrapper id="car-__carpool.id_" data-id="__carpool.id_" 
-      .entry class="cars __transport.status_"      
-        .done-wrapper data-id="__transport.id_"
-          .input-field
-            .cb-label Done 
-            = check_box_tag "car-done-__carpool.id_", 1, false
-            = label_tag "car-done-__carpool.id_", ""
-        .middle-wrapper
-          a.modal-trigger.black-text href="#show-modal" data-id="__transport.id_" 
-            = "__transport.name_"
-        .wait-wrapper data-id="__transport.id_"
-          .input-field
-            .cb-label Wait 
-            = check_box_tag "car-wait-__carpool.id_", 1, false
-            = label_tag "car-wait-__carpool.id_", ""
-            / = link_to edit_carpool_path("__carpool.id_"), remote: true
-          /   i.material-icons style="padding-top:9px; color:salmon" pause_circle_outline
+script#carpool-template type="text/x-custom-template"  
+  li.ui-state-default.entry-wrapper.col.s12.m6.l3 id="car-__carpool.id_" data-id="__carpool.id_" 
+    = hidden_field_tag 'carpools[__carpool.id_][sort_order]', nil, class:'position'
+    .entry class="cars __transport.status_"      
+      .done-wrapper data-id="__transport.id_"
+        .input-field.done-button
+          .cb-label Done 
+          = check_box_tag "car-done-__carpool.id_", 1, false
+          = label_tag "car-done-__carpool.id_", ""
+      .middle-wrapper
+        a.modal-trigger.black-text href="#show-modal" data-id="__transport.id_" 
+          = "__transport.name_"
+      .wait-wrapper data-id="__transport.id_"
+        .input-field.wait-button
+          .cb-label Wait 
+          = check_box_tag "car-wait-__carpool.id_", 1, false
+          = label_tag "car-wait-__carpool.id_", ""
+        .order-handle data-id="__transport.id_" style="display:none"
+          .drag-handle
+            i.material-icons dehaze
+
 
 script#passenger-template type="text/x-custom-template"
   .row.pax-entry id="passenger-__pax.id_"

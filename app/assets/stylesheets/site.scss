@@ -846,36 +846,38 @@ ul {
 // =========================================== Carpool =========================================
 .carpool {
 	.entry-wrapper {
-		overflow:hidden;
-    display: table;
-    border-collapse: collapse;
-    text-align: center;
-		width: 100%;
-		margin: 10px 0px;
+    // border-collapse: collapse;
+    // text-align: center;	
 
-		.entry {
-			display:table-row;			
-			font-size: 2.5rem;
+		.entry {			
+			//font-size: 2.5rem;
 			border-radius: 4px;
 			text-align: center;		
 		
 			.done-wrapper {
-				display:table-cell;
+				display: inline-block;
+				float: left;
 				width: 70px;
 				border-radius: 5px 0 0 5px;
 			}
 			.middle-wrapper {
-				display:table-cell;
+				display: inline-block;
+				height: 70px;
 				vertical-align: middle;
+				a {
+					font-size: 3.8em;
+					line-height: 1.3em;
+				}
 			}
 			.wait-wrapper {
-				display:table-cell;
+				display: inline-block;
+				float: right;
 				width: 70px;
 				border-radius: 0 5px 5px 0;
 			}
 
 			.input-field label {
-				top: 0px;
+				top: 10px;
 			}
 		}		
 	}
@@ -1202,4 +1204,45 @@ td.barby-cell.on { background: #000; }
     font-size: 12px;
 }
 
+.ui-state-default {
+	border: none;
+	background: none;
+}
+
+.ui-state-highlight { 
+	height: 70px; 
+	background: pink;
+}
+
+@media only screen and (min-width: 0px) {
+	.ui-state-highlight { 
+		width: 100%;
+		margin-left: 0;
+	}	
+}
+
+@media only screen and (min-width: 601px) {
+	.ui-state-highlight { 
+		width: 50%;
+		margin-left: 0;
+	}	
+}
+
+@media only screen and (min-width: 993px) {
+	.ui-state-highlight { 
+		width: 25%;
+		margin-left: 0;
+	}	
+}
+
+.sortable li {  
+	padding: 8px; 
+	float: left; 
+	height: 90px; 
+}
+
+.drag-handle i {
+	line-height: 1.7em;
+	font-size: 2.9em;
+}
 
