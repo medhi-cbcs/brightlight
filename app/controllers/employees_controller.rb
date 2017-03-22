@@ -118,7 +118,7 @@ class EmployeesController < ApplicationController
         :home_country, :home_postal_code, :mobile_phone, :home_phone, :office_phone, :other_phone,
         :emergency_contact_number, :emergency_contact_name, :email, :photo_uri, :education_degree,
         :education_graduation_date, :education_school, :education_degree2, :education_graduation_date2,
-        :education_school2, :supervisor_id, :department_id, :nationality, :blood_type,
+        :education_school2, :supervisor_id, :department_id, :nationality, :blood_type, :is_active,
         {book_loans_attributes: [:id, :book_copy_id, :academic_year_id, :book_edition_id, :book_category_id, :book_title_id,
             :out_date, :due_date, :return_date, :loan_type_id, :user_id, :created_at, :updated_at, :barcode,
             :employee_id, :employee_no, :loan_status, :return_status, :notes, :grade_section_code, :grade_subject_code,
