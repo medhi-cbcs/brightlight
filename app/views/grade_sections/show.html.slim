@@ -67,7 +67,10 @@ nav
               td style="width:40px"
                 = "#{gss.order_no}. "
               td
-                = link_to gss.student.name, gss.student, remote: true
+                - if gss.student.present?
+                  = link_to gss.student.name, gss.student, remote: true
+                - else
+                  span.red-text Error! Student not found (##{gss.student_id})
               td 
                 = gss.track
 
