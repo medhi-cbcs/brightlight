@@ -18,7 +18,6 @@ ul#student-options.dropdown-content
 
 ul#year-options.dropdown-content
   li  
-    = link_to 'All', by_student_student_books_path(params.merge(year:'all').symbolize_keys)
   - AcademicYear.list_for_menu.each do |year|
     li 
       = link_to year.name, by_student_student_books_path(params.merge(year:year.id).symbolize_keys)
@@ -29,7 +28,7 @@ ul#year-options.dropdown-content
       ul
         li 
           = link_to 'PDF Format', by_student_student_books_path(year:params[:year],s:params[:s],st:params[:st], format: :pdf), target: '_blank'
-        - if @student_books.present? and @disable_status
+        - if @student_books.present? and !@disable_edit
           li  
             button.btn.waves-effect.waves-light type="submit" Save 
       ul.right
@@ -51,6 +50,7 @@ ul#year-options.dropdown-content
             i.material-icons.right arrow_drop_down
 
   = hidden_field_tag :student_form, 1
+
   - if @student_list.present?
     - @student_list.each_with_index do |record,count|
       - student = record.student
@@ -108,36 +108,38 @@ ul#year-options.dropdown-content
                 - initial_condition = book.book_copy.start_condition_in_year(@year_id) if book.book_copy.present?
                 tr
                   td.wd3 = i+1                  
-                  td.wd20 = book.try(:book_edition).try(:title).truncate(45)
+                  td.wd20 = book.try(:title).truncate(45) 
+                  /#book.try(:book_edition).try(:title).truncate(45)
                   td.wd5 style='text-align:center;' 
                     span = link_to book.barcode, book.try(:book_copy)
                   td.wd5 style='text-align:center;' 
-                    span.box class="#{initial_condition.try(:color) || 'white'}"
+                    span.box class="#{initial_condition.try(:color) || 'beige'}"
                       = initial_condition.try(:code) || '?'
                   td.wd3 style='text-align:center;' 
-                    = f.radio_button :end_copy_condition_id, 1, disabled:@disable_status.to_s
+                    = f.radio_button :end_copy_condition_id, 1, disabled:@disable_edit
                     = f.label :end_copy_condition_id_1, "New", class:'small-radio-label'
                   td.wd3 style='text-align:center;' 
-                    = f.radio_button :end_copy_condition_id, 2, disabled:@disable_status.to_s
+                    = f.radio_button :end_copy_condition_id, 2, disabled:@disable_edit
                     = f.label :end_copy_condition_id_2, "Good", class:'small-radio-label'
                   td.wd3 style='text-align:center;' 
-                    = f.radio_button :end_copy_condition_id, 3, disabled:@disable_status.to_s
+                    = f.radio_button :end_copy_condition_id, 3, disabled:@disable_edit
                     = f.label :end_copy_condition_id_3, "Fair", class:'small-radio-label'
                   td.wd3 style='text-align:center;' 
-                    = f.radio_button :end_copy_condition_id, 4, disabled:@disable_status.to_s
+                    = f.radio_button :end_copy_condition_id, 4, disabled:@disable_edit
                     = f.label :end_copy_condition_id_4, "Poor", class:'small-radio-label'
                   td.wd3 style='text-align:center;' 
-                    = f.radio_button :end_copy_condition_id, 5, disabled:@disable_status.to_s
+                    = f.radio_button :end_copy_condition_id, 5, disabled:@disable_edit
                     = f.label :end_copy_condition_id_5, "Missing", class:'small-radio-label'
                   td.wd5 style='text-align:center;' 
-                    = f.check_box :needs_rebinding, disabled:@disable_status.to_s
+                    = f.check_box :needs_rebinding, disabled:@disable_edit
                     = f.label :needs_rebinding, 'NR', class:'small-radio-label;font-size:2px'
                   td.wd20
-                    = f.text_field :notes, disabled:@disable_status.to_s
+                    = f.text_field :notes, disabled:@disable_edit
 
       .page-break    
-    .toolbar.z-depth-1
-      button.btn.waves-effect.waves-light type="submit" Save
+    - if !@disable_edit
+      .toolbar.z-depth-1
+        button.btn.waves-effect.waves-light type="submit" Save
   - else
     #message.card-panel.grey.lighten-1
       .center.white-text Please choose Grade Level, Class and Student
