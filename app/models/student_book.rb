@@ -27,6 +27,7 @@ class StudentBook < ActiveRecord::Base
   accepts_nested_attributes_for :book_loan
 
   scope :current_year, lambda { where(academic_year:AcademicYear.current) }
+
   scope :standard_books, lambda { |grade_level_id, grade_section_id, year_id, category_id|
     if [11,12].include? grade_level_id
       joins("JOIN standard_books ON student_books.book_edition_id = standard_books.book_edition_id
@@ -39,6 +40,9 @@ class StudentBook < ActiveRecord::Base
       AND standard_books.book_category_id = #{category_id}
       AND standard_books.academic_year_id = #{year_id}")
     end
+    .joins('LEFT JOIN book_editions ON student_books.book_edition_id = book_editions.id')
+    .where(academic_year_id:year_id)
+    .select('student_books.*, book_editions.title as title')
   }
 
   # Fine is applied if end condition is 2 steps worser than the initial condition, of if the book is missing

@@ -31,9 +31,9 @@ nav
     table.compact.striped
       thead
         tr
-          th Code
-          th Name
+          th = sort_link "name"
           th Description
+          th = sort_link "books", "Books Count"
           th
           th
           th

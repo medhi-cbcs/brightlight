@@ -1,10 +1,11 @@
 tr id="row-#{subject.id}"
-  td = subject.code
   td = link_to subject.name, subject, remote: true
-  td = subject.description
+  td = subject.description || "--"
+  td = subject.books
   td 
      = link_to edit_subject_path(subject), remote: true, class: "waves-effect waves-teal"
        i.material-icons edit
-
+     = link_to subject, data: {:confirm => 'Are you sure?'}, :method => :delete, class:'red-text'
+       i.material-icons delete
 
             

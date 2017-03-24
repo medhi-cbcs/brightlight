@@ -104,7 +104,8 @@ class BookCopy < ActiveRecord::Base
   end
 
   def start_condition_in_year(academic_year_id)
-    copy_conditions.where(academic_year_id:academic_year_id).where(post:0).order('created_at DESC').first.try(:book_condition)
+    copy_conditions.where(academic_year_id:academic_year_id).where(post:0).order(created_at: :desc)
+      .first.try(:book_condition)
   end
 
   def return_condition_in_year(academic_year_id)
