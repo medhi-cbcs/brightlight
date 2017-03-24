@@ -14,7 +14,8 @@ class BookCopiesController < ApplicationController
       @condition = BookCondition.where(id:params[:condition]).take if params[:condition].present? and params[:condition] != 'all' and params[:condition] != 'na'
       @status = Status.where(id:params[:status]).take if params[:status].present? and params[:status] != 'all' and params[:status] != 'na'
       @book_copies = @book_edition.book_copies
-        .with_condition(params[:condition]).with_status(params[:status]).with_active_loans
+        .with_condition(params[:condition]).with_status(params[:status]) 
+        # Put .with_active_loans here, if we want to show borrowers. But it causes problems with unreturned books
     else
       @book_copies = BookCopy.all.order(:copy_no)
     end
