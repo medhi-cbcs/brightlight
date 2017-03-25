@@ -1,2 +1,2 @@
-$("#show-modal").html("<%=j render(partial: 'book_loan_record', locals: {book_loan: @book_loan})%>");
+$("#show-modal").html("<%=j render(partial: 'book_loan_record', locals: {book_loan: @book_loan, last_check: @last_check})%>");
 $('#show-modal').openModal();
