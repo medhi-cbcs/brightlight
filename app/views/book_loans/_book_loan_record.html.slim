@@ -7,55 +7,55 @@
         .item = book_loan.try(:book_edition).try(:title) || '--'
       dd.col.s3
         .label Barcode:
-        .item = book_loan.barcode || '--'
-      dd.col.s3
-        .label BKUDID:
-        .item = book_loan.bkudid || '--'
-      dd.col.s3
-        .label Book category:
-        .item = book_loan.book_category.try(:name) || '--'
-      dd.col.s3
-        .label Loan type:
-        .item = book_loan.loan_type.try(:name) || '--'
-    dl.row
+        .item = book_loan.barcode || '--'            
       - if book_loan.employee.present?
         dd.col.s6
-          .label Employee Name:
+          .label Borrower:
           .item = book_loan.employee.name  || '--'
         dd.col.s3
           .label Employee No:
-          .item = book_loan.employee_no || '--'
+          .item = book_loan.employee.employee_number || '--'
       - if book_loan.student.present?
         dd.col.s6
-          .label Student Name:
+          .label Borrower:
           .item = book_loan.student.name  || '--'
         dd.col.s3
           .label Student No:
           .item = book_loan.student_no || '--'
     dl.row
       dd.col.s3
+        .label Academic year:
+        .item = book_loan.academic_year.try(:name) || '--'
+      dd.col.s3
         .label Out date:
-        .item = book_loan.out_date || '--'
+        .item = "(#{book_loan.loan_status || '--'}) #{book_loan.out_date || '--'}"
       dd.col.s3
         .label Due date:
         .item = book_loan.due_date || '--'
       dd.col.s3
         .label Return date:
-        .item = book_loan.return_date  || '--' 
+        .item = "(#{book_loan.return_status || '--'}) #{book_loan.return_date || '--'}" 
+    / dl.row
+    /   dd.col.s3
+    /     .label Loan status:
+    /     .item = book_loan.loan_status || '--'
+    /   dd.col.s3
+    /     .label Return status:
+    /     .item = book_loan.return_status || '--'
     dl.row
-      dd.col.s3
-        .label Loan status:
-        .item = book_loan.loan_status || '--'
-      dd.col.s3
-        .label Return status:
-        .item = book_loan.return_status || '--'
+      dd.col.s6 
+        .label Last checked:
+        .item = last_check.try(:updated_at).try(:localtime) || '--'
+      dd.col.s6 
+        .label Checked by:
+        .item = last_check.try(:user).try(:name) || '--'
     dl.row
-      dd.col.s3
-        .label Academic year:
-        .item = book_loan.academic_year.try(:name) || '--'
-      dd.col.s3
-        .label Update by:
-        .item = book_loan.user.try(:email) || '--'
+      dd.col.s6
+        .label Last record update:
+        .item = book_loan.updated_at.localtime || '--'
+      dd.col.s6
+        .label Updated by:
+        .item = book_loan.user.try(:name) || book_loan.user.try(:email) || '--'
 
 .modal-footer
   = link_to "Close", "#!", class:"modal-action modal-close waves-effect waves-light btn-flat"
