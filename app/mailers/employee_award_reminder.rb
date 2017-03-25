@@ -1,6 +1,6 @@
 class EmployeeAwardReminder < ActionMailer::Base
-  default from: "medhi.widjaja@cahayabangsa.org",
-          cc: "medhiwidjaja@yahoo.com"
+  default from: "brightlight@cahayabangsa.org",
+          bcc: "medhiwidjaja@cahayabangsa.org"
   
   def sample_email
     @user = Employee.find_by_name 'Medhi Widjaja'
