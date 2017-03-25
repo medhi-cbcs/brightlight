@@ -201,6 +201,7 @@ class BookLoansController < ApplicationController
     authorize! :read, BookLoan
     @teacher = Employee.find params[:employee_id]
     @book_loan = BookLoan.find params[:id]
+    @last_check = @book_loan.loan_checks.order(updated_at: :desc).take
   end
 
   def new_tm
