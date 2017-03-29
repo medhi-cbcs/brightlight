@@ -12,7 +12,7 @@ tr id="row-#{book_copy.id}"
   td = book_copy.status_name || 'N/A'
   td = book_copy.notes
   td.actions
-    = link_to book_copy
+    = link_to book_copy, remote: true
       i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="View" visibility
     - if can? :update, book_copy
       = link_to edit_book_copy_path(book_copy), remote: true

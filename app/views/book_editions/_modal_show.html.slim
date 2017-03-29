@@ -4,6 +4,7 @@
   
 .modal-footer
   .left
+    = link_to "Show", @book_edition, class:"modal-action modal-close waves-effect waves-light btn btn-flat"
     - if can? :update, @book_edition
       = link_to edit_book_edition_path(@book_edition), class:"modal-action modal-close waves-effect waves-light btn btn-flat"
         | Edit
@@ -11,4 +12,5 @@
       = link_to update_metadata_book_edition_path(id:@book_edition.id), class:"modal-action modal-close waves-effect waves-light btn btn-flat"
         | Update Metadata
         /i.material-icons.left.tooltipped data-position="bottom" data-delay="50" data-tooltip="Update Metadata" autorenew
+    
   = link_to "Close", "#!", class:"modal-action modal-close waves-effect waves-light btn-flat"
