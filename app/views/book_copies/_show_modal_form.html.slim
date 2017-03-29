@@ -1,0 +1,58 @@
+.modal-content
+  table
+    tr
+      td style="vertical-align:top"
+        - thumbnail = @book_copy.book_edition.present? ? @book_copy.book_edition.small_thumbnail : 'book-icon.png' 
+        = image_tag(thumbnail, class: 'list_image')
+      td
+        .list_description
+          dl.row
+            h4 = @book_copy.book_edition.title
+            dd = @book_copy.book_edition.subtitle
+          dl.row
+            dd.col.s4
+              .label ISBN 10
+              .item = @book_copy.book_edition.isbn10
+            dd.col.s4
+              .label ISBN
+              .item = @book_copy.book_edition.isbn13
+          dl.row
+            dd.col.s4
+              .label Barcode
+              .item = @book_copy.barcode
+            dd.col.s4
+              .label Label             
+              .item = @book_copy.book_label.try(:name)
+            dd.col.s4
+              .label Status
+              .item = @book_copy.status.try(:name)
+          - if @book_copy.notes
+            dl.row
+              dd.col.s12
+                .label Notes
+                .item = @book_copy.notes
+    tr
+      td colspan=2
+        .label Loan history
+        table.compact.striped
+          tbody
+            - @copy_loans.each do |copy_loan|                
+              tr
+                td
+                  - if copy_loan.student.present?
+                    = copy_loan.student.name
+                  - elsif copy_loan.employee.present?              
+                    = copy_loan.employee.name
+                td = copy_loan.grade_section_name
+                td = copy_loan.try(:academic_year).try(:name)
+                td  
+                  - if copy_loan.student.present?
+                    = link_to student_student_books_path(copy_loan.student, year:copy_loan.academic_year_id)
+                      i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="View" visibility
+                  - elsif copy_loan.employee.present?              
+                    = link_to employee_book_loans_path(copy_loan.employee, year:copy_loan.academic_year_id)
+                      i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="View" visibility
+
+
+.modal-footer
+  a.modal-action.modal-close.waves-effect.waves-light.btn-flat href="#!" Close

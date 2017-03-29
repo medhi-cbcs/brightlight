@@ -38,16 +38,18 @@ h4 = @book_edition.title
       td
       - @by_condition.each do |c|
         td = link_to c[:total] || 0, book_edition_book_copies_path(@book_edition, condition: c[:id] || 'na')
-      td = link_to @nr_of_copies || 0, book_edition_book_copies_path(@book_edition, condition: 'all')
+      td = link_to @total_by_condition || 0, book_edition_book_copies_path(@book_edition, condition: 'all')
     tr.header-shade
       td.wd12-5
         p Status
       - @by_status.each do |s| 
         td.wd12-5 = s[:name]
+      td.wd12-5 Total
     tr
       td
       - @by_status.each do |s|
         td = link_to s[:total] || 0, book_edition_book_copies_path(@book_edition, status: s[:id] || 'na')
+      td = link_to @total_by_status || 0, book_edition_book_copies_path(@book_edition, status: 'all')
 
 
 = form_tag do
@@ -113,10 +115,6 @@ h4 = @book_edition.title
               | New
               i.material-icons.left add
 
-  - if @total_copies != @nr_of_copies
-    .card-panel.red.lighten-3
-      | There are discrepancies in total number of book copies. There may be double entries due to incomplete data, such as incomplete return status  
-
   .card-panel  
     table.compact.striped
       thead
@@ -138,3 +136,5 @@ h4 = @book_edition.title
 
 #edit-modal.modal.modal-fixed-footer
   #edit-modal-content
+#show-modal.modal.modal-fixed-footer
+  #show-modal-content
