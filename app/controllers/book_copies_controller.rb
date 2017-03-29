@@ -9,18 +9,17 @@ class BookCopiesController < ApplicationController
     if params[:book_edition_id].present?
       @book_edition = BookEdition.find(params[:book_edition_id])      
       @by_condition = @book_edition.summary_by_conditions
-      @nr_of_copies = @by_condition.reduce(0) {|r,x| r + (x[:total] || 0)}
+      @total_by_condition = @by_condition.reduce(0) {|r,x| r + (x[:total] || 0)}
       @by_status = @book_edition.summary_by_status
+      @total_by_status = @by_status.reduce(0) {|r,x| r + (x[:total] || 0)}
       @condition = BookCondition.where(id:params[:condition]).take if params[:condition].present? and params[:condition] != 'all' and params[:condition] != 'na'
       @status = Status.where(id:params[:status]).take if params[:status].present? and params[:status] != 'all' and params[:status] != 'na'
       @book_copies = @book_edition.book_copies
         .with_condition(params[:condition]).with_status(params[:status]) 
-        # Put .with_active_loans here, if we want to show borrowers. But it causes problems with unreturned books
     else
       @book_copies = BookCopy.all.order(:copy_no)
     end
     @book_copies = @book_copies.order("#{sort_column} #{sort_direction}")
-    @total_copies = @book_copies.to_a.count
   end
 
   # GET /book_copies/1
@@ -49,6 +48,12 @@ class BookCopiesController < ApplicationController
           render json: {errors:"Invalid barcode"}, status: :unprocessable_entity
         end
       end
+      format.js do
+        set_book_copy 
+        @copy_loans = BookLoan.where(book_copy_id:params[:id])
+                          .includes([:academic_year, :student, :employee])
+                          .order('academic_year_id DESC, out_date DESC')
+      end 
     end
   end
 
@@ -191,7 +196,7 @@ class BookCopiesController < ApplicationController
   def loans
     authorize! :read, BookCopy
     @copy_loans = BookLoan.where(book_copy_id:params[:id])
-                          .includes([:academic_year, :student])
+                          .includes([:academic_year, :student, :employee])
                           .order('academic_year_id DESC, out_date DESC')
     @book_copy = BookCopy.where(id:params[:id]).includes([:book_edition]).take
     @book_edition = @book_copy.book_edition

@@ -42,17 +42,31 @@ h4 Book Copy
                   h5 = @book_copy.book_label.present? ? @book_copy.book_label.name : "--"
               dl.row
                 dd.col.s4
+                  .label Book Edition 
+                .col.s1
+                  = link_to @book_copy.book_edition
+                    i.material-icons visibility
+              dl.row
+                dd.col.s4
                   .label ISBN
-                  .item = link_to @book_copy.book_edition
+                  .item 
                     = @book_copy.book_edition.isbn13.blank? ? '--' : @book_copy.book_edition.isbn13
                 dd.col.s4
                   .label ISBN 10
-                  .item = link_to @book_copy.book_edition
+                  .item 
                     = @book_copy.book_edition.isbn10.blank? ? '--' : @book_copy.book_edition.isbn10
                 dd.col.s4
                   .label Reference No
-                  .item = link_to @book_copy.book_edition
+                  .item 
                     = @book_copy.book_edition.refno.blank? ? '--' : @book_copy.book_edition.refno
+              dl.row
+                dd.col.s4
+                  .label Book Title 
+                .col.s1
+                  = link_to @book_copy.book_title
+                    i.material-icons visibility
+                dd.col.s12
+                  = @book_copy.try(:book_title).try(:title)
               dl.row
                 dd.col.s4
                   .label Condition
