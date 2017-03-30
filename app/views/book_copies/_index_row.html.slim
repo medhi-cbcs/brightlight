@@ -10,7 +10,12 @@ tr id="row-#{book_copy.id}"
     span.box class="#{badge_color}"
       = book_copy.cond_code.try(:capitalize) || 'N/A'  
   td = book_copy.status_name || 'N/A'
-  td = book_copy.notes
+  td
+    - if book_copy.teacher_id.present? 
+      = link_to book_copy.teacher_name, employee_book_loans_path(book_copy.teacher_id)  
+    - elsif book_copy.student_id.present?
+      = link_to book_copy.student_name, student_student_books_path(book_copy.student_id)
+
   td.actions
     = link_to book_copy, remote: true
       i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="View" visibility

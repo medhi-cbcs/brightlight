@@ -57,8 +57,8 @@ class BookCopy < ActiveRecord::Base
     end
   }
 
-  scope :with_active_loans, lambda {
-    joins('left join book_loans l on l.book_copy_id = book_copies.id and l.return_status is null')
+  scope :with_active_loans, lambda { |year|
+    joins("left join book_loans l on l.book_copy_id = book_copies.id and l.return_status is null and l.academic_year_id = #{year}")
     .joins('left join employees e on e.id = l.employee_id')
     .joins('left join students s on s.id = l.student_id')
     .select('e.name as teacher_name, e.id as teacher_id, s.name as student_name, s.id as student_id')
