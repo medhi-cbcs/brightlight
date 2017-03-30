@@ -34,5 +34,7 @@ module Brightlight
         ENV[key.to_s] = value
       end if File.exists?(env_file)
     end
+
+    config.action_mailer.preview_path = "#{Rails.root}/test/mailers/previews"
   end
 end

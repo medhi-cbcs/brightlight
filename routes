@@ -302,6 +302,7 @@ autocomplete_book_edition_title_standard_books GET      /standard_books/autocomp
                                                PATCH    /students/:student_id/book_loans/:id(.:format)                    book_loans#update
                                                PUT      /students/:student_id/book_loans/:id(.:format)                    book_loans#update
                                                DELETE   /students/:student_id/book_loans/:id(.:format)                    book_loans#destroy
+                            employees_reminder GET      /employees/reminder(.:format)                                     employees#reminder
                            employee_book_loans GET      /employees/:employee_id/book_loans(.:format)                      book_loans#list
                    employee_book_loans_receipt GET      /employees/:employee_id/teacher_receipt(.:format)                 book_loans#teacher_receipt
                                                POST     /employees/:employee_id/book_loans(.:format)                      book_loans#create_tm
