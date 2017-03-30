@@ -10,6 +10,7 @@ Rails.application.routes.draw do
   resources :book_labels
   resources :rosters
   resources :departments
+  resources :employees
   resources :guardians
   resources :book_assignments
   resources :book_grades
@@ -136,10 +137,6 @@ Rails.application.routes.draw do
   patch  'students/:student_id/book_loans/:id' => 'book_loans#update'
   put  'students/:student_id/book_loans/:id' => 'book_loans#update'
   delete  'students/:student_id/book_loans/:id' => 'book_loans#destroy'
-
-  get  'employees/reminder' => 'employees#reminder', as: :employees_reminder
-
-  resources :employees
   
   get  'employees/:employee_id/book_loans' => 'book_loans#list', as: :employee_book_loans
   get  'employees/:employee_id/teacher_receipt' => 'book_loans#teacher_receipt', as: :employee_book_loans_receipt
