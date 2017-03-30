@@ -1,0 +1,30 @@
+doctype html
+html
+	head
+		title = content_for?(:title) ? yield(:title) : t(:site_name)
+
+		/[if lt IE 9]
+
+		= stylesheet_link_tag "application", media: "all", 'data-turbolinks-track' => true
+		= csrf_meta_tags
+		= favicon_link_tag 'favicon.ico'
+		/ link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"
+
+		= javascript_include_tag "application", 'data-turbolinks-track' => true
+
+		meta name="viewport" content="width=device-width, initial-scale=1.0"
+
+	body class="#{controller_name} #{action_name} blue-grey lighten-5"
+		header
+			= render 'shared/layout/header'
+
+		main#main
+			.container
+				section
+					= yield :layout
+
+		footer.page-footer style="padding-top:0"
+			.container
+				ul.collapsible data-collapsible="expandable" style="padding-bottom:0px; box-shadow:none; border:none"
+					li style="color: white;"
+						.copyright Brightlight. Copyright © 2015-2016 Cahaya Bangsa Classical School. All rights reserved.
