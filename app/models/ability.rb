@@ -68,7 +68,7 @@ class Ability
     can :read, :all
   end
 
-  def Carpool
+  def carpool
     can [:manage], Carpool
     can :read, :all
   end
