@@ -4,7 +4,8 @@ class PeopleController < ApplicationController
   # GET /people
   # GET /people.json
   def index
-    @people = Person.all
+    # @people = Person.all
+    EmailNotification.scan_completed(current_user).deliver_now
   end
 
   # GET /people/1

@@ -1,0 +1,30 @@
+doctype html
+html
+	head
+		= stylesheet_link_tag "application", media: "all", 'data-turbolinks-track' => true
+		meta name="viewport" content="width=device-width, initial-scale=1.0"
+
+	body
+    div style="margin-left:30px; width=85%; font-size:16px"
+      h3 Hello, #{@user.name},
+      
+      div
+        p Thank you for using <i>Brightlight</i> to scan and check your books. 
+        p You can access your list of book loans from the following link.
+      
+      div style="margin-top:20px; margin-bottom:40px"
+        = link_to 'Book List', employee_book_loans_url(@user.employee), style:"padding:10px 15px ; background-color:#e7580b; color:white; border-radius:4px; text-decoration:none"
+
+      p Thanks,
+      p CBCS Brightlight Team
+    
+    footer
+      div style="margin-top:20px; border-top:solid grey 1px; font-size:10px; color: #292c33; padding:10px"
+        | This message was sent to #{@user.email} from Brightlight application. Please do not reply.
+      div style="color:white; padding: 20px 10px; background-color: #292c33"
+        div   
+          a href='http://cahayabangsa.ddns.net/' style="color: white; text-decoration: none;"
+            | Brightlight | 
+          | © 2014 Copyright Cahaya Bangsa Classical School
+
+
