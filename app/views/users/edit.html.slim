@@ -34,8 +34,8 @@ h4 Editing User
         = check_box_tag "user[roles][]", 'inventory', @user.roles.include?(:inventory), {id: :inventory, multiple: true}
         = label_tag :inventory
       .input-field.col.s2       
-        = check_box_tag "user[roles][]", 'librarian', @user.roles.include?(:librarian), {id: :librarian, multiple: true}
-        = label_tag :librarian  
+        = check_box_tag "user[roles][]", 'carpool', @user.roles.include?(:carpool), {id: :carpool, multiple: true}
+        = label_tag :carpool  
       .input-field.col.s2       
         = check_box_tag "user[roles][]", 'student', @user.roles.include?(:student), {id: :student, multiple: true}
         = label_tag :student 
