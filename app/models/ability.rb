@@ -45,7 +45,7 @@ class Ability
     can :manage, GradeSection
     can :manage, StudentBook
     can :manage, StandardBook
-    can :manage, Carpool
+    can [:create,:read,:update,:destroy], Carpool
     can :read, :all
 	end
 
@@ -55,16 +55,21 @@ class Ability
     can :manage, GradeSection, homeroom: @user.employee
     can :manage, StudentBook #, grade_section: GradeSection.find_by_homeroom_id(@user.employee)
     can :manage, StandardBook
-    can :manage, Carpool
     can :scan, BookLoan
     can :read, BookLoan
     can [:read,:create], LoanCheck
+    can [:create,:read,:update,:destroy], Carpool
     can :read, :all
   end
 
   def staff
     can [:create,:read,:update,:destroy], Carpool
     can :manage, Transport
+    can :read, :all
+  end
+
+  def Carpool
+    can [:manage], Carpool
     can :read, :all
   end
 
