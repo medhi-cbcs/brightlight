@@ -345,6 +345,8 @@ var CarpoolApp = (function(){
       var timeout = 3600000; // stop after 1 hour
       var timedelay = 1000;  // pool every 1 second
       var now = new Date().getTime();
+      var todaysDate = new Date().getDate();
+      var marksDate = new Date(Number(localStorage.carpool_mark)).getDate();
       $.getJSON('/carpools/poll?since='+localStorage.carpool_mark, null, function(data) {        
         var carpool = data.carpool;
         //if (data.reorder > data.timestamp) console.log("Reorder: " + data.reorder);
@@ -359,8 +361,8 @@ var CarpoolApp = (function(){
             Carpool.createOrUpdate(car);
           });
           localStorage.carpool_ts = now;  // Mark last polling having  data
-        } else {
-          console.log("Empty: RESETTING");          
+        } else if (todaysDate != marksDate) {
+          console.log("RESETTING: "+todaysDate+" <=> "+marksDate);          
           Carpool.reset();
         }
         localStorage.carpool_mark = data.timestamp;

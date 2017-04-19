@@ -1,5 +1,6 @@
 class TransportsController < ApplicationController
   before_action :set_transport, only: [:show, :edit, :update, :destroy, :add_members, :members]
+  #skip_before_action :verify_authenticity_token
 
   # GET /transports
   # GET /transports.json
@@ -21,7 +22,7 @@ class TransportsController < ApplicationController
   # GET /transports/1
   # GET /transports/1.json
   def show
-    authorize! :read, Transport
+    #authorize! :read, Transport
     @passengers = @transport.passengers
   end
 

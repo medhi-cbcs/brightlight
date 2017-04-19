@@ -79,6 +79,14 @@
                                                PATCH    /departments/:id(.:format)                                        departments#update
                                                PUT      /departments/:id(.:format)                                        departments#update
                                                DELETE   /departments/:id(.:format)                                        departments#destroy
+                                     employees GET      /employees(.:format)                                              employees#index
+                                               POST     /employees(.:format)                                              employees#create
+                                  new_employee GET      /employees/new(.:format)                                          employees#new
+                                 edit_employee GET      /employees/:id/edit(.:format)                                     employees#edit
+                                      employee GET      /employees/:id(.:format)                                          employees#show
+                                               PATCH    /employees/:id(.:format)                                          employees#update
+                                               PUT      /employees/:id(.:format)                                          employees#update
+                                               DELETE   /employees/:id(.:format)                                          employees#destroy
                                      guardians GET      /guardians(.:format)                                              guardians#index
                                                POST     /guardians(.:format)                                              guardians#create
                                   new_guardian GET      /guardians/new(.:format)                                          guardians#new
@@ -111,14 +119,6 @@
                                                PATCH    /academic_years/:id(.:format)                                     academic_years#update
                                                PUT      /academic_years/:id(.:format)                                     academic_years#update
                                                DELETE   /academic_years/:id(.:format)                                     academic_years#destroy
-                                     employees GET      /employees(.:format)                                              employees#index
-                                               POST     /employees(.:format)                                              employees#create
-                                  new_employee GET      /employees/new(.:format)                                          employees#new
-                                 edit_employee GET      /employees/:id/edit(.:format)                                     employees#edit
-                                      employee GET      /employees/:id(.:format)                                          employees#show
-                                               PATCH    /employees/:id(.:format)                                          employees#update
-                                               PUT      /employees/:id(.:format)                                          employees#update
-                                               DELETE   /employees/:id(.:format)                                          employees#destroy
                                copy_conditions GET      /copy_conditions(.:format)                                        copy_conditions#index
                                                POST     /copy_conditions(.:format)                                        copy_conditions#create
                             new_copy_condition GET      /copy_conditions/new(.:format)                                    copy_conditions#new
@@ -302,7 +302,6 @@ autocomplete_book_edition_title_standard_books GET      /standard_books/autocomp
                                                PATCH    /students/:student_id/book_loans/:id(.:format)                    book_loans#update
                                                PUT      /students/:student_id/book_loans/:id(.:format)                    book_loans#update
                                                DELETE   /students/:student_id/book_loans/:id(.:format)                    book_loans#destroy
-                            employees_reminder GET      /employees/reminder(.:format)                                     employees#reminder
                            employee_book_loans GET      /employees/:employee_id/book_loans(.:format)                      book_loans#list
                    employee_book_loans_receipt GET      /employees/:employee_id/teacher_receipt(.:format)                 book_loans#teacher_receipt
                                                POST     /employees/:employee_id/book_loans(.:format)                      book_loans#create_tm
@@ -343,6 +342,7 @@ autocomplete_book_edition_title_standard_books GET      /standard_books/autocomp
                                                PUT      /book_receipts/:id(.:format)                                      book_receipts#update
                                                DELETE   /book_receipts/:id(.:format)                                      book_receipts#destroy
                                  poll_carpools GET      /carpools/poll(.:format)                                          carpools#poll
+                              reorder_carpools PUT      /carpools/reorder(.:format)                                       carpools#reorder
                                       carpools GET      /carpools(.:format)                                               carpools#index
                                                POST     /carpools(.:format)                                               carpools#create
                                    new_carpool GET      /carpools/new(.:format)                                           carpools#new
@@ -387,6 +387,16 @@ autocomplete_book_edition_title_standard_books GET      /standard_books/autocomp
                                           user GET      /users/:id(.:format)                                              users#show
                                                PATCH    /users/:id(.:format)                                              users#update
                                                PUT      /users/:id(.:format)                                              users#update
+                                   api_sign_in POST     /api/sign-in(.:format)                                            api/sessions#create {:format=>:json}
+                                  api_sign_out DELETE   /api/sign-out(.:format)                                           api/sessions#destroy {:format=>:json}
+                                  api_carpools GET      /api/carpools(.:format)                                           api/carpools#index {:format=>:json}
+                                               POST     /api/carpools(.:format)                                           api/carpools#create {:format=>:json}
+                               new_api_carpool GET      /api/carpools/new(.:format)                                       api/carpools#new {:format=>:json}
+                              edit_api_carpool GET      /api/carpools/:id/edit(.:format)                                  api/carpools#edit {:format=>:json}
+                                   api_carpool GET      /api/carpools/:id(.:format)                                       api/carpools#show {:format=>:json}
+                                               PATCH    /api/carpools/:id(.:format)                                       api/carpools#update {:format=>:json}
+                                               PUT      /api/carpools/:id(.:format)                                       api/carpools#update {:format=>:json}
+                                               DELETE   /api/carpools/:id(.:format)                                       api/carpools#destroy {:format=>:json}
                                           root GET      /                                                                 welcome#index
                                      dashboard GET      /dashboard(.:format)                                              welcome#dashboard
                                 inventory_mtce GET      /inventory_mtce(.:format)                                         welcome#inventory_mtce
