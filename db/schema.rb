@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161118043810) do
+ActiveRecord::Schema.define(version: 20170412040739) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -429,6 +429,14 @@ ActiveRecord::Schema.define(version: 20161118043810) do
 
   add_index "departments", ["manager_id"], name: "index_departments_on_manager_id", using: :btree
   add_index "departments", ["slug"], name: "index_departments_on_slug", unique: true, using: :btree
+
+  create_table "employee_trainings", force: :cascade do |t|
+    t.integer  "employee_id"
+    t.integer  "training_id"
+    t.string   "status"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+  end
 
   create_table "employees", force: :cascade do |t|
     t.string   "name"
@@ -1012,6 +1020,19 @@ ActiveRecord::Schema.define(version: 20161118043810) do
   add_index "templates", ["academic_year_id"], name: "index_templates_on_academic_year_id", using: :btree
   add_index "templates", ["user_id"], name: "index_templates_on_user_id", using: :btree
 
+  create_table "trainings", force: :cascade do |t|
+    t.string   "topic"
+    t.string   "trainer"
+    t.date     "training_start"
+    t.date     "training_end"
+    t.string   "location"
+    t.string   "description"
+    t.string   "required"
+    t.datetime "created_at",     null: false
+    t.datetime "updated_at",     null: false
+    t.string   "certificated"
+  end
+
   create_table "transports", force: :cascade do |t|
     t.string   "category"
     t.string   "name"
@@ -1052,8 +1073,10 @@ ActiveRecord::Schema.define(version: 20161118043810) do
     t.string   "current_sign_in_ip"
     t.string   "last_sign_in_ip"
     t.integer  "roles_mask"
+    t.string   "auth_token"
   end
 
+  add_index "users", ["auth_token"], name: "index_users_on_auth_token", using: :btree
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
 
