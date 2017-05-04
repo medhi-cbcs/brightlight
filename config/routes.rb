@@ -85,7 +85,7 @@ Rails.application.routes.draw do
     resources :standard_books, shallow: true
   end
 
-  resources :standard_books, only:[:index] do
+  resources :standard_books, only:[:index,:update] do
     collection do
       post 'prepare'
     end
