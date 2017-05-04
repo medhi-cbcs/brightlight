@@ -47,7 +47,7 @@ class StudentBook < ActiveRecord::Base
             AND standard_books.grade_level_id = student_books.grade_level_id
             AND standard_books.book_category_id = #{category_id}
             AND standard_books.academic_year_id = student_books.academic_year_id
-            AND (standard_books.track = gss.track OR standard_books.track is null")
+            AND (standard_books.track = gss.track OR standard_books.track is null)")
     .joins('LEFT JOIN book_editions ON student_books.book_edition_id = book_editions.id')
     .where(academic_year_id: year_id)
     .where(grade_level_id: grade_level_id)
