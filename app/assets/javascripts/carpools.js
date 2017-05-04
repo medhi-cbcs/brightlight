@@ -36,7 +36,7 @@ var CarpoolApp = (function(){
     render: function() {
       var arrival_time = new Date(this.arrival);
       var late;
-      if (car.category == 'shuttle' && arrival_time > Carpool.shuttleTimeLimit) {
+      if (this.category == 'shuttle' && arrival_time > Carpool.shuttleTimeLimit) {
         late = true;
       }
       if ($(".carpool").has(this.node()).length == 0) {
