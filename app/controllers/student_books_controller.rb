@@ -292,12 +292,8 @@ class StudentBooksController < ApplicationController
                         .where(academic_year_id: @year_id)
                         .joins(:book_edition)
                         .group(:book_edition_id, 'book_editions.title', :book_title_id)
-                        .select(:book_edition_id, 'book_editions.title', :book_title_id)
-                        .preload
-                        .includes([:book_edition, :book_title])
-    # if @grade_level.present? && [11,12].include?(@grade_level.id)
-    #   @standard_books = @standard_books.where(grade_section:@grade_section)
-    # end
+                        .select(:book_edition_id, 'book_editions.title', :book_title_id)                        
+
     if params[:t].present?
       # A book title is selected, here we load only the specified book title
       @book_title_id = params[:t]
@@ -305,9 +301,9 @@ class StudentBooksController < ApplicationController
     else
       # No book title is selected, here we load ALL book titles for the grade_section
       # @book_titles = @standard_books.map {|x| {title:x.try(:book_edition).try(:book_title)}}
-      @book_titles = @standard_books.map {|x| {title: x.book_edition_id} }
+      @book_titles = @standard_books.map {|x| { edition_title: x.title, title: BookTitle.find(x.book_title_id) } }
     end
-    @book_titles.each { |bt| bt[:edition] = bt[:title].book_editions.first }
+    # @book_titles.each { |bt| bt[:edition] = bt[:title].book_editions.first }
     @book_titles.each do |bt|
       if @grade_level_id == 15
         student_books = StudentBook

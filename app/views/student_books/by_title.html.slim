@@ -36,7 +36,7 @@ javascript:
   }
   function filterTitleOptions(grade_level_id, grade_section_id, section_name, year) {
     $("#section").html(section_name);
-    $.getJSON("/standard_books.json?grade_level_id="+grade_level_id+"&section="+grade_section_id+"&category="+"TB"+"&year="+year, null, function (data) {
+    $.getJSON("/standard_books.json?grade_level_id="+grade_level_id+"&category="+"TB"+"&year="+year, null, function (data) {
       var list = "<li><a href='/student_books/by_title?s="+grade_section_id+"&g="+grade_level_id+"&year="+year+"'>All</a></li>";
       $.each(data, function(i,item){
           list += "<li><a href='/student_books/by_title?s="+grade_section_id+"&g="+item.grade_level_id+"&t="+item.id+"&year="+year+"'>"+item.title+"</a></li>";
@@ -75,8 +75,8 @@ javascript:
             
   - if @book_titles.present?
     - @book_titles.each do |book_title|
-      h4 = book_title[:title].title
-      = render partial: 'book_title_table', locals: {book_title: book_title}
+      h4 = book_title[:edition_title]
+      = render partial: 'book_title_table', locals: {student_books: book_title[:student_books]}
       .page-break    
     - if !@disable_edit
       .toolbar.z-depth-1

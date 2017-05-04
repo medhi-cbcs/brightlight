@@ -37,6 +37,13 @@ class StandardBooksController < ApplicationController
 
       @standard_books = @standard_books.paginate(page: params[:page], per_page: @items_per_page)
     end
+
+    respond_to do |format|
+      format.html
+      format.json do
+        @standard_books = @standard_books.to_a.uniq {|x| x.book_edition_id }
+      end
+    end 
   end
 
   # GET /standard_books/1
