@@ -289,7 +289,7 @@ class StudentBooksController < ApplicationController
     @standard_books = StandardBook
                         .where(grade_level: @grade_level)
                         .where(book_category_id: @textbook_category_id)
-                        .where(academic_year_id: @year_id)
+                        .where(academic_year_id: @year_id)                        
                         .includes([:book_edition, :book_title])
     if @grade_level.present? && [11,12].include?(@grade_level.id)
       @standard_books = @standard_books.where(grade_section:@grade_section)
@@ -366,7 +366,8 @@ class StudentBooksController < ApplicationController
     elsif params[:s].present?
       # No student is selected, here we load ALL for the grade_section
       @student_list = @grade_section.students_for_academic_year(@year_id)
-      @student_books = StudentBook.where(grade_section:@grade_section)                        
+      @student_books = StudentBook.where(grade_section:@grade_section)
+                        .standard_books(@grade_section.grade_level.id, @grade_section.id, @year_id, @textbook_category_id)      
                         .order('roster_no ASC, standard_books.id ASC')
                         .includes([:book_copy])
     end
