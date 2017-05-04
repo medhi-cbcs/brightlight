@@ -359,15 +359,14 @@ class StudentBooksController < ApplicationController
       @student_list = [gss]
       @grade_section = gss.try(:grade_section)
       @roster_no = gss.order_no
-      @student_books = @student.student_books
-                          .standard_books(@grade_section.grade_level.id, @grade_section.id, @year_id, @textbook_category_id)
+      @student_books = @student.student_books         
+                          .standard_books(@grade_section.grade_level.id, @grade_section.id, @year_id, @textbook_category_id)    
                           .order('standard_books.id')
                           .includes([:book_copy])
     elsif params[:s].present?
       # No student is selected, here we load ALL for the grade_section
       @student_list = @grade_section.students_for_academic_year(@year_id)
-      @student_books = StudentBook.where(grade_section:@grade_section)
-                        .standard_books(@grade_section.grade_level.id, @grade_section.id, @year_id, @textbook_category_id)
+      @student_books = StudentBook.where(grade_section:@grade_section)                        
                         .order('roster_no ASC, standard_books.id ASC')
                         .includes([:book_copy])
     end

@@ -113,6 +113,10 @@ class BookReceipt < ActiveRecord::Base
       })
     end
   end
+
+  def student
+    GradeSectionsStudent.where(academic_year: academic_year, order_no: roster_no.to_s, grade_section: grade_section).take.student
+  end 
   
   private
 

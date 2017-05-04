@@ -18,6 +18,8 @@
             
   .card-panel 
     .row
+      .col.s12
+        h5 = f.object.book_edition.title
       .input-field.col.s3
         = f.label :grade_level, class:'active'
         = f.collection_select :grade_level_id, GradeLevel.all, :id, :name, selected:f.object.grade_level_id

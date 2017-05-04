@@ -15,7 +15,7 @@ var CarpoolApp = (function(){
       transport.id = car.transport_id;
       transport.transportName = car.transport_name;
       transport.carpoolId = car.id;
-      transport.late = false;
+      transport.arrival = car.arrival;
       return transport;
     },
 
@@ -34,6 +34,11 @@ var CarpoolApp = (function(){
     waitCheckBox: function() { return $("#car-wait-" + this.carpoolId) },
     
     render: function() {
+      var arrival_time = new Date(this.arrival);
+      var late;
+      if (car.category == 'shuttle' && arrival_time > Carpool.shuttleTimeLimit) {
+        late = true;
+      }
       if ($(".carpool").has(this.node()).length == 0) {
         var container;
         if (this.status == 'done') {
@@ -43,7 +48,7 @@ var CarpoolApp = (function(){
         } else if (this.category == 'private') {
           container = $("#private-cars");
         } else if (this.category == 'shuttle') {
-          if (this.late) {
+          if (late) {
             container = $("#private-cars");
           } else {
             container = $("#shuttle-cars");
@@ -122,7 +127,7 @@ var CarpoolApp = (function(){
         dataType: 'json',
         success: function(data) {
           // console.log("Car status uploaded: "+status);          
-          console.log("Updated at: "+data.timestamp);
+          // console.log("Updated at: "+data.timestamp);
         },
         error: function() {
           Materialize.toast("Sorry...I'm confused", 5000, 'red');
@@ -242,7 +247,7 @@ var CarpoolApp = (function(){
     },
 
     handleCarpoolEntry: function() {
-      console.log("Keyboard entry " + $("#transport_name").val().toUpperCase());
+      // console.log("Keyboard entry " + $("#transport_name").val().toUpperCase());
       url = "/carpools/";
       var dataToSend = new Object();
       dataToSend = { carpool: {
@@ -276,11 +281,7 @@ var CarpoolApp = (function(){
     },
 
     create: function(car) {
-      var transport = Transport.init(car);
-      var now = new Date().getTime();
-      if (car.category == 'shuttle' && now > Carpool.shuttleTimeLimit) {
-        transport.late = true;
-      }
+      var transport = Transport.init(car);      
       Carpool.carpoolList.push(transport);
       transport.render();
     },
@@ -353,8 +354,8 @@ var CarpoolApp = (function(){
         //console.log("Timestamp: " + data.timestamp);
         if (carpool.length > 0) {
           if (data.reorder > localStorage.carpool_ts) {
-            console.log("Reorder: " + data.reorder);
-            console.log("This TS: " + localStorage.carpool_ts);
+            // console.log("Reorder: " + data.reorder);
+            // console.log("This TS: " + localStorage.carpool_ts);
             Carpool.reset();
           }
           $.each(carpool, function(i,car){
@@ -362,7 +363,7 @@ var CarpoolApp = (function(){
           });
           localStorage.carpool_ts = now;  // Mark last polling having  data
         } else if (todaysDate != marksDate) {
-          console.log("RESETTING: "+todaysDate+" <=> "+marksDate);          
+          // console.log("RESETTING: "+todaysDate+" <=> "+marksDate);          
           Carpool.reset();
         }
         localStorage.carpool_mark = data.timestamp;
