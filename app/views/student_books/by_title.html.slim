@@ -12,7 +12,7 @@ ul#section-options.dropdown-content
       = link_to section.name, "#!", class:"grade-#{section.grade_level_id}", onclick:"filterTitleOptions(#{section.grade_level_id}, #{section.id}, '#{section.name}', #{@year_id});"
 ul#title-options.dropdown-content
   /- if @standard_books.present?
-  li = link_to 'All', by_title_student_books_path(year:@year_id, s:@grade_section.id, g:@grade_level.id)
+  /li = link_to 'All', by_title_student_books_path(year:@year_id, s:@grade_section.id, g:@grade_level.id)
   - @standard_books.each do |standard_book|
     li = link_to standard_book.title, by_title_student_books_path(year:@year_id, s:@grade_section.id, g:@grade_level.id, t:standard_book.book_title_id)
 
