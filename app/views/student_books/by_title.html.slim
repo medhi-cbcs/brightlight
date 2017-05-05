@@ -11,10 +11,10 @@ ul#section-options.dropdown-content
     li
       = link_to section.name, "#!", class:"grade-#{section.grade_level_id}", onclick:"filterTitleOptions(#{section.grade_level_id}, #{section.id}, '#{section.name}', #{@year_id});"
 ul#title-options.dropdown-content
-  - if @standard_books.present?
-    li = link_to 'All', by_title_student_books_path(year:@year_id, s:@grade_section.id, g:@grade_level.id)
-    - @standard_books.each do |standard_book|
-      li = link_to standard_book.book_title.title, by_title_student_books_path(year:@year_id, s:@grade_section.id, g:@grade_level.id, t:standard_book.book_title_id)
+  /- if @standard_books.present?
+  /li = link_to 'All', by_title_student_books_path(year:@year_id, s:@grade_section.id, g:@grade_level.id)
+  - @standard_books.each do |standard_book|
+    li = link_to standard_book.title, by_title_student_books_path(year:@year_id, s:@grade_section.id, g:@grade_level.id, t:standard_book.book_title_id)
 
 ul#year-options.dropdown-content
   li  
@@ -36,7 +36,7 @@ javascript:
   }
   function filterTitleOptions(grade_level_id, grade_section_id, section_name, year) {
     $("#section").html(section_name);
-    $.getJSON("/standard_books.json?grade_level_id="+grade_level_id+"&section="+grade_section_id+"&category="+"TB"+"&year="+year, null, function (data) {
+    $.getJSON("/standard_books.json?grade_level_id="+grade_level_id+"&category="+"TB"+"&year="+year, null, function (data) {
       var list = "<li><a href='/student_books/by_title?s="+grade_section_id+"&g="+grade_level_id+"&year="+year+"'>All</a></li>";
       $.each(data, function(i,item){
           list += "<li><a href='/student_books/by_title?s="+grade_section_id+"&g="+item.grade_level_id+"&t="+item.id+"&year="+year+"'>"+item.title+"</a></li>";
@@ -75,8 +75,8 @@ javascript:
             
   - if @book_titles.present?
     - @book_titles.each do |book_title|
-      h4 = book_title[:title].title
-      = render partial: 'book_title_table', locals: {book_title: book_title}
+      h4 = book_title[:edition_title]
+      = render partial: 'book_title_table', locals: {student_books: book_title[:student_books]}
       .page-break    
     - if !@disable_edit
       .toolbar.z-depth-1

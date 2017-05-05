@@ -22,9 +22,9 @@
         th.wd5 style='text-align:center;font-size:0.9rem' Rebinding 
         th style='text-align:center;' Notes
     tbody
-      - if book_title.present?
+      - if student_books.present?
         /- book_copies = BookCopy.where(book_edition_id:book_title.book_editions.first.id).standard_books(@grade_level.id,AcademicYear.current_id).order('standard_books.id').includes([:book_edition, :book_condition])
-        - book_title[:student_books].each_with_index do |book, i|
+        - student_books.each_with_index do |book, i|
           = fields_for "book_loans[]", book do |f|
             = f.hidden_field :grade_section_id, value: @grade_section.id 
             = f.hidden_field :grade_level_id, value: @grade_level.id 

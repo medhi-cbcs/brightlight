@@ -13,8 +13,8 @@ ul#section-options.dropdown-content
 ul#student-options.dropdown-content
   - if @grade_section.present?
     li = link_to 'All', by_student_student_books_path(params.merge(year:@year_id,s:@grade_section.id, g:@grade_level.id).symbolize_keys)
-    - Student.for_section(@grade_section.id,year:@year_id).each do |student| 
-      li = link_to "#{student.order_no}. #{student.name}", by_student_student_books_path(params.merge(year:@year_id,st:student.id,s:@grade_section.id).symbolize_keys)
+    - @all_students.each do |gss| 
+      li = link_to "#{gss.order_no}. #{gss.student.name}", by_student_student_books_path(params.merge(year:@year_id,st:gss.student.id,s:@grade_section.id).symbolize_keys)
 
 ul#year-options.dropdown-content
   li  
@@ -28,9 +28,7 @@ ul#year-options.dropdown-content
       ul
         li 
           = link_to 'PDF Format', by_student_student_books_path(year:params[:year],s:params[:s],st:params[:st], format: :pdf), target: '_blank'
-        - if @student_books.present? and !@disable_edit
-          li  
-            button.btn.waves-effect.waves-light type="submit" Save 
+
       ul.right
         li 
           a.dropdown-button href="#!" data-activates="year-options"
@@ -50,6 +48,9 @@ ul#year-options.dropdown-content
             i.material-icons.right arrow_drop_down
 
   = hidden_field_tag :student_form, 1
+  = hidden_field_tag :grade_section_id, @grade_section.id
+  = hidden_field_tag :grade_level_id, @grade_level.id
+  = hidden_field_tag :st, @student.id
 
   - if @student_list.present?
     - @student_list.each_with_index do |record,count|
@@ -140,6 +141,8 @@ ul#year-options.dropdown-content
     - if !@disable_edit
       .toolbar.z-depth-1
         button.btn.waves-effect.waves-light type="submit" Save
+        - if @next_in_list
+          button.btn.waves-effect.waves-light type="submit" name="next" value=@next_in_list.student_id Save & Next
   - else
     #message.card-panel.grey.lighten-1
       .center.white-text Please choose Grade Level, Class and Student
