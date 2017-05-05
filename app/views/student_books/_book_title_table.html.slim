@@ -46,7 +46,8 @@
             = f.hidden_field :user_id, value: current_user.id if current_user
           = fields_for "student_books[]", book do |f|
             - initial_condition = book.book_copy.start_condition_in_year(@year_id) if book.book_copy.present?
-            tr
+            - end_condition = book.end_copy_condition_id
+            tr id=book.id
               td.wd5 = i+1
               td.wd10 = link_to book.barcode, book.try(:book_copy)
               td.wd5 style='text-align:center;' 
@@ -54,21 +55,22 @@
               td.wd10 style='text-align:center;' 
                 span.box class="#{initial_condition.try(:color) || 'white'}"
                   = initial_condition.try(:code) || '?'
+              = f.hidden_field :end_copy_condition_id
               td.wd5 style='text-align:center;' 
-                = f.radio_button :end_copy_condition_id, 1, disabled:@disable_edit
-                = f.label :end_copy_condition_id_1, "New", class:'small-radio-label'
+                = radio_button_tag "book[#{book.id}][condition]", 1, end_condition==1, disabled:@disable_edit
+                = label_tag "book[#{book.id}][condition]_1", "New", class:'small-radio-label'
               td.wd5 style='text-align:center;' 
-                = f.radio_button :end_copy_condition_id, 2, disabled:@disable_edit
-                = f.label :end_copy_condition_id_2, "Good", class:'small-radio-label'
+                = radio_button_tag "book[#{book.id}][condition]", 2, end_condition==2, disabled:@disable_edit
+                = label_tag "book[#{book.id}][condition]_2", "Good", class:'small-radio-label'
               td.wd5 style='text-align:center;' 
-                = f.radio_button :end_copy_condition_id, 3, disabled:@disable_edit
-                = f.label :end_copy_condition_id_3, "Fair", class:'small-radio-label'
+                = radio_button_tag "book[#{book.id}][condition]", 3, end_condition==3, disabled:@disable_edit
+                = label_tag "book[#{book.id}][condition]_3", "Fair", class:'small-radio-label'
               td.wd5 style='text-align:center;' 
-                = f.radio_button :end_copy_condition_id, 4, disabled:@disable_edit
-                = f.label :end_copy_condition_id_4, "Poor", class:'small-radio-label'
+                = radio_button_tag "book[#{book.id}][condition]", 4, end_condition==4, disabled:@disable_edit
+                = label_tag "book[#{book.id}][condition]_4", "Poor", class:'small-radio-label'
               td.wd5 style='text-align:center;' 
-                = f.radio_button :end_copy_condition_id, 5, disabled:@disable_edit
-                = f.label :end_copy_condition_id_5, "Missing", class:'small-radio-label'
+                = radio_button_tag "book[#{book.id}][condition]", 5, end_condition==5, disabled:@disable_edit
+                = label_tag "book[#{book.id}][condition]_5", "Missing", class:'small-radio-label'
               td.wd5 style='text-align:center;' 
                 = f.check_box :needs_rebinding, disabled:@disable_edit
                 = f.label :needs_rebinding, 'NR', class:'small-radio-label;font-size:2px'
@@ -80,3 +82,4 @@ css:
     padding-left: 0px !important;
     padding-top:20px !important;
   }
+
