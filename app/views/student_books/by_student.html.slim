@@ -8,7 +8,7 @@ ul#grade-options.dropdown-content
 ul#section-options.dropdown-content
   - @grade_sections.each do |section|
     li
-      = link_to section.name, "#!", class:"grade-#{section.grade_level_id}", onclick:"filterStudentOptions(#{section.id}, '#{section.name}');"
+      = link_to section.name, "#!", class:"grade-#{section.grade_level_id}", onclick:"filterStudentOptions(#{section.grade_level_id},#{section.id}, '#{section.name}');"
 
 ul#student-options.dropdown-content
   - if @grade_section.present?
@@ -48,9 +48,9 @@ ul#year-options.dropdown-content
             i.material-icons.right arrow_drop_down
 
   = hidden_field_tag :student_form, 1
-  = hidden_field_tag :grade_section_id, @grade_section.id
-  = hidden_field_tag :grade_level_id, @grade_level.id
-  = hidden_field_tag :st, @student.id
+  = hidden_field_tag :grade_section_id, @grade_section.try(:id)
+  = hidden_field_tag :grade_level_id, @grade_level.try(:id)
+  = hidden_field_tag :st, @student.try(:id)
 
   - if @student_list.present?
     - @student_list.each_with_index do |record,count|
@@ -107,30 +107,31 @@ ul#year-options.dropdown-content
                 = f.hidden_field :user_id, value: current_user.id if current_user
               = fields_for "student_books[]", book do |f|
                 - initial_condition = book.book_copy.start_condition_in_year(@year_id) if book.book_copy.present?
-                tr
+                - end_condition = book.end_copy_condition_id
+                tr id=book.id
                   td.wd3 = i+1                  
                   td.wd20 = book.try(:title).truncate(45) 
-                  /#book.try(:book_edition).try(:title).truncate(45)
                   td.wd5 style='text-align:center;' 
                     span = link_to book.barcode, book.try(:book_copy)
                   td.wd5 style='text-align:center;' 
                     span.box class="#{initial_condition.try(:color) || 'beige'}"
                       = initial_condition.try(:code) || '?'
+                  = f.hidden_field :end_copy_condition_id
                   td.wd3 style='text-align:center;' 
-                    = f.radio_button :end_copy_condition_id, 1, disabled:@disable_edit
-                    = f.label :end_copy_condition_id_1, "New", class:'small-radio-label'
+                    = radio_button_tag "book[#{book.id}][condition]", 1, end_condition==1, disabled:@disable_edit
+                    = label_tag "book[#{book.id}][condition]_1", "New", class:'small-radio-label'
                   td.wd3 style='text-align:center;' 
-                    = f.radio_button :end_copy_condition_id, 2, disabled:@disable_edit
-                    = f.label :end_copy_condition_id_2, "Good", class:'small-radio-label'
+                    = radio_button_tag "book[#{book.id}][condition]", 2, end_condition==2, disabled:@disable_edit
+                    = label_tag "book[#{book.id}][condition]_2", "Good", class:'small-radio-label'
                   td.wd3 style='text-align:center;' 
-                    = f.radio_button :end_copy_condition_id, 3, disabled:@disable_edit
-                    = f.label :end_copy_condition_id_3, "Fair", class:'small-radio-label'
+                    = radio_button_tag "book[#{book.id}][condition]", 3, end_condition==3, disabled:@disable_edit
+                    = label_tag "book[#{book.id}][condition]_3", "Fair", class:'small-radio-label'
                   td.wd3 style='text-align:center;' 
-                    = f.radio_button :end_copy_condition_id, 4, disabled:@disable_edit
-                    = f.label :end_copy_condition_id_4, "Poor", class:'small-radio-label'
+                    = radio_button_tag "book[#{book.id}][condition]", 4, end_condition==4, disabled:@disable_edit
+                    = label_tag "book[#{book.id}][condition]_4", "Poor", class:'small-radio-label'
                   td.wd3 style='text-align:center;' 
-                    = f.radio_button :end_copy_condition_id, 5, disabled:@disable_edit
-                    = f.label :end_copy_condition_id_5, "Missing", class:'small-radio-label'
+                    = radio_button_tag "book[#{book.id}][condition]", 5, end_condition==5, disabled:@disable_edit
+                    = label_tag "book[#{book.id}][condition]_5", "Missing", class:'small-radio-label'
                   td.wd5 style='text-align:center;' 
                     = f.check_box :needs_rebinding, disabled:@disable_edit
                     = f.label :needs_rebinding, 'NR', class:'small-radio-label;font-size:2px'
@@ -160,7 +161,7 @@ javascript:
       }
     })
   }
-  function filterStudentOptions(grade_section_id, section_name) {
+  function filterStudentOptions(grade_level_id, grade_section_id, section_name) {
     $("#section").html(section_name);
     $.getJSON("/students.json?section="+grade_section_id+"&year=#{@year_id}", null, function (data) {
       var list = "<li><a href='/student_books/by_student?s="+grade_section_id+"&year=#{@year_id}"+"'>All</a></li>";
@@ -170,4 +171,21 @@ javascript:
       $("#student-options").html(list);
       $("#student-menu").dropdown();
     });
+    //$("#grade_section_id").prop("value", grade_section_id);
+    //$("#grade_level_id").prop("value", grade_level_id);    
   }
+
+  var setCheck; 
+  $("input:radio").click(function(){
+    var id = $(this).closest("tr").attr("id");
+    var condition = $(this).prop("value");    
+    if(setCheck!=this){
+      setCheck=this;
+      $("#student_books_"+id+"_end_copy_condition_id").prop("value", condition);
+    } else { 
+      $(this).prop("checked", false);
+      $("#student_books_"+id+"_end_copy_condition_id").prop("value", null);
+      setCheck=null;
+    }
+    console.log("Setting: "+id+" to "+condition);
+  });
