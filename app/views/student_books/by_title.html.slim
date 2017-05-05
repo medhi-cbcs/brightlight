@@ -45,7 +45,6 @@ javascript:
     });
   }
 
-/= form_for :student_book, url: update_multiple_student_books_path do |f|
 = form_tag update_multiple_student_books_path, method: :put do
   nav
     .nav-wrapper
@@ -84,3 +83,23 @@ javascript:
   - else
     #message.card-panel.grey.lighten-1
       .center.white-text Please choose Grade Level, Class and Book Title
+
+  = hidden_field_tag :grade_section_id, @grade_section.try(:id)
+  = hidden_field_tag :grade_level_id, @grade_level.try(:id)
+  = hidden_field_tag :title, @book_title_id
+
+javascript:
+  var setCheck; 
+  $("input:radio").click(function(){
+    var id = $(this).closest("tr").attr("id");
+    var condition = $(this).prop("value");    
+    if(setCheck!=this){
+      setCheck=this;
+      $("#student_books_"+id+"_end_copy_condition_id").prop("value", condition);
+    } else { 
+      $(this).prop("checked", false);
+      $("#student_books_"+id+"_end_copy_condition_id").prop("value", null);
+      setCheck=null;
+    }
+    console.log("Setting: "+id+" to "+condition);
+  });
