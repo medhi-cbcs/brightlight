@@ -30,7 +30,7 @@
     </Style>
   </Styles>
   <Worksheet ss:Name="Sheet1">
-    <Table ss:ExpandedColumnCount="11" ss:ExpandedRowCount="<%= @count+3 %>" x:FullColumns="1"
+    <Table ss:ExpandedColumnCount="12" ss:ExpandedRowCount="<%= @count+3 %>" x:FullColumns="1"
     x:FullRows="1" ss:DefaultRowHeight="15">
     <Column ss:AutoFitWidth="0" ss:Width="35.25"/>
     <Column ss:AutoFitWidth="0" ss:Width="82.5"/>
@@ -51,6 +51,7 @@
         <Cell ss:StyleID="s64"><Data ss:Type="String">Title</Data></Cell>
         <Cell ss:StyleID="s64"><Data ss:Type="String">Subject</Data></Cell>
         <Cell ss:StyleID="s64"><Data ss:Type="String">Return Date</Data></Cell>
+        <Cell ss:StyleID="s64"><Data ss:Type="String">Return?</Data></Cell>
         <Cell ss:StyleID="s64"><Data ss:Type="String">Checked?</Data></Cell>
         <Cell ss:StyleID="s64"><Data ss:Type="String">ISBN 13</Data></Cell>
         <Cell ss:StyleID="s64"><Data ss:Type="String">ISBN 10</Data></Cell>
@@ -63,15 +64,16 @@
       <Row>
         <Cell><Data ss:Type="Number"><%= i %></Data></Cell>
         <Cell><Data ss:Type="String"><%= book_loan.barcode %></Data></Cell>
-        <Cell><Data ss:Type="String"><%= book_edition.try(:title) %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= book_loan.title %></Data></Cell>
         <Cell><Data ss:Type="String"><%= book_loan.subject %></Data></Cell>
         <Cell><Data ss:Type="String"><%= book_loan.return_date %></Data></Cell>
         <Cell><Data ss:Type="String"><%= book_loan.return_status ? 'Yes' : 'No' %></Data></Cell>
-        <Cell><Data ss:Type="String"><%= book_edition.isbn13 %></Data></Cell>
-        <Cell><Data ss:Type="String"><%= book_edition.isbn10 %></Data></Cell>
-        <Cell><Data ss:Type="String"><%= book_edition.refno %></Data></Cell>
-        <Cell><Data ss:Type="String"><%= book_edition.authors %></Data></Cell>
-        <Cell><Data ss:Type="String"><%= book_edition.publisher %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= book_loan.check_id.present? ? 'Yes' : 'No' %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= book_loan.isbn13 %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= book_loan.isbn10 %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= book_loan.refno %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= book_loan.authors %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= book_loan.publisher %></Data></Cell>
       </Row>
     <% end %>
     </Table>
