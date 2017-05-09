@@ -163,9 +163,8 @@ class BookLoansController < ApplicationController
     else #if params[:year].blank?
       @academic_year = AcademicYear.current      
     end 
-    @book_loans = BookLoan.list_for_teacher(params[:employee_id], params[:year])
-                    .includes([:loan_checks])
-    @count = @book_loans.length
+    @book_loans = TeachersBook.for(@teacher).year(@academic_year)
+    @count = @book_loans.count
 
     respond_to do |format|
       format.html do
@@ -358,13 +357,8 @@ class BookLoansController < ApplicationController
         :loan_type_id, :out_date, :due_date, :academic_year_id, :barcode, :return_date, :loan_status, :return_status, :notes)
     end
 
-    
-    
-   
-
-
     def sortable_columns 
-      [:subject, :title, :barcode, :return_status, :out_date, :return_date, :academic_year_id]
+      [:subject, :title, :barcode, :return_status, :out_date, :return_date, :academic_year_id, :check_id]
     end    
 
 end

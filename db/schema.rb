@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170412040739) do
+ActiveRecord::Schema.define(version: 20170509031634) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -429,14 +429,6 @@ ActiveRecord::Schema.define(version: 20170412040739) do
 
   add_index "departments", ["manager_id"], name: "index_departments_on_manager_id", using: :btree
   add_index "departments", ["slug"], name: "index_departments_on_slug", unique: true, using: :btree
-
-  create_table "employee_trainings", force: :cascade do |t|
-    t.integer  "employee_id"
-    t.integer  "training_id"
-    t.string   "status"
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
-  end
 
   create_table "employees", force: :cascade do |t|
     t.string   "name"
@@ -1020,19 +1012,6 @@ ActiveRecord::Schema.define(version: 20170412040739) do
   add_index "templates", ["academic_year_id"], name: "index_templates_on_academic_year_id", using: :btree
   add_index "templates", ["user_id"], name: "index_templates_on_user_id", using: :btree
 
-  create_table "trainings", force: :cascade do |t|
-    t.string   "topic"
-    t.string   "trainer"
-    t.date     "training_start"
-    t.date     "training_end"
-    t.string   "location"
-    t.string   "description"
-    t.string   "required"
-    t.datetime "created_at",     null: false
-    t.datetime "updated_at",     null: false
-    t.string   "certificated"
-  end
-
   create_table "transports", force: :cascade do |t|
     t.string   "category"
     t.string   "name"
@@ -1103,4 +1082,60 @@ ActiveRecord::Schema.define(version: 20170412040739) do
   add_foreign_key "smart_cards", "transports"
   add_foreign_key "templates", "academic_years"
   add_foreign_key "templates", "users"
+
+  create_view :teachers_books,  sql_definition: <<-SQL
+      SELECT book_loans.id,
+      book_loans.book_copy_id,
+      book_loans.book_edition_id,
+      book_loans.book_title_id,
+      book_loans.person_id,
+      book_loans.book_category_id,
+      book_loans.loan_type_id,
+      book_loans.out_date,
+      book_loans.due_date,
+      book_loans.academic_year_id,
+      book_loans.user_id,
+      book_loans.created_at,
+      book_loans.updated_at,
+      book_loans.student_no,
+      book_loans.roster_no,
+      book_loans.barcode,
+      book_loans.refno,
+      book_loans.grade_section_code,
+      book_loans.grade_subject_code,
+      book_loans.notes,
+      book_loans.prev_academic_year_id,
+      book_loans.loan_status,
+      book_loans.return_status,
+      book_loans.bkudid,
+      book_loans.return_date,
+      book_loans.employee_id,
+      book_loans.employee_no,
+      book_loans.student_id,
+      book_loans.deleted_flag,
+      subjects.name AS subject,
+      e.id AS edition_id,
+      e.title,
+      e.authors,
+      e.isbn10,
+      e.isbn13,
+      e.publisher,
+      e.small_thumbnail,
+      l.id AS check_id,
+      l.user_id AS checked_by,
+      l.loaned_to,
+      l.scanned_for,
+      l.emp_flag,
+      l.matched,
+      l.notes AS check_notes,
+      employees.id AS emp_id,
+      employees.name AS emp_name
+     FROM (((((book_loans
+       LEFT JOIN book_titles ON ((book_titles.id = book_loans.book_title_id)))
+       LEFT JOIN book_editions e ON ((e.id = book_loans.book_edition_id)))
+       LEFT JOIN subjects ON ((subjects.id = book_titles.subject_id)))
+       LEFT JOIN employees ON ((employees.id = book_loans.employee_id)))
+       LEFT JOIN loan_checks l ON (((l.book_loan_id = book_loans.id) AND (l.academic_year_id = book_loans.academic_year_id) AND (l.loaned_to = book_loans.employee_id) AND (l.matched = true))));
+  SQL
+
 end
