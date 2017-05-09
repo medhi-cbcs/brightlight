@@ -82,7 +82,7 @@ ul#year-options.dropdown-content
             td = sort_link :return_status, "Returned?"
             th = sort_link :return_date 
             th = sort_link :subject
-            th = "Checked?"
+            th = sort_link :check_id, "Checked?"
               / a.dropdown-button href="#!" data-activates="checked-options" data-beloworigin="true" 
               /   = params[:checked]=='t' ? "Checked" : params[:checked]=='f' ? 'Not Checked' : 'Checked?'
               /   i.material-icons.right arrow_drop_down          
@@ -95,25 +95,26 @@ ul#year-options.dropdown-content
                 input.checkbox type="checkbox" id="add_#{book_loan.id}" name="add[#{book_loan.id}]"
                 = label_tag "add[#{book_loan.id}]", ""
               td = @book_loans.offset + i + 1
-              td = link_to book_loan.barcode, book_loan.book_copy
+              td = link_to book_loan.barcode, book_copy_path(book_loan.book_copy_id)
               td 
-                - if book_loan.book_edition.present?
-                  = link_to book_loan.book_edition.try(:title).truncate(50), book_loan.book_edition, remote: true
+                /- if book_loan.book_edition.present?
+                /  = link_to book_loan.book_edition.try(:title).truncate(50), book_loan.book_edition, remote: true
+                = link_to book_loan.title.truncate(50), book_edition_path(book_loan.edition_id), remote: true
               //td = book_loan.out_date
               td style='text-align:center' 
                 = book_loan.return_status == 'R' ? '&#9745;'.html_safe : ''
               td = book_loan.return_date 
               td = book_loan.subject
-              td style='text-align:center' 
-                = book_loan.loan_checks.for_year(@academic_year.id).all_matched.for_employee(@teacher.id).present? ? '&#9745;'.html_safe : ''
+              td style='text-align:center'                 
+                = book_loan.check_id.present? ? '&#9745;'.html_safe : ''
               td 
-                = link_to employee_book_loan_path(employee_id: @teacher.id, id:book_loan.id), remote:true
+                = link_to employee_book_loan_path(employee_id: book_loan.emp_id, id:book_loan.id), remote:true
                   i.material-icons visibility
                 - if can? :update, BookLoan
-                  = link_to edit_employee_book_loans_path(book_loan.employee,book_loan, year: @academic_year.id)
+                  = link_to edit_employee_book_loans_path(book_loan.emp_id, book_loan, year: @academic_year.id)
                     i.material-icons edit
                 - if can? :delete, BookLoan
-                  = link_to book_loan, data: {id: book_loan.id, confirm: 'Are you sure?'}, :method => :delete, class:"red-text delete-link", remote: true
+                  = link_to book_loan_path(book_loan.id), data: {id: book_loan.id, confirm: 'Are you sure?'}, :method => :delete, class:"red-text delete-link", remote: true
                     i.material-icons delete
     - else 
       = @error
