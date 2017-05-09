@@ -70,6 +70,9 @@ gem 'omniauth-google-oauth2'
 # Nested form handling
 gem 'cocoon'
 
+# Scenic provides support for using database views in Rails
+gem 'scenic'
+
 # For converting HTML to PDF
 gem 'wicked_pdf'
 gem 'wkhtmltopdf-binary', '~> 0.9.9.3'
