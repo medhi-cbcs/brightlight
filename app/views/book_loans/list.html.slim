@@ -78,14 +78,10 @@ ul#year-options.dropdown-content
             th No
             th = sort_link :barcode
             th = sort_link :title, 'Book title'
-            //th = sort_link :out_date
             td = sort_link :return_status, "Returned?"
             th = sort_link :return_date 
             th = sort_link :subject
-            th = sort_link :check_id, "Checked?"
-              / a.dropdown-button href="#!" data-activates="checked-options" data-beloworigin="true" 
-              /   = params[:checked]=='t' ? "Checked" : params[:checked]=='f' ? 'Not Checked' : 'Checked?'
-              /   i.material-icons.right arrow_drop_down          
+            th = sort_link :check_id, "Checked?"       
             th Actions
               
         tbody
@@ -97,10 +93,7 @@ ul#year-options.dropdown-content
               td = @book_loans.offset + i + 1
               td = link_to book_loan.barcode, book_copy_path(book_loan.book_copy_id)
               td 
-                /- if book_loan.book_edition.present?
-                /  = link_to book_loan.book_edition.try(:title).truncate(50), book_loan.book_edition, remote: true
                 = link_to book_loan.title.truncate(50), book_edition_path(book_loan.edition_id), remote: true
-              //td = book_loan.out_date
               td style='text-align:center' 
                 = book_loan.return_status == 'R' ? '&#9745;'.html_safe : ''
               td = book_loan.return_date 

@@ -44,29 +44,54 @@ h4 New Standard Book
   .card-panel
     table#book_list
 
-javascript:
-  $(document).ready(function() {
+/ javascript:
+/   $(document).ready(function() {
 
-    $("#title_autocomplete").easyAutocomplete({
-      url: function(title) {
-        return "/book_editions?search=" + title + "&format=json";
-      },
-      getValue: 'title',
-      list: {
-        maxNumberOfElements: 50,
-        onClickEvent: function() {
-          var edition = $("#title_autocomplete").getSelectedItemData();
-          insert_row(edition);
-        },
-        onChooseEvent: function() {
-          $("#title_autocomplete").val("");
-          $("#new_standard_book").submit();
-        }
+/     $("#title_autocomplete").easyAutocomplete({
+/       url: function(title) {
+/         return "/book_editions?search=" + title + "&format=json";
+/       },
+/       getValue: 'title',
+/       list: {
+/         maxNumberOfElements: 50,
+/         onClickEvent: function() {
+/           var edition = $("#title_autocomplete").getSelectedItemData();
+/           insert_row(edition);
+/         },
+/         onChooseEvent: function() {
+/           $("#title_autocomplete").val("");
+/           $("#new_standard_book").submit();
+/         }
+/       }
+/     });
+/   });
+
+/   function insert_row(edition) {
+/     $("#standard_book_book_edition_id").val(edition.id);
+/     $("#standard_book_book_title_id").val(edition.book_title_id);
+/   }
+
+javascript:
+  $( function() {
+    $( "#title_autocomplete" ).autocomplete({
+      source: "/book_editions?format=json",
+      max: 50,
+      minLength: 2,
+      select: function( event, ui ) {
+        insert_row(ui.item);
       }
-    });
-  });
+    })
+    .autocomplete( "instance" )._renderItem = function( ul, item ) {
+      return $( "<li>" )
+        .append( "<div>" + item.title + " ISBN: " + (item.isbn13 ? item.isbn13 : item.isbn10 ? item.isbn10 : "-" )+"</div>" )
+        .appendTo( ul );
+    };
+  } );
 
   function insert_row(edition) {
+    console.log( "Selected: " + edition.value + " id " + edition.id );
     $("#standard_book_book_edition_id").val(edition.id);
     $("#standard_book_book_title_id").val(edition.book_title_id);
+    $("#new_standard_book").submit();
+    $("#title_autocomplete").val("");
   }
