@@ -1,27 +1,27 @@
 class BookEditionsController < ApplicationController
   before_action :set_book_edition, only: [:show, :edit, :update, :destroy, :update_metadata]
- 
-
 
   # GET /book_editions
   # GET /book_editions.json
   def index
     authorize! :read, BookEdition
     if params[:v] == 'list'
-      items_per_page = 20
+      items_per_page = 30
       @view_style = :list
       session[:view_style] = 'list'
     else
-      items_per_page = 10
+      items_per_page = 20
       @view_style = :block
       session[:view_style] = ''
     end
     
     @book_editions = BookEdition.with_number_of_copies
-    respond_to do |format|
-      format.html { @book_editions = @book_editions
-        .search_query(params[:search]) if params[:search] 
-        .paginate(page: params[:page], per_page: items_per_page)
+     
+    respond_to do |format|      
+      format.html { 
+        @book_editions = @book_editions.search_query(params[:search]) if params[:search] 
+        @book_editions = @book_editions.order("#{sort_column} #{sort_direction}")
+                          .paginate(page: params[:page], per_page: items_per_page)
       }
       format.json { @book_editions = @book_editions.search_query(params[:term]) if params[:term] } 
     end
@@ -151,6 +151,9 @@ class BookEditionsController < ApplicationController
         {:book_copies_attributes => [:id, :book_edition_id, :book_condition_id, :status_id, :barcode, :copy_no, :book_label_id, :notes, :_destroy]}
       )
     end
-    
+
+    def sortable_columns 
+      [:title, :authors, :publisher, :isbn13, :refno]
+    end 
     
 end

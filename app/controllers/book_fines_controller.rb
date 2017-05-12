@@ -45,7 +45,7 @@ class BookFinesController < ApplicationController
           WHERE grade_sections_students.grade_section_id = ?
           AND grade_sections_students.academic_year_id = ?)", @grade_section.id, @academic_year.id)
     end
-    @book_fines = @book_fines.includes([:student,:old_condition,:new_condition]).includes(:book_copy => :book_edition)
+    @book_fines = @book_fines.includes([:student,:old_condition,:new_condition]).includes(:book_copy => :book_edition).includes(:book_copy => :book_label)
   end
 
   # GET /book_fines/1
