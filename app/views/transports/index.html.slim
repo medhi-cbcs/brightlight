@@ -36,7 +36,7 @@ ul#category-options.dropdown-content
         th Active
         th Contact
         th Contact phone
-        / th Contact email
+        th Smartcards
         th Actions
 
     tbody
@@ -52,7 +52,7 @@ ul#category-options.dropdown-content
               label for="active-transport" 
           td.wd30 = transport.contact_name
           td.wd30 = transport.contact_phone
-          / td = transport.contact_email
+          td.wd5 = transport.smart_cards.count
           td.actions.wd20
             = link_to transport_path(id:transport.id, page:params[:page], type:params[:type])
               i.material-icons visibility
