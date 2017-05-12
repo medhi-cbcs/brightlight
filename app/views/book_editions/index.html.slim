@@ -36,11 +36,11 @@ nav
     table.medium.compact.striped
       thead
         tr
-          th Title
-          th Author 
-          th Publisher 
-          th ISBN
-          th Reference
+          th = sort_link :title
+          th = sort_link :authors
+          th = sort_link :publisher 
+          th = sort_link :isbn13, 'ISBN'
+          th = sort_link :refno, 'Reference'
           th Copies
           - if can? :manage, BookEdition
             th 
@@ -50,7 +50,7 @@ nav
             td = link_to book_edition.title, book_edition_path(book_edition, {listpage:params[:page]})
             td = book_edition.authors
             td = book_edition.publisher
-            td = "#{book_edition.isbn13} #{'/ '+book_edition.isbn10 if book_edition.isbn10}"
+            td = "#{book_edition.isbn13} #{'/ '+book_edition.isbn10 if book_edition.isbn10.present?}"
             td = book_edition.refno
             td
               = link_to book_edition_book_copies_path(book_edition)                  
