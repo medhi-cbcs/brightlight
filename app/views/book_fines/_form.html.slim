@@ -1,7 +1,6 @@
 = form_for @book_fine do |f|
   .card-panel
 
-    h5 Editing Book Fine
     .row
       - if @book_fine.errors.any?
         #error_explanation
@@ -49,13 +48,12 @@
         = f.label :student, class:'active'
         = text_field_tag nil, f.object.try(:student).try(:name), disabled:true 
         = f.hidden_field :student_id
-        /= f.autocomplete_field :student, autocomplete_student_name_book_fines_path, id_element: "#book_fine_student_id"
+
 
   .toolbar.z-depth-1
     .actions.col.s12 
       button.btn.waves-effect.waves-light type="submit" Save
-      /= link_to 'Cancel', @book_fine, class: "waves-effect waves-teal btn-flat"
-      = link_to "Close", "#!", class:"modal-action modal-close waves-effect waves-light btn-flat"
+      = link_to "Cancel", book_fines_path, class:"modal-action modal-close waves-effect waves-light btn-flat"
 
 javascript:
   $(document).ready(function() {

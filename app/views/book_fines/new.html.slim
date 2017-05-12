@@ -1,3 +1,138 @@
 h4 Create New Book Fine
 
-== render 'form'
+= form_for @book_fine do |f|
+  .card-panel
+    .row
+      - if @book_fine.errors.any?
+        #error_explanation
+          h2 = "#{pluralize(@book_fine.errors.count, "error")} prohibited this book_fine from being saved:"
+          ul
+            - @book_fine.errors.full_messages.each do |message|
+              li = message
+    .row
+      .input-field.col.s12
+        = f.label :title, class:'active'
+        = text_field_tag nil, @book_title, disabled:true, id:'title'    
+    .row
+      .input-field.col.s4
+        = f.label :barcode, class:'active'
+        = text_field_tag :barcode, @barcode
+      .input-field.col.s1
+        = f.label :currency, class:'active'
+        = text_field_tag nil, @currency, disabled:true, id: 'currency'
+      .input-field.col.s4
+        = f.label :book_price, class:'active'
+        = text_field_tag nil, @price, disabled:true, id: 'book_price'
+      = f.hidden_field :book_copy_id
+    .row
+      .input-field.col.s3
+        = f.label :old_condition, class:'active'
+        = f.collection_select :old_condition_id, BookCondition.all, :id, :code
+      .input-field.col.s3
+        = f.label "New condition", class:'active'
+        = f.collection_select :new_condition_id, BookCondition.all, :id, :code
+      .input-field.col.s2
+        = f.label :percentage, class:'active'  
+        = f.select :percentage, FineScale.collection_for_select
+      .input-field.col.s2
+        = f.label :currency, class:'active'
+        = f.select :currency, [['USD', 'USD'], ['IDR', 'IDR']]
+      .input-field.col.s2
+        = f.label :fine, class:'active'
+        = f.number_field :fine, step:'any'
+    .row
+      .input-field.col.s2
+        = f.label :academic_year, class:'active'
+        = text_field_tag :year, AcademicYear.current.name, disabled:true
+        = f.hidden_field :academic_year_id, value:AcademicYear.current_id
+      .input-field.col.s5
+        = f.label :student_name, class:'active'
+        = f.hidden_field :student_id
+        = text_field_tag :student, "", id: "student_autocomplete", placeholder: "Search student name" 
+      .input-field.col.s5
+        = text_field_tag :student_name, "", disabled:true
+
+  .toolbar.z-depth-1
+    .actions.col.s12 
+      button.btn.waves-effect.waves-light type="submit" Save
+      /= link_to 'Cancel', @book_fine, class: "waves-effect waves-teal btn-flat"
+      = link_to "Close", "#!", class:"modal-action modal-close waves-effect waves-light btn-flat"
+
+javascript:
+  $(document).ready(function() {
+    var pressed = false;
+    var chars = [];
+    $(window).keypress(function(e) {
+      if (e.which >= 45 && e.which <= 112) {
+          chars.push(String.fromCharCode(e.which));
+      }
+      if (pressed == false) {
+        setTimeout(function(){
+          if (chars.length >= 11) {
+            var barcode = chars.join("");
+            $.getJSON("/book_copies/"+barcode+".json", null, function (data) {              
+              $("#barcode").focus().val(barcode);
+              update_values(data);
+            }).fail(function(){
+              $("[name$='[book_copy_id]']").val('');
+              Materialize.toast("Invalid barcode.", 4000, 'red');
+            });            
+          }
+          chars = [];
+          pressed = false;
+        },500);
+      }
+      pressed = true;
+    });
+    $(document).on("keypress","#barcode", (function(e){
+      if ( e.which === 13 ) {
+        e.preventDefault();
+        $.getJSON("/book_copies/"+$(e.target).val()+".json", null, function (data) {
+          update_values(data);
+        }).fail(function(){
+          $(e.target).val('');
+          Materialize.toast("Invalid barcode.", 5000, 'red');
+        });
+      }
+    }));
+    var update_values = function(data) {
+      var book = data.book_copy;
+      $("img.barcode").attr('src',"/assets/images/"+book.barcode+".PNG")
+      $("#title").val(book.book_edition.title);
+      $("#currency").val(book.book_edition.currency);
+      $("#book_price").val(book.book_edition.price);
+      $("#old_condition").val(book.book_condition);
+      $("label[for=book_fine_old_condition]").attr('class','active');
+      $("[name$='[old_condition_id]']").val(book.book_condition_id);
+      $("label[for=book_fine_title]").attr('class','active');
+      $("label[for=book_fine_book_price]").attr('class','active');
+      $("label[for=book_fine_currency]").attr('class','active');
+      $("[name$='[book_copy_id]']").val(book.id);
+    };
+    $("#book_fine_percentage").on('change', function(e) {
+      var total = parseFloat($("#book_price").val()) * parseFloat($("#book_fine_percentage option:selected").val());
+      $("#book_fine_fine").val(total.toFixed(2));
+    });
+  });
+
+javascript:
+  $( function() {
+    $( "#student_autocomplete" ).autocomplete({
+      source: "/students?format=json",
+      max: 50,
+      minLength: 2,
+      select: function( event, ui ) {
+        insert_row(ui.item);
+      }
+    })
+    .autocomplete( "instance" )._renderItem = function( ul, student ) {
+      return $( "<li>" )
+        .append( "<div>" + student.name + " " + student.grade + " #" + student.roster_no+ "</div>" )
+        .appendTo( ul );
+    };
+  } );
+
+  function insert_row(student) {
+    $("#book_fine_student_id").val(student.id);
+    $("#student_name").val(student.name);
+  }
