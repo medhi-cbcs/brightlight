@@ -55,8 +55,7 @@ h4 Create New Book Fine
   .toolbar.z-depth-1
     .actions.col.s12 
       button.btn.waves-effect.waves-light type="submit" Save
-      /= link_to 'Cancel', @book_fine, class: "waves-effect waves-teal btn-flat"
-      = link_to "Close", "#!", class:"modal-action modal-close waves-effect waves-light btn-flat"
+      = link_to 'Cancel', book_fines_path, class: "waves-effect waves-teal btn-flat"      
 
 javascript:
   $(document).ready(function() {
