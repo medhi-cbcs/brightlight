@@ -165,6 +165,15 @@ scss:
        font-size:16px;
     }
   }
+
+  /* Hack to avoid page break inside a td */
+  table tbody tr td:before,
+  table tbody tr td:after {
+      content : "" ;
+      height : 4px ;
+      display : block ;
+  }
+
   table.compact {
   	width: 100%;
 

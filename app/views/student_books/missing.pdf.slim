@@ -1,70 +1,76 @@
-.right Teacher's Signature
-h5 Missing Books Notification  #{@grade_section.name if @grade_section.present?}
+- if @template      
+  = @template.substituted :header, pdf: true
+  = @template.substituted :opening, pdf: true  
 
-- @students.each do |student|
-  - missing_books = @student_books.where(grade_section:student.current_grade_section).where(roster_no:student.current_roster_no)
-  - unless missing_books.blank?
-    .panel    
-      h5 = "#{student.name} (#{student.current_grade_section.name}##{student.current_roster_no})"
-      table.compact.striped
-        thead
-          tr.compact-row
-            th colspan=3
-            th style='text-align:center;' Fine
-            th colspan=3 style='text-align:center;' Book condition (if found)
-          tr.compact-row
-            th No
-            th style='text-align:center;' Title
-            th style='text-align:center;' Barcode
-            th style='text-align:center;' Amount
-            th style='text-align:center;' Good
-            th style='text-align:center;' Fair
-            th style='text-align:center;' Poor
+  - prev = @students.first.current_grade_section
+  - page_one = true
+  - @students.each do |student|
+    - grade_section = student.current_grade_section
+    - missing_books = @student_books.where(grade_section:grade_section).where(roster_no:student.current_roster_no)
+    - unless missing_books.blank?
+      - page_break = (prev != grade_section) || page_one      
+      - if page_break
+        div style="#{page_break ? 'page-break-before: always;' : ''}"
+          .right Teacher's Signature
+          h5 Missing Books Notification  #{@grade_section.name if @grade_section.present?}
+        - prev = grade_section
+        - page_one = false
+      .panel        
+        h5 style="margin:0"
+          = "#{student.name} (#{grade_section.name}##{student.current_roster_no})" 
+        table.compact.striped
+          thead
+            tr.compact-row
+              th colspan=3
+              th style='text-align:center;' Fine
+              th colspan=3 style='text-align:center;' Book condition (if found)
+            tr.compact-row
+              th No
+              th style='text-align:center;' Title
+              th style='text-align:center;' Barcode
+              th style='text-align:center;' Amount
+              th style='text-align:center;' Good
+              th style='text-align:center;' Fair
+              th style='text-align:center;' Poor
 
-        tbody                                    
-          - total_usd = 0.0
-          - total_idr = 0.0
-          - total_missing_books = 0
-          - missing_books.each_with_index do |book, i|
-            - total_missing_books += 1
-            tr.nobreak style='border-bottom:1px solid gainsboro'
-              td.wd3 = i+1
-              td.wd20
-                span = book.try(:book_edition).try(:title).truncate(50)
-              td.wd5 style='text-align:center'          
-                = book.barcode
-              td.wd5 style='text-align:right;'
-                - pct = FineScale.fine_percentage_for_condition_change(book.initial_copy_condition_id,book.end_copy_condition_id)
-                - fine = pct * (book.try(:book_copy).try(:book_edition).try(:price).try(:to_f) || 0.0)
-                - currency = book.try(:book_copy).try(:book_edition).try(:currency).try(:upcase)
-                - total_usd += fine if currency == 'USD'
-                - total_idr += fine if currency == 'IDR'
-                = "#{currency} #{fine}"
-              td.wd3 style='text-align:center;background-color:LightGrey'
-                | &#9744;
-              td.wd3 style='text-align:center;background-color:LightGrey'
-                | &#9744;
-              td.wd3 style='text-align:center;background-color:LightGrey'
-                | &#9744;
-          / -if total_usd > 0.0
-          /   tr.nobreak
-          /     td colspan=2
-          /     td.wd5 style='text-align:right;font-weight:bold' Total USD 
-          /     td.wd5 style='text-align:right;font-weight:bold' =  total_usd 
-          / -if total_idr > 0.0
-          /   tr.nobreak
-          /     td colspan=2
-          /     td.wd5 style='text-align:right;font-weight:bold' Total IDR 
-          /     td.wd5 style='text-align:right;font-weight:bold' =  total_idr    
-          tr 
-            td colspan=2
-              -if total_usd > 0.0
-                p style="font-size:9pt" = "(USD 1 = Rp#{Currency.dollar_rate})"
-            td.wd5 style='text-align:right;' Total IDR 
-            td.wd5 style='text-align:right;' =  total_idr +  total_usd * Currency.dollar_rate
-          tr.nobreak
-            td colspan=5
-              p style="font-size:8pt"
-                | I acknowledge that I have missed #{total_missing_books} book(s). I will try to look for the missing book(s) and return it to Inventory by May 20, 2016 during school hours. If I do not return the book(s) by then, I will have to to pay for the fee according to the current book price. Inventory will strictly reject any books returned after the due date for any reasons. Students who return the books between May 16-18, 2016 can pick the book again for final examination preparation by May 24, 2016 at the latest.
-            td colspan=2 style="vertical-align:top"
-              | Student Signature
+          tbody                                    
+            - total_usd = 0.0
+            - total_idr = 0.0
+            - total_missing_books = 0
+            - missing_books.each_with_index do |book, i|
+              - total_missing_books += 1
+              tr.nobreak style='border-bottom:1px solid gainsboro'
+                td.wd3 = i+1
+                td.wd20
+                  span = book.try(:book_edition).try(:title).truncate(50)
+                td.wd5 style='text-align:center'          
+                  = book.barcode
+                td.wd5 style='text-align:right;'
+                  - pct = FineScale.fine_percentage_for_condition_change(book.initial_copy_condition_id,book.end_copy_condition_id)
+                  - fine = pct * (book.try(:book_copy).try(:book_edition).try(:price).try(:to_f) || 0.0)
+                  - currency = book.try(:book_copy).try(:book_edition).try(:currency).try(:upcase)
+                  - total_usd += fine if currency == 'USD'
+                  - total_idr += fine if currency == 'IDR'
+                  = number_to_currency(fine.round(2), {unit:'USD', precision:2}) if currency == 'USD'
+                  = number_to_currency(fine.round(-2), {unit:'Rp', precision:0}) if currency == 'IDR'
+                td.wd3 style='text-align:center;background-color:LightGrey'
+                  | &#9744;
+                td.wd3 style='text-align:center;background-color:LightGrey'
+                  | &#9744;
+                td.wd3 style='text-align:center;background-color:LightGrey'
+                  | &#9744;
+          tfoot
+            tr 
+              td colspan=2
+                -if total_usd > 0.0
+                  p style="font-size:9pt" = "(USD 1 = Rp#{Currency.dollar_rate})"
+              td.wd5 style='text-align:right;' Total IDR 
+              td.wd5 style='text-align:right;' = number_to_currency((total_idr +  total_usd * Currency.dollar_rate).round(-2), {unit:'Rp', precision:0})          
+
+        = @template.substituted :closing, pdf: true
+  
+  = @template.substituted :footer, pdf: true
+
+- else
+  p No template is active for Missing Book Notification.
+  p Please create or activate a template.
