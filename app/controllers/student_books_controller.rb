@@ -212,6 +212,20 @@ class StudentBooksController < ApplicationController
     respond_to do |format|
       format.html
       format.pdf do
+        # Use the specified template or the default one if none given
+        if params[:template].present?
+          @template = Template.find params[:template]
+        else
+          @template = Template.where(target:'missing_books').where(active:'true').take
+        end
+
+        # if @template
+        #   @template.placeholders = {
+        #     student_name: @student.name,
+        #     grade_section: @student.current_grade_section.name
+        #   }
+        # end
+
         render pdf:         "Missing_Book_List#{('-'+@grade_section.name if @grade_section.present?)}",
                disposition: 'inline',
                template:    'student_books/missing.pdf.slim',

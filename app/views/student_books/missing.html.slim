@@ -40,7 +40,7 @@ nav
   - missing_books = @student_books.where(grade_section:student.current_grade_section,roster_no:student.current_roster_no).includes([:book_edition, :book_copy, :initial_copy_condition, :end_copy_condition])
   - unless missing_books.blank?
     .card-panel    
-      h5 = "#{student.name} (#{student.current_grade_section.name}##{student.current_roster_no})"
+      h5 = "#{student.name} (#{student.current_grade_section.name}##{student.current_roster_no})" style="margin:0"
       table.compact.striped
         thead
           tr.compact-row
@@ -71,14 +71,15 @@ nav
                 - currency = book.try(:book_copy).try(:book_edition).try(:currency).try(:upcase)
                 - total_usd += fine if currency == 'USD'
                 - total_idr += fine if currency == 'IDR'
-                = "#{currency} #{fine}"        
+                = number_to_currency(fine.round(2), {unit:'USD', precision:2}) if currency == 'USD'
+                = number_to_currency(fine.round(-2), {unit:'Rp', precision:0}) if currency == 'IDR'       
           tr 
             td colspan=2
               -if total_usd > 0.0
                 p = "USD 1 = Rp#{Currency.dollar_rate}"
             td colspan=2 
             td.wd5 style='text-align:right;' Total IDR 
-            td.wd5 style='text-align:right;' =  total_idr +  total_usd * Currency.dollar_rate
+            td.wd5 style='text-align:right;' = number_to_currency((total_idr +  total_usd * Currency.dollar_rate).round(-2), {unit:'Rp', precision:0})
       
       
 javascript:

@@ -25,11 +25,13 @@ class Template < ActiveRecord::Base
   def substituted(section, options={})
     if self.respond_to? section
       text = String.new self.method(section).call
-      self.placeholders.merge!(options)
-      self.placeholders.each do |key, value|
-        next if key.blank?
-        placeholder = "##{key.to_s}#"
-        text.gsub!(placeholder, value.to_s || '')
+      if self.placeholders.present?
+        self.placeholders.merge!(options)
+        self.placeholders.each do |key, value|
+          next if key.blank?
+          placeholder = "##{key.to_s}#"
+          text.gsub!(placeholder, value.to_s || '')
+        end
       end
       img_match = text.match(/img.*src=\"([^ ]+)\"/)
       if options[:pdf]==true && img_match.present?
