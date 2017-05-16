@@ -40,7 +40,7 @@ nav
   - missing_books = @student_books.where(grade_section:student.current_grade_section,roster_no:student.current_roster_no).includes([:book_edition, :book_copy, :initial_copy_condition, :end_copy_condition])
   - unless missing_books.blank?
     .card-panel    
-      h5 = "#{student.name} (#{student.current_grade_section.name}##{student.current_roster_no})" style="margin:0"
+      h5 = "#{student.name} (#{student.current_grade_section.name}##{student.current_roster_no})"
       table.compact.striped
         thead
           tr.compact-row
