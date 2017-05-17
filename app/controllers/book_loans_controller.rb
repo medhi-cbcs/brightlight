@@ -224,7 +224,7 @@ class BookLoansController < ApplicationController
 
   # PUT /employees/:employee_id/book_loans/:id
   def update_tm
-    authorize! :manage, BookLoan
+    authorize! :scan, BookLoan
     @teacher = Employee.find params[:employee_id]
     @book_loan = BookLoan.find params[:id]
     borrower_matched = @teacher == @book_loan.employee
