@@ -14,9 +14,14 @@ nav
         = link_to 'Done', employee_book_loans_path(@teacher, year: params[:year])
 
 - unless can? :manage, BookLoan
-  .toolbar
-    .notes Scan barcode
-    = hidden_field_tag :barcode
+  ul.collapsible data-collapsible="expandable"
+    li
+      .collapsible-header 
+        | Scan bar code
+        = hidden_field_tag :barcode
+        .input-field.right-in-header
+          = check_box_tag :return 
+          = label_tag :return 
 - else
   ul.collapsible data-collapsible="expandable"
     li
@@ -120,8 +125,8 @@ javascript:
             $("tbody#book_loans").prepend("<tr><td>"+book.barcode+"</td><td>"+book.book_edition.title+"</td><td>Returned</td><td>"+today.toUTCString()+"</td></tr>");
         })
         .fail(function(xhr) {
-          //Materialize.toast($.parseJSON(xhr.responseText).errors, 4000, 'red');
-          Materialize.toast('Book check error', 5000, 'red');
+          Materialize.toast($.parseJSON(xhr.responseText).errors, 4000, 'red');
+          //Materialize.toast('Book check error', 5000, 'red');
         });
       } else {
         Materialize.toast(book.barcode+' is borrowed by '+book.loans.employee_name, 5000, 'red');
