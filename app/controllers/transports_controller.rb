@@ -10,11 +10,17 @@ class TransportsController < ApplicationController
     if type.present?
       @category = type == 'private' ? "Car Riders" : type == 'shuttle' ? "Shuttle Cars" : "???"
     end
-    @transports = type ? Transport.where('lower(category) = ?', type.downcase) : Transport.all    
+    @transports = type ? Transport.where('lower(category) = ?', type.downcase) : Transport.all
+     
     if params[:term] =~ /\A\d{10}\Z/    # 10 digits
       @transports = @transports.joins(:smart_cards).where(smart_cards: {code: params[:term]})
     elsif params[:term]
       @transports = @transports.where('name LIKE ?', "%#{params[:term]}%")
+    end 
+    if params[:period] == 'am'
+      @transports = @transports.am_carpool
+    elsif params[:period] == 'pm'
+      @transports = @transports.pm_carpool
     end 
     @transports = @transports.order(:name).paginate(page: params[:page], per_page: 30) 
   end
