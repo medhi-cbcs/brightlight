@@ -44,10 +44,10 @@ nav
         a.dropdown-button href="#!" data-activates="student-options"
           span#grade = @student.present? ? "#{@student.name}" : "Student" 
           i.material-icons.right arrow_drop_down
-      li.right
-        = link_to calculate_book_fines_path, data: {:confirm => 'This will create new records. Are you sure?'}, class:'red-text'
-          | Calculate book fines
-          i.material-icons.left local_atm
+      / li.right
+      /   = link_to calculate_book_fines_path, data: {:confirm => 'This will create new records. Are you sure?'}, class:'red-text'
+      /     | Calculate book fines
+      /     i.material-icons.left local_atm
       li.right
         = link_to new_book_fine_path
           | Create new

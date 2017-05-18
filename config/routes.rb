@@ -157,7 +157,7 @@ Rails.application.routes.draw do
 
   resources :book_fines do
     collection do
-      get 'calculate'
+      post 'calculate'
       get 'current'
       get 'autocomplete_student_name'
       get 'notification'

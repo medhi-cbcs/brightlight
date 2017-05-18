@@ -9,8 +9,8 @@ class BookFine < ActiveRecord::Base
 
   # collect_current will read student_books table and look for book that are applicable for book fine
   # for the current academic year and then save them in book_fines table
-  def self.collect_current
-    BookFine.create(StudentBook.current_year.fine_applies.map do |b|
+  def self.collect_fines(year)
+    BookFine.create(StudentBook.where(academic_year:year).fine_applies.map do |b|
       pct = FineScale.fine_percentage_for_condition_change(b.initial_copy_condition_id,b.end_copy_condition_id)
       price = b.try(:book_copy).try(:book_edition).try(:price).try(:to_f) || 0.0
       {
@@ -24,6 +24,25 @@ class BookFine < ActiveRecord::Base
         currency:         b.book_copy.try(:book_edition).try(:currency)
       }
     end)
+    # puts "Collect fines for #{AcademicYear.find(year).name}"
+  end
+
+  def self.collect_fines_for_grade_level grade_level, year: year
+    BookFine.create(StudentBook.where(academic_year:year).fine_applies.where(grade_level:grade_level).map do |b|
+      pct = FineScale.fine_percentage_for_condition_change(b.initial_copy_condition_id,b.end_copy_condition_id)
+      price = b.try(:book_copy).try(:book_edition).try(:price).try(:to_f) || 0.0
+      {
+        book_copy_id:     b.book_copy_id,
+        old_condition_id: b.initial_copy_condition_id,
+        new_condition_id: b.end_copy_condition_id,
+        academic_year_id: b.academic_year_id,
+        student_id:       b.student_id,
+        percentage:       pct,
+        fine:             pct * price,
+        currency:         b.book_copy.try(:book_edition).try(:currency)
+      }
+    end)
+    # puts "Collect fines for #{GradeLevel.find(grade_level).name} #{AcademicYear.find(year).name}"
   end
 
   def self.create_invoice_for(student:, total_amount:, academic_year:, exchange_rate:1, foreign_currency:'USD', invoice_currency:'Rp', round_to_hundreds:true, current_user: )
