@@ -112,11 +112,21 @@ class BookFinesController < ApplicationController
     authorize! :manage, BookFine
   end
 
-  # GET /book_fines/calculate
+  # POST /book_fines/calculate
   def calculate
-    authorize! :manage, BookFine
-    BookFine.collect_current
-    redirect_to book_fines_path
+    authorize! :manage, BookFine    
+    academic_year_id = params[:fines_academic_year].to_i
+
+    respond_to do |format|
+      format.js do
+        grades = params[:fines_grade]
+        if grades[:all].present?
+          BookFine.collect_fines academic_year_id
+        else
+          grades.each { |grade| BookFine.collect_fines_for_grade_level grade[0], year:academic_year_id }
+        end 
+      end
+    end
   end
 
   # GET /book_fines/notification?st=1&year=1

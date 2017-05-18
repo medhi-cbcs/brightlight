@@ -120,3 +120,31 @@ ul class="collapsible" data-collapsible="expandable"
                 .col.s12
                   button.btn.waves-effect.waves-light type="submit" Move
       
+  li 
+    .collapsible-header.waves-effect.waves-light.large-letter.active        
+      | Textbook Fines
+      i.material-icons.right chevron_right
+    .collapsible-body#calculate_fines
+      .container-padding
+        = form_tag calculate_book_fines_path, remote:true do 
+          .row
+            .col.s2
+              .label Academic Year
+              = select_tag :fines_academic_year, options_from_collection_for_select(@academic_years,'id','name', @current_year_id), include_blank: 'None'
+            .col.s2
+              button.btn.waves-effect.waves-light type="submit" id="calculate-fines-button" disabled="disabled" Calculate
+              br
+              .label Select Grades
+              input.allcheckboxes type="checkbox" id="fines_grade-all" name="fines_grade[all]" data-total="#{GradeLevel.count}"
+              = label_tag "fines_grade-all", "All grades"
+              - GradeLevel.all.each do |grade|
+                div style="width:300px"
+                  input.checkbox type="checkbox" id="fines_grade-#{grade.id}" name="fines_grade[#{grade.id}]"
+                  = label_tag "fines_grade-#{grade.id}", grade.name
+            .col.s7 
+              h6 Calculate Textbook Fines
+              .label Description        
+              | This will create new Textbook Fine records based on the student book conditions (Borrow Condition vs. Return Condition). 
+              br 
+              br
+              | Please make sure that the Student Books' conditions are up-to-date (Student Books by Student or by Title). Also make sure that each Book Edition has correct and non-empty <em>price</em> and <em>currency</em>.
