@@ -18,6 +18,10 @@ nav
         a.dropdown-button href="#!" data-activates="category-options"
           span#year = @category.present? ? @category : 'All Category' 
           i.material-icons.right arrow_drop_down
+      li
+        a.dropdown-button href="#!" data-activates="period-options"
+          | Period
+          i.material-icons.right arrow_drop_down
     ul.right
       li
         - if can? :manage, Carpool
@@ -27,6 +31,10 @@ nav
 ul#category-options.dropdown-content
   li = link_to "Shuttle cars", transports_path(type:'shuttle')
   li = link_to "Car riders", transports_path(type:'private')
+
+ul#period-options.dropdown-content
+  li = link_to "Car riders Morning", transports_path(period:'am')
+  li = link_to "Car riders Afternoon", transports_path(period:'pm')
 
 .card-panel
   table.compact.striped
