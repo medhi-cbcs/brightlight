@@ -26,7 +26,7 @@ nav
         = link_to edit_transport_path(@transport)
           i.material-icons edit
 
-.card-panel
+.card-panel#transport data-id="#{@transport.id}"
   .row
     .col.s4
       .big-chip = @transport.name
@@ -80,25 +80,52 @@ javascript:
   $(document).ready(function() {
     $(document).on("click", "#reset-search", function() {
       window.location = [location.protocol, '//', location.host, location.pathname].join('');
-    })
-  });
+    });
+    $("#card-list").codeScanner({
+      minEntryChars: 10,
+      maxEntryTime: 500,
+      onScan: function($element, input) {
+        var barcode = input.trim();
+        $.getJSON("/smart_cards/"+barcode+".json", null, function (data) {
+          var card = data.smart_card
+          if (card) {
+            Materialize.toast("Smart card already registered to "+card.transport_name+" ("+card.category+")", 5000, 'red'); 
+          } else {
+            create_entry(data.new_card.code);
+            Materialize.toast("Registering new card "+ data.new_card.code, 5000, 'green'); 
+          }
+        });           
+      }
+    });
 
-  $(window).codeScanner({
-    minEntryChars: 10,
-    maxEntryTime: 500,
-    onScan: function($element, input) {
-      var barcode = input.trim();
-      $.getJSON("/smart_cards/"+barcode+".json", null, function (data) {
-        var card = data.smart_card
-        Materialize.toast("Smart card already registered to "+card.transport_name+" ("+card.category+")", 5000, 'red');              
-      }).fail(function(data){
-        create_entry(data.smart_card);
-      });           
+    function create_entry(code) {
+      var htmlstr = "<div class='chip'>"+code+"</div>";
+      uploadStatus($("#transport").data("id"), code);
+      $("#card-list").append(htmlstr);
+    };
+    
+    function uploadStatus(transport_id, code) {
+      url = "/transports/" + transport_id;
+      var dataToSend = new Object();
+      dataToSend = { transport: {
+                      smart_cards_attributes: [{code: code}]
+                    } };
+      var jsonData = JSON.stringify(dataToSend);
+      $.ajax({
+        type: 'PATCH',
+        contentType: "application/json; charset=utf-8",
+        url: url,
+        data: jsonData,
+        dataType: 'json',
+        success: function(data) {
+          console.log("Smart card added to " + transport_id + " : " + code);          
+          // console.log("Updated at: "+data.timestamp);
+        },
+        error: function() {
+          Materialize.toast("Sorry...Can't save smartcard", 5000, 'red');
+        }
+      });
     }
   });
-  var id = 1;
-  function create_entry(card) {
-    var template = $("#smart-card-template");
-    var htmlStr = function() { return template.html().replace(/_id_/g, ++id).replace(/_value_/g, card.code); };
-    $("#card-list").append(htmlStr);
-  }
+
+  

@@ -3,10 +3,8 @@ class SmartCardsController < ApplicationController
   # GET /smart_cards/1.json
   def show
     authorize! :manage, SmartCard
-    @smart_card = SmartCard.includes(:transport).find_by_code(params[:id])
-    unless @smart_card
-      render json: :no_header, status: :unprocessable_entity
-    end
+    @code = params[:id]
+    @smart_card = SmartCard.includes(:transport).find_by_code(@code)
   end
 
   # POST /smart_cards.json

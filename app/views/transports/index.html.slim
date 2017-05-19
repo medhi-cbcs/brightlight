@@ -40,6 +40,7 @@ ul#period-options.dropdown-content
   table.compact.striped
     thead
       tr
+        th No
         th Name
         th Active
         th Contact
@@ -48,9 +49,12 @@ ul#period-options.dropdown-content
         th Actions
 
     tbody
-      - @transports.each do |transport|
+      - @transports.each.with_index(1) do |transport, i|
         tr
-          td.wd10 = transport.name
+          td 
+            em = i
+          td.wd10.center
+            strong = transport.name
           td.wd10
             div style="padding-top:10px"
               - if transport.active

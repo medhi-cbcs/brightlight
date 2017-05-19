@@ -18,11 +18,12 @@ class TransportsController < ApplicationController
       @transports = @transports.where('name LIKE ?', "%#{params[:term]}%")
     end 
     if params[:period] == 'am'
-      @transports = @transports.am_carpool
+      @transports = Transport.am_carpool
     elsif params[:period] == 'pm'
-      @transports = @transports.pm_carpool
+      @transports = Transport.pm_carpool
     end 
-    @transports = @transports.order(:name).paginate(page: params[:page], per_page: 30) 
+
+    @transports = @transports.order(:name).paginate(page: params[:page].blank? ? 1 : params[:page], per_page: 200) 
   end
 
   # GET /transports/1
