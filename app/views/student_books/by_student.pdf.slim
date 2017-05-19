@@ -5,7 +5,7 @@ h5 Check Book Condition and Return #{'( '+@grade_section.name+' )' if @grade_sec
     - student = record.student
     - grade_section = record.grade_section
     - roster_no = record.order_no
-    - student_books = @student_books.where(roster_no:roster_no.to_s)
+    - student_books = @student_books.where(student:student)
     
     - if student.present?
       h5 #{student.name} (#{grade_section.try(:name)}##{roster_no})
