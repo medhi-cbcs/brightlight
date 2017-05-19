@@ -13,7 +13,7 @@
     .row      
       .input-field.col.s3
         = f.label :category, class:'active'
-        = f.select :category, [['Shuttle Cars','shuttle'],['Car riders','private']], {selected:params[:type]}
+        = f.select :category, [['Shuttle Cars','shuttle'],['Car riders','private']], {selected:f.object.category}
       .input-field.col.s3
         = f.label :name
         = f.text_field :name

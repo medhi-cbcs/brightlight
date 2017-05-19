@@ -15,10 +15,10 @@ class Transport < ActiveRecord::Base
     .where("gss.academic_year_id = ?", AcademicYear.current_year.take.id)
   }
   scope :am_carpool, lambda {
-    with_grades.where("gss.grade_section_id < 12")
+    with_grades.where("gss.grade_section_id < 10")
   }
   scope :pm_carpool, lambda {
-    with_grades.where("gss.grade_section_id > 12")
+    with_grades.where("gss.grade_section_id > 9")
   }
 
   accepts_nested_attributes_for :smart_cards, allow_destroy: true, reject_if: proc { |attributes| attributes['code'].blank? }
