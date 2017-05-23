@@ -15,15 +15,15 @@ nav
   .nav-wrapper
     ul
       li
-        a.dropdown-button href="#!" data-activates="grade-options"
+        a.dropdown-button href="#!" data-activates="grade-options" data-beloworigin="true" 
           span#grade = @grade_section.present? ? "#{@grade_section.grade_level.name}" : 'Choose a grade'
           i.material-icons.right arrow_drop_down
       li
-        a.dropdown-button href="#!" data-activates="section-options"
+        a.dropdown-button href="#!" data-activates="section-options" data-beloworigin="true" 
           span#section = @grade_section.present? ? "#{@grade_section.name}" : 'Choose a class'
           i.material-icons.right arrow_drop_down
       li
-        a.dropdown-button href="#!" data-activates="year-options"
+        a.dropdown-button href="#!" data-activates="year-options" data-beloworigin="true" 
           span#year = @academic_year.present? ? "#{@academic_year.name}" : "Academic Year" 
           i.material-icons.right arrow_drop_down      
       li.right

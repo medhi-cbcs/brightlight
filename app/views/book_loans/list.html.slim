@@ -17,11 +17,11 @@ ul#year-options.dropdown-content
     .nav-wrapper
       ul
         li
-          a#borrowers-menu.dropdown-button href="#!" data-activates="borrowers-options" data-year="#{@academic_year.id}"
+          a#borrowers-menu.dropdown-button href="#!" data-activates="borrowers-options" data-year="#{@academic_year.id}" data-beloworigin="true" 
             span#teacher = @teacher.present? ? "#{@teacher.name}" : "Teacher name" 
             i.material-icons.right arrow_drop_down
         li
-          a.dropdown-button href="#!" data-activates="year-options"
+          a.dropdown-button href="#!" data-activates="year-options" data-beloworigin="true" 
             span#year = params[:year].present? && params[:year].downcase == 'all' ? 'All' : (@academic_year.present? ? "#{@academic_year.name}" : "Academic Year") 
             i.material-icons.right arrow_drop_down
       #context-buttons style="display:none;"
@@ -37,34 +37,60 @@ ul#year-options.dropdown-content
               button.btn.red type='submit' name='delete' data-confirm="Are you sure?"
                 i.material-icons delete
       #default-buttons
-        ul.right
-          li 
-              = link_to employee_book_loans_receipt_path(@teacher, year: @academic_year.id)
-                | Receipt
-                i.material-icons.left book
-          li 
+        ul.right.hide-on-med-and-down
+          li.tooltipped data-position="bottom" data-delay="10" data-tooltip="Book Receipt"
+            = link_to employee_book_loans_receipt_path(@teacher, year: @academic_year.id)
+              i.material-icons.left receipt 
+          li.tooltipped data-position="bottom" data-delay="10" data-tooltip="Export to PDF"
             -if @academic_year.present?
               = link_to employee_book_loans_path(@teacher, year: @academic_year.id, format: :pdf), target: '_blank'
-                | PDF
-                i.material-icons.left description
+                i.material-icons.left picture_as_pdf
             - else
               = link_to employee_book_loans_path(@teacher, format: :pdf), target: '_blank'
-                | PDF
-                i.material-icons.left description
-          li
+                i.material-icons.left picture_as_pdf
+          li.tooltipped data-position="bottom" data-delay="10" data-tooltip="Export to Excel"
             = link_to employee_book_loans_path(@teacher, year: @academic_year.id, format: :xls), target: '_blank'
-              | XLS
-              i.material-icons.left border_all
-          li
-            = link_to scan_employee_book_loans_path(@teacher, year: @academic_year.id)
+              = image_tag 'xls80-white.png'
+          li.tooltipped data-position="bottom" data-delay="10" data-tooltip="Scan book to check/return"
+            = link_to scan_employee_book_loans_path(@teacher, year: @academic_year.id)              
               | Check
-              i.material-icons.left import_contacts
+              = image_tag 'barcode-white.png', class:"left"
           - if can? :manage, BookLoan
-            li
+            li.tooltipped data-position="bottom" data-delay="10" data-tooltip="Add book"
               = link_to new_employee_book_loans_path(@teacher)
-                | Add
                 i.material-icons.left add
-                
+      
+      a href="#" data-activates="sidenav-menu" class="right button-collapse" style="margin-right:10px"
+        i.material-icons menu
+
+      ul.side-nav#sidenav-menu
+        li 
+          = link_to employee_book_loans_receipt_path(@teacher, year: @academic_year.id)
+            | Book Receipt
+            i.material-icons.left receipt
+        li 
+          -if @academic_year.present?
+            = link_to employee_book_loans_path(@teacher, year: @academic_year.id, format: :pdf), target: '_blank'
+              | Export to PDF
+              i.material-icons.left picture_as_pdf
+          - else
+            = link_to employee_book_loans_path(@teacher, format: :pdf), target: '_blank'
+              | Export to PDF
+              i.material-icons.left picture_as_pdf
+        li
+          = link_to employee_book_loans_path(@teacher, year: @academic_year.id, format: :xls), target: '_blank'            
+            | Export to Excel
+            = image_tag 'xls80-black.png', class:'left'
+        li
+          = link_to scan_employee_book_loans_path(@teacher, year: @academic_year.id)
+            | Scan book to check or return
+            = image_tag 'barcode-black.png', class:'left'
+        - if can? :manage, BookLoan
+          li
+            = link_to new_employee_book_loans_path(@teacher)
+              | Add New Book
+              i.material-icons.left add
+
   #show-modal.modal.modal-fixed-footer
 
   .card-panel
@@ -146,10 +172,18 @@ javascript:
       toggle_menu();
     });
     update_borrowers_menu();
+    $('.button-collapse').sideNav({
+      menuWidth: 300, // Default is 300
+      edge: 'right', // Choose the horizontal origin
+      closeOnClick: true, // Closes side-nav on <a> clicks, useful for Angular/Meteor
+      draggable: true // Choose whether you can drag to open on touch screens
+    });
   }
   $(document).on('page:load', function(){
-    prepare_menu();
+    prepare_menu();    
   });
   $(document).on('ready', function(){
     prepare_menu();
   });
+
+  

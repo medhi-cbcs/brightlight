@@ -392,9 +392,16 @@ nav {
 				&:hover {
 					background-color: rgba(0,0,0,.3);
 				}
+				height: 54px;
+				img { padding-top: 10px }
 			}
 		}
 	}
+	ul.dropdown-content { 
+		a { height: 27px; }
+	}
+	img.left { margin-right: 15px; }
+
 	.nav-heading {
 		position: absolute;
     color: #fff;
