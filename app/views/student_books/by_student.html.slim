@@ -31,19 +31,19 @@ ul#year-options.dropdown-content
 
       ul.right
         li 
-          a.dropdown-button href="#!" data-activates="year-options"
+          a.dropdown-button href="#!" data-activates="year-options" data-beloworigin="true" 
             span#year = @academic_year.name
             i.material-icons.right arrow_drop_down
         li
-          a.dropdown-button href="#!" data-activates="grade-options"
+          a.dropdown-button href="#!" data-activates="grade-options" data-beloworigin="true" 
             span#grade = params[:l].present? ? "Grade #{@grade_level_name}" : 'Choose grade'
             i.material-icons.right arrow_drop_down
         li
-          a.dropdown-button href="#!" data-activates="section-options"
+          a.dropdown-button href="#!" data-activates="section-options" data-beloworigin="true" 
             span#section = params[:l].present? ? "Section #{@grade_section_name}" : 'Choose class'
             i.material-icons.right arrow_drop_down
         li
-          a#student-menu.dropdown-button href="#!" data-activates="student-options"
+          a#student-menu.dropdown-button href="#!" data-activates="student-options" data-beloworigin="true" 
             span#student = 'Choose student'
             i.material-icons.right arrow_drop_down
 

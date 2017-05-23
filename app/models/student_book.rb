@@ -43,7 +43,7 @@ class StudentBook < ActiveRecord::Base
   scope :standard_books, lambda { |grade_level_id, grade_section_id, year_id, category_id|
     joins("LEFT JOIN grade_sections_students gss on gss.student_id = student_books.student_id 
             AND gss.academic_year_id = student_books.academic_year_id")
-    .joins("JOIN standard_books ON student_books.book_edition_id = standard_books.book_edition_id
+    .joins("LEFT JOIN standard_books ON student_books.book_edition_id = standard_books.book_edition_id
             AND standard_books.grade_level_id = student_books.grade_level_id
             AND standard_books.book_category_id = #{category_id}
             AND standard_books.academic_year_id = student_books.academic_year_id

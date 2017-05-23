@@ -17,11 +17,11 @@ ul#year-options.dropdown-content
     .nav-wrapper
       ul
         li
-          a#borrowers-menu.dropdown-button href="#!" data-activates="borrowers-options" data-year="#{@academic_year.id}"
+          a#borrowers-menu.dropdown-button href="#!" data-activates="borrowers-options" data-year="#{@academic_year.id}" data-beloworigin="true" 
             span#teacher = @teacher.present? ? "#{@teacher.name}" : "Teacher name" 
             i.material-icons.right arrow_drop_down
         li
-          a.dropdown-button href="#!" data-activates="year-options"
+          a.dropdown-button href="#!" data-activates="year-options" data-beloworigin="true" 
             span#year = params[:year].present? && params[:year].downcase == 'all' ? 'All' : (@academic_year.present? ? "#{@academic_year.name}" : "Academic Year") 
             i.material-icons.right arrow_drop_down
       #context-buttons style="display:none;"
