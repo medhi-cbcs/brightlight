@@ -1,0 +1,41 @@
+h1 Listing budget_items
+
+table
+  thead
+    tr
+      th Budget
+      th Description
+      th Notes
+      th Amount
+      th Currency
+      th Used amount
+      th Completed
+      th Appvl notes
+      th Approved
+      th Approver
+      th Date approved
+      th
+      th
+      th
+
+  tbody
+    - @budget_items.each do |budget_item|
+      tr
+        td = budget_item.budget
+        td = budget_item.description
+        td = budget_item.notes
+        td = budget_item.amount
+        td = budget_item.currency
+        td = budget_item.used_amount
+        td = budget_item.completed
+        td = budget_item.appvl_notes
+        td = budget_item.approved
+        td = budget_item.approver
+        td = budget_item.date_approved
+        td = link_to 'Show', budget_item
+        td = link_to 'Edit', edit_budget_item_path(budget_item)
+        td = link_to 'Destroy', budget_item, data: {:confirm => 'Are you sure?'}, :method => :delete
+
+br
+
+= link_to 'New Budget item', new_budget_item_path

@@ -1,5 +1,10 @@
 Rails.application.routes.draw do
 
+  resources :order_items
+  resources :budget_items
+  resources :budgets
+  resources :req_items
+  resources :requisitions
   resources :template_targets
   resources :templates
   resources :currencies

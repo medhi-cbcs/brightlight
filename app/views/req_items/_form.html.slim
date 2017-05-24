@@ -1,0 +1,51 @@
+= form_for @req_item do |f|
+  - if @req_item.errors.any?
+    #error_explanation
+      h2 = "#{pluralize(@req_item.errors.count, "error")} prohibited this req_item from being saved:"
+      ul
+        - @req_item.errors.full_messages.each do |message|
+          li = message
+
+  .field
+    = f.label :requisition
+    = f.text_field :requisition
+  .field
+    = f.label :description
+    = f.text_field :description
+  .field
+    = f.label :qty_reqd
+    = f.text_field :qty_reqd
+  .field
+    = f.label :unit
+    = f.text_field :unit
+  .field
+    = f.label :est_price
+    = f.text_field :est_price
+  .field
+    = f.label :actual_price
+    = f.text_field :actual_price
+  .field
+    = f.label :notes
+    = f.text_field :notes
+  .field
+    = f.label :date_needed
+    = f.date_select :date_needed
+  .field
+    = f.label :budgetted
+    = f.check_box :budgetted
+  .field
+    = f.label :budget_item
+    = f.text_field :budget_item
+  .field
+    = f.label :budget_name
+    = f.text_field :budget_name
+  .field
+    = f.label :bdgt_approved
+    = f.check_box :bdgt_approved
+  .field
+    = f.label :bdgt_notes
+    = f.text_field :bdgt_notes
+  .field
+    = f.label :bdgt_appvl_by
+    = f.text_field :bdgt_appvl_by
+  .actions = f.submit

@@ -1,0 +1,39 @@
+h1 Listing order_items
+
+table
+  thead
+    tr
+      th Purchase order
+      th No
+      th Order date
+      th Supplier
+      th Supplier
+      th Req line
+      th Invoice amt
+      th Dp amount
+      th Dp date
+      th Notes
+      th
+      th
+      th
+
+  tbody
+    - @order_items.each do |order_item|
+      tr
+        td = order_item.purchase_order
+        td = order_item.no
+        td = order_item.order_date
+        td = order_item.supplier
+        td = order_item.supplier_id
+        td = order_item.req_line
+        td = order_item.invoice_amt
+        td = order_item.dp_amount
+        td = order_item.dp_date
+        td = order_item.notes
+        td = link_to 'Show', order_item
+        td = link_to 'Edit', edit_order_item_path(order_item)
+        td = link_to 'Destroy', order_item, data: {:confirm => 'Are you sure?'}, :method => :delete
+
+br
+
+= link_to 'New Order item', new_order_item_path

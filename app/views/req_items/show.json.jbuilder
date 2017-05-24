@@ -1,0 +1,1 @@
+json.extract! @req_item, :id, :requisition_id, :description, :qty_reqd, :unit, :est_price, :actual_price, :notes, :date_needed, :budgetted, :budget_item_id, :budget_name, :bdgt_approved, :bdgt_notes, :bdgt_appvl_by_id, :created_at, :updated_at

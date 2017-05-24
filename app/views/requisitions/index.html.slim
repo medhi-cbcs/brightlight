@@ -1,0 +1,59 @@
+h1 Listing requisitions
+
+table
+  thead
+    tr
+      th Req no
+      th Department
+      th Requester
+      th Supv approved
+      th Supv notes
+      th Notes
+      th Budgetted
+      th Budget approved
+      th Bdgt appvd by
+      th Bdgt appvd name
+      th Bdgt appv notes
+      th Sent purch
+      th Sent supv
+      th Date sent supv
+      th Sent bdgt appv
+      th Date sent bdgt
+      th Date supv appvl
+      th Date bdgt appvl
+      th Notes
+      th Origin
+      th
+      th
+      th
+
+  tbody
+    - @requisitions.each do |requisition|
+      tr
+        td = requisition.req_no
+        td = requisition.department
+        td = requisition.requester
+        td = requisition.supv_approved
+        td = requisition.supv_notes
+        td = requisition.notes
+        td = requisition.budgetted
+        td = requisition.budget_approved
+        td = requisition.bdgt_appvd_by
+        td = requisition.bdgt_appvd_name
+        td = requisition.bdgt_appv_notes
+        td = requisition.sent_purch
+        td = requisition.sent_supv
+        td = requisition.date_sent_supv
+        td = requisition.sent_bdgt_appv
+        td = requisition.date_sent_bdgt
+        td = requisition.date_supv_appvl
+        td = requisition.date_bdgt_appvl
+        td = requisition.notes
+        td = requisition.origin
+        td = link_to 'Show', requisition
+        td = link_to 'Edit', edit_requisition_path(requisition)
+        td = link_to 'Destroy', requisition, data: {:confirm => 'Are you sure?'}, :method => :delete
+
+br
+
+= link_to 'New Requisition', new_requisition_path

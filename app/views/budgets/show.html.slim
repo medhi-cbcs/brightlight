@@ -1,0 +1,48 @@
+p#notice = notice
+
+p
+  strong Department:
+  = @budget.department
+p
+  strong Owner:
+  = @budget.owner
+p
+  strong Grade level:
+  = @budget.grade_level
+p
+  strong Grade section:
+  = @budget.grade_section
+p
+  strong Academic year:
+  = @budget.academic_year
+p
+  strong Submitted:
+  = @budget.submitted
+p
+  strong Submit date:
+  = @budget.submit_date
+p
+  strong Approved:
+  = @budget.approved
+p
+  strong Apprv date:
+  = @budget.apprv_date
+p
+  strong Approver:
+  = @budget.approver
+p
+  strong Type:
+  = @budget.type
+p
+  strong Category:
+  = @budget.category
+p
+  strong Active:
+  = @budget.active
+p
+  strong Notes:
+  = @budget.notes
+
+= link_to 'Edit', edit_budget_path(@budget)
+'|
+= link_to 'Back', budgets_path

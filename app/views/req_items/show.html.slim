@@ -1,0 +1,48 @@
+p#notice = notice
+
+p
+  strong Requisition:
+  = @req_item.requisition
+p
+  strong Description:
+  = @req_item.description
+p
+  strong Qty reqd:
+  = @req_item.qty_reqd
+p
+  strong Unit:
+  = @req_item.unit
+p
+  strong Est price:
+  = @req_item.est_price
+p
+  strong Actual price:
+  = @req_item.actual_price
+p
+  strong Notes:
+  = @req_item.notes
+p
+  strong Date needed:
+  = @req_item.date_needed
+p
+  strong Budgetted:
+  = @req_item.budgetted
+p
+  strong Budget item:
+  = @req_item.budget_item
+p
+  strong Budget name:
+  = @req_item.budget_name
+p
+  strong Bdgt approved:
+  = @req_item.bdgt_approved
+p
+  strong Bdgt notes:
+  = @req_item.bdgt_notes
+p
+  strong Bdgt appvl by:
+  = @req_item.bdgt_appvl_by
+
+= link_to 'Edit', edit_req_item_path(@req_item)
+'|
+= link_to 'Back', req_items_path

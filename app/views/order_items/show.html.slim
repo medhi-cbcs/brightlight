@@ -1,0 +1,36 @@
+p#notice = notice
+
+p
+  strong Purchase order:
+  = @order_item.purchase_order
+p
+  strong No:
+  = @order_item.no
+p
+  strong Order date:
+  = @order_item.order_date
+p
+  strong Supplier:
+  = @order_item.supplier
+p
+  strong Supplier:
+  = @order_item.supplier_id
+p
+  strong Req line:
+  = @order_item.req_line
+p
+  strong Invoice amt:
+  = @order_item.invoice_amt
+p
+  strong Dp amount:
+  = @order_item.dp_amount
+p
+  strong Dp date:
+  = @order_item.dp_date
+p
+  strong Notes:
+  = @order_item.notes
+
+= link_to 'Edit', edit_order_item_path(@order_item)
+'|
+= link_to 'Back', order_items_path

@@ -1,0 +1,69 @@
+= form_for @requisition do |f|
+  - if @requisition.errors.any?
+    #error_explanation
+      h2 = "#{pluralize(@requisition.errors.count, "error")} prohibited this requisition from being saved:"
+      ul
+        - @requisition.errors.full_messages.each do |message|
+          li = message
+
+  .field
+    = f.label :req_no
+    = f.text_field :req_no
+  .field
+    = f.label :department
+    = f.text_field :department
+  .field
+    = f.label :requester
+    = f.text_field :requester
+  .field
+    = f.label :supv_approved
+    = f.check_box :supv_approved
+  .field
+    = f.label :supv_notes
+    = f.text_field :supv_notes
+  .field
+    = f.label :notes
+    = f.text_field :notes
+  .field
+    = f.label :budgetted
+    = f.check_box :budgetted
+  .field
+    = f.label :budget_approved
+    = f.check_box :budget_approved
+  .field
+    = f.label :bdgt_appvd_by
+    = f.text_field :bdgt_appvd_by
+  .field
+    = f.label :bdgt_appvd_name
+    = f.text_field :bdgt_appvd_name
+  .field
+    = f.label :bdgt_appv_notes
+    = f.text_field :bdgt_appv_notes
+  .field
+    = f.label :sent_purch
+    = f.check_box :sent_purch
+  .field
+    = f.label :sent_supv
+    = f.check_box :sent_supv
+  .field
+    = f.label :date_sent_supv
+    = f.date_select :date_sent_supv
+  .field
+    = f.label :sent_bdgt_appv
+    = f.check_box :sent_bdgt_appv
+  .field
+    = f.label :date_sent_bdgt
+    = f.date_select :date_sent_bdgt
+  .field
+    = f.label :date_supv_appvl
+    = f.date_select :date_supv_appvl
+  .field
+    = f.label :date_bdgt_appvl
+    = f.date_select :date_bdgt_appvl
+  .field
+    = f.label :notes
+    = f.text_field :notes
+  .field
+    = f.label :origin
+    = f.text_field :origin
+  .actions = f.submit

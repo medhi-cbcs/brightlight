@@ -1,0 +1,47 @@
+h1 Listing budgets
+
+table
+  thead
+    tr
+      th Department
+      th Owner
+      th Grade level
+      th Grade section
+      th Academic year
+      th Submitted
+      th Submit date
+      th Approved
+      th Apprv date
+      th Approver
+      th Type
+      th Category
+      th Active
+      th Notes
+      th
+      th
+      th
+
+  tbody
+    - @budgets.each do |budget|
+      tr
+        td = budget.department
+        td = budget.owner
+        td = budget.grade_level
+        td = budget.grade_section
+        td = budget.academic_year
+        td = budget.submitted
+        td = budget.submit_date
+        td = budget.approved
+        td = budget.apprv_date
+        td = budget.approver
+        td = budget.type
+        td = budget.category
+        td = budget.active
+        td = budget.notes
+        td = link_to 'Show', budget
+        td = link_to 'Edit', edit_budget_path(budget)
+        td = link_to 'Destroy', budget, data: {:confirm => 'Are you sure?'}, :method => :delete
+
+br
+
+= link_to 'New Budget', new_budget_path

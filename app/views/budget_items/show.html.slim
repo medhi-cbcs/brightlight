@@ -1,0 +1,39 @@
+p#notice = notice
+
+p
+  strong Budget:
+  = @budget_item.budget
+p
+  strong Description:
+  = @budget_item.description
+p
+  strong Notes:
+  = @budget_item.notes
+p
+  strong Amount:
+  = @budget_item.amount
+p
+  strong Currency:
+  = @budget_item.currency
+p
+  strong Used amount:
+  = @budget_item.used_amount
+p
+  strong Completed:
+  = @budget_item.completed
+p
+  strong Appvl notes:
+  = @budget_item.appvl_notes
+p
+  strong Approved:
+  = @budget_item.approved
+p
+  strong Approver:
+  = @budget_item.approver
+p
+  strong Date approved:
+  = @budget_item.date_approved
+
+= link_to 'Edit', edit_budget_item_path(@budget_item)
+'|
+= link_to 'Back', budget_items_path
