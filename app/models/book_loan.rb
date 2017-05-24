@@ -18,6 +18,8 @@ class BookLoan < ActiveRecord::Base
 
   has_many :loan_checks
 
+  before_update :sync_book_copy_status, if: :return_status_changed?
+
   scope :current, lambda { where(academic_year: AcademicYear.current) }
   scope :returned, lambda { where(return_status:'R') }
   scope :not_returned, lambda { where(return_status: nil) }
@@ -94,4 +96,24 @@ class BookLoan < ActiveRecord::Base
   def grade_section_name
     student.grade_section_with_academic_year_id(self.academic_year_id).try(:name) if student.present?
   end
+
+  private
+
+  # Whenever return status is changed, also change book_copy status
+  # TODO: loan status and return status should be combined into 1 field
+  def sync_book_copy_status
+    case self.return_status 
+    when nil
+      if self.loan_status == 'B'
+        self.book_copy.status_id = 2   # Status: on loan
+        self.book_copy.save
+      end
+    when 'R'
+      self.loan_status = nil
+    when 'RI'
+      self.loan_status = nil
+      self.book_copy.status_id = 1    # Status: available
+      self.book_copy.save
+    end
+  end 
 end
