@@ -25,23 +25,25 @@ nav
 - else
   ul.collapsible data-collapsible="expandable"
     li
-      .collapsible-header        
+      .collapsible-header
         | Manual input
         i.material-icons.left keyboard
         .input-field.right-in-header
+          = check_box_tag :return_to_inventory 
+          = label_tag :return_to_inventory
+        .input-field.right-in-header
           = check_box_tag :return 
-          = label_tag :return  
+          = label_tag :return
 
       .collapsible-body
         .container style="margin-top:1px"
           .row
             .input-field.col.s4
               = label_tag :barcode, nil, class:'active'
-              = text_field_tag :barcode, nil 
-            .col.s6 style="margin-top:26px;"
-              | Enter barcode and press enter   
-
-        
+              = text_field_tag :barcode, nil
+              | Enter barcode and press enter 
+            .col.s8
+              
 .card-panel#returns style="display:none"
   .row
     table.compact
@@ -67,8 +69,14 @@ javascript:
     var toggleOutput = function() {
       $("#returns").toggle($("#return").is(':checked'));
       $("#checks").toggle(!$("#return").is(':checked'));
+      $("#return_to_inventory").prop("disabled", !$("#return").is(':checked'));
     };
     $("#return").on("change", toggleOutput.bind(this));
+    $("#return_to_inventory").on("change", function(){
+      $("#return").prop("checked", $(this).is(':checked'));
+      $("#return").prop("disabled", $(this).is(':checked'));
+      toggleOutput();
+    });
   });
   $("#barcode").codeScanner({
     minEntryChars: 11,
@@ -90,7 +98,7 @@ javascript:
       e.stopPropagation();
       var barcode = $("#barcode").val().trim();
       $.getJSON("/book_copies/"+barcode+".json?empl="+#{@teacher.id}+"&year="+#{@academic_year_id}, null, function (data) {
-        if ($("#return").is(':checked')) {
+        if ($("#return").is(':checked') || $("#return_to_inventory").is(':checked')) {
           update_book_loan(data);
         } else {
           check_book_loan(data);
@@ -110,7 +118,8 @@ javascript:
         url = "/employees/"+ employeeId + "/book_loans/" + book.loans.id;
         var dataToSend = new Object();
         var today = new Date();
-        dataToSend = { book_loan: { barcode: book.barcode, return_status:'R', academic_year_id: acad_year,
+        var return_status = $("#return_to_inventory").is(':checked') ? 'RI' : 'R';
+        dataToSend = { book_loan: { barcode: book.barcode, return_status: return_status, academic_year_id: acad_year,
                                     return_date: today.toISOString(), user_id: currentUserId }};
         var jsonData = JSON.stringify(dataToSend);
         $.ajax({
@@ -122,7 +131,9 @@ javascript:
         })
         .done(function(m) {
             Materialize.toast('Book checked', 5000, 'green');
-            $("tbody#book_loans").prepend("<tr><td>"+book.barcode+"</td><td>"+book.book_edition.title+"</td><td>Returned</td><td>"+today.toUTCString()+"</td></tr>");
+            var status = "Returned";
+            if (book.return_status == 'RI') status += " to inventory";
+            $("tbody#book_loans").prepend("<tr><td>"+book.barcode+"</td><td>"+book.book_edition.title+"</td><td>"+status+"</td><td>"+today.toUTCString()+"</td></tr>");
         })
         .fail(function(xhr) {
           Materialize.toast($.parseJSON(xhr.responseText).errors, 4000, 'red');

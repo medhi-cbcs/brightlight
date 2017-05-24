@@ -51,7 +51,7 @@
           = f.select :loan_status, options_for_select([['None', nil],['Borrowed','B']], book_loan.loan_status)
         .input_field.col.s3
           = f.label :return_status
-          = f.select :return_status, options_for_select([['None', nil],['Returned','R']], book_loan.return_status)
+          = f.select :return_status, options_for_select([['None', nil],['Returned','R'],['Return to Inventory','RI']], book_loan.return_status)
 
   .toolbar.action
     button.btn.waves-effect.waves-light type='Submit' Save

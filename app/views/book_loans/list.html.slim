@@ -121,7 +121,12 @@ ul#year-options.dropdown-content
               td 
                 = link_to book_loan.title.truncate(50), book_edition_path(book_loan.edition_id), remote: true
               td style='text-align:center' 
-                = book_loan.return_status == 'R' ? '&#9745;'.html_safe : ''
+                - if book_loan.return_status == 'RI'
+                  = '&#9745;'.html_safe + ' Inventory'
+                - elsif  book_loan.return_status == 'R' 
+                  = '&#9745;'.html_safe
+                - else
+                  = ''
               td = book_loan.return_date 
               td = book_loan.subject
               td style='text-align:center'                 
