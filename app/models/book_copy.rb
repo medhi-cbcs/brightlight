@@ -16,6 +16,10 @@ class BookCopy < ActiveRecord::Base
   before_save :sync_book_label, if: :book_label_id_changed?
   before_save :sync_book_edition, if: :book_edition_id_changed?
 
+  def self.default_scope
+    where('disposed = false OR disposed is null')
+  end
+
   scope :standard_books, lambda { |grade_level_id, grade_section_id, year_id|
     if grade_level_id <= 10
       joins("JOIN standard_books ON book_copies.book_edition_id = standard_books.book_edition_id
@@ -31,7 +35,7 @@ class BookCopy < ActiveRecord::Base
   
   scope :with_condition, lambda { |condition_id|
     query = self.joins('left join copy_conditions c on c.book_copy_id = book_copies.id and c.id = (select id from copy_conditions 
-	                  where book_copy_id = book_copies.id order by academic_year_id desc, created_at desc limit 1)')   
+                    where book_copy_id = book_copies.id order by academic_year_id desc, created_at desc limit 1)')   
                 .joins('left join book_labels on book_copies.book_label_id = book_labels.id')                                
                 .joins('left join book_conditions bc on bc.id = c.book_condition_id')
                 .select('book_copies.barcode, book_copies.id, book_copies.status_id, book_copies.notes, book_copies.book_label_id, book_copies.book_condition_id, book_labels.name as label, c.book_condition_id as condition_id, bc.code as cond_code, bc.color as cond_color')
@@ -69,7 +73,7 @@ class BookCopy < ActiveRecord::Base
   end
 
   def book_title
-  	book_edition.try(:book_title)
+    book_edition.try(:book_title)
   end
 
   def create_condition(condition_id, year_id, user_id)
@@ -120,7 +124,7 @@ class BookCopy < ActiveRecord::Base
   def self.update_conditions_from_student_books(academic_year_id, next_academic_year_id)
     category = BookCategory.find_by_code 'TB'
     columns = [:book_copy_id, :barcode, :book_condition_id, :start_date, :end_date, :academic_year_id, :notes, :post, :deleted_flag]
-		return_conditions = []
+    return_conditions = []
     starting_conditions = []
     GradeSection.all.each do |grade_section|
       grade_level_id = grade_section.grade_level_id
@@ -137,19 +141,31 @@ class BookCopy < ActiveRecord::Base
           starting_condition = [sb.book_copy_id, sb.barcode, sb.end_copy_condition_id, sb.return_date, nil, next_academic_year_id, sb.notes, 0, false]
           starting_conditions << starting_condition
         end
-  			if return_conditions.count > 0
-  				CopyCondition.import columns, return_conditions
+        if return_conditions.count > 0
+          CopyCondition.import columns, return_conditions
           CopyCondition.import columns, starting_conditions
-  			end
-				return_conditions = []
+        end
+        return_conditions = []
         starting_conditions = []
       end
     end
   end
 
   def self.copy_with_barcode(barcode)
-  	BookCopy.where(barcode:barcode).first
+    BookCopy.where(barcode:barcode).first
   end
+
+  def dispose
+    self.disposed = true
+    self.disposed_at = Time.zone.now
+    self.save
+  end 
+
+  def undispose
+    self.disposed = false
+    self.disposed_at = nil
+    self.save
+  end 
 
   protected
     def create_initial_condition

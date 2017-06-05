@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170509031634) do
+ActiveRecord::Schema.define(version: 20170605064716) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -106,6 +106,8 @@ ActiveRecord::Schema.define(version: 20170509031634) do
     t.string   "slug"
     t.boolean  "needs_repair"
     t.string   "notes"
+    t.boolean  "disposed"
+    t.date     "disposed_at"
   end
 
   add_index "book_copies", ["barcode"], name: "index_book_copies_on_barcode", unique: true, using: :btree
@@ -307,6 +309,51 @@ ActiveRecord::Schema.define(version: 20170509031634) do
   add_index "book_titles", ["slug"], name: "index_book_titles_on_slug", unique: true, using: :btree
   add_index "book_titles", ["subject_id"], name: "index_book_titles_on_subject_id", using: :btree
 
+  create_table "budget_items", force: :cascade do |t|
+    t.integer  "budget_id"
+    t.string   "description"
+    t.string   "notes"
+    t.decimal  "amount"
+    t.string   "currency"
+    t.decimal  "used_amount"
+    t.boolean  "completed"
+    t.string   "appvl_notes"
+    t.boolean  "approved"
+    t.integer  "approver_id"
+    t.date     "date_approved"
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
+  end
+
+  add_index "budget_items", ["approver_id"], name: "index_budget_items_on_approver_id", using: :btree
+  add_index "budget_items", ["budget_id"], name: "index_budget_items_on_budget_id", using: :btree
+
+  create_table "budgets", force: :cascade do |t|
+    t.integer  "department_id"
+    t.integer  "owner_id"
+    t.integer  "grade_level_id"
+    t.integer  "grade_section_id"
+    t.integer  "academic_year_id"
+    t.boolean  "submitted"
+    t.date     "submit_date"
+    t.boolean  "approved"
+    t.date     "apprv_date"
+    t.integer  "user_id"
+    t.string   "type"
+    t.string   "category"
+    t.boolean  "active"
+    t.string   "notes"
+    t.datetime "created_at",       null: false
+    t.datetime "updated_at",       null: false
+  end
+
+  add_index "budgets", ["academic_year_id"], name: "index_budgets_on_academic_year_id", using: :btree
+  add_index "budgets", ["department_id"], name: "index_budgets_on_department_id", using: :btree
+  add_index "budgets", ["grade_level_id"], name: "index_budgets_on_grade_level_id", using: :btree
+  add_index "budgets", ["grade_section_id"], name: "index_budgets_on_grade_section_id", using: :btree
+  add_index "budgets", ["owner_id"], name: "index_budgets_on_owner_id", using: :btree
+  add_index "budgets", ["user_id"], name: "index_budgets_on_user_id", using: :btree
+
   create_table "carpools", force: :cascade do |t|
     t.string   "category"
     t.integer  "transport_id"
@@ -421,10 +468,11 @@ ActiveRecord::Schema.define(version: 20170509031634) do
   create_table "departments", force: :cascade do |t|
     t.string   "name"
     t.string   "code"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at",      null: false
+    t.datetime "updated_at",      null: false
     t.integer  "manager_id"
     t.string   "slug"
+    t.integer  "vice_manager_id"
   end
 
   add_index "departments", ["manager_id"], name: "index_departments_on_manager_id", using: :btree
@@ -661,6 +709,27 @@ ActiveRecord::Schema.define(version: 20170509031634) do
   add_index "late_passengers", ["student_id"], name: "index_late_passengers_on_student_id", using: :btree
   add_index "late_passengers", ["transport_id"], name: "index_late_passengers_on_transport_id", using: :btree
 
+  create_table "leave_requests", force: :cascade do |t|
+    t.integer  "employee_id"
+    t.date     "leave_date_start"
+    t.date     "leave_date_end"
+    t.string   "leave_hours"
+    t.string   "leave_type"
+    t.string   "leave_note"
+    t.string   "substitute"
+    t.string   "substitute_notes"
+    t.string   "spv_approved"
+    t.date     "spv_approved_date"
+    t.string   "spv_approved_notes"
+    t.string   "hr_approved"
+    t.date     "hr_approved_date"
+    t.string   "hr_approved_notes"
+    t.date     "form_submitted_date"
+    t.string   "attachment_uri"
+    t.datetime "created_at",          null: false
+    t.datetime "updated_at",          null: false
+  end
+
   create_table "line_items", force: :cascade do |t|
     t.string   "description"
     t.string   "quantity"
@@ -702,6 +771,24 @@ ActiveRecord::Schema.define(version: 20170509031634) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
+
+  create_table "order_items", force: :cascade do |t|
+    t.integer  "purchase_order_id"
+    t.integer  "no"
+    t.date     "order_date"
+    t.string   "supplier"
+    t.integer  "supplier_id"
+    t.integer  "req_item_id"
+    t.decimal  "invoice_amt"
+    t.decimal  "dp_amount"
+    t.date     "dp_date"
+    t.string   "notes"
+    t.datetime "created_at",        null: false
+    t.datetime "updated_at",        null: false
+  end
+
+  add_index "order_items", ["purchase_order_id"], name: "index_order_items_on_purchase_order_id", using: :btree
+  add_index "order_items", ["req_item_id"], name: "index_order_items_on_req_item_id", using: :btree
 
   create_table "passengers", force: :cascade do |t|
     t.integer  "transport_id"
@@ -774,6 +861,85 @@ ActiveRecord::Schema.define(version: 20170509031634) do
     t.string   "expiry_date"
     t.date     "received_date"
   end
+
+  create_table "purchase_orders", force: :cascade do |t|
+    t.string   "po_number"
+    t.date     "po_date"
+    t.integer  "supplier_id"
+    t.string   "supplier_name"
+    t.string   "supplier_address"
+    t.string   "supplier_phone"
+    t.string   "requisition_no"
+    t.integer  "requisition_id"
+    t.integer  "req_item_id"
+    t.integer  "requestor_id"
+    t.decimal  "invoice_amount"
+    t.string   "currency"
+    t.decimal  "dp_amount"
+    t.string   "dp_date"
+    t.string   "notes"
+    t.string   "po_doc"
+    t.date     "entry_date"
+    t.date     "sent_date"
+    t.datetime "created_at",       null: false
+    t.datetime "updated_at",       null: false
+  end
+
+  add_index "purchase_orders", ["req_item_id"], name: "index_purchase_orders_on_req_item_id", using: :btree
+  add_index "purchase_orders", ["requestor_id"], name: "index_purchase_orders_on_requestor_id", using: :btree
+  add_index "purchase_orders", ["requisition_id"], name: "index_purchase_orders_on_requisition_id", using: :btree
+  add_index "purchase_orders", ["supplier_id"], name: "index_purchase_orders_on_supplier_id", using: :btree
+
+  create_table "req_items", force: :cascade do |t|
+    t.integer  "requisition_id"
+    t.string   "description"
+    t.float    "qty_reqd"
+    t.string   "unit"
+    t.decimal  "est_price"
+    t.decimal  "actual_price"
+    t.string   "notes"
+    t.date     "date_needed"
+    t.boolean  "budgeted"
+    t.integer  "budget_item_id"
+    t.string   "budget_name"
+    t.boolean  "bdgt_approved"
+    t.string   "bdgt_notes"
+    t.integer  "bdgt_approver_id"
+    t.datetime "created_at",       null: false
+    t.datetime "updated_at",       null: false
+  end
+
+  add_index "req_items", ["bdgt_approver_id"], name: "index_req_items_on_bdgt_approver_id", using: :btree
+  add_index "req_items", ["budget_item_id"], name: "index_req_items_on_budget_item_id", using: :btree
+  add_index "req_items", ["requisition_id"], name: "index_req_items_on_requisition_id", using: :btree
+
+  create_table "requisitions", force: :cascade do |t|
+    t.string   "req_no"
+    t.integer  "department_id"
+    t.integer  "requestor_id"
+    t.boolean  "supv_approved"
+    t.string   "supv_notes"
+    t.string   "notes"
+    t.boolean  "budgeted"
+    t.boolean  "budget_approved"
+    t.integer  "bdgt_approver_id"
+    t.string   "bdgt_appvd_name"
+    t.string   "bdgt_appv_notes"
+    t.boolean  "sent_purch"
+    t.boolean  "sent_supv"
+    t.date     "date_sent_supv"
+    t.boolean  "sent_bdgt_appv"
+    t.date     "date_sent_bdgt"
+    t.date     "date_supv_appvl"
+    t.date     "date_bdgt_appvl"
+    t.string   "origin"
+    t.datetime "created_at",       null: false
+    t.datetime "updated_at",       null: false
+  end
+
+  add_index "requisitions", ["bdgt_approver_id"], name: "index_requisitions_on_bdgt_approver_id", using: :btree
+  add_index "requisitions", ["department_id"], name: "index_requisitions_on_department_id", using: :btree
+  add_index "requisitions", ["requestor_id"], name: "index_requisitions_on_requestor_id", using: :btree
 
   create_table "rosters", force: :cascade do |t|
     t.integer  "course_section_id"
@@ -983,6 +1149,20 @@ ActiveRecord::Schema.define(version: 20170509031634) do
     t.datetime "updated_at",  null: false
   end
 
+  create_table "suppliers", force: :cascade do |t|
+    t.string   "name"
+    t.string   "address"
+    t.string   "office_phone"
+    t.string   "cellphone"
+    t.string   "fax"
+    t.string   "email"
+    t.string   "notes"
+    t.string   "category"
+    t.string   "type"
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
+  end
+
   create_table "template_targets", force: :cascade do |t|
     t.string   "name"
     t.string   "code"
@@ -1059,6 +1239,14 @@ ActiveRecord::Schema.define(version: 20170509031634) do
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
 
+  add_foreign_key "budget_items", "budgets"
+  add_foreign_key "budget_items", "employees", column: "approver_id"
+  add_foreign_key "budgets", "academic_years"
+  add_foreign_key "budgets", "departments"
+  add_foreign_key "budgets", "employees", column: "owner_id"
+  add_foreign_key "budgets", "grade_levels"
+  add_foreign_key "budgets", "grade_sections"
+  add_foreign_key "budgets", "users"
   add_foreign_key "carpools", "transports"
   add_foreign_key "course_section_histories", "employees", column: "instructor_id"
   add_foreign_key "currencies", "users"
@@ -1076,9 +1264,21 @@ ActiveRecord::Schema.define(version: 20170509031634) do
   add_foreign_key "loan_checks", "book_copies"
   add_foreign_key "loan_checks", "book_loans"
   add_foreign_key "loan_checks", "users"
+  add_foreign_key "order_items", "purchase_orders"
+  add_foreign_key "order_items", "req_items"
   add_foreign_key "passengers", "grade_sections"
   add_foreign_key "passengers", "students"
   add_foreign_key "passengers", "transports"
+  add_foreign_key "purchase_orders", "employees", column: "requestor_id"
+  add_foreign_key "purchase_orders", "req_items"
+  add_foreign_key "purchase_orders", "requisitions"
+  add_foreign_key "purchase_orders", "suppliers"
+  add_foreign_key "req_items", "budget_items"
+  add_foreign_key "req_items", "employees", column: "bdgt_approver_id"
+  add_foreign_key "req_items", "requisitions"
+  add_foreign_key "requisitions", "departments"
+  add_foreign_key "requisitions", "employees", column: "bdgt_approver_id"
+  add_foreign_key "requisitions", "employees", column: "requestor_id"
   add_foreign_key "smart_cards", "transports"
   add_foreign_key "templates", "academic_years"
   add_foreign_key "templates", "users"
@@ -1130,12 +1330,19 @@ ActiveRecord::Schema.define(version: 20170509031634) do
       l.notes AS check_notes,
       employees.id AS emp_id,
       employees.name AS emp_name
-     FROM (((((book_loans
+     FROM ((((((book_loans
        LEFT JOIN book_titles ON ((book_titles.id = book_loans.book_title_id)))
        LEFT JOIN book_editions e ON ((e.id = book_loans.book_edition_id)))
        LEFT JOIN subjects ON ((subjects.id = book_titles.subject_id)))
        LEFT JOIN employees ON ((employees.id = book_loans.employee_id)))
-       LEFT JOIN loan_checks l ON (((l.book_loan_id = book_loans.id) AND (l.academic_year_id = book_loans.academic_year_id) AND (l.loaned_to = book_loans.employee_id) AND (l.matched = true))));
+       LEFT JOIN ( SELECT loan_checks.book_loan_id,
+              loan_checks.loaned_to,
+              loan_checks.matched,
+              loan_checks.academic_year_id,
+              max(loan_checks.created_at) AS max_date
+             FROM loan_checks
+            GROUP BY loan_checks.loaned_to, loan_checks.matched, loan_checks.book_loan_id, loan_checks.academic_year_id) max_dates ON ((max_dates.book_loan_id = book_loans.id)))
+       LEFT JOIN loan_checks l ON (((l.book_loan_id = book_loans.id) AND (l.academic_year_id = book_loans.academic_year_id) AND (l.loaned_to = book_loans.employee_id) AND (l.matched = true) AND (max_dates.book_loan_id = l.book_loan_id) AND (max_dates.max_date = l.created_at))));
   SQL
 
 end
