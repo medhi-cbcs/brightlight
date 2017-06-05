@@ -1,0 +1,19 @@
+SELECT book_loans.*, subjects.name as subject, 
+    e.id as edition_id, e.title as title, e.authors, e.isbn10, e.isbn13, e.publisher, e.small_thumbnail,
+    l.id as check_id, l.user_id as checked_by, l.loaned_to, l.scanned_for, l.emp_flag, l.matched, l.notes as check_notes,
+	employees.id as emp_id, employees.name as emp_name
+FROM book_loans
+LEFT JOIN book_titles ON book_titles.id = book_loans.book_title_id
+LEFT JOIN book_editions e ON e.id = book_loans.book_edition_id
+LEFT JOIN subjects ON subjects.id = book_titles.subject_id
+LEFT JOIN employees ON employees.id = book_loans.employee_id
+LEFT JOIN ( select book_loan_id, loaned_to, matched, academic_year_id, max(created_at) max_date 
+		from loan_checks 
+		group by loaned_to, matched, book_loan_id, academic_year_id ) max_dates 
+	ON max_dates.book_loan_id = book_loans.id
+LEFT JOIN loan_checks l ON l.book_loan_id = book_loans.id
+	and l.academic_year_id = book_loans.academic_year_id
+	and l.loaned_to = book_loans.employee_id
+	and l.matched = true 
+	and max_dates.book_loan_id = l.book_loan_id 
+	and max_dates.max_date = l.created_at

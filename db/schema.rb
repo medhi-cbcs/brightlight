@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170531040802) do
+ActiveRecord::Schema.define(version: 20170605064716) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -1330,12 +1330,19 @@ ActiveRecord::Schema.define(version: 20170531040802) do
       l.notes AS check_notes,
       employees.id AS emp_id,
       employees.name AS emp_name
-     FROM (((((book_loans
+     FROM ((((((book_loans
        LEFT JOIN book_titles ON ((book_titles.id = book_loans.book_title_id)))
        LEFT JOIN book_editions e ON ((e.id = book_loans.book_edition_id)))
        LEFT JOIN subjects ON ((subjects.id = book_titles.subject_id)))
        LEFT JOIN employees ON ((employees.id = book_loans.employee_id)))
-       LEFT JOIN loan_checks l ON (((l.book_loan_id = book_loans.id) AND (l.academic_year_id = book_loans.academic_year_id) AND (l.loaned_to = book_loans.employee_id) AND (l.matched = true))));
+       LEFT JOIN ( SELECT loan_checks.book_loan_id,
+              loan_checks.loaned_to,
+              loan_checks.matched,
+              loan_checks.academic_year_id,
+              max(loan_checks.created_at) AS max_date
+             FROM loan_checks
+            GROUP BY loan_checks.loaned_to, loan_checks.matched, loan_checks.book_loan_id, loan_checks.academic_year_id) max_dates ON ((max_dates.book_loan_id = book_loans.id)))
+       LEFT JOIN loan_checks l ON (((l.book_loan_id = book_loans.id) AND (l.academic_year_id = book_loans.academic_year_id) AND (l.loaned_to = book_loans.employee_id) AND (l.matched = true) AND (max_dates.book_loan_id = l.book_loan_id) AND (max_dates.max_date = l.created_at))));
   SQL
 
 end
