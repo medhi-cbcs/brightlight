@@ -1,0 +1,56 @@
+- title "#{@book_copy.barcode} Check History"
+
+h4 Book Check History
+
+.card-panel
+  .row
+    .col.s12
+      .label Book Title
+      h6 = link_to @book_edition.title, @book_edition.book_title
+    .col.s3
+      .label barcode
+      div = @book_copy.barcode
+    .col.s3
+      .label Book No.
+      div = @book_copy.book_label.try(:name) || '--'
+    .col.s6
+      .label ISBN
+      div 
+        = @book_copy.book_edition.isbn 
+        = " (#{@book_copy.book_edition.isbn10})" if @book_copy.book_edition.isbn10.present?
+nav
+  .nav-wrapper
+    ul
+      li
+        = link_to @book_copy
+          i.material-icons.left chevron_left
+          | Book Copy
+      li.right
+        = link_to book_copy_conditions_path(@book_copy)
+          i.material-icons.right chevron_right
+          | Condition History
+      li.right
+        = link_to book_copy_loans_path(@book_copy)
+          i.material-icons.right chevron_right
+          | Loan History
+
+.card-panel
+  table.striped.compact
+    thead
+      tr
+        th Loaned to
+        th Scanned for
+        th Match
+        th Check Date
+        th Checked by
+        th Academic year
+
+    tbody
+      - @checks.each do |check|
+        tr
+          td = link_to check.loaned_to_name, check.book_loan
+          td = check.scanned_for_name
+          td = check.matched ? '&#9745;'.html_safe : ''
+          td = check.created_at
+          td = check.checked_by_name
+          td = check.try(:academic_year).try(:name)
