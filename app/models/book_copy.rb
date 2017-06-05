@@ -11,6 +11,7 @@ class BookCopy < ActiveRecord::Base
   has_many :book_loan_histories
   has_many :book_receipts
   has_many :student_books
+  has_many :loan_checks
 
   after_create :create_initial_condition
   before_save :sync_book_label, if: :book_label_id_changed?

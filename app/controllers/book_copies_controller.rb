@@ -1,5 +1,5 @@
 class BookCopiesController < ApplicationController
-  before_action :set_book_copy, only: [:edit, :destroy]
+  before_action :set_book_copy, only: [:edit, :destroy, :checks]
   before_action :sortable_columns, only: [:index]
 
   # GET /book_copies
@@ -192,7 +192,7 @@ class BookCopiesController < ApplicationController
     @last_condition = @copy_conditions.first
   end
 
-  # GET /book_copies/1/conditions
+  # GET /book_copies/1/loans
   def loans
     authorize! :read, BookCopy
     @copy_loans = BookLoan.where(book_copy_id:params[:id])
@@ -201,6 +201,14 @@ class BookCopiesController < ApplicationController
     @book_copy = BookCopy.where(id:params[:id]).includes([:book_edition]).take
     @book_edition = @book_copy.book_edition
     @last_loan = @copy_loans.first
+  end
+
+  # GET /book_copies/1/checks
+  def checks
+    authorize! :read, BookCopy
+    @book_edition = @book_copy.book_edition
+    @checks = @book_copy.loan_checks.details
+              
   end
 
   private

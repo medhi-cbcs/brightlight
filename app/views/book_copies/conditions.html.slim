@@ -42,7 +42,11 @@ nav
         = link_to book_copy_loans_path(@book_copy)
           i.material-icons.left history
           | Loan History
-          
+      li.right
+        = link_to book_copy_checks_path(@book_copy)
+          i.material-icons.left history
+          | Check History
+
 .card-panel
   table.compact.striped
     thead

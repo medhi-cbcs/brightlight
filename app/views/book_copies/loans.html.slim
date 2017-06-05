@@ -29,6 +29,10 @@ nav
         = link_to book_copy_conditions_path(@book_copy)
           i.material-icons.right chevron_right
           | Condition History
+      li.right
+        = link_to book_copy_checks_path(@book_copy)
+          i.material-icons.right chevron_right
+          | Checks History
 
 .card-panel
   table.striped.compact
