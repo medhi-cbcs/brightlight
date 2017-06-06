@@ -398,7 +398,13 @@ nav {
 		}
 	}
 	ul.dropdown-content { 
-		a { height: 27px; }
+    a { 
+      height: 27px; 
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    //width: 100% !important;
 	}
 	img.left { margin-right: 15px; }
 

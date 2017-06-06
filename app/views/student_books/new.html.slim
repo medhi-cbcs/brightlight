@@ -71,7 +71,7 @@ javascript:
     });
     $(document).on("keypress","[name$='[barcode]']", (function(e){
       var c = String.fromCharCode(e.which);
-      if ( $.trim($(e.target).val()).length >= 10 ) {
+      if ( $.trim($(e.target).val()).length > 10 ) {
         var barcode = $.trim($(e.target).val()+c);
         e.preventDefault();
         $.getJSON("/book_copies/"+barcode+".json", null, function (data) {
@@ -88,6 +88,7 @@ javascript:
       $(".titles:last").html(book.book_edition.title);
       // $(".book_numbers:last").html(book.copy_no);
       // $(".book_loans:last").html(book.loans.student_name);
+      $(".barcodes:last").val(book.barcode);
       $(".book_copy_ids:last").val(book.id);
       $(".academic_year_ids:last").val(book.academic_year.academic_year_id);
       $(".copy_nos:last").val(book.copy_no);

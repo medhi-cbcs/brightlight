@@ -10,7 +10,7 @@ class StudentBook < ActiveRecord::Base
   belongs_to :course
   belongs_to :initial_copy_condition, class_name: "BookCondition"
   belongs_to :end_copy_condition, class_name: "BookCondition"
-  belongs_to :book_loan
+  belongs_to :book_loan, dependent: :destroy
 
   validates :student, presence: true
   validates :book_copy, presence: true
@@ -19,10 +19,12 @@ class StudentBook < ActiveRecord::Base
   # validates :course_text, presence: true
   validates :grade_level, presence: true
   validates :grade_section, presence: true
-  validates :book_copy, uniqueness: { scope: [:academic_year_id, :student_id],
-    message: "cannot add same book for the same student in the same year" }
+  validates :book_copy, uniqueness: { scope: [:academic_year_id],
+    message: "cannot add same book in the same academic year" }
 
   after_save :update_book_copy_condition
+  after_update :sync_book_loan
+  after_create :create_book_loan
 
   accepts_nested_attributes_for :book_loan
 
@@ -83,28 +85,7 @@ class StudentBook < ActiveRecord::Base
                     'initial_copy_condition_id' => receipt.initial_condition_id)
           } 
         ) do |sb|
-          book_title_id = sb.book_edition.try(:book_title_id)
-          book_title = BookTitle.find book_title_id
-          standard_book = StandardBook.where(book_title_id: book_title_id, academic_year_id:sb.academic_year_id).take
-          book_category = standard_book.try(:book_category_id)
-
-          # Create BookLoan record
-          BookLoan.create({
-            academic_year_id: sb.academic_year_id,
-            barcode:          sb.barcode,
-            book_edition_id:  sb.book_edition_id,
-            book_title_id:    book_title_id,
-            book_category_id: book_category,
-            bkudid:           book_title.try(:bkudid),
-            book_copy_id:     sb.book_copy_id,
-            out_date:         sb.issue_date,
-            loan_status:      'B',
-            refno:            sb.book_edition.try(:refno),
-            roster_no:        sb.roster_no,
-            student_id:       sb.student_id,
-            student_no:       sb.student_no,
-            deleted_flag:     false
-          })
+          create_book_loan(sb)
         end
       end
     else
@@ -113,6 +94,47 @@ class StudentBook < ActiveRecord::Base
   end
 
   private
+
+    def create_book_loan(sb = nil)
+      sb ||= self
+      book_title_id = sb.book_edition.try(:book_title_id)
+      book_title = BookTitle.where(id: book_title_id).take
+      standard_book = StandardBook.where(book_title_id: book_title_id, academic_year_id:sb.academic_year_id).take
+      book_category = standard_book.try(:book_category_id)
+
+      # Create BookLoan record
+      book_loan = BookLoan.create({
+        academic_year_id: sb.academic_year_id,
+        barcode:          sb.barcode,
+        book_edition_id:  sb.book_edition_id,
+        book_title_id:    book_title_id,
+        book_category_id: book_category,
+        bkudid:           book_title.try(:bkudid),
+        book_copy_id:     sb.book_copy_id,
+        out_date:         sb.issue_date,
+        loan_status:      'B',
+        refno:            sb.book_edition.try(:refno),
+        roster_no:        sb.roster_no,
+        student_id:       sb.student_id,
+        student_no:       sb.student_no,
+        deleted_flag:     false
+      })
+      sb.update_column :book_loan_id, book_loan.id
+    end
+
+    def sync_book_loan
+      book_loan = self.book_loan
+      book_loan.academic_year_id = self.academic_year_id
+      book_loan.barcode = self.barcode
+      book_loan.book_edition_id = self.book_edition_id
+      book_loan.book_title_id = self.book_edition.try(:book_title_id)
+      book_loan.book_copy_id = self.book_copy_id
+      book_loan.out_date = self.issue_date
+      book_loan.roster_no = self.roster_no
+      book_loan.student_id = self.student_id
+      book_loan.student_no = self.student_no
+      book_loan.save
+    end  
 
     # This method is called by around_save
     def update_book_copy_condition
