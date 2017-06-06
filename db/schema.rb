@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170605064716) do
+ActiveRecord::Schema.define(version: 20170606074109) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -1073,11 +1073,13 @@ ActiveRecord::Schema.define(version: 20170605064716) do
     t.integer  "book_edition_id"
     t.boolean  "deleted_flag"
     t.boolean  "needs_rebinding"
+    t.integer  "book_loan_id"
   end
 
   add_index "student_books", ["academic_year_id"], name: "index_student_books_on_academic_year_id", using: :btree
   add_index "student_books", ["book_copy_id"], name: "index_student_books_on_book_copy_id", using: :btree
   add_index "student_books", ["book_edition_id"], name: "index_student_books_on_book_edition_id", using: :btree
+  add_index "student_books", ["book_loan_id"], name: "index_student_books_on_book_loan_id", using: :btree
   add_index "student_books", ["course_id"], name: "index_student_books_on_course_id", using: :btree
   add_index "student_books", ["course_text_id"], name: "index_student_books_on_course_text_id", using: :btree
   add_index "student_books", ["grade_level_id"], name: "index_student_books_on_grade_level_id", using: :btree
