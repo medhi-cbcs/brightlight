@@ -318,7 +318,7 @@ class BookLoansController < ApplicationController
 
  # GET /book_loans/teacher_receipt?tid=1&year=1
   def teacher_receipt
-    authorize! :manage, BookLoan
+    authorize! :read, BookLoan
     @academic_year = AcademicYear.find params[:year]
     @year_prev = @academic_year.name.slice!(0..3)
     @year_next = @academic_year.name.slice!(1..4)  
