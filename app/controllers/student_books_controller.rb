@@ -1,5 +1,6 @@
 class StudentBooksController < ApplicationController
   before_action :set_student_book, only: [:show, :edit, :update, :destroy]
+  respond_to :html, :json, :js
 
   # GET /student_books
   # GET /student_books.json
@@ -293,47 +294,32 @@ class StudentBooksController < ApplicationController
     @year_id = params[:year] || AcademicYear.current_id
     @disable_edit = @year_id.to_i != AcademicYear.current_id
     @academic_year = AcademicYear.find @year_id
-    @book_titles = []
+
     if params[:s].present?
       @grade_section = GradeSection.find(params[:s])
       @grade_level = @grade_section.grade_level
-      # authorize! :update, StudentBook.where(grade_section:@grade_section).where(academic_year:AcademicYear.current).first
-    end
-    @textbook_category_id = BookCategory.find_by_code('TB').id
-    @standard_books = StandardBook
-                        .where(grade_level: @grade_level)
-                        .where(book_category_id: @textbook_category_id)
-                        .where(academic_year_id: @year_id)
-                        .joins(:book_edition)
-                        .group(:book_edition_id, 'book_editions.title', :book_title_id)
-                        .select(:book_edition_id, 'book_editions.title', :book_title_id)                        
+                    
+      all_books = StudentBook.where(academic_year_id:@year_id,grade_section: @grade_section)
+      @all_titles = all_books.joins(:book_edition)
+                      .group('book_edition_id, book_editions.title')
+                      .select('book_edition_id as id, book_editions.title as title')
+                      .order('book_editions.title')
 
-    if params[:t].present?
-      # A book title is selected, here we load only the specified book title
-      @book_title_id = params[:t]
-      @book_titles << {title: BookTitle.find(params[:t])}
-    else
-      # No book title is selected, here we load ALL book titles for the grade_section
-      # @book_titles = @standard_books.map {|x| {title:x.try(:book_edition).try(:book_title)}}
-      @book_titles = @standard_books.map {|x| { edition_title: x.title, title: BookTitle.find(x.book_title_id) } }
-    end
-    # @book_titles.each { |bt| bt[:edition] = bt[:title].book_editions.first }
-    @book_titles.each do |bt|
-      if @grade_level_id == 15
-        student_books = StudentBook
-                        .standard_books(@grade_level.id, @grade_section.id, @year_id, @textbook_category_id)
-                        .where(grade_section: @grade_section)
-                        .order('CAST(roster_no as INT)')
-                        .includes([:book_copy, book_copy: [:book_label]])
-        bt[:student_books] = student_books
+      if params[:t].present?
+        # A book title is selected, here we load only the specified book title
+        @book_edition_id = params[:t]
+        @title = BookEdition.find(@book_edition_id).title
+        @book_titles = @all_titles.where(book_edition_id: @book_edition_id)
+        @student_books = all_books.where(book_edition_id: @book_edition_id)
+                          .joins(:book_edition)   
+                          .order('book_editions.title')
+                          .includes([:book_copy])
       else
-        student_books = StudentBook
-                        .standard_books(@grade_level.id, @grade_section.id, AcademicYear.current_id, @textbook_category_id)
-                        .where(book_edition_id: bt[:title])
-                        .where(grade_section: @grade_section)
-                        .order('CAST(roster_no as INT)')
-                        .includes([:book_copy, book_copy: [:book_label]])
-        bt[:student_books] = student_books
+        # No book title is selected, here we load ALL book titles for the grade_section
+        @book_titles = @all_titles
+        @student_books = all_books.joins(:book_edition)
+                          .order('book_editions.title, CAST(roster_no as INT)')
+                          .includes([:book_copy])        
       end
     end
 
@@ -344,7 +330,8 @@ class StudentBooksController < ApplicationController
         @grade_sections_ids = @grade_sections.collect(&:id)
       end
       format.pdf do
-        render pdf:         "BookList-#{@grade_section.slug}#{('-'+@book_titles.first[:title].title if params[:t].present?)}",
+        @num_titles = @book_titles.to_a.count
+        render pdf:         "BookList-#{@grade_section.slug}#{('-'+@title if @title.present?)}",
                disposition: 'inline',
                template:    'student_books/by_title.pdf.slim',
                layout:      'pdf.html',
@@ -356,7 +343,6 @@ class StudentBooksController < ApplicationController
   # GET /student_books/by_student
   def by_student
     authorize! :manage, StudentBook
-    @book_titles = []
     @year_id = params[:year] || AcademicYear.current_id
     @disable_edit = @year_id.to_i != AcademicYear.current_id
     @academic_year = AcademicYear.find @year_id
@@ -447,6 +433,20 @@ class StudentBooksController < ApplicationController
       format.js
     end
   end
+
+  def titles
+    # grade_level = params[:l]
+    grade_section = params[:s]
+    year = params[:year]
+    all_books = StudentBook.joins(:book_edition)
+                  .where(academic_year_id: year, grade_section: grade_section)
+    book_titles = all_books.group('book_edition_id, book_editions.title')
+                  .select('book_edition_id, book_editions.title as title')
+                  .order('book_editions.title')
+    respond_to do |format|
+      format.json { render json: book_titles.map {|book| {id:book.book_edition_id, title:book.title}} }
+    end
+  end 
 
   private
     # Use callbacks to share common setup or constraints between actions.

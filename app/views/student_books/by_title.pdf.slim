@@ -1,11 +1,7 @@
-- if @book_title.present?
-  h5 Book List By Title (#{@grade_section.name})
-  h5 #{@book_title.title} 
-
-- if @book_titles.present?
-  - @book_titles.each_with_index do |book_title, i|
+- if @student_books.present?
+  - @book_titles.each_with_index do |edition, i|
     h5 Book List By Title (#{@grade_section.name})
-    h5 = book_title[:title].title
+    h5 = edition.title
     table.compact
       thead
         tr.compact-row
@@ -29,8 +25,9 @@
           th.wd5 style='text-align:center;font-size:0.9rem' binding 
           th style='text-align:center;' Notes
       tbody
-        - if book_title.present?
-          - book_title[:student_books].each_with_index do |book, i|
+        - book_list = @student_books.where(book_edition_id:edition.id)
+        - if book_list.present?
+          - book_list.each_with_index do |book, i|
             - initial_condition = book.book_copy.start_condition_in_year(@year_id) if book.book_copy.present?
             tr.nobreak style='border-bottom:1px solid gainsboro'
               td.wd5 = i+1
@@ -56,5 +53,5 @@
                 = book.needs_rebinding == 1 ? '&#9745;'.html_safe : '&#9744;'.html_safe
               td.wd25
                 = book.notes
-    - if i < @book_titles.count-1
+    - if i < @num_titles - 1
       .page-break

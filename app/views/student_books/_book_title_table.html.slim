@@ -23,12 +23,11 @@
         th style='text-align:center;' Notes
     tbody
       - if student_books.present?
-        /- book_copies = BookCopy.where(book_edition_id:book_title.book_editions.first.id).standard_books(@grade_level.id,AcademicYear.current_id).order('standard_books.id').includes([:book_edition, :book_condition])
         - student_books.each_with_index do |book, i|
           = fields_for "book_loans[]", book do |f|
             = f.hidden_field :grade_section_id, value: @grade_section.id 
             = f.hidden_field :grade_level_id, value: @grade_level.id 
-            = f.hidden_field :academic_year_id, value: @current_year
+            = f.hidden_field :academic_year_id, value: @academic_year
             = f.hidden_field :book_copy_id, value: book.book_copy_id 
             = f.hidden_field :book_edition_id, value: book.book_edition_id
             = f.hidden_field :book_title_id, value: @book_title_id
@@ -76,6 +75,9 @@
                 = f.label :needs_rebinding, 'NR', class:'small-radio-label;font-size:2px'
               td.wd20
                 = f.text_field :notes, disabled:@disable_edit
+      - else
+        tr
+          td = "No books"
 css:
   .small-radio-label {
     font-size:0.8rem !important;
