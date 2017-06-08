@@ -298,15 +298,7 @@ class StudentBooksController < ApplicationController
     if params[:s].present?
       @grade_section = GradeSection.find(params[:s])
       @grade_level = @grade_section.grade_level
-      # authorize! :update, StudentBook.where(grade_section:@grade_section).where(academic_year:AcademicYear.current).first
-      
-      # textbook_category_id = BookCategory.find_by_code('TB').id
-      # @standard_books = StandardBook
-      #                     .where(grade_level: @grade_level)
-      #                     .where(book_category_id: textbook_category_id)
-      #                     .where(academic_year_id: @year_id)
-      #                     .joins(:book_edition)
-      #                     .select(:book_edition_id, 'book_editions.title', :book_title_id)                        
+                    
       all_books = StudentBook.where(academic_year_id:@year_id,grade_section: @grade_section)
       @all_titles = all_books.joins(:book_edition)
                       .group('book_edition_id, book_editions.title')
@@ -324,32 +316,11 @@ class StudentBooksController < ApplicationController
                           .includes([:book_copy])
       else
         # No book title is selected, here we load ALL book titles for the grade_section
-        # @book_titles = @standard_books.map {|x| {title:x.try(:book_edition).try(:book_title)}}
-        # @book_titles = @standard_books.map {|x| { edition_title: x.title, title: BookTitle.find(x.book_title_id) } }
         @book_titles = @all_titles
         @student_books = all_books.joins(:book_edition)
                           .order('book_editions.title, CAST(roster_no as INT)')
                           .includes([:book_copy])        
       end
-      # @book_titles.each { |bt| bt[:edition] = bt[:title].book_editions.first }
-      # @book_titles.each do |bt|
-      #   if @grade_level_id == 15
-      #     student_books = StudentBook
-      #                     .standard_books(@grade_level.id, @grade_section.id, @year_id, @textbook_category_id)
-      #                     .where(grade_section: @grade_section)
-      #                     .order('CAST(roster_no as INT)')
-      #                     .includes([:book_copy, book_copy: [:book_label]])
-      #     bt[:student_books] = student_books
-      #   else
-      #     student_books = StudentBook
-      #                     .standard_books(@grade_level.id, @grade_section.id, AcademicYear.current_id, @textbook_category_id)
-      #                     .where(book_edition_id: bt[:title])
-      #                     .where(grade_section: @grade_section)
-      #                     .order('CAST(roster_no as INT)')
-      #                     .includes([:book_copy, book_copy: [:book_label]])
-      #     bt[:student_books] = student_books
-      #   end
-      # end
     end
 
     respond_to do |format|
@@ -372,7 +343,6 @@ class StudentBooksController < ApplicationController
   # GET /student_books/by_student
   def by_student
     authorize! :manage, StudentBook
-    # @book_titles = []
     @year_id = params[:year] || AcademicYear.current_id
     @disable_edit = @year_id.to_i != AcademicYear.current_id
     @academic_year = AcademicYear.find @year_id
