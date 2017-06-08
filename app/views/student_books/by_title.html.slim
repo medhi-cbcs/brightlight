@@ -11,10 +11,10 @@ ul#section-options.dropdown-content
     li
       = link_to section.name, "#!", class:"grade-#{section.grade_level_id}", onclick:"filterTitleOptions(#{section.grade_level_id}, #{section.id}, '#{section.name}', #{@year_id});"
 ul#title-options.dropdown-content
-  /- if @standard_books.present?
-  /li = link_to 'All', by_title_student_books_path(year:@year_id, s:@grade_section.id, g:@grade_level.id)
-  - @standard_books.each do |standard_book|
-    li = link_to standard_book.title, by_title_student_books_path(year:@year_id, s:@grade_section.id, g:@grade_level.id, t:standard_book.book_title_id)
+  - if @all_titles.present?
+    li = link_to 'All', by_title_student_books_path(year:@year_id, s:@grade_section.id, g:@grade_level.id)
+    - @all_titles.each do |book|
+      li = link_to book.title, by_title_student_books_path(year:@year_id, s:@grade_section.id, g:@grade_level.id, t:book.id)
 
 ul#year-options.dropdown-content
   li  
@@ -36,10 +36,10 @@ javascript:
   }
   function filterTitleOptions(grade_level_id, grade_section_id, section_name, year) {
     $("#section").html(section_name);
-    $.getJSON("/standard_books.json?grade_level_id="+grade_level_id+"&category="+"TB"+"&year="+year, null, function (data) {
-      var list = "<li><a href='/student_books/by_title?s="+grade_section_id+"&g="+grade_level_id+"&year="+year+"'>All</a></li>";
+    $.getJSON("/student_books/titles.json?s="+grade_section_id+"&year="+year, null, function (data) {
+      var list = "<li><a href='/student_books/by_title?s="+grade_section_id+"&year="+year+"'>All</a></li>";
       $.each(data, function(i,item){
-          list += "<li><a href='/student_books/by_title?s="+grade_section_id+"&g="+item.grade_level_id+"&t="+item.id+"&year="+year+"'>"+item.title+"</a></li>";
+          list += "<li><a href='/student_books/by_title?s="+grade_section_id+"&t="+item.id+"&year="+year+"'>"+item.title+"</a></li>";
       });
       $("#title-options").html(list);
     });
@@ -51,7 +51,7 @@ javascript:
       ul
         li 
           = link_to 'PDF Format', by_title_student_books_path(year:params[:year],s:params[:s],t:params[:t], format: :pdf), target: '_blank'
-        - if @book_titles.present? and !@disable_edit
+        - if @student_books.present? and !@disable_edit
           li  
             button.btn.waves-effect.waves-light type="submit" Save 
       ul.right
@@ -61,21 +61,22 @@ javascript:
             i.material-icons.right arrow_drop_down
         li
           a.dropdown-button href="#!" data-activates="grade-options"
-            span#grade = params[:l].present? ? "#{@grade_level_name}" : 'Grade'
+            span#grade = @grade_level.present? ? "#{@grade_level.name}" : 'Grade'
             i.material-icons.right arrow_drop_down
         li
           a.dropdown-button href="#!" data-activates="section-options"
-            span#section = params[:l].present? ? "#{@grade_section_name}" : 'Class'
+            span#section = @grade_section.present? ? "#{@grade_section.name}" : 'Class'
             i.material-icons.right arrow_drop_down
         li
           a#student-menu.dropdown-button href="#!" data-activates="title-options"
-            span#title = params[:t].present? ? "#{@book_titles.first[:title].title.truncate(25)}" : 'Book'
+            span#title = params[:t].present? ? "#{@title.truncate(25)}" : 'Book'
             i.material-icons.right arrow_drop_down
             
-  - if @book_titles.present?
-    - @book_titles.each do |book_title|
-      h4 = book_title[:edition_title]
-      = render partial: 'book_title_table', locals: {student_books: book_title[:student_books]}
+  - if @student_books.present?
+    - @book_titles.each do |edition|
+      h4 = edition.title
+      - @book_list = @student_books.where(book_edition_id:edition.id)
+      = render partial: 'book_title_table', locals: {student_books: @book_list}
       .page-break    
     - if !@disable_edit
       .toolbar.z-depth-1

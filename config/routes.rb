@@ -112,6 +112,7 @@ Rails.application.routes.draw do
   put 'student_books/update_multiple' => 'student_books#update_multiple', as: :update_multiple_student_books
   get 'student_books/missing' => 'student_books#missing', as: :missing_student_books
   get 'student_books/pnnrb' => 'student_books#pnnrb', as: :pnnrb_student_books
+  get 'student_books/titles' => 'student_books#titles', as: :titles_student_books
   post 'student_books/finalize' => 'student_books#finalize', as: :finalize_student_books
   post 'student_books/prepare_student_books' => 'student_books#prepare', as: :prepare_student_books
 
