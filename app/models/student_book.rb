@@ -56,6 +56,20 @@ class StudentBook < ActiveRecord::Base
     .select('student_books.*, book_editions.title as title')
   }
 
+  scope :only_standard_books, lambda { |grade_level_id, grade_section_id, year_id, category_id|
+    joins("LEFT JOIN grade_sections_students gss on gss.student_id = student_books.student_id 
+            AND gss.academic_year_id = student_books.academic_year_id")
+    .joins("JOIN standard_books ON student_books.book_edition_id = standard_books.book_edition_id
+            AND standard_books.grade_level_id = student_books.grade_level_id
+            AND standard_books.book_category_id = #{category_id}
+            AND standard_books.academic_year_id = student_books.academic_year_id
+            AND (standard_books.track = gss.track OR standard_books.track is null)")
+    .joins('LEFT JOIN book_editions ON student_books.book_edition_id = book_editions.id')
+    .where(academic_year_id: year_id)
+    .where(grade_level_id: grade_level_id)
+    .select('student_books.*, book_editions.title as title')
+  }
+
   # Fine is applied if end condition is 2 steps worser than the initial condition, of if the book is missing
   # Here 'missing' is hardcoded with id=5
   scope :fine_applies, lambda { where('(end_copy_condition_id - initial_copy_condition_id >= 2) OR end_copy_condition_id=5')}
