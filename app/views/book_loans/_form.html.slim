@@ -32,10 +32,10 @@
           = f.select :loan_status, options_for_select([['None', nil],['Borrowed','B']], @book_loan.loan_status)
         .input_field.col.s4
           = f.label :return_status
-          = f.select :return_status, options_for_select([['None', nil],['Returned','R']], @book_loan.return_status)
+          = f.select :return_status, options_for_select([['None', nil],['Returned','R'],['Return to Inventory','RI']], @book_loan.return_status)
         .input-field.col.s4
           = f.label :academic_year, class:'active'
-          = f.collection_select :academic_year, AcademicYear.list_for_menu, :id, :name
+          = f.collection_select :academic_year, AcademicYear.list_for_menu, :id, :name, selected: @book_loan.academic_year_id
           = f.hidden_field :user
   .toolbar.actions
     button.btn.waves-effect.waves-light type="submit" Save

@@ -32,12 +32,15 @@ class BookReceipt < ActiveRecord::Base
     textbook_category = BookCategory.find_by_code 'TB'
     values = []
     grade_section = GradeSection.find grade_section_id
-    grade_level_id = grade_section.grade_level_id
-    # Books with 'Poor' condition will not be included
-    poor_condition = BookCondition.find_by_slug 'poor'
+    # grade_level_id = grade_section.grade_level_id
+    # Books with 'Poor / Missing' condition will not be included
+    poor = BookCondition.find_by_slug 'poor'
+    missing = BookCondition.find_by_slug 'missing'
     student_books = StudentBook.where(grade_section:grade_section,academic_year_id:previous_year_id)
-                      .standard_books(grade_section.grade_level.id, grade_section.id, new_year_id, textbook_category.id)
-                      .joins(:book_copy).where('book_copies.book_condition_id != ?', poor_condition.id)
+                      .only_standard_books(grade_section.grade_level.id, grade_section.id, new_year_id, textbook_category.id)
+                      .joins(:book_copy)
+                      .where('book_copies.book_condition_id != ?', poor.id)
+                      .where('book_copies.book_condition_id != ?', missing.id)
 
     student_books.each_with_index do |sb,i|
       data = [sb.book_copy_id, sb.barcode, sb.book_edition_id, new_year_id, sb.book_copy.book_condition_id,
@@ -57,11 +60,13 @@ class BookReceipt < ActiveRecord::Base
   def self.initialize_with_student_books(grade_section:, roster_no:, previous_year:, new_year:)
     textbook_category = BookCategory.find_by_code 'TB'
 
-    # Books with 'Poor' condition will not be included
-    poor_condition = BookCondition.find_by_slug 'poor'
+    # Books with 'Poor / Missing' condition will not be included
+    poor = BookCondition.find_by_slug 'poor'
     student_books = StudentBook.where(grade_section: grade_section, academic_year_id: previous_year, roster_no: roster_no.to_s)
-                      .standard_books(grade_section.grade_level.id, grade_section.id, new_year, textbook_category.id)
-                      .joins(:book_copy).where('book_copies.book_condition_id != ?', poor_condition.id)
+                      .only_standard_books(grade_section.grade_level.id, grade_section.id, new_year, textbook_category.id)
+                      .joins(:book_copy)
+                      .where('book_copies.book_condition_id != ?', poor.id)
+                      .where('book_copies.book_condition_id != ?', missing.id)
     BookReceipt.create(student_books.map { |sb|
       { book_copy_id: sb.book_copy_id, barcode: sb.barcode, book_edition_id: sb.book_edition_id,
         academic_year_id: new_year, initial_condition_id: sb.book_copy.book_condition_id,
