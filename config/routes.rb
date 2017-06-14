@@ -214,13 +214,14 @@ Rails.application.routes.draw do
     end
   end
   
+  get 'settings/inventory_mtce' => 'settings#inventory_mtce', as: :settings_inventory_mtce
+
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
   # You can have the root of your site routed with "root"
   root 'welcome#index'
   get :dashboard, to: 'welcome#dashboard'
-  get :inventory_mtce, to: 'welcome#inventory_mtce'
 
   # For authorization with OmniAuth2
   get '/auth/:provider/callback', to: 'sessions#create'
