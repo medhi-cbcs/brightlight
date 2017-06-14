@@ -262,7 +262,7 @@ class BookTitlesController < ApplicationController
     end
   end
 
-  # POST /book_title/1/update_metadata
+  # POST /book_titles/1/update_metadata
   def update_metadata
     authorize! :update, BookTitle
     respond_to do |format|
@@ -270,7 +270,7 @@ class BookTitlesController < ApplicationController
       format.js
     end
   end
-
+  
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_book_title
