@@ -4,7 +4,10 @@ class BookFine < ActiveRecord::Base
   belongs_to :student
   belongs_to :old_condition, class_name: 'BookCondition'
   belongs_to :new_condition, class_name: 'BookCondition'
-
+  belongs_to :student_book
+  belongs_to :grade_section
+  belongs_to :grade_level
+  
   validates :book_copy, uniqueness: {scope: [:student_id, :academic_year_id]}
 
   # collect_current will read student_books table and look for book that are applicable for book fine
@@ -27,23 +30,27 @@ class BookFine < ActiveRecord::Base
   end
 
   def self.collect_fines_for_grade_level grade_level, year: year
-    StudentBook.where(academic_year:year).fine_applies.where(grade_level:grade_level).each do |b|
-      pct = FineScale.fine_percentage_for_condition_change(b.initial_copy_condition_id,b.end_copy_condition_id)
-      price = b.try(:book_copy).try(:book_edition).try(:price).try(:to_f) || 0.0
-      book_copy = b.book_copy
-      if book_copy
-        book_fine = BookFine.find_or_create_by(academic_year: year, book_copy: book_copy)
-        book_fine.update_attributes(
-          book_copy_id:     b.book_copy_id,
-          old_condition_id: b.initial_copy_condition_id,
-          new_condition_id: b.end_copy_condition_id,
-          academic_year_id: b.academic_year_id,
-          student_id:       b.student_id,
-          percentage:       pct,
-          fine:             pct * price,
-          currency:         b.book_copy.try(:book_edition).try(:currency)
-        )
-      end
+    StudentBook.where(academic_year:year).where(grade_level:grade_level).each do |b|
+      if b.fine_applies
+        pct = FineScale.fine_percentage_for_condition_change(b.initial_copy_condition_id,b.end_copy_condition_id)
+        price = b.try(:book_copy).try(:book_edition).try(:price).try(:to_f) || 0.0
+        book_copy = b.book_copy
+        if book_copy
+          book_fine = BookFine.find_or_create_by(academic_year: year, book_copy: book_copy)
+          book_fine.update_attributes(
+            book_copy_id:     b.book_copy_id,
+            old_condition_id: b.initial_copy_condition_id,
+            new_condition_id: b.end_copy_condition_id,
+            academic_year_id: b.academic_year_id,
+            student_id:       b.student_id,
+            percentage:       pct,
+            fine:             pct * price,
+            currency:         b.book_copy.try(:book_edition).try(:currency)
+          )
+        end
+      else
+        BookFine.where(student_book: b).destroy
+      end 
     end
   end
 

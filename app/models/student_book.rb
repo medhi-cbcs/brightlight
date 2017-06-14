@@ -12,6 +12,8 @@ class StudentBook < ActiveRecord::Base
   belongs_to :end_copy_condition, class_name: "BookCondition"
   belongs_to :book_loan, dependent: :destroy
 
+  has_many :book_fines
+  
   validates :student, presence: true
   validates :book_copy, presence: true
   validates :academic_year, presence: true
