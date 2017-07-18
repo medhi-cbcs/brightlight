@@ -127,7 +127,7 @@ class BookCopy < ActiveRecord::Base
     columns = [:book_copy_id, :barcode, :book_condition_id, :start_date, :end_date, :academic_year_id, :notes, :post, :deleted_flag]
     return_conditions = []
     starting_conditions = []
-    GradeSection.all.each do |grade_section|
+    GradeSection.all.order(:grade_level_id, :id).each do |grade_section|
       grade_level_id = grade_section.grade_level_id
       student_books = StudentBook.where(academic_year_id:academic_year_id)
                         .standard_books(grade_level_id, grade_section.id, academic_year_id, category.id)

@@ -13,7 +13,7 @@
     .row
       .input-field.col.s3
         = f.label :grade_section, class: 'active'
-        = f.collection_select :grade_section, GradeSection.all, :id, :name, {prompt: true}, { class: 'browser-default'}
+        = f.collection_select :grade_section, GradeSection.all.order(:grade_level_id, :id), :id, :name, {prompt: true}, { class: 'browser-default'}
     .row
       .input-field.col.s3
         = f.label :student, class: 'active'
