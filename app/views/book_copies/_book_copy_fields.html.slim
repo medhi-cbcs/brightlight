@@ -4,8 +4,7 @@ tr.nested-fields
       = f.text_field :barcode
   td.wd15
     .input-field
-      = f.grouped_collection_select :book_label_id, GradeSection.all.order(:id), :book_labels, :name, :id, :name, {prompt:true}, {class:'browser-default materialish'}
-      = f.hidden_field :book_label_id
+      = f.grouped_collection_select :book_label_id, @book_labels_for_menu, :book_labels, :name, :id, :name, {prompt:true}, {class:'browser-default materialish'}
   td.wd15
     .input-field
       = f.collection_select :book_condition_id, BookCondition.all, :id, :code, selected:1, class:'material-select'
