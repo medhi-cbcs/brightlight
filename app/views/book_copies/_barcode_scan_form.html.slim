@@ -8,7 +8,7 @@
 				button.btn.btn-floating.waves-effect.waves-light.teal name='commit' type='submit'
 					i.material-icons add
 			.col.s11
-				= f.grouped_collection_select :book_label_id, GradeSection.all.order(:id), :book_labels, :name, :id, :name, {prompt:true}, {class:'browser-default materialish'}
+				= f.grouped_collection_select :book_label_id, GradeSection.all.order(:grade_level_id, :id), :book_labels, :name, :id, :name, {prompt:true}, {class:'browser-default materialish'}
 				= f.hidden_field :book_edition_id, value: @book_edition.id
 			.col.s6
 				= f.collection_select :book_condition_id, BookCondition.all, :id, :code, {selected: 0}

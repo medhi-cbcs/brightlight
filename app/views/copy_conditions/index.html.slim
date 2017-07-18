@@ -45,7 +45,7 @@ javascript:
     }) 
   }
   function filterLabelOptions(section_name) {
-    var section_names = #{raw GradeSection.all.map &:name};
+    var section_names = #{raw GradeSection.all.order(:grade_level_id, :id).map &:name};
     $("#section").html(section_name);
     section_names.forEach(function(s){ 
       if(section_name != s) { 

@@ -5,7 +5,7 @@
     /   = f.text_field :name
     .input-field.col.s2
       = f.label :grade_section, class: 'active'
-      = f.collection_select(:grade_section_id, GradeSection.all, :id, :name, {prompt: true}, {:class => 'browser-default'})
+      = f.collection_select(:grade_section_id, GradeSection.all.order(:grade_level_id, :id), :id, :name, {prompt: true}, {:class => 'browser-default'})
     .input-field.col.s3
       = f.label :instructor, class: 'active'
       = f.collection_select(:instructor_id, Employee.all_teachers, :id, :name, {prompt: true}, {:class => 'browser-default'})

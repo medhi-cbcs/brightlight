@@ -3,7 +3,7 @@ module DynamicSelect
     respond_to :json
 
     def grade_sections
-      @grade_sections = GradeSection.where(grade_level_id: params[:grade_level_id])
+      @grade_sections = GradeSection.where(grade_level_id: params[:grade_level_id]).order(:grade_level_id, :id)
       respond_with(@grade_sections)
     end
 

@@ -9,7 +9,7 @@ class StudentBooksController < ApplicationController
     items_per_page = 25
     @grade_levels = GradeLevel.all.order(:id)
     @grade_level_ids = @grade_levels.collect(&:id)
-    @grade_sections = GradeSection.all.order(:id)
+    @grade_sections = GradeSection.all.order(:grade_level_id, :id)
     @grade_sections_ids = @grade_sections.collect(&:id)
     if params[:s].present?
       @grade_section = @grade_sections.where(id:params[:s]).first
@@ -166,7 +166,7 @@ class StudentBooksController < ApplicationController
     respond_to do |format|
       format.html do
         @grade_level_ids = GradeLevel.all.collect(&:id)
-        @grade_sections = GradeSection.all
+        @grade_sections = GradeSection.all.order(:grade_level_id, :id)
         @grade_sections_ids = @grade_sections.collect(&:id)
       end
       format.pdf do
@@ -185,7 +185,7 @@ class StudentBooksController < ApplicationController
     @year_id = params[:year] || AcademicYear.current_id
     @academic_year = AcademicYear.find @year_id
     @grade_level_ids = GradeLevel.all.order(:id).collect(&:id)
-    @grade_sections = GradeSection.all.order(:id)
+    @grade_sections = GradeSection.all.order(:grade_level_id, :id)
     @grade_sections_ids = @grade_sections.collect(&:id)
 
     @grade_section = GradeSection.where(id:params[:s]).take if params[:s].present?
@@ -242,7 +242,7 @@ class StudentBooksController < ApplicationController
     @year_id = params[:year] || AcademicYear.current_id
     @academic_year = AcademicYear.find @year_id
     @grade_level_ids = GradeLevel.all.order(:id).collect(&:id)
-    @grade_sections = GradeSection.all.order(:id)
+    @grade_sections = GradeSection.all.order(:grade_level_id, :id)
     @grade_sections_ids = @grade_sections.collect(&:id)
 
     @grade_section = GradeSection.where(id:params[:s]).take if params[:s].present?
@@ -326,7 +326,7 @@ class StudentBooksController < ApplicationController
     respond_to do |format|
       format.html do
         @grade_level_ids = GradeLevel.all.collect(&:id)
-        @grade_sections = GradeSection.all.order(:id)
+        @grade_sections = GradeSection.all.order(:grade_level_id, :id)
         @grade_sections_ids = @grade_sections.collect(&:id)
       end
       format.pdf do
@@ -379,7 +379,7 @@ class StudentBooksController < ApplicationController
     respond_to do |format|
       format.html do
         @grade_level_ids = GradeLevel.all.order(:id).collect(&:id)
-        @grade_sections = GradeSection.all.order(:id)
+        @grade_sections = GradeSection.all.order(:grade_level_id, :id)
         @grade_sections_ids = @grade_sections.collect(&:id)
       end
       format.pdf do
@@ -424,7 +424,7 @@ class StudentBooksController < ApplicationController
   def prepare
     authorize! :manage, StudentBook
     academic_year_id = params[:prepare_student_book_year].to_i
-    GradeSection.all.each do |section|
+    GradeSection.all.order(:grade_level_id, :id).each do |section|
       section.students_for_academic_year(academic_year_id).each do |gss|
         StudentBook.initialize_from_book_receipts gss:gss, year:AcademicYear.find(academic_year_id)
       end

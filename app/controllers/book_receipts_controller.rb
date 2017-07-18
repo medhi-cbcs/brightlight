@@ -51,7 +51,7 @@ class BookReceiptsController < ApplicationController
                     .to_sql
         @grade_sections = GradeSection.joins("INNER JOIN (#{subquery}) AS s ON grade_sections.id = s.grade_section_id")
                             .select("grade_sections.*, s.max_num")
-                            .order(:id)
+                            .order(:grade_level_id, :id)
         @grade_sections_ids = @grade_sections.collect(&:id)
       end
       format.pdf do
@@ -205,7 +205,7 @@ class BookReceiptsController < ApplicationController
     respond_to do |format|
       format.html do
         @grade_level_ids = GradeLevel.all.collect(&:id)
-        @grade_sections = GradeSection.all
+        @grade_sections = GradeSection.all.order(:grade_level_id, :id)
         @grade_sections_ids = @grade_sections.collect(&:id)
       end
       format.pdf do

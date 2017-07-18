@@ -86,7 +86,7 @@ class GradeLevelsController < ApplicationController
   def archive
     authorize! :update, @grade_level
 
-    GradeSection.all.each do |grade_section|
+    GradeSection.all.order(:grade_level_id, :id).each do |grade_section|
       gsh = GradeSectionHistory.new(
               grade_level_id: grade_section.grade_level_id,
               grade_section_id: grade_section.id,

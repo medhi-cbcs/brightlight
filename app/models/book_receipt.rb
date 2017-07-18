@@ -21,7 +21,7 @@ class BookReceipt < ActiveRecord::Base
   after_save :update_book_copy_condition
 
   def self.initialize_book_receipts(previous_year_id, new_year_id)
-    GradeSection.all.each do |grade_section|
+    GradeSection.all.order(:grade_level_id, :id).each do |grade_section|
       self.initialize_with_student_books_for_grade(previous_year_id, new_year_id, grade_section.id)
     end
   end

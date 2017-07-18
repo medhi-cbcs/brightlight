@@ -23,7 +23,7 @@ namespace :db do
 
 		# Create student roster for each course sections
 		puts "Create student roster"
-		GradeSection.all.each do |section|
+		GradeSection.all.order(:grade_level_id, :id).each do |section|
 			puts "Section #{section.name}"
 			section.course_sections.each do |cs|
 				Roster.create(section.students.map {|s| {:course_section_id => cs.id, :student_id => s.id, :academic_year_id => year.id} })

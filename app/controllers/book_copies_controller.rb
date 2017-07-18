@@ -91,7 +91,7 @@ class BookCopiesController < ApplicationController
     @book_edition = BookEdition.find(params[:book_edition_id])
     @book_copies = @book_edition.book_copies.order(:book_label_id)
     @grade_level_ids = GradeLevel.all.collect(&:id)
-    @grade_sections = GradeSection.all
+    @grade_sections = GradeSection.all.order(:grade_level_id, :id)
     @book_labels_for_menu = GradeSection.all.includes(:book_labels).order(:id)
 
     if params[:s].present?

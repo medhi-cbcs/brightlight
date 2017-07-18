@@ -1,7 +1,7 @@
 namespace :data do
 	desc "Setup book labels"
 	task setup_book_labels: :environment do
-    GradeSection.all.each do |grade_section|
+    GradeSection.all.order(:grade_level_id, :id).each do |grade_section|
       existing_label_numbers = grade_section.book_labels.collect(&:book_no)
       (1..grade_section.capacity).each_with_index do |i|
         name = if grade_section.grade_level_id > 12

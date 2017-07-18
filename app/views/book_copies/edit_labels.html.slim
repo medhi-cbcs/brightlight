@@ -34,7 +34,7 @@ ul#grade-options.dropdown-content
       = link_to grade.name, "#!", onclick:"filterSectionOptions(#{grade.id}, '#{grade.name}');"
 
 ul#section-options.dropdown-content
-  - GradeSection.all.order(:id).each do |section|
+  - GradeSection.all.order(:grade_level_id, :id).each do |section|
     li
       = link_to section.name, "#!", class:"grade-#{section.grade_level_id}", onclick:"filterLabelOptions(#{section.id}, '#{section.name}');"
 
