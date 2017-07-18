@@ -1,6 +1,6 @@
 .row.compact
 	.input-field.col.s2
-
+		= f.hidden_field :grade_section_id, value: @grade_section.id
 		= f.text_field :id, disabled:true
 	.input-field.col.s2
 		= f.label :name, class: 'active'
