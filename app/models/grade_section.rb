@@ -11,7 +11,7 @@ class GradeSection < ActiveRecord::Base
   has_many :grade_sections_students, dependent: :destroy
   has_many :students, through: :grade_sections_students
   has_many :student_books
-  has_many :book_labels
+  has_many :book_labels, -> { order("cast(substring(name from position('#' in name)+1)  as integer)")}
   has_many :grade_section_histories
   has_many :book_receipts
 
