@@ -77,6 +77,7 @@ class BookCopiesController < ApplicationController
     authorize! :manage, BookCopy
     @book_edition = BookEdition.find(params[:book_edition_id])
     @book_copy = @book_edition.book_copies.new
+    @book_labels_for_menu = GradeSection.all.includes(:book_labels).order(:id)
   end
 
   # GET /book_copies/1/edit

@@ -62,9 +62,9 @@
     button.btn.waves-effect.waves-light type="submit" Save
     = link_to 'Cancel', book_edition_book_copies_path(@book_edition), class: "waves-effect waves-light btn btn-flat"
 
-/ The following javascript callback function will turn select elements in the dynamically created row 
-/ into MaterializeCSS style selects.
 javascript:
+  // The following callback function will turn select elements in the dynamically created row 
+  // into MaterializeCSS style selects.
   $('#book_copy').on('cocoon:after-insert', function() {
     $('select').material_select();
   });
