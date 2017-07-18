@@ -66,7 +66,7 @@ class GradeLevelsController < ApplicationController
     # @book_labels = @grade_level.book_labels.where('name LIKE ?', "#{section_name}%")
     # @grade_section = @grade_level.grade_sections.where(name:section_name).first
     @grade_section = GradeSection.find params[:section]
-    @book_labels = @grade_section.book_labels
+    @book_labels = @grade_section.book_labels.order("cast(substring(name from position('#' in name)+1)  as integer)")
     @students = @grade_section.students
   end
 
