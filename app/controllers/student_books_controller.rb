@@ -280,11 +280,17 @@ class StudentBooksController < ApplicationController
   # POST /student_books/finalize.js
   def finalize
     authorize! :manage, StudentBook
-    academic_year_id = params[:finalize_year].to_i
+    academic_year_id = params[:finalize_student_books_year].to_i
 
-    BookCopy.update_conditions_from_student_books academic_year_id, academic_year_id+1
     respond_to do |format|
-      format.js
+      format.js do
+        grades = params[:finalize_student_books]
+        if grades[:all].present?
+          BookCopy.update_conditions_from_student_books academic_year_id, academic_year_id+1, GradeLevel.all
+        else
+          BookCopy.update_conditions_from_student_books academic_year_id, academic_year_id+1, GradeLevel.(where("id in (?)", grades) }
+        end 
+      end
     end
   end
 

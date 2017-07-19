@@ -122,7 +122,7 @@ class BookCopy < ActiveRecord::Base
   end
 
   # Create copy_conditions records based
-  def self.update_conditions_from_student_books(academic_year_id, next_academic_year_id)
+  def self.update_conditions_from_student_books(academic_year_id, next_academic_year_id, grade_levels)
     category = BookCategory.find_by_code 'TB'
     columns = [:book_copy_id, :barcode, :book_condition_id, :start_date, :end_date, :academic_year_id, :notes, :post, :deleted_flag]
     return_conditions = []
