@@ -268,7 +268,7 @@ class BookLoansController < ApplicationController
         if BookLoan.where(academic_year_id:academic_year_id).where.not(employee_id:nil).count > 0
           @error = "Error: records are not empty for the academic year #{AcademicYear.find(academic_year_id).name}"
         else
-          BookLoan.initialize_teacher_loans_from_previous_year academic_year_id-1, academic_year_id
+          BookLoan.initialize_teacher_loans_from_previous_year academic_year_id-1, academic_year_id, current_user.id
           @message = "Initialization completed."
         end
       end
@@ -282,12 +282,13 @@ class BookLoansController < ApplicationController
     to = Employee.find params[:to_teacher].to_i
     from_year = params[:from_year].to_i
     to_year = params[:to_year].to_i
-    user_id = params[:current_user_id]
-    BookLoan.move_all_books(from:from,to:to, from_year:from_year, to_year:to_year, user_id:user_id)
+    count = BookLoan.where(academic_year:from_year, employee_id:from).count
+
+    BookLoan.move_all_books(from:from,to:to, from_year:from_year, to_year:to_year, user_id: current_user.id)
 
     respond_to do |format|
       format.js do
-        if BookLoan.where(academic_year:to_year, employee_id:to).count == BookLoan.where(academic_year:from_year, employee_id:from).count
+        if BookLoan.where(academic_year:to_year, employee_id:to).count == count
           @message = "Move completed successfully."
         else
           @error = "Error: Failed to move some or all of the books"
