@@ -282,12 +282,13 @@ class BookLoansController < ApplicationController
     to = Employee.find params[:to_teacher].to_i
     from_year = params[:from_year].to_i
     to_year = params[:to_year].to_i
+    count = BookLoan.where(academic_year:from_year, employee_id:from).count
 
     BookLoan.move_all_books(from:from,to:to, from_year:from_year, to_year:to_year, user_id: current_user.id)
 
     respond_to do |format|
       format.js do
-        if BookLoan.where(academic_year:to_year, employee_id:to).count == BookLoan.where(academic_year:from_year, employee_id:from).count
+        if BookLoan.where(academic_year:to_year, employee_id:to).count == count
           @message = "Move completed successfully."
         else
           @error = "Error: Failed to move some or all of the books"
