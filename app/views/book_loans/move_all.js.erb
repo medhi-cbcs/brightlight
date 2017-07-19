@@ -1,0 +1,6 @@
+
+<% if @error %>
+  Materialize.toast("<%=j @error %>", 5000, "red");
+<% else %>
+  Materialize.toast("<%=j @message %>", 5000, "green");
+<% end %>
