@@ -69,7 +69,7 @@ class BookLoan < ActiveRecord::Base
   end
 
   # BookLoan.move_all_books(from:Employee.find(3),to:Employee.find(4),from_year:AcademicYear.current_id-1,to_year:AcademicYear.current)
-  def self.move_all_books(from:,to:, from_year:, to_year:)
+  def self.move_all_books(from:,to:, from_year:, to_year:, user_id:)
     source = Employee.find(from.id)
     destination = Employee.find(to.id)
 
@@ -77,7 +77,8 @@ class BookLoan < ActiveRecord::Base
     # BookLoan.where(employee:source,academic_year:from_year).update_all(employee_id:to.id, academic_year_id:to_year.id)
 
     tmp = source.book_loans.where(academic_year:from_year).map { |x|
-            x.attributes.except('created_at','updated_at','id').merge('academic_year_id'=>to_year)
+            x.attributes.except('created_at','updated_at','id','return_status','return_date','out_date','user_id')
+            .merge('academic_year_id'=>to_year, 'out_date'=>Date.today, 'user_id'=>user_id)
           }
     source.book_loans.where(academic_year:from_year).delete_all if from_year == to_year
     destination.book_loans.create(tmp)

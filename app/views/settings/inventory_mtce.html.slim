@@ -99,6 +99,7 @@ ul class="collapsible" data-collapsible="expandable"
             .col.s4
               .row
                 .col.s6
+                  = hidden_field_tag current_user_id = current_user.id
                   .label From
                   = select_tag :from_teacher, options_from_collection_for_select(@employees,'id','name'), include_blank: 'None' 
                 .col.s6
