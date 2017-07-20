@@ -61,7 +61,7 @@ ul class="collapsible" data-collapsible="expandable"
                 = form_tag prepare_book_receipts_path, remote:true do 
                   #prepare_book_receipts.row
                     .col.s2
-                      .label Academic Year 
+                      .label New Academic Year 
                       = select_tag :prepare_book_receipts_year, options_from_collection_for_select(@academic_years,'id','name', @current_year_id), include_blank: 'None'
                     .col.s2
                       button.btn.waves-effect.waves-light type="submit" id="prepare_book_receipts-button" disabled="disabled" Prepare 
@@ -76,6 +76,7 @@ ul class="collapsible" data-collapsible="expandable"
                       h6 Prepare Book Receipts
                       .label Description
                       | This will prepare book receipt forms for each student based on the finalized Student Book conditions.
+                      | Please select the right academic year. It should be the <em>new</em> academic year. 
           li 
             .collapsible-header.waves-effect.waves-light.grey.darken-1.white-text      
               | Finalize Book Condition from Receipts
