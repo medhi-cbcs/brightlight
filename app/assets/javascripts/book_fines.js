@@ -1,4 +1,5 @@
-(function(){
+$(document).on("ready page:load", function(){
+    if ($("body.book_fines").length == 0) return;
     function init(){
         var toggle_calc_button = function() {
             var checked = $('#calculate_fines input.checkbox:checked').length > 0;
@@ -22,4 +23,4 @@
     $(document).on('page:change', function(){    
         init();
     });
-})();
+});

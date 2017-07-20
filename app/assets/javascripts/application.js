@@ -31,3 +31,4 @@
 //= require turbolinks
 //= require book_copies
 //= require book_fines
+//= require settings

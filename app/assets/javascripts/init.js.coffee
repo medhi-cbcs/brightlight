@@ -1,9 +1,10 @@
-window.initApp = ->
+window.App ||= {}
+
+App.init = ->
   $('select[data-dynamic-selectable-url][data-dynamic-selectable-target]').dynamicSelectable()
 
-document.addEventListener 'page:load', initApp
-
-$ initApp
+$(document).on "ready page:load", ->
+  App.init()
 
 # send get forms through turbolinks
 $(document).on "submit", "form[method=get]", ->

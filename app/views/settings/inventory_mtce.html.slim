@@ -4,7 +4,7 @@ h4 Maintenance
     
 ul class="collapsible" data-collapsible="expandable"
   li 
-    .collapsible-header.waves-effect.waves-light.large-letter.active        
+    .collapsible-header.waves-effect.waves-light.large-letter      
       | Standard Books
       i.material-icons.right chevron_right
     .collapsible-body
@@ -22,113 +22,173 @@ ul class="collapsible" data-collapsible="expandable"
               | This will create new Standard Books records based on previous academic year's Standard Books.
   
   li 
-    .collapsible-header.waves-effect.waves-light.large-letter.active
+    .collapsible-header.waves-effect.waves-light.large-letter
       | Student Books
       i.material-icons.right chevron_right
     .collapsible-body
       .container-padding
-        = form_tag finalize_student_books_path, remote:true do 
-          .row
-            .col.s2
-              .label Academic Year 
-              = select_tag :finalize_year, options_from_collection_for_select(@academic_years,'id','name', @current_year_id), include_blank: 'None'
-            .col.s2
-              .label 
-              button.btn.waves-effect.waves-light type="submit" Finalize 
-            .col.s7
-              h6 Finalize Book Conditions
-              .label Description
-              | This will finalize student books condition checking and prepare starting conditions for each student book copy for the next academic year.
-        hr
-        = form_tag prepare_book_receipts_path, remote:true do 
-          .row
-            .col.s2
-              .label Academic Year 
-              = select_tag :book_receipt_year, options_from_collection_for_select(@academic_years,'id','name', @current_year_id), include_blank: 'None'
-            .col.s2
-              button.btn.waves-effect.waves-light type="submit" Prepare 
-            .col.s7
-              h6 Prepare Book Receipts
-              .label Description
-              | This will prepare book receipt forms for each student based on the finalized Student Book conditions.
-        hr
-        = form_tag finalize_condition_book_receipts_path, remote:true do 
-          .row
-            .col.s2
-              .label Academic Year 
-              = select_tag :receipt_condition_year, options_from_collection_for_select(@academic_years,'id','name', @current_year_id), include_blank: 'None'
-            .col.s2
-              button.btn.waves-effect.waves-light type="submit" data-confirm="Are you sure?" Finalize
-              /= submit_tag 'Finalize', data: { confirm: 'Are you sure?' }, class:'btn waves-effect waves-light'  
-            .col.s7
-              h6 Finalize Book Condition from Receipts
-              .label Description
-              | This will create this year's initial book conditions based on book conditions inputted in Book Receipt Form.
-        hr
-        = form_tag prepare_student_books_path, remote:true do 
-          .row
-            .col.s2
-              .label Academic Year 
-              = select_tag :prepare_student_book_year, options_from_collection_for_select(@academic_years,'id','name', @current_year_id), include_blank: 'None'
-            .col.s2
-              button.btn.waves-effect.waves-light type="submit" Create
-            .col.s7
-              h6 Create Student Book Loans from Receipts
-              .label Description
-              | This will create new Student Book Loan records based on Student Book Receipt Form.
+        ul class="collapsible" data-collapsible="expandable"
+          li 
+            .collapsible-header.waves-effect.waves-light.grey.darken-1.white-text      
+              | Finalize Book Conditions
+              i.material-icons.right chevron_right
+            .collapsible-body
+              .container-padding
+                = form_tag finalize_student_books_path, remote:true do 
+                  #finalize_student_books.row
+                    .col.s2
+                      .label Academic Year 
+                      = select_tag :finalize_student_books_year, options_from_collection_for_select(@academic_years,'id','name', @current_year_id), include_blank: 'None'
+                    .col.s2
+                      button.btn.waves-effect.waves-light type="submit" id="finalize-student-books-button" disabled="disabled" Finalize 
+                      .label Select Grades
+                      input.allcheckboxes type="checkbox" id="finalize_student_books-all" name="finalize_student_books[all]" data-total="#{GradeLevel.count}"
+                      = label_tag "finalize_student_books-all", "All grades"
+                      - @grade_levels.each do |grade|
+                        div style="width:300px"
+                          input.checkbox type="checkbox" id="finalize_student_books-#{grade.id}" name="finalize_student_books[#{grade.id}]"
+                          = label_tag "finalize_student_books-#{grade.id}", grade.name
+                    .col.s7
+                      h6 Finalize Book Conditions
+                      .label Description
+                      | This will finalize student books condition checking and prepare starting conditions for each student book copy for the next academic year.
+          li 
+            .collapsible-header.waves-effect.waves-light.grey.darken-1.white-text       
+              | Prepare Book Receipts
+              i.material-icons.right chevron_right
+            .collapsible-body
+              .container-padding
+                = form_tag prepare_book_receipts_path, remote:true do 
+                  #prepare_book_receipts.row
+                    .col.s2
+                      .label Academic Year 
+                      = select_tag :prepare_book_receipts_year, options_from_collection_for_select(@academic_years,'id','name', @current_year_id), include_blank: 'None'
+                    .col.s2
+                      button.btn.waves-effect.waves-light type="submit" id="prepare_book_receipts-button" disabled="disabled" Prepare 
+                      .label Select Grades
+                      input.allcheckboxes type="checkbox" id="prepare_book_receipts-all" name="prepare_book_receipts[all]" data-total="#{GradeLevel.count}"
+                      = label_tag "prepare_book_receipts-all", "All grades"
+                      - @grade_levels.each do |grade|
+                        div style="width:300px"
+                          input.checkbox type="checkbox" id="prepare_book_receipts-#{grade.id}" name="prepare_book_receipts[#{grade.id}]"
+                          = label_tag "prepare_book_receipts-#{grade.id}", grade.name
+                    .col.s7
+                      h6 Prepare Book Receipts
+                      .label Description
+                      | This will prepare book receipt forms for each student based on the finalized Student Book conditions.
+          li 
+            .collapsible-header.waves-effect.waves-light.grey.darken-1.white-text      
+              | Finalize Book Condition from Receipts
+              i.material-icons.right chevron_right
+            .collapsible-body
+              .container-padding
+                = form_tag finalize_condition_book_receipts_path, remote:true do 
+                  #finalize_condition_book_receipts.row
+                    .col.s2
+                      .label Academic Year 
+                      = select_tag :receipt_condition_year, options_from_collection_for_select(@academic_years,'id','name', @current_year_id), include_blank: 'None'
+                    .col.s2
+                      button.btn.waves-effect.waves-light type="submit" id="finalize_condition_book_receipts-button" disabled="disabled" data-confirm="Are you sure?" Finalize
+                      .label Select Grades
+                      input.allcheckboxes type="checkbox" id="finalize_condition_book_receipts-all" name="finalize_condition_book_receipts[all]" data-total="#{GradeLevel.count}"
+                      = label_tag "finalize_condition_book_receipts-all", "All grades"
+                      - @grade_levels.each do |grade|
+                        div style="width:300px"
+                          input.checkbox type="checkbox" id="finalize_condition_book_receipts-#{grade.id}" name="finalize_condition_book_receipts[#{grade.id}]"
+                          = label_tag "finalize_condition_book_receipts-#{grade.id}", grade.name  
+                    .col.s7
+                      h6 Finalize Book Condition from Receipts
+                      .label Description
+                      | This will create this year's initial book conditions based on book conditions inputted in Book Receipt Form.
+          li 
+            .collapsible-header.waves-effect.waves-light.grey.darken-1.white-text      
+              | Create Student Book Loans from Receipts
+              i.material-icons.right chevron_right
+            .collapsible-body
+              .container-padding
+                = form_tag prepare_student_books_path, remote:true do 
+                  #prepare_student_books.row
+                    .col.s2
+                      .label Academic Year 
+                      = select_tag :prepare_student_book_year, options_from_collection_for_select(@academic_years,'id','name', @current_year_id), include_blank: 'None'
+                    .col.s2
+                      button.btn.waves-effect.waves-light type="submit" id="prepare_student_books-button" disabled="disabled" Create
+                      .label Select Grades
+                      input.allcheckboxes type="checkbox" id="prepare_student_books-all" name="prepare_student_books[all]" data-total="#{GradeLevel.count}"
+                      = label_tag "prepare_student_books-all", "All grades"
+                      - @grade_levels.each do |grade|
+                        div style="width:300px"
+                          input.checkbox type="checkbox" id="prepare_student_books-#{grade.id}" name="prepare_student_books[#{grade.id}]"
+                          = label_tag "prepare_student_books-#{grade.id}", grade.name 
+                    .col.s7
+                      h6 Create Student Book Loans from Receipts
+                      .label Description
+                      | This will create new Student Book Loan records based on Student Book Receipt Form.
   li 
-    .collapsible-header.waves-effect.waves-light.large-letter.active
+    .collapsible-header.waves-effect.waves-light.large-letter
       | Teacher's Books
       i.material-icons.right chevron_right
     .collapsible-body
       .container-padding
-        = form_tag initialize_teachers_book_loans_path, remote:true do 
-          .row
-            .col.s2
-              .label New Academic Year
-              = select_tag :teacher_loan_year, options_from_collection_for_select(@academic_years,'id','name', @current_year_id), include_blank: 'None'
-            .col.s2
-              button.btn.waves-effect.waves-light type="submit" Create
-            .col.s7 
-              h6 Initialize Teacher Book Loans
-              .label Description
-              | This will create new Teacher Book Loan records based on returned books from previous academic year loan records.
-        hr
-        = form_tag move_all_book_loans_path, remote:true do 
-          .row
-            .col.s4
-              .row
-                .col.s6
-                  = hidden_field_tag current_user_id = current_user.id
-                  .label From
-                  = select_tag :from_teacher, options_from_collection_for_select(@employees,'id','name'), include_blank: 'None' 
-                .col.s6
-                  .label From Year
-                  = select_tag :from_year, options_from_collection_for_select(@academic_years,'id','name'), include_blank: 'None'
-              .row
-                .col.s6
-                  .label To
-                  = select_tag :to_teacher, options_from_collection_for_select(@employees,'id','name'), include_blank: 'None' 
-                .col.s6
-                  .label To Year
-                  = select_tag :to_year, options_from_collection_for_select(@academic_years,'id','name'), include_blank: 'None'
-            .col.s7
-              .row
-                .col.s12
-                  h6 Move book loans
-                  .label Description
-                  | This will move book loans from one teacher to another.
-                .col.s12
-                  button.btn.waves-effect.waves-light type="submit" Move
+        ul class="collapsible" data-collapsible="expandable"
+          li 
+            .collapsible-header.waves-effect.waves-light.grey.darken-1.white-text       
+              | Initialize Teacher Book Loans
+              i.material-icons.right chevron_right
+            .collapsible-body
+              .container-padding
+                = form_tag initialize_teachers_book_loans_path, remote:true do 
+                  .row
+                    .col.s2
+                      .label New Academic Year
+                      = select_tag :teacher_loan_year, options_from_collection_for_select(@academic_years,'id','name', @current_year_id), include_blank: 'None'
+                    .col.s2
+                      button.btn.waves-effect.waves-light type="submit" Create
+                    .col.s7 
+                      h6 Initialize Teacher Book Loans
+                      .label Description
+                      | This will create new Teacher Book Loan records based on returned books from previous academic year loan records.
+          li 
+            .collapsible-header.waves-effect.waves-light.grey.darken-1.white-text       
+              | Move book loans
+              i.material-icons.right chevron_right
+            .collapsible-body
+              .container-padding
+                = form_tag move_all_book_loans_path, remote:true do 
+                  .row
+                    .col.s4
+                      .row
+                        .col.s6
+                          = hidden_field_tag current_user_id = current_user.id
+                          .label From
+                          = select_tag :from_teacher, options_from_collection_for_select(@employees,'id','name'), include_blank: 'None' 
+                        .col.s6
+                          .label From Year
+                          = select_tag :from_year, options_from_collection_for_select(@academic_years,'id','name'), include_blank: 'None'
+                      .row
+                        .col.s6
+                          .label To
+                          = select_tag :to_teacher, options_from_collection_for_select(@employees,'id','name'), include_blank: 'None' 
+                        .col.s6
+                          .label To Year
+                          = select_tag :to_year, options_from_collection_for_select(@academic_years,'id','name'), include_blank: 'None'
+                    .col.s7
+                      .row
+                        .col.s12
+                          h6 Move book loans
+                          .label Description
+                          | This will move book loans from one teacher to another.
+                        .col.s12
+                          button.btn.waves-effect.waves-light type="submit" Move
       
   li 
-    .collapsible-header.waves-effect.waves-light.large-letter.active        
+    .collapsible-header.waves-effect.waves-light.large-letter      
       | Textbook Fines
       i.material-icons.right chevron_right
-    .collapsible-body#calculate_fines
+    .collapsible-body
       .container-padding
         = form_tag calculate_book_fines_path, remote:true do 
-          .row
+          #calculate_book_fines.row
             .col.s2
               .label Academic Year
               = select_tag :fines_academic_year, options_from_collection_for_select(@academic_years,'id','name', @current_year_id), include_blank: 'None'
@@ -138,7 +198,7 @@ ul class="collapsible" data-collapsible="expandable"
               .label Select Grades
               input.allcheckboxes type="checkbox" id="fines_grade-all" name="fines_grade[all]" data-total="#{GradeLevel.count}"
               = label_tag "fines_grade-all", "All grades"
-              - GradeLevel.all.each do |grade|
+              - @grade_levels.each do |grade|
                 div style="width:300px"
                   input.checkbox type="checkbox" id="fines_grade-#{grade.id}" name="fines_grade[#{grade.id}]"
                   = label_tag "fines_grade-#{grade.id}", grade.name

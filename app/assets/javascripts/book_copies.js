@@ -1,4 +1,5 @@
-(function(){
+$(document).on("ready page:load", function(){
+  if ($("body.book_copies").length == 0) return;
   function init(){
     var toggle_menu = function() {
       $('.context-buttons').toggle($('input.checkbox:checked').length > 0);
@@ -17,4 +18,4 @@
   $(document).on('page:change', function(){    
     init();
   });
-})();
+})

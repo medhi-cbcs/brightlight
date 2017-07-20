@@ -7,6 +7,7 @@ class SettingsController < ApplicationController
     authorize! :manage, BookLoan
     @academic_years = AcademicYear.list_for_menu
     @current_year_id = AcademicYear.current_id
+    @grade_levels = GradeLevel.all.order(:id)
     @employees = Employee.all.order(:name)
   end
 

@@ -280,11 +280,13 @@ class StudentBooksController < ApplicationController
   # POST /student_books/finalize.js
   def finalize
     authorize! :manage, StudentBook
-    academic_year_id = params[:finalize_year].to_i
+    academic_year_id = params[:finalize_student_books_year].to_i
 
-    BookCopy.update_conditions_from_student_books academic_year_id, academic_year_id+1
     respond_to do |format|
-      format.js
+      format.js do
+        grades = params[:finalize_student_books].reject {|k,v| k == "all"}.keys
+        BookCopy.update_conditions_from_student_books academic_year_id, academic_year_id+1, grades
+      end
     end
   end
 
@@ -424,7 +426,8 @@ class StudentBooksController < ApplicationController
   def prepare
     authorize! :manage, StudentBook
     academic_year_id = params[:prepare_student_book_year].to_i
-    GradeSection.all.order(:grade_level_id, :id).each do |section|
+    grades = params[:prepare_student_books].reject {|k,v| k == "all"}.keys
+    GradeSection.where("grade_level_id in (?)", grades).each do |section|
       section.students_for_academic_year(academic_year_id).each do |gss|
         StudentBook.initialize_from_book_receipts gss:gss, year:AcademicYear.find(academic_year_id)
       end
