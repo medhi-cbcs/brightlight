@@ -162,8 +162,8 @@ class BookReceiptsController < ApplicationController
 
     respond_to do |format|
       format.js do
-        if BookReceipt.where(academic_year_id:academic_year_id).count > 0
-          @error = "Error: records are not empty for the academic year #{AcademicYear.find(academic_year_id).name}"
+        if BookReceipt.where(academic_year_id:academic_year_id).where("grade_level_id in (?)", grades).count > 0
+          @error = "Error: Book receipts have been created for some of the selected grade levels #{AcademicYear.find(academic_year_id).name}"
         else
           n = BookReceipt.initialize_book_receipts academic_year_id-1, academic_year_id, grades
           @message = "Preparation completed (#{n})."
