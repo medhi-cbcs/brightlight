@@ -157,15 +157,16 @@ class BookReceiptsController < ApplicationController
   # POST /book_receipts/prepare.js
   def prepare
     authorize! :manage, BookReceipt
-    academic_year_id = params[:book_receipt_year].to_i
+    academic_year_id = params[:prepare_book_receipts_year].to_i
+    grades = params[:prepare_book_receipts].reject {|k,v| k == "all"}.keys
 
     respond_to do |format|
       format.js do
         if BookReceipt.where(academic_year_id:academic_year_id).count > 0
           @error = "Error: records are not empty for the academic year #{AcademicYear.find(academic_year_id).name}"
         else
-          BookReceipt.initialize_book_receipts academic_year_id-1, academic_year_id
-          @message = "Initialization completed."
+          n = BookReceipt.initialize_book_receipts academic_year_id-1, academic_year_id, grades
+          @message = "Preparation completed (#{n})."
         end
       end
     end
@@ -222,7 +223,9 @@ class BookReceiptsController < ApplicationController
   def finalize_condition
     authorize! :manage, BookReceipt
     academic_year_id = params[:receipt_condition_year].to_i
-    BookReceipt.finalize_receipts_conditions(academic_year_id, current_user.id)
+    grades = params[:finalize_condition_book_receipts].reject {|k,v| k == "all"}.keys
+    BookReceipt.finalize_receipts_conditions academic_year_id, current_user.id, grades 
+
     respond_to :js
   end
 

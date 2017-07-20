@@ -20,10 +20,14 @@ class BookReceipt < ActiveRecord::Base
 
   after_save :update_book_copy_condition
 
-  def self.initialize_book_receipts(previous_year_id, new_year_id)
-    GradeSection.all.order(:grade_level_id, :id).each do |grade_section|
-      self.initialize_with_student_books_for_grade(previous_year_id, new_year_id, grade_section.id)
+  def self.initialize_book_receipts(previous_year_id, new_year_id, grade_levels)
+    n = 0
+    GradeSection.where("grade_level_id in (?)", grade_levels).each do |grade_section|
+      #self.initialize_with_student_books_for_grade(previous_year_id, new_year_id, grade_section.id)
+      puts "Preparing #{grade_section.name}"
+      n = self.initialize_with_student_books grade_section: grade_section, previous_year: previous_year_id, new_year: new_year_id
     end
+    n
   end
 
   def self.initialize_with_student_books_for_grade(previous_year_id, new_year_id, grade_section_id)
@@ -57,13 +61,13 @@ class BookReceipt < ActiveRecord::Base
     end
   end
 
-  def self.initialize_with_student_books(grade_section:, roster_no:, previous_year:, new_year:)
+  def self.initialize_with_student_books(grade_section:, previous_year:, new_year:)
     textbook_category = BookCategory.find_by_code 'TB'
 
     # Books with 'Poor / Missing' condition will not be included
     poor = BookCondition.find_by_slug 'poor'
-    student_books = StudentBook.where(grade_section: grade_section, academic_year_id: previous_year, roster_no: roster_no.to_s)
-                      .only_standard_books(grade_section.grade_level.id, grade_section.id, new_year, textbook_category.id)
+    missing = BookCondition.find_by_slug 'missing'
+    student_books = StudentBook.where(grade_section: grade_section, academic_year_id: previous_year)
                       .joins(:book_copy)
                       .where('book_copies.book_condition_id != ?', poor.id)
                       .where('book_copies.book_condition_id != ?', missing.id)
@@ -73,12 +77,14 @@ class BookReceipt < ActiveRecord::Base
         grade_section_id: sb.grade_section_id, grade_level_id: sb.grade_level_id, roster_no: sb.roster_no.to_i, course_id: sb.course_id
       }
     })
+    student_books.count
   end
 
   # Create book_copy's condition based on the condition in book_receipt
-  def self.finalize_receipts_conditions(year_id, current_user_id)
+  def self.finalize_receipts_conditions(year_id, current_user_id, grade_levels)
     receipts = BookReceipt.joins(:book_copy,:academic_year)
                 .where(academic_year_id:year_id)
+                .where("grade_level_id in (?)", grade_levels)
                 .select('book_receipts.*, academic_years.start_date as start_date')
     receipts.each do |receipt|
       latest_condition = CopyCondition.where(book_copy_id: receipt.book_copy_id, academic_year_id: year_id, post: 0)
