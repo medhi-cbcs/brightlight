@@ -27,27 +27,23 @@
         a href='#tab1' Shuttle
       li.tab.col.s2
         a href='#tab2' Car Riders
-      li.tab.col.s2
-        a href='#tab3' Waiting
+      / li.tab.col.s2
+      /   a href='#tab3' Waiting
       li.tab.col.s2
         a href='#tab4' Done 
         
-    #tab1.tab-content      
-      / = form_for :carpool, url: reorder_carpools_path, html: { remote: true, method: :put } do |form|
-      /   = link_to "#", class:"reorder-button btn btn-primary"
-      /     i.material-icons compare_arrows
-      /   = form.submit "Done", class:"btn btn-primary reorder-done-button", style:"display:none"
-      ul#shuttle-cars.sortable
+    #tab1.tab-content
+      ul#shuttle-cars
 
-    #tab2.tab-content      
+    #tab2.tab-content         
       = form_for :carpool, url: reorder_carpools_path, html: { remote: true, method: :put } do |form|
         = link_to "#", class:"reorder-button btn btn-primary"
           i.material-icons compare_arrows
         = form.submit "Done", class:"btn btn-primary reorder-done-button", style:"display:none"
+      .col.s6
         ul#private-cars.sortable
-
-    #tab3.tab-content
-      ul#waiting-cars
+      .col.s6
+        ul#waiting-cars
 
     #tab4.tab-content
       ul#exit-carpool
@@ -64,7 +60,7 @@
     = link_to "Close", "#!", class:"modal-action modal-close waves-effect waves-light btn-flat"
 
 script#carpool-template type="text/x-custom-template"  
-  li.ui-state-default.entry-wrapper.col.s12.m6.l3 id="car-__carpool.id_" data-id="__carpool.id_" 
+  li.ui-state-default.entry-wrapper.col.s12.m12.l4 id="car-__carpool.id_" data-id="__carpool.id_" 
     = hidden_field_tag 'carpools[__carpool.id_][sort_order]', nil, class:'position'
     .entry class="cars __transport.status_"      
       .done-wrapper data-id="__transport.id_"
@@ -125,9 +121,7 @@ script#expected-pax-template type="text/x-custom-template"
     
 
 javascript:
-  $(document).on("page:load", function() {
+  $(document).on("ready page:load", function() {
     CarpoolApp.init();
   });
-  $(document).ready(function() {
-    CarpoolApp.init();
-  });
+

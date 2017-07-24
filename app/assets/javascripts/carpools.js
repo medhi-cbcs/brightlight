@@ -8,14 +8,17 @@ var CarpoolApp = (function(){
     carpoolId:'',
     //expectedPassengers: [],
     
-    init: function(car) {
+    init: function(car) { 
+      console.log(car)     ;
       var transport = Object.create(Transport);
       transport.category = car.category;
       transport._status = car.status;
       transport.id = car.transport_id;
       transport.transportName = car.transport_name;
       transport.carpoolId = car.id;
-      transport.arrival = car.arrival;
+      transport.arrival = new Date(car.arrival);
+      transport.late = (transport.category == 'shuttle' && transport.arrival > Carpool.shuttleTimeLimit) ? true : false;
+      console.log("Car "+transport.transportName+" @ "+transport.arrival +": "+transport.late);
       return transport;
     },
 
@@ -33,12 +36,7 @@ var CarpoolApp = (function(){
     doneCheckBox: function() { return $("#car-done-" + this.carpoolId) },
     waitCheckBox: function() { return $("#car-wait-" + this.carpoolId) },
     
-    render: function() {
-      var arrival_time = new Date(this.arrival);
-      var late;
-      if (this.category == 'shuttle' && arrival_time > Carpool.shuttleTimeLimit) {
-        late = true;
-      }
+    render: function() {      
       if ($(".carpool").has(this.node()).length == 0) {
         var container;
         if (this.status == 'done') {
@@ -48,7 +46,7 @@ var CarpoolApp = (function(){
         } else if (this.category == 'private') {
           container = $("#private-cars");
         } else if (this.category == 'shuttle') {
-          if (late) {
+          if (this.late) {
             container = $("#private-cars");
           } else {
             container = $("#shuttle-cars");
@@ -57,7 +55,7 @@ var CarpoolApp = (function(){
           container = $("#data-error");
         }
         // console.log("Rendering transport "+this.transportName+" with status "+this.status);
-        console.log("Rendering transport "+this.transportName+" with status "+this.status+" in "+container.selector);
+        console.log("Rendering transport "+this.transportName+" ("+this.category+") with status "+this.status+" ("+(this.late?'':'not ')+"late) in "+container.selector);
         container.append(this.htmlStr());
         this.doneCheckBox().prop("checked", this.status == 'done');
         this.waitCheckBox().prop("checked", this.status == 'waiting');        
@@ -130,7 +128,7 @@ var CarpoolApp = (function(){
           // console.log("Updated at: "+data.timestamp);
         },
         error: function() {
-          Materialize.toast("Sorry...I'm confused", 5000, 'red');
+          Materialize.toast("Sorry...something is wrong", 5000, 'red');
         }
       });
     },
@@ -263,6 +261,7 @@ var CarpoolApp = (function(){
         dataType: 'json',
         success: function(data) {
           var car = data.carpool;
+          console.log(car);
           $("#transport_name").val("");
           Carpool.createOrUpdate(car);
         },
@@ -281,7 +280,7 @@ var CarpoolApp = (function(){
     },
 
     create: function(car) {
-      var transport = Transport.init(car);      
+      var transport = Transport.init(car);            
       Carpool.carpoolList.push(transport);
       transport.render();
     },
@@ -293,6 +292,7 @@ var CarpoolApp = (function(){
     },
 
     createOrUpdate: function(car) {
+      console.log(car);
       if (Carpool.getTransport(car.transport_id)) {
         Carpool.update(car);
       } else {
