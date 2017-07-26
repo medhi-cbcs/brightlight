@@ -1,45 +1,54 @@
 = form_for @book_copy, remote:true do |f|
   .modal-content
     table
-        tr
-          td style="vertical-align:top"
-            - thumbnail = @book_copy.book_edition.present? ? @book_copy.book_edition.small_thumbnail : 'book-icon.png' 
-            = image_tag(thumbnail, class: 'list_image')
-          td
-            .list_description
-              dl.row
-                h4 = @book_copy.book_edition.title
-                dd = @book_copy.book_edition.subtitle
-              dl.row
-                dd.col.s4
-                  .label ISBN 10
-                  .item = @book_copy.book_edition.isbn10
-                dd.col.s4
-                  .label ISBN
-                  .item = @book_copy.book_edition.isbn13
-            br
-            - if @book_copy.errors.any?
-              #error_explanation
-                h2 = "#{pluralize(@book_copy.errors.count, "error")} prohibited this book_copy from being saved:"
-                ul
-                  - @book_copy.errors.full_messages.each do |message|
-                    li = message
-            input type="hidden" name="book_copy[book_edition_id]" value=@book_copy.book_edition_id
-            .row
-              .input-field.col.s4
-                = f.label :barcode, class: 'active'
-                = f.text_field :barcode
-              .input-field.col.s4
-                = f.label 'Label', class: 'active'                
-                = f.select :book_label_id, grouped_options_for_select(GradeSection.book_labels_for_select, @book_copy.book_label_id), {prompt:true}, {class:'browser-default materialish'}
-              .input-field.col.s4
-                = f.label 'Status', class: 'active'
-                = f.collection_select :status_id, Status.all, :id, :name, prompt:true
-            .row
-              .input-field.col.s12
-                = f.label :notes, class: 'active'
-                = f.text_field :notes
+      tr
+        td style="vertical-align:top"
+          - thumbnail = @book_copy.book_edition.present? ? @book_copy.book_edition.small_thumbnail : 'book-icon.png' 
+          = image_tag(thumbnail, class: 'list_image')
+        td
+          .list_description
+            dl.row
+              h4 = @book_copy.book_edition.title
+              dd = @book_copy.book_edition.subtitle
+            dl.row
+              dd.col.s4
+                .label ISBN 10
+                .item = @book_copy.book_edition.isbn10
+              dd.col.s4
+                .label ISBN
+                .item = @book_copy.book_edition.isbn13
+
+          br
+          - if @book_copy.errors.any?
+            #error_explanation
+              h2 = "#{pluralize(@book_copy.errors.count, "error")} prohibited this book_copy from being saved:"
+              ul
+                - @book_copy.errors.full_messages.each do |message|
+                  li = message
+          input type="hidden" name="book_copy[book_edition_id]" value=@book_copy.book_edition_id
+          .row
+            .input-field.col.s4
+              = f.label :barcode, class: 'active'
+              = f.text_field :barcode
+            .input-field.col.s4
+              = f.label 'Label', class: 'active'                
+              = f.select :book_label_id, grouped_options_for_select(GradeSection.book_labels_for_select, @book_copy.book_label_id), {prompt:true}, {class:'browser-default materialish'}
+            .input-field.col.s4
+              = f.label 'Status', class: 'active'
+              = f.collection_select :status_id, Status.all, :id, :name, prompt:true
+          .row
+            .input-field.col.s12
+              = f.label :notes, class: 'active'
+              = f.text_field :notes
+          .row
+            .input-field.col.s12
+              = f.hidden_field :book_edition_id
+              = f.label 'Change Book Edition', class: 'active'
+              = text_field_tag :book_edition_title, "", id: "title_autocomplete", placeholder: "Search book title"
+          .row
+            #edition-message.red-text
 
   .modal-footer
     button.btn.btn-flat.waves-effect.waves-light.modal-action.modal-close type="submit" Save
     a.modal-action.modal-close.waves-effect.waves-light.btn-flat href="#!" Close
+
