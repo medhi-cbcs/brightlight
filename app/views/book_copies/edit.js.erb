@@ -1,2 +1,23 @@
 $("#edit-modal-content").html("<%=j render 'edit_modal_form'%>");
-$('#edit-modal').openModal();
+$('#edit-modal').openModal({
+    ready: function() { // Callback for Modal open. Modal and trigger parameters available.
+      $( "#title_autocomplete" ).autocomplete({
+        source: "/book_editions?format=json",
+        max: 30,
+        minLength: 5,
+        select: function( event, ui ) {
+          insert_row(ui.item);
+        }
+      })
+      .autocomplete( "instance" )._renderItem = function( ul, item ) {
+        return $( "<li>" )
+          .append( "<div>" + item.title + " ISBN: " + (item.isbn13 ? item.isbn13 : item.isbn10 ? item.isbn10 : "-" )+"</div>" )
+          .appendTo( ul );
+      };
+    }
+  });
+
+function insert_row(edition) {
+  $("#book_copy_book_edition_id").val(edition.id);
+  $("#edition-message").html("The book's edition title will be changed to " +edition.title + " ISBN: " + (edition.isbn13 ? edition.isbn13 : edition.isbn10 ? edition.isbn10  : "-"));
+}
