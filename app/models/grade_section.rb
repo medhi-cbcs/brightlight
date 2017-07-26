@@ -70,7 +70,7 @@ class GradeSection < ActiveRecord::Base
   end
 
   def self.book_labels_for_select
-    self.all.order(:id).includes(:book_labels).map { |section|
+    self.all.order(:grade_level_id, :id).includes(:book_labels).map { |section|
       [ section.name , section.book_labels.map {|label| [label.name, label.id]} ]
     }.reject {|g, labels| labels.blank? }
   end
