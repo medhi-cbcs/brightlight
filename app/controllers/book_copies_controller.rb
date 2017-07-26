@@ -125,7 +125,7 @@ class BookCopiesController < ApplicationController
       if @book_copy.update(book_copy_params)        
         format.html { redirect_to @book_copy, notice: 'Book copy was successfully updated.' }
         format.json { render :show, status: :ok, location: @book_edition }
-        format.js
+        format.js { render :js => "window.location.href='"+book_edition_book_copies_path(@book_copy.book_edition_id)+"'" }
       else
         format.html { render :edit }
         format.json { render json: @book_copy.errors, status: :unprocessable_entity }
