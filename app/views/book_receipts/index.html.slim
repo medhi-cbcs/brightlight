@@ -17,10 +17,10 @@ ul#section-options.dropdown-content
 ul#roster-options.dropdown-content
   - @grade_sections.each do |section|
     li = link_to 'All', book_receipts_path(gs:"#{section.id}",year:params[:year]), class:"section-#{section.id}", style:"display:#{section==@grade_section ? 'block' : 'none'}"
-    // section.max_num is the maximum :roster_no in the section
-    - section.max_num.times do |number|
-      li 
-        = link_to number+1, book_receipts_path(gs:"#{section.id}",r:"#{number+1}", year:params[:year]), class:"section-#{section.id}", style:"display:#{section==@grade_section ? 'block' : 'none'}"
+    - if max_num = section.book_receipts.where(academic_year:@academic_year).maximum(:roster_no)
+      - max_num.times do |number|
+        li 
+          = link_to number+1, book_receipts_path(gs:"#{section.id}",r:"#{number+1}", year:params[:year]), class:"section-#{section.id}", style:"display:#{section==@grade_section ? 'block' : 'none'}"
 ul#year-options.dropdown-content
   li  
   - AcademicYear.list_for_menu.each do |year|
@@ -37,7 +37,7 @@ nav
       - if @book_copies.present?
         li 
           = link_to 'PDF Format', book_receipts_path(gs:params[:gs], g:params[:g], r:params[:r], year:params[:year], format: :pdf), target: '_blank'
-      - if @grade_section.present? and @roster_no.present? and @academic_year.present?
+      - if @grade_section.present?
         li 
           = link_to new_book_receipt_path(gs:params[:gs], g:params[:g], r:params[:r], year:params[:year])
             | Add book 

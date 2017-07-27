@@ -44,14 +44,7 @@ class BookReceiptsController < ApplicationController
     respond_to do |format|
       format.html do
         @grade_level_ids = GradeLevel.all.collect(&:id)
-        # We need the maximum roster_no in the book_receipts table for each grade section
-        subquery = BookReceipt.select(['max(roster_no) as max_num', :grade_section_id])
-                    .group(:grade_section_id)
-                    .where(academic_year:@academic_year)
-                    .to_sql
-        @grade_sections = GradeSection.joins("INNER JOIN (#{subquery}) AS s ON grade_sections.id = s.grade_section_id")
-                            .select("grade_sections.*, s.max_num")
-                            .order(:grade_level_id, :id)
+        @grade_sections = GradeSection.all.order(:grade_level_id, :id)
         @grade_sections_ids = @grade_sections.collect(&:id)
       end
       format.pdf do
@@ -98,7 +91,7 @@ class BookReceiptsController < ApplicationController
     @grade_sections = @grade_section.grade_level.grade_sections.order(:id)
     academic_year_id = params[:year] || AcademicYear.current_id
     @academic_year = AcademicYear.find academic_year_id
-    if @grade_section.blank? or @roster_no.blank?
+    if @grade_section.blank? 
       redirect_to book_receipts_url, alert: 'Error: No Class or Number was selected.'
     else
       @book_receipt = BookReceipt.new
@@ -107,7 +100,7 @@ class BookReceiptsController < ApplicationController
 
   # GET /book_receipts/1/edit
   def edit
-    authorize! :update, @bookReceipt
+    authorize! :update, @book_receipt
   end
 
   # POST /book_receipts
@@ -130,7 +123,7 @@ class BookReceiptsController < ApplicationController
   # PATCH/PUT /book_receipts/1
   # PATCH/PUT /book_receipts/1.json
   def update
-    authorize! :update, @bookReceipt
+    authorize! :update, @book_receipt
     respond_to do |format|
       if @book_receipt.update(book_receipt_params)
         format.html { redirect_to book_receipts_path(gs:params[:gs],r:params[:r],year:params[:year]), notice: 'Book receipt was successfully updated.' }
