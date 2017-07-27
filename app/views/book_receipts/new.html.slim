@@ -28,9 +28,9 @@ h4 Add Book to Receipt Form
               = f.label :Class, class:'active'
               = f.collection_select :id, @grade_sections, :id, :name
               /= text_field_tag :class, @grade_section.name, disabled:true
-            .input-field.col.s1 
+            .input-field.col.s2
               = label_tag :roster_no, 'Number', class:'active'
-              = select_tag :roster_no, options_for_select((1..20).map{|x| [x.to_s,x]}, @roster_no)
+              = select_tag :roster_no, options_for_select((1..20).map{|x| [x.to_s,x]}, @roster_no), {prompt:'Please select'}
   .card-panel
     .row
       table.compact
@@ -95,13 +95,14 @@ javascript:
     el.find(".book_edition_ids").val(book.book_edition_id);
     el.find(".copy_nos").val(book.copy_no);
     el.find(".barcodes").val(book.barcode);
-    el.find(".initial_condition_ids").val(book.book_condition_id);      
+    el.find(".initial_condition_ids").val(book.book_condition_id);
+    el.find(".grade_section_ids").val($("#grade_section_id").val());
   };
   $("#roster_no").change(function() {
     $(".roster_nos,[name='r']").val($("[name='roster_no']").val());
   });
-  $("#grade_section_grade_section_id").change(function() {
-    $("[name='gs']").val($("#grade_section_grade_section_id").val());
+  $("#grade_section_id").change(function() {
+    $("[name='gs']").val($("#grade_section_id").val());
   });
 
   $("#use-scanner").change(function() {
