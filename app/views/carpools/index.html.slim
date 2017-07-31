@@ -27,8 +27,8 @@
         a href='#tab1' Shuttle
       li.tab.col.s2
         a href='#tab2' Car Riders
-      / li.tab.col.s2
-      /   a href='#tab3' Waiting
+      li.tab.col.s2
+        a href='#tab3' Waiting
       li.tab.col.s2
         a href='#tab4' Done 
         
@@ -40,10 +40,9 @@
         = link_to "#", class:"reorder-button btn btn-primary"
           i.material-icons compare_arrows
         = form.submit "Done", class:"btn btn-primary reorder-done-button", style:"display:none"
-      .col.s6
-        ul#private-cars.sortable
-      .col.s6
-        ul#waiting-cars
+      ul#private-cars.sortable
+    #tab3.tab-content 
+      ul#waiting-cars
 
     #tab4.tab-content
       ul#exit-carpool
