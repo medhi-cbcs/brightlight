@@ -1,4 +1,4 @@
-.navbar-fixed
+.navbar-fixed.carpool-navbar
   nav
     .nav-wrapper
       ul.left style='height:100%'
@@ -59,7 +59,7 @@
     = link_to "Close", "#!", class:"modal-action modal-close waves-effect waves-light btn-flat"
 
 script#carpool-template type="text/x-custom-template"  
-  li.ui-state-default.entry-wrapper.col.s12.m12.l4 id="car-__carpool.id_" data-id="__carpool.id_" 
+  li.ui-state-default.entry-wrapper.col.s12.m6.l4 id="car-__carpool.id_" data-id="__carpool.id_" 
     = hidden_field_tag 'carpools[__carpool.id_][sort_order]', nil, class:'position'
     .entry class="cars __transport.status_"      
       .done-wrapper data-id="__transport.id_"
