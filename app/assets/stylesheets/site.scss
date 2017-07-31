@@ -855,7 +855,7 @@ ul {
 	-moz-box-sizing: border-box;
 	box-sizing: border-box;
 }
-
+ 
 // =========================================== Carpool =========================================
 .carpool {
 	.entry-wrapper {
@@ -875,10 +875,10 @@ ul {
 			}
 			.middle-wrapper {
 				display: inline-block;
-				height: 140px;
+				height: 70px;
 				vertical-align: middle;
 				a {
-					font-size: 7em;
+					font-size: 4.3em;
 					font-weight: bold;
 					line-height: 1.4em;
 				}
@@ -900,7 +900,7 @@ ul {
 		li {  
 			padding: 8px; 
 			float: left; 
-			height: 160px; 
+			height: 90px; 
 		}
 	}
 	
@@ -949,6 +949,54 @@ ul {
 		.tabs {
 			height: 40px;
 			top: 54px;
+		}
+	}
+}
+
+@media only screen and (min-width: 601px) {
+	.carpool {
+		.entry-wrapper {
+			.entry {			
+				border-radius: 4px;
+
+				.middle-wrapper {
+					height: 80px;
+					a {
+						font-size: 4.3em;
+						font-weight: bold;
+						line-height: 1.4em;
+					}
+				}
+			}		
+		}
+		ul {
+			li {  
+				height: 90px; 
+			}
+		}
+	}
+}
+
+@media only screen and (min-width: 993px) {
+	.carpool {
+		.entry-wrapper {
+			.entry {			
+				border-radius: 4px;
+
+				.middle-wrapper {
+					height: 250px;
+					a {
+						font-size: 15em;
+						font-weight: bold;
+						line-height: 1.2em;
+					}
+				}
+			}		
+		}
+		ul {
+			li {  
+				height: 270px; 
+			}
 		}
 	}
 }
