@@ -24,13 +24,13 @@
   .row
     ul.tabs.z-depth-1
       li.tab.col.s2
-        a href='#tab1' Shuttle
+        a class="#{params[:s] ? "active" : nil}" href='#tab1' Shuttle
       li.tab.col.s2
-        a href='#tab2' Car Riders
+        a class="#{params[:p] ? "active" : nil}" href='#tab2' Car Riders
       li.tab.col.s2
-        a href='#tab3' Waiting
+        a class="#{params[:w] ? "active" : nil}" href='#tab3' Waiting
       li.tab.col.s2
-        a href='#tab4' Done 
+        a class="#{params[:d] ? "active" : nil}" href='#tab4' Done 
         
     #tab1.tab-content
       ul#shuttle-cars
@@ -59,7 +59,7 @@
     = link_to "Close", "#!", class:"modal-action modal-close waves-effect waves-light btn-flat"
 
 script#carpool-template type="text/x-custom-template"  
-  li.ui-state-default.entry-wrapper.col.s12.m6.l4 id="car-__carpool.id_" data-id="__carpool.id_" 
+  li.ui-state-default.entry-wrapper.col.s12.m12.l4 id="car-__carpool.id_" data-id="__carpool.id_" 
     = hidden_field_tag 'carpools[__carpool.id_][sort_order]', nil, class:'position'
     .entry class="cars __transport.status_"      
       .done-wrapper data-id="__transport.id_"
