@@ -922,8 +922,8 @@ ul {
 
 	// --- Tab bar for Carpool 
 	.tabs {
-		position: fixed;
-    top: 64px;
+		// position: fixed;
+    // top: 64px;
     z-index: 997;
 	}
 
@@ -946,10 +946,10 @@ ul {
 			height: 54px;
 			line-height: 54px;
 		}
-		.tabs {
-			height: 40px;
-			top: 54px;
-		}
+		// .tabs {
+		// 	height: 40px;
+		// 	top: 54px;
+		// }
 	}
 }
 
