@@ -55,7 +55,7 @@ var CarpoolApp = (function(){
           container = $("#data-error");
         }
         // console.log("Rendering transport "+this.transportName+" with status "+this.status);
-        console.log("Rendering transport "+this.transportName+" ("+this.category+") with status "+this.status+" ("+(this.late?'':'not ')+"late) in "+container.selector);
+        // console.log("Rendering transport "+this.transportName+" ("+this.category+") with status "+this.status+" ("+(this.late?'':'not ')+"late) in "+container.selector);
         container.append(this.htmlStr());
         this.doneCheckBox().prop("checked", this.status == 'done');
         this.waitCheckBox().prop("checked", this.status == 'waiting');        
