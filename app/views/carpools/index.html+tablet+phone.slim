@@ -24,27 +24,28 @@
   .row
     ul.tabs.z-depth-1
       li.tab.col.s2
-        a class="#{params[:p] ? "active" : nil}" href='#tab1' Car Riders
+        a class="#{params[:s] ? "active" : nil}" href='#tab1' Shuttle
       li.tab.col.s2
-        a class="#{params[:s] ? "active" : nil}" href='#tab2' Shuttle
+        a class="#{params[:p] ? "active" : nil}" href='#tab2' Car Riders
+      li.tab.col.s2
+        a class="#{params[:w] ? "active" : nil}" href='#tab3' Waiting
       li.tab.col.s2
         a class="#{params[:d] ? "active" : nil}" href='#tab4' Done 
         
-    #tab1.tab-content         
+    #tab1.tab-content
+      ul#shuttle-cars
+
+    #tab2.tab-content         
       = form_for :carpool, url: reorder_carpools_path, html: { remote: true, method: :put } do |form|
         = link_to "#", class:"reorder-button btn btn-primary"
           i.material-icons compare_arrows
         = form.submit "Done", class:"btn btn-primary reorder-done-button", style:"display:none"
         ul#private-cars.sortable
-
-    #tab2.tab-content
-      ul#shuttle-cars
+    #tab3.tab-content 
+      ul#waiting-cars
 
     #tab4.tab-content
       ul#exit-carpool
-
-.carpool.scroll-text
-  ul#waiting-cars
 
 #data-error style="display:none"
 
