@@ -1000,12 +1000,13 @@ ul {
 		ul#shuttle-cars {
 			li { height: 190px }
 			.entry-wrapper {
-				width: 20% !important;
+				width: inherit !important;
 			}
 			.done-wrapper { display: none };
 			.wait-wrapper { display: none };
 			.middle-wrapper {
 				height: 170px;
+				padding: 0 20px;
 				a {
 					font-size: 12em;
 					font-weight: bold;
