@@ -174,9 +174,9 @@ var CarpoolApp = (function(){
       Carpool.shuttleTimeLimit = new Date();
       Carpool.shuttleTimeLimit.setHours(14,30,0);  // Time limit for shuttle. After this time will be considered late.
 
-      // if AM, start at midnight, otherwise start at noon:
+      // if AM, start at midnight, otherwise start at 13:00:
       var time = new Date();
-      localStorage.carpool_start = time.setHours(time.getHours() < 12 ? 0 : 12, 0, 0, 0);
+      localStorage.carpool_start = time.setHours(time.getHours() < 13 ? 0 : 13, 0, 0, 0);
       localStorage.carpool_mark = localStorage.carpool_start;
       // Settings 
       Carpool.resetSettings();
