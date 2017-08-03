@@ -1,8 +1,9 @@
 class TransportUniquenessValidator < ActiveModel::Validator
   def validate(record)
     now = Time.now
-    range_start = now < now.noon ? now.beginning_of_day : now.noon
-    range_end   = now < now.noon ? now.noon : now.end_of_day
+    period_0_end = now.noon + 1.hour
+    range_start = now < period_0_end ? now.beginning_of_day : period_0_end
+    range_end   = now < period_0_end ? period_0_end : now.end_of_day
     records = Carpool.where('created_at > ?', range_start)
                      .where('created_at < ?', range_end)
     if record.transport_name.present?
@@ -36,8 +37,8 @@ class Carpool < ActiveRecord::Base
   scope :shuttle_cars, lambda { where(category:'shuttle') }
   scope :active, lambda { where.not(status:'done') }
   scope :inactive, lambda { where(status:'done') }
-  scope :today_am, lambda { where('created_at > ? and created_at < ?', Date.today.beginning_of_day, Date.today.noon) }
-  scope :today_pm, lambda { where('created_at > ?', Date.today.noon) }
+  scope :today_am, lambda { where('created_at > ? and created_at < ?', Date.today.beginning_of_day, Date.today.noon + 1.hour) }
+  scope :today_pm, lambda { where('created_at > ?', Date.today.noon + 1.hour) }
   scope :today, lambda { where('created_at > ?', Date.today.beginning_of_day) }
 
   before_create :fill_in_details
