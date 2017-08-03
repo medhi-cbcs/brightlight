@@ -36,6 +36,8 @@
           i.material-icons compare_arrows
         = form.submit "Done", class:"btn btn-primary reorder-done-button", style:"display:none"
         ul#private-cars.sortable
+      .carpool.fixed-footer
+        ul#waiting-cars.scroll-text.row 
 
     #tab2.tab-content
       ul#shuttle-cars
@@ -43,8 +45,7 @@
     #tab4.tab-content
       ul#exit-carpool
 
-.carpool.fixed-footer
-  ul#waiting-cars.scroll-text.row
+
 
 #data-error style="display:none"
 
