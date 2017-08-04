@@ -1,7 +1,7 @@
 class CarpoolsController < ApplicationController
   before_action :set_carpool, only: [:show, :update, :destroy]
   before_action :check_format, except: [:index, :reorder]
-  before_action :detect_device_format
+  # before_action :detect_device_format
 
   layout 'sans_sidebar'
   @@reorder = 0
@@ -15,8 +15,8 @@ class CarpoolsController < ApplicationController
     respond_to do |format|
       format.json
       format.html          # /app/views/carpools/index.html.slim
-      format.html.phone    # /app/views/carpools/index.html+phone.slim
-      format.html.tablet   # /app/views/carpools/index.html+tablet.slim
+      # format.html.phone    # /app/views/carpools/index.html+phone.slim
+      # format.html.tablet   # /app/views/carpools/index.html+tablet.slim
     end
   end
 
