@@ -1000,14 +1000,15 @@ ul {
 		ul#shuttle-cars {
 			li { height: 190px }
 			.entry-wrapper {
-				width: 16.66% !important;
+				width: inherit !important;
 			}
 			.done-wrapper { display: none };
 			.wait-wrapper { display: none };
 			.middle-wrapper {
 				height: 170px;
+				padding: 0 20px;
 				a {
-					font-size: 12em;
+					font-size: 11em;
 					font-weight: bold;
 					line-height: 1.0em;
 				}
@@ -1062,13 +1063,11 @@ ul {
 }
 
 .scroll-text {
-  box-shadow: inset 0 -15px 30px rgba(0,0,0,0.4), 0 5px 10px rgba(0,0,0,0.5);
-  width: 100%;
+	// width: 100%;
   height: 250px;
-  margin: 20px auto;
-  overflow: hidden;
-  border-radius: 4px;
-  padding: 3px;
+  margin: 0px;
+	overflow: hidden;
+	padding: 5px 0 0 0;
   -webkit-user-select: none
 
 	span {
@@ -1086,7 +1085,6 @@ ul {
 
 	ul {
 		float: left;
-		padding-left: 20px;
 		animation: ticker 10s cubic-bezier(1, 0, .5, 0) infinite;
 		-webkit-user-select: none
 	}
@@ -1099,9 +1097,6 @@ ul {
 		-webkit-font-smoothing: antialiased;
 		-webkit-user-select: none
 	}
-
-	ul:hover { animation-play-state: paused }
-	span:hover+ul { animation-play-state: paused }
 
 } 
 
