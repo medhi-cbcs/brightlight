@@ -21,16 +21,8 @@ html
       = render 'shared/flash_messages'
       = yield :layout
 
-    footer.page-footer style="padding:0"
-      //= render 'shared/layout/footer'
+    footer.fixed-footer style="padding:0"
+      = yield :bottom_footer
       
       = yield :javascript
       
-      .container
-        ul.collapsible data-collapsible="expandable" style="padding-bottom:0px; box-shadow:none; border:none"
-          li style="color: white;"
-            .collapsible-header style="background-color:#e7580b; border:none"
-              .copyright Brightlight. Copyright © 2015 Cahaya Bangsa Classical School. All rights reserved.
-            .collapsible-body
-              -if Rails.env.development?
-                = debug(params)

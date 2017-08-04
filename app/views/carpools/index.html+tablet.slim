@@ -1,66 +1,51 @@
-- if params['shuttle'].present?
-  .card.carpool
-    .row
+.navbar.carpool-navbar
+  nav
+    .nav-wrapper
+      ul.left style='height:100%'
+        li style='height:100%;width:230px'
+          .input-field#car-entry data-gate="IN" style='height:100%; margin:0'
+            /style='font-size:1.5rem; padding-left:30px'
+            = text_field_tag :transport_name, nil, type:'search', placeholder:'Shuttle/Family No', style:'border:none;height:100%'
+            = label_tag :transport_name 
+              i.material-icons add
+            i.material-icons#submit-carpool send
+      ul.right
+        - if can? :manage, Carpool
+          li
+            .input-field.col.s2
+              = link_to "#settings-modal", class:"modal-trigger"
+                i.material-icons settings
+        / li
+        /   .input-field
+        /     = check_box_tag :auto_update, value = "1", checked = true
+        /     = label_tag :auto_update, '', style:'top:9px; left:9px'
+
+.card.carpool
+  .row
+    ul.tabs.z-depth-1
+      li.tab.col.s2
+        a class="#{params[:s] ? "active" : nil}" href='#tab1' Shuttle
+      li.tab.col.s2
+        a class="#{params[:p] ? "active" : nil}" href='#tab2' Car Riders
+      li.tab.col.s2
+        a class="#{params[:w] ? "active" : nil}" href='#tab3' Waiting
+      li.tab.col.s2
+        a class="#{params[:d] ? "active" : nil}" href='#tab4' Done 
+        
+    #tab1.tab-content
       ul#shuttle-cars
-- elsif params['cars'].present?
-  .card.carpool
-    .row
-      ul#private-cars
-      .fixed-footer
-        .scroll-text 
-          ul#waiting-cars
-- else
-  .navbar.carpool-navbar
-    nav
-      .nav-wrapper
-        ul.left style='height:100%'
-          li style='height:100%;width:230px'
-            .input-field#car-entry data-gate="IN" style='height:100%; margin:0'
-              /style='font-size:1.5rem; padding-left:30px'
-              = text_field_tag :transport_name, nil, type:'search', placeholder:'Shuttle/Family No', style:'border:none;height:100%'
-              = label_tag :transport_name 
-                i.material-icons add
-              i.material-icons#submit-carpool send
-        ul.right
-          - if can? :manage, Carpool
-            li
-              .input-field.col.s2
-                = link_to "#settings-modal", class:"modal-trigger"
-                  i.material-icons settings
-          / li
-          /   .input-field
-          /     = check_box_tag :auto_update, value = "1", checked = true
-          /     = label_tag :auto_update, '', style:'top:9px; left:9px'
 
-  .card.carpool
-    .row
-      ul.tabs.z-depth-1
-        li.tab.col.s2
-          a class="#{params[:p] ? "active" : nil}" href='#tab1' Car Riders
-        li.tab.col.s2
-          a class="#{params[:s] ? "active" : nil}" href='#tab2' Shuttle
-        li.tab.col.s2
-          a class="#{params[:w] ? "active" : nil}" href='#tab3' Wait
-        li.tab.col.s2
-          a class="#{params[:d] ? "active" : nil}" href='#tab4' Done 
-          
-      #tab1.tab-content         
-        = form_for :carpool, url: reorder_carpools_path, html: { remote: true, method: :put } do |form|
-          = link_to "#", class:"reorder-button btn btn-primary"
-            i.material-icons compare_arrows
-          = form.submit "Done", class:"btn btn-primary reorder-done-button", style:"display:none"
-          ul#private-cars.sortable
+    #tab2.tab-content         
+      = form_for :carpool, url: reorder_carpools_path, html: { remote: true, method: :put } do |form|
+        = link_to "#", class:"reorder-button btn btn-primary"
+          i.material-icons compare_arrows
+        = form.submit "Done", class:"btn btn-primary reorder-done-button", style:"display:none"
+        ul#private-cars.sortable
+    #tab3.tab-content 
+      ul#waiting-cars
 
-      #tab2.tab-content
-        ul#shuttle-cars
-
-      #tab3.tab-content
-        ul#waiting-cars
-
-      #tab4.tab-content
-        ul#exit-carpool
-
-
+    #tab4.tab-content
+      ul#exit-carpool
 
 #data-error style="display:none"
 

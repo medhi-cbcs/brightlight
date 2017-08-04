@@ -134,6 +134,8 @@ li
 			ul
 				li
 					= link_to 'Carpool', carpools_path
+					= link_to 'TV Shuttle', carpools_path(shuttle:0)
+					= link_to 'TV Car Riders', carpools_path(cars:0)
 				- if can? :manage, Carpool
 					li
 						= link_to 'Transports', transports_path(type:'shuttle')

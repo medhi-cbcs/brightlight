@@ -1,6 +1,7 @@
 class CarpoolsController < ApplicationController
   before_action :set_carpool, only: [:show, :update, :destroy]
   before_action :check_format, except: [:index, :reorder]
+  # before_action :detect_device_format
 
   layout 'sans_sidebar'
   @@reorder = 0
@@ -10,6 +11,13 @@ class CarpoolsController < ApplicationController
   def index
     authorize! :read, Carpool
     @carpool = Carpool.new
+
+    respond_to do |format|
+      format.json
+      format.html          # /app/views/carpools/index.html.slim
+      # format.html.phone    # /app/views/carpools/index.html+phone.slim
+      # format.html.tablet   # /app/views/carpools/index.html+tablet.slim
+    end
   end
 
   # GET /carpools/poll
@@ -132,6 +140,21 @@ class CarpoolsController < ApplicationController
 
     def check_format
       redirect_to carpools_path unless params[:format] == 'json' || request.headers["Accept"] =~ /json/
+    end
+
+    def detect_device_format
+      case request.user_agent
+      when /iPad/i
+        request.variant = :tablet
+      when /iPhone/i
+        request.variant = :phone
+      when /Android/i && /mobile/i
+        request.variant = :phone
+      when /Android/i
+        request.variant = :tablet
+      when /Windows Phone/i
+        request.variant = :phone
+      end
     end
 
 end
