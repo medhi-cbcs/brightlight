@@ -75,7 +75,7 @@ class Api::CarpoolsController < Api::BaseController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_carpool
-      if Time.now < Date.today.noon
+      if Time.now < Carpool.end_of_morning_period
         @carpool = Carpool.today_am.find_uid(params[:id])
       else
         @carpool = Carpool.today_pm.find_uid(params[:id])
