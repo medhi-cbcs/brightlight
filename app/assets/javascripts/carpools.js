@@ -9,7 +9,6 @@ var CarpoolApp = (function(){
     //expectedPassengers: [],
     
     init: function(car) { 
-      console.log(car)     ;
       var transport = Object.create(Transport);
       transport.category = car.category;
       transport._status = car.status;
@@ -335,7 +334,9 @@ var CarpoolApp = (function(){
       var now = new Date().getTime();
       var todaysDate = new Date().getDate();
       var marksDate = new Date(Number(localStorage.carpool_mark)).getDate();
-      $.getJSON('/carpools/poll?since='+localStorage.carpool_mark, null, function(data) {        
+      var endOfPeriod = new Date().setHours(13, 0, 0, 0);
+      var period = now < endOfPeriod ? "0" : "1"
+      $.getJSON('/carpools/poll?period='+period+'&since='+localStorage.carpool_mark, null, function(data) {        
         var carpool = data.carpool;
         if (carpool.length > 0) {
           if (data.reorder > localStorage.carpool_ts) {
