@@ -1,9 +1,8 @@
 class TransportUniquenessValidator < ActiveModel::Validator
   def validate(record)
     now = Time.now
-    period_0_end = now.noon + 1.hour
-    range_start = now < period_0_end ? now.beginning_of_day : period_0_end
-    range_end   = now < period_0_end ? period_0_end : now.end_of_day
+    range_start = now < Carpool.end_of_morning_period ? now.beginning_of_day : Carpool.end_of_morning_period
+    range_end   = now < Carpool.end_of_morning_period ? Carpool.end_of_morning_period : now.end_of_day
     records = Carpool.where('created_at > ?', range_start)
                      .where('created_at < ?', range_end)
     if record.transport_name.present?
@@ -37,12 +36,12 @@ class Carpool < ActiveRecord::Base
   scope :shuttle_cars, lambda { where(category:'shuttle') }
   scope :active, lambda { where.not(status:'done') }
   scope :inactive, lambda { where(status:'done') }
-  scope :today_am, lambda { where('created_at > ? and created_at < ?', Date.today.beginning_of_day, Date.today.noon + 1.hour) }
-  scope :today_pm, lambda { where('created_at > ?', Date.today.noon + 1.hour) }
+  scope :today_am, lambda { where('created_at > ? and created_at < ?', Date.today.beginning_of_day, Carpool.end_of_morning_period) }
+  scope :today_pm, lambda { where('created_at > ?', Carpool.end_of_morning_period) }
   scope :today, lambda { where('created_at > ?', Date.today.beginning_of_day) }
 
   before_create :fill_in_details
-  after_update  :sync_late_passengers
+  # after_update  :sync_late_passengers
 
   # if id is a string with a length greater of 10 digits, it's assumed to be a RFID UID
   def self.find_uid(id)
@@ -53,13 +52,18 @@ class Carpool < ActiveRecord::Base
     end
   end
 
+  def self.end_of_morning_period
+    Date.today.noon + 1.hour  # 13:00
+  end
+
   private
 
     def fill_in_details
       if barcode.present?
         transport = SmartCard.find_by_code(barcode).try(:transport)
       elsif transport_name.present?
-        transport = Transport.find_by_name transport_name.upcase        
+        transport = Transport.find_by_name transport_name.upcase
+        self.barcode = transport.smart_cards.first.try(:code) if transport.present?
       end 
       unless transport.present?
         return false
@@ -67,9 +71,9 @@ class Carpool < ActiveRecord::Base
       self.transport_id = transport.id
       self.transport_name = transport.name
       self.arrival = created_at
-      self.period = arrival < Time.now.noon ? 0 : 1
+      self.period = arrival < Carpool.end_of_morning_period ? 0 : 1
       self.active = true
-      self.category = transport.category      
+      self.category = transport.category   
     end
 
     def sync_late_passengers

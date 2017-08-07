@@ -1006,9 +1006,9 @@ ul {
 			.wait-wrapper { display: none };
 			.middle-wrapper {
 				height: 170px;
-				padding: 0 20px;
+				padding: 0 10px;
 				a {
-					font-size: 11em;
+					font-size: 10em;
 					font-weight: bold;
 					line-height: 1.0em;
 				}
@@ -1063,7 +1063,7 @@ ul {
 }
 
 .scroll-text {
-	// width: 100%;
+	width: 100%;
   height: 250px;
   margin: 0px;
 	overflow: hidden;

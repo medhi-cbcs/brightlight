@@ -18,7 +18,6 @@ var CarpoolApp = (function(){
       transport.carpoolId = car.id;
       transport.arrival = new Date(car.arrival);
       transport.late = (transport.category == 'shuttle' && transport.arrival > Carpool.shuttleTimeLimit) ? true : false;
-      console.log("Car "+transport.transportName+" @ "+transport.arrival +": "+transport.late);
       return transport;
     },
 
@@ -54,28 +53,21 @@ var CarpoolApp = (function(){
         } else {
           container = $("#data-error");
         }
-        // console.log("Rendering transport "+this.transportName+" with status "+this.status);
-        // console.log("Rendering transport "+this.transportName+" ("+this.category+") with status "+this.status+" ("+(this.late?'':'not ')+"late) in "+container.selector);
         container.append(this.htmlStr());
         this.doneCheckBox().prop("checked", this.status == 'done');
         this.waitCheckBox().prop("checked", this.status == 'waiting');        
-      } else {
-        // console.log("Node present. Nothing to render "+this.transportName);
       }
     },
 
     set status(s) {
       var prevStatus = this._status;
       if (this._status != s) {
-        // console.log("Changing status from "+this.status+" to "+s); 
         this._status = s;
         this.node().removeClass('ready leaving loading waiting done')
           .addClass(this._status);
-        // console.log("Now, "+this._status+" check: "+$("#car-done-"+this.id).prop("checked"));
         var transport = this;
         this.node().fadeOut('slow', function(){ 
           this.remove(); 
-          // console.log("Element removed! status: "+transport.status);
           transport.render();
         });
         if (prevStatus != s) {
@@ -95,14 +87,12 @@ var CarpoolApp = (function(){
     },
 
     getPassengers: function() {
-      // console.log('Getting passengers list for ', this.transportName);
       $.getJSON('/transports/'+this.id, null, function(data) {
         var list = [];
         var transport = this;
         var passengerList = data.transport.members;
         if (passengerList.length > 0) {
           $.each(passengerList, function(i,passenger){
-            // console.log('Got pax '+passenger.name);
             var pax = Passenger.init(transport, passenger);
             pax.render();
           });   
@@ -174,7 +164,7 @@ var CarpoolApp = (function(){
       Carpool.shuttleTimeLimit = new Date();
       Carpool.shuttleTimeLimit.setHours(14,30,0);  // Time limit for shuttle. After this time will be considered late.
 
-      // if AM, start at midnight, otherwise start at 13:00:
+      // Morning carpool starts at midnight, otherwise starts at 13:00:
       var time = new Date();
       localStorage.carpool_start = time.setHours(time.getHours() < 13 ? 0 : 13, 0, 0, 0);
       localStorage.carpool_mark = localStorage.carpool_start;
@@ -245,7 +235,6 @@ var CarpoolApp = (function(){
     },
 
     handleCarpoolEntry: function() {
-      // console.log("Keyboard entry " + $("#transport_name").val().toUpperCase());
       url = "/carpools/";
       var dataToSend = new Object();
       dataToSend = { carpool: {
@@ -261,7 +250,6 @@ var CarpoolApp = (function(){
         dataType: 'json',
         success: function(data) {
           var car = data.carpool;
-          console.log(car);
           $("#transport_name").val("");
           Carpool.createOrUpdate(car);
         },
@@ -292,7 +280,6 @@ var CarpoolApp = (function(){
     },
 
     createOrUpdate: function(car) {
-      console.log(car);
       if (Carpool.getTransport(car.transport_id)) {
         Carpool.update(car);
       } else {
@@ -350,20 +337,15 @@ var CarpoolApp = (function(){
       var marksDate = new Date(Number(localStorage.carpool_mark)).getDate();
       $.getJSON('/carpools/poll?since='+localStorage.carpool_mark, null, function(data) {        
         var carpool = data.carpool;
-        //if (data.reorder > data.timestamp) console.log("Reorder: " + data.reorder);
-        //console.log("Timestamp: " + data.timestamp);
         if (carpool.length > 0) {
           if (data.reorder > localStorage.carpool_ts) {
-            // console.log("Reorder: " + data.reorder);
-            // console.log("This TS: " + localStorage.carpool_ts);
             Carpool.reset();
           }
           $.each(carpool, function(i,car){
             Carpool.createOrUpdate(car);
           });
           localStorage.carpool_ts = now;  // Mark last polling having  data
-        } else if (todaysDate != marksDate) {
-          // console.log("RESETTING: "+todaysDate+" <=> "+marksDate);          
+        } else if (todaysDate != marksDate) {      
           Carpool.reset();
         }
         localStorage.carpool_mark = data.timestamp;
