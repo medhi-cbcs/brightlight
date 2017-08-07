@@ -998,14 +998,23 @@ ul {
 		}
 
 		ul#shuttle-cars {
-			li { height: 190px }
+			
+			// Shuttle cars display will be shown in 4 columns
+			-webkit-column-count: 4; /* Chrome, Safari, Opera */
+    	-moz-column-count: 4; /* Firefox */
+			column-count: 4;
+			-webkit-column-rule-style: solid; /* Chrome, Safari, Opera */
+    	-moz-column-rule-style: solid; /* Firefox */
+			column-rule-style: solid;
+		
+			li { height: 150px }
 			.entry-wrapper {
 				width: inherit !important;
 			}
 			.done-wrapper { display: none };
 			.wait-wrapper { display: none };
 			.middle-wrapper {
-				height: 170px;
+				height: 140px;
 				padding: 0 10px;
 				a {
 					font-size: 10em;
