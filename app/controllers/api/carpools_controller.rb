@@ -25,7 +25,10 @@ class Api::CarpoolsController < Api::BaseController
     
     if params[:since]      
       @carpools = @carpools.since params[:since] unless params[:since].to_i < @reorder
-    end    
+    end 
+    if params[:period]
+      @carpools = @carpools.where(period: params[:period])
+    end
     respond_to :json
   end
 
